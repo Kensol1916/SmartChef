@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SmartChef 🍳</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍳</text></svg>" />
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script>
+      // Shim so the esbuild bundle's require("react") calls resolve correctly
+      window.require = function(mod) {
+        if (mod === "react")     return window.React;
+        if (mod === "react-dom") return window.ReactDOM;
+        throw new Error("Cannot require: " + mod);
+      };
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="./smartchef.bundle.js"></script>
+    <script>
+      const root = ReactDOM.createRoot(document.getElementById("root"));
+      root.render(React.createElement(__SC.default));
+    </script>
+  </body>
+</html>
