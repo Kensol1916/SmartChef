@@ -21583,6 +21583,18 @@ export default function App() {
   // Merge built-in + user recipes into one array for tabs that need all recipes
   const allRecipes = [...RECIPES, ...userRecipes];
 
+  // ── DEV: one-time dataset audit for missing steps ──────────────────────────
+  React.useEffect(() => {
+    const pool = allRecipes;
+    const missing = pool.filter(r => !(r.steps?.length) && !(r.instructions));
+    if (missing.length > 0) {
+      console.warn('[SmartChef DEV] ' + missing.length + ' recipe(s) missing steps. First 10:',
+        missing.slice(0,10).map(r => r.id + ':' + r.title).join(', '));
+    } else {
+      console.info('[SmartChef DEV] Dataset audit: all ' + pool.length + ' recipes have steps ✓');
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   const toggleSave = id => {
     if (!isPremium && !saved.has(id) && saved.size >= FREE_SAVE_LIMIT) {
       setShowUpgrade("save"); return;
@@ -21700,7 +21712,7 @@ export default function App() {
           {tab==="shopping"  && <ShoppingListTab {...tp} pantry={pantry} mealPlan={mealPlan} />}
           {tab==="chat"      && <ChatTab      {...tp} pantry={pantry} prefs={prefs} addToList={addToList} />}
           {tab==="planner"   && <PlannerTab   {...tp} shopping={shopping} prefs={prefs} pantry={pantry} />}
-          {tab==="plans"     && <PlanLibraryTab {...tp} />}
+          {tab==="plans"     && <PlanLibraryErrorBoundary resetKey={tab}><PlanLibraryTab {...tp} /></PlanLibraryErrorBoundary>}
           {tab==="profile"   && <ProfileTab   {...tp} />}
           {/* TODO [ROADMAP]: CommunityTab removed from active nav — code retained as stub */}
         </div>
@@ -22612,6 +22624,26 @@ function buildWeekFromFilter(filterFn, allRecipes) {
   }));
 }
 
+class PlanLibraryErrorBoundary extends React.Component {
+  constructor(props) { super(props); this.state = { hasError: false, error: null }; }
+  static getDerivedStateFromError(e) { return { hasError: true, error: e }; }
+  componentDidCatch(e, info) { console.error('[SmartChef] PlanLibrary crash:', e, info); }
+  componentDidUpdate(pp) { if (pp.resetKey !== this.props.resetKey) this.setState({ hasError: false, error: null }); }
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div style={{padding:24,textAlign:'center'}}>
+          <div style={{fontSize:32,marginBottom:12}}>📋</div>
+          <div style={{fontWeight:600,fontSize:15,color:'var(--ch)',marginBottom:6}}>Something went wrong in Plan Library</div>
+          <div style={{fontSize:12,color:'var(--mu)',marginBottom:16}}>{String(this.state.error)}</div>
+          <button className="btn btn-p btn-sm" onClick={()=>this.setState({hasError:false,error:null})}>Try again</button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
 function PlanLibraryTab({ allRecipes, mealPlan, setMealPlan, pantry, showToast, onViewRecipe, user,
   libraryPreview: preview, setLibraryPreview: setPreview,
   libraryDraft: draftPlan, setLibraryDraft: setDraftPlan,
@@ -22758,7 +22790,7 @@ function PlanLibraryTab({ allRecipes, mealPlan, setMealPlan, pantry, showToast, 
 
   // ── Copy Safety Modal ───────────────────────────────────────────────────────
   const CopySafetyModal = ({ plan, onClose }) => {
-    const doReplace = () => { setMealPlan(plan); showToast?.("📅 Plan copied to your week!"); onClose(); setPreview(null); };
+    const doReplace = () => { setMealPlan(plan); showToast?.("📅 Plan copied to your week!"); onClose(); setPreview(null); setPreviewSlotPicker(null); };
     const doMerge  = () => {
       setMealPlan(prev => prev.map((day, di) => ({
         ...day,
@@ -22787,6 +22819,48 @@ function PlanLibraryTab({ allRecipes, mealPlan, setMealPlan, pantry, showToast, 
       </div>
     );
   };
+
+  // ── Shared plan grid renderer (must be defined BEFORE PlanCreatorView) ───────
+  const renderPlanGrid = (plan, onSlotSwap) => (
+    <div className="pwrap" style={{marginBottom:18}}>
+      <div style={{display:"grid",gridTemplateColumns:"60px repeat(7,1fr)",gap:6,minWidth:580}}>
+        <div/>
+        {plan.map(d=><div key={d.day} className="pdh">{d.day}</div>)}
+        {[["☀️","Breakfast",0],["🌤️","Lunch",1],["🌙","Dinner",2]].map(([icon,label,mi])=>[
+          <div key={label} style={{display:"flex",alignItems:"center",justifyContent:"flex-end",paddingRight:6}}>
+            <div className="prl" style={{fontSize:10,gap:3}}>{icon}<span style={{display:"none"}}>{label}</span></div>
+          </div>,
+          ...plan.map((day,dayIdx)=>{
+            const meal=day.meals[mi];
+            const mealType=label;
+            const recipeObj=meal?recipePool.find(r=>r.id===meal.id):null;
+            return (
+              <div
+                key={`${day.day}${label}`}
+                className={`mslot ${meal?"filled":""}`}
+                style={{cursor:meal&&recipeObj?"pointer":"default",position:"relative",minHeight:70}}
+                onClick={()=>meal&&recipeObj&&onViewRecipe(recipeObj)}
+                title={meal?`${meal.name} — click to view, ↔ to swap`:"Empty slot"}
+              >
+                {meal
+                  ? <div className="msi">
+                      <div className="msem">{meal.emoji}</div>
+                      <div className="msn">{meal.name}</div>
+                      {onSlotSwap && <button
+                        style={{position:"absolute",top:3,right:3,fontSize:10,padding:"1px 5px",borderRadius:3,border:"1px solid var(--bor)",background:"rgba(255,255,255,.92)",cursor:"pointer",lineHeight:1.5,color:"var(--mu)",zIndex:5,fontWeight:600}}
+                        onClick={e=>{e.stopPropagation();onSlotSwap({dayIdx,mealIdx:mi,mealType});}}
+                        title="Replace this meal"
+                      >↔</button>}
+                    </div>
+                  : <div className="msadd" style={{fontSize:16}}>+</div>
+                }
+              </div>
+            );
+          })
+        ])}
+      </div>
+    </div>
+  );
 
   // ── Plan Creator View (full-page split layout: chat + plan preview) ───────────
   const PlanCreatorView = ({ onClose, onDraft }) => {
@@ -22879,14 +22953,15 @@ function PlanLibraryTab({ allRecipes, mealPlan, setMealPlan, pantry, showToast, 
       });
 
       const shuffle = arr => [...arr].sort(()=>Math.random()-.5);
-      const dinnerPool   = shuffle(pool.filter(r => getMealType(r) === 'Dinner'));
-      const lunchPool    = shuffle(pool.filter(r => getMealType(r) === 'Lunch'));
-      const bfastPool    = shuffle(pool.filter(r => getMealType(r) === 'Breakfast'));
+      const dinnerPool   = shuffle(pool.filter(r => getMealType(r) === 'dinner'));
+      const lunchPool    = shuffle(pool.filter(r => getMealType(r) === 'lunch'));
+      const bfastPool    = shuffle(pool.filter(r => getMealType(r) === 'breakfast'));
       const dinnerThemed = dinnerPool.filter(matchesTheme);
       const dinnerOther  = dinnerPool.filter(r => !matchesTheme(r));
-      const orderedDinner = dinnerThemes.length ? [...dinnerThemed, ...dinnerOther] : dinnerPool;
-      const bFallback = bfastPool.length >= 3 ? bfastPool : shuffle(pool);
-      const lFallback = lunchPool.length >= 3 ? lunchPool : shuffle(pool);
+      const orderedDinner = dinnerThemes.length ? [...dinnerThemed, ...dinnerOther] : dFallback;
+      const bFallback = bfastPool.length >= 3 ? bfastPool : shuffle(pool.filter(r=>['breakfast','lunch'].includes(getMealType(r))).concat(pool)).slice(0,21);
+      const lFallback = lunchPool.length >= 3 ? lunchPool : shuffle(pool.filter(r=>['lunch','breakfast'].includes(getMealType(r))).concat(pool)).slice(0,21);
+      const dFallback = dinnerPool.length >= 3 ? dinnerPool : shuffle(pool.filter(r=>['dinner','lunch'].includes(getMealType(r))).concat(pool)).slice(0,21);
 
       const usedIds = new Set();
       const pick = arr => {
@@ -23043,8 +23118,15 @@ function PlanLibraryTab({ allRecipes, mealPlan, setMealPlan, pantry, showToast, 
             {!creatorPlan && <button className="btn btn-s btn-sm" style={{marginTop:6}} onClick={()=>{
               setIsGenerating(true);
               setTimeout(()=>{
-                const plan = runGenerate(filters);
-                if(plan){setCreatorPlan(plan);addMsg('bot','✨ Here\'s your plan! Chat to refine, or hit Confirm.');}
+                let _gp = null;
+                try { _gp = runGenerate(filters); } catch(e) {
+                  console.error('[SmartChef] runGenerate error:', e);
+                  setGenerateError('Couldn\'t generate plan — ' + e.message);
+                  setIsGenerating(false);
+                  return;
+                }
+                setGenerateError(null);
+                if(_gp){setCreatorPlan(_gp);addMsg('bot','✨ Here\'s your plan! Chat to refine, or hit Confirm.');}
                 else{addMsg('bot','⚠️ Too few matches — adjust filters above.');}
                 setIsGenerating(false);
               },300);
@@ -23132,48 +23214,6 @@ function PlanLibraryTab({ allRecipes, mealPlan, setMealPlan, pantry, showToast, 
     );
   }
 
-  // ── Shared plan grid renderer (used in preview + draft) ──────────────────────
-  const renderPlanGrid = (plan, onSlotSwap) => (
-    <div className="pwrap" style={{marginBottom:18}}>
-      <div style={{display:"grid",gridTemplateColumns:"60px repeat(7,1fr)",gap:6,minWidth:580}}>
-        <div/>
-        {plan.map(d=><div key={d.day} className="pdh">{d.day}</div>)}
-        {[["☀️","Breakfast",0],["🌤️","Lunch",1],["🌙","Dinner",2]].map(([icon,label,mi])=>[
-          <div key={label} style={{display:"flex",alignItems:"center",justifyContent:"flex-end",paddingRight:6}}>
-            <div className="prl" style={{fontSize:10,gap:3}}>{icon}<span style={{display:"none"}}>{label}</span></div>
-          </div>,
-          ...plan.map((day,dayIdx)=>{
-            const meal=day.meals[mi];
-            const mealType=label;
-            const recipeObj=meal?recipePool.find(r=>r.id===meal.id):null;
-            return (
-              <div
-                key={`${day.day}${label}`}
-                className={`mslot ${meal?"filled":""}`}
-                style={{cursor:meal&&recipeObj?"pointer":"default",position:"relative",minHeight:70}}
-                onClick={()=>meal&&recipeObj&&onViewRecipe(recipeObj)}
-                title={meal?`${meal.name} — click to view, ↔ to swap`:"Empty slot"}
-              >
-                {meal
-                  ? <div className="msi">
-                      <div className="msem">{meal.emoji}</div>
-                      <div className="msn">{meal.name}</div>
-                      {onSlotSwap && <button
-                        style={{position:"absolute",top:3,right:3,fontSize:10,padding:"1px 5px",borderRadius:3,border:"1px solid var(--bor)",background:"rgba(255,255,255,.92)",cursor:"pointer",lineHeight:1.5,color:"var(--mu)",zIndex:5,fontWeight:600}}
-                        onClick={e=>{e.stopPropagation();onSlotSwap({dayIdx,mealIdx:mi,mealType});}}
-                        title="Replace this meal"
-                      >↔</button>}
-                    </div>
-                  : <div className="msadd" style={{fontSize:16}}>+</div>
-                }
-              </div>
-            );
-          })
-        ])}
-      </div>
-    </div>
-  );
-
   // Sync draftTitle when draftPlan changes
   React.useEffect(() => { if (draftPlan) setDraftTitle(draftPlan.title || ''); }, [draftPlan?.title]);
 
@@ -23187,7 +23227,7 @@ function PlanLibraryTab({ allRecipes, mealPlan, setMealPlan, pantry, showToast, 
         {showShoppingList && <ShoppingListModal plan={plan} entry={draftEntry} onClose={()=>setShowShoppingList(null)}/>}
         {showCopySafety && <CopySafetyModal plan={showCopySafety.plan} onClose={()=>setShowCopySafety(null)}/>}
         <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:16,flexWrap:"wrap"}}>
-          <button className="btn btn-s btn-sm" onClick={()=>setDraftPlan(null)}>← Back to library</button>
+          <button className="btn btn-s btn-sm" onClick={()=>{setDraftPlan(null);setPreviewSlotPicker(null);}}>← Back to library</button>
           <div style={{flex:1,minWidth:0,display:'flex',alignItems:'center',gap:8}}>
             <span style={{fontSize:18,fontFamily:"var(--fd)"}}>✨</span>
             <input
@@ -23225,7 +23265,7 @@ function PlanLibraryTab({ allRecipes, mealPlan, setMealPlan, pantry, showToast, 
         {showShoppingList && <ShoppingListModal plan={plan} entry={entry} onClose={()=>setShowShoppingList(null)}/>}
         {showCopySafety && <CopySafetyModal plan={showCopySafety.plan} onClose={()=>setShowCopySafety(null)}/>}
         <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:16,flexWrap:"wrap"}}>
-          <button className="btn btn-s btn-sm" onClick={()=>setPreview(null)}>← Back to library</button>
+          <button className="btn btn-s btn-sm" onClick={()=>{setPreview(null);setPreviewSlotPicker(null);}}>← Back to library</button>
           <h2 style={{fontFamily:"var(--fd)",fontSize:20,flex:1,minWidth:0}}>{entry.emoji} {entry.name}</h2>
         </div>
         <div style={{display:"flex",gap:12,marginBottom:14,flexWrap:"wrap",alignItems:"center"}}>
@@ -23556,6 +23596,43 @@ function RecipeDetail({ recipe, saved, onSave, onBack, onAddToList, pantry, setP
       </div>
     );
   }
+  // ── Normalize steps: support `instructions` field + auto-generate if empty ──
+  const getDisplaySteps = (r) => {
+    // 1. Already has valid steps array
+    if (Array.isArray(r.steps) && r.steps.length > 0) return { steps: r.steps, isAutoGenerated: false };
+    // 2. Has `instructions` string/array (alternative field name)
+    if (r.instructions) {
+      if (Array.isArray(r.instructions)) {
+        const mapped = r.instructions.map((s, i) => typeof s === 'string'
+          ? { n: i + 1, t: `Step ${i + 1}`, d: s }
+          : { n: i + 1, t: s.title || s.t || `Step ${i + 1}`, d: s.description || s.d || String(s) });
+        if (mapped.length > 0) return { steps: mapped, isAutoGenerated: false };
+      }
+      if (typeof r.instructions === 'string' && r.instructions.trim()) {
+        const parts = r.instructions.split(/\n|;/).map(s => s.trim()).filter(Boolean);
+        const mapped = parts.map((d, i) => ({ n: i + 1, t: `Step ${i + 1}`, d }));
+        return { steps: mapped, isAutoGenerated: false };
+      }
+    }
+    // 3. Auto-generate a minimal fallback from ingredients + title
+    const ings = (r.ingredients || []).map(i => i.n).filter(Boolean);
+    const auto = [
+      { n: 1, t: 'Gather ingredients', d: ings.length > 0 ? `You'll need: ${ings.slice(0, 5).join(', ')}${ings.length > 5 ? ', and more.' : '.'}` : 'Gather all ingredients before starting.' },
+      { n: 2, t: 'Prepare', d: `Prepare and portion all ingredients. Wash vegetables. Preheat oven/pan as needed for "${r.title}".` },
+      { n: 3, t: 'Cook', d: `Cook following your preferred method. This dish typically takes ${r.time || 15} minutes.` },
+      { n: 4, t: 'Season & serve', d: 'Season to taste with salt and pepper. Plate and serve hot.' },
+    ];
+    return { steps: auto, isAutoGenerated: true };
+  };
+  const { steps: displaySteps, isAutoGenerated: stepsAutoGenerated } = getDisplaySteps(recipe);
+
+  // ── DEV audit: log any recipe missing steps ────────────────────────────────
+  if (process.env.NODE_ENV !== 'production' && typeof __DEV__ !== 'undefined' && __DEV__) {
+    if (!(recipe.steps?.length) && !(recipe.instructions)) {
+      console.warn(`[SmartChef] Recipe "${recipe.title}" (id:${recipe.id}) is missing steps`);
+    }
+  }
+
   // Use the shared matching engine (normalizeIng / ingInPantry / buildPantrySet)
   const pantrySet = buildPantrySet(pantry || []);
 
@@ -23746,8 +23823,8 @@ function RecipeDetail({ recipe, saved, onSave, onBack, onAddToList, pantry, setP
           </div>
           <div>
             <h2 style={{fontFamily:"var(--fd)",fontSize:20,marginBottom:16}}>Instructions</h2>
-            {!(recipe.steps?.length) && <div style={{color:'var(--mu)',fontSize:13,padding:'12px 0'}}>No instructions available for this recipe.</div>}
-            {(recipe.steps||[]).map(s=><div key={s.n} style={{display:"flex",gap:16,marginBottom:20}}><div style={{width:30,height:30,borderRadius:"50%",background:"var(--clay)",color:"#fff",display:"flex",alignItems:"center",justifyContent:"center",fontSize:13,fontWeight:700,flexShrink:0,marginTop:2}}>{s.n}</div><div><div style={{fontWeight:600,fontSize:14,marginBottom:4}}>{s.t}</div><div style={{fontSize:14,color:"var(--mu)",lineHeight:1.7}}>{s.d}</div></div></div>)}
+            {stepsAutoGenerated && <div style={{fontSize:11,color:'var(--gold)',background:'rgba(212,173,65,.1)',border:'1px solid rgba(212,173,65,.25)',borderRadius:4,padding:'4px 10px',marginBottom:12,display:'inline-block'}}>⚡ Auto-generated steps</div>}
+            {displaySteps.map(s=><div key={s.n} style={{display:"flex",gap:16,marginBottom:20}}><div style={{width:30,height:30,borderRadius:"50%",background:"var(--clay)",color:"#fff",display:"flex",alignItems:"center",justifyContent:"center",fontSize:13,fontWeight:700,flexShrink:0,marginTop:2}}>{s.n}</div><div><div style={{fontWeight:600,fontSize:14,marginBottom:4}}>{s.t}</div><div style={{fontSize:14,color:"var(--mu)",lineHeight:1.7}}>{s.d}</div></div></div>)}
           </div>
         </div>
       </div>
@@ -24888,6 +24965,58 @@ const PANTRY_MEAL_TEMPLATES = [
   { name:"Tuna Pasta",           emoji:"🍝", meal:"dinner",    time:15, requires:["pasta","tuna"],      optionals:["olive oil","garlic","lemon","capers"],   contains_meat:false, contains_fish:true,  contains_dairy:false },
 ];
 
+// Generate sensible cooking steps from a pantry meal template
+const generatePantrySteps = (t) => {
+  const reqs = (t.requires || []);
+  const opts  = (t.optionals || []);
+  const all   = [...reqs, ...opts];
+  const ingList = all.slice(0, 5).join(', ');
+  // Build generic 4-step instructions based on meal type + title
+  const isEgg    = reqs.some(r => r.includes('egg'));
+  const isPasta  = reqs.some(r => r.includes('pasta'));
+  const isSoup   = /soup|stew|lentil|broth/.test((t.name||'').toLowerCase());
+  const isBaked  = /bake|baked|roast/.test((t.name||'').toLowerCase());
+  const isSalad  = /salad|bowl/.test((t.name||'').toLowerCase());
+  const isToast  = /toast|bread/.test((t.name||'').toLowerCase());
+  if (isToast) return [
+    {n:1, t:'Toast bread',     d:`Toast bread to your liking. ${opts.length?'Gather: '+opts.slice(0,3).join(', ')+'.':''}`},
+    {n:2, t:'Prepare topping', d:`Prepare your topping: ${reqs.filter(r=>!r.includes('bread')).join(', ')||'spread'}.`},
+    {n:3, t:'Assemble',        d:`Layer topping on toast. Add salt, pepper, or any extras to taste.`},
+    {n:4, t:'Serve',           d:`Serve immediately while warm.`},
+  ];
+  if (isSalad) return [
+    {n:1, t:'Prep ingredients', d:`Wash and chop: ${ingList}.`},
+    {n:2, t:'Mix dressing',     d:`Combine olive oil, lemon juice (or vinegar), salt and pepper.`},
+    {n:3, t:'Combine',          d:`Toss all ingredients together with the dressing.`},
+    {n:4, t:'Serve',            d:`Adjust seasoning and serve.`},
+  ];
+  if (isSoup || isBaked) return [
+    {n:1, t:'Prep',   d:`Dice or prepare: ${reqs.slice(0,3).join(', ')}.`},
+    {n:2, t:'Cook base', d:`Heat oil in a pot. Sauté onion and garlic (if using) until soft, about 5 min.`},
+    {n:3, t:'Simmer',    d:`Add remaining ingredients (${reqs.slice(1).concat(opts.slice(0,2)).join(', ')}). Add water or stock to cover. Simmer ${t.time||20} min.`},
+    {n:4, t:'Season',    d:`Season with salt and pepper. Adjust to taste and serve hot.`},
+  ];
+  if (isPasta) return [
+    {n:1, t:'Boil pasta',  d:`Cook pasta in salted boiling water per packet instructions. Drain, reserve ½ cup water.`},
+    {n:2, t:'Make sauce',  d:`Heat olive oil. Add ${opts.slice(0,3).join(', ') || 'garlic'} and cook 2–3 min.`},
+    {n:3, t:'Combine',     d:`Toss drained pasta in sauce, adding pasta water as needed for consistency.`},
+    {n:4, t:'Finish',      d:`Season with salt and pepper. Serve with parmesan if available.`},
+  ];
+  if (isEgg) return [
+    {n:1, t:'Prep',    d:`Crack eggs into a bowl. Beat lightly. Prepare any mix-ins: ${opts.slice(0,3).join(', ') || 'salt, pepper'}.`},
+    {n:2, t:'Heat pan', d:`Heat a non-stick pan over medium heat. Add a little butter or oil.`},
+    {n:3, t:'Cook',    d:`Add eggs. Cook, stirring gently (for scrambled) or leaving to set (for fried/omelet), ${t.time||5} min.`},
+    {n:4, t:'Serve',   d:`Plate immediately. Season with salt and pepper.`},
+  ];
+  // Generic fallback
+  return [
+    {n:1, t:'Gather & prep',   d:`Measure out: ${reqs.join(', ')}.${opts.length ? ' Optional extras: '+opts.slice(0,3).join(', ')+'.' : ''}`},
+    {n:2, t:'Cook',            d:`Heat pan or pot over medium heat. Add ingredients in order, cooking according to type (fry, boil, or bake as needed), about ${t.time||15} min total.`},
+    {n:3, t:'Season & adjust', d:`Taste and season with salt and pepper. Add any optional extras to taste.`},
+    {n:4, t:'Serve',           d:`Plate and serve immediately.`},
+  ];
+};
+
 // Generate pantry meals from templates — returns recipe-like objects with missingCount=0
 const generatePantryMeals = (pantrySet) => {
   if(!pantrySet || pantrySet.size === 0) return [];
@@ -24912,6 +25041,7 @@ const generatePantryMeals = (pantrySet) => {
       isPantryGenerated: true,
       pp: 100,
       cuisine: "Pantry",
+      steps: generatePantrySteps(tmpl),
     }));
 };
 
@@ -25016,6 +25146,7 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
       contains_meat: t.contains_meat||false, contains_fish: t.contains_fish||false,
       contains_shellfish: false, contains_dairy: t.contains_dairy||false,
       isPantryGenerated: true, missingCount: 0,
+      steps: generatePantrySteps(t),
     };
   };
 
