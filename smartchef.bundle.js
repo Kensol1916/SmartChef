@@ -23,9 +23,9 @@ var __SC = (() => {
   };
   var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
-  // recovered_smartchef.jsx
-  var recovered_smartchef_exports = {};
-  __export(recovered_smartchef_exports, {
+  // smartchef.jsx
+  var smartchef_exports = {};
+  __export(smartchef_exports, {
     default: () => App
   });
   var import_react = __require("react");
@@ -1037,6 +1037,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
   var RECIPES = [
     {
       id: 1,
+      meal: "dinner",
       emoji: "\u{1F35D}",
       title: "Spaghetti Aglio e Olio",
       cuisine: "Italian",
@@ -1056,6 +1057,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 2,
+      meal: "lunch",
       emoji: "\u{1F957}",
       title: "Mediterranean Chickpea Bowl",
       cuisine: "Mediterranean",
@@ -1075,6 +1077,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 3,
+      meal: "lunch",
       emoji: "\u{1F35C}",
       title: "Quick Miso Ramen",
       cuisine: "Japanese",
@@ -1094,6 +1097,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 4,
+      meal: "dinner",
       emoji: "\u{1F357}",
       title: "Lemon Herb Roast Chicken",
       cuisine: "French",
@@ -1113,6 +1117,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 5,
+      meal: "breakfast",
       emoji: "\u{1F958}",
       title: "One-Pan Shakshuka",
       cuisine: "Middle Eastern",
@@ -1132,6 +1137,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 6,
+      meal: "breakfast",
       emoji: "\u{1F95E}",
       title: "Fluffy Buttermilk Pancakes",
       cuisine: "American",
@@ -1151,6 +1157,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 7,
+      meal: "dinner",
       emoji: "\u{1F35B}",
       title: "Chickpea Curry",
       cuisine: "Indian",
@@ -1170,6 +1177,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 8,
+      meal: "lunch",
       emoji: "\u{1F32E}",
       title: "Fish Tacos",
       cuisine: "Mexican",
@@ -1189,6 +1197,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 9,
+      meal: "lunch",
       emoji: "\u{1F372}",
       title: "Lentil Soup",
       cuisine: "Mediterranean",
@@ -1208,6 +1217,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 10,
+      meal: "dinner",
       emoji: "\u{1F355}",
       title: "Margherita Pizza",
       cuisine: "Italian",
@@ -1227,6 +1237,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 11,
+      meal: "lunch",
       emoji: "\u{1F959}",
       title: "Chicken Shawarma Wrap",
       cuisine: "Middle Eastern",
@@ -1246,6 +1257,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 12,
+      meal: "breakfast",
       emoji: "\u{1F373}",
       title: "Veggie Frittata",
       cuisine: "Italian",
@@ -1265,6 +1277,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 13,
+      meal: "lunch",
       emoji: "\u{1F35C}",
       title: "Pad Thai",
       cuisine: "Thai",
@@ -1284,6 +1297,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 14,
+      meal: "dinner",
       emoji: "\u{1F969}",
       title: "Beef Stir-Fry",
       cuisine: "Chinese",
@@ -1303,6 +1317,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 15,
+      meal: "dinner",
       emoji: "\u{1F35D}",
       title: "Creamy Mushroom Pasta",
       cuisine: "Italian",
@@ -1322,6 +1337,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 16,
+      meal: "lunch",
       emoji: "\u{1F32F}",
       title: "Burrito Bowl",
       cuisine: "Mexican",
@@ -1341,6 +1357,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 17,
+      meal: "dinner",
       emoji: "\u{1F958}",
       title: "Ratatouille",
       cuisine: "French",
@@ -1360,6 +1377,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 18,
+      meal: "lunch",
       emoji: "\u{1F372}",
       title: "Tom Yum Soup",
       cuisine: "Thai",
@@ -1379,6 +1397,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 19,
+      meal: "lunch",
       emoji: "\u{1F957}",
       title: "Greek Salad",
       cuisine: "Mediterranean",
@@ -1398,6 +1417,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 20,
+      meal: "breakfast",
       emoji: "\u{1F373}",
       title: "Avocado Toast",
       cuisine: "American",
@@ -1417,6 +1437,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 21,
+      meal: "dinner",
       emoji: "\u{1F35D}",
       title: "Carbonara",
       cuisine: "Italian",
@@ -1437,6 +1458,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     // BATCH 1: Breakfast Recipes (30 recipes, IDs 22-51)
     {
       id: 22,
+      meal: "breakfast",
       emoji: "\u{1F373}",
       title: "Spinach Mushroom Omelette",
       cuisine: "Mediterranean",
@@ -1456,6 +1478,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 23,
+      meal: "breakfast",
       emoji: "\u{1F951}",
       title: "Avocado Toast with Lemon",
       cuisine: "Modern",
@@ -1475,6 +1498,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 24,
+      meal: "breakfast",
       emoji: "\u{1F963}",
       title: "Greek Yogurt Honey Bowl",
       cuisine: "Greek",
@@ -1494,6 +1518,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 25,
+      meal: "breakfast",
       emoji: "\u{1F95E}",
       title: "Banana Oat Pancakes",
       cuisine: "American",
@@ -1513,6 +1538,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 26,
+      meal: "breakfast",
       emoji: "\u{1F958}",
       title: "Shakshuka",
       cuisine: "Middle Eastern",
@@ -1532,6 +1558,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 27,
+      meal: "breakfast",
       emoji: "\u{1F963}",
       title: "Cottage Cheese Berry Bowl",
       cuisine: "Modern",
@@ -1551,6 +1578,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 28,
+      meal: "breakfast",
       emoji: "\u{1F35E}",
       title: "Tomato Basil Toast",
       cuisine: "Italian",
@@ -1570,6 +1598,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 29,
+      meal: "breakfast",
       emoji: "\u{1F963}",
       title: "Apple Cinnamon Oatmeal",
       cuisine: "American",
@@ -1589,6 +1618,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 30,
+      meal: "breakfast",
       emoji: "\u{1F32F}",
       title: "Veggie Breakfast Wrap",
       cuisine: "Mexican",
@@ -1608,6 +1638,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 31,
+      meal: "breakfast",
       emoji: "\u{1F963}",
       title: "Chia Almond Pudding",
       cuisine: "Modern",
@@ -1627,6 +1658,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 32,
+      meal: "breakfast",
       emoji: "\u{1F373}",
       title: "Zucchini Frittata",
       cuisine: "Italian",
@@ -1646,6 +1678,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 33,
+      meal: "breakfast",
       emoji: "\u{1F35E}",
       title: "Peanut Butter Banana Toast",
       cuisine: "American",
@@ -1665,6 +1698,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 34,
+      meal: "breakfast",
       emoji: "\u{1F32F}",
       title: "Mushroom Spinach Quesadilla",
       cuisine: "Mexican",
@@ -1684,6 +1718,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 35,
+      meal: "breakfast",
       emoji: "\u{1F35E}",
       title: "Ricotta Toast with Honey",
       cuisine: "Italian",
@@ -1703,6 +1738,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 36,
+      meal: "breakfast",
       emoji: "\u{1F963}",
       title: "Savory Oatmeal with Egg",
       cuisine: "Modern",
@@ -1722,6 +1758,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 37,
+      meal: "breakfast",
       emoji: "\u{1F963}",
       title: "Apple Yogurt Parfait",
       cuisine: "Modern",
@@ -1741,6 +1778,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 38,
+      meal: "breakfast",
       emoji: "\u{1F32F}",
       title: "Breakfast Burrito Veggie",
       cuisine: "Mexican",
@@ -1760,6 +1798,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 39,
+      meal: "breakfast",
       emoji: "\u{1F9C1}",
       title: "Blueberry Oat Muffins",
       cuisine: "American",
@@ -1779,6 +1818,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 40,
+      meal: "breakfast",
       emoji: "\u{1F35E}",
       title: "Tomato Mozzarella Toast",
       cuisine: "Italian",
@@ -1798,6 +1838,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 41,
+      meal: "breakfast",
       emoji: "\u{1F35E}",
       title: "Date Tahini Toast",
       cuisine: "Middle Eastern",
@@ -1817,6 +1858,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 42,
+      meal: "breakfast",
       emoji: "\u{1F95E}",
       title: "Savory Cottage Pancakes",
       cuisine: "Eastern European",
@@ -1836,6 +1878,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 43,
+      meal: "breakfast",
       emoji: "\u{1F35E}",
       title: "Almond Butter Apple Toast",
       cuisine: "Modern",
@@ -1855,6 +1898,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 44,
+      meal: "breakfast",
       emoji: "\u{1F35E}",
       title: "Eggplant Breakfast Toast",
       cuisine: "Mediterranean",
@@ -1874,6 +1918,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 45,
+      meal: "breakfast",
       emoji: "\u{1F963}",
       title: "Mango Yogurt Bowl",
       cuisine: "Modern",
@@ -1893,6 +1938,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 46,
+      meal: "breakfast",
       emoji: "\u{1F950}",
       title: "Cheese Spinach Croissant",
       cuisine: "French",
@@ -1912,6 +1958,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 47,
+      meal: "breakfast",
       emoji: "\u{1F35E}",
       title: "Savory French Toast",
       cuisine: "American",
@@ -1931,6 +1978,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 48,
+      meal: "breakfast",
       emoji: "\u{1F963}",
       title: "Pear Cinnamon Yogurt",
       cuisine: "Modern",
@@ -1950,6 +1998,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 49,
+      meal: "breakfast",
       emoji: "\u{1F959}",
       title: "Breakfast Pita with Hummus",
       cuisine: "Middle Eastern",
@@ -1969,6 +2018,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 50,
+      meal: "breakfast",
       emoji: "\u{1F963}",
       title: "Pumpkin Oat Porridge",
       cuisine: "American",
@@ -1988,6 +2038,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 51,
+      meal: "breakfast",
       emoji: "\u{1F373}",
       title: "Savory Tomato Egg Skillet",
       cuisine: "Mediterranean",
@@ -2008,6 +2059,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     // BATCH 2: Additional Recipes (IDs 52-131)
     {
       id: 52,
+      meal: "lunch",
       emoji: "\u{1F957}",
       title: "Caesar Salad",
       cuisine: "Italian",
@@ -2027,6 +2079,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 53,
+      meal: "lunch",
       emoji: "\u{1F372}",
       title: "Lentil Soup",
       cuisine: "Mediterranean",
@@ -2046,6 +2099,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 54,
+      meal: "dinner",
       emoji: "\u{1F355}",
       title: "Margherita Pizza",
       cuisine: "Italian",
@@ -2065,6 +2119,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 55,
+      meal: "dinner",
       emoji: "\u{1F35B}",
       title: "Chickpea Curry",
       cuisine: "Indian",
@@ -2084,6 +2139,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 56,
+      meal: "lunch",
       emoji: "\u{1F959}",
       title: "Falafel Wrap",
       cuisine: "Middle Eastern",
@@ -2103,6 +2159,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 57,
+      meal: "dinner",
       emoji: "\u{1F35C}",
       title: "Pad Thai",
       cuisine: "Thai",
@@ -2122,6 +2179,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 58,
+      meal: "dinner",
       emoji: "\u{1F958}",
       title: "Vegetable Paella",
       cuisine: "Spanish",
@@ -2141,6 +2199,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 59,
+      meal: "lunch",
       emoji: "\u{1F32E}",
       title: "Black Bean Tacos",
       cuisine: "Mexican",
@@ -2160,6 +2219,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 60,
+      meal: "dinner",
       emoji: "\u{1F35D}",
       title: "Penne Arrabbiata",
       cuisine: "Italian",
@@ -2179,6 +2239,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 61,
+      meal: "lunch",
       emoji: "\u{1F957}",
       title: "Greek Salad",
       cuisine: "Greek",
@@ -2198,6 +2259,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 62,
+      meal: "lunch",
       emoji: "\u{1F372}",
       title: "Minestrone Soup",
       cuisine: "Italian",
@@ -2217,6 +2279,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 63,
+      meal: "lunch",
       emoji: "\u{1F96A}",
       title: "Caprese Sandwich",
       cuisine: "Italian",
@@ -2236,6 +2299,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 64,
+      meal: "dinner",
       emoji: "\u{1F35B}",
       title: "Thai Green Curry",
       cuisine: "Thai",
@@ -2255,6 +2319,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 65,
+      meal: "lunch",
       emoji: "\u{1F959}",
       title: "Veggie Burrito",
       cuisine: "Mexican",
@@ -2274,6 +2339,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 66,
+      meal: "dinner",
       emoji: "\u{1F35D}",
       title: "Fettuccine Alfredo",
       cuisine: "Italian",
@@ -2293,6 +2359,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 67,
+      meal: "lunch",
       emoji: "\u{1F957}",
       title: "Quinoa Salad",
       cuisine: "Modern",
@@ -2312,6 +2379,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 68,
+      meal: "lunch",
       emoji: "\u{1F372}",
       title: "Tomato Basil Soup",
       cuisine: "Italian",
@@ -2331,6 +2399,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 69,
+      meal: "lunch",
       emoji: "\u{1F32F}",
       title: "Hummus Wrap",
       cuisine: "Middle Eastern",
@@ -2350,6 +2419,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 70,
+      meal: "dinner",
       emoji: "\u{1F35D}",
       title: "Pesto Pasta",
       cuisine: "Italian",
@@ -2369,6 +2439,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 71,
+      meal: "dinner",
       emoji: "\u{1F958}",
       title: "Ratatouille",
       cuisine: "French",
@@ -2388,6 +2459,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 72,
+      meal: "dinner",
       emoji: "\u{1F35B}",
       title: "Mushroom Risotto",
       cuisine: "Italian",
@@ -2407,6 +2479,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 73,
+      meal: "lunch",
       emoji: "\u{1F32E}",
       title: "Veggie Tacos",
       cuisine: "Mexican",
@@ -2426,6 +2499,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 74,
+      meal: "lunch",
       emoji: "\u{1F957}",
       title: "Spinach Salad",
       cuisine: "Modern",
@@ -2445,6 +2519,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 75,
+      meal: "lunch",
       emoji: "\u{1F372}",
       title: "Butternut Squash Soup",
       cuisine: "American",
@@ -2464,6 +2539,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 76,
+      meal: "dinner",
       emoji: "\u{1F35D}",
       title: "Cacio e Pepe",
       cuisine: "Italian",
@@ -2483,6 +2559,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 77,
+      meal: "breakfast",
       emoji: "\u{1F32F}",
       title: "Breakfast Burrito",
       cuisine: "Mexican",
@@ -2502,6 +2579,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 78,
+      meal: "dinner",
       emoji: "\u{1F958}",
       title: "Vegetable Stir-Fry",
       cuisine: "Asian",
@@ -2521,6 +2599,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 79,
+      meal: "dinner",
       emoji: "\u{1F355}",
       title: "Veggie Pizza",
       cuisine: "Italian",
@@ -2540,6 +2619,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 80,
+      meal: "dinner",
       emoji: "\u{1F957}",
       title: "Coleslaw",
       cuisine: "American",
@@ -2559,6 +2639,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 81,
+      meal: "dinner",
       emoji: "\u{1F35B}",
       title: "Red Curry Tofu",
       cuisine: "Thai",
@@ -2578,6 +2659,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 82,
+      meal: "breakfast",
       emoji: "\u{1F32E}",
       title: "Breakfast Tacos",
       cuisine: "Mexican",
@@ -2597,6 +2679,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 83,
+      meal: "lunch",
       emoji: "\u{1F372}",
       title: "French Onion Soup",
       cuisine: "French",
@@ -2616,6 +2699,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 84,
+      meal: "lunch",
       emoji: "\u{1F959}",
       title: "Greek Pita",
       cuisine: "Greek",
@@ -2635,6 +2719,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 85,
+      meal: "dinner",
       emoji: "\u{1F35D}",
       title: "Mushroom Pasta",
       cuisine: "Italian",
@@ -2654,6 +2739,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 86,
+      meal: "lunch",
       emoji: "\u{1F957}",
       title: "Tabbouleh",
       cuisine: "Middle Eastern",
@@ -2673,6 +2759,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 87,
+      meal: "dinner",
       emoji: "\u{1F35B}",
       title: "Eggplant Curry",
       cuisine: "Indian",
@@ -2692,6 +2779,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 88,
+      meal: "lunch",
       emoji: "\u{1F96A}",
       title: "Grilled Cheese",
       cuisine: "American",
@@ -2711,6 +2799,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 89,
+      meal: "lunch",
       emoji: "\u{1F372}",
       title: "Split Pea Soup",
       cuisine: "American",
@@ -2730,6 +2819,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 90,
+      meal: "lunch",
       emoji: "\u{1F32E}",
       title: "Sweet Potato Tacos",
       cuisine: "Mexican",
@@ -2749,6 +2839,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 91,
+      meal: "dinner",
       emoji: "\u{1F35D}",
       title: "Lemon Garlic Pasta",
       cuisine: "Italian",
@@ -2768,6 +2859,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 92,
+      meal: "dinner",
       emoji: "\u{1F958}",
       title: "Vegetable Biryani",
       cuisine: "Indian",
@@ -2787,6 +2879,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 93,
+      meal: "lunch",
       emoji: "\u{1F32F}",
       title: "Mediterranean Wrap",
       cuisine: "Mediterranean",
@@ -2806,6 +2899,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 94,
+      meal: "lunch",
       emoji: "\u{1F372}",
       title: "Gazpacho",
       cuisine: "Spanish",
@@ -2825,6 +2919,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 95,
+      meal: "lunch",
       emoji: "\u{1F957}",
       title: "Asian Noodle Salad",
       cuisine: "Asian",
@@ -2844,6 +2939,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 96,
+      meal: "dinner",
       emoji: "\u{1F35B}",
       title: "Paneer Tikka Masala",
       cuisine: "Indian",
@@ -2863,6 +2959,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 97,
+      meal: "lunch",
       emoji: "\u{1F959}",
       title: "Veggie Pita Pocket",
       cuisine: "Mediterranean",
@@ -2882,6 +2979,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 98,
+      meal: "dinner",
       emoji: "\u{1F35D}",
       title: "Broccoli Pasta",
       cuisine: "Italian",
@@ -2901,6 +2999,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 99,
+      meal: "dinner",
       emoji: "\u{1F958}",
       title: "Stuffed Bell Peppers",
       cuisine: "Mediterranean",
@@ -2920,6 +3019,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 100,
+      meal: "lunch",
       emoji: "\u{1F32E}",
       title: "Cauliflower Tacos",
       cuisine: "Mexican",
@@ -2939,6 +3039,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 101,
+      meal: "lunch",
       emoji: "\u{1F372}",
       title: "White Bean Soup",
       cuisine: "Italian",
@@ -2958,6 +3059,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 102,
+      meal: "lunch",
       emoji: "\u{1F957}",
       title: "Caprese Salad",
       cuisine: "Italian",
@@ -2977,6 +3079,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 103,
+      meal: "dinner",
       emoji: "\u{1F35B}",
       title: "Vegetable Korma",
       cuisine: "Indian",
@@ -2996,6 +3099,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 104,
+      meal: "lunch",
       emoji: "\u{1F32F}",
       title: "BBQ Tofu Wrap",
       cuisine: "American",
@@ -3015,6 +3119,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 105,
+      meal: "dinner",
       emoji: "\u{1F35D}",
       title: "Sun-Dried Tomato Pasta",
       cuisine: "Italian",
@@ -3034,6 +3139,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 106,
+      meal: "dinner",
       emoji: "\u{1F958}",
       title: "Moroccan Tagine",
       cuisine: "Moroccan",
@@ -3053,6 +3159,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 107,
+      meal: "lunch",
       emoji: "\u{1F32E}",
       title: "Fish Tacos",
       cuisine: "Mexican",
@@ -3072,6 +3179,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 108,
+      meal: "dinner",
       emoji: "\u{1F35D}",
       title: "Shrimp Scampi",
       cuisine: "Italian",
@@ -3091,6 +3199,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 109,
+      meal: "dinner",
       emoji: "\u{1F357}",
       title: "Chicken Stir-Fry",
       cuisine: "Asian",
@@ -3110,6 +3219,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 110,
+      meal: "lunch",
       emoji: "\u{1F969}",
       title: "Beef Tacos",
       cuisine: "Mexican",
@@ -3129,6 +3239,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 111,
+      meal: "lunch",
       emoji: "\u{1F357}",
       title: "Grilled Chicken Salad",
       cuisine: "American",
@@ -3148,6 +3259,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 112,
+      meal: "dinner",
       emoji: "\u{1F35D}",
       title: "Salmon Pasta",
       cuisine: "Italian",
@@ -3167,6 +3279,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 113,
+      meal: "dinner",
       emoji: "\u{1F357}",
       title: "BBQ Chicken",
       cuisine: "American",
@@ -3186,6 +3299,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 114,
+      meal: "dinner",
       emoji: "\u{1F969}",
       title: "Beef Stir-Fry",
       cuisine: "Asian",
@@ -3205,6 +3319,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 115,
+      meal: "lunch",
       emoji: "\u{1F357}",
       title: "Chicken Quesadilla",
       cuisine: "Mexican",
@@ -3224,6 +3339,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 116,
+      meal: "dinner",
       emoji: "\u{1F41F}",
       title: "Baked Cod",
       cuisine: "Mediterranean",
@@ -3243,6 +3359,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 117,
+      meal: "dinner",
       emoji: "\u{1F357}",
       title: "Chicken Alfredo",
       cuisine: "Italian",
@@ -3262,6 +3379,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 118,
+      meal: "lunch",
       emoji: "\u{1F969}",
       title: "Beef Burrito Bowl",
       cuisine: "Mexican",
@@ -3281,6 +3399,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 119,
+      meal: "dinner",
       emoji: "\u{1F357}",
       title: "Honey Mustard Chicken",
       cuisine: "American",
@@ -3300,6 +3419,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 120,
+      meal: "dinner",
       emoji: "\u{1F35D}",
       title: "Tuna Pasta",
       cuisine: "Italian",
@@ -3319,6 +3439,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 121,
+      meal: "dinner",
       emoji: "\u{1F357}",
       title: "Teriyaki Chicken",
       cuisine: "Japanese",
@@ -3338,6 +3459,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 122,
+      meal: "dinner",
       emoji: "\u{1F969}",
       title: "Steak Fajitas",
       cuisine: "Mexican",
@@ -3357,6 +3479,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 123,
+      meal: "dinner",
       emoji: "\u{1F357}",
       title: "Chicken Parmesan",
       cuisine: "Italian",
@@ -3376,6 +3499,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 124,
+      meal: "dinner",
       emoji: "\u{1F35D}",
       title: "Meatball Pasta",
       cuisine: "Italian",
@@ -3395,6 +3519,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 125,
+      meal: "dinner",
       emoji: "\u{1F41F}",
       title: "Lemon Garlic Salmon",
       cuisine: "Mediterranean",
@@ -3414,6 +3539,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 126,
+      meal: "dinner",
       emoji: "\u{1F357}",
       title: "Chicken Curry",
       cuisine: "Indian",
@@ -3433,6 +3559,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 127,
+      meal: "dinner",
       emoji: "\u{1F969}",
       title: "Beef Stroganoff",
       cuisine: "Russian",
@@ -3452,6 +3579,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 128,
+      meal: "dinner",
       emoji: "\u{1F357}",
       title: "Chicken Fajitas",
       cuisine: "Mexican",
@@ -3471,6 +3599,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 129,
+      meal: "dinner",
       emoji: "\u{1F41F}",
       title: "Grilled Salmon",
       cuisine: "American",
@@ -3490,6 +3619,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 130,
+      meal: "lunch",
       emoji: "\u{1F357}",
       title: "Chicken Noodle Soup",
       cuisine: "American",
@@ -3509,6 +3639,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
     },
     {
       id: 131,
+      meal: "dinner",
       emoji: "\u{1F969}",
       title: "Beef and Broccoli",
       cuisine: "Chinese",
@@ -30499,10 +30630,33 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
   ];
   var getMealType = (recipe) => {
     if (recipe.meal) return recipe.meal;
-    const breakfastIds = [5, 6, 12, 20, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51];
-    if (breakfastIds.includes(recipe.id)) return "breakfast";
-    const lunchIds = [2, 3, 8, 9, 13, 19, 52, 61, 67, 74, 86, 95, 102, 62, 68, 75, 94, 101, 56, 63, 69, 84, 88, 93, 97, 104, 59, 65, 100, 111, 115];
-    if (lunchIds.includes(recipe.id)) return "lunch";
+    const t = (recipe.title || "").toLowerCase();
+    const BREAKFAST_KWS = [
+      "pancake",
+      "oatmeal",
+      "smoothie",
+      "waffle",
+      "granola",
+      "porridge",
+      "frittata",
+      "omelette",
+      "omelet",
+      "french toast",
+      "avocado toast",
+      "overnight oat",
+      "chia pudding",
+      "yogurt bowl"
+    ];
+    const LUNCH_KWS = ["sandwich", "wrap", "salad", "soup", "bowl", "taco", "quesadilla", "pita", "ramen", "pho"];
+    for (const kw of BREAKFAST_KWS) if (t.includes(kw)) {
+      console.warn(`[SmartChef] Recipe id:${recipe.id} "${recipe.title}" missing meal field \u2014 inferred: breakfast`);
+      return "breakfast";
+    }
+    for (const kw of LUNCH_KWS) if (t.includes(kw)) {
+      console.warn(`[SmartChef] Recipe id:${recipe.id} "${recipe.title}" missing meal field \u2014 inferred: lunch`);
+      return "lunch";
+    }
+    console.warn(`[SmartChef] Recipe id:${recipe.id} "${recipe.title}" missing meal field \u2014 defaulting to: dinner`);
     return "dinner";
   };
   var computeCoreDishKey = (recipe) => {
@@ -31527,7 +31681,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
       collections,
       setCollections
     };
-    return /* @__PURE__ */ React.createElement("div", { className: "shell" }, /* @__PURE__ */ React.createElement("style", null, S), /* @__PURE__ */ React.createElement(Sidebar, { ...tp }), /* @__PURE__ */ React.createElement("div", { className: "main" }, /* @__PURE__ */ React.createElement("div", { className: "mmhdr" }, /* @__PURE__ */ React.createElement("div", { style: { fontFamily: "var(--fd)", fontSize: 18 } }, "\u{1F373} SmartChef"), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 8 } }, isPremium ? /* @__PURE__ */ React.createElement("span", { className: "pro-badge" }, "\u2B50 PRO") : /* @__PURE__ */ React.createElement("span", { className: "free-badge" }, "FREE"), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 13, color: "var(--mu)" } }, user?.name))), /* @__PURE__ */ React.createElement("div", { className: "mcontent" }, tab === "home" && /* @__PURE__ */ React.createElement(HomeTab, { ...tp }), tab === "favorites" && /* @__PURE__ */ React.createElement(FavoritesTab, { ...tp }), tab === "pantry" && /* @__PURE__ */ React.createElement(PantryTab, { ...tp }), tab === "shopping" && /* @__PURE__ */ React.createElement(ShoppingListTab, { ...tp, pantry, mealPlan }), tab === "chat" && /* @__PURE__ */ React.createElement(ChatTab, { ...tp, pantry, prefs, addToList }), tab === "planner" && /* @__PURE__ */ React.createElement(PlannerTab, { ...tp, shopping, prefs, pantry }), tab === "profile" && /* @__PURE__ */ React.createElement(ProfileTab, { ...tp }), tab === "community" && /* @__PURE__ */ React.createElement(CommunityTab, { ...tp }))), showUpgrade && /* @__PURE__ */ React.createElement(UpgradeModal, { reason: showUpgrade, onClose: () => setShowUpgrade(null), onActivate: activatePremium }), showSaveFav && /* @__PURE__ */ React.createElement(SaveFavModal, { recipe: showSaveFav, favFolders, favItems, onSave: saveToFolder, onClose: () => setShowSaveFav(null), onCreateFolder: createFavFolder }), toastMsg && /* @__PURE__ */ React.createElement("div", { className: "toast-wrap" }, /* @__PURE__ */ React.createElement("div", { className: "toast" }, toastMsg.msg)));
+    return /* @__PURE__ */ React.createElement("div", { className: "shell" }, /* @__PURE__ */ React.createElement("style", null, S), /* @__PURE__ */ React.createElement(Sidebar, { ...tp }), /* @__PURE__ */ React.createElement("div", { className: "main" }, /* @__PURE__ */ React.createElement("div", { className: "mmhdr" }, /* @__PURE__ */ React.createElement("div", { style: { fontFamily: "var(--fd)", fontSize: 18 } }, "\u{1F373} SmartChef"), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 8 } }, isPremium ? /* @__PURE__ */ React.createElement("span", { className: "pro-badge" }, "\u2B50 PRO") : /* @__PURE__ */ React.createElement("span", { className: "free-badge" }, "FREE"), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 13, color: "var(--mu)" } }, user?.name))), /* @__PURE__ */ React.createElement("div", { className: "mcontent" }, tab === "home" && /* @__PURE__ */ React.createElement(HomeTab, { ...tp }), tab === "favorites" && /* @__PURE__ */ React.createElement(FavoritesTab, { ...tp }), tab === "pantry" && /* @__PURE__ */ React.createElement(PantryTab, { ...tp }), tab === "shopping" && /* @__PURE__ */ React.createElement(ShoppingListTab, { ...tp, pantry, mealPlan }), tab === "chat" && /* @__PURE__ */ React.createElement(ChatTab, { ...tp, pantry, prefs, addToList }), tab === "planner" && /* @__PURE__ */ React.createElement(PlannerTab, { ...tp, shopping, prefs, pantry }), tab === "profile" && /* @__PURE__ */ React.createElement(ProfileTab, { ...tp }))), showUpgrade && /* @__PURE__ */ React.createElement(UpgradeModal, { reason: showUpgrade, onClose: () => setShowUpgrade(null), onActivate: activatePremium }), showSaveFav && /* @__PURE__ */ React.createElement(SaveFavModal, { recipe: showSaveFav, favFolders, favItems, onSave: saveToFolder, onClose: () => setShowSaveFav(null), onCreateFolder: createFavFolder }), toastMsg && /* @__PURE__ */ React.createElement("div", { className: "toast-wrap" }, /* @__PURE__ */ React.createElement("div", { className: "toast" }, toastMsg.msg)));
   }
   function Sidebar({ tab, setTab, user, isGuest, onLogout, isPremium, onUpgrade }) {
     const NAV = [
@@ -31537,7 +31691,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
       { id: "shopping", label: "Shopping List", icon: "cart" },
       { id: "chat", label: "Chef AI", icon: "chat", premium: true },
       { id: "planner", label: "Planner", icon: "cal" },
-      { id: "community", label: "Community", icon: "community" },
+      // TODO [ROADMAP]: Community tab — social features (published menus, community feed). Frozen.
       { id: "profile", label: "Profile", icon: "user" }
     ];
     return /* @__PURE__ */ React.createElement("nav", { className: "sidebar" }, /* @__PURE__ */ React.createElement("div", { className: "slogo" }, /* @__PURE__ */ React.createElement("div", { className: "slogo-ic" }, "\u{1F373}"), /* @__PURE__ */ React.createElement("div", { className: "slogo-tx" }, "SmartChef")), /* @__PURE__ */ React.createElement("div", { className: "snav" }, NAV.map((it) => /* @__PURE__ */ React.createElement("button", { key: it.id, className: `ni ${tab === it.id ? "ac" : ""}`, onClick: () => setTab(it.id), style: { position: "relative" } }, /* @__PURE__ */ React.createElement(Ic, { n: it.icon, s: 18 }), it.label, it.premium && !isPremium && /* @__PURE__ */ React.createElement("span", { style: { marginLeft: "auto", fontSize: 10, background: "var(--goldBg)", color: "var(--gold)", padding: "2px 6px", borderRadius: 4, fontWeight: 700 } }, "PRO")))), /* @__PURE__ */ React.createElement("div", { className: "sfooter" }, !isPremium && !isGuest && /* @__PURE__ */ React.createElement("button", { className: "upgrade-btn", onClick: () => onUpgrade("generic") }, "\u2B50 Go Premium \u2014 $4.99/mo"), isPremium && /* @__PURE__ */ React.createElement("div", { style: { padding: "8px 12px", marginBottom: 4, background: "linear-gradient(135deg,rgba(201,149,58,.12) 0%,rgba(201,149,58,.06) 100%)", borderRadius: 8, border: "1px solid rgba(201,149,58,.2)" } }, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 11, fontWeight: 700, color: "var(--gold)", letterSpacing: 0.4 } }, "\u2B50 PREMIUM ACTIVE"), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 11, color: "var(--mu)", marginTop: 2 } }, "All features unlocked")), /* @__PURE__ */ React.createElement("div", { style: { padding: "10px 12px", fontSize: 13, color: "var(--mu)" } }, /* @__PURE__ */ React.createElement("div", { style: { fontWeight: 600, color: "var(--ch)", fontSize: 14 } }, user?.name || "Guest"), !isGuest && /* @__PURE__ */ React.createElement("div", { style: { marginTop: 2, fontSize: 12 } }, user?.email), isGuest && /* @__PURE__ */ React.createElement("div", { style: { marginTop: 3 } }, /* @__PURE__ */ React.createElement("span", { style: { background: "var(--clayBg)", color: "var(--clayH)", padding: "2px 8px", borderRadius: 4, fontSize: 11, fontWeight: 700 } }, "GUEST"))), /* @__PURE__ */ React.createElement("button", { className: "ni", onClick: onLogout }, /* @__PURE__ */ React.createElement(Ic, { n: "logout", s: 18 }), "Sign out")));
@@ -31804,7 +31958,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
         const group = cookNowGroups[k];
         return /* @__PURE__ */ React.createElement("div", { key: k, style: { marginBottom: 28 } }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 8, marginBottom: 10 } }, /* @__PURE__ */ React.createElement("span", { style: { fontWeight: 700, fontSize: 13, color } }, label), /* @__PURE__ */ React.createElement("span", { style: { fontSize: 11, color: "var(--mu)", background: dim, padding: "1px 7px", borderRadius: 10, fontWeight: 600 } }, group.length)), /* @__PURE__ */ React.createElement("div", { className: "rgrid" }, group.map((r) => {
           const rDisp = { ...r, missing: k === 0 ? [] : r._mn };
-          return /* @__PURE__ */ React.createElement(RecipeCard, { key: r.id, r: rDisp, saved: isRecipeSaved ? isRecipeSaved(r) : saved.has(r.id), onSave: () => onSaveFav ? onSaveFav(r) : toggleSave(r.id), onView: () => onViewRecipe(r), addToList: () => addToList(rDisp.missing || []) });
+          return /* @__PURE__ */ React.createElement(RecipeCard, { key: r.id, r: rDisp, saved: isRecipeSaved ? isRecipeSaved(r) : saved.has(r.id), onSave: () => onSaveFav ? onSaveFav(r) : toggleSave(r.id), onView: () => onViewRecipe(r), addToList, pantry });
         })));
       }));
     })(), lockedCount > 0 && /* @__PURE__ */ React.createElement("div", { className: "paywall-overlay" }, /* @__PURE__ */ React.createElement("div", { className: "paywall-cta" }, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 32, marginBottom: 8 } }, "\u{1F512}"), /* @__PURE__ */ React.createElement("div", { className: "paywall-cta-title" }, lockedCount, " more recipes locked"), /* @__PURE__ */ React.createElement("div", { className: "paywall-cta-sub" }, "Upgrade to Premium to unlock all ", RECIPES.length, " recipes including lunches, dinners, and seasonal specials."), /* @__PURE__ */ React.createElement("button", { className: "btn btn-p btn-full", onClick: () => onUpgrade("recipes") }, "\u2B50 Unlock all recipes")))) : pantryPerfect && pantryPerfectGroups ? (
@@ -31825,7 +31979,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
           return /* @__PURE__ */ React.createElement("div", { key: k, style: { marginBottom: 20 } }, /* @__PURE__ */ React.createElement("div", { className: "sec-hdr", onClick: () => k !== 0 && setPpCollapsed((p) => ({ ...p, [k]: !p[k] })) }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 8 } }, /* @__PURE__ */ React.createElement("span", { style: { fontWeight: 700, fontSize: 13, color } }, label), /* @__PURE__ */ React.createElement("span", { style: { fontSize: 11, background: dim, color, padding: "1px 8px", borderRadius: 10, fontWeight: 600 } }, group.length)), k !== 0 && /* @__PURE__ */ React.createElement("span", { style: { fontSize: 12, color: "var(--mu)" } }, isOpen ? "\u25B2 collapse" : "\u25BC expand")), isOpen && /* @__PURE__ */ React.createElement("div", { className: "rgrid", style: { marginTop: 8 } }, group.map((r) => {
             const rDisp = { ...r, missing: k === 0 ? [] : r._mn };
             const ingMatchLabel = r._ingMatch && searchQ ? /* @__PURE__ */ React.createElement("span", { style: { fontSize: 10, color: "var(--clay)", fontWeight: 600, display: "block", marginTop: 2 } }, "Includes: ", searchQ) : null;
-            return /* @__PURE__ */ React.createElement(RecipeCard, { key: r.id, r: rDisp, saved: isRecipeSaved ? isRecipeSaved(r) : saved.has(r.id), onSave: () => onSaveFav ? onSaveFav(r) : toggleSave(r.id), onView: () => onViewRecipe(r), addToList: () => addToList(rDisp.missing || []) });
+            return /* @__PURE__ */ React.createElement(RecipeCard, { key: r.id, r: rDisp, saved: isRecipeSaved ? isRecipeSaved(r) : saved.has(r.id), onSave: () => onSaveFav ? onSaveFav(r) : toggleSave(r.id), onView: () => onViewRecipe(r), addToList, pantry });
           })));
         });
       })(), lockedCount > 0 && /* @__PURE__ */ React.createElement("div", { className: "paywall-overlay" }, /* @__PURE__ */ React.createElement("div", { className: "paywall-cta" }, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 32, marginBottom: 8 } }, "\u{1F512}"), /* @__PURE__ */ React.createElement("div", { className: "paywall-cta-title" }, lockedCount, " more recipes locked"), /* @__PURE__ */ React.createElement("div", { className: "paywall-cta-sub" }, "Upgrade to Premium to unlock all ", RECIPES.length, " recipes."), /* @__PURE__ */ React.createElement("button", { className: "btn btn-p btn-full", onClick: () => onUpgrade("recipes") }, "\u2B50 Unlock all recipes"))))
@@ -31833,15 +31987,22 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
       /* ── Normal (unordered) view ── */
       /* @__PURE__ */ React.createElement("div", { className: lockedCount > 0 ? "paywall-lock" : "", style: { minHeight: lockedCount > 0 ? 420 : void 0 } }, /* @__PURE__ */ React.createElement("div", { className: "rgrid" }, filtered.length === 0 ? /* @__PURE__ */ React.createElement("div", { className: "empty" }, /* @__PURE__ */ React.createElement("div", { className: "eic" }, "\u{1F37D}\uFE0F"), /* @__PURE__ */ React.createElement("div", { className: "etitle" }, "No recipes found"), /* @__PURE__ */ React.createElement("div", { className: "esub" }, "Try a different filter or add more pantry items.")) : visibleRecipes.map((r) => {
         const ingMatchLabel = r._ingMatch && searchQ ? /* @__PURE__ */ React.createElement("span", { style: { fontSize: 10, color: "var(--clay)", fontWeight: 600, display: "block", marginTop: 2 } }, "Includes: ", searchQ) : null;
-        return /* @__PURE__ */ React.createElement(RecipeCard, { key: r.id, r, saved: isRecipeSaved ? isRecipeSaved(r) : saved.has(r.id), onSave: () => onSaveFav ? onSaveFav(r) : toggleSave(r.id), onView: () => onViewRecipe(r), addToList: () => addToList(r.missing || []) });
+        return /* @__PURE__ */ React.createElement(RecipeCard, { key: r.id, r, saved: isRecipeSaved ? isRecipeSaved(r) : saved.has(r.id), onSave: () => onSaveFav ? onSaveFav(r) : toggleSave(r.id), onView: () => onViewRecipe(r), addToList, pantry });
       })), lockedCount > 0 && /* @__PURE__ */ React.createElement("div", { className: "paywall-overlay" }, /* @__PURE__ */ React.createElement("div", { className: "paywall-cta" }, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 32, marginBottom: 8 } }, "\u{1F512}"), /* @__PURE__ */ React.createElement("div", { className: "paywall-cta-title" }, lockedCount, " more recipes locked"), /* @__PURE__ */ React.createElement("div", { className: "paywall-cta-sub" }, "Upgrade to Premium to unlock all ", RECIPES.length, " recipes including lunches, dinners, and seasonal specials."), /* @__PURE__ */ React.createElement("button", { className: "btn btn-p btn-full", onClick: () => onUpgrade("recipes") }, "\u2B50 Unlock all recipes"))))
     ), !isPremium && saved.size >= FREE_SAVE_LIMIT && /* @__PURE__ */ React.createElement("div", { style: { background: "var(--goldBg)", border: "1px solid rgba(201,149,58,.3)", borderRadius: 10, padding: "12px 16px", marginTop: 16, display: "flex", alignItems: "center", gap: 10 } }, /* @__PURE__ */ React.createElement("span", { style: { fontSize: 20 } }, "\u2764\uFE0F"), /* @__PURE__ */ React.createElement("div", { style: { flex: 1 } }, /* @__PURE__ */ React.createElement("div", { style: { fontWeight: 600, fontSize: 14 } }, "You've saved ", saved.size, " recipes (free limit)"), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 12, color: "var(--mu)" } }, "Upgrade to save unlimited recipes to your personal cookbook.")), /* @__PURE__ */ React.createElement("button", { className: "btn btn-p btn-sm", onClick: () => onUpgrade("save") }, "Upgrade")), /* @__PURE__ */ React.createElement("div", { className: "sep" }), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "baseline", gap: 10, marginBottom: 4 } }, /* @__PURE__ */ React.createElement("h2", { className: "stitle" }, "Suggested items to buy"), /* @__PURE__ */ React.createElement("span", { style: { fontSize: 14, color: "var(--mu)" } }, "\u2014 unlock more recipes")), /* @__PURE__ */ React.createElement("p", { className: "ssub" }, "Based on your pantry and cuisines, these ingredients open the most new recipes."), /* @__PURE__ */ React.createElement("div", { className: "bgrid" }, BOOSTERS.map((b) => /* @__PURE__ */ React.createElement("div", { key: b.name, className: "bcard" }, /* @__PURE__ */ React.createElement("div", { className: "bing" }, /* @__PURE__ */ React.createElement("span", { style: { fontSize: 20 } }, b.emoji), b.name), /* @__PURE__ */ React.createElement("div", { className: "bwhy" }, b.why), /* @__PURE__ */ React.createElement("div", { className: "bul" }, "Unlocks"), /* @__PURE__ */ React.createElement("div", { className: "brec" }, b.unlocks.join(" \xB7 ")), /* @__PURE__ */ React.createElement("button", { className: "btn btn-sm btn-cs btn-full", onClick: () => addToList([b.name]) }, /* @__PURE__ */ React.createElement(Ic, { n: "cart", s: 14 }), "Add to shopping list"))))), showRandom && /* @__PURE__ */ React.createElement(RandomModal, { onClose: () => setShowRandom(false), onView: (r) => {
       setShowRandom(false);
       onViewRecipe(r);
     }, addToList }));
   }
-  function RecipeCard({ r, saved, onSave, onView, addToList, inFav }) {
-    return /* @__PURE__ */ React.createElement("div", { className: "card" }, /* @__PURE__ */ React.createElement("div", { className: "rimg", onClick: onView }, /* @__PURE__ */ React.createElement("span", null, r.emoji), /* @__PURE__ */ React.createElement("div", { className: "rtag" }, r.cuisine), r.worth && /* @__PURE__ */ React.createElement("div", { className: "rbadge" }, "\u2B50 Worth buying"), r.isUserCreated && /* @__PURE__ */ React.createElement("div", { className: "rbadge", style: { background: "var(--sage)" } }, "My Recipe")), /* @__PURE__ */ React.createElement("div", { className: "rbody" }, /* @__PURE__ */ React.createElement("div", { className: "rtitle", onClick: onView }, r.title), /* @__PURE__ */ React.createElement("div", { className: "rmeta" }, /* @__PURE__ */ React.createElement("span", { className: "rmeta-i" }, "\u23F1 ", r.time, " min"), /* @__PURE__ */ React.createElement("span", { className: "rmeta-i" }, "\u{1F4CA} ", r.diff)), /* @__PURE__ */ React.createElement("div", { className: "rtags" }, r.dietary.map((d) => /* @__PURE__ */ React.createElement("span", { key: d, className: "tag td" }, d))), !r.isUserCreated && /* @__PURE__ */ React.createElement("div", { className: "pbar" }, /* @__PURE__ */ React.createElement("div", { className: "pbar-r" }, /* @__PURE__ */ React.createElement("span", null, "Pantry match"), /* @__PURE__ */ React.createElement("span", { style: { color: "var(--sage)", fontWeight: 600 } }, r.pp, "%")), /* @__PURE__ */ React.createElement("div", { className: "pbar-t" }, /* @__PURE__ */ React.createElement("div", { className: "pbar-f", style: { width: `${r.pp}%` } }))), r.missing && r.missing.length > 0 && /* @__PURE__ */ React.createElement("div", { style: { fontSize: 12, color: "var(--mu)", marginBottom: 12 } }, "Missing: ", r.missing.join(", "), r.worth && /* @__PURE__ */ React.createElement("span", { className: "bwrth", style: { marginLeft: 8 } }, "Worth buying")), /* @__PURE__ */ React.createElement("div", { className: "ractions" }, /* @__PURE__ */ React.createElement("button", { className: "btn btn-sm btn-cs", onClick: onView }, "View recipe"), /* @__PURE__ */ React.createElement(
+  function RecipeCard({ r, saved, onSave, onView, addToList, inFav, pantry }) {
+    const dynamicMissing = React.useMemo(() => {
+      if (r.isUserCreated || !r.ingredients?.length) return [];
+      const ps = buildPantrySet(pantry || []);
+      return r.ingredients.filter((i) => !ingInPantry(i.n, ps)).map((i) => i.n);
+    }, [r.id, r.ingredients, pantry]);
+    const dynamicPP = r.ingredients?.length ? Math.round((r.ingredients.length - dynamicMissing.length) / r.ingredients.length * 100) : r.pp || 0;
+    const handleAddMissing = () => addToList(dynamicMissing);
+    return /* @__PURE__ */ React.createElement("div", { className: "card" }, /* @__PURE__ */ React.createElement("div", { className: "rimg", onClick: onView }, /* @__PURE__ */ React.createElement("span", null, r.emoji), /* @__PURE__ */ React.createElement("div", { className: "rtag" }, r.cuisine), r.worth && /* @__PURE__ */ React.createElement("div", { className: "rbadge" }, "\u2B50 Worth buying"), r.isUserCreated && /* @__PURE__ */ React.createElement("div", { className: "rbadge", style: { background: "var(--sage)" } }, "My Recipe")), /* @__PURE__ */ React.createElement("div", { className: "rbody" }, /* @__PURE__ */ React.createElement("div", { className: "rtitle", onClick: onView }, r.title), /* @__PURE__ */ React.createElement("div", { className: "rmeta" }, /* @__PURE__ */ React.createElement("span", { className: "rmeta-i" }, "\u23F1 ", r.time, " min"), /* @__PURE__ */ React.createElement("span", { className: "rmeta-i" }, "\u{1F4CA} ", r.diff)), /* @__PURE__ */ React.createElement("div", { className: "rtags" }, r.dietary.map((d) => /* @__PURE__ */ React.createElement("span", { key: d, className: "tag td" }, d))), !r.isUserCreated && /* @__PURE__ */ React.createElement("div", { className: "pbar" }, /* @__PURE__ */ React.createElement("div", { className: "pbar-r" }, /* @__PURE__ */ React.createElement("span", null, "Pantry match"), /* @__PURE__ */ React.createElement("span", { style: { color: "var(--sage)", fontWeight: 600 } }, dynamicPP, "%")), /* @__PURE__ */ React.createElement("div", { className: "pbar-t" }, /* @__PURE__ */ React.createElement("div", { className: "pbar-f", style: { width: `${dynamicPP}%` } }))), dynamicMissing.length > 0 && /* @__PURE__ */ React.createElement("div", { style: { fontSize: 12, color: "var(--mu)", marginBottom: 12 } }, "Missing: ", dynamicMissing.slice(0, 4).join(", "), dynamicMissing.length > 4 ? ` +${dynamicMissing.length - 4} more` : ""), /* @__PURE__ */ React.createElement("div", { className: "ractions" }, /* @__PURE__ */ React.createElement("button", { className: "btn btn-sm btn-cs", onClick: onView }, "View recipe"), /* @__PURE__ */ React.createElement(
       "button",
       {
         className: `bm-btn ${saved ? "on" : ""}`,
@@ -31852,7 +32013,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
         title: inFav ? "Remove from favorites" : "Save to favorites"
       },
       /* @__PURE__ */ React.createElement(Ic, { n: saved ? "bookmarkOn" : "bookmark", s: 15 })
-    ), r.missing && r.missing.length > 0 && /* @__PURE__ */ React.createElement("button", { className: "btn btn-sm btn-g", style: { border: "1px solid var(--bor)" }, onClick: addToList }, /* @__PURE__ */ React.createElement(Ic, { n: "cart", s: 13 })))));
+    ), dynamicMissing.length > 0 && /* @__PURE__ */ React.createElement("button", { className: "btn btn-sm btn-g", style: { border: "1px solid var(--bor)" }, onClick: handleAddMissing }, /* @__PURE__ */ React.createElement(Ic, { n: "cart", s: 13 })))));
   }
   function RandomModal({ onClose, onView, addToList }) {
     const [step, setStep] = (0, import_react.useState)("filters");
@@ -31871,7 +32032,7 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
       setResult(pool.length > 0 ? pool[Math.floor(Math.random() * pool.length)] : RECIPES[Math.floor(Math.random() * RECIPES.length)]);
       setStep("result");
     };
-    return /* @__PURE__ */ React.createElement("div", { className: "mov", onClick: (e) => e.target === e.currentTarget && onClose() }, /* @__PURE__ */ React.createElement("div", { className: "modal" }, /* @__PURE__ */ React.createElement("div", { className: "mhd" }, /* @__PURE__ */ React.createElement("div", { className: "mtitle" }, step === "filters" ? "\u{1F3B2} Random Plate" : "Here's your plate!"), /* @__PURE__ */ React.createElement("button", { className: "mclose", onClick: onClose }, /* @__PURE__ */ React.createElement(Ic, { n: "x", s: 16 }))), step === "filters" && /* @__PURE__ */ React.createElement("div", { className: "mbody", style: { display: "flex", flexDirection: "column", gap: 16 } }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "Cuisine"), /* @__PURE__ */ React.createElement("select", { className: "sel", value: f.cuisine, onChange: (e) => setF((p) => ({ ...p, cuisine: e.target.value })) }, CUIS.map((c) => /* @__PURE__ */ React.createElement("option", { key: c }, c)))), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "Style"), /* @__PURE__ */ React.createElement("div", { className: "mopts" }, STYLES.map((s) => /* @__PURE__ */ React.createElement("button", { key: s, className: `mopt ${f.style === s ? "sel" : ""}`, onClick: () => setF((p) => ({ ...p, style: s })) }, s)))), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "Max cook time: ", f.maxTime, " min"), /* @__PURE__ */ React.createElement("input", { type: "range", min: 10, max: 120, step: 5, value: f.maxTime, onChange: (e) => setF((p) => ({ ...p, maxTime: +e.target.value })), style: { width: "100%", accentColor: "var(--clay)" } })), /* @__PURE__ */ React.createElement("button", { className: "btn btn-p btn-full btn-lg", onClick: generate }, /* @__PURE__ */ React.createElement(Ic, { n: "shuffle", s: 18 }), "Surprise me!")), step === "result" && result && /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { style: { textAlign: "center", padding: "28px 20px" } }, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 72, marginBottom: 8 } }, result.emoji), /* @__PURE__ */ React.createElement("div", { style: { fontFamily: "var(--fd)", fontSize: 26, marginBottom: 6 } }, result.title), /* @__PURE__ */ React.createElement("div", { style: { color: "var(--mu)", fontSize: 14, marginBottom: 16 } }, result.cuisine, " \xB7 ", result.time, " min \xB7 ", result.diff), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", flexWrap: "wrap", gap: 6, justifyContent: "center", marginBottom: 16 } }, result.dietary.map((d) => /* @__PURE__ */ React.createElement("span", { key: d, className: "tag td" }, d))), /* @__PURE__ */ React.createElement("div", { className: "pbar", style: { textAlign: "left" } }, /* @__PURE__ */ React.createElement("div", { className: "pbar-r" }, /* @__PURE__ */ React.createElement("span", null, "Pantry match"), /* @__PURE__ */ React.createElement("span", { style: { color: "var(--sage)", fontWeight: 600 } }, result.pp, "%")), /* @__PURE__ */ React.createElement("div", { className: "pbar-t" }, /* @__PURE__ */ React.createElement("div", { className: "pbar-f", style: { width: `${result.pp}%` } })))), /* @__PURE__ */ React.createElement("div", { style: { padding: "0 24px 24px", display: "flex", flexDirection: "column", gap: 10 } }, /* @__PURE__ */ React.createElement("button", { className: "btn btn-p btn-full", onClick: () => onView(result) }, "View full recipe \u2192"), /* @__PURE__ */ React.createElement("button", { className: "btn btn-s btn-full", onClick: generate }, /* @__PURE__ */ React.createElement(Ic, { n: "shuffle", s: 16 }), "Generate another"), result.missing.length > 0 && /* @__PURE__ */ React.createElement("button", { className: "btn btn-g btn-full", style: { border: "1px solid var(--bor)" }, onClick: () => addToList(result.missing) }, /* @__PURE__ */ React.createElement(Ic, { n: "cart", s: 16 }), "Add missing to list")))));
+    return /* @__PURE__ */ React.createElement("div", { className: "mov", onClick: (e) => e.target === e.currentTarget && onClose() }, /* @__PURE__ */ React.createElement("div", { className: "modal" }, /* @__PURE__ */ React.createElement("div", { className: "mhd" }, /* @__PURE__ */ React.createElement("div", { className: "mtitle" }, step === "filters" ? "\u{1F3B2} Random Plate" : "Here's your plate!"), /* @__PURE__ */ React.createElement("button", { className: "mclose", onClick: onClose }, /* @__PURE__ */ React.createElement(Ic, { n: "x", s: 16 }))), step === "filters" && /* @__PURE__ */ React.createElement("div", { className: "mbody", style: { display: "flex", flexDirection: "column", gap: 16 } }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "Cuisine"), /* @__PURE__ */ React.createElement("select", { className: "sel", value: f.cuisine, onChange: (e) => setF((p) => ({ ...p, cuisine: e.target.value })) }, CUIS.map((c) => /* @__PURE__ */ React.createElement("option", { key: c }, c)))), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "Style"), /* @__PURE__ */ React.createElement("div", { className: "mopts" }, STYLES.map((s) => /* @__PURE__ */ React.createElement("button", { key: s, className: `mopt ${f.style === s ? "sel" : ""}`, onClick: () => setF((p) => ({ ...p, style: s })) }, s)))), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "Max cook time: ", f.maxTime, " min"), /* @__PURE__ */ React.createElement("input", { type: "range", min: 10, max: 120, step: 5, value: f.maxTime, onChange: (e) => setF((p) => ({ ...p, maxTime: +e.target.value })), style: { width: "100%", accentColor: "var(--clay)" } })), /* @__PURE__ */ React.createElement("button", { className: "btn btn-p btn-full btn-lg", onClick: generate }, /* @__PURE__ */ React.createElement(Ic, { n: "shuffle", s: 18 }), "Surprise me!")), step === "result" && result && /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { style: { textAlign: "center", padding: "28px 20px" } }, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 72, marginBottom: 8 } }, result.emoji), /* @__PURE__ */ React.createElement("div", { style: { fontFamily: "var(--fd)", fontSize: 26, marginBottom: 6 } }, result.title), /* @__PURE__ */ React.createElement("div", { style: { color: "var(--mu)", fontSize: 14, marginBottom: 16 } }, result.cuisine, " \xB7 ", result.time, " min \xB7 ", result.diff), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", flexWrap: "wrap", gap: 6, justifyContent: "center", marginBottom: 16 } }, result.dietary.map((d) => /* @__PURE__ */ React.createElement("span", { key: d, className: "tag td" }, d))), /* @__PURE__ */ React.createElement("div", { className: "pbar", style: { textAlign: "left" } }, /* @__PURE__ */ React.createElement("div", { className: "pbar-r" }, /* @__PURE__ */ React.createElement("span", null, "Pantry match"), /* @__PURE__ */ React.createElement("span", { style: { color: "var(--sage)", fontWeight: 600 } }, result.pp, "%")), /* @__PURE__ */ React.createElement("div", { className: "pbar-t" }, /* @__PURE__ */ React.createElement("div", { className: "pbar-f", style: { width: `${result.pp}%` } })))), /* @__PURE__ */ React.createElement("div", { style: { padding: "0 24px 24px", display: "flex", flexDirection: "column", gap: 10 } }, /* @__PURE__ */ React.createElement("button", { className: "btn btn-p btn-full", onClick: () => onView(result) }, "View full recipe \u2192"), /* @__PURE__ */ React.createElement("button", { className: "btn btn-s btn-full", onClick: generate }, /* @__PURE__ */ React.createElement(Ic, { n: "shuffle", s: 16 }), "Generate another")))));
   }
   var AVOID_OPTIONAL_INGS = /* @__PURE__ */ new Set([
     "parsley",
@@ -32496,112 +32657,6 @@ Provide 4-6 options. Each must be genuinely different from recent suggestions.`;
       if (valid) onSave({ kind: "custom", title: title.trim(), notes: notes.trim() || void 0 });
     } }, "Save"))));
   }
-  function PublishMenuModal({ mealPlan, user, allRecipes: allRecipes2, onPublish, onClose }) {
-    const [title, setTitle] = React.useState("My Week Menu");
-    const [visibility, setVisibility] = React.useState("public");
-    const [published, setPublished] = React.useState(false);
-    const [menuId, setMenuId] = React.useState(null);
-    const plannedCount = mealPlan.flatMap((d) => d.meals).filter(Boolean).length;
-    const handlePublish = () => {
-      const id = `menu_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
-      const menu = {
-        id,
-        title,
-        authorUserId: user?.email?.toLowerCase() || "guest",
-        authorName: user?.name || "Anonymous",
-        weekStartDate: (/* @__PURE__ */ new Date()).toISOString().slice(0, 10),
-        slots: mealPlan.flatMap(
-          (day, di) => day.meals.map((meal, mi) => meal ? {
-            day: day.day,
-            mealType: ["Breakfast", "Lunch", "Dinner"][mi],
-            item: meal
-          } : null).filter(Boolean)
-        ),
-        mealCount: plannedCount,
-        createdAt: Date.now(),
-        visibility
-      };
-      const feed = JSON.parse(localStorage.getItem("sc_community_feed") || "[]");
-      localStorage.setItem("sc_community_feed", JSON.stringify([menu, ...feed].slice(0, 200)));
-      onPublish(menu);
-      setMenuId(id);
-      setPublished(true);
-    };
-    if (published) return /* @__PURE__ */ React.createElement("div", { className: "modal-overlay", onClick: onClose }, /* @__PURE__ */ React.createElement("div", { className: "modal-box", onClick: (e) => e.stopPropagation(), style: { maxWidth: 400, padding: 28, textAlign: "center" } }, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 48, marginBottom: 12 } }, "\u{1F389}"), /* @__PURE__ */ React.createElement("div", { style: { fontWeight: 700, fontSize: 18, marginBottom: 8 } }, "Menu published!"), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 13, color: "var(--mu)", marginBottom: 20 } }, "Your weekly menu is now visible in the Community feed."), /* @__PURE__ */ React.createElement("button", { className: "btn btn-p", onClick: onClose }, "Done")));
-    return /* @__PURE__ */ React.createElement("div", { className: "modal-overlay", onClick: onClose }, /* @__PURE__ */ React.createElement("div", { className: "modal-box", onClick: (e) => e.stopPropagation(), style: { maxWidth: 440, padding: 24 } }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 } }, /* @__PURE__ */ React.createElement("div", { style: { fontWeight: 700, fontSize: 15 } }, "\u{1F310} Publish Weekly Menu"), /* @__PURE__ */ React.createElement("button", { className: "btn btn-xs btn-g", onClick: onClose }, "\u2715")), plannedCount === 0 && /* @__PURE__ */ React.createElement("div", { style: { color: "var(--err)", fontSize: 13, marginBottom: 12 } }, "\u26A0\uFE0F Your plan is empty. Add some meals first."), /* @__PURE__ */ React.createElement("div", { className: "fg" }, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "Menu title"), /* @__PURE__ */ React.createElement("input", { className: "fi", value: title, onChange: (e) => setTitle(e.target.value) })), /* @__PURE__ */ React.createElement("div", { className: "fg" }, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "Visibility"), /* @__PURE__ */ React.createElement("select", { className: "sel", value: visibility, onChange: (e) => setVisibility(e.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "public" }, "Public \u2014 visible in community"), /* @__PURE__ */ React.createElement("option", { value: "private" }, "Private \u2014 only you can see it"))), /* @__PURE__ */ React.createElement("div", { style: { background: "var(--cream)", borderRadius: 8, padding: "10px 14px", marginBottom: 16, fontSize: 13, color: "var(--mu)" } }, plannedCount, " meal", plannedCount !== 1 ? "s" : "", " will be shared."), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 8, justifyContent: "flex-end" } }, /* @__PURE__ */ React.createElement("button", { className: "btn btn-s btn-sm", onClick: onClose }, "Cancel"), /* @__PURE__ */ React.createElement("button", { className: "btn btn-p btn-sm", disabled: plannedCount === 0, onClick: handlePublish }, "Publish"))));
-  }
-  function CommunityTab({ mealPlan, setMealPlan, allRecipes: allRecipes2, user, isGuest, collections, setCollections, showToast, isPremium, onViewRecipe }) {
-    const [feed, setFeed] = React.useState([]);
-    const [tab, setTab] = React.useState("menus");
-    const [copyingId, setCopyingId] = React.useState(null);
-    React.useEffect(() => {
-      const raw = localStorage.getItem("sc_community_feed") || "[]";
-      try {
-        setFeed(JSON.parse(raw));
-      } catch {
-        setFeed([]);
-      }
-    }, []);
-    const menus = feed.filter((item) => item.slots);
-    const copyToPlanner = (menu) => {
-      if (isGuest) {
-        alert("Create an account to copy menus to your planner.");
-        return;
-      }
-      const newPlan = mealPlan.map((day) => ({ ...day, meals: [...day.meals] }));
-      const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-      const MT = ["Breakfast", "Lunch", "Dinner"];
-      menu.slots.forEach((slot) => {
-        const di = DAYS.indexOf(slot.day);
-        const mi = MT.indexOf(slot.mealType);
-        if (di >= 0 && mi >= 0) newPlan[di].meals[mi] = slot.item;
-      });
-      setMealPlan(newPlan);
-      if (showToast) showToast("\u{1F4C5} Menu copied to your planner!");
-    };
-    const saveMenu = (menu) => {
-      if (isGuest) {
-        alert("Create an account to save menus.");
-        return;
-      }
-      const uid = user?.email?.toLowerCase() || "";
-      const updated = collections.map(
-        (c) => c.id === "saved" ? { ...c, items: [{ type: "menu", id: menu.id, menuData: menu, savedAt: Date.now() }, ...c.items.filter((i) => !(i.type === "menu" && i.id === menu.id))] } : c
-      );
-      setCollections(updated);
-      if (showToast) showToast("\u{1F516} Menu saved to your collection!");
-    };
-    const saveRecipe = (r) => {
-      if (isGuest) {
-        alert("Create an account to save recipes.");
-        return;
-      }
-      const updated = collections.map(
-        (c) => c.id === "saved" ? { ...c, items: [{ type: "recipe", id: r.id, savedAt: Date.now() }, ...c.items.filter((i) => !(i.type === "recipe" && i.id === r.id))] } : c
-      );
-      setCollections(updated);
-      if (showToast) showToast("\u{1F516} Recipe saved to your collection!");
-    };
-    const MEAL_TYPE_EMOJIS = { Breakfast: "\u2600\uFE0F", Lunch: "\u{1F324}\uFE0F", Dinner: "\u{1F319}" };
-    const getMealDisplay = (item) => {
-      if (!item) return null;
-      if (item.kind === "custom") return { emoji: "\u{1F4DD}", name: item.title };
-      const r = allRecipes2.find((x) => x.id === item.id);
-      return r ? { emoji: r.emoji || "\u{1F37D}", name: r.title } : { emoji: item.emoji || "\u{1F37D}", name: item.name || "Unknown" };
-    };
-    if (menus.length === 0 && tab === "menus") return /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 8, marginBottom: 24 } }, /* @__PURE__ */ React.createElement("button", { className: `prof-tab ${tab === "menus" ? "ac" : ""}`, onClick: () => setTab("menus") }, "\u{1F4C5} Weekly Menus")), /* @__PURE__ */ React.createElement("div", { style: { textAlign: "center", padding: "60px 0", color: "var(--mu)" } }, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 48, marginBottom: 12 } }, "\u{1F310}"), /* @__PURE__ */ React.createElement("div", { style: { fontWeight: 700, fontSize: 18, marginBottom: 8 } }, "No published menus yet"), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 14 } }, "Go to the Planner tab and publish your weekly menu to see it here!")));
-    return /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { style: { marginBottom: 20 } }, /* @__PURE__ */ React.createElement("h2", { style: { fontFamily: "var(--fd)", fontSize: 24, marginBottom: 6 } }, "Community"), /* @__PURE__ */ React.createElement("p", { style: { color: "var(--mu)", fontSize: 14 } }, "Discover and copy weekly menus from the community.")), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 8, marginBottom: 20 } }, /* @__PURE__ */ React.createElement("button", { className: `prof-tab ${tab === "menus" ? "ac" : ""}`, onClick: () => setTab("menus") }, "\u{1F4C5} Weekly Menus (", menus.length, ")")), tab === "menus" && /* @__PURE__ */ React.createElement("div", { className: "feed-grid" }, menus.map((menu) => {
-      const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-      const MTs = ["Breakfast", "Lunch", "Dinner"];
-      return /* @__PURE__ */ React.createElement("div", { key: menu.id, className: "feed-card" }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 12 } }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { style: { fontWeight: 700, fontSize: 15, marginBottom: 2 } }, menu.title), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 12, color: "var(--mu)" } }, "By ", menu.authorName, " \xB7 ", menu.mealCount, " meals"), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 11, color: "var(--mu)", marginTop: 2 } }, new Date(menu.createdAt).toLocaleDateString())), /* @__PURE__ */ React.createElement("span", { style: { fontSize: 11, background: "var(--sageBg)", color: "var(--sageH)", padding: "3px 8px", borderRadius: 6, fontWeight: 600 } }, "Public")), /* @__PURE__ */ React.createElement("div", { style: { display: "grid", gridTemplateColumns: "repeat(7,1fr)", gap: 4, marginBottom: 12 } }, days.map((day) => {
-        const slots = MTs.map((mt) => {
-          const s = menu.slots.find((sl) => sl.day === day && sl.mealType === mt);
-          return s ? getMealDisplay(s.item) : null;
-        }).filter(Boolean);
-        return /* @__PURE__ */ React.createElement("div", { key: day, style: { textAlign: "center" } }, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 9, color: "var(--mu)", fontWeight: 700, marginBottom: 4 } }, day), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", flexDirection: "column", gap: 2 } }, slots.slice(0, 3).map((m, i) => m && /* @__PURE__ */ React.createElement("div", { key: i, title: m.name, style: { fontSize: 16, lineHeight: 1.2 } }, m.emoji)), slots.length === 0 && /* @__PURE__ */ React.createElement("div", { style: { fontSize: 11, color: "var(--bor)" } }, "\u2014")));
-      })), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 8 } }, /* @__PURE__ */ React.createElement("button", { className: "btn btn-p btn-sm", style: { flex: 1 }, onClick: () => copyToPlanner(menu) }, "\u{1F4C5} Copy to Planner"), /* @__PURE__ */ React.createElement("button", { className: "btn btn-s btn-sm", onClick: () => saveMenu(menu) }, "\u{1F516} Save")));
-    })));
-  }
   function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, prefs, pantry, setPantry, setShopping, isPremium, subscription, setSubscription, onUpgrade, allRecipes: allRecipesProp, userRecipes, avoidedIngredients = [], user, publishedMenus, setPublishedMenus, showToast, collections, setCollections }) {
     const allRecipes2 = allRecipesProp || RECIPES;
     const [slots, setSlots] = (0, import_react.useState)({ Breakfast: true, Lunch: true, Dinner: true });
@@ -32612,8 +32667,6 @@ Provide 4-6 options. Each must be genuinely different from recent suggestions.`;
     const [dragSource, setDragSource] = (0, import_react.useState)(null);
     const [showPublishModal, setShowPublishModal] = (0, import_react.useState)(false);
     const [planning, setPlanning] = (0, import_react.useState)(false);
-    const [plannerTab, setPlannerTab] = (0, import_react.useState)("week");
-    const [showPlannerChat, setShowPlannerChat] = (0, import_react.useState)(false);
     const [showMissingModal, setShowMissingModal] = (0, import_react.useState)(false);
     const [tooRestrictive, setTooRestrictive] = (0, import_react.useState)(false);
     const [allowAvoidedLastResort, setAllowAvoidedLastResort] = (0, import_react.useState)(false);
@@ -32832,7 +32885,17 @@ Provide 4-6 options. Each must be genuinely different from recent suggestions.`;
     }, 0);
     const missingItems = shopping.filter((i) => !i.checked).length;
     const active = ["Breakfast", "Lunch", "Dinner"].filter((m) => slots[m]);
-    return /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 20, flexWrap: "wrap", gap: 12 } }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h1", { className: "stitle" }, "Weekly Planner"), /* @__PURE__ */ React.createElement("p", { className: "ssub" }, "Feb 17\u201323, 2026")), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 8, flexWrap: "wrap" } }, /* @__PURE__ */ React.createElement("button", { className: "btn btn-s btn-sm", onClick: () => setShowPlannerChat(true) }, "\u{1F4AC} Chat to adjust plan"), /* @__PURE__ */ React.createElement("button", { className: "btn btn-p btn-sm", onClick: () => {
+    return /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 20, flexWrap: "wrap", gap: 12 } }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h1", { className: "stitle" }, "Weekly Planner"), /* @__PURE__ */ React.createElement("p", { className: "ssub" }, (() => {
+      const now = /* @__PURE__ */ new Date();
+      const dow = now.getDay();
+      const diffToMon = dow === 0 ? -6 : 1 - dow;
+      const mon = new Date(now);
+      mon.setDate(now.getDate() + diffToMon);
+      const sun = new Date(mon);
+      sun.setDate(mon.getDate() + 6);
+      const fmt = (d) => d.toLocaleDateString(void 0, { month: "short", day: "numeric" });
+      return `${fmt(mon)} \u2013 ${fmt(sun)}, ${sun.getFullYear()}`;
+    })())), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 8, flexWrap: "wrap" } }, /* @__PURE__ */ React.createElement("button", { className: "btn btn-p btn-sm", onClick: () => {
       if (isGuest) {
         return;
       }
@@ -32875,7 +32938,7 @@ Provide 4-6 options. Each must be genuinely different from recent suggestions.`;
         });
         setShowMissingModal(false);
       } }, "Add all missing to shopping list")));
-    })(), !isPremium && !isGuest && (subscription.autoplanUsed || 0) >= FREE_AUTOPLAN_USES && /* @__PURE__ */ React.createElement("div", { style: { background: "linear-gradient(135deg,var(--clayBg) 0%,rgba(201,149,58,.06) 100%)", border: "1px solid rgba(192,106,62,.2)", borderRadius: 10, padding: "12px 16px", marginBottom: 16, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap" } }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 10 } }, /* @__PURE__ */ React.createElement("span", { style: { fontSize: 20 } }, "\u{1F4C5}"), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { style: { fontWeight: 600, fontSize: 14 } }, "Free auto-plan used"), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 12, color: "var(--mu)", marginTop: 1 } }, "Upgrade to auto-generate unlimited weekly plans in one click."))), /* @__PURE__ */ React.createElement("button", { className: "btn btn-p btn-sm", onClick: () => onUpgrade("autoplan") }, "\u2B50 Upgrade \u2014 $4.99/mo")), !isGuest && mealPlan.flatMap((d) => d.meals).some(Boolean) && /* @__PURE__ */ React.createElement("div", { style: { display: "flex", justifyContent: "flex-end", marginBottom: 8 } }, /* @__PURE__ */ React.createElement("button", { className: "btn btn-sage btn-sm", onClick: () => setShowPublishModal(true) }, "\u{1F310} Publish this week")), /* @__PURE__ */ React.createElement("div", { className: "planner-tabs" }, [{ id: "week", label: "\u{1F4C5} Weekly Grid" }, { id: "prep", label: "\u{1F4E6} Meal Prep Plan" }].map((t) => /* @__PURE__ */ React.createElement("button", { key: t.id, className: `ptab ${plannerTab === t.id ? "ac" : ""}`, onClick: () => setPlannerTab(t.id) }, t.label))), plannerTab === "week" && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { style: { background: "var(--white)", border: "1px solid var(--bor)", borderRadius: "var(--r)", padding: "14px 18px", marginBottom: 16 } }, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 11, fontWeight: 700, color: "var(--mu)", textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 10 } }, "Meal slots"), /* @__PURE__ */ React.createElement("div", { className: "mtoggles" }, ["Breakfast", "Lunch", "Dinner"].map((m) => /* @__PURE__ */ React.createElement("label", { key: m, className: "mtog" }, /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: slots[m], onChange: (e) => setSlots((p) => ({ ...p, [m]: e.target.checked })) }), /* @__PURE__ */ React.createElement("span", { className: "mtog-l" }, ME[m], " ", m))))), /* @__PURE__ */ React.createElement("div", { className: "pwrap" }, /* @__PURE__ */ React.createElement("div", { style: { display: "grid", gridTemplateColumns: "70px repeat(7,1fr)", gap: 8, minWidth: 640 } }, /* @__PURE__ */ React.createElement("div", null), mealPlan.map((d) => /* @__PURE__ */ React.createElement("div", { key: d.day, className: "pdh" }, d.day)), active.map((mealType, mi) => [
+    })(), !isPremium && !isGuest && (subscription.autoplanUsed || 0) >= FREE_AUTOPLAN_USES && /* @__PURE__ */ React.createElement("div", { style: { background: "linear-gradient(135deg,var(--clayBg) 0%,rgba(201,149,58,.06) 100%)", border: "1px solid rgba(192,106,62,.2)", borderRadius: 10, padding: "12px 16px", marginBottom: 16, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap" } }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 10 } }, /* @__PURE__ */ React.createElement("span", { style: { fontSize: 20 } }, "\u{1F4C5}"), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { style: { fontWeight: 600, fontSize: 14 } }, "Free auto-plan used"), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 12, color: "var(--mu)", marginTop: 1 } }, "Upgrade to auto-generate unlimited weekly plans in one click."))), /* @__PURE__ */ React.createElement("button", { className: "btn btn-p btn-sm", onClick: () => onUpgrade("autoplan") }, "\u2B50 Upgrade \u2014 $4.99/mo")), /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { style: { background: "var(--white)", border: "1px solid var(--bor)", borderRadius: "var(--r)", padding: "14px 18px", marginBottom: 16 } }, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 11, fontWeight: 700, color: "var(--mu)", textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 10 } }, "Meal slots"), /* @__PURE__ */ React.createElement("div", { className: "mtoggles" }, ["Breakfast", "Lunch", "Dinner"].map((m) => /* @__PURE__ */ React.createElement("label", { key: m, className: "mtog" }, /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: slots[m], onChange: (e) => setSlots((p) => ({ ...p, [m]: e.target.checked })) }), /* @__PURE__ */ React.createElement("span", { className: "mtog-l" }, ME[m], " ", m))))), /* @__PURE__ */ React.createElement("div", { className: "pwrap" }, /* @__PURE__ */ React.createElement("div", { style: { display: "grid", gridTemplateColumns: "70px repeat(7,1fr)", gap: 8, minWidth: 640 } }, /* @__PURE__ */ React.createElement("div", null), mealPlan.map((d) => /* @__PURE__ */ React.createElement("div", { key: d.day, className: "pdh" }, d.day)), active.map((mealType, mi) => [
       /* @__PURE__ */ React.createElement("div", { key: `L${mealType}`, style: { display: "flex", alignItems: "center", justifyContent: "flex-end", paddingRight: 8 } }, /* @__PURE__ */ React.createElement("div", { className: "prl", style: { fontSize: 11 } }, ME[mealType], /* @__PURE__ */ React.createElement("span", null, mealType))),
       ...mealPlan.map((day) => {
         const meal = day.meals[mi];
@@ -32917,7 +32980,7 @@ Provide 4-6 options. Each must be genuinely different from recent suggestions.`;
           meal ? /* @__PURE__ */ React.createElement("div", { className: "msi" }, meal.kind === "custom" ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "msem" }, "\u{1F4DD}"), /* @__PURE__ */ React.createElement("div", { className: "msn" }, meal.title), /* @__PURE__ */ React.createElement("div", { className: "custom-badge" }, "Custom")) : /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "msem" }, meal.emoji), /* @__PURE__ */ React.createElement("div", { className: "msn" }, meal.name), recipeNeedsShopping(meal) && /* @__PURE__ */ React.createElement("div", { style: { fontSize: 10, color: "var(--gold)", fontWeight: 600, marginTop: 2 } }, "\u{1F6D2} Needs shopping"))) : /* @__PURE__ */ React.createElement("div", { className: "msadd" }, "+")
         );
       })
-    ]))), /* @__PURE__ */ React.createElement("div", { style: { marginTop: 28 } }, /* @__PURE__ */ React.createElement("h3", { style: { fontFamily: "var(--fd)", fontSize: 18, marginBottom: 14 } }, "This week at a glance"), /* @__PURE__ */ React.createElement("div", { className: "glance-grid" }, /* @__PURE__ */ React.createElement("div", { className: "glance-card" }, /* @__PURE__ */ React.createElement("div", { className: "glance-val" }, totalMeals), /* @__PURE__ */ React.createElement("div", { className: "glance-lbl" }, "meals planned")), /* @__PURE__ */ React.createElement("div", { className: "glance-card" }, /* @__PURE__ */ React.createElement("div", { className: "glance-val", style: { fontSize: totalTime > 99 ? 24 : 32 } }, totalTime, /* @__PURE__ */ React.createElement("span", { style: { fontSize: 14, color: "var(--mu)", fontFamily: "var(--fb)", fontWeight: 400 } }, " min")), /* @__PURE__ */ React.createElement("div", { className: "glance-lbl" }, "total cooking time")), /* @__PURE__ */ React.createElement("div", { className: "glance-card" }, /* @__PURE__ */ React.createElement("div", { className: "glance-val" }, "0"), /* @__PURE__ */ React.createElement("div", { className: "glance-lbl" }, "meals use expiring ingredients")), /* @__PURE__ */ React.createElement("div", { className: "glance-card" }, /* @__PURE__ */ React.createElement("div", { className: "glance-val" }, missingItems), /* @__PURE__ */ React.createElement("div", { className: "glance-lbl" }, "shopping items still needed"))))), plannerTab === "prep" && /* @__PURE__ */ React.createElement(MealPrepPlanner, { mealPlan, prefs: { dietary: [], household: 2 } }), slotActions && (() => {
+    ]))), /* @__PURE__ */ React.createElement("div", { style: { marginTop: 28 } }, /* @__PURE__ */ React.createElement("h3", { style: { fontFamily: "var(--fd)", fontSize: 18, marginBottom: 14 } }, "This week at a glance"), /* @__PURE__ */ React.createElement("div", { className: "glance-grid" }, /* @__PURE__ */ React.createElement("div", { className: "glance-card" }, /* @__PURE__ */ React.createElement("div", { className: "glance-val" }, totalMeals), /* @__PURE__ */ React.createElement("div", { className: "glance-lbl" }, "meals planned")), /* @__PURE__ */ React.createElement("div", { className: "glance-card" }, /* @__PURE__ */ React.createElement("div", { className: "glance-val", style: { fontSize: totalTime > 99 ? 24 : 32 } }, totalTime, /* @__PURE__ */ React.createElement("span", { style: { fontSize: 14, color: "var(--mu)", fontFamily: "var(--fb)", fontWeight: 400 } }, " min")), /* @__PURE__ */ React.createElement("div", { className: "glance-lbl" }, "total cooking time")), /* @__PURE__ */ React.createElement("div", { className: "glance-card" }, /* @__PURE__ */ React.createElement("div", { className: "glance-val" }, "0"), /* @__PURE__ */ React.createElement("div", { className: "glance-lbl" }, "meals use expiring ingredients")), /* @__PURE__ */ React.createElement("div", { className: "glance-card" }, /* @__PURE__ */ React.createElement("div", { className: "glance-val" }, missingItems), /* @__PURE__ */ React.createElement("div", { className: "glance-lbl" }, "shopping items still needed"))))), slotActions && (() => {
       const { dayIdx, mealIdx, dayLabel, mealType } = slotActions;
       const meal = mealPlan[dayIdx]?.meals[mealIdx];
       const recipeObj = meal && meal.kind !== "custom" && meal.id ? allRecipes2.find((r) => r.id === meal.id) : null;
@@ -32968,114 +33031,7 @@ Provide 4-6 options. Each must be genuinely different from recent suggestions.`;
           setCustomMealModal(null);
         }
       }
-    ), showPublishModal && /* @__PURE__ */ React.createElement(
-      PublishMenuModal,
-      {
-        mealPlan,
-        user,
-        allRecipes: allRecipes2,
-        onClose: () => setShowPublishModal(false),
-        onPublish: publishMenu
-      }
-    ), showPlannerChat && /* @__PURE__ */ React.createElement(PlannerChatDrawer, { onClose: () => setShowPlannerChat(false), mealPlan, setMealPlan }));
-  }
-  function PlannerChatDrawer({ onClose, mealPlan, setMealPlan }) {
-    const [msgs, setMsgs] = (0, import_react.useState)([{ role: "ai", text: `Hi! I can help you adjust your meal plan \u{1F5D3}\uFE0F
-
-Try:
-\u2022 "Swap Tuesday dinner"
-\u2022 "Make Friday vegetarian"
-\u2022 "I'm busy Wednesday, give me something under 15 min"` }]);
-    const [input, setInput] = (0, import_react.useState)("");
-    const [loading, setLoading] = (0, import_react.useState)(false);
-    const [pending, setPending] = (0, import_react.useState)(null);
-    const endRef = (0, import_react.useRef)(null);
-    (0, import_react.useEffect)(() => {
-      endRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, [msgs, loading]);
-    const QUICK = ["Swap Tuesday dinner", "Make Friday vegetarian", "Busy Wednesday \u2014 15 min meal", "Add a healthy breakfast Monday", "Remove Sunday lunch"];
-    const callAI = async (userMsg) => {
-      setLoading(true);
-      setMsgs((p) => [...p, { role: "user", text: userMsg }]);
-      setInput("");
-      const planSummary = mealPlan.map((d) => `${d.day}: ${d.meals.map((m, i) => m ? `${["Breakfast", "Lunch", "Dinner"][i]}=${m.name}` : "empty").join(", ")}`).join("\n");
-      try {
-        const res = await fetch("https://api.anthropic.com/v1/messages", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({
-          model: "claude-sonnet-4-20250514",
-          max_tokens: 600,
-          system: `You are a meal plan assistant. The user has this weekly plan:
-${planSummary}
-
-Available meals: Pancakes (breakfast), Scrambled Eggs (breakfast), Chickpea Bowl (lunch), Miso Ramen (lunch), Aglio e Olio (dinner), Roast Chicken (dinner), Shakshuka (dinner).
-
-Respond with JSON: {"reply":"friendly confirmation message","change":{"day":"Mon","slot":0,"meal":{"emoji":"\u{1F95E}","name":"Pancakes","id":6}} or null}. slot: 0=Breakfast,1=Lunch,2=Dinner. If no change needed, change=null.`,
-          messages: [{ role: "user", content: userMsg }]
-        }) });
-        const data = await res.json();
-        const clean = data.content[0].text.replace(/```json|```/g, "").trim();
-        const parsed = JSON.parse(clean);
-        setMsgs((p) => [...p, { role: "ai", text: parsed.reply }]);
-        if (parsed.change) {
-          setPending(parsed.change);
-        }
-      } catch {
-        setMsgs((p) => [...p, { role: "ai", text: "I've noted your preference! Try describing what day and meal you'd like to change, and I'll update it for you." }]);
-      }
-      setLoading(false);
-    };
-    const applyChange = () => {
-      if (!pending) return;
-      setMealPlan((p) => p.map((d) => {
-        if (d.day !== pending.day) return d;
-        const meals = [...d.meals];
-        meals[pending.slot] = pending.meal;
-        return { ...d, meals };
-      }));
-      setMsgs((p) => [...p, { role: "ai", text: "\u2705 Plan updated! Anything else you'd like to change?" }]);
-      setPending(null);
-    };
-    return /* @__PURE__ */ React.createElement("div", { className: "dov", onClick: (e) => e.target === e.currentTarget && onClose() }, /* @__PURE__ */ React.createElement("div", { className: "pc-drawer" }, /* @__PURE__ */ React.createElement("div", { className: "dhdr" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "dtitle" }, "Adjust Plan"), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 12, color: "var(--mu)", marginTop: 2 } }, "Chat to modify your week")), /* @__PURE__ */ React.createElement("button", { className: "dclose", onClick: onClose }, /* @__PURE__ */ React.createElement(Ic, { n: "x", s: 16 }))), /* @__PURE__ */ React.createElement("div", { style: { padding: "12px 20px", borderBottom: "1px solid var(--bor)", display: "flex", flexWrap: "wrap", gap: 6 } }, QUICK.map((q) => /* @__PURE__ */ React.createElement("button", { key: q, className: "cchip", style: { fontSize: 12, padding: "5px 10px" }, onClick: () => callAI(q) }, q))), /* @__PURE__ */ React.createElement("div", { className: "pc-msgs" }, msgs.map((m, i) => /* @__PURE__ */ React.createElement("div", { key: i, className: `mrow ${m.role === "user" ? "u" : ""}` }, m.role === "ai" && /* @__PURE__ */ React.createElement("div", { className: "mav" }, "\u{1F4C5}"), /* @__PURE__ */ React.createElement("div", { className: "mbub", style: { whiteSpace: "pre-wrap" } }, m.text))), loading && /* @__PURE__ */ React.createElement("div", { className: "mrow" }, /* @__PURE__ */ React.createElement("div", { className: "mav" }, "\u{1F4C5}"), /* @__PURE__ */ React.createElement("div", { className: "mbub" }, /* @__PURE__ */ React.createElement("div", { className: "ldots" }, /* @__PURE__ */ React.createElement("div", { className: "dot" }), /* @__PURE__ */ React.createElement("div", { className: "dot" }), /* @__PURE__ */ React.createElement("div", { className: "dot" })))), pending && /* @__PURE__ */ React.createElement("div", { style: { background: "var(--sageBg)", border: "1px solid var(--sage)", borderRadius: "var(--rs)", padding: 14, margin: "4px 0" } }, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 13, fontWeight: 600, marginBottom: 8 } }, "Proposed: ", pending.day, " ", ["Breakfast", "Lunch", "Dinner"][pending.slot], " \u2192 ", pending.meal?.emoji, " ", pending.meal?.name), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 8 } }, /* @__PURE__ */ React.createElement("button", { className: "btn btn-sage btn-sm", onClick: applyChange }, "Apply \u2713"), /* @__PURE__ */ React.createElement("button", { className: "btn btn-s btn-sm", onClick: () => setPending(null) }, "Dismiss"))), /* @__PURE__ */ React.createElement("div", { ref: endRef })), /* @__PURE__ */ React.createElement("div", { className: "pc-bot" }, /* @__PURE__ */ React.createElement("textarea", { className: "pc-inp", rows: 1, placeholder: "e.g. Swap Tuesday dinner or make it vegetarian\u2026", value: input, onChange: (e) => setInput(e.target.value), onKeyDown: (e) => {
-      if (e.key === "Enter" && !e.shiftKey) {
-        e.preventDefault();
-        if (input.trim()) callAI(input.trim());
-      }
-    } }), /* @__PURE__ */ React.createElement("button", { className: "csend", onClick: () => {
-      if (input.trim()) callAI(input.trim());
-    } }, /* @__PURE__ */ React.createElement(Ic, { n: "send", s: 18 })))));
-  }
-  function MealPrepPlanner({ mealPlan, prefs }) {
-    const [setup, setSetup] = (0, import_react.useState)({ days: 5, meals: { Breakfast: true, Lunch: true, Dinner: true }, sessions: 1, maxTime: 90, freezer: true });
-    const [result, setResult] = (0, import_react.useState)(null);
-    const [loading, setLoading] = (0, import_react.useState)(false);
-    const generate = async () => {
-      setLoading(true);
-      await new Promise((r) => setTimeout(r, 900));
-      const mealList = Object.entries(setup.meals).filter(([, v]) => v).map(([k]) => k).join("+");
-      setResult({
-        cookDay: "Sunday",
-        batches: [
-          { emoji: "\u{1F357}", title: "Herb Roast Chicken (batch)", portions: setup.days > 4 ? 6 : 4, fridge: "3\u20134 days", freeze: "Up to 3 months (portion in bags)", remixes: ["Monday: chicken + rice bowl", "Wednesday: chicken wrap", "Friday: chicken salad"], time: 70 },
-          { emoji: "\u{1F963}", title: "Big Grain Base (rice + quinoa)", portions: 8, fridge: "5 days", freeze: "Up to 2 months", remixes: ["Lunch bowl base", "Side dish", "Add to soups"], time: 25 },
-          { emoji: "\u{1F958}", title: "Shakshuka sauce (batch)", portions: 4, fridge: "4 days", freeze: "2 months (sauce only, eggs fresh)", remixes: ["Breakfast eggs", "Pasta sauce base", "Shakshuka bowls"], time: 20 },
-          ...setup.meals.Breakfast ? [{ emoji: "\u{1F95E}", title: "Pancake batter (ready-to-cook)", portions: 6, fridge: "2 days", freeze: "Not recommended \u2014 cook fresh", remixes: ["Quick breakfast any morning"], time: 10 }] : []
-        ],
-        shopping: ["1 whole chicken", "Rice + quinoa (1kg combined)", "Canned tomatoes x4", "Eggs x12", "Lemons x3", "Fresh herbs (parsley, thyme)", "Olive oil", "Cumin, paprika"],
-        checklist: [
-          { n: 1, t: "Prep chicken (20 min)", d: "Season and prepare the whole chicken. Get it in the oven first \u2014 it takes longest." },
-          { n: 2, t: "Start grain base (5 min active)", d: "Put rice and quinoa on to cook while chicken roasts." },
-          { n: 3, t: "Make shakshuka sauce (20 min)", d: "Simmer the tomato sauce. Cool and portion into containers." },
-          { n: 4, t: "Prep pancake batter (5 min)", d: "Mix dry and wet ingredients. Store in a sealed jar in the fridge." },
-          { n: 5, t: "Portion + label everything (15 min)", d: "Use containers with date labels. Freeze portions you won't use in 3 days." }
-        ]
-      });
-      setLoading(false);
-    };
-    return /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h2", { style: { fontFamily: "var(--fd)", fontSize: 20, marginBottom: 6 } }, "Meal Prep for the Week"), /* @__PURE__ */ React.createElement("p", { style: { color: "var(--mu)", fontSize: 14, marginBottom: 20 } }, "Set your constraints and get a structured, cook-once plan for the whole week."), !result && /* @__PURE__ */ React.createElement("div", { className: "prep-setup" }, /* @__PURE__ */ React.createElement("div", { className: "prep-section" }, /* @__PURE__ */ React.createElement("div", { className: "prep-section-title" }, "How many days to prep for?"), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 8, flexWrap: "wrap" } }, [3, 5, 7].map((d) => /* @__PURE__ */ React.createElement("button", { key: d, className: `mopt ${setup.days === d ? "sel" : ""}`, onClick: () => setSetup((p) => ({ ...p, days: d })) }, d, " days")))), /* @__PURE__ */ React.createElement("div", { className: "prep-section" }, /* @__PURE__ */ React.createElement("div", { className: "prep-section-title" }, "Which meals to prep?"), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 12, flexWrap: "wrap" } }, ["Breakfast", "Lunch", "Dinner"].map((m, mi) => {
-      const ico = ["\u2600\uFE0F", "\u{1F324}\uFE0F", "\u{1F319}"][mi];
-      return /* @__PURE__ */ React.createElement("label", { key: m, className: "mtog" }, /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: setup.meals[m], onChange: (ev) => setSetup((p) => ({ ...p, meals: { ...p.meals, [m]: ev.target.checked } })) }), /* @__PURE__ */ React.createElement("span", { className: "mtog-l" }, ico, " ", m));
-    }))), /* @__PURE__ */ React.createElement("div", { className: "prep-section" }, /* @__PURE__ */ React.createElement("div", { className: "prep-section-title" }, "Cooking sessions & time"), /* @__PURE__ */ React.createElement("div", { className: "row", style: { flexWrap: "wrap", gap: 16 } }, /* @__PURE__ */ React.createElement("div", { className: "half" }, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "Cooking sessions"), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 8 } }, [{ v: 1, l: "1 day (Sunday)" }, { v: 2, l: "2 days (Sat+Sun)" }].map((o) => /* @__PURE__ */ React.createElement("button", { key: o.v, className: `mopt ${setup.sessions === o.v ? "sel" : ""}`, onClick: () => setSetup((p) => ({ ...p, sessions: o.v })), style: { flex: 1 } }, o.l)))), /* @__PURE__ */ React.createElement("div", { className: "half" }, /* @__PURE__ */ React.createElement("label", { className: "fl" }, "Max time per session"), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 8 } }, [60, 90, 120].map((t) => /* @__PURE__ */ React.createElement("button", { key: t, className: `mopt ${setup.maxTime === t ? "sel" : ""}`, onClick: () => setSetup((p) => ({ ...p, maxTime: t })), style: { flex: 1 } }, t, " min")))))), /* @__PURE__ */ React.createElement("div", { className: "prep-section" }, /* @__PURE__ */ React.createElement("div", { className: "prep-section-title" }, "Include freezer meals?"), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 8 } }, /* @__PURE__ */ React.createElement("button", { className: `mopt ${setup.freezer ? "sel" : ""}`, onClick: () => setSetup((p) => ({ ...p, freezer: true })) }, "Yes, freeze extras"), /* @__PURE__ */ React.createElement("button", { className: `mopt ${!setup.freezer ? "sel" : ""}`, onClick: () => setSetup((p) => ({ ...p, freezer: false })) }, "No, fridge only"))), /* @__PURE__ */ React.createElement("button", { className: "btn btn-p btn-full btn-lg", onClick: generate, disabled: loading }, loading ? "Generating plan\u2026" : "\u{1F4E6} Generate meal prep plan")), result && /* @__PURE__ */ React.createElement("div", { className: "prep-result" }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16, flexWrap: "wrap", gap: 10 } }, /* @__PURE__ */ React.createElement("h3", { style: { fontFamily: "var(--fd)", fontSize: 20 } }, "Cook on ", result.cookDay, " \u2014 ", result.batches.length, " batches"), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 8 } }, /* @__PURE__ */ React.createElement("button", { className: "btn btn-s btn-sm", onClick: () => {
-      setResult(null);
-    } }, "Edit constraints"), /* @__PURE__ */ React.createElement("button", { className: "btn btn-cs btn-sm", onClick: generate }, "Regenerate"))), result.batches.map((b, i) => /* @__PURE__ */ React.createElement("div", { key: i, className: "prep-batch" }, /* @__PURE__ */ React.createElement("div", { className: "prep-batch-title" }, /* @__PURE__ */ React.createElement("span", { style: { fontSize: 24 } }, b.emoji), b.title), /* @__PURE__ */ React.createElement("div", { className: "prep-batch-row" }, /* @__PURE__ */ React.createElement("div", { className: "prep-batch-lbl" }, "Portions"), /* @__PURE__ */ React.createElement("div", { className: "prep-batch-val" }, b.portions, " servings")), /* @__PURE__ */ React.createElement("div", { className: "prep-batch-row" }, /* @__PURE__ */ React.createElement("div", { className: "prep-batch-lbl" }, "Fridge"), /* @__PURE__ */ React.createElement("div", { className: "prep-batch-val" }, b.fridge)), setup.freezer && /* @__PURE__ */ React.createElement("div", { className: "prep-batch-row" }, /* @__PURE__ */ React.createElement("div", { className: "prep-batch-lbl" }, "Freezer"), /* @__PURE__ */ React.createElement("div", { className: "prep-batch-val" }, b.freeze)), /* @__PURE__ */ React.createElement("div", { className: "prep-batch-row" }, /* @__PURE__ */ React.createElement("div", { className: "prep-batch-lbl" }, "Remixes"), /* @__PURE__ */ React.createElement("div", { className: "prep-batch-val" }, b.remixes.map((r, ri) => /* @__PURE__ */ React.createElement("span", { key: ri, className: "remix-tag" }, r)))), /* @__PURE__ */ React.createElement("div", { className: "prep-batch-row" }, /* @__PURE__ */ React.createElement("div", { className: "prep-batch-lbl" }, "Cook time"), /* @__PURE__ */ React.createElement("div", { className: "prep-batch-val" }, b.time, " min")))), /* @__PURE__ */ React.createElement("div", { className: "prep-section", style: { marginBottom: 20 } }, /* @__PURE__ */ React.createElement("div", { className: "prep-section-title" }, "\u{1F6D2} Shopping list for this prep"), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", flexWrap: "wrap", gap: 8, marginTop: 8 } }, result.shopping.map((s, i) => /* @__PURE__ */ React.createElement("span", { key: i, style: { background: "var(--cream)", border: "1px solid var(--bor)", borderRadius: 6, padding: "4px 12px", fontSize: 13 } }, s)))), /* @__PURE__ */ React.createElement("div", { className: "prep-section" }, /* @__PURE__ */ React.createElement("div", { className: "prep-section-title" }, "\u2705 Prep checklist (", result.cookDay, ")"), /* @__PURE__ */ React.createElement("div", { className: "prep-checklist", style: { marginTop: 12 } }, result.checklist.map((s) => /* @__PURE__ */ React.createElement("div", { key: s.n, className: "prep-check-item" }, /* @__PURE__ */ React.createElement("div", { className: "prep-step-num" }, s.n), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { style: { fontWeight: 600, marginBottom: 2 } }, s.t), /* @__PURE__ */ React.createElement("div", { style: { color: "var(--mu)", fontSize: 12, lineHeight: 1.5 } }, s.d))))))));
+    ));
   }
   function ShoppingListTab({ shopping, setShopping, pantry, mealPlan, isGuest }) {
     const [newItem, setNewItem] = (0, import_react.useState)("");
@@ -33130,7 +33086,8 @@ Respond with JSON: {"reply":"friendly confirmation message","change":{"day":"Mon
     deleteFavFolder,
     saveToFolder,
     isRecipeSaved,
-    showToast
+    showToast,
+    pantry
   }) {
     const [activeFolder, setActiveFolder] = (0, import_react.useState)(null);
     const [search, setSearch] = (0, import_react.useState)("");
@@ -33229,7 +33186,8 @@ Respond with JSON: {"reply":"friendly confirmation message","change":{"day":"Mon
             onSave: () => onSaveFav && onSaveFav(recipe),
             onView: () => onViewRecipe(recipe),
             addToList: () => {
-            }
+            },
+            pantry
           }
         ), /* @__PURE__ */ React.createElement("div", { className: "fav-card-footer" }, /* @__PURE__ */ React.createElement("button", { className: "fav-foot-btn", onClick: () => onViewRecipe(recipe) }, "View"), confirmDelete === recipe.id ? /* @__PURE__ */ React.createElement(
           "button",
@@ -33260,7 +33218,8 @@ Respond with JSON: {"reply":"friendly confirmation message","change":{"day":"Mon
             onSave: () => removeFavItem(recipe, item.folderId),
             onView: () => onViewRecipe(recipe),
             addToList: () => {
-            }
+            },
+            pantry
           }
         ), /* @__PURE__ */ React.createElement("div", { className: "fav-card-footer" }, /* @__PURE__ */ React.createElement("button", { className: "fav-foot-btn", onClick: () => setMoveTarget({ recipe, item }) }, "Move to\u2026"), /* @__PURE__ */ React.createElement("button", { className: "fav-foot-btn danger", onClick: () => removeFavItem(recipe, item.folderId) }, "Remove")))))
       ))
@@ -33473,7 +33432,7 @@ Respond with JSON: {"reply":"friendly confirmation message","change":{"day":"Mon
     if (view === "shopping") return /* @__PURE__ */ React.createElement(ShoppingView, { shopping, setShopping, onBack: () => setView("main") });
     if (view === "folders") return /* @__PURE__ */ React.createElement(FoldersView, { onBack: () => setView("main"), isGuest });
     const dl = prefs.dietary.length === 0 || prefs.dietary.includes("None") ? "No restrictions" : prefs.dietary.join(", ");
-    return /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { style: { marginBottom: 16 } }, /* @__PURE__ */ React.createElement("h1", { className: "stitle" }, "Profile"), /* @__PURE__ */ React.createElement("p", { className: "ssub" }, "Manage your account and preferences")), !isGuest && /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 6, marginBottom: 20, flexWrap: "wrap" } }, /* @__PURE__ */ React.createElement("button", { className: `prof-tab ${profTab === "account" ? "ac" : ""}`, onClick: () => setProfTab("account") }, "\u{1F464} Account"), /* @__PURE__ */ React.createElement("button", { className: `prof-tab ${profTab === "menus" ? "ac" : ""}`, onClick: () => setProfTab("menus") }, "\u{1F4C5} My Published Menus (", publishedMenus.length, ")"), /* @__PURE__ */ React.createElement("button", { className: `prof-tab ${profTab === "collections" ? "ac" : ""}`, onClick: () => setProfTab("collections") }, "\u{1F516} Collections (", collections.reduce((a, c) => a + c.items.length, 0), ")")), profTab === "menus" && !isGuest && /* @__PURE__ */ React.createElement("div", null, publishedMenus.length === 0 ? /* @__PURE__ */ React.createElement("div", { style: { textAlign: "center", padding: "40px 0", color: "var(--mu)" } }, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 36, marginBottom: 8 } }, "\u{1F4C5}"), /* @__PURE__ */ React.createElement("div", { style: { fontWeight: 600, marginBottom: 4 } }, "No published menus yet"), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 13 } }, 'Go to the Planner tab and click "Publish this week" to share your menu.')) : /* @__PURE__ */ React.createElement("div", { className: "feed-grid" }, publishedMenus.map((m) => /* @__PURE__ */ React.createElement("div", { key: m.id, className: "feed-card" }, /* @__PURE__ */ React.createElement("div", { style: { fontWeight: 700, fontSize: 15, marginBottom: 4 } }, m.title), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 12, color: "var(--mu)", marginBottom: 8 } }, m.mealCount, " meals \xB7 ", new Date(m.createdAt).toLocaleDateString(), " \xB7 ", m.visibility === "public" ? "\u{1F310} Public" : "\u{1F512} Private"))))), profTab === "collections" && !isGuest && /* @__PURE__ */ React.createElement("div", null, collections.map((col) => /* @__PURE__ */ React.createElement("div", { key: col.id, style: { marginBottom: 20 } }, /* @__PURE__ */ React.createElement("div", { style: { fontWeight: 700, fontSize: 15, marginBottom: 8 } }, col.emoji, " ", col.name, " ", /* @__PURE__ */ React.createElement("span", { style: { fontSize: 12, color: "var(--mu)", fontWeight: 400 } }, "(", col.items.length, ")")), col.items.length === 0 ? /* @__PURE__ */ React.createElement("div", { style: { fontSize: 13, color: "var(--mu)", padding: "8px 0" } }, "Nothing saved here yet.") : /* @__PURE__ */ React.createElement("div", { style: { display: "flex", flexWrap: "wrap", gap: 8 } }, col.items.map((item, i) => /* @__PURE__ */ React.createElement("div", { key: i, style: { background: "var(--white)", border: "1px solid var(--bor)", borderRadius: 8, padding: "6px 12px", fontSize: 13 } }, item.type === "recipe" ? "\u{1F37D}" : "\u{1F4C5}", " ", item.menuData?.title || `Recipe #${item.id}`)))))), (profTab === "account" || isGuest) && /* @__PURE__ */ React.createElement("div", { className: "pgr" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "card pcard", style: { marginBottom: 16 } }, /* @__PURE__ */ React.createElement("div", { className: "pav" }, isGuest ? "\u{1F464}" : user?.name?.[0]?.toUpperCase() || "?"), /* @__PURE__ */ React.createElement("div", { className: "pname" }, isGuest ? "Guest User" : user?.name), /* @__PURE__ */ React.createElement("div", { className: "pemail" }, isGuest ? "Guest session" : user?.email), isGuest && /* @__PURE__ */ React.createElement("div", { style: { marginTop: 10 } }, /* @__PURE__ */ React.createElement("span", { style: { background: "var(--clayBg)", color: "var(--clayH)", padding: "3px 10px", borderRadius: 6, fontSize: 12, fontWeight: 700 } }, "GUEST MODE")), !isGuest && /* @__PURE__ */ React.createElement("div", { style: { marginTop: 10 } }, isPremium ? /* @__PURE__ */ React.createElement("span", { className: "pro-badge" }, "\u2B50 PREMIUM") : /* @__PURE__ */ React.createElement("span", { className: "free-badge" }, "FREE PLAN"))), !isGuest && /* @__PURE__ */ React.createElement("div", { className: `card ${isPremium ? "sub-pro-card" : "sub-status-card"}`, style: { marginBottom: 16, padding: "18px 20px" } }, isPremium ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 10, marginBottom: 12 } }, /* @__PURE__ */ React.createElement("div", { style: { width: 40, height: 40, borderRadius: 11, background: "linear-gradient(135deg,#C9953A 0%,#E8B84B 100%)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, flexShrink: 0 } }, "\u2B50"), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { style: { fontWeight: 700, fontSize: 15 } }, "SmartChef Premium"), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 12, color: "var(--mu)", marginTop: 1 } }, "All features unlocked \xB7 Cancel anytime"))), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", flexDirection: "column", gap: 6, marginBottom: 14 } }, ["\u{1F916} Chef AI chat", "\u{1F37D}\uFE0F All 131 recipes", "\u{1F4C5} Unlimited auto-planning", "\u2764\uFE0F Unlimited saved recipes"].map((f) => /* @__PURE__ */ React.createElement("div", { key: f, style: { display: "flex", alignItems: "center", gap: 8, fontSize: 13 } }, /* @__PURE__ */ React.createElement("span", { style: { color: "var(--sage)", fontWeight: 700 } }, "\u2713"), f))), /* @__PURE__ */ React.createElement("a", { href: "https://billing.stripe.com/p/login/REPLACE_CUSTOMER_PORTAL", target: "_blank", rel: "noreferrer", style: { fontSize: 13, color: "var(--clay)", fontWeight: 600, textDecoration: "none" } }, "Manage billing \u2192")) : /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 10, marginBottom: 10 } }, /* @__PURE__ */ React.createElement("div", { style: { width: 40, height: 40, borderRadius: 11, background: "var(--cream)", border: "1px solid var(--bor)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, flexShrink: 0 } }, "\u{1F513}"), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { style: { fontWeight: 700, fontSize: 15 } }, "Free Plan"), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 12, color: "var(--mu)", marginTop: 1 } }, "Limited to ", FREE_RECIPE_LIMIT, " recipes \xB7 ", FREE_SAVE_LIMIT, " saves"))), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", flexDirection: "column", gap: 5, marginBottom: 14 } }, [{ f: `${FREE_RECIPE_LIMIT} of ${RECIPES.length} recipes`, locked: false }, { f: "1 free auto-plan use", locked: false }, { f: `${Math.min(saved?.size || 0, FREE_SAVE_LIMIT)} of ${FREE_SAVE_LIMIT} recipe saves used`, locked: false }, { f: "Chef AI chat", locked: true }, { f: "Unlimited auto-planning", locked: true }, { f: "All 131 recipes", locked: true }].map(({ f, locked }) => /* @__PURE__ */ React.createElement("div", { key: f, style: { display: "flex", alignItems: "center", gap: 8, fontSize: 13, color: locked ? "var(--mu)" : "var(--ch)" } }, /* @__PURE__ */ React.createElement("span", { style: { color: locked ? "var(--bor)" : "var(--sage)", fontWeight: 700 } }, locked ? "\u2717" : "\u2713"), f))), /* @__PURE__ */ React.createElement("button", { className: "upgrade-btn", style: { marginTop: 0 }, onClick: () => onUpgrade("generic") }, "\u2B50 Upgrade to Premium \u2014 $4.99/mo"))), /* @__PURE__ */ React.createElement("div", { className: "ssec" }, /* @__PURE__ */ React.createElement("div", { className: "srow", onClick: () => setView("shopping") }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "srl" }, "\u{1F6D2} Shopping List"), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 12, color: "var(--mu)" } }, shopping.filter((i) => !i.checked).length, " items left")), /* @__PURE__ */ React.createElement(Ic, { n: "right", s: 16 })), /* @__PURE__ */ React.createElement("div", { className: "srow", onClick: () => setView("folders") }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "srl" }, "\u{1F4C1} Saved Folders")), /* @__PURE__ */ React.createElement(Ic, { n: "right", s: 16 }))), /* @__PURE__ */ React.createElement("div", { className: "ssec" }, /* @__PURE__ */ React.createElement("div", { className: "srow", onClick: onLogout }, /* @__PURE__ */ React.createElement("div", { className: "srl", style: { color: "var(--err)" } }, isGuest ? "\u2190 Exit Guest Mode" : "Sign Out")))), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 } }, /* @__PURE__ */ React.createElement("h2", { style: { fontFamily: "var(--fd)", fontSize: 20 } }, "Preferences"), /* @__PURE__ */ React.createElement("button", { className: "btn btn-p btn-sm", onClick: () => setShowPrefs(true) }, "Edit preferences")), /* @__PURE__ */ React.createElement("div", { className: "ssec" }, [{ l: "\u{1F957} Dietary mode", v: dl }, { l: "\u{1F30D} Favorite cuisines", v: prefs.cuisines.join(", ") || "None" }, { l: "\u{1F3AF} Health goal", v: prefs.health }, { l: "\u{1F468}\u200D\u{1F373} Cooking skill", v: prefs.skill }, { l: "\u23F1 Max cook time", v: `${prefs.maxTime} min` }, { l: "\u{1F465} Household size", v: `${prefs.household} people` }].map((r) => /* @__PURE__ */ React.createElement("div", { key: r.l, className: "srow", style: { cursor: "default" } }, /* @__PURE__ */ React.createElement("div", { className: "srl" }, r.l), /* @__PURE__ */ React.createElement("div", { className: "srv" }, r.v)))))), showPrefs && /* @__PURE__ */ React.createElement(PrefsModal, { prefs, setPrefs, onClose: () => setShowPrefs(false) }));
+    return /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { style: { marginBottom: 16 } }, /* @__PURE__ */ React.createElement("h1", { className: "stitle" }, "Profile"), /* @__PURE__ */ React.createElement("p", { className: "ssub" }, "Manage your account and preferences")), !isGuest && /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 6, marginBottom: 20, flexWrap: "wrap" } }, /* @__PURE__ */ React.createElement("button", { className: `prof-tab ${profTab === "account" ? "ac" : ""}`, onClick: () => setProfTab("account") }, "\u{1F464} Account"), /* @__PURE__ */ React.createElement("button", { className: `prof-tab ${profTab === "menus" ? "ac" : ""}`, onClick: () => setProfTab("menus") }, "\u{1F4C5} My Published Menus (", publishedMenus.length, ")"), /* @__PURE__ */ React.createElement("button", { className: `prof-tab ${profTab === "collections" ? "ac" : ""}`, onClick: () => setProfTab("collections") }, "\u{1F516} Collections (", collections.reduce((a, c) => a + c.items.length, 0), ")")), profTab === "menus" && !isGuest && /* @__PURE__ */ React.createElement("div", null, publishedMenus.length === 0 ? /* @__PURE__ */ React.createElement("div", { style: { textAlign: "center", padding: "40px 0", color: "var(--mu)" } }, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 36, marginBottom: 8 } }, "\u{1F4C5}"), /* @__PURE__ */ React.createElement("div", { style: { fontWeight: 600, marginBottom: 4 } }, "No published menus yet"), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 13 } }, "Published menus feature coming soon.")) : /* @__PURE__ */ React.createElement("div", { className: "feed-grid" }, publishedMenus.map((m) => /* @__PURE__ */ React.createElement("div", { key: m.id, className: "feed-card" }, /* @__PURE__ */ React.createElement("div", { style: { fontWeight: 700, fontSize: 15, marginBottom: 4 } }, m.title), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 12, color: "var(--mu)", marginBottom: 8 } }, m.mealCount, " meals \xB7 ", new Date(m.createdAt).toLocaleDateString(), " \xB7 ", m.visibility === "public" ? "\u{1F310} Public" : "\u{1F512} Private"))))), profTab === "collections" && !isGuest && /* @__PURE__ */ React.createElement("div", null, collections.map((col) => /* @__PURE__ */ React.createElement("div", { key: col.id, style: { marginBottom: 20 } }, /* @__PURE__ */ React.createElement("div", { style: { fontWeight: 700, fontSize: 15, marginBottom: 8 } }, col.emoji, " ", col.name, " ", /* @__PURE__ */ React.createElement("span", { style: { fontSize: 12, color: "var(--mu)", fontWeight: 400 } }, "(", col.items.length, ")")), col.items.length === 0 ? /* @__PURE__ */ React.createElement("div", { style: { fontSize: 13, color: "var(--mu)", padding: "8px 0" } }, "Nothing saved here yet.") : /* @__PURE__ */ React.createElement("div", { style: { display: "flex", flexWrap: "wrap", gap: 8 } }, col.items.map((item, i) => /* @__PURE__ */ React.createElement("div", { key: i, style: { background: "var(--white)", border: "1px solid var(--bor)", borderRadius: 8, padding: "6px 12px", fontSize: 13 } }, item.type === "recipe" ? "\u{1F37D}" : "\u{1F4C5}", " ", item.menuData?.title || `Recipe #${item.id}`)))))), (profTab === "account" || isGuest) && /* @__PURE__ */ React.createElement("div", { className: "pgr" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "card pcard", style: { marginBottom: 16 } }, /* @__PURE__ */ React.createElement("div", { className: "pav" }, isGuest ? "\u{1F464}" : user?.name?.[0]?.toUpperCase() || "?"), /* @__PURE__ */ React.createElement("div", { className: "pname" }, isGuest ? "Guest User" : user?.name), /* @__PURE__ */ React.createElement("div", { className: "pemail" }, isGuest ? "Guest session" : user?.email), isGuest && /* @__PURE__ */ React.createElement("div", { style: { marginTop: 10 } }, /* @__PURE__ */ React.createElement("span", { style: { background: "var(--clayBg)", color: "var(--clayH)", padding: "3px 10px", borderRadius: 6, fontSize: 12, fontWeight: 700 } }, "GUEST MODE")), !isGuest && /* @__PURE__ */ React.createElement("div", { style: { marginTop: 10 } }, isPremium ? /* @__PURE__ */ React.createElement("span", { className: "pro-badge" }, "\u2B50 PREMIUM") : /* @__PURE__ */ React.createElement("span", { className: "free-badge" }, "FREE PLAN"))), !isGuest && /* @__PURE__ */ React.createElement("div", { className: `card ${isPremium ? "sub-pro-card" : "sub-status-card"}`, style: { marginBottom: 16, padding: "18px 20px" } }, isPremium ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 10, marginBottom: 12 } }, /* @__PURE__ */ React.createElement("div", { style: { width: 40, height: 40, borderRadius: 11, background: "linear-gradient(135deg,#C9953A 0%,#E8B84B 100%)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, flexShrink: 0 } }, "\u2B50"), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { style: { fontWeight: 700, fontSize: 15 } }, "SmartChef Premium"), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 12, color: "var(--mu)", marginTop: 1 } }, "All features unlocked \xB7 Cancel anytime"))), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", flexDirection: "column", gap: 6, marginBottom: 14 } }, ["\u{1F916} Chef AI chat", "\u{1F37D}\uFE0F All 131 recipes", "\u{1F4C5} Unlimited auto-planning", "\u2764\uFE0F Unlimited saved recipes"].map((f) => /* @__PURE__ */ React.createElement("div", { key: f, style: { display: "flex", alignItems: "center", gap: 8, fontSize: 13 } }, /* @__PURE__ */ React.createElement("span", { style: { color: "var(--sage)", fontWeight: 700 } }, "\u2713"), f))), /* @__PURE__ */ React.createElement("a", { href: "https://billing.stripe.com/p/login/REPLACE_CUSTOMER_PORTAL", target: "_blank", rel: "noreferrer", style: { fontSize: 13, color: "var(--clay)", fontWeight: 600, textDecoration: "none" } }, "Manage billing \u2192")) : /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 10, marginBottom: 10 } }, /* @__PURE__ */ React.createElement("div", { style: { width: 40, height: 40, borderRadius: 11, background: "var(--cream)", border: "1px solid var(--bor)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, flexShrink: 0 } }, "\u{1F513}"), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { style: { fontWeight: 700, fontSize: 15 } }, "Free Plan"), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 12, color: "var(--mu)", marginTop: 1 } }, "Limited to ", FREE_RECIPE_LIMIT, " recipes \xB7 ", FREE_SAVE_LIMIT, " saves"))), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", flexDirection: "column", gap: 5, marginBottom: 14 } }, [{ f: `${FREE_RECIPE_LIMIT} of ${RECIPES.length} recipes`, locked: false }, { f: "1 free auto-plan use", locked: false }, { f: `${Math.min(saved?.size || 0, FREE_SAVE_LIMIT)} of ${FREE_SAVE_LIMIT} recipe saves used`, locked: false }, { f: "Chef AI chat", locked: true }, { f: "Unlimited auto-planning", locked: true }, { f: "All 131 recipes", locked: true }].map(({ f, locked }) => /* @__PURE__ */ React.createElement("div", { key: f, style: { display: "flex", alignItems: "center", gap: 8, fontSize: 13, color: locked ? "var(--mu)" : "var(--ch)" } }, /* @__PURE__ */ React.createElement("span", { style: { color: locked ? "var(--bor)" : "var(--sage)", fontWeight: 700 } }, locked ? "\u2717" : "\u2713"), f))), /* @__PURE__ */ React.createElement("button", { className: "upgrade-btn", style: { marginTop: 0 }, onClick: () => onUpgrade("generic") }, "\u2B50 Upgrade to Premium \u2014 $4.99/mo"))), /* @__PURE__ */ React.createElement("div", { className: "ssec" }, /* @__PURE__ */ React.createElement("div", { className: "srow", onClick: () => setView("shopping") }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "srl" }, "\u{1F6D2} Shopping List"), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 12, color: "var(--mu)" } }, shopping.filter((i) => !i.checked).length, " items left")), /* @__PURE__ */ React.createElement(Ic, { n: "right", s: 16 })), /* @__PURE__ */ React.createElement("div", { className: "srow", onClick: () => setView("folders") }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "srl" }, "\u{1F4C1} Saved Folders")), /* @__PURE__ */ React.createElement(Ic, { n: "right", s: 16 }))), /* @__PURE__ */ React.createElement("div", { className: "ssec" }, /* @__PURE__ */ React.createElement("div", { className: "srow", onClick: onLogout }, /* @__PURE__ */ React.createElement("div", { className: "srl", style: { color: "var(--err)" } }, isGuest ? "\u2190 Exit Guest Mode" : "Sign Out")))), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 } }, /* @__PURE__ */ React.createElement("h2", { style: { fontFamily: "var(--fd)", fontSize: 20 } }, "Preferences"), /* @__PURE__ */ React.createElement("button", { className: "btn btn-p btn-sm", onClick: () => setShowPrefs(true) }, "Edit preferences")), /* @__PURE__ */ React.createElement("div", { className: "ssec" }, [{ l: "\u{1F957} Dietary mode", v: dl }, { l: "\u{1F30D} Favorite cuisines", v: prefs.cuisines.join(", ") || "None" }, { l: "\u{1F3AF} Health goal", v: prefs.health }, { l: "\u{1F468}\u200D\u{1F373} Cooking skill", v: prefs.skill }, { l: "\u23F1 Max cook time", v: `${prefs.maxTime} min` }, { l: "\u{1F465} Household size", v: `${prefs.household} people` }].map((r) => /* @__PURE__ */ React.createElement("div", { key: r.l, className: "srow", style: { cursor: "default" } }, /* @__PURE__ */ React.createElement("div", { className: "srl" }, r.l), /* @__PURE__ */ React.createElement("div", { className: "srv" }, r.v)))))), showPrefs && /* @__PURE__ */ React.createElement(PrefsModal, { prefs, setPrefs, onClose: () => setShowPrefs(false) }));
   }
   function ShoppingView({ shopping, setShopping, onBack }) {
     const [newItem, setNewItem] = (0, import_react.useState)("");
@@ -33504,5 +33463,5 @@ Respond with JSON: {"reply":"friendly confirmation message","change":{"day":"Mon
       onClose();
     } }, "Save preferences"))));
   }
-  return __toCommonJS(recovered_smartchef_exports);
+  return __toCommonJS(smartchef_exports);
 })();

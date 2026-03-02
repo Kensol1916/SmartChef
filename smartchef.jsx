@@ -1104,399 +1104,399 @@ function PricingModal({ onClose, onActivate }) {
 
 /* ── DATA ── */
 const RECIPES = [
-  { id:1,emoji:"🍝",title:"Spaghetti Aglio e Olio",cuisine:"Italian",time:20,diff:"Easy",dietary:["Vegetarian"],pp:90,missing:["Spaghetti"],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
+  { id:1,meal:"dinner",emoji:"🍝",title:"Spaghetti Aglio e Olio",cuisine:"Italian",time:20,diff:"Easy",dietary:["Vegetarian"],pp:90,missing:["Spaghetti"],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Spaghetti",a:"400g"},{n:"Garlic",a:"8 cloves"},{n:"Olive oil",a:"½ cup"},{n:"Chili flakes",a:"1 tsp"},{n:"Parsley",a:"½ cup"},{n:"Parmesan",a:"60g"}],
     steps:[{n:1,t:"Boil pasta",d:"Boil salted water. Cook spaghetti al dente 9–11 min. Reserve 1 cup pasta water."},{n:2,t:"Toast garlic",d:"Slice garlic. Heat oil medium-low. Add garlic+chili, 4–5 min until golden."},{n:3,t:"Combine",d:"Add pasta to pan, toss vigorously with pasta water until sauce is glossy."},{n:4,t:"Finish",d:"Stir in parsley + half the parmesan. Serve topped with rest."}]},
-  { id:2,emoji:"🥗",title:"Mediterranean Chickpea Bowl",cuisine:"Mediterranean",time:15,diff:"Easy",dietary:["Vegan","Gluten-free"],pp:75,missing:["Cherry tomatoes","Feta"],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
+  { id:2,meal:"lunch",emoji:"🥗",title:"Mediterranean Chickpea Bowl",cuisine:"Mediterranean",time:15,diff:"Easy",dietary:["Vegan","Gluten-free"],pp:75,missing:["Cherry tomatoes","Feta"],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Chickpeas",a:"1 can"},{n:"Cucumber",a:"1, diced"},{n:"Cherry tomatoes",a:"200g"},{n:"Feta",a:"100g"},{n:"Olive oil",a:"3 tbsp"},{n:"Lemon",a:"2 tbsp juice"},{n:"Za'atar",a:"2 tsp"}],
     steps:[{n:1,t:"Prep",d:"Drain+rinse chickpeas."},{n:2,t:"Dress",d:"Whisk oil, lemon, za'atar, salt."},{n:3,t:"Combine",d:"Toss all veg + chickpeas with dressing."},{n:4,t:"Top",d:"Crumble feta. Serve."}]},
-  { id:3,emoji:"🍜",title:"Quick Miso Ramen",cuisine:"Japanese",time:25,diff:"Intermediate",dietary:["Vegetarian"],pp:60,missing:["Ramen noodles","Miso paste"],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
+  { id:3,meal:"lunch",emoji:"🍜",title:"Quick Miso Ramen",cuisine:"Japanese",time:25,diff:"Intermediate",dietary:["Vegetarian"],pp:60,missing:["Ramen noodles","Miso paste"],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Ramen noodles",a:"2 portions"},{n:"Miso paste",a:"3 tbsp"},{n:"Veg broth",a:"800ml"},{n:"Sesame oil",a:"1 tbsp"},{n:"Soy sauce",a:"2 tbsp"},{n:"Soft-boiled eggs",a:"2"},{n:"Green onions",a:"3, sliced"}],
     steps:[{n:1,t:"Broth",d:"Heat broth. Whisk in miso, soy, sesame oil."},{n:2,t:"Noodles",d:"Cook per pack. Drain."},{n:3,t:"Bowl",d:"Noodles → broth."},{n:4,t:"Garnish",d:"Halved eggs + green onions."}]},
-  { id:4,emoji:"🍗",title:"Lemon Herb Roast Chicken",cuisine:"French",time:70,diff:"Intermediate",dietary:["Gluten-free"],pp:80,missing:["Fresh thyme"],worth:false,contains_meat:true,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_risk:true,
+  { id:4,meal:"dinner",emoji:"🍗",title:"Lemon Herb Roast Chicken",cuisine:"French",time:70,diff:"Intermediate",dietary:["Gluten-free"],pp:80,missing:["Fresh thyme"],worth:false,contains_meat:true,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_risk:true,
     ingredients:[{n:"Whole chicken",a:"1.5kg"},{n:"Lemon",a:"2"},{n:"Garlic",a:"6 cloves"},{n:"Butter",a:"4 tbsp"},{n:"Fresh thyme",a:"6 sprigs"},{n:"Olive oil",a:"2 tbsp"}],
     steps:[{n:1,t:"Prep",d:"Pat dry. Mix butter+lemon zest+garlic, rub under/over skin."},{n:2,t:"Stuff",d:"Stuff with lemon halves + thyme."},{n:3,t:"Roast",d:"200°C for 60–70 min."},{n:4,t:"Rest",d:"Rest 10 min before carving."}]},
-  { id:5,emoji:"🥘",title:"One-Pan Shakshuka",cuisine:"Middle Eastern",time:30,diff:"Easy",dietary:["Vegetarian","Gluten-free"],pp:85,missing:["Canned tomatoes"],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
+  { id:5,meal:"breakfast",emoji:"🥘",title:"One-Pan Shakshuka",cuisine:"Middle Eastern",time:30,diff:"Easy",dietary:["Vegetarian","Gluten-free"],pp:85,missing:["Canned tomatoes"],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Eggs",a:"4"},{n:"Canned tomatoes",a:"1 can"},{n:"Onion",a:"1, diced"},{n:"Garlic",a:"3 cloves"},{n:"Cumin",a:"1 tsp"},{n:"Paprika",a:"1 tsp"},{n:"Feta",a:"60g"}],
     steps:[{n:1,t:"Sauté",d:"Sweat onion 5 min, add garlic+spices."},{n:2,t:"Sauce",d:"Add tomatoes, simmer 10 min."},{n:3,t:"Eggs",d:"Wells in sauce, crack in eggs, cover 8 min."},{n:4,t:"Serve",d:"Crumble feta. Serve from pan."}]},
-  { id:6,emoji:"🥞",title:"Fluffy Buttermilk Pancakes",cuisine:"American",time:20,diff:"Easy",dietary:["Vegetarian"],pp:70,missing:["Buttermilk"],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
+  { id:6,meal:"breakfast",emoji:"🥞",title:"Fluffy Buttermilk Pancakes",cuisine:"American",time:20,diff:"Easy",dietary:["Vegetarian"],pp:70,missing:["Buttermilk"],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Flour",a:"200g"},{n:"Buttermilk",a:"300ml"},{n:"Eggs",a:"2"},{n:"Butter",a:"2 tbsp melted"},{n:"Sugar",a:"2 tbsp"},{n:"Baking powder",a:"1 tsp"}],
     steps:[{n:1,t:"Dry",d:"Mix flour, sugar, baking powder."},{n:2,t:"Wet",d:"Whisk buttermilk, eggs, butter."},{n:3,t:"Combine",d:"Fold wet into dry — lumps ok."},{n:4,t:"Cook",d:"Medium-low, 2–3 min per side."}]},
-  { id:7,emoji:"🍛",title:"Chickpea Curry",cuisine:"Indian",time:35,diff:"Easy",dietary:["Vegan","Gluten-free"],pp:80,missing:["Canned chickpeas","Curry powder"],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
+  { id:7,meal:"dinner",emoji:"🍛",title:"Chickpea Curry",cuisine:"Indian",time:35,diff:"Easy",dietary:["Vegan","Gluten-free"],pp:80,missing:["Canned chickpeas","Curry powder"],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Chickpeas",a:"2 cans"},{n:"Onion",a:"1"},{n:"Garlic",a:"3 cloves"},{n:"Ginger",a:"1 inch"},{n:"Tomatoes",a:"2"},{n:"Coconut milk",a:"400ml"},{n:"Curry powder",a:"2 tbsp"}],
     steps:[{n:1,t:"Base",d:"Sauté onion, garlic, ginger 5 min."},{n:2,t:"Spice",d:"Add curry powder, cook 1 min."},{n:3,t:"Simmer",d:"Add tomatoes, chickpeas, coconut milk. Simmer 20 min."},{n:4,t:"Serve",d:"Serve with rice or naan."}]},
-  { id:8,emoji:"🌮",title:"Fish Tacos",cuisine:"Mexican",time:25,diff:"Easy",dietary:["Gluten-free"],pp:65,missing:["White fish","Tortillas"],worth:false,contains_meat:false,contains_fish:true,contains_shellfish:false,contains_dairy:true,kosher_safe:false,
+  { id:8,meal:"lunch",emoji:"🌮",title:"Fish Tacos",cuisine:"Mexican",time:25,diff:"Easy",dietary:["Gluten-free"],pp:65,missing:["White fish","Tortillas"],worth:false,contains_meat:false,contains_fish:true,contains_shellfish:false,contains_dairy:true,kosher_safe:false,
     ingredients:[{n:"White fish",a:"400g"},{n:"Tortillas",a:"8"},{n:"Cabbage",a:"2 cups shredded"},{n:"Lime",a:"2"},{n:"Sour cream",a:"½ cup"},{n:"Cumin",a:"1 tsp"}],
     steps:[{n:1,t:"Season",d:"Season fish with cumin, salt. Pan-fry 3 min per side."},{n:2,t:"Slaw",d:"Mix cabbage, lime juice, salt."},{n:3,t:"Assemble",d:"Warm tortillas, add fish, slaw."},{n:4,t:"Finish",d:"Drizzle sour cream, lime wedges."}]},
-  { id:9,emoji:"🍲",title:"Lentil Soup",cuisine:"Mediterranean",time:40,diff:"Easy",dietary:["Vegan","Gluten-free"],pp:90,missing:["Lentils"],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
+  { id:9,meal:"lunch",emoji:"🍲",title:"Lentil Soup",cuisine:"Mediterranean",time:40,diff:"Easy",dietary:["Vegan","Gluten-free"],pp:90,missing:["Lentils"],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Lentils",a:"1 cup"},{n:"Carrot",a:"2"},{n:"Celery",a:"2 stalks"},{n:"Onion",a:"1"},{n:"Garlic",a:"4 cloves"},{n:"Vegetable stock",a:"1.5L"},{n:"Cumin",a:"1 tsp"}],
     steps:[{n:1,t:"Sauté",d:"Dice veg. Sauté onion, carrot, celery 8 min."},{n:2,t:"Add",d:"Add garlic, cumin, cook 1 min."},{n:3,t:"Simmer",d:"Add lentils, stock. Simmer 30 min until tender."},{n:4,t:"Season",d:"Season to taste, serve."}]},
-  { id:10,emoji:"🍕",title:"Margherita Pizza",cuisine:"Italian",time:35,diff:"Intermediate",dietary:["Vegetarian"],pp:60,missing:["Pizza dough","Mozzarella"],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
+  { id:10,meal:"dinner",emoji:"🍕",title:"Margherita Pizza",cuisine:"Italian",time:35,diff:"Intermediate",dietary:["Vegetarian"],pp:60,missing:["Pizza dough","Mozzarella"],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Pizza dough",a:"1 ball"},{n:"Tomato sauce",a:"½ cup"},{n:"Mozzarella",a:"200g"},{n:"Basil",a:"handful"},{n:"Olive oil",a:"2 tbsp"}],
     steps:[{n:1,t:"Prep",d:"Roll dough to 12 inch circle."},{n:2,t:"Top",d:"Spread sauce, tear mozzarella on top."},{n:3,t:"Bake",d:"250°C for 12-15 min until bubbly."},{n:4,t:"Finish",d:"Fresh basil, olive oil drizzle."}]},
-  { id:11,emoji:"🥙",title:"Chicken Shawarma Wrap",cuisine:"Middle Eastern",time:30,diff:"Easy",dietary:["Gluten-free"],pp:70,missing:["Chicken breast","Pita"],worth:false,contains_meat:true,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_risk:true,
+  { id:11,meal:"lunch",emoji:"🥙",title:"Chicken Shawarma Wrap",cuisine:"Middle Eastern",time:30,diff:"Easy",dietary:["Gluten-free"],pp:70,missing:["Chicken breast","Pita"],worth:false,contains_meat:true,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_risk:true,
     ingredients:[{n:"Chicken breast",a:"500g"},{n:"Pita bread",a:"4"},{n:"Yogurt",a:"½ cup"},{n:"Cucumber",a:"1"},{n:"Garlic",a:"2 cloves"},{n:"Cumin",a:"1 tsp"},{n:"Paprika",a:"1 tsp"}],
     steps:[{n:1,t:"Marinate",d:"Mix cumin, paprika, salt. Coat chicken, let sit 10 min."},{n:2,t:"Cook",d:"Pan-fry chicken 6 min per side. Slice."},{n:3,t:"Sauce",d:"Mix yogurt, minced garlic, diced cucumber."},{n:4,t:"Wrap",d:"Warm pita, add chicken, sauce, wrap."}]},
-  { id:12,emoji:"🍳",title:"Veggie Frittata",cuisine:"Italian",time:25,diff:"Easy",dietary:["Vegetarian","Gluten-free"],pp:85,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
+  { id:12,meal:"breakfast",emoji:"🍳",title:"Veggie Frittata",cuisine:"Italian",time:25,diff:"Easy",dietary:["Vegetarian","Gluten-free"],pp:85,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Eggs",a:"6"},{n:"Spinach",a:"2 cups"},{n:"Bell pepper",a:"1"},{n:"Onion",a:"½"},{n:"Feta",a:"100g"},{n:"Olive oil",a:"2 tbsp"}],
     steps:[{n:1,t:"Sauté",d:"Dice veg. Sauté in oven-safe pan 5 min."},{n:2,t:"Eggs",d:"Beat eggs, pour over veg."},{n:3,t:"Cook",d:"Cook stovetop 5 min, then broil 5 min until set."},{n:4,t:"Serve",d:"Crumble feta on top, slice."}]},
-  { id:13,emoji:"🍜",title:"Pad Thai",cuisine:"Thai",time:30,diff:"Intermediate",dietary:["Gluten-free"],pp:55,missing:["Rice noodles","Peanuts"],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:true,contains_dairy:false,kosher_safe:false,
+  { id:13,meal:"lunch",emoji:"🍜",title:"Pad Thai",cuisine:"Thai",time:30,diff:"Intermediate",dietary:["Gluten-free"],pp:55,missing:["Rice noodles","Peanuts"],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:true,contains_dairy:false,kosher_safe:false,
     ingredients:[{n:"Rice noodles",a:"200g"},{n:"Shrimp",a:"300g"},{n:"Eggs",a:"2"},{n:"Peanuts",a:"½ cup"},{n:"Fish sauce",a:"3 tbsp"},{n:"Lime",a:"2"},{n:"Bean sprouts",a:"1 cup"}],
     steps:[{n:1,t:"Noodles",d:"Soak noodles per pack instructions."},{n:2,t:"Sauce",d:"Mix fish sauce, lime juice, sugar."},{n:3,t:"Stir-fry",d:"High heat: shrimp, eggs, noodles, sauce. Toss 4 min."},{n:4,t:"Garnish",d:"Top with peanuts, bean sprouts, lime."}]},
-  { id:14,emoji:"🥩",title:"Beef Stir-Fry",cuisine:"Chinese",time:20,diff:"Easy",dietary:["Gluten-free"],pp:65,missing:["Beef steak"],worth:false,contains_meat:true,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
+  { id:14,meal:"dinner",emoji:"🥩",title:"Beef Stir-Fry",cuisine:"Chinese",time:20,diff:"Easy",dietary:["Gluten-free"],pp:65,missing:["Beef steak"],worth:false,contains_meat:true,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Beef steak",a:"400g"},{n:"Broccoli",a:"2 cups"},{n:"Bell pepper",a:"1"},{n:"Soy sauce",a:"3 tbsp"},{n:"Garlic",a:"3 cloves"},{n:"Ginger",a:"1 inch"},{n:"Sesame oil",a:"1 tbsp"}],
     steps:[{n:1,t:"Prep",d:"Slice beef thin. Chop veg."},{n:2,t:"Sauce",d:"Mix soy, sesame oil, minced garlic+ginger."},{n:3,t:"Cook",d:"High heat: beef 3 min, remove. Veg 4 min."},{n:4,t:"Combine",d:"Return beef, add sauce, toss 1 min."}]},
-  { id:15,emoji:"🍝",title:"Creamy Mushroom Pasta",cuisine:"Italian",time:25,diff:"Easy",dietary:["Vegetarian"],pp:80,missing:["Heavy cream"],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
+  { id:15,meal:"dinner",emoji:"🍝",title:"Creamy Mushroom Pasta",cuisine:"Italian",time:25,diff:"Easy",dietary:["Vegetarian"],pp:80,missing:["Heavy cream"],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Pasta",a:"400g"},{n:"Mushrooms",a:"300g"},{n:"Heavy cream",a:"1 cup"},{n:"Garlic",a:"4 cloves"},{n:"Parmesan",a:"60g"},{n:"Butter",a:"2 tbsp"}],
     steps:[{n:1,t:"Pasta",d:"Cook pasta al dente, reserve 1 cup water."},{n:2,t:"Mushrooms",d:"Sauté mushrooms in butter 8 min until golden."},{n:3,t:"Sauce",d:"Add garlic, cream, simmer 3 min."},{n:4,t:"Combine",d:"Toss pasta with sauce, parmesan, pasta water."}]},
-  { id:16,emoji:"🌯",title:"Burrito Bowl",cuisine:"Mexican",time:30,diff:"Easy",dietary:["Gluten-free"],pp:75,missing:["Black beans","Salsa"],worth:true,contains_meat:true,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_risk:true,
+  { id:16,meal:"lunch",emoji:"🌯",title:"Burrito Bowl",cuisine:"Mexican",time:30,diff:"Easy",dietary:["Gluten-free"],pp:75,missing:["Black beans","Salsa"],worth:true,contains_meat:true,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_risk:true,
     ingredients:[{n:"Rice",a:"1 cup"},{n:"Black beans",a:"1 can"},{n:"Chicken breast",a:"300g"},{n:"Corn",a:"1 cup"},{n:"Salsa",a:"½ cup"},{n:"Cheese",a:"100g"},{n:"Lime",a:"1"}],
     steps:[{n:1,t:"Rice",d:"Cook rice with lime juice."},{n:2,t:"Protein",d:"Season, cook chicken, slice."},{n:3,t:"Beans",d:"Heat beans with cumin."},{n:4,t:"Bowl",d:"Layer rice, beans, chicken, corn, salsa, cheese."}]},
-  { id:17,emoji:"🥘",title:"Ratatouille",cuisine:"French",time:45,diff:"Easy",dietary:["Vegan","Gluten-free"],pp:90,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
+  { id:17,meal:"dinner",emoji:"🥘",title:"Ratatouille",cuisine:"French",time:45,diff:"Easy",dietary:["Vegan","Gluten-free"],pp:90,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Eggplant",a:"1"},{n:"Zucchini",a:"2"},{n:"Bell pepper",a:"2"},{n:"Tomatoes",a:"4"},{n:"Onion",a:"1"},{n:"Garlic",a:"4 cloves"},{n:"Thyme",a:"1 tsp"}],
     steps:[{n:1,t:"Prep",d:"Slice all veg into ½ inch rounds."},{n:2,t:"Sauce",d:"Sauté onion, garlic. Add diced tomatoes, simmer 10 min."},{n:3,t:"Layer",d:"In baking dish, alternate veg slices in sauce."},{n:4,t:"Bake",d:"Cover, bake 180°C for 30 min."}]},
-  { id:18,emoji:"🍲",title:"Tom Yum Soup",cuisine:"Thai",time:30,diff:"Intermediate",dietary:["Gluten-free"],pp:60,missing:["Lemongrass","Shrimp"],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:true,contains_dairy:false,kosher_safe:false,
+  { id:18,meal:"lunch",emoji:"🍲",title:"Tom Yum Soup",cuisine:"Thai",time:30,diff:"Intermediate",dietary:["Gluten-free"],pp:60,missing:["Lemongrass","Shrimp"],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:true,contains_dairy:false,kosher_safe:false,
     ingredients:[{n:"Shrimp",a:"300g"},{n:"Mushrooms",a:"200g"},{n:"Lemongrass",a:"2 stalks"},{n:"Lime",a:"3"},{n:"Fish sauce",a:"3 tbsp"},{n:"Chili",a:"2"},{n:"Chicken stock",a:"1L"}],
     steps:[{n:1,t:"Broth",d:"Bruise lemongrass, add to stock with chili. Simmer 10 min."},{n:2,t:"Veg",d:"Add mushrooms, cook 5 min."},{n:3,t:"Shrimp",d:"Add shrimp, cook 3 min."},{n:4,t:"Season",d:"Remove lemongrass. Add fish sauce, lime juice."}]},
-  { id:19,emoji:"🥗",title:"Greek Salad",cuisine:"Mediterranean",time:15,diff:"Easy",dietary:["Vegetarian","Gluten-free"],pp:85,missing:["Feta","Olives"],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
+  { id:19,meal:"lunch",emoji:"🥗",title:"Greek Salad",cuisine:"Mediterranean",time:15,diff:"Easy",dietary:["Vegetarian","Gluten-free"],pp:85,missing:["Feta","Olives"],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Cucumber",a:"1"},{n:"Tomatoes",a:"3"},{n:"Bell pepper",a:"1"},{n:"Red onion",a:"½"},{n:"Feta",a:"150g"},{n:"Olives",a:"½ cup"},{n:"Olive oil",a:"3 tbsp"}],
     steps:[{n:1,t:"Chop",d:"Dice all veg into chunks."},{n:2,t:"Combine",d:"Toss veg with olives."},{n:3,t:"Dress",d:"Drizzle olive oil, lemon juice, oregano."},{n:4,t:"Top",d:"Crumble feta on top, serve."}]},
-  { id:20,emoji:"🍳",title:"Avocado Toast",cuisine:"American",time:10,diff:"Easy",dietary:["Vegetarian"],pp:75,missing:["Avocado","Bread"],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
+  { id:20,meal:"breakfast",emoji:"🍳",title:"Avocado Toast",cuisine:"American",time:10,diff:"Easy",dietary:["Vegetarian"],pp:75,missing:["Avocado","Bread"],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Bread",a:"2 slices"},{n:"Avocado",a:"1"},{n:"Eggs",a:"2"},{n:"Lemon",a:"½"},{n:"Chili flakes",a:"pinch"}],
     steps:[{n:1,t:"Toast",d:"Toast bread until golden."},{n:2,t:"Avocado",d:"Mash avocado with lemon juice, salt."},{n:3,t:"Eggs",d:"Fry or poach eggs to preference."},{n:4,t:"Assemble",d:"Spread avocado on toast, top with eggs, chili flakes."}]},
-  { id:21,emoji:"🍝",title:"Carbonara",cuisine:"Italian",time:20,diff:"Easy",dietary:[],pp:70,missing:["Bacon","Parmesan"],worth:false,contains_meat:true,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_risk:true,
+  { id:21,meal:"dinner",emoji:"🍝",title:"Carbonara",cuisine:"Italian",time:20,diff:"Easy",dietary:[],pp:70,missing:["Bacon","Parmesan"],worth:false,contains_meat:true,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_risk:true,
     ingredients:[{n:"Spaghetti",a:"400g"},{n:"Bacon",a:"200g"},{n:"Eggs",a:"3"},{n:"Parmesan",a:"100g"},{n:"Black pepper",a:"2 tsp"}],
     steps:[{n:1,t:"Pasta",d:"Cook pasta al dente, reserve 1 cup water."},{n:2,t:"Bacon",d:"Dice, fry until crispy."},{n:3,t:"Sauce",d:"Beat eggs with grated parmesan, black pepper."},{n:4,t:"Combine",d:"Off heat, toss hot pasta with bacon, then egg mixture. Add pasta water to emulsify."}]},
   // BATCH 1: Breakfast Recipes (30 recipes, IDs 22-51)
-  { id:22,emoji:"🍳",title:"Spinach Mushroom Omelette",cuisine:"Mediterranean",time:12,diff:"Easy",dietary:["Vegetarian"],pp:85,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
+  { id:22,meal:"breakfast",emoji:"🍳",title:"Spinach Mushroom Omelette",cuisine:"Mediterranean",time:12,diff:"Easy",dietary:["Vegetarian"],pp:85,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Eggs",a:"3"},{n:"Spinach",a:"1 cup"},{n:"Mushrooms",a:"100g"},{n:"Olive oil",a:"1 tbsp"},{n:"Salt",a:"pinch"},{n:"Black pepper",a:"pinch"}],
     steps:[{n:1,t:"Prep",d:"Whisk eggs. Sauté mushrooms and spinach 3 min."},{n:2,t:"Cook",d:"Pour eggs, cook 2 min."},{n:3,t:"Fold",d:"Fold omelette, cook 1 min."},{n:4,t:"Serve",d:"Plate and serve hot."}]},
-  { id:23,emoji:"🥑",title:"Avocado Toast with Lemon",cuisine:"Modern",time:8,diff:"Easy",dietary:["Vegetarian"],pp:80,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
+  { id:23,meal:"breakfast",emoji:"🥑",title:"Avocado Toast with Lemon",cuisine:"Modern",time:8,diff:"Easy",dietary:["Vegetarian"],pp:80,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Whole grain bread",a:"2 slices"},{n:"Avocado",a:"1"},{n:"Lemon juice",a:"1 tbsp"},{n:"Salt",a:"pinch"},{n:"Chili flakes",a:"pinch"}],
     steps:[{n:1,t:"Toast",d:"Toast bread golden."},{n:2,t:"Mash",d:"Mash avocado with lemon, salt."},{n:3,t:"Spread",d:"Spread on toast."},{n:4,t:"Top",d:"Sprinkle chili flakes."}]},
-  { id:24,emoji:"🥣",title:"Greek Yogurt Honey Bowl",cuisine:"Greek",time:3,diff:"Easy",dietary:["Vegetarian"],pp:75,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
+  { id:24,meal:"breakfast",emoji:"🥣",title:"Greek Yogurt Honey Bowl",cuisine:"Greek",time:3,diff:"Easy",dietary:["Vegetarian"],pp:75,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Greek yogurt",a:"200g"},{n:"Honey",a:"2 tbsp"},{n:"Walnuts",a:"30g"},{n:"Cinnamon",a:"½ tsp"}],
     steps:[{n:1,t:"Bowl",d:"Scoop yogurt into bowl."},{n:2,t:"Drizzle",d:"Drizzle honey on top."},{n:3,t:"Top",d:"Add walnuts and cinnamon."},{n:4,t:"Serve",d:"Serve immediately."}]},
-  { id:25,emoji:"🥞",title:"Banana Oat Pancakes",cuisine:"American",time:15,diff:"Easy",dietary:["Vegetarian"],pp:80,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
+  { id:25,meal:"breakfast",emoji:"🥞",title:"Banana Oat Pancakes",cuisine:"American",time:15,diff:"Easy",dietary:["Vegetarian"],pp:80,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Banana",a:"2"},{n:"Oats",a:"1 cup"},{n:"Eggs",a:"2"},{n:"Baking powder",a:"1 tsp"},{n:"Olive oil",a:"1 tbsp"}],
     steps:[{n:1,t:"Blend",d:"Blend banana, oats, eggs, baking powder."},{n:2,t:"Heat",d:"Heat oil in pan."},{n:3,t:"Cook",d:"Pour batter, cook 3 min per side."},{n:4,t:"Serve",d:"Stack and serve warm."}]},
-  { id:26,emoji:"🥘",title:"Shakshuka",cuisine:"Middle Eastern",time:23,diff:"Medium",dietary:["Vegetarian","Gluten-free"],pp:85,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
+  { id:26,meal:"breakfast",emoji:"🥘",title:"Shakshuka",cuisine:"Middle Eastern",time:23,diff:"Medium",dietary:["Vegetarian","Gluten-free"],pp:85,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Eggs",a:"4"},{n:"Crushed tomatoes",a:"400g"},{n:"Onion",a:"1"},{n:"Garlic",a:"3 cloves"},{n:"Paprika",a:"1 tsp"},{n:"Olive oil",a:"2 tbsp"}],
     steps:[{n:1,t:"Sauté",d:"Cook onion and garlic 5 min."},{n:2,t:"Sauce",d:"Add tomatoes and paprika, simmer 10 min."},{n:3,t:"Eggs",d:"Make wells, crack eggs, cover 8 min."},{n:4,t:"Serve",d:"Serve from pan."}]},
-  { id:27,emoji:"🥣",title:"Cottage Cheese Berry Bowl",cuisine:"Modern",time:4,diff:"Easy",dietary:["Vegetarian"],pp:70,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
+  { id:27,meal:"breakfast",emoji:"🥣",title:"Cottage Cheese Berry Bowl",cuisine:"Modern",time:4,diff:"Easy",dietary:["Vegetarian"],pp:70,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Cottage cheese",a:"200g"},{n:"Strawberries",a:"100g"},{n:"Blueberries",a:"100g"},{n:"Honey",a:"1 tbsp"}],
     steps:[{n:1,t:"Bowl",d:"Add cottage cheese to bowl."},{n:2,t:"Berries",d:"Top with strawberries and blueberries."},{n:3,t:"Drizzle",d:"Drizzle honey."},{n:4,t:"Serve",d:"Serve immediately."}]},
-  { id:28,emoji:"🍞",title:"Tomato Basil Toast",cuisine:"Italian",time:9,diff:"Easy",dietary:["Vegetarian"],pp:80,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
+  { id:28,meal:"breakfast",emoji:"🍞",title:"Tomato Basil Toast",cuisine:"Italian",time:9,diff:"Easy",dietary:["Vegetarian"],pp:80,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Bread",a:"2 slices"},{n:"Tomatoes",a:"2"},{n:"Fresh basil",a:"5 leaves"},{n:"Olive oil",a:"1 tbsp"},{n:"Salt",a:"pinch"}],
     steps:[{n:1,t:"Toast",d:"Toast bread."},{n:2,t:"Dice",d:"Dice tomatoes."},{n:3,t:"Top",d:"Top toast with tomatoes and basil."},{n:4,t:"Drizzle",d:"Drizzle olive oil and salt."}]},
-  { id:29,emoji:"🥣",title:"Apple Cinnamon Oatmeal",cuisine:"American",time:13,diff:"Easy",dietary:["Vegetarian"],pp:75,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
+  { id:29,meal:"breakfast",emoji:"🥣",title:"Apple Cinnamon Oatmeal",cuisine:"American",time:13,diff:"Easy",dietary:["Vegetarian"],pp:75,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Rolled oats",a:"1 cup"},{n:"Apple",a:"1"},{n:"Cinnamon",a:"1 tsp"},{n:"Milk",a:"2 cups"},{n:"Maple syrup",a:"2 tbsp"}],
     steps:[{n:1,t:"Cook",d:"Boil milk, add oats, cook 10 min."},{n:2,t:"Dice",d:"Dice apple."},{n:3,t:"Mix",d:"Stir in apple, cinnamon, syrup."},{n:4,t:"Serve",d:"Serve warm."}]},
-  { id:30,emoji:"🌯",title:"Veggie Breakfast Wrap",cuisine:"Mexican",time:14,diff:"Easy",dietary:["Vegetarian"],pp:80,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
+  { id:30,meal:"breakfast",emoji:"🌯",title:"Veggie Breakfast Wrap",cuisine:"Mexican",time:14,diff:"Easy",dietary:["Vegetarian"],pp:80,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Whole wheat tortilla",a:"1"},{n:"Eggs",a:"2"},{n:"Bell pepper",a:"½"},{n:"Onion",a:"¼"},{n:"Cheddar cheese",a:"50g"}],
     steps:[{n:1,t:"Scramble",d:"Scramble eggs with diced pepper and onion."},{n:2,t:"Warm",d:"Warm tortilla."},{n:3,t:"Fill",d:"Add eggs and cheese to tortilla."},{n:4,t:"Roll",d:"Roll and serve."}]},
-  { id:31,emoji:"🥣",title:"Chia Almond Pudding",cuisine:"Modern",time:5,diff:"Easy",dietary:["Vegetarian","Gluten-free"],pp:70,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
+  { id:31,meal:"breakfast",emoji:"🥣",title:"Chia Almond Pudding",cuisine:"Modern",time:5,diff:"Easy",dietary:["Vegetarian","Gluten-free"],pp:70,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Chia seeds",a:"¼ cup"},{n:"Almond milk",a:"1 cup"},{n:"Vanilla extract",a:"½ tsp"},{n:"Maple syrup",a:"2 tbsp"}],
     steps:[{n:1,t:"Mix",d:"Mix all ingredients."},{n:2,t:"Refrigerate",d:"Refrigerate overnight or 30 min."},{n:3,t:"Stir",d:"Stir before serving."},{n:4,t:"Serve",d:"Top with fruit if desired."}]},
-  { id:32,emoji:"🍳",title:"Zucchini Frittata",cuisine:"Italian",time:17,diff:"Easy",dietary:["Vegetarian"],pp:85,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
+  { id:32,meal:"breakfast",emoji:"🍳",title:"Zucchini Frittata",cuisine:"Italian",time:17,diff:"Easy",dietary:["Vegetarian"],pp:85,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Eggs",a:"4"},{n:"Zucchini",a:"1"},{n:"Olive oil",a:"2 tbsp"},{n:"Salt",a:"pinch"},{n:"Pepper",a:"pinch"}],
     steps:[{n:1,t:"Slice",d:"Slice zucchini thin."},{n:2,t:"Sauté",d:"Sauté zucchini 5 min."},{n:3,t:"Pour",d:"Pour whisked eggs, cook 5 min."},{n:4,t:"Finish",d:"Broil 2 min until set."}]},
-  { id:33,emoji:"🍞",title:"Peanut Butter Banana Toast",cuisine:"American",time:6,diff:"Easy",dietary:["Vegetarian"],pp:75,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
+  { id:33,meal:"breakfast",emoji:"🍞",title:"Peanut Butter Banana Toast",cuisine:"American",time:6,diff:"Easy",dietary:["Vegetarian"],pp:75,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Whole grain bread",a:"2 slices"},{n:"Peanut butter",a:"3 tbsp"},{n:"Banana",a:"1"},{n:"Honey",a:"1 tbsp"}],
     steps:[{n:1,t:"Toast",d:"Toast bread."},{n:2,t:"Spread",d:"Spread peanut butter."},{n:3,t:"Slice",d:"Slice banana on top."},{n:4,t:"Drizzle",d:"Drizzle honey."}]},
-  { id:34,emoji:"🌯",title:"Mushroom Spinach Quesadilla",cuisine:"Mexican",time:14,diff:"Easy",dietary:["Vegetarian"],pp:80,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
+  { id:34,meal:"breakfast",emoji:"🌯",title:"Mushroom Spinach Quesadilla",cuisine:"Mexican",time:14,diff:"Easy",dietary:["Vegetarian"],pp:80,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Tortilla",a:"2"},{n:"Mushrooms",a:"100g"},{n:"Spinach",a:"1 cup"},{n:"Cheddar cheese",a:"100g"}],
     steps:[{n:1,t:"Sauté",d:"Sauté mushrooms and spinach 5 min."},{n:2,t:"Fill",d:"Place filling and cheese on tortilla."},{n:3,t:"Fold",d:"Top with second tortilla."},{n:4,t:"Cook",d:"Cook 3 min per side until golden."}]},
-  { id:35,emoji:"🍞",title:"Ricotta Toast with Honey",cuisine:"Italian",time:7,diff:"Easy",dietary:["Vegetarian"],pp:75,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
+  { id:35,meal:"breakfast",emoji:"🍞",title:"Ricotta Toast with Honey",cuisine:"Italian",time:7,diff:"Easy",dietary:["Vegetarian"],pp:75,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Bread",a:"2 slices"},{n:"Ricotta cheese",a:"100g"},{n:"Honey",a:"2 tbsp"},{n:"Pistachios",a:"30g"}],
     steps:[{n:1,t:"Toast",d:"Toast bread."},{n:2,t:"Spread",d:"Spread ricotta on toast."},{n:3,t:"Drizzle",d:"Drizzle honey."},{n:4,t:"Top",d:"Sprinkle chopped pistachios."}]},
-  { id:36,emoji:"🥣",title:"Savory Oatmeal with Egg",cuisine:"Modern",time:12,diff:"Easy",dietary:["Vegetarian"],pp:80,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
+  { id:36,meal:"breakfast",emoji:"🥣",title:"Savory Oatmeal with Egg",cuisine:"Modern",time:12,diff:"Easy",dietary:["Vegetarian"],pp:80,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Oats",a:"½ cup"},{n:"Egg",a:"1"},{n:"Spinach",a:"1 cup"},{n:"Olive oil",a:"1 tbsp"}],
     steps:[{n:1,t:"Cook",d:"Cook oats in water 7 min."},{n:2,t:"Sauté",d:"Sauté spinach in oil."},{n:3,t:"Egg",d:"Fry egg."},{n:4,t:"Top",d:"Top oats with spinach and egg."}]},
-  { id:37,emoji:"🥣",title:"Apple Yogurt Parfait",cuisine:"Modern",time:5,diff:"Easy",dietary:["Vegetarian"],pp:70,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
+  { id:37,meal:"breakfast",emoji:"🥣",title:"Apple Yogurt Parfait",cuisine:"Modern",time:5,diff:"Easy",dietary:["Vegetarian"],pp:70,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Plain yogurt",a:"200g"},{n:"Apple",a:"1"},{n:"Granola",a:"50g"},{n:"Cinnamon",a:"½ tsp"}],
     steps:[{n:1,t:"Dice",d:"Dice apple."},{n:2,t:"Layer",d:"Layer yogurt, apple, granola."},{n:3,t:"Repeat",d:"Repeat layers."},{n:4,t:"Top",d:"Sprinkle cinnamon."}]},
-  { id:38,emoji:"🌯",title:"Breakfast Burrito Veggie",cuisine:"Mexican",time:16,diff:"Medium",dietary:["Vegetarian"],pp:85,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
+  { id:38,meal:"breakfast",emoji:"🌯",title:"Breakfast Burrito Veggie",cuisine:"Mexican",time:16,diff:"Medium",dietary:["Vegetarian"],pp:85,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Tortilla",a:"1"},{n:"Eggs",a:"2"},{n:"Black beans",a:"½ cup"},{n:"Bell pepper",a:"½"},{n:"Cheese",a:"50g"}],
     steps:[{n:1,t:"Scramble",d:"Scramble eggs with diced pepper."},{n:2,t:"Warm",d:"Warm beans and tortilla."},{n:3,t:"Fill",d:"Add eggs, beans, cheese to tortilla."},{n:4,t:"Roll",d:"Roll burrito tight."}]},
-  { id:39,emoji:"🧁",title:"Blueberry Oat Muffins",cuisine:"American",time:28,diff:"Medium",dietary:["Vegetarian"],pp:75,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
+  { id:39,meal:"breakfast",emoji:"🧁",title:"Blueberry Oat Muffins",cuisine:"American",time:28,diff:"Medium",dietary:["Vegetarian"],pp:75,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Blueberries",a:"1 cup"},{n:"Flour",a:"2 cups"},{n:"Eggs",a:"2"},{n:"Milk",a:"1 cup"},{n:"Sugar",a:"½ cup"}],
     steps:[{n:1,t:"Mix",d:"Mix dry and wet ingredients separately."},{n:2,t:"Combine",d:"Fold wet into dry, add blueberries."},{n:3,t:"Fill",d:"Fill muffin cups."},{n:4,t:"Bake",d:"Bake 180°C for 18 min."}]},
-  { id:40,emoji:"🍞",title:"Tomato Mozzarella Toast",cuisine:"Italian",time:9,diff:"Easy",dietary:["Vegetarian"],pp:80,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
+  { id:40,meal:"breakfast",emoji:"🍞",title:"Tomato Mozzarella Toast",cuisine:"Italian",time:9,diff:"Easy",dietary:["Vegetarian"],pp:80,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Bread",a:"2 slices"},{n:"Tomato",a:"1"},{n:"Mozzarella",a:"100g"},{n:"Basil",a:"5 leaves"},{n:"Olive oil",a:"1 tbsp"}],
     steps:[{n:1,t:"Toast",d:"Toast bread."},{n:2,t:"Slice",d:"Slice tomato and mozzarella."},{n:3,t:"Layer",d:"Layer tomato, mozzarella, basil."},{n:4,t:"Drizzle",d:"Drizzle olive oil."}]},
-  { id:41,emoji:"🍞",title:"Date Tahini Toast",cuisine:"Middle Eastern",time:6,diff:"Easy",dietary:["Vegetarian"],pp:75,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
+  { id:41,meal:"breakfast",emoji:"🍞",title:"Date Tahini Toast",cuisine:"Middle Eastern",time:6,diff:"Easy",dietary:["Vegetarian"],pp:75,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Whole wheat bread",a:"2 slices"},{n:"Tahini",a:"3 tbsp"},{n:"Chopped dates",a:"50g"},{n:"Sesame seeds",a:"1 tsp"}],
     steps:[{n:1,t:"Toast",d:"Toast bread."},{n:2,t:"Spread",d:"Spread tahini."},{n:3,t:"Top",d:"Top with chopped dates."},{n:4,t:"Sprinkle",d:"Sprinkle sesame seeds."}]},
-  { id:42,emoji:"🥞",title:"Savory Cottage Pancakes",cuisine:"Eastern European",time:15,diff:"Easy",dietary:["Vegetarian"],pp:80,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
+  { id:42,meal:"breakfast",emoji:"🥞",title:"Savory Cottage Pancakes",cuisine:"Eastern European",time:15,diff:"Easy",dietary:["Vegetarian"],pp:80,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Cottage cheese",a:"200g"},{n:"Eggs",a:"2"},{n:"Flour",a:"½ cup"},{n:"Salt",a:"pinch"}],
     steps:[{n:1,t:"Mix",d:"Mix cottage cheese, eggs, flour, salt."},{n:2,t:"Heat",d:"Heat pan with oil."},{n:3,t:"Cook",d:"Drop spoonfuls, cook 3 min per side."},{n:4,t:"Serve",d:"Serve warm."}]},
-  { id:43,emoji:"🍞",title:"Almond Butter Apple Toast",cuisine:"Modern",time:6,diff:"Easy",dietary:["Vegetarian"],pp:75,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
+  { id:43,meal:"breakfast",emoji:"🍞",title:"Almond Butter Apple Toast",cuisine:"Modern",time:6,diff:"Easy",dietary:["Vegetarian"],pp:75,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Whole grain bread",a:"2 slices"},{n:"Almond butter",a:"3 tbsp"},{n:"Apple slices",a:"1 apple"},{n:"Cinnamon",a:"½ tsp"}],
     steps:[{n:1,t:"Toast",d:"Toast bread."},{n:2,t:"Spread",d:"Spread almond butter."},{n:3,t:"Layer",d:"Layer apple slices."},{n:4,t:"Sprinkle",d:"Sprinkle cinnamon."}]},
-  { id:44,emoji:"🍞",title:"Eggplant Breakfast Toast",cuisine:"Mediterranean",time:18,diff:"Medium",dietary:["Vegetarian"],pp:80,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
+  { id:44,meal:"breakfast",emoji:"🍞",title:"Eggplant Breakfast Toast",cuisine:"Mediterranean",time:18,diff:"Medium",dietary:["Vegetarian"],pp:80,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Bread",a:"2 slices"},{n:"Grilled eggplant",a:"4 slices"},{n:"Olive oil",a:"2 tbsp"},{n:"Salt",a:"pinch"},{n:"Pepper",a:"pinch"}],
     steps:[{n:1,t:"Grill",d:"Grill eggplant slices 8 min."},{n:2,t:"Toast",d:"Toast bread."},{n:3,t:"Top",d:"Place eggplant on toast."},{n:4,t:"Season",d:"Drizzle oil, season."}]},
-  { id:45,emoji:"🥣",title:"Mango Yogurt Bowl",cuisine:"Modern",time:4,diff:"Easy",dietary:["Vegetarian"],pp:70,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
+  { id:45,meal:"breakfast",emoji:"🥣",title:"Mango Yogurt Bowl",cuisine:"Modern",time:4,diff:"Easy",dietary:["Vegetarian"],pp:70,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Yogurt",a:"200g"},{n:"Mango",a:"1"},{n:"Granola",a:"50g"},{n:"Honey",a:"1 tbsp"}],
     steps:[{n:1,t:"Dice",d:"Dice mango."},{n:2,t:"Bowl",d:"Add yogurt to bowl."},{n:3,t:"Top",d:"Top with mango and granola."},{n:4,t:"Drizzle",d:"Drizzle honey."}]},
-  { id:46,emoji:"🥐",title:"Cheese Spinach Croissant",cuisine:"French",time:13,diff:"Easy",dietary:["Vegetarian"],pp:75,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
+  { id:46,meal:"breakfast",emoji:"🥐",title:"Cheese Spinach Croissant",cuisine:"French",time:13,diff:"Easy",dietary:["Vegetarian"],pp:75,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Croissant",a:"1"},{n:"Cheese",a:"50g"},{n:"Spinach",a:"1 cup"}],
     steps:[{n:1,t:"Sauté",d:"Sauté spinach 3 min."},{n:2,t:"Slice",d:"Slice croissant."},{n:3,t:"Fill",d:"Fill with cheese and spinach."},{n:4,t:"Warm",d:"Warm in oven 5 min."}]},
-  { id:47,emoji:"🍞",title:"Savory French Toast",cuisine:"American",time:15,diff:"Easy",dietary:["Vegetarian"],pp:80,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
+  { id:47,meal:"breakfast",emoji:"🍞",title:"Savory French Toast",cuisine:"American",time:15,diff:"Easy",dietary:["Vegetarian"],pp:80,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Bread",a:"4 slices"},{n:"Eggs",a:"3"},{n:"Milk",a:"¼ cup"},{n:"Cheese",a:"50g"},{n:"Salt",a:"pinch"}],
     steps:[{n:1,t:"Whisk",d:"Whisk eggs, milk, salt."},{n:2,t:"Dip",d:"Dip bread in mixture."},{n:3,t:"Cook",d:"Cook 3 min per side."},{n:4,t:"Top",d:"Top with grated cheese."}]},
-  { id:48,emoji:"🥣",title:"Pear Cinnamon Yogurt",cuisine:"Modern",time:3,diff:"Easy",dietary:["Vegetarian"],pp:70,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
+  { id:48,meal:"breakfast",emoji:"🥣",title:"Pear Cinnamon Yogurt",cuisine:"Modern",time:3,diff:"Easy",dietary:["Vegetarian"],pp:70,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Yogurt",a:"200g"},{n:"Pear",a:"1"},{n:"Cinnamon",a:"½ tsp"},{n:"Honey",a:"1 tbsp"}],
     steps:[{n:1,t:"Dice",d:"Dice pear."},{n:2,t:"Bowl",d:"Add yogurt to bowl."},{n:3,t:"Top",d:"Top with pear."},{n:4,t:"Season",d:"Sprinkle cinnamon, drizzle honey."}]},
-  { id:49,emoji:"🥙",title:"Breakfast Pita with Hummus",cuisine:"Middle Eastern",time:6,diff:"Easy",dietary:["Vegetarian"],pp:75,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
+  { id:49,meal:"breakfast",emoji:"🥙",title:"Breakfast Pita with Hummus",cuisine:"Middle Eastern",time:6,diff:"Easy",dietary:["Vegetarian"],pp:75,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Pita bread",a:"1"},{n:"Hummus",a:"100g"},{n:"Cucumber",a:"½"},{n:"Tomato",a:"1"}],
     steps:[{n:1,t:"Warm",d:"Warm pita."},{n:2,t:"Spread",d:"Spread hummus inside."},{n:3,t:"Dice",d:"Dice cucumber and tomato."},{n:4,t:"Fill",d:"Fill pita and serve."}]},
-  { id:50,emoji:"🥣",title:"Pumpkin Oat Porridge",cuisine:"American",time:17,diff:"Easy",dietary:["Vegetarian"],pp:75,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
+  { id:50,meal:"breakfast",emoji:"🥣",title:"Pumpkin Oat Porridge",cuisine:"American",time:17,diff:"Easy",dietary:["Vegetarian"],pp:75,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Oats",a:"1 cup"},{n:"Pumpkin puree",a:"½ cup"},{n:"Milk",a:"2 cups"},{n:"Cinnamon",a:"1 tsp"},{n:"Maple syrup",a:"2 tbsp"}],
     steps:[{n:1,t:"Boil",d:"Boil milk."},{n:2,t:"Add",d:"Add oats and pumpkin, cook 10 min."},{n:3,t:"Season",d:"Stir in cinnamon and syrup."},{n:4,t:"Serve",d:"Serve warm."}]},
-  { id:51,emoji:"🍳",title:"Savory Tomato Egg Skillet",cuisine:"Mediterranean",time:18,diff:"Easy",dietary:["Vegetarian"],pp:85,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
+  { id:51,meal:"breakfast",emoji:"🍳",title:"Savory Tomato Egg Skillet",cuisine:"Mediterranean",time:18,diff:"Easy",dietary:["Vegetarian"],pp:85,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Eggs",a:"4"},{n:"Tomatoes",a:"3"},{n:"Onion",a:"1"},{n:"Olive oil",a:"2 tbsp"},{n:"Salt",a:"pinch"},{n:"Pepper",a:"pinch"}],
     steps:[{n:1,t:"Sauté",d:"Sauté diced onion and tomatoes 8 min."},{n:2,t:"Eggs",d:"Crack eggs into skillet."},{n:3,t:"Cook",d:"Cook 5 min until set."},{n:4,t:"Serve",d:"Season and serve from skillet."}]},
   // BATCH 2: Additional Recipes (IDs 52-131)
-  { id:52,emoji:"🥗",title:"Caesar Salad",cuisine:"Italian",time:15,diff:"Easy",dietary:["Vegetarian"],pp:80,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
+  { id:52,meal:"lunch",emoji:"🥗",title:"Caesar Salad",cuisine:"Italian",time:15,diff:"Easy",dietary:["Vegetarian"],pp:80,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Romaine lettuce",a:"1 head"},{n:"Parmesan",a:"50g"},{n:"Croutons",a:"1 cup"},{n:"Caesar dressing",a:"¼ cup"},{n:"Lemon juice",a:"1 tbsp"}],
     steps:[{n:1,t:"Prep",d:"Chop romaine into bite-size pieces."},{n:2,t:"Toss",d:"Mix lettuce with dressing."},{n:3,t:"Top",d:"Add croutons and parmesan."},{n:4,t:"Serve",d:"Finish with lemon juice."}]},
-  { id:53,emoji:"🍲",title:"Lentil Soup",cuisine:"Mediterranean",time:35,diff:"Easy",dietary:["Vegan"],pp:90,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
+  { id:53,meal:"lunch",emoji:"🍲",title:"Lentil Soup",cuisine:"Mediterranean",time:35,diff:"Easy",dietary:["Vegan"],pp:90,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Lentils",a:"1 cup"},{n:"Carrots",a:"2"},{n:"Celery",a:"2 stalks"},{n:"Onion",a:"1"},{n:"Vegetable broth",a:"4 cups"},{n:"Cumin",a:"1 tsp"}],
     steps:[{n:1,t:"Sauté",d:"Dice vegetables, sauté 5 min."},{n:2,t:"Add",d:"Add lentils and broth."},{n:3,t:"Simmer",d:"Simmer 25 min until lentils tender."},{n:4,t:"Season",d:"Add cumin and salt."}]},
-  { id:54,emoji:"🍕",title:"Margherita Pizza",cuisine:"Italian",time:25,diff:"Easy",dietary:["Vegetarian"],pp:75,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
+  { id:54,meal:"dinner",emoji:"🍕",title:"Margherita Pizza",cuisine:"Italian",time:25,diff:"Easy",dietary:["Vegetarian"],pp:75,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Pizza dough",a:"1 ball"},{n:"Tomato sauce",a:"½ cup"},{n:"Mozzarella",a:"200g"},{n:"Fresh basil",a:"10 leaves"},{n:"Olive oil",a:"2 tbsp"}],
     steps:[{n:1,t:"Roll",d:"Roll dough into circle."},{n:2,t:"Top",d:"Spread sauce, add cheese and basil."},{n:3,t:"Bake",d:"Bake at 220°C for 12-15 min."},{n:4,t:"Serve",d:"Drizzle olive oil and serve."}]},
-  { id:55,emoji:"🍛",title:"Chickpea Curry",cuisine:"Indian",time:30,diff:"Easy",dietary:["Vegan"],pp:85,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
+  { id:55,meal:"dinner",emoji:"🍛",title:"Chickpea Curry",cuisine:"Indian",time:30,diff:"Easy",dietary:["Vegan"],pp:85,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Chickpeas",a:"2 cans"},{n:"Coconut milk",a:"1 can"},{n:"Tomatoes",a:"2"},{n:"Curry powder",a:"2 tbsp"},{n:"Onion",a:"1"},{n:"Garlic",a:"3 cloves"}],
     steps:[{n:1,t:"Sauté",d:"Cook onion and garlic 3 min."},{n:2,t:"Spice",d:"Add curry powder, cook 1 min."},{n:3,t:"Simmer",d:"Add chickpeas, tomatoes, coconut milk. Simmer 20 min."},{n:4,t:"Serve",d:"Serve with rice."}]},
-  { id:56,emoji:"🥙",title:"Falafel Wrap",cuisine:"Middle Eastern",time:20,diff:"Easy",dietary:["Vegan"],pp:70,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
+  { id:56,meal:"lunch",emoji:"🥙",title:"Falafel Wrap",cuisine:"Middle Eastern",time:20,diff:"Easy",dietary:["Vegan"],pp:70,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Falafel",a:"6 pieces"},{n:"Pita bread",a:"2"},{n:"Hummus",a:"¼ cup"},{n:"Cucumber",a:"1"},{n:"Tomato",a:"1"},{n:"Lettuce",a:"1 cup"}],
     steps:[{n:1,t:"Heat",d:"Warm falafel and pita."},{n:2,t:"Spread",d:"Spread hummus on pita."},{n:3,t:"Fill",d:"Add falafel and chopped vegetables."},{n:4,t:"Roll",d:"Roll and serve."}]},
-  { id:57,emoji:"🍜",title:"Pad Thai",cuisine:"Thai",time:25,diff:"Medium",dietary:["Vegetarian"],pp:65,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
+  { id:57,meal:"dinner",emoji:"🍜",title:"Pad Thai",cuisine:"Thai",time:25,diff:"Medium",dietary:["Vegetarian"],pp:65,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Rice noodles",a:"200g"},{n:"Eggs",a:"2"},{n:"Tofu",a:"100g"},{n:"Bean sprouts",a:"1 cup"},{n:"Peanuts",a:"¼ cup"},{n:"Tamarind paste",a:"2 tbsp"}],
     steps:[{n:1,t:"Soak",d:"Soak noodles 10 min."},{n:2,t:"Stir-fry",d:"Fry tofu and eggs 3 min."},{n:3,t:"Add",d:"Add noodles, tamarind, bean sprouts."},{n:4,t:"Toss",d:"Toss 5 min, top with peanuts."}]},
-  { id:58,emoji:"🥘",title:"Vegetable Paella",cuisine:"Spanish",time:40,diff:"Medium",dietary:["Vegan"],pp:75,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
+  { id:58,meal:"dinner",emoji:"🥘",title:"Vegetable Paella",cuisine:"Spanish",time:40,diff:"Medium",dietary:["Vegan"],pp:75,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Rice",a:"2 cups"},{n:"Bell peppers",a:"2"},{n:"Green beans",a:"1 cup"},{n:"Tomatoes",a:"2"},{n:"Saffron",a:"pinch"},{n:"Vegetable broth",a:"4 cups"}],
     steps:[{n:1,t:"Sauté",d:"Cook peppers and beans 5 min."},{n:2,t:"Add",d:"Add rice, tomatoes, saffron."},{n:3,t:"Simmer",d:"Add broth, simmer 30 min."},{n:4,t:"Rest",d:"Let rest 5 min before serving."}]},
-  { id:59,emoji:"🌮",title:"Black Bean Tacos",cuisine:"Mexican",time:20,diff:"Easy",dietary:["Vegan"],pp:85,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
+  { id:59,meal:"lunch",emoji:"🌮",title:"Black Bean Tacos",cuisine:"Mexican",time:20,diff:"Easy",dietary:["Vegan"],pp:85,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Black beans",a:"1 can"},{n:"Tortillas",a:"6"},{n:"Avocado",a:"1"},{n:"Salsa",a:"½ cup"},{n:"Lime",a:"1"},{n:"Cilantro",a:"¼ cup"}],
     steps:[{n:1,t:"Heat",d:"Warm beans and tortillas."},{n:2,t:"Mash",d:"Mash avocado with lime."},{n:3,t:"Fill",d:"Fill tortillas with beans."},{n:4,t:"Top",d:"Top with avocado, salsa, cilantro."}]},
-  { id:60,emoji:"🍝",title:"Penne Arrabbiata",cuisine:"Italian",time:20,diff:"Easy",dietary:["Vegan"],pp:90,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
+  { id:60,meal:"dinner",emoji:"🍝",title:"Penne Arrabbiata",cuisine:"Italian",time:20,diff:"Easy",dietary:["Vegan"],pp:90,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Penne pasta",a:"400g"},{n:"Tomato sauce",a:"2 cups"},{n:"Garlic",a:"4 cloves"},{n:"Chili flakes",a:"2 tsp"},{n:"Olive oil",a:"3 tbsp"},{n:"Parsley",a:"¼ cup"}],
     steps:[{n:1,t:"Boil",d:"Cook pasta al dente."},{n:2,t:"Sauce",d:"Sauté garlic and chili in oil."},{n:3,t:"Simmer",d:"Add tomato sauce, simmer 10 min."},{n:4,t:"Toss",d:"Toss pasta with sauce, top with parsley."}]},
-  { id:61,emoji:"🥗",title:"Greek Salad",cuisine:"Greek",time:10,diff:"Easy",dietary:["Vegetarian"],pp:85,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
+  { id:61,meal:"lunch",emoji:"🥗",title:"Greek Salad",cuisine:"Greek",time:10,diff:"Easy",dietary:["Vegetarian"],pp:85,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Cucumber",a:"1"},{n:"Tomatoes",a:"3"},{n:"Feta",a:"100g"},{n:"Olives",a:"½ cup"},{n:"Red onion",a:"½"},{n:"Olive oil",a:"3 tbsp"}],
     steps:[{n:1,t:"Chop",d:"Dice all vegetables."},{n:2,t:"Mix",d:"Combine in bowl."},{n:3,t:"Dress",d:"Drizzle olive oil and lemon."},{n:4,t:"Top",d:"Crumble feta on top."}]},
-  { id:62,emoji:"🍲",title:"Minestrone Soup",cuisine:"Italian",time:35,diff:"Easy",dietary:["Vegan"],pp:80,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
+  { id:62,meal:"lunch",emoji:"🍲",title:"Minestrone Soup",cuisine:"Italian",time:35,diff:"Easy",dietary:["Vegan"],pp:80,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Pasta",a:"1 cup"},{n:"Kidney beans",a:"1 can"},{n:"Zucchini",a:"1"},{n:"Carrots",a:"2"},{n:"Tomato sauce",a:"2 cups"},{n:"Vegetable broth",a:"4 cups"}],
     steps:[{n:1,t:"Sauté",d:"Cook diced vegetables 5 min."},{n:2,t:"Add",d:"Add broth, sauce, beans."},{n:3,t:"Simmer",d:"Simmer 20 min."},{n:4,t:"Pasta",d:"Add pasta, cook 10 min more."}]},
-  { id:63,emoji:"🥪",title:"Caprese Sandwich",cuisine:"Italian",time:10,diff:"Easy",dietary:["Vegetarian"],pp:85,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
+  { id:63,meal:"lunch",emoji:"🥪",title:"Caprese Sandwich",cuisine:"Italian",time:10,diff:"Easy",dietary:["Vegetarian"],pp:85,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Ciabatta bread",a:"1 loaf"},{n:"Mozzarella",a:"150g"},{n:"Tomatoes",a:"2"},{n:"Fresh basil",a:"10 leaves"},{n:"Balsamic vinegar",a:"2 tbsp"},{n:"Olive oil",a:"1 tbsp"}],
     steps:[{n:1,t:"Slice",d:"Cut bread and slice ingredients."},{n:2,t:"Layer",d:"Layer mozzarella, tomato, basil."},{n:3,t:"Dress",d:"Drizzle oil and vinegar."},{n:4,t:"Serve",d:"Close sandwich and serve."}]},
-  { id:64,emoji:"🍛",title:"Thai Green Curry",cuisine:"Thai",time:30,diff:"Medium",dietary:["Vegan"],pp:70,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
+  { id:64,meal:"dinner",emoji:"🍛",title:"Thai Green Curry",cuisine:"Thai",time:30,diff:"Medium",dietary:["Vegan"],pp:70,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Green curry paste",a:"3 tbsp"},{n:"Coconut milk",a:"1 can"},{n:"Tofu",a:"200g"},{n:"Bell peppers",a:"2"},{n:"Bamboo shoots",a:"1 cup"},{n:"Basil",a:"¼ cup"}],
     steps:[{n:1,t:"Fry",d:"Fry curry paste 2 min."},{n:2,t:"Add",d:"Add coconut milk, tofu, vegetables."},{n:3,t:"Simmer",d:"Simmer 20 min."},{n:4,t:"Finish",d:"Add basil and serve with rice."}]},
-  { id:65,emoji:"🥙",title:"Veggie Burrito",cuisine:"Mexican",time:20,diff:"Easy",dietary:["Vegetarian"],pp:85,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
+  { id:65,meal:"lunch",emoji:"🥙",title:"Veggie Burrito",cuisine:"Mexican",time:20,diff:"Easy",dietary:["Vegetarian"],pp:85,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Tortilla",a:"1 large"},{n:"Black beans",a:"1 cup"},{n:"Rice",a:"1 cup cooked"},{n:"Cheese",a:"50g"},{n:"Sour cream",a:"2 tbsp"},{n:"Salsa",a:"¼ cup"}],
     steps:[{n:1,t:"Warm",d:"Heat tortilla and beans."},{n:2,t:"Fill",d:"Add rice, beans, cheese."},{n:3,t:"Top",d:"Add sour cream and salsa."},{n:4,t:"Roll",d:"Roll tightly and serve."}]},
-  { id:66,emoji:"🍝",title:"Fettuccine Alfredo",cuisine:"Italian",time:20,diff:"Easy",dietary:["Vegetarian"],pp:85,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
+  { id:66,meal:"dinner",emoji:"🍝",title:"Fettuccine Alfredo",cuisine:"Italian",time:20,diff:"Easy",dietary:["Vegetarian"],pp:85,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Fettuccine",a:"400g"},{n:"Butter",a:"100g"},{n:"Heavy cream",a:"1 cup"},{n:"Parmesan",a:"150g"},{n:"Garlic",a:"2 cloves"},{n:"Black pepper",a:"1 tsp"}],
     steps:[{n:1,t:"Cook",d:"Boil pasta al dente."},{n:2,t:"Sauce",d:"Melt butter, add cream and garlic."},{n:3,t:"Cheese",d:"Stir in parmesan until melted."},{n:4,t:"Toss",d:"Toss pasta with sauce."}]},
-  { id:67,emoji:"🥗",title:"Quinoa Salad",cuisine:"Modern",time:25,diff:"Easy",dietary:["Vegan"],pp:75,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
+  { id:67,meal:"lunch",emoji:"🥗",title:"Quinoa Salad",cuisine:"Modern",time:25,diff:"Easy",dietary:["Vegan"],pp:75,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Quinoa",a:"1 cup"},{n:"Cherry tomatoes",a:"1 cup"},{n:"Cucumber",a:"1"},{n:"Red onion",a:"½"},{n:"Lemon juice",a:"3 tbsp"},{n:"Olive oil",a:"2 tbsp"}],
     steps:[{n:1,t:"Cook",d:"Cook quinoa 15 min."},{n:2,t:"Chop",d:"Dice vegetables."},{n:3,t:"Mix",d:"Combine cooled quinoa with vegetables."},{n:4,t:"Dress",d:"Toss with lemon and oil."}]},
-  { id:68,emoji:"🍲",title:"Tomato Basil Soup",cuisine:"Italian",time:30,diff:"Easy",dietary:["Vegetarian"],pp:85,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
+  { id:68,meal:"lunch",emoji:"🍲",title:"Tomato Basil Soup",cuisine:"Italian",time:30,diff:"Easy",dietary:["Vegetarian"],pp:85,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Tomatoes",a:"6"},{n:"Onion",a:"1"},{n:"Garlic",a:"4 cloves"},{n:"Fresh basil",a:"1 cup"},{n:"Cream",a:"½ cup"},{n:"Vegetable broth",a:"2 cups"}],
     steps:[{n:1,t:"Sauté",d:"Cook onion and garlic 5 min."},{n:2,t:"Add",d:"Add tomatoes and broth."},{n:3,t:"Simmer",d:"Simmer 20 min, blend smooth."},{n:4,t:"Finish",d:"Stir in cream and basil."}]},
-  { id:69,emoji:"🌯",title:"Hummus Wrap",cuisine:"Middle Eastern",time:10,diff:"Easy",dietary:["Vegan"],pp:90,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
+  { id:69,meal:"lunch",emoji:"🌯",title:"Hummus Wrap",cuisine:"Middle Eastern",time:10,diff:"Easy",dietary:["Vegan"],pp:90,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Tortilla",a:"2"},{n:"Hummus",a:"½ cup"},{n:"Cucumber",a:"1"},{n:"Tomato",a:"1"},{n:"Lettuce",a:"1 cup"},{n:"Red pepper",a:"1"}],
     steps:[{n:1,t:"Spread",d:"Spread hummus on tortillas."},{n:2,t:"Chop",d:"Slice vegetables."},{n:3,t:"Fill",d:"Add vegetables to wrap."},{n:4,t:"Roll",d:"Roll tightly and serve."}]},
-  { id:70,emoji:"🍝",title:"Pesto Pasta",cuisine:"Italian",time:15,diff:"Easy",dietary:["Vegetarian"],pp:80,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
+  { id:70,meal:"dinner",emoji:"🍝",title:"Pesto Pasta",cuisine:"Italian",time:15,diff:"Easy",dietary:["Vegetarian"],pp:80,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Pasta",a:"400g"},{n:"Pesto sauce",a:"½ cup"},{n:"Cherry tomatoes",a:"1 cup"},{n:"Parmesan",a:"50g"},{n:"Pine nuts",a:"2 tbsp"}],
     steps:[{n:1,t:"Cook",d:"Boil pasta al dente."},{n:2,t:"Toss",d:"Mix hot pasta with pesto."},{n:3,t:"Add",d:"Add halved cherry tomatoes."},{n:4,t:"Top",d:"Garnish with parmesan and pine nuts."}]},
-  { id:71,emoji:"🥘",title:"Ratatouille",cuisine:"French",time:45,diff:"Medium",dietary:["Vegan"],pp:75,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
+  { id:71,meal:"dinner",emoji:"🥘",title:"Ratatouille",cuisine:"French",time:45,diff:"Medium",dietary:["Vegan"],pp:75,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Eggplant",a:"1"},{n:"Zucchini",a:"2"},{n:"Bell peppers",a:"2"},{n:"Tomatoes",a:"4"},{n:"Onion",a:"1"},{n:"Thyme",a:"2 tsp"}],
     steps:[{n:1,t:"Slice",d:"Slice all vegetables thinly."},{n:2,t:"Layer",d:"Layer in baking dish."},{n:3,t:"Season",d:"Drizzle oil, add thyme, salt."},{n:4,t:"Bake",d:"Bake 180°C for 40 min."}]},
-  { id:72,emoji:"🍛",title:"Mushroom Risotto",cuisine:"Italian",time:35,diff:"Medium",dietary:["Vegetarian"],pp:75,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
+  { id:72,meal:"dinner",emoji:"🍛",title:"Mushroom Risotto",cuisine:"Italian",time:35,diff:"Medium",dietary:["Vegetarian"],pp:75,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Arborio rice",a:"1½ cups"},{n:"Mushrooms",a:"300g"},{n:"Vegetable broth",a:"5 cups"},{n:"White wine",a:"½ cup"},{n:"Parmesan",a:"100g"},{n:"Butter",a:"3 tbsp"}],
     steps:[{n:1,t:"Sauté",d:"Cook mushrooms 5 min, set aside."},{n:2,t:"Toast",d:"Toast rice 2 min, add wine."},{n:3,t:"Add",d:"Add broth gradually, stirring 25 min."},{n:4,t:"Finish",d:"Stir in mushrooms, butter, parmesan."}]},
-  { id:73,emoji:"🌮",title:"Veggie Tacos",cuisine:"Mexican",time:20,diff:"Easy",dietary:["Vegan"],pp:85,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
+  { id:73,meal:"lunch",emoji:"🌮",title:"Veggie Tacos",cuisine:"Mexican",time:20,diff:"Easy",dietary:["Vegan"],pp:85,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Tortillas",a:"6"},{n:"Bell peppers",a:"2"},{n:"Onion",a:"1"},{n:"Black beans",a:"1 can"},{n:"Corn",a:"1 cup"},{n:"Cumin",a:"1 tsp"}],
     steps:[{n:1,t:"Sauté",d:"Cook peppers and onion 5 min."},{n:2,t:"Add",d:"Add beans, corn, cumin."},{n:3,t:"Heat",d:"Warm tortillas."},{n:4,t:"Fill",d:"Fill and serve with toppings."}]},
-  { id:74,emoji:"🥗",title:"Spinach Salad",cuisine:"Modern",time:10,diff:"Easy",dietary:["Vegetarian"],pp:85,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
+  { id:74,meal:"lunch",emoji:"🥗",title:"Spinach Salad",cuisine:"Modern",time:10,diff:"Easy",dietary:["Vegetarian"],pp:85,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Spinach",a:"4 cups"},{n:"Strawberries",a:"1 cup"},{n:"Walnuts",a:"½ cup"},{n:"Feta",a:"100g"},{n:"Balsamic vinegar",a:"3 tbsp"},{n:"Olive oil",a:"2 tbsp"}],
     steps:[{n:1,t:"Wash",d:"Rinse spinach."},{n:2,t:"Slice",d:"Slice strawberries."},{n:3,t:"Toss",d:"Combine spinach, berries, walnuts."},{n:4,t:"Dress",d:"Drizzle oil and vinegar, top with feta."}]},
-  { id:75,emoji:"🍲",title:"Butternut Squash Soup",cuisine:"American",time:40,diff:"Easy",dietary:["Vegan"],pp:80,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
+  { id:75,meal:"lunch",emoji:"🍲",title:"Butternut Squash Soup",cuisine:"American",time:40,diff:"Easy",dietary:["Vegan"],pp:80,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Butternut squash",a:"1 large"},{n:"Onion",a:"1"},{n:"Garlic",a:"3 cloves"},{n:"Vegetable broth",a:"4 cups"},{n:"Coconut milk",a:"½ cup"},{n:"Cinnamon",a:"½ tsp"}],
     steps:[{n:1,t:"Roast",d:"Roast squash 180°C for 25 min."},{n:2,t:"Sauté",d:"Cook onion and garlic."},{n:3,t:"Blend",d:"Blend squash, onion, broth."},{n:4,t:"Finish",d:"Add coconut milk and cinnamon."}]},
-  { id:76,emoji:"🍝",title:"Cacio e Pepe",cuisine:"Italian",time:15,diff:"Easy",dietary:["Vegetarian"],pp:90,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
+  { id:76,meal:"dinner",emoji:"🍝",title:"Cacio e Pepe",cuisine:"Italian",time:15,diff:"Easy",dietary:["Vegetarian"],pp:90,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Spaghetti",a:"400g"},{n:"Pecorino cheese",a:"150g"},{n:"Black pepper",a:"2 tsp"},{n:"Butter",a:"2 tbsp"},{n:"Pasta water",a:"½ cup"}],
     steps:[{n:1,t:"Cook",d:"Boil pasta, reserve water."},{n:2,t:"Toast",d:"Toast pepper in butter."},{n:3,t:"Mix",d:"Off heat, add cheese and pasta water."},{n:4,t:"Toss",d:"Toss pasta until creamy."}]},
-  { id:77,emoji:"🌯",title:"Breakfast Burrito",cuisine:"Mexican",time:15,diff:"Easy",dietary:["Vegetarian"],pp:85,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
+  { id:77,meal:"breakfast",emoji:"🌯",title:"Breakfast Burrito",cuisine:"Mexican",time:15,diff:"Easy",dietary:["Vegetarian"],pp:85,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Tortilla",a:"2"},{n:"Eggs",a:"4"},{n:"Cheese",a:"50g"},{n:"Bell pepper",a:"1"},{n:"Onion",a:"½"},{n:"Salsa",a:"¼ cup"}],
     steps:[{n:1,t:"Scramble",d:"Scramble eggs with peppers and onion."},{n:2,t:"Warm",d:"Heat tortillas."},{n:3,t:"Fill",d:"Add eggs and cheese."},{n:4,t:"Roll",d:"Roll with salsa inside."}]},
-  { id:78,emoji:"🥘",title:"Vegetable Stir-Fry",cuisine:"Asian",time:20,diff:"Easy",dietary:["Vegan"],pp:85,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
+  { id:78,meal:"dinner",emoji:"🥘",title:"Vegetable Stir-Fry",cuisine:"Asian",time:20,diff:"Easy",dietary:["Vegan"],pp:85,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Broccoli",a:"2 cups"},{n:"Carrots",a:"2"},{n:"Bell peppers",a:"2"},{n:"Soy sauce",a:"3 tbsp"},{n:"Garlic",a:"3 cloves"},{n:"Ginger",a:"1 tbsp"}],
     steps:[{n:1,t:"Prep",d:"Chop all vegetables."},{n:2,t:"Stir-fry",d:"Cook garlic and ginger 1 min."},{n:3,t:"Add",d:"Add vegetables, stir-fry 8 min."},{n:4,t:"Season",d:"Add soy sauce, toss well."}]},
-  { id:79,emoji:"🍕",title:"Veggie Pizza",cuisine:"Italian",time:25,diff:"Easy",dietary:["Vegetarian"],pp:75,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
+  { id:79,meal:"dinner",emoji:"🍕",title:"Veggie Pizza",cuisine:"Italian",time:25,diff:"Easy",dietary:["Vegetarian"],pp:75,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Pizza dough",a:"1 ball"},{n:"Tomato sauce",a:"½ cup"},{n:"Mozzarella",a:"200g"},{n:"Bell peppers",a:"1"},{n:"Mushrooms",a:"100g"},{n:"Onion",a:"½"}],
     steps:[{n:1,t:"Roll",d:"Roll dough into circle."},{n:2,t:"Top",d:"Spread sauce, add cheese and vegetables."},{n:3,t:"Bake",d:"Bake 220°C for 15 min."},{n:4,t:"Serve",d:"Slice and serve hot."}]},
-  { id:80,emoji:"🥗",title:"Coleslaw",cuisine:"American",time:15,diff:"Easy",dietary:["Vegetarian"],pp:90,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
+  { id:80,meal:"dinner",emoji:"🥗",title:"Coleslaw",cuisine:"American",time:15,diff:"Easy",dietary:["Vegetarian"],pp:90,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Cabbage",a:"½ head"},{n:"Carrots",a:"2"},{n:"Mayonnaise",a:"½ cup"},{n:"Apple cider vinegar",a:"2 tbsp"},{n:"Sugar",a:"1 tbsp"},{n:"Salt",a:"½ tsp"}],
     steps:[{n:1,t:"Shred",d:"Shred cabbage and grate carrots."},{n:2,t:"Mix",d:"Whisk mayo, vinegar, sugar."},{n:3,t:"Toss",d:"Toss vegetables with dressing."},{n:4,t:"Chill",d:"Refrigerate 10 min before serving."}]},
-  { id:81,emoji:"🍛",title:"Red Curry Tofu",cuisine:"Thai",time:25,diff:"Easy",dietary:["Vegan"],pp:70,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
+  { id:81,meal:"dinner",emoji:"🍛",title:"Red Curry Tofu",cuisine:"Thai",time:25,diff:"Easy",dietary:["Vegan"],pp:70,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Tofu",a:"300g"},{n:"Red curry paste",a:"3 tbsp"},{n:"Coconut milk",a:"1 can"},{n:"Bell peppers",a:"2"},{n:"Bamboo shoots",a:"1 cup"},{n:"Basil",a:"¼ cup"}],
     steps:[{n:1,t:"Fry",d:"Fry tofu until golden."},{n:2,t:"Curry",d:"Fry curry paste 2 min."},{n:3,t:"Simmer",d:"Add coconut milk, vegetables, simmer 15 min."},{n:4,t:"Serve",d:"Add basil, serve with rice."}]},
-  { id:82,emoji:"🌮",title:"Breakfast Tacos",cuisine:"Mexican",time:15,diff:"Easy",dietary:["Vegetarian"],pp:85,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
+  { id:82,meal:"breakfast",emoji:"🌮",title:"Breakfast Tacos",cuisine:"Mexican",time:15,diff:"Easy",dietary:["Vegetarian"],pp:85,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Tortillas",a:"4"},{n:"Eggs",a:"4"},{n:"Black beans",a:"½ cup"},{n:"Cheese",a:"50g"},{n:"Avocado",a:"1"},{n:"Salsa",a:"¼ cup"}],
     steps:[{n:1,t:"Scramble",d:"Scramble eggs."},{n:2,t:"Warm",d:"Heat beans and tortillas."},{n:3,t:"Fill",d:"Add eggs, beans, cheese."},{n:4,t:"Top",d:"Top with avocado and salsa."}]},
-  { id:83,emoji:"🍲",title:"French Onion Soup",cuisine:"French",time:45,diff:"Medium",dietary:["Vegetarian"],pp:80,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
+  { id:83,meal:"lunch",emoji:"🍲",title:"French Onion Soup",cuisine:"French",time:45,diff:"Medium",dietary:["Vegetarian"],pp:80,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Onions",a:"4 large"},{n:"Butter",a:"4 tbsp"},{n:"Vegetable broth",a:"6 cups"},{n:"Bread",a:"4 slices"},{n:"Gruyere cheese",a:"200g"},{n:"Thyme",a:"2 tsp"}],
     steps:[{n:1,t:"Caramelize",d:"Cook onions in butter 30 min until golden."},{n:2,t:"Add",d:"Add broth and thyme, simmer 10 min."},{n:3,t:"Toast",d:"Toast bread with cheese."},{n:4,t:"Serve",d:"Top soup with cheese toast."}]},
-  { id:84,emoji:"🥙",title:"Greek Pita",cuisine:"Greek",time:15,diff:"Easy",dietary:["Vegetarian"],pp:85,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
+  { id:84,meal:"lunch",emoji:"🥙",title:"Greek Pita",cuisine:"Greek",time:15,diff:"Easy",dietary:["Vegetarian"],pp:85,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Pita bread",a:"2"},{n:"Falafel",a:"4 pieces"},{n:"Tzatziki",a:"¼ cup"},{n:"Cucumber",a:"1"},{n:"Tomato",a:"1"},{n:"Red onion",a:"¼"}],
     steps:[{n:1,t:"Warm",d:"Heat pita and falafel."},{n:2,t:"Spread",d:"Spread tzatziki inside pita."},{n:3,t:"Fill",d:"Add falafel and chopped vegetables."},{n:4,t:"Serve",d:"Fold and serve."}]},
-  { id:85,emoji:"🍝",title:"Mushroom Pasta",cuisine:"Italian",time:20,diff:"Easy",dietary:["Vegetarian"],pp:85,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
+  { id:85,meal:"dinner",emoji:"🍝",title:"Mushroom Pasta",cuisine:"Italian",time:20,diff:"Easy",dietary:["Vegetarian"],pp:85,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Pasta",a:"400g"},{n:"Mushrooms",a:"300g"},{n:"Cream",a:"1 cup"},{n:"Garlic",a:"3 cloves"},{n:"Parmesan",a:"50g"},{n:"Parsley",a:"¼ cup"}],
     steps:[{n:1,t:"Cook",d:"Boil pasta."},{n:2,t:"Sauté",d:"Cook mushrooms and garlic 5 min."},{n:3,t:"Sauce",d:"Add cream, simmer 5 min."},{n:4,t:"Toss",d:"Mix pasta with sauce, top with parmesan."}]},
-  { id:86,emoji:"🥗",title:"Tabbouleh",cuisine:"Middle Eastern",time:20,diff:"Easy",dietary:["Vegan"],pp:80,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
+  { id:86,meal:"lunch",emoji:"🥗",title:"Tabbouleh",cuisine:"Middle Eastern",time:20,diff:"Easy",dietary:["Vegan"],pp:80,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Bulgur wheat",a:"1 cup"},{n:"Parsley",a:"2 cups"},{n:"Tomatoes",a:"3"},{n:"Cucumber",a:"1"},{n:"Lemon juice",a:"¼ cup"},{n:"Olive oil",a:"3 tbsp"}],
     steps:[{n:1,t:"Soak",d:"Soak bulgur in hot water 15 min."},{n:2,t:"Chop",d:"Finely chop parsley and vegetables."},{n:3,t:"Mix",d:"Combine all ingredients."},{n:4,t:"Dress",d:"Toss with lemon and oil."}]},
-  { id:87,emoji:"🍛",title:"Eggplant Curry",cuisine:"Indian",time:30,diff:"Easy",dietary:["Vegan"],pp:75,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
+  { id:87,meal:"dinner",emoji:"🍛",title:"Eggplant Curry",cuisine:"Indian",time:30,diff:"Easy",dietary:["Vegan"],pp:75,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Eggplant",a:"2"},{n:"Tomatoes",a:"3"},{n:"Onion",a:"1"},{n:"Curry powder",a:"2 tbsp"},{n:"Coconut milk",a:"1 can"},{n:"Garlic",a:"3 cloves"}],
     steps:[{n:1,t:"Cube",d:"Dice eggplant and tomatoes."},{n:2,t:"Sauté",d:"Cook onion and garlic 3 min."},{n:3,t:"Curry",d:"Add curry powder, cook 1 min."},{n:4,t:"Simmer",d:"Add eggplant, tomatoes, coconut milk. Simmer 20 min."}]},
-  { id:88,emoji:"🥪",title:"Grilled Cheese",cuisine:"American",time:10,diff:"Easy",dietary:["Vegetarian"],pp:90,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
+  { id:88,meal:"lunch",emoji:"🥪",title:"Grilled Cheese",cuisine:"American",time:10,diff:"Easy",dietary:["Vegetarian"],pp:90,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Bread",a:"4 slices"},{n:"Cheddar cheese",a:"4 slices"},{n:"Butter",a:"2 tbsp"}],
     steps:[{n:1,t:"Butter",d:"Butter one side of each slice."},{n:2,t:"Layer",d:"Place cheese between slices."},{n:3,t:"Grill",d:"Cook in pan 3 min per side."},{n:4,t:"Serve",d:"Cut and serve hot."}]},
-  { id:89,emoji:"🍲",title:"Split Pea Soup",cuisine:"American",time:60,diff:"Easy",dietary:["Vegan"],pp:90,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
+  { id:89,meal:"lunch",emoji:"🍲",title:"Split Pea Soup",cuisine:"American",time:60,diff:"Easy",dietary:["Vegan"],pp:90,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Split peas",a:"2 cups"},{n:"Carrots",a:"2"},{n:"Celery",a:"2 stalks"},{n:"Onion",a:"1"},{n:"Vegetable broth",a:"6 cups"},{n:"Bay leaf",a:"1"}],
     steps:[{n:1,t:"Sauté",d:"Cook vegetables 5 min."},{n:2,t:"Add",d:"Add peas, broth, bay leaf."},{n:3,t:"Simmer",d:"Simmer 50 min until thick."},{n:4,t:"Season",d:"Remove bay leaf, season and serve."}]},
-  { id:90,emoji:"🌮",title:"Sweet Potato Tacos",cuisine:"Mexican",time:30,diff:"Easy",dietary:["Vegan"],pp:80,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
+  { id:90,meal:"lunch",emoji:"🌮",title:"Sweet Potato Tacos",cuisine:"Mexican",time:30,diff:"Easy",dietary:["Vegan"],pp:80,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Sweet potatoes",a:"2"},{n:"Tortillas",a:"6"},{n:"Black beans",a:"1 can"},{n:"Avocado",a:"1"},{n:"Lime",a:"1"},{n:"Cilantro",a:"¼ cup"}],
     steps:[{n:1,t:"Roast",d:"Cube and roast sweet potatoes 200°C for 25 min."},{n:2,t:"Warm",d:"Heat beans and tortillas."},{n:3,t:"Mash",d:"Mash avocado with lime."},{n:4,t:"Fill",d:"Fill tacos with potatoes, beans, avocado."}]},
-  { id:91,emoji:"🍝",title:"Lemon Garlic Pasta",cuisine:"Italian",time:15,diff:"Easy",dietary:["Vegetarian"],pp:90,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
+  { id:91,meal:"dinner",emoji:"🍝",title:"Lemon Garlic Pasta",cuisine:"Italian",time:15,diff:"Easy",dietary:["Vegetarian"],pp:90,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Spaghetti",a:"400g"},{n:"Garlic",a:"6 cloves"},{n:"Lemon",a:"2"},{n:"Butter",a:"4 tbsp"},{n:"Parmesan",a:"100g"},{n:"Parsley",a:"¼ cup"}],
     steps:[{n:1,t:"Cook",d:"Boil pasta."},{n:2,t:"Sauté",d:"Cook garlic in butter 2 min."},{n:3,t:"Mix",d:"Add lemon juice and zest."},{n:4,t:"Toss",d:"Toss pasta with sauce, top with parmesan."}]},
-  { id:92,emoji:"🥘",title:"Vegetable Biryani",cuisine:"Indian",time:45,diff:"Medium",dietary:["Vegan"],pp:70,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
+  { id:92,meal:"dinner",emoji:"🥘",title:"Vegetable Biryani",cuisine:"Indian",time:45,diff:"Medium",dietary:["Vegan"],pp:70,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Basmati rice",a:"2 cups"},{n:"Mixed vegetables",a:"3 cups"},{n:"Onion",a:"2"},{n:"Yogurt",a:"½ cup"},{n:"Biryani spice",a:"2 tbsp"},{n:"Saffron",a:"pinch"}],
     steps:[{n:1,t:"Sauté",d:"Cook onions until golden."},{n:2,t:"Spice",d:"Add vegetables and spices, cook 5 min."},{n:3,t:"Layer",d:"Layer rice and vegetables."},{n:4,t:"Steam",d:"Cover, steam 30 min on low heat."}]},
-  { id:93,emoji:"🌯",title:"Mediterranean Wrap",cuisine:"Mediterranean",time:15,diff:"Easy",dietary:["Vegetarian"],pp:85,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
+  { id:93,meal:"lunch",emoji:"🌯",title:"Mediterranean Wrap",cuisine:"Mediterranean",time:15,diff:"Easy",dietary:["Vegetarian"],pp:85,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Tortilla",a:"2"},{n:"Hummus",a:"¼ cup"},{n:"Feta",a:"50g"},{n:"Cucumber",a:"1"},{n:"Tomatoes",a:"2"},{n:"Olives",a:"¼ cup"}],
     steps:[{n:1,t:"Spread",d:"Spread hummus on tortillas."},{n:2,t:"Chop",d:"Dice vegetables."},{n:3,t:"Fill",d:"Add vegetables, feta, olives."},{n:4,t:"Roll",d:"Roll tightly and serve."}]},
-  { id:94,emoji:"🍲",title:"Gazpacho",cuisine:"Spanish",time:20,diff:"Easy",dietary:["Vegan"],pp:85,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
+  { id:94,meal:"lunch",emoji:"🍲",title:"Gazpacho",cuisine:"Spanish",time:20,diff:"Easy",dietary:["Vegan"],pp:85,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Tomatoes",a:"6"},{n:"Cucumber",a:"1"},{n:"Bell pepper",a:"1"},{n:"Garlic",a:"2 cloves"},{n:"Olive oil",a:"3 tbsp"},{n:"Red wine vinegar",a:"2 tbsp"}],
     steps:[{n:1,t:"Chop",d:"Roughly chop vegetables."},{n:2,t:"Blend",d:"Blend all ingredients until smooth."},{n:3,t:"Season",d:"Add salt, pepper, adjust acidity."},{n:4,t:"Chill",d:"Refrigerate 15 min, serve cold."}]},
-  { id:95,emoji:"🥗",title:"Asian Noodle Salad",cuisine:"Asian",time:20,diff:"Easy",dietary:["Vegan"],pp:75,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
+  { id:95,meal:"lunch",emoji:"🥗",title:"Asian Noodle Salad",cuisine:"Asian",time:20,diff:"Easy",dietary:["Vegan"],pp:75,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Rice noodles",a:"200g"},{n:"Cabbage",a:"2 cups"},{n:"Carrots",a:"2"},{n:"Peanuts",a:"¼ cup"},{n:"Soy sauce",a:"3 tbsp"},{n:"Lime juice",a:"2 tbsp"}],
     steps:[{n:1,t:"Cook",d:"Cook noodles, drain and cool."},{n:2,t:"Shred",d:"Shred cabbage and grate carrots."},{n:3,t:"Mix",d:"Combine noodles and vegetables."},{n:4,t:"Dress",d:"Toss with soy sauce, lime, peanuts."}]},
-  { id:96,emoji:"🍛",title:"Paneer Tikka Masala",cuisine:"Indian",time:35,diff:"Medium",dietary:["Vegetarian"],pp:70,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
+  { id:96,meal:"dinner",emoji:"🍛",title:"Paneer Tikka Masala",cuisine:"Indian",time:35,diff:"Medium",dietary:["Vegetarian"],pp:70,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Paneer",a:"300g"},{n:"Tomato sauce",a:"2 cups"},{n:"Cream",a:"½ cup"},{n:"Onion",a:"1"},{n:"Garam masala",a:"2 tsp"},{n:"Garlic",a:"4 cloves"}],
     steps:[{n:1,t:"Sauté",d:"Cook onion and garlic 5 min."},{n:2,t:"Spice",d:"Add garam masala, cook 1 min."},{n:3,t:"Simmer",d:"Add tomato sauce, cream, simmer 15 min."},{n:4,t:"Add",d:"Add paneer cubes, cook 10 min."}]},
-  { id:97,emoji:"🥙",title:"Veggie Pita Pocket",cuisine:"Mediterranean",time:15,diff:"Easy",dietary:["Vegan"],pp:90,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
+  { id:97,meal:"lunch",emoji:"🥙",title:"Veggie Pita Pocket",cuisine:"Mediterranean",time:15,diff:"Easy",dietary:["Vegan"],pp:90,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Pita bread",a:"2"},{n:"Chickpeas",a:"1 cup"},{n:"Cucumber",a:"1"},{n:"Tomato",a:"1"},{n:"Lettuce",a:"1 cup"},{n:"Tahini",a:"3 tbsp"}],
     steps:[{n:1,t:"Warm",d:"Warm pita bread."},{n:2,t:"Chop",d:"Dice vegetables."},{n:3,t:"Fill",d:"Stuff pita with chickpeas and vegetables."},{n:4,t:"Drizzle",d:"Drizzle with tahini."}]},
-  { id:98,emoji:"🍝",title:"Broccoli Pasta",cuisine:"Italian",time:20,diff:"Easy",dietary:["Vegan"],pp:85,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
+  { id:98,meal:"dinner",emoji:"🍝",title:"Broccoli Pasta",cuisine:"Italian",time:20,diff:"Easy",dietary:["Vegan"],pp:85,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Pasta",a:"400g"},{n:"Broccoli",a:"2 cups"},{n:"Garlic",a:"4 cloves"},{n:"Olive oil",a:"¼ cup"},{n:"Chili flakes",a:"1 tsp"},{n:"Lemon",a:"1"}],
     steps:[{n:1,t:"Cook",d:"Boil pasta and broccoli together."},{n:2,t:"Sauté",d:"Cook garlic and chili in oil."},{n:3,t:"Toss",d:"Toss pasta and broccoli with garlic oil."},{n:4,t:"Finish",d:"Add lemon juice and serve."}]},
-  { id:99,emoji:"🥘",title:"Stuffed Bell Peppers",cuisine:"Mediterranean",time:45,diff:"Medium",dietary:["Vegetarian"],pp:75,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
+  { id:99,meal:"dinner",emoji:"🥘",title:"Stuffed Bell Peppers",cuisine:"Mediterranean",time:45,diff:"Medium",dietary:["Vegetarian"],pp:75,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Bell peppers",a:"4"},{n:"Rice",a:"1 cup cooked"},{n:"Black beans",a:"1 can"},{n:"Corn",a:"1 cup"},{n:"Cheese",a:"100g"},{n:"Tomato sauce",a:"1 cup"}],
     steps:[{n:1,t:"Prep",d:"Cut tops off peppers, remove seeds."},{n:2,t:"Mix",d:"Combine rice, beans, corn, half the cheese."},{n:3,t:"Stuff",d:"Fill peppers with mixture."},{n:4,t:"Bake",d:"Top with sauce and cheese, bake 180°C for 35 min."}]},
-  { id:100,emoji:"🌮",title:"Cauliflower Tacos",cuisine:"Mexican",time:25,diff:"Easy",dietary:["Vegan"],pp:80,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
+  { id:100,meal:"lunch",emoji:"🌮",title:"Cauliflower Tacos",cuisine:"Mexican",time:25,diff:"Easy",dietary:["Vegan"],pp:80,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Cauliflower",a:"1 head"},{n:"Tortillas",a:"6"},{n:"Taco seasoning",a:"2 tbsp"},{n:"Avocado",a:"1"},{n:"Cabbage",a:"1 cup"},{n:"Lime",a:"1"}],
     steps:[{n:1,t:"Roast",d:"Toss cauliflower with seasoning, roast 200°C for 20 min."},{n:2,t:"Warm",d:"Heat tortillas."},{n:3,t:"Fill",d:"Add cauliflower and cabbage."},{n:4,t:"Top",d:"Add avocado and lime juice."}]},
-  { id:101,emoji:"🍲",title:"White Bean Soup",cuisine:"Italian",time:30,diff:"Easy",dietary:["Vegan"],pp:90,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
+  { id:101,meal:"lunch",emoji:"🍲",title:"White Bean Soup",cuisine:"Italian",time:30,diff:"Easy",dietary:["Vegan"],pp:90,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"White beans",a:"2 cans"},{n:"Carrots",a:"2"},{n:"Celery",a:"2 stalks"},{n:"Tomatoes",a:"2"},{n:"Vegetable broth",a:"4 cups"},{n:"Rosemary",a:"2 tsp"}],
     steps:[{n:1,t:"Sauté",d:"Cook diced vegetables 5 min."},{n:2,t:"Add",d:"Add beans, tomatoes, broth, rosemary."},{n:3,t:"Simmer",d:"Simmer 20 min."},{n:4,t:"Serve",d:"Season and serve with bread."}]},
-  { id:102,emoji:"🥗",title:"Caprese Salad",cuisine:"Italian",time:10,diff:"Easy",dietary:["Vegetarian"],pp:90,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
+  { id:102,meal:"lunch",emoji:"🥗",title:"Caprese Salad",cuisine:"Italian",time:10,diff:"Easy",dietary:["Vegetarian"],pp:90,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Tomatoes",a:"4"},{n:"Mozzarella",a:"200g"},{n:"Fresh basil",a:"15 leaves"},{n:"Olive oil",a:"3 tbsp"},{n:"Balsamic vinegar",a:"2 tbsp"},{n:"Salt",a:"pinch"}],
     steps:[{n:1,t:"Slice",d:"Slice tomatoes and mozzarella."},{n:2,t:"Layer",d:"Alternate tomato, mozzarella, basil."},{n:3,t:"Drizzle",d:"Drizzle with oil and vinegar."},{n:4,t:"Season",d:"Sprinkle salt and serve."}]},
-  { id:103,emoji:"🍛",title:"Vegetable Korma",cuisine:"Indian",time:35,diff:"Medium",dietary:["Vegetarian"],pp:70,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
+  { id:103,meal:"dinner",emoji:"🍛",title:"Vegetable Korma",cuisine:"Indian",time:35,diff:"Medium",dietary:["Vegetarian"],pp:70,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Mixed vegetables",a:"3 cups"},{n:"Cream",a:"1 cup"},{n:"Onion",a:"1"},{n:"Tomatoes",a:"2"},{n:"Korma paste",a:"3 tbsp"},{n:"Almonds",a:"¼ cup"}],
     steps:[{n:1,t:"Sauté",d:"Cook onions until soft."},{n:2,t:"Paste",d:"Add korma paste, cook 2 min."},{n:3,t:"Simmer",d:"Add vegetables, tomatoes, cream. Simmer 25 min."},{n:4,t:"Finish",d:"Top with toasted almonds."}]},
-  { id:104,emoji:"🌯",title:"BBQ Tofu Wrap",cuisine:"American",time:20,diff:"Easy",dietary:["Vegan"],pp:75,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
+  { id:104,meal:"lunch",emoji:"🌯",title:"BBQ Tofu Wrap",cuisine:"American",time:20,diff:"Easy",dietary:["Vegan"],pp:75,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Tofu",a:"200g"},{n:"BBQ sauce",a:"½ cup"},{n:"Tortilla",a:"2"},{n:"Coleslaw",a:"1 cup"},{n:"Pickles",a:"4"}],
     steps:[{n:1,t:"Fry",d:"Pan-fry tofu until crispy."},{n:2,t:"Coat",d:"Toss with BBQ sauce."},{n:3,t:"Warm",d:"Heat tortillas."},{n:4,t:"Fill",d:"Add tofu, coleslaw, pickles, roll."}]},
-  { id:105,emoji:"🍝",title:"Sun-Dried Tomato Pasta",cuisine:"Italian",time:20,diff:"Easy",dietary:["Vegetarian"],pp:80,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
+  { id:105,meal:"dinner",emoji:"🍝",title:"Sun-Dried Tomato Pasta",cuisine:"Italian",time:20,diff:"Easy",dietary:["Vegetarian"],pp:80,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Pasta",a:"400g"},{n:"Sun-dried tomatoes",a:"½ cup"},{n:"Cream",a:"1 cup"},{n:"Garlic",a:"3 cloves"},{n:"Spinach",a:"2 cups"},{n:"Parmesan",a:"50g"}],
     steps:[{n:1,t:"Cook",d:"Boil pasta."},{n:2,t:"Sauté",d:"Cook garlic and tomatoes 2 min."},{n:3,t:"Sauce",d:"Add cream and spinach, wilt 3 min."},{n:4,t:"Toss",d:"Mix pasta with sauce, top with parmesan."}]},
-  { id:106,emoji:"🥘",title:"Moroccan Tagine",cuisine:"Moroccan",time:50,diff:"Medium",dietary:["Vegan"],pp:70,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
+  { id:106,meal:"dinner",emoji:"🥘",title:"Moroccan Tagine",cuisine:"Moroccan",time:50,diff:"Medium",dietary:["Vegan"],pp:70,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Chickpeas",a:"2 cans"},{n:"Sweet potato",a:"2"},{n:"Dried apricots",a:"½ cup"},{n:"Onion",a:"1"},{n:"Cumin",a:"2 tsp"},{n:"Vegetable broth",a:"2 cups"}],
     steps:[{n:1,t:"Sauté",d:"Cook onion 5 min."},{n:2,t:"Spice",d:"Add cumin, cook 1 min."},{n:3,t:"Add",d:"Add chickpeas, sweet potato, apricots, broth."},{n:4,t:"Simmer",d:"Cover, simmer 40 min until tender."}]},
-  { id:107,emoji:"🌮",title:"Fish Tacos",cuisine:"Mexican",time:25,diff:"Easy",dietary:[],pp:70,missing:[],worth:false,contains_meat:false,contains_fish:true,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
+  { id:107,meal:"lunch",emoji:"🌮",title:"Fish Tacos",cuisine:"Mexican",time:25,diff:"Easy",dietary:[],pp:70,missing:[],worth:false,contains_meat:false,contains_fish:true,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"White fish",a:"300g"},{n:"Tortillas",a:"6"},{n:"Cabbage",a:"1 cup"},{n:"Lime",a:"1"},{n:"Sour cream",a:"¼ cup"},{n:"Cilantro",a:"¼ cup"}],
     steps:[{n:1,t:"Season",d:"Season fish with cumin, salt."},{n:2,t:"Cook",d:"Pan-fry fish 4 min per side."},{n:3,t:"Warm",d:"Heat tortillas."},{n:4,t:"Assemble",d:"Flake fish into tortillas, top with cabbage, lime, cream."}]},
-  { id:108,emoji:"🍝",title:"Shrimp Scampi",cuisine:"Italian",time:20,diff:"Easy",dietary:[],pp:75,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:true,contains_dairy:true,kosher_risk:true,
+  { id:108,meal:"dinner",emoji:"🍝",title:"Shrimp Scampi",cuisine:"Italian",time:20,diff:"Easy",dietary:[],pp:75,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:true,contains_dairy:true,kosher_risk:true,
     ingredients:[{n:"Shrimp",a:"400g"},{n:"Linguine",a:"400g"},{n:"Garlic",a:"5 cloves"},{n:"Butter",a:"4 tbsp"},{n:"White wine",a:"½ cup"},{n:"Lemon",a:"1"}],
     steps:[{n:1,t:"Cook",d:"Boil pasta."},{n:2,t:"Sauté",d:"Cook garlic in butter 1 min."},{n:3,t:"Shrimp",d:"Add shrimp, wine, lemon. Cook 5 min."},{n:4,t:"Toss",d:"Toss pasta with shrimp sauce."}]},
-  { id:109,emoji:"🍗",title:"Chicken Stir-Fry",cuisine:"Asian",time:20,diff:"Easy",dietary:[],pp:80,missing:[],worth:false,contains_meat:true,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
+  { id:109,meal:"dinner",emoji:"🍗",title:"Chicken Stir-Fry",cuisine:"Asian",time:20,diff:"Easy",dietary:[],pp:80,missing:[],worth:false,contains_meat:true,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Chicken breast",a:"300g"},{n:"Broccoli",a:"2 cups"},{n:"Bell peppers",a:"2"},{n:"Soy sauce",a:"3 tbsp"},{n:"Garlic",a:"3 cloves"},{n:"Ginger",a:"1 tbsp"}],
     steps:[{n:1,t:"Slice",d:"Cut chicken into strips."},{n:2,t:"Fry",d:"Cook chicken 5 min, set aside."},{n:3,t:"Vegetables",d:"Stir-fry vegetables 5 min."},{n:4,t:"Combine",d:"Add chicken back, add soy sauce, toss."}]},
-  { id:110,emoji:"🥩",title:"Beef Tacos",cuisine:"Mexican",time:25,diff:"Easy",dietary:[],pp:80,missing:[],worth:false,contains_meat:true,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_risk:true,
+  { id:110,meal:"lunch",emoji:"🥩",title:"Beef Tacos",cuisine:"Mexican",time:25,diff:"Easy",dietary:[],pp:80,missing:[],worth:false,contains_meat:true,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_risk:true,
     ingredients:[{n:"Ground beef",a:"400g"},{n:"Tortillas",a:"8"},{n:"Taco seasoning",a:"2 tbsp"},{n:"Cheese",a:"100g"},{n:"Lettuce",a:"1 cup"},{n:"Salsa",a:"½ cup"}],
     steps:[{n:1,t:"Cook",d:"Brown beef with seasoning 8 min."},{n:2,t:"Warm",d:"Heat tortillas."},{n:3,t:"Fill",d:"Add beef to tortillas."},{n:4,t:"Top",d:"Add cheese, lettuce, salsa."}]},
-  { id:111,emoji:"🍗",title:"Grilled Chicken Salad",cuisine:"American",time:25,diff:"Easy",dietary:[],pp:85,missing:[],worth:false,contains_meat:true,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
+  { id:111,meal:"lunch",emoji:"🍗",title:"Grilled Chicken Salad",cuisine:"American",time:25,diff:"Easy",dietary:[],pp:85,missing:[],worth:false,contains_meat:true,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Chicken breast",a:"2"},{n:"Mixed greens",a:"4 cups"},{n:"Cherry tomatoes",a:"1 cup"},{n:"Cucumber",a:"1"},{n:"Feta",a:"50g"},{n:"Balsamic dressing",a:"¼ cup"}],
     steps:[{n:1,t:"Grill",d:"Season and grill chicken 6 min per side."},{n:2,t:"Slice",d:"Let rest, then slice."},{n:3,t:"Toss",d:"Mix greens, vegetables, dressing."},{n:4,t:"Top",d:"Top with chicken and feta."}]},
-  { id:112,emoji:"🍝",title:"Salmon Pasta",cuisine:"Italian",time:25,diff:"Easy",dietary:[],pp:75,missing:[],worth:false,contains_meat:false,contains_fish:true,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
+  { id:112,meal:"dinner",emoji:"🍝",title:"Salmon Pasta",cuisine:"Italian",time:25,diff:"Easy",dietary:[],pp:75,missing:[],worth:false,contains_meat:false,contains_fish:true,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Salmon",a:"300g"},{n:"Pasta",a:"400g"},{n:"Cream",a:"1 cup"},{n:"Dill",a:"2 tbsp"},{n:"Lemon",a:"1"},{n:"Garlic",a:"2 cloves"}],
     steps:[{n:1,t:"Cook",d:"Boil pasta."},{n:2,t:"Sauté",d:"Cook garlic 1 min, add cream."},{n:3,t:"Salmon",d:"Add flaked salmon and dill."},{n:4,t:"Toss",d:"Mix pasta with sauce, add lemon juice."}]},
-  { id:113,emoji:"🍗",title:"BBQ Chicken",cuisine:"American",time:40,diff:"Easy",dietary:[],pp:85,missing:[],worth:false,contains_meat:true,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
+  { id:113,meal:"dinner",emoji:"🍗",title:"BBQ Chicken",cuisine:"American",time:40,diff:"Easy",dietary:[],pp:85,missing:[],worth:false,contains_meat:true,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Chicken legs",a:"4"},{n:"BBQ sauce",a:"1 cup"},{n:"Honey",a:"2 tbsp"},{n:"Paprika",a:"1 tsp"},{n:"Garlic powder",a:"1 tsp"}],
     steps:[{n:1,t:"Season",d:"Rub chicken with spices."},{n:2,t:"Bake",d:"Bake 200°C for 25 min."},{n:3,t:"Glaze",d:"Brush with BBQ sauce and honey."},{n:4,t:"Finish",d:"Bake 10 min more until glazed."}]},
-  { id:114,emoji:"🥩",title:"Beef Stir-Fry",cuisine:"Asian",time:20,diff:"Easy",dietary:[],pp:75,missing:[],worth:false,contains_meat:true,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
+  { id:114,meal:"dinner",emoji:"🥩",title:"Beef Stir-Fry",cuisine:"Asian",time:20,diff:"Easy",dietary:[],pp:75,missing:[],worth:false,contains_meat:true,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Beef strips",a:"300g"},{n:"Broccoli",a:"2 cups"},{n:"Carrots",a:"2"},{n:"Soy sauce",a:"3 tbsp"},{n:"Oyster sauce",a:"2 tbsp"},{n:"Ginger",a:"1 tbsp"}],
     steps:[{n:1,t:"Marinate",d:"Marinate beef in soy sauce 10 min."},{n:2,t:"Fry",d:"Stir-fry beef 3 min, set aside."},{n:3,t:"Vegetables",d:"Stir-fry vegetables 5 min."},{n:4,t:"Combine",d:"Add beef, oyster sauce, toss."}]},
-  { id:115,emoji:"🍗",title:"Chicken Quesadilla",cuisine:"Mexican",time:15,diff:"Easy",dietary:[],pp:85,missing:[],worth:false,contains_meat:true,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
+  { id:115,meal:"lunch",emoji:"🍗",title:"Chicken Quesadilla",cuisine:"Mexican",time:15,diff:"Easy",dietary:[],pp:85,missing:[],worth:false,contains_meat:true,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Chicken breast",a:"200g cooked"},{n:"Tortillas",a:"4"},{n:"Cheese",a:"150g"},{n:"Bell peppers",a:"1"},{n:"Onion",a:"½"}],
     steps:[{n:1,t:"Slice",d:"Shred chicken, slice vegetables."},{n:2,t:"Fill",d:"Layer chicken, vegetables, cheese on tortilla."},{n:3,t:"Cook",d:"Top with another tortilla, cook 3 min per side."},{n:4,t:"Cut",d:"Cut into wedges and serve."}]},
-  { id:116,emoji:"🐟",title:"Baked Cod",cuisine:"Mediterranean",time:25,diff:"Easy",dietary:[],pp:85,missing:[],worth:false,contains_meat:false,contains_fish:true,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
+  { id:116,meal:"dinner",emoji:"🐟",title:"Baked Cod",cuisine:"Mediterranean",time:25,diff:"Easy",dietary:[],pp:85,missing:[],worth:false,contains_meat:false,contains_fish:true,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Cod fillets",a:"4"},{n:"Lemon",a:"1"},{n:"Olive oil",a:"3 tbsp"},{n:"Garlic",a:"3 cloves"},{n:"Parsley",a:"¼ cup"},{n:"Cherry tomatoes",a:"1 cup"}],
     steps:[{n:1,t:"Prep",d:"Place cod in baking dish."},{n:2,t:"Top",d:"Top with tomatoes, garlic, lemon."},{n:3,t:"Drizzle",d:"Drizzle with oil."},{n:4,t:"Bake",d:"Bake 200°C for 15 min."}]},
-  { id:117,emoji:"🍗",title:"Chicken Alfredo",cuisine:"Italian",time:25,diff:"Easy",dietary:[],pp:80,missing:[],worth:false,contains_meat:true,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
+  { id:117,meal:"dinner",emoji:"🍗",title:"Chicken Alfredo",cuisine:"Italian",time:25,diff:"Easy",dietary:[],pp:80,missing:[],worth:false,contains_meat:true,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Chicken breast",a:"300g"},{n:"Fettuccine",a:"400g"},{n:"Cream",a:"1½ cups"},{n:"Parmesan",a:"150g"},{n:"Butter",a:"3 tbsp"},{n:"Garlic",a:"2 cloves"}],
     steps:[{n:1,t:"Cook",d:"Cook pasta and slice, pan-fry chicken."},{n:2,t:"Sauce",d:"Melt butter, add cream, parmesan."},{n:3,t:"Combine",d:"Add pasta to sauce."},{n:4,t:"Top",d:"Top with sliced chicken."}]},
-  { id:118,emoji:"🥩",title:"Beef Burrito Bowl",cuisine:"Mexican",time:25,diff:"Easy",dietary:[],pp:80,missing:[],worth:false,contains_meat:true,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_risk:true,
+  { id:118,meal:"lunch",emoji:"🥩",title:"Beef Burrito Bowl",cuisine:"Mexican",time:25,diff:"Easy",dietary:[],pp:80,missing:[],worth:false,contains_meat:true,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_risk:true,
     ingredients:[{n:"Ground beef",a:"300g"},{n:"Rice",a:"2 cups cooked"},{n:"Black beans",a:"1 can"},{n:"Corn",a:"1 cup"},{n:"Cheese",a:"100g"},{n:"Sour cream",a:"¼ cup"}],
     steps:[{n:1,t:"Cook",d:"Brown beef with taco seasoning."},{n:2,t:"Warm",d:"Heat beans and corn."},{n:3,t:"Assemble",d:"Layer rice, beef, beans, corn in bowl."},{n:4,t:"Top",d:"Top with cheese and sour cream."}]},
-  { id:119,emoji:"🍗",title:"Honey Mustard Chicken",cuisine:"American",time:30,diff:"Easy",dietary:[],pp:85,missing:[],worth:false,contains_meat:true,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
+  { id:119,meal:"dinner",emoji:"🍗",title:"Honey Mustard Chicken",cuisine:"American",time:30,diff:"Easy",dietary:[],pp:85,missing:[],worth:false,contains_meat:true,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Chicken breast",a:"4"},{n:"Honey",a:"¼ cup"},{n:"Dijon mustard",a:"3 tbsp"},{n:"Garlic",a:"2 cloves"},{n:"Olive oil",a:"2 tbsp"}],
     steps:[{n:1,t:"Mix",d:"Whisk honey, mustard, garlic, oil."},{n:2,t:"Marinate",d:"Coat chicken, marinate 10 min."},{n:3,t:"Bake",d:"Bake 200°C for 25 min."},{n:4,t:"Serve",d:"Let rest, slice and serve."}]},
-  { id:120,emoji:"🍝",title:"Tuna Pasta",cuisine:"Italian",time:20,diff:"Easy",dietary:[],pp:85,missing:[],worth:false,contains_meat:false,contains_fish:true,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
+  { id:120,meal:"dinner",emoji:"🍝",title:"Tuna Pasta",cuisine:"Italian",time:20,diff:"Easy",dietary:[],pp:85,missing:[],worth:false,contains_meat:false,contains_fish:true,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Pasta",a:"400g"},{n:"Tuna",a:"2 cans"},{n:"Tomato sauce",a:"1 cup"},{n:"Capers",a:"2 tbsp"},{n:"Olives",a:"½ cup"},{n:"Garlic",a:"3 cloves"}],
     steps:[{n:1,t:"Cook",d:"Boil pasta."},{n:2,t:"Sauce",d:"Sauté garlic, add tomato sauce."},{n:3,t:"Add",d:"Add tuna, capers, olives."},{n:4,t:"Toss",d:"Mix pasta with sauce."}]},
-  { id:121,emoji:"🍗",title:"Teriyaki Chicken",cuisine:"Japanese",time:25,diff:"Easy",dietary:[],pp:80,missing:[],worth:false,contains_meat:true,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
+  { id:121,meal:"dinner",emoji:"🍗",title:"Teriyaki Chicken",cuisine:"Japanese",time:25,diff:"Easy",dietary:[],pp:80,missing:[],worth:false,contains_meat:true,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Chicken thighs",a:"4"},{n:"Teriyaki sauce",a:"½ cup"},{n:"Honey",a:"2 tbsp"},{n:"Garlic",a:"2 cloves"},{n:"Ginger",a:"1 tbsp"},{n:"Sesame seeds",a:"1 tbsp"}],
     steps:[{n:1,t:"Marinate",d:"Mix sauce, honey, garlic, ginger. Marinate chicken 10 min."},{n:2,t:"Cook",d:"Pan-fry chicken 6 min per side."},{n:3,t:"Glaze",d:"Brush with remaining sauce."},{n:4,t:"Serve",d:"Sprinkle sesame seeds."}]},
-  { id:122,emoji:"🥩",title:"Steak Fajitas",cuisine:"Mexican",time:20,diff:"Easy",dietary:[],pp:75,missing:[],worth:false,contains_meat:true,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_risk:true,
+  { id:122,meal:"dinner",emoji:"🥩",title:"Steak Fajitas",cuisine:"Mexican",time:20,diff:"Easy",dietary:[],pp:75,missing:[],worth:false,contains_meat:true,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_risk:true,
     ingredients:[{n:"Beef steak",a:"400g"},{n:"Bell peppers",a:"3"},{n:"Onion",a:"1"},{n:"Tortillas",a:"8"},{n:"Sour cream",a:"¼ cup"},{n:"Fajita seasoning",a:"2 tbsp"}],
     steps:[{n:1,t:"Slice",d:"Slice steak and vegetables."},{n:2,t:"Cook",d:"Stir-fry steak 5 min, set aside."},{n:3,t:"Vegetables",d:"Cook peppers and onion 5 min."},{n:4,t:"Serve",d:"Serve in tortillas with sour cream."}]},
-  { id:123,emoji:"🍗",title:"Chicken Parmesan",cuisine:"Italian",time:35,diff:"Medium",dietary:[],pp:75,missing:[],worth:false,contains_meat:true,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_risk:true,
+  { id:123,meal:"dinner",emoji:"🍗",title:"Chicken Parmesan",cuisine:"Italian",time:35,diff:"Medium",dietary:[],pp:75,missing:[],worth:false,contains_meat:true,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_risk:true,
     ingredients:[{n:"Chicken breast",a:"4"},{n:"Breadcrumbs",a:"1 cup"},{n:"Mozzarella",a:"200g"},{n:"Parmesan",a:"100g"},{n:"Tomato sauce",a:"2 cups"},{n:"Eggs",a:"2"}],
     steps:[{n:1,t:"Bread",d:"Dip chicken in egg, then breadcrumbs."},{n:2,t:"Fry",d:"Pan-fry 4 min per side."},{n:3,t:"Top",d:"Top with sauce and cheeses."},{n:4,t:"Bake",d:"Bake 200°C for 15 min."}]},
-  { id:124,emoji:"🍝",title:"Meatball Pasta",cuisine:"Italian",time:30,diff:"Easy",dietary:[],pp:75,missing:[],worth:false,contains_meat:true,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_risk:true,
+  { id:124,meal:"dinner",emoji:"🍝",title:"Meatball Pasta",cuisine:"Italian",time:30,diff:"Easy",dietary:[],pp:75,missing:[],worth:false,contains_meat:true,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_risk:true,
     ingredients:[{n:"Ground beef",a:"400g"},{n:"Pasta",a:"400g"},{n:"Tomato sauce",a:"2 cups"},{n:"Breadcrumbs",a:"½ cup"},{n:"Egg",a:"1"},{n:"Parmesan",a:"100g"}],
     steps:[{n:1,t:"Form",d:"Mix beef, breadcrumbs, egg. Form meatballs."},{n:2,t:"Cook",d:"Fry meatballs 10 min, add sauce."},{n:3,t:"Simmer",d:"Simmer 15 min."},{n:4,t:"Serve",d:"Serve over cooked pasta with parmesan."}]},
-  { id:125,emoji:"🐟",title:"Lemon Garlic Salmon",cuisine:"Mediterranean",time:20,diff:"Easy",dietary:[],pp:85,missing:[],worth:false,contains_meat:false,contains_fish:true,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
+  { id:125,meal:"dinner",emoji:"🐟",title:"Lemon Garlic Salmon",cuisine:"Mediterranean",time:20,diff:"Easy",dietary:[],pp:85,missing:[],worth:false,contains_meat:false,contains_fish:true,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Salmon fillets",a:"4"},{n:"Lemon",a:"2"},{n:"Garlic",a:"4 cloves"},{n:"Olive oil",a:"3 tbsp"},{n:"Dill",a:"2 tbsp"},{n:"White wine",a:"¼ cup"}],
     steps:[{n:1,t:"Season",d:"Season salmon with salt, pepper."},{n:2,t:"Sauté",d:"Cook garlic in oil 1 min."},{n:3,t:"Add",d:"Add salmon, lemon, wine. Cook 8 min."},{n:4,t:"Finish",d:"Top with dill and serve."}]},
-  { id:126,emoji:"🍗",title:"Chicken Curry",cuisine:"Indian",time:35,diff:"Medium",dietary:[],pp:70,missing:[],worth:false,contains_meat:true,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
+  { id:126,meal:"dinner",emoji:"🍗",title:"Chicken Curry",cuisine:"Indian",time:35,diff:"Medium",dietary:[],pp:70,missing:[],worth:false,contains_meat:true,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Chicken thighs",a:"600g"},{n:"Curry powder",a:"3 tbsp"},{n:"Coconut milk",a:"1 can"},{n:"Onion",a:"1"},{n:"Tomatoes",a:"2"},{n:"Yogurt",a:"½ cup"}],
     steps:[{n:1,t:"Sauté",d:"Cook onion 5 min."},{n:2,t:"Spice",d:"Add curry powder, cook 1 min."},{n:3,t:"Add",d:"Add chicken, tomatoes, coconut milk."},{n:4,t:"Simmer",d:"Simmer 25 min, stir in yogurt."}]},
-  { id:127,emoji:"🥩",title:"Beef Stroganoff",cuisine:"Russian",time:30,diff:"Medium",dietary:[],pp:75,missing:[],worth:false,contains_meat:true,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_risk:true,
+  { id:127,meal:"dinner",emoji:"🥩",title:"Beef Stroganoff",cuisine:"Russian",time:30,diff:"Medium",dietary:[],pp:75,missing:[],worth:false,contains_meat:true,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_risk:true,
     ingredients:[{n:"Beef strips",a:"400g"},{n:"Mushrooms",a:"300g"},{n:"Onion",a:"1"},{n:"Sour cream",a:"1 cup"},{n:"Beef broth",a:"1 cup"},{n:"Egg noodles",a:"400g"}],
     steps:[{n:1,t:"Cook",d:"Brown beef 5 min, set aside."},{n:2,t:"Sauté",d:"Cook mushrooms and onion 5 min."},{n:3,t:"Sauce",d:"Add broth, simmer 10 min. Stir in sour cream."},{n:4,t:"Serve",d:"Add beef back, serve over noodles."}]},
-  { id:128,emoji:"🍗",title:"Chicken Fajitas",cuisine:"Mexican",time:25,diff:"Easy",dietary:[],pp:80,missing:[],worth:false,contains_meat:true,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
+  { id:128,meal:"dinner",emoji:"🍗",title:"Chicken Fajitas",cuisine:"Mexican",time:25,diff:"Easy",dietary:[],pp:80,missing:[],worth:false,contains_meat:true,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Chicken breast",a:"400g"},{n:"Bell peppers",a:"3"},{n:"Onion",a:"1"},{n:"Tortillas",a:"8"},{n:"Sour cream",a:"¼ cup"},{n:"Fajita seasoning",a:"2 tbsp"}],
     steps:[{n:1,t:"Slice",d:"Slice chicken and vegetables."},{n:2,t:"Cook",d:"Stir-fry chicken with seasoning 8 min."},{n:3,t:"Vegetables",d:"Add peppers and onion, cook 5 min."},{n:4,t:"Serve",d:"Serve in tortillas with sour cream."}]},
-  { id:129,emoji:"🐟",title:"Grilled Salmon",cuisine:"American",time:20,diff:"Easy",dietary:[],pp:90,missing:[],worth:false,contains_meat:false,contains_fish:true,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
+  { id:129,meal:"dinner",emoji:"🐟",title:"Grilled Salmon",cuisine:"American",time:20,diff:"Easy",dietary:[],pp:90,missing:[],worth:false,contains_meat:false,contains_fish:true,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Salmon fillets",a:"4"},{n:"Lemon",a:"1"},{n:"Olive oil",a:"2 tbsp"},{n:"Garlic powder",a:"1 tsp"},{n:"Paprika",a:"1 tsp"},{n:"Black pepper",a:"½ tsp"}],
     steps:[{n:1,t:"Season",d:"Rub salmon with spices and oil."},{n:2,t:"Grill",d:"Grill 5 min per side."},{n:3,t:"Squeeze",d:"Squeeze lemon over salmon."},{n:4,t:"Serve",d:"Serve with vegetables."}]},
-  { id:130,emoji:"🍗",title:"Chicken Noodle Soup",cuisine:"American",time:40,diff:"Easy",dietary:[],pp:85,missing:[],worth:false,contains_meat:true,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
+  { id:130,meal:"lunch",emoji:"🍗",title:"Chicken Noodle Soup",cuisine:"American",time:40,diff:"Easy",dietary:[],pp:85,missing:[],worth:false,contains_meat:true,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Chicken breast",a:"300g"},{n:"Egg noodles",a:"200g"},{n:"Carrots",a:"2"},{n:"Celery",a:"2 stalks"},{n:"Chicken broth",a:"6 cups"},{n:"Onion",a:"1"}],
     steps:[{n:1,t:"Boil",d:"Boil chicken in broth 15 min."},{n:2,t:"Shred",d:"Remove, shred chicken."},{n:3,t:"Cook",d:"Add vegetables, simmer 15 min."},{n:4,t:"Add",d:"Add noodles and chicken, cook 8 min."}]},
-  { id:131,emoji:"🥩",title:"Beef and Broccoli",cuisine:"Chinese",time:20,diff:"Easy",dietary:[],pp:80,missing:[],worth:false,contains_meat:true,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
+  { id:131,meal:"dinner",emoji:"🥩",title:"Beef and Broccoli",cuisine:"Chinese",time:20,diff:"Easy",dietary:[],pp:80,missing:[],worth:false,contains_meat:true,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Beef strips",a:"400g"},{n:"Broccoli",a:"3 cups"},{n:"Soy sauce",a:"¼ cup"},{n:"Oyster sauce",a:"2 tbsp"},{n:"Garlic",a:"3 cloves"},{n:"Ginger",a:"1 tbsp"}],
     steps:[{n:1,t:"Marinate",d:"Marinate beef in soy sauce 10 min."},{n:2,t:"Stir-fry",d:"Cook beef 5 min, set aside."},{n:3,t:"Broccoli",d:"Stir-fry broccoli with garlic and ginger 5 min."},{n:4,t:"Combine",d:"Add beef, oyster sauce, toss well."}]},
   {
@@ -20643,14 +20643,26 @@ const RECIPES = [
 
 // Helper: Derive meal type from recipe (based on ID ranges and keywords)
 const getMealType = (recipe) => {
-  // Prefer the explicit meal field (set on all recipes with IDs 132+)
-  if(recipe.meal) return recipe.meal;
+  // SINGLE SOURCE OF TRUTH: use recipe.meal field (set on all recipes in dataset).
+  // All legacy recipes (IDs 1–131) were patched to include meal: field during Step 2
+  // of the June 2026 stabilization pass. Hardcoded ID lists removed.
+  if (recipe.meal) return recipe.meal;
 
-  // Fallback: hardcoded ID lists for legacy recipes (IDs 1-131)
-  const breakfastIds = [5,6,12,20,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51];
-  if(breakfastIds.includes(recipe.id)) return "breakfast";
-  const lunchIds = [2,3,8,9,13,19,52,61,67,74,86,95,102,62,68,75,94,101,56,63,69,84,88,93,97,104,59,65,100,111,115];
-  if(lunchIds.includes(recipe.id)) return "lunch";
+  // Safety fallback: infer from title keywords if meal field is somehow absent,
+  // then default to "dinner". Always log so missing field is detectable.
+  const t = (recipe.title || "").toLowerCase();
+  const BREAKFAST_KWS = ["pancake","oatmeal","smoothie","waffle","granola","porridge","frittata",
+    "omelette","omelet","french toast","avocado toast","overnight oat","chia pudding","yogurt bowl"];
+  const LUNCH_KWS = ["sandwich","wrap","salad","soup","bowl","taco","quesadilla","pita","ramen","pho"];
+  for (const kw of BREAKFAST_KWS) if (t.includes(kw)) {
+    console.warn(`[SmartChef] Recipe id:${recipe.id} "${recipe.title}" missing meal field — inferred: breakfast`);
+    return "breakfast";
+  }
+  for (const kw of LUNCH_KWS) if (t.includes(kw)) {
+    console.warn(`[SmartChef] Recipe id:${recipe.id} "${recipe.title}" missing meal field — inferred: lunch`);
+    return "lunch";
+  }
+  console.warn(`[SmartChef] Recipe id:${recipe.id} "${recipe.title}" missing meal field — defaulting to: dinner`);
   return "dinner";
 };
 
@@ -21578,7 +21590,7 @@ export default function App() {
           {tab==="chat"      && <ChatTab      {...tp} pantry={pantry} prefs={prefs} addToList={addToList} />}
           {tab==="planner"   && <PlannerTab   {...tp} shopping={shopping} prefs={prefs} pantry={pantry} />}
           {tab==="profile"   && <ProfileTab   {...tp} />}
-          {tab==="community" && <CommunityTab {...tp} />}
+          {/* TODO [ROADMAP]: CommunityTab removed from active nav — code retained as stub */}
         </div>
       </div>
       {showUpgrade && <UpgradeModal reason={showUpgrade} onClose={()=>setShowUpgrade(null)} onActivate={activatePremium} />}
@@ -21597,7 +21609,7 @@ function Sidebar({ tab, setTab, user, isGuest, onLogout, isPremium, onUpgrade })
     {id:"shopping",label:"Shopping List",icon:"cart"},
     {id:"chat",label:"Chef AI",icon:"chat",premium:true},
     {id:"planner",label:"Planner",icon:"cal"},
-    {id:"community",label:"Community",icon:"community"},
+    // TODO [ROADMAP]: Community tab — social features (published menus, community feed). Frozen.
     {id:"profile",label:"Profile",icon:"user"}
   ];
   return (
@@ -22174,7 +22186,7 @@ function HomeTab({ isGuest, saved, toggleSave, onViewRecipe, pantry, addToList, 
                           {group.map(r => {
                             // In "Cook now" section hide missing text; in others use live-computed list
                             const rDisp = {...r, missing: k===0 ? [] : r._mn};
-                            return <RecipeCard key={r.id} r={rDisp} saved={isRecipeSaved?isRecipeSaved(r):saved.has(r.id)} onSave={()=>onSaveFav?onSaveFav(r):toggleSave(r.id)} onView={()=>onViewRecipe(r)} addToList={()=>addToList(rDisp.missing||[])}/>;
+                            return <RecipeCard key={r.id} r={rDisp} saved={isRecipeSaved?isRecipeSaved(r):saved.has(r.id)} onSave={()=>onSaveFav?onSaveFav(r):toggleSave(r.id)} onView={()=>onViewRecipe(r)} addToList={addToList} pantry={pantry}/>;
                           })}
                         </div>
                       </div>
@@ -22223,7 +22235,7 @@ function HomeTab({ isGuest, saved, toggleSave, onViewRecipe, pantry, addToList, 
                     {group.map(r=>{
                       const rDisp = {...r, missing: k===0?[]:r._mn};
                       const ingMatchLabel = r._ingMatch && searchQ ? <span style={{fontSize:10,color:"var(--clay)",fontWeight:600,display:"block",marginTop:2}}>Includes: {searchQ}</span> : null;
-                      return <RecipeCard key={r.id} r={rDisp} saved={isRecipeSaved?isRecipeSaved(r):saved.has(r.id)} onSave={()=>onSaveFav?onSaveFav(r):toggleSave(r.id)} onView={()=>onViewRecipe(r)} addToList={()=>addToList(rDisp.missing||[])}/>;
+                      return <RecipeCard key={r.id} r={rDisp} saved={isRecipeSaved?isRecipeSaved(r):saved.has(r.id)} onSave={()=>onSaveFav?onSaveFav(r):toggleSave(r.id)} onView={()=>onViewRecipe(r)} addToList={addToList} pantry={pantry}/>;
                     })}
                   </div>}
                 </div>
@@ -22248,7 +22260,7 @@ function HomeTab({ isGuest, saved, toggleSave, onViewRecipe, pantry, addToList, 
             {filtered.length===0?<div className="empty"><div className="eic">🍽️</div><div className="etitle">No recipes found</div><div className="esub">Try a different filter or add more pantry items.</div></div>
               :visibleRecipes.map(r=>{
                 const ingMatchLabel = r._ingMatch && searchQ ? <span style={{fontSize:10,color:"var(--clay)",fontWeight:600,display:"block",marginTop:2}}>Includes: {searchQ}</span> : null;
-                return <RecipeCard key={r.id} r={r} saved={isRecipeSaved?isRecipeSaved(r):saved.has(r.id)} onSave={()=>onSaveFav?onSaveFav(r):toggleSave(r.id)} onView={()=>onViewRecipe(r)} addToList={()=>addToList(r.missing||[])}/>;
+                return <RecipeCard key={r.id} r={r} saved={isRecipeSaved?isRecipeSaved(r):saved.has(r.id)} onSave={()=>onSaveFav?onSaveFav(r):toggleSave(r.id)} onView={()=>onViewRecipe(r)} addToList={addToList} pantry={pantry}/>;
               })}
           </div>
           {lockedCount>0&&(
@@ -22284,7 +22296,24 @@ function HomeTab({ isGuest, saved, toggleSave, onViewRecipe, pantry, addToList, 
   );
 }
 
-function RecipeCard({ r, saved, onSave, onView, addToList, inFav }) {
+function RecipeCard({ r, saved, onSave, onView, addToList, inFav, pantry }) {
+  // STEP 4 STABILIZATION: Compute missing ingredients dynamically from pantry.
+  // Do NOT use the static r.missing field for display — it is hardcoded and not pantry-aware.
+  const dynamicMissing = React.useMemo(() => {
+    if (r.isUserCreated || !r.ingredients?.length) return [];
+    const ps = buildPantrySet(pantry || []);
+    return r.ingredients
+      .filter(i => !ingInPantry(i.n, ps))
+      .map(i => i.n);
+  }, [r.id, r.ingredients, pantry]);
+
+  // Pantry match % (dynamic, replaces static r.pp)
+  const dynamicPP = r.ingredients?.length
+    ? Math.round(((r.ingredients.length - dynamicMissing.length) / r.ingredients.length) * 100)
+    : (r.pp || 0);
+
+  const handleAddMissing = () => addToList(dynamicMissing);
+
   return (
     <div className="card">
       <div className="rimg" onClick={onView}>
@@ -22297,8 +22326,20 @@ function RecipeCard({ r, saved, onSave, onView, addToList, inFav }) {
         <div className="rtitle" onClick={onView}>{r.title}</div>
         <div className="rmeta"><span className="rmeta-i">⏱ {r.time} min</span><span className="rmeta-i">📊 {r.diff}</span></div>
         <div className="rtags">{r.dietary.map(d=><span key={d} className="tag td">{d}</span>)}</div>
-        {!r.isUserCreated && <div className="pbar"><div className="pbar-r"><span>Pantry match</span><span style={{color:"var(--sage)",fontWeight:600}}>{r.pp}%</span></div><div className="pbar-t"><div className="pbar-f" style={{width:`${r.pp}%`}}/></div></div>}
-        {r.missing&&r.missing.length>0&&<div style={{fontSize:12,color:"var(--mu)",marginBottom:12}}>Missing: {r.missing.join(", ")}{r.worth&&<span className="bwrth" style={{marginLeft:8}}>Worth buying</span>}</div>}
+        {!r.isUserCreated && (
+          <div className="pbar">
+            <div className="pbar-r">
+              <span>Pantry match</span>
+              <span style={{color:"var(--sage)",fontWeight:600}}>{dynamicPP}%</span>
+            </div>
+            <div className="pbar-t"><div className="pbar-f" style={{width:`${dynamicPP}%`}}/></div>
+          </div>
+        )}
+        {dynamicMissing.length > 0 && (
+          <div style={{fontSize:12,color:"var(--mu)",marginBottom:12}}>
+            Missing: {dynamicMissing.slice(0,4).join(", ")}{dynamicMissing.length > 4 ? ` +${dynamicMissing.length - 4} more` : ""}
+          </div>
+        )}
         <div className="ractions">
           <button className="btn btn-sm btn-cs" onClick={onView}>View recipe</button>
           <button
@@ -22308,7 +22349,11 @@ function RecipeCard({ r, saved, onSave, onView, addToList, inFav }) {
           >
             <Ic n={saved?"bookmarkOn":"bookmark"} s={15}/>
           </button>
-          {r.missing&&r.missing.length>0&&<button className="btn btn-sm btn-g" style={{border:"1px solid var(--bor)"}} onClick={addToList}><Ic n="cart" s={13}/></button>}
+          {dynamicMissing.length > 0 && (
+            <button className="btn btn-sm btn-g" style={{border:"1px solid var(--bor)"}} onClick={handleAddMissing}>
+              <Ic n="cart" s={13}/>
+            </button>
+          )}
         </div>
       </div>
     </div>
@@ -22344,13 +22389,66 @@ function RandomModal({ onClose, onView, addToList }) {
           <div style={{padding:"0 24px 24px",display:"flex",flexDirection:"column",gap:10}}>
             <button className="btn btn-p btn-full" onClick={()=>onView(result)}>View full recipe →</button>
             <button className="btn btn-s btn-full" onClick={generate}><Ic n="shuffle" s={16}/>Generate another</button>
-            {result.missing.length>0&&<button className="btn btn-g btn-full" style={{border:"1px solid var(--bor)"}} onClick={()=>addToList(result.missing)}><Ic n="cart" s={16}/>Add missing to list</button>}
+            {/* Missing ingredients for random recipes computed dynamically in RecipeDetail when opened */}
           </div>
         </div>}
       </div>
     </div>
   );
 }
+
+
+// ╔══════════════════════════════════════════════════════════════════════════════╗
+// ║                    SMARTCHEF FEATURE ROADMAP — TODO LIST                   ║
+// ║              DO NOT IMPLEMENT — planning markers only (Jun 2026)           ║
+// ╚══════════════════════════════════════════════════════════════════════════════╝
+//
+// TODO [ROADMAP-01]: Plan Library
+//   Pre-made weekly menus curated by SmartChef team (e.g. "Keto Week", "Budget Week").
+//   User picks a template and it fills the planner grid. Store in a separate PLAN_LIBRARY array.
+//
+// TODO [ROADMAP-02]: Multiple Saved Weekly Plans
+//   Let users save and name multiple weekly plans (e.g. "Summer Rotation", "Work Week").
+//   Switching between plans replaces the mealPlan state. Store in localStorage keyed by user.
+//
+// TODO [ROADMAP-03]: Add Recipe Directly to Specific Day/Slot from Recipe Page
+//   "Add to plan" button on RecipeDetail/RecipeCard. Opens a slot-picker (day + meal type).
+//   Sets the slot without navigating to Planner tab.
+//
+// TODO [ROADMAP-04]: Ingredient Avoid List + Substitution Engine
+//   Extend avoidedIngredients with substitution suggestions (e.g. avoid "dairy" → suggest almond milk).
+//   Use AVOID_REPLACEABLE_MAP (already exists) as foundation.
+//   Surface substitutions in RecipeDetail for avoided ingredients.
+//
+// TODO [ROADMAP-05]: Animated Cooking Steps
+//   Each step in RecipeDetail plays a short icon animation (stir, chop, heat, etc.).
+//   Map step keywords (boil, fry, bake, mix...) to animation classes in CSS.
+//   Steps auto-advance on a timer if user enables "guided mode".
+//
+// TODO [ROADMAP-06]: Advanced Pantry Coverage Insights (Pantry Strength Meter)
+//   Dashboard panel showing: pantry strength score, top 5 ingredients to unlock most recipes,
+//   ingredient categories coverage, and waste-minimizer suggestions.
+//   Extend greedyCoverageExpansion() + computeIngredientImpact() already in codebase.
+//
+// TODO [ROADMAP-07]: Social Layer (Profiles, Published Menus, Copy Menus)
+//   Full social feed. Community tab already stubbed. Requires backend/auth.
+//   CommunityTab and PublishMenuModal code retained as stubs.
+//   publishMenu() and publishedMenus state already in App — wire up when ready.
+//
+// TODO [ROADMAP-08]: Most Liked / Trending Recipes
+//   Like/heart counter per recipe. Aggregate across users (needs backend).
+//   Sort option "Most liked" in HomeTab already has placeholder in sortMode state.
+//
+// TODO [ROADMAP-09]: Ingredient Unlock Ranking System
+//   Show a ranked list of "buy X to unlock N recipes". Already partially implemented
+//   in greedyCoverageExpansion(). Expose as a dedicated "What to buy next?" panel.
+//
+// TODO [ROADMAP-10]: Waste Minimizer Suggestions
+//   Surface recipes that use expiring pantry items first.
+//   Cross-reference pantry item expiry dates (already tracked) with recipe ingredients.
+//   Highlight these recipes with an "⏰ Use soon" badge.
+//
+// ─────────────────────────────────────────────────────────────────────────────
 
 /* ── RECIPE DETAIL ── */
 // ── AVOID INGREDIENTS HEURISTICS ─────────────────────────────────────────────
@@ -23678,8 +23776,6 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
   const [dragSource, setDragSource] = useState(null);
   const [showPublishModal, setShowPublishModal] = useState(false);
   const [planning,setPlanning]=useState(false);
-  const [plannerTab,setPlannerTab]=useState("week");
-  const [showPlannerChat,setShowPlannerChat]=useState(false);
   const [showMissingModal,setShowMissingModal]=useState(false);
   const [tooRestrictive,setTooRestrictive]=useState(false);       // avoid filter blocked all slots
   const [allowAvoidedLastResort,setAllowAvoidedLastResort]=useState(false); // override toggle
@@ -23914,9 +24010,16 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
   return (
     <div>
       <div style={{display:"flex",alignItems:"flex-start",justifyContent:"space-between",marginBottom:20,flexWrap:"wrap",gap:12}}>
-        <div><h1 className="stitle">Weekly Planner</h1><p className="ssub">Feb 17–23, 2026</p></div>
+        <div><h1 className="stitle">Weekly Planner</h1><p className="ssub">{(()=>{
+          const now = new Date();
+          const dow = now.getDay(); // 0=Sun, 1=Mon...
+          const diffToMon = (dow === 0) ? -6 : 1 - dow;
+          const mon = new Date(now); mon.setDate(now.getDate() + diffToMon);
+          const sun = new Date(mon); sun.setDate(mon.getDate() + 6);
+          const fmt = d => d.toLocaleDateString(undefined,{month:"short",day:"numeric"});
+          return `${fmt(mon)} – ${fmt(sun)}, ${sun.getFullYear()}`;
+        })()}</p></div>
         <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
-          <button className="btn btn-s btn-sm" onClick={()=>setShowPlannerChat(true)}>💬 Chat to adjust plan</button>
           <button className="btn btn-p btn-sm" onClick={()=>{
             if(isGuest){return;}
             if(!isPremium && (subscription.autoplanUsed||0) >= FREE_AUTOPLAN_USES){onUpgrade("autoplan");return;}
@@ -24019,18 +24122,10 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
 
 
 
-      {!isGuest && mealPlan.flatMap(d=>d.meals).some(Boolean) && (
-        <div style={{display:"flex",justifyContent:"flex-end",marginBottom:8}}>
-          <button className="btn btn-sage btn-sm" onClick={()=>setShowPublishModal(true)}>🌐 Publish this week</button>
-        </div>
-      )}
+      {/* TODO [ROADMAP]: "Publish this week" button — social publish flow. Frozen. */}
 
-      {/* Planner sub-tabs */}
-      <div className="planner-tabs">
-        {[{id:"week",label:"📅 Weekly Grid"},{id:"prep",label:"📦 Meal Prep Plan"}].map(t=><button key={t.id} className={`ptab ${plannerTab===t.id?"ac":""}`} onClick={()=>setPlannerTab(t.id)}>{t.label}</button>)}
-      </div>
-
-      {plannerTab==="week"&&<>
+      {/* Weekly grid — only view. Prep Plan tab removed (TODO [ROADMAP]). */}
+      {true&&<>
         {/* Meal slot toggles */}
         <div style={{background:"var(--white)",border:"1px solid var(--bor)",borderRadius:"var(--r)",padding:"14px 18px",marginBottom:16}}>
           <div style={{fontSize:11,fontWeight:700,color:"var(--mu)",textTransform:"uppercase",letterSpacing:.5,marginBottom:10}}>Meal slots</div>
@@ -24109,7 +24204,7 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
         </div>
       </>}
 
-      {plannerTab==="prep"&&<MealPrepPlanner mealPlan={mealPlan} prefs={{dietary:[],household:2}} />}
+      {/* TODO [ROADMAP]: MealPrepPlanner — code retained as stub, not rendered */}
 
       {slotActions && (()=>{
         const { dayIdx, mealIdx, dayLabel, mealType } = slotActions;
@@ -24160,17 +24255,9 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
         />
       )}
 
-      {showPublishModal && (
-        <PublishMenuModal
-          mealPlan={mealPlan}
-          user={user}
-          allRecipes={allRecipes}
-          onClose={()=>setShowPublishModal(false)}
-          onPublish={publishMenu}
-        />
-      )}
+      {/* TODO [ROADMAP]: PublishMenuModal — retained as code stub, not rendered */}
 
-      {showPlannerChat&&<PlannerChatDrawer onClose={()=>setShowPlannerChat(false)} mealPlan={mealPlan} setMealPlan={setMealPlan}/>}
+      {/* TODO [ROADMAP]: PlannerChatDrawer — AI-powered plan chat (needs backend API key). Frozen. */}
     </div>
   );
 }
@@ -24441,7 +24528,7 @@ function ShoppingListTab({ shopping, setShopping, pantry, mealPlan, isGuest }) {
 /* ── FAVORITES TAB ── */
 function FavoritesTab({ favFolders, favItems, userRecipes, allRecipes, onViewRecipe, onSaveFav,
   removeFavItem, removeFromAllFolders, addUserRecipe, deleteUserRecipe,
-  createFavFolder, deleteFavFolder, saveToFolder, isRecipeSaved, showToast }) {
+  createFavFolder, deleteFavFolder, saveToFolder, isRecipeSaved, showToast, pantry }) {
   const [activeFolder,        setActiveFolder]        = useState(null);
   const [search,              setSearch]              = useState("");
   const [sort,                setSort]                = useState("recent");
@@ -24603,7 +24690,8 @@ function FavoritesTab({ favFolders, favItems, userRecipes, allRecipes, onViewRec
                       inFav={true}
                       onSave={()=>onSaveFav && onSaveFav(recipe)}
                       onView={()=>onViewRecipe(recipe)}
-                      addToList={()=>{}}/>
+                      addToList={()=>{}}
+                      pantry={pantry}/>
                     <div className="fav-card-footer">
                       <button className="fav-foot-btn" onClick={()=>onViewRecipe(recipe)}>View</button>
                       {confirmDelete === recipe.id ? (
@@ -24639,7 +24727,8 @@ function FavoritesTab({ favFolders, favItems, userRecipes, allRecipes, onViewRec
                       inFav={true}
                       onSave={()=>removeFavItem(recipe, item.folderId)}
                       onView={()=>onViewRecipe(recipe)}
-                      addToList={()=>{}}/>
+                      addToList={()=>{}}
+                      pantry={pantry}/>
                     <div className="fav-card-footer">
                       <button className="fav-foot-btn" onClick={()=>setMoveTarget({recipe, item})}>Move to…</button>
                       <button className="fav-foot-btn danger" onClick={()=>removeFavItem(recipe, item.folderId)}>Remove</button>
@@ -24957,7 +25046,7 @@ function ProfileTab({ user, isGuest, prefs, setPrefs, onLogout, shopping, setSho
             ? <div style={{textAlign:"center",padding:"40px 0",color:"var(--mu)"}}>
                 <div style={{fontSize:36,marginBottom:8}}>📅</div>
                 <div style={{fontWeight:600,marginBottom:4}}>No published menus yet</div>
-                <div style={{fontSize:13}}>Go to the Planner tab and click "Publish this week" to share your menu.</div>
+                <div style={{fontSize:13}}>Published menus feature coming soon.</div>
               </div>
             : <div className="feed-grid">
                 {publishedMenus.map(m=>(
