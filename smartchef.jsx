@@ -21303,6 +21303,31 @@ const smartParseList = rawText => {
   return results;
 };
 
+/* ── ERROR BOUNDARY ── */
+class RecipeErrorBoundary extends React.Component {
+  constructor(props) { super(props); this.state = { hasError: false, error: null }; }
+  static getDerivedStateFromError(error) { return { hasError: true, error }; }
+  componentDidCatch(error, info) { console.error('[SmartChef] RecipeDetail crash:', error, info); }
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div style={{minHeight:'100vh',background:'var(--cream)',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',fontFamily:'var(--fb)',gap:16,padding:32}}>
+          <style>{S}</style>
+          <div style={{fontSize:48}}>🍳</div>
+          <div style={{fontSize:20,fontWeight:700,color:'var(--ch)'}}>Recipe couldn't load</div>
+          <div style={{fontSize:14,color:'var(--mu)',maxWidth:340,textAlign:'center'}}>
+            Something went wrong displaying this recipe. This has been logged.
+          </div>
+          <button className="btn btn-p" onClick={()=>{this.setState({hasError:false,error:null});this.props.onBack?.();}}>
+            ← Go back
+          </button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
 /* ── MAIN APP ── */
 export default function App() {
   const [screen, setScreen] = useState("loading"); // loading first to check session
@@ -21318,6 +21343,11 @@ export default function App() {
   ]);
   const [prefs, setPrefs] = useState({ dietary:[],cuisines:["Italian","Mediterranean"],health:"Balanced",skill:"Intermediate",maxTime:60,household:2 });
   const [viewRecipe, setViewRecipe] = useState(null);
+  // Plan Library state lifted to App level so it survives recipe navigation
+  const [libraryPreview, setLibraryPreview] = useState(null);   // { plan, entry }
+  const [libraryDraft, setLibraryDraft]     = useState(null);   // { plan, title }
+  const [libraryDraftTitle, setLibraryDraftTitle] = useState(''); // editable draft name
+  const [libraryShowCreate, setLibraryShowCreate] = useState(false);
   // 🔧 DEV MODE: isPremium defaults to true for testing — set to false when gating is needed
   const [subscription, setSubscription] = useState({ isPremium: true, autoplanUsed: 0 });
   const [showUpgrade, setShowUpgrade] = useState(null); // 'chat'|'autoplan'|'save'|'recipes'|null
@@ -21598,7 +21628,32 @@ export default function App() {
   if (screen==="signup")    return <SignupScreen onBack={()=>setScreen("welcome")} onLogin={login} onSwitch={()=>setScreen("login")} />;
   if (screen==="onboarding") return <Onboarding onDone={items=>{setPantry(items);setScreen("main");}} onSkip={()=>setScreen("main")} />;
 
-  if (viewRecipe) return <><RecipeDetail recipe={viewRecipe} saved={saved.has(viewRecipe.id)} onSave={()=>toggleSave(viewRecipe.id)} onBack={()=>setViewRecipe(null)} onAddToList={m=>addToList(m)} pantry={pantry} setPantry={setPantry} isRecipeSaved={isRecipeSaved} favFolders={favFolders} favItems={favItems} saveToFolder={saveToFolder} createFavFolder={createFavFolder} removeFromAllFolders={removeFromAllFolders} showToast={showToast} avoidedIngredients={avoidedIngredients} setAvoidedIngredients={setAvoidedIngredients} onAddToWeek={setAddToWeekRecipe} mealPlan={mealPlan} setMealPlan={setMealPlan} />{addToWeekRecipe&&<AddToWeekModal recipe={addToWeekRecipe} mealPlan={mealPlan} setMealPlan={setMealPlan} onClose={()=>setAddToWeekRecipe(null)} showToast={showToast}/>}</>;
+  if (viewRecipe) return (
+    <RecipeErrorBoundary onBack={()=>setViewRecipe(null)}>
+      <RecipeDetail
+        recipe={viewRecipe}
+        saved={saved.has(viewRecipe.id)}
+        onSave={()=>toggleSave(viewRecipe.id)}
+        onBack={()=>setViewRecipe(null)}
+        onAddToList={m=>addToList(m)}
+        pantry={pantry||[]}
+        setPantry={setPantry}
+        isRecipeSaved={isRecipeSaved}
+        favFolders={favFolders}
+        favItems={favItems}
+        saveToFolder={saveToFolder}
+        createFavFolder={createFavFolder}
+        removeFromAllFolders={removeFromAllFolders}
+        showToast={showToast}
+        avoidedIngredients={avoidedIngredients}
+        setAvoidedIngredients={setAvoidedIngredients}
+        onAddToWeek={setAddToWeekRecipe}
+        mealPlan={mealPlan}
+        setMealPlan={setMealPlan}
+      />
+      {addToWeekRecipe&&<AddToWeekModal recipe={addToWeekRecipe} mealPlan={mealPlan} setMealPlan={setMealPlan} onClose={()=>setAddToWeekRecipe(null)} showToast={showToast}/>}
+    </RecipeErrorBoundary>
+  );
 
   const onAddToWeek = (recipe) => setAddToWeekRecipe(recipe);
 
@@ -21619,6 +21674,11 @@ export default function App() {
     homeMealCat, setHomeMealCat,
     // Add-to-week
     onAddToWeek,
+    // Plan Library state — lifted so it survives recipe view navigation
+    libraryPreview, setLibraryPreview,
+    libraryDraft, setLibraryDraft,
+    libraryDraftTitle, setLibraryDraftTitle,
+    libraryShowCreate, setLibraryShowCreate,
   };
 
   return (
@@ -22552,14 +22612,15 @@ function buildWeekFromFilter(filterFn, allRecipes) {
   }));
 }
 
-function PlanLibraryTab({ allRecipes, mealPlan, setMealPlan, pantry, showToast, onViewRecipe, user }) {
-  const [preview, setPreview] = useState(null); // { plan: [...], entry }
+function PlanLibraryTab({ allRecipes, mealPlan, setMealPlan, pantry, showToast, onViewRecipe, user,
+  libraryPreview: preview, setLibraryPreview: setPreview,
+  libraryDraft: draftPlan, setLibraryDraft: setDraftPlan,
+  libraryDraftTitle: draftTitle, setLibraryDraftTitle: setDraftTitle,
+  libraryShowCreate: showCreatePlan, setLibraryShowCreate: setShowCreatePlan,
+}) {
   const [showCopySafety, setShowCopySafety] = useState(null); // { plan }
   const [showShoppingList, setShowShoppingList] = useState(null); // { plan, entry }
-  const [showCreatePlan, setShowCreatePlan] = useState(false);
   const [previewSlotPicker, setPreviewSlotPicker] = useState(null); // {dayIdx, mealIdx, mealType}
-  const [draftPlan, setDraftPlan] = useState(null); // { plan, title } — AI-generated pending confirm
-  const [draftTitle, setDraftTitle] = useState(''); // editable title for current draft
   const [savedPlans, setSavedPlans] = useState(() => {
     if (!user?.id) return [];
     try { return JSON.parse(localStorage.getItem(`sc_${user.id}_savedPlans`) || '[]'); } catch { return []; }
@@ -22727,181 +22788,292 @@ function PlanLibraryTab({ allRecipes, mealPlan, setMealPlan, pantry, showToast, 
     );
   };
 
-  // ── Create Plan Modal ───────────────────────────────────────────────────────
-  const CreatePlanModal = ({ onClose, onDraft }) => {
-    const [mode, setMode] = useState(null); // null | 'ai' | 'manual'
-    // Structured form state
-    const [aiForm, setAiForm] = useState({ cuisines:[], dietary:'Omnivore', maxTime:60 });
-    // Natural language chat state
-    const [chatInput, setChatInput] = useState('');
-    const [chatParsed, setChatParsed] = useState(null); // parsed filters from NL
+  // ── Plan Creator View (full-page split layout: chat + plan preview) ───────────
+  const PlanCreatorView = ({ onClose, onDraft }) => {
+    const [chatMessages, setChatMessages] = React.useState([]); // {role:'user'|'bot', text, id}
+    const [chatInput, setChatInput] = React.useState('');
+    const [filters, setFilters] = React.useState({ cuisines:[], dietary:[], maxTime:120, dinnerThemes:[] });
+    const [creatorPlan, setCreatorPlan] = React.useState(null); // generated plan
+    const [isGenerating, setIsGenerating] = React.useState(false);
+    const [creatorSlotPicker, setCreatorSlotPicker] = React.useState(null);
+    const chatEndRef = React.useRef(null);
+
     const CUISINES = ['Italian','Japanese','Mediterranean','Mexican','Indian','French','Greek','Thai','Chinese','Middle Eastern'];
     const DIETARY_OPTS = [
-      {id:'Omnivore',    icon:'🍖', label:'Omnivore'},
-      {id:'Pescatarian', icon:'🐟', label:'Pescatarian'},
-      {id:'Vegetarian',  icon:'🥦', label:'Vegetarian'},
-      {id:'Vegan',       icon:'🌱', label:'Vegan'},
-      {id:'Kosher',      icon:'🕎', label:'Kosher'},
+      {id:'Omnivore',icon:'🍖',label:'Omnivore',desc:'No restrictions'},
+      {id:'Pescatarian',icon:'🐟',label:'Pescatarian',desc:'Fish ok, no land meat'},
+      {id:'Vegetarian',icon:'🥦',label:'Vegetarian',desc:'No meat or fish'},
+      {id:'Vegan',icon:'🌱',label:'Vegan',desc:'No animal products'},
+      {id:'Kosher',icon:'🕎',label:'Kosher',desc:'Stackable'},
     ];
 
-    // ── Natural language parser ─────────────────────────────────────────────
-    const parseChat = (text) => {
+    React.useEffect(() => { chatEndRef.current?.scrollIntoView({behavior:'smooth'}); }, [chatMessages]);
+
+    const addMsg = (role, text) => setChatMessages(p => [...p, {role, text, id: Date.now() + Math.random()}]);
+
+    // Multi-select dietary with conflict resolution
+    const toggleDiet = (id) => setFilters(f => {
+      const cur = f.dietary || [];
+      if (id === 'Omnivore') return {...f, dietary: []};
+      const isOn = cur.includes(id);
+      if (isOn) return {...f, dietary: cur.filter(x => x !== id)};
+      let next = [...cur, id];
+      if (id === 'Pescatarian') next = next.filter(x => x !== 'Vegetarian' && x !== 'Vegan');
+      if (id === 'Vegetarian')  next = next.filter(x => x !== 'Pescatarian' && x !== 'Vegan');
+      if (id === 'Vegan')       next = next.filter(x => x !== 'Pescatarian' && x !== 'Vegetarian');
+      return {...f, dietary: next};
+    });
+
+    // Parse natural language into filter updates
+    const parseMsg = (text) => {
       const t = text.toLowerCase();
-      // Dietary detection
-      let dietary = 'Omnivore';
-      if(/pescatarian|fish only|no meat/.test(t))     dietary = 'Pescatarian';
-      else if(/vegan/.test(t))                    dietary = 'Vegan';
-      else if(/vegetarian|veggie|no meat|no fish/.test(t)) dietary = 'Vegetarian';
-      else if(/kosher/.test(t))                       dietary = 'Kosher';
-      // Time detection
-      let maxTime = 120;
-      const timeMatch = t.match(/(\d+)\s*min/);
-      if(timeMatch) maxTime = Math.max(10, Math.min(120, parseInt(timeMatch[1])));
-      // Cuisine detection
-      const CUISINE_KW = {mediterranean:'Mediterranean',italian:'Italian',japanese:'Japanese',mexican:'Mexican',
-        indian:'Indian',french:'French',greek:'Greek',thai:'Thai',chinese:'Chinese','middle eastern':'Middle Eastern',
-        moroccan:'Moroccan',spanish:'Spanish',turkish:'Turkish'};
-      const cuisines = Object.entries(CUISINE_KW).filter(([kw])=>t.includes(kw)).map(([,v])=>v);
-      // Include/exclude extraction
-      const includeMatch = [];
-      const excludeMatch = [];
-      t.split(/[.,;]/).forEach(seg=>{
-        const uSeg = seg.trim();
-        if(/(use|with|include|featuring|add|want)/.test(uSeg)) {
-          const after = uSeg.replace(/.*?(use|with|include|featuring|add|want)\s+/,'').replace(/\s*(and|,)\s*/g,',');
-          after.split(',').forEach(w=>{const wt=w.trim(); if(wt.length>2) includeMatch.push(wt);});
-        }
-        if(/(avoid|no |without|exclude|hate|don.t like)/.test(uSeg)) {
-          const after = uSeg.replace(/.*?(avoid|no |without|exclude|hate|don.t like)\s+/,'').replace(/\s*(and|,)\s*/g,',');
-          after.split(',').forEach(w=>{const wt=w.trim(); if(wt.length>2) excludeMatch.push(wt);});
-        }
-      });
-      return { dietary, cuisines, maxTime, include:includeMatch.join(', '), exclude:excludeMatch.join(', ') };
+      const updates = {};
+      // Dietary
+      const dietary = [];
+      if(/pescatarian|fish only/.test(t)) dietary.push('Pescatarian');
+      if(/\bvegan\b/.test(t)) dietary.push('Vegan');
+      else if(/vegetarian|veggie/.test(t)) dietary.push('Vegetarian');
+      if(/kosher/.test(t)) dietary.push('Kosher');
+      if(dietary.length) updates.dietary = dietary;
+      // Time
+      const tm = t.match(/(\d+)\s*min/);
+      if(tm) updates.maxTime = Math.max(10, Math.min(120, parseInt(tm[1])));
+      // Cuisines
+      const CK = {mediterranean:'Mediterranean',italian:'Italian',japanese:'Japanese',mexican:'Mexican',indian:'Indian',french:'French',greek:'Greek',thai:'Thai',chinese:'Chinese','middle eastern':'Middle Eastern',moroccan:'Moroccan',spanish:'Spanish',turkish:'Turkish'};
+      const cuisines = Object.entries(CK).filter(([kw])=>t.includes(kw)).map(([,v])=>v);
+      if(cuisines.length) updates.cuisines = cuisines;
+      // Dinner themes
+      const DTHEMES = [
+        {kw:/\bfish\b|salmon|tuna|cod|halibut|white fish|seafood/,theme:'fish'},
+        {kw:/pasta|noodle|spaghetti|linguine|penne|fettuccine/,theme:'pasta'},
+        {kw:/soup|stew|ramen|chowder|bisque|broth/,theme:'soup'},
+        {kw:/quick|fast/,theme:'quick'},
+        {kw:/spicy|hot chili/,theme:'spicy'},
+      ];
+      const dinnerThemes = DTHEMES.filter(({kw})=>kw.test(t)).map(({theme})=>theme);
+      if(dinnerThemes.length) updates.dinnerThemes = dinnerThemes;
+      return updates;
     };
 
-    const handleParseChat = () => {
-      if(!chatInput.trim()) return;
-      const parsed = parseChat(chatInput);
-      setChatParsed(parsed);
-      setAiForm(f=>({...f,...parsed}));
-    };
-
-    // ── Plan generation ─────────────────────────────────────────────────────
-    const generateAIPlan = (form) => {
-      const f = form || aiForm;
+    // Core generation engine (dinner-theme aware)
+    const runGenerate = (currentFilters) => {
+      const f = currentFilters;
       let pool = recipePool;
-      // Apply dietary filter using isRecipeAllowedForUser logic
-      const syntheticPrefs = { dietary: f.dietary==='Omnivore' ? [] : [f.dietary] };
+      const syntheticPrefs = { dietary: f.dietary || [] };
       pool = pool.filter(r => isRecipeAllowedForUser(r, syntheticPrefs));
-      if(f.cuisines.length > 0) pool = pool.filter(r => f.cuisines.includes(r.cuisine));
+      if(f.cuisines?.length) pool = pool.filter(r => f.cuisines.includes(r.cuisine));
       if(f.maxTime < 120) pool = pool.filter(r => r.time <= f.maxTime);
-      if(pool.length < 5) { showToast?.("⚠️ Too few recipes match — try loosening filters"); return; }
-      const plan = buildWeekFromFilter(r => pool.includes(r), recipePool);
-      // Store as draft — user confirms before it goes to the planner
-      const title = chatInput.trim() ? chatInput.trim().slice(0, 40) : `AI Plan (${f.dietary})`;
-      onDraft({ plan, title });
-      onClose();
+      if(pool.length < 5) return null; // too few matches
+
+      const dinnerThemes = f.dinnerThemes || [];
+      const THEME_PATS = {
+        fish:  /fish|salmon|tuna|cod|halibut|seafood|tilapia|trout/i,
+        pasta: /pasta|noodle|spaghetti|linguine|penne|fettuccine|rigatoni/i,
+        soup:  /soup|stew|ramen|chowder|bisque|broth|chili|curry/i,
+        quick: /quick|fast/i,
+        spicy: /spicy|hot|chili|jalape/i,
+      };
+      const matchesTheme = (r) => dinnerThemes.length && dinnerThemes.some(th => {
+        const pat = THEME_PATS[th];
+        return pat && (pat.test(r.title) || (r.ingredients||[]).some(i=>pat.test(i.n)));
+      });
+
+      const shuffle = arr => [...arr].sort(()=>Math.random()-.5);
+      const dinnerPool   = shuffle(pool.filter(r => getMealType(r) === 'Dinner'));
+      const lunchPool    = shuffle(pool.filter(r => getMealType(r) === 'Lunch'));
+      const bfastPool    = shuffle(pool.filter(r => getMealType(r) === 'Breakfast'));
+      const dinnerThemed = dinnerPool.filter(matchesTheme);
+      const dinnerOther  = dinnerPool.filter(r => !matchesTheme(r));
+      const orderedDinner = dinnerThemes.length ? [...dinnerThemed, ...dinnerOther] : dinnerPool;
+      const bFallback = bfastPool.length >= 3 ? bfastPool : shuffle(pool);
+      const lFallback = lunchPool.length >= 3 ? lunchPool : shuffle(pool);
+
+      const usedIds = new Set();
+      const pick = arr => {
+        const r = arr.find(x => !usedIds.has(x.id)) || arr[0];
+        if(r) usedIds.add(r.id);
+        return r ? {emoji:r.emoji, name:r.title, id:r.id} : null;
+      };
+      return mealPlan.map(d => ({...d, meals:[pick(bFallback), pick(lFallback), pick(orderedDinner)]}));
     };
+
+    const handleSend = () => {
+      const text = chatInput.trim();
+      if(!text) return;
+      setChatInput('');
+      addMsg('user', text);
+      setIsGenerating(true);
+      // Parse message and merge with existing filters
+      const updates = parseMsg(text);
+      const newFilters = {...filters, ...updates};
+      setFilters(newFilters);
+      setTimeout(() => {
+        const plan = runGenerate(newFilters);
+        if(!plan) {
+          addMsg('bot', '⚠️ Too few recipes match those filters. Try loosening the dietary or cuisine restrictions.');
+        } else {
+          setCreatorPlan(plan);
+          const parts = [];
+          if(updates.dietary?.length) parts.push(updates.dietary.join(' + '));
+          if(updates.cuisines?.length) parts.push(updates.cuisines.join(', '));
+          if(updates.dinnerThemes?.length) parts.push(`dinners: ${updates.dinnerThemes.join(', ')}`);
+          if(updates.maxTime) parts.push(`max ${updates.maxTime} min`);
+          const summary = parts.length ? `(${parts.join(' · ')})` : '';
+          addMsg('bot', `✨ Plan updated! ${summary} Tap a slot’s ↔ button to swap any meal. When ready, hit Confirm.`);
+        }
+        setIsGenerating(false);
+      }, 300);
+    };
+
+    // Slot picker for creator plan
+    if(creatorSlotPicker) {
+      return (
+        <RecipePickerModal
+          mealType={creatorSlotPicker.mealType}
+          pantry={pantry}
+          allRecipes={allRecipes}
+          prefs={{}}
+          avoidedIngredients={[]}
+          onClose={()=>setCreatorSlotPicker(null)}
+          onSelect={r=>{
+            setCreatorPlan(prev=>{
+              const np = prev.map(d=>({...d,meals:[...d.meals]}));
+              np[creatorSlotPicker.dayIdx].meals[creatorSlotPicker.mealIdx] = {kind:'recipe',emoji:r.emoji,name:r.title,id:r.id};
+              return np;
+            });
+            setCreatorSlotPicker(null);
+          }}
+        />
+      );
+    }
 
     return (
-      <div className="modal-overlay" onClick={onClose}>
-        <div className="modal-box" onClick={e=>e.stopPropagation()} style={{maxWidth:480,maxHeight:'90vh',overflow:'auto'}}>
-          <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:18}}>
-            <div style={{fontWeight:700,fontSize:16}}>✨ Create New Plan</div>
-            <button className="btn btn-xs btn-g" onClick={onClose}>✕</button>
-          </div>
+      <div style={{display:'flex',flexDirection:'column',gap:0}}>
+        {/* Header */}
+        <div style={{display:'flex',alignItems:'center',gap:12,marginBottom:16,flexWrap:'wrap'}}>
+          <button className="btn btn-s btn-sm" onClick={onClose}>← Back to library</button>
+          <h2 style={{fontFamily:'var(--fd)',fontSize:18,flex:1,margin:0}}>✨ Plan Creator <span style={{fontSize:11,fontWeight:400,color:'var(--mu)',marginLeft:4}}>AI beta — rule-based</span></h2>
+          {creatorPlan && <>
+            <button className="btn btn-p btn-sm" onClick={()=>{
+              const dietLabel = (filters.dietary||[]).length ? filters.dietary.join('+') : 'Omnivore';
+              onDraft({plan:creatorPlan, title: chatMessages.find(m=>m.role==='user')?.text?.slice(0,40) || `AI Plan (${dietLabel})`});
+              onClose();
+            }}>💾 Confirm &amp; save draft</button>
+            <button className="btn btn-s btn-sm" onClick={()=>handleCopyRequest(creatorPlan)}>📋 Copy to week</button>
+          </>}
+        </div>
 
-          {/* ── Mode selection ─────────────────────────────────── */}
-          {!mode && <div style={{display:'flex',flexDirection:'column',gap:10}}>
-            <button style={{textAlign:'left',padding:'14px 16px',borderRadius:'var(--r)',border:'1px solid var(--bor)',background:'var(--white)',cursor:'pointer'}}
-              onClick={()=>{onDraft({plan:mealPlan.map(d=>({...d,meals:[null,null,null]})),title:'Blank Plan'});onClose();}}>
-              <div style={{fontWeight:700,fontSize:14,color:'var(--ch)'}}>📝 Manual — Blank plan</div>
-              <div style={{fontSize:12,color:'var(--mu)',marginTop:4}}>Start a blank weekly plan — fill slots yourself, then save or copy to week</div>
-            </button>
-            <button style={{textAlign:'left',padding:'14px 16px',borderRadius:'var(--r)',border:'1px solid rgba(106,158,114,.35)',background:'rgba(106,158,114,.05)',cursor:'pointer'}}
-              onClick={()=>setMode('ai')}>
-              <div style={{fontWeight:700,fontSize:14,color:'var(--ch)'}}>🤖 Generate with AI
-                <span style={{fontSize:10,background:'var(--sageBg)',color:'var(--sageH)',padding:'1px 5px',borderRadius:3,marginLeft:8,fontWeight:700}}>BETA</span>
-              </div>
-              <div style={{fontSize:12,color:'var(--mu)',marginTop:4}}>Tell us what you want — or use filters — and get a full week instantly</div>
-            </button>
-          </div>}
-
-          {/* ── AI generator ───────────────────────────────────── */}
-          {mode==='ai' && <div style={{display:'flex',flexDirection:'column',gap:16}}>
-            <button className="btn btn-g btn-sm" style={{alignSelf:'flex-start'}} onClick={()=>{setMode(null);setChatParsed(null);}}>← Back</button>
-
-            {/* Chat box */}
-            <div style={{background:'rgba(106,158,114,.05)',border:'1px solid rgba(106,158,114,.2)',borderRadius:10,padding:14}}>
-              <label style={{fontSize:12,fontWeight:700,color:'var(--sageH)',display:'block',marginBottom:8}}>
-                🤖 Describe your ideal week
-                <span style={{fontSize:10,fontWeight:400,color:'var(--mu)',marginLeft:6}}>(AI beta — rule-based)</span>
-              </label>
-              <textarea
-                style={{width:'100%',minHeight:72,padding:'8px 10px',borderRadius:8,border:'1px solid var(--bor)',fontSize:13,resize:'vertical',fontFamily:'inherit',boxSizing:'border-box',background:'var(--white)'}}
-                placeholder={'e.g. "Mediterranean, pescatarian, max 30 min, use salmon, avoid mushrooms"'}
-                value={chatInput}
-                onChange={e=>setChatInput(e.target.value)}
-                onKeyDown={e=>{if(e.key==='Enter'&&(e.metaKey||e.ctrlKey)){handleParseChat();}}}
-              />
-              <div style={{display:'flex',justifyContent:'flex-end',marginTop:6}}>
-                <button className="btn btn-s btn-sm" onClick={handleParseChat} disabled={!chatInput.trim()}>
-                  Parse → fill filters
-                </button>
-              </div>
-              {chatParsed && <div style={{marginTop:8,fontSize:11,color:'var(--sageH)',background:'rgba(106,158,114,.08)',borderRadius:6,padding:'6px 10px',lineHeight:1.7}}>
-                ✓ Parsed: <b>{chatParsed.dietary}</b>
-                {chatParsed.cuisines.length>0&&<> · {chatParsed.cuisines.join(', ')}</>}
-                {chatParsed.maxTime<120&&<> · max {chatParsed.maxTime} min</>}
-                {chatParsed.include&&<> · include: {chatParsed.include}</>}
-                {chatParsed.exclude&&<> · exclude: {chatParsed.exclude}</>}
-              </div>}
-            </div>
-
-            {/* Structured filters */}
-            <div style={{borderTop:'1px solid var(--bor)',paddingTop:14}}>
-              <div style={{fontSize:11,fontWeight:700,color:'var(--mu)',textTransform:'uppercase',letterSpacing:.5,marginBottom:12}}>Or set filters manually</div>
-
+        {/* Split layout */}
+        <div style={{display:'flex',gap:16,alignItems:'flex-start',flexWrap:'wrap'}}>
+          {/* Left: Chat panel */}
+          <div style={{width:300,minWidth:260,flexShrink:0,display:'flex',flexDirection:'column',gap:0}}>
+            {/* Filter chips */}
+            <div style={{background:'rgba(106,158,114,.06)',border:'1px solid rgba(106,158,114,.2)',borderRadius:'var(--r)',padding:12,marginBottom:10}}>
+              <div style={{fontSize:11,fontWeight:700,color:'var(--sageH)',marginBottom:8,textTransform:'uppercase',letterSpacing:.4}}>Filters</div>
               {/* Dietary */}
-              <div style={{marginBottom:12}}>
-                <label style={{fontSize:12,fontWeight:600,color:'var(--mu)',display:'block',marginBottom:6}}>Dietary mode</label>
-                <div style={{display:'flex',flexWrap:'wrap',gap:6}}>
-                  {DIETARY_OPTS.map(o=>(
-                    <button key={o.id}
-                      className={`btn btn-xs ${aiForm.dietary===o.id?'btn-p':'btn-g'}`}
-                      onClick={()=>setAiForm(f=>({...f,dietary:o.id}))}>
-                      {o.icon} {o.label}
-                    </button>
-                  ))}
+              <div style={{marginBottom:8}}>
+                <div style={{fontSize:11,color:'var(--mu)',marginBottom:4}}>Diet (Kosher stacks)</div>
+                <div style={{display:'flex',flexWrap:'wrap',gap:4}}>
+                  {DIETARY_OPTS.map(o=>{
+                    const isActive = o.id==='Omnivore' ? (filters.dietary||[]).length===0 : (filters.dietary||[]).includes(o.id);
+                    return <button key={o.id} title={o.desc}
+                      style={{padding:'3px 8px',borderRadius:4,border:`1px solid ${isActive?'var(--clay)':'var(--bor)'}`,background:isActive?'var(--clayBg)':'var(--white)',cursor:'pointer',fontSize:11,fontWeight:isActive?700:400,color:isActive?'var(--clay)':'var(--ch)'}}
+                      onClick={()=>toggleDiet(o.id)}>{o.icon} {o.label}</button>;
+                  })}
                 </div>
               </div>
-
               {/* Cuisines */}
-              <div style={{marginBottom:12}}>
-                <label style={{fontSize:12,fontWeight:600,color:'var(--mu)',display:'block',marginBottom:6}}>Cuisines <span style={{fontWeight:400}}>(leave blank for all)</span></label>
-                <div style={{display:'flex',flexWrap:'wrap',gap:5}}>
-                  {CUISINES.map(c=><button key={c} className={`btn btn-xs ${aiForm.cuisines.includes(c)?'btn-p':'btn-g'}`}
-                    onClick={()=>setAiForm(f=>({...f,cuisines:f.cuisines.includes(c)?f.cuisines.filter(x=>x!==c):[...f.cuisines,c]}))}>{c}</button>)}
+              <div style={{marginBottom:8}}>
+                <div style={{fontSize:11,color:'var(--mu)',marginBottom:4}}>Cuisines</div>
+                <div style={{display:'flex',flexWrap:'wrap',gap:3}}>
+                  {CUISINES.map(c=><button key={c}
+                    style={{padding:'2px 7px',borderRadius:4,border:`1px solid ${filters.cuisines?.includes(c)?'var(--clay)':'var(--bor)'}`,background:filters.cuisines?.includes(c)?'var(--clayBg)':'var(--white)',cursor:'pointer',fontSize:10,color:filters.cuisines?.includes(c)?'var(--clay)':'var(--ch)'}}
+                    onClick={()=>setFilters(f=>({...f,cuisines:f.cuisines?.includes(c)?f.cuisines.filter(x=>x!==c):[...(f.cuisines||[]),c]}))}>
+                    {c}
+                  </button>)}
                 </div>
               </div>
-
               {/* Max time */}
-              <div style={{marginBottom:4}}>
-                <label style={{fontSize:12,fontWeight:600,color:'var(--mu)',display:'block',marginBottom:4}}>Max cook time: <b>{aiForm.maxTime} min</b></label>
-                <input type="range" min={15} max={120} step={5} value={aiForm.maxTime}
-                  onChange={e=>setAiForm(f=>({...f,maxTime:+e.target.value}))}
+              <div>
+                <div style={{fontSize:11,color:'var(--mu)',marginBottom:3}}>Max cook time: <b>{filters.maxTime} min</b></div>
+                <input type="range" min={15} max={120} step={5} value={filters.maxTime}
+                  onChange={e=>setFilters(f=>({...f,maxTime:+e.target.value}))}
                   style={{width:'100%',accentColor:'var(--clay)'}}/>
               </div>
+              {filters.dinnerThemes?.length>0 && <div style={{marginTop:6,fontSize:11,color:'var(--sageH)'}}>🎯 Dinner themes: {filters.dinnerThemes.join(', ')}</div>}
             </div>
 
-            <button className="btn btn-p btn-full" onClick={()=>generateAIPlan(aiForm)} style={{marginTop:2}}>
-              ✨ Generate Week Plan
-            </button>
-          </div>}
+            {/* Chat history */}
+            <div style={{flex:1,minHeight:200,maxHeight:340,overflowY:'auto',display:'flex',flexDirection:'column',gap:8,marginBottom:8,padding:4}}>
+              {chatMessages.length===0 && <div style={{color:'var(--mu)',fontSize:12,textAlign:'center',padding:16,lineHeight:1.6}}>
+                Describe what you want:<br/>
+                <span style={{opacity:.8}}>"Fish, pasta and soups for dinner"</span><br/>
+                <span style={{opacity:.8}}>"Vegetarian Mediterranean, 30 min"</span><br/>
+                <span style={{opacity:.8}}>"More quick meals this week"</span>
+              </div>}
+              {chatMessages.map(m=>(
+                <div key={m.id} style={{
+                  alignSelf: m.role==='user' ? 'flex-end' : 'flex-start',
+                  background: m.role==='user' ? 'var(--clay)' : 'var(--cream)',
+                  color: m.role==='user' ? '#fff' : 'var(--ch)',
+                  border: m.role==='bot' ? '1px solid var(--bor)' : 'none',
+                  borderRadius: m.role==='user' ? '12px 12px 2px 12px' : '12px 12px 12px 2px',
+                  padding:'8px 12px', maxWidth:'85%', fontSize:12, lineHeight:1.5,
+                }}>
+                  {m.text}
+                </div>
+              ))}
+              {isGenerating && <div style={{alignSelf:'flex-start',background:'var(--cream)',border:'1px solid var(--bor)',borderRadius:'12px 12px 12px 2px',padding:'8px 12px',fontSize:12,color:'var(--mu)'}}>✨ Generating...</div>}
+              <div ref={chatEndRef}/>
+            </div>
+
+            {/* Input */}
+            <div style={{display:'flex',gap:6}}>
+              <input
+                style={{flex:1,padding:'8px 10px',borderRadius:8,border:'1px solid var(--bor)',fontSize:12,fontFamily:'inherit',outline:'none'}}
+                placeholder="Describe changes or diet…"
+                value={chatInput}
+                onChange={e=>setChatInput(e.target.value)}
+                onKeyDown={e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();handleSend();}}}
+              />
+              <button className="btn btn-p btn-sm" onClick={handleSend} disabled={!chatInput.trim()||isGenerating}>
+                {isGenerating?'…':'Send'}
+              </button>
+            </div>
+            {!creatorPlan && <button className="btn btn-s btn-sm" style={{marginTop:6}} onClick={()=>{
+              setIsGenerating(true);
+              setTimeout(()=>{
+                const plan = runGenerate(filters);
+                if(plan){setCreatorPlan(plan);addMsg('bot','✨ Here\'s your plan! Chat to refine, or hit Confirm.');}
+                else{addMsg('bot','⚠️ Too few matches — adjust filters above.');}
+                setIsGenerating(false);
+              },300);
+            }}>✨ Generate plan</button>}
+          </div>
+
+          {/* Right: Plan grid or placeholder */}
+          <div style={{flex:1,minWidth:300}}>
+            {!creatorPlan
+              ? <div style={{border:'2px dashed var(--bor)',borderRadius:'var(--r)',padding:40,textAlign:'center',color:'var(--mu)',fontSize:14}}>
+                  <div style={{fontSize:40,marginBottom:12}}>✨</div>
+                  <div style={{fontWeight:600,marginBottom:6}}>Your plan will appear here</div>
+                  <div style={{fontSize:12}}>Type in the chat or click "Generate plan"</div>
+                </div>
+              : <>
+                  {renderPlanGrid(creatorPlan, ({dayIdx,mealIdx,mealType})=>setCreatorSlotPicker({dayIdx,mealIdx,mealType}))}
+                  <div style={{display:'flex',gap:8,flexWrap:'wrap',marginTop:4}}>
+                    <button className="btn btn-s btn-sm" onClick={()=>setShowShoppingList({plan:creatorPlan,entry:{name:'AI Plan',emoji:'✨'}})}>🛒 Shopping list</button>
+                  </div>
+                </>
+            }
+          </div>
         </div>
       </div>
     );
   };
+
+  // (CreatePlanModal kept as alias for backward compat)
+  const CreatePlanModal = PlanCreatorView
 
   // ── Copy request handler ────────────────────────────────────────────────────
   const handleCopyRequest = (plan) => {
@@ -22914,6 +23086,20 @@ function PlanLibraryTab({ allRecipes, mealPlan, setMealPlan, pantry, showToast, 
       setPreview(null);
     }
   };
+
+  // ── Plan Creator view (full-page, replaces library list) ───────────────────
+  if (showCreatePlan) {
+    return (
+      <div>
+        {showShoppingList && <ShoppingListModal plan={showShoppingList.plan} entry={showShoppingList.entry} onClose={()=>setShowShoppingList(null)}/>}
+        {showCopySafety && <CopySafetyModal plan={showCopySafety.plan} onClose={()=>setShowCopySafety(null)}/>}
+        <PlanCreatorView
+          onClose={()=>setShowCreatePlan(false)}
+          onDraft={(d)=>{setDraftPlan(d);setShowCreatePlan(false);}}
+        />
+      </div>
+    );
+  }
 
   // ── Preview slot picker (replace recipe in preview) ────────────────────────
   if (previewSlotPicker && (preview || draftPlan)) {
@@ -23024,9 +23210,8 @@ function PlanLibraryTab({ allRecipes, mealPlan, setMealPlan, pantry, showToast, 
           <button className="btn btn-p" onClick={()=>{saveMyPlan(plan,draftTitle);setDraftPlan(null);}}>💾 Save to My Plans</button>
           <button className="btn btn-s" onClick={()=>handleCopyRequest(plan)}>📋 Copy to my week</button>
           <button className="btn btn-s" onClick={()=>setShowShoppingList({plan,entry:draftEntry})}>🛒 Shopping list</button>
-          <button className="btn btn-g btn-sm" style={{marginLeft:'auto'}} onClick={()=>setShowCreatePlan(true)}>🔄 Regenerate</button>
+          <button className="btn btn-g btn-sm" style={{marginLeft:'auto'}} onClick={()=>{setDraftPlan(null);setShowCreatePlan(true);}}>🔄 Regenerate in Creator</button>
         </div>
-        {showCreatePlan && <CreatePlanModal onClose={()=>setShowCreatePlan(false)} onDraft={(d)=>{setDraftPlan(d);setShowCreatePlan(false);}}/>}
       </div>
     );
   }
@@ -23064,7 +23249,6 @@ function PlanLibraryTab({ allRecipes, mealPlan, setMealPlan, pantry, showToast, 
     <div>
       {showShoppingList && <ShoppingListModal plan={showShoppingList.plan} entry={showShoppingList.entry} onClose={()=>setShowShoppingList(null)}/>}
       {showCopySafety && <CopySafetyModal plan={showCopySafety.plan} onClose={()=>setShowCopySafety(null)}/>}
-      {showCreatePlan && <CreatePlanModal onClose={()=>setShowCreatePlan(false)} onDraft={(d)=>{setDraftPlan(d);setShowCreatePlan(false);}}/>}
       <div style={{display:"flex",alignItems:"flex-start",justifyContent:"space-between",marginBottom:20,flexWrap:"wrap",gap:12}}>
         <div>
           <h1 className="stitle">Plan Library</h1>
@@ -23360,8 +23544,20 @@ function RecipeDetail({ recipe, saved, onSave, onBack, onAddToList, pantry, setP
   const [markedHave,     setMarkedHave]     = useState({});
   const [showLocalFavModal, setShowLocalFavModal] = useState(false);
   
+  // Guard: if recipe is null/undefined, render safe fallback
+  if (!recipe) {
+    return (
+      <div style={{minHeight:'100vh',background:'var(--cream)',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:16,padding:32,fontFamily:'var(--fb)'}}>
+        <style>{S}</style>
+        <div style={{fontSize:48}}>🍳</div>
+        <div style={{fontSize:20,fontWeight:700}}>Recipe not found</div>
+        <div style={{fontSize:14,color:'var(--mu)'}}>This recipe couldn't be loaded.</div>
+        <button className="btn btn-p" onClick={onBack}>← Go back</button>
+      </div>
+    );
+  }
   // Use the shared matching engine (normalizeIng / ingInPantry / buildPantrySet)
-  const pantrySet = buildPantrySet(pantry);
+  const pantrySet = buildPantrySet(pantry || []);
 
   // Check if ingredient is in pantry (uses shared family matching)
   const isInPantry = (ingName) => ingInPantry(ingName, pantrySet);
@@ -23403,7 +23599,7 @@ function RecipeDetail({ recipe, saved, onSave, onBack, onAddToList, pantry, setP
   };
   
   // Get list of missing ingredients (live — updates as user marks items)
-  const missingIngredients = recipe.ingredients
+  const missingIngredients = (recipe.ingredients || [])
     .filter(ing => !isInPantry(ing.n))
     .map(ing => ing.n);
   
@@ -23460,7 +23656,7 @@ function RecipeDetail({ recipe, saved, onSave, onBack, onAddToList, pantry, setP
             Example prompts: "Make it quicker", "Substitute dairy", "Healthier version", "Explain steps". */}
       </div>
       <div style={{maxWidth:860,margin:"0 auto",padding:"40px 32px"}}>
-        <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:12}}>{recipe.dietary.map(d=><span key={d} className="tag td">{d}</span>)}<span className="tag tc">{recipe.cuisine}</span></div>
+        <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:12}}>{(recipe.dietary||[]).map(d=><span key={d} className="tag td">{d}</span>)}<span className="tag tc">{recipe.cuisine||'Other'}</span></div>
         <h1 style={{fontFamily:"var(--fd)",fontSize:38,marginBottom:10,lineHeight:1.1}}>{recipe.emoji} {recipe.title}</h1>
         <div style={{display:"flex",gap:20,color:"var(--mu)",fontSize:14,marginBottom:32}}><span>⏱ {recipe.time} min</span><span>📊 {recipe.diff}</span><span>👥 2 servings</span></div>
         <div style={{display:"grid",gridTemplateColumns:"1fr 1.5fr",gap:40}}>
@@ -23488,11 +23684,12 @@ function RecipeDetail({ recipe, saved, onSave, onBack, onAddToList, pantry, setP
               );
             })()}
             <div className="card" style={{padding:"4px 16px"}}>
-              {recipe.ingredients.map((ing,i)=>{
+              {(recipe.ingredients||[]).length===0&&<div style={{padding:'16px 0',color:'var(--mu)',fontSize:13}}>No ingredient details available.</div>}
+              {(recipe.ingredients||[]).map((ing,i)=>{
                 const inPantry = isInPantry(ing.n);
                 const markState = markedHave[ing.n]; // "added" | "removing" | undefined
                 return(
-                  <div key={i} style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"11px 0",borderBottom:i<recipe.ingredients.length-1?"1px solid var(--bor)":"none",gap:8}}>
+                  <div key={i} style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"11px 0",borderBottom:i<(recipe.ingredients||[]).length-1?"1px solid var(--bor)":"none",gap:8}}>
                     <span style={{fontSize:14,fontWeight:500}}>{ing.n}</span>
                     <div style={{display:"flex",alignItems:"center",gap:6,flexShrink:0}}>
                       <span style={{fontSize:13,color:"var(--mu)"}}>{ing.a}</span>
@@ -23549,7 +23746,8 @@ function RecipeDetail({ recipe, saved, onSave, onBack, onAddToList, pantry, setP
           </div>
           <div>
             <h2 style={{fontFamily:"var(--fd)",fontSize:20,marginBottom:16}}>Instructions</h2>
-            {recipe.steps.map(s=><div key={s.n} style={{display:"flex",gap:16,marginBottom:20}}><div style={{width:30,height:30,borderRadius:"50%",background:"var(--clay)",color:"#fff",display:"flex",alignItems:"center",justifyContent:"center",fontSize:13,fontWeight:700,flexShrink:0,marginTop:2}}>{s.n}</div><div><div style={{fontWeight:600,fontSize:14,marginBottom:4}}>{s.t}</div><div style={{fontSize:14,color:"var(--mu)",lineHeight:1.7}}>{s.d}</div></div></div>)}
+            {!(recipe.steps?.length) && <div style={{color:'var(--mu)',fontSize:13,padding:'12px 0'}}>No instructions available for this recipe.</div>}
+            {(recipe.steps||[]).map(s=><div key={s.n} style={{display:"flex",gap:16,marginBottom:20}}><div style={{width:30,height:30,borderRadius:"50%",background:"var(--clay)",color:"#fff",display:"flex",alignItems:"center",justifyContent:"center",fontSize:13,fontWeight:700,flexShrink:0,marginTop:2}}>{s.n}</div><div><div style={{fontWeight:600,fontSize:14,marginBottom:4}}>{s.t}</div><div style={{fontSize:14,color:"var(--mu)",lineHeight:1.7}}>{s.d}</div></div></div>)}
           </div>
         </div>
       </div>
