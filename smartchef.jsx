@@ -20827,49 +20827,45 @@ const isSameCoreDish = (recipeA, recipeB) => {
 const isRecipeAllowedForUser = (recipe, prefs) => {
   if(!recipe || !prefs) return true;
   const dietary = prefs.dietary || [];
+  // dietary is an array with 0 or 1 element (single-select mode):
+  // [] = Omnivore (no restrictions)
+  // ["Pescatarian"] = fish OK, no meat
+  // ["Vegetarian"]  = no meat, no fish
+  // ["Vegan"]       = no meat, fish, shellfish, dairy
+  // ["Kosher"]      = kosher_safe filter
   
-  // Vegetarian check (STRICT)
+  // Pescatarian: allow fish/shellfish, exclude land meat only
+  if(dietary.includes("Pescatarian")) {
+    if(recipe.contains_meat) return false;
+    // Fish and shellfish ARE allowed — do not block them
+  }
+  
+  // Vegetarian: exclude all meat AND fish/shellfish
   if(dietary.includes("Vegetarian")) {
-    if(recipe.contains_meat || recipe.contains_fish || recipe.contains_shellfish) {
-      return false; // Exclude any meat/fish/shellfish
-    }
-    // Also check if dietary tags include vegetarian/vegan
-    if(!recipe.dietary?.includes("Vegetarian") && !recipe.dietary?.includes("Vegan")) {
-      // If not explicitly tagged but has no meat/fish/shellfish, allow
-      if(recipe.contains_meat !== false && recipe.contains_fish !== false && recipe.contains_shellfish !== false) {
-        return false; // Fail closed if unknown
-      }
-    }
+    if(recipe.contains_meat || recipe.contains_fish || recipe.contains_shellfish) return false;
   }
   
-  // Vegan check
+  // Vegan: exclude all animal products
   if(dietary.includes("Vegan")) {
-    if(recipe.contains_meat || recipe.contains_fish || recipe.contains_shellfish || recipe.contains_dairy) {
-      return false;
-    }
+    if(recipe.contains_meat || recipe.contains_fish || recipe.contains_shellfish || recipe.contains_dairy) return false;
   }
   
-  // Kosher check (STRICT - simplified v1)
+  // Kosher: no shellfish, no pork, no meat+dairy mix, respect kosher_safe flag
   if(dietary.includes("Kosher")) {
-    // Exclude shellfish always
     if(recipe.contains_shellfish) return false;
-    // Exclude pork (check ingredients)
-    const hasPork = recipe.ingredients?.some(ing=>ing.n.toLowerCase().includes("pork")||ing.n.toLowerCase().includes("bacon"));
+    const hasPork = recipe.ingredients?.some(i => {
+      const n = i.n.toLowerCase();
+      return n.includes("pork") || n.includes("bacon") || n.includes("ham");
+    });
     if(hasPork) return false;
-    // Exclude meat+dairy combination (kosher risk flag)
-    if(recipe.kosher_risk || (recipe.contains_meat && recipe.contains_dairy)) {
-      return false;
-    }
-    // Fail closed if kosher_safe not explicitly true
-    if(recipe.kosher_safe !== true && (recipe.contains_meat || recipe.contains_fish)) {
-      return false;
-    }
+    if(recipe.contains_meat && recipe.contains_dairy) return false;
+    if(recipe.kosher_risk) return false;
+    if(recipe.kosher_safe === false) return false;
   }
   
   // Gluten-free check
   if(dietary.includes("Gluten-free")) {
     if(!recipe.dietary?.includes("Gluten-free")) {
-      // Check for obvious gluten sources
       const hasGluten = recipe.ingredients?.some(ing=>{
         const n=ing.n.toLowerCase();
         return n.includes("pasta")||n.includes("bread")||n.includes("flour")||n.includes("pita")||n.includes("naan")||n.includes("soy sauce");
@@ -22671,79 +22667,193 @@ function PlanLibraryTab({ allRecipes, mealPlan, setMealPlan, pantry, showToast, 
 
   // ── Create Plan Modal ───────────────────────────────────────────────────────
   const CreatePlanModal = ({ onClose }) => {
-    const [mode, setMode] = useState(null); // null | 'ai'
-    const [aiForm, setAiForm] = useState({ cuisines:[], dietary:'Any', maxTime:60, include:'', exclude:'' });
+    const [mode, setMode] = useState(null); // null | 'ai' | 'manual'
+    // Structured form state
+    const [aiForm, setAiForm] = useState({ cuisines:[], dietary:'Omnivore', maxTime:60, include:'', exclude:'' });
+    // Natural language chat state
+    const [chatInput, setChatInput] = useState('');
+    const [chatParsed, setChatParsed] = useState(null); // parsed filters from NL
     const CUISINES = ['Italian','Japanese','Mediterranean','Mexican','Indian','French','Greek','Thai','Chinese','Middle Eastern'];
-    const DIETARIES = ['Any','Vegetarian','Vegan','Gluten-Free','Dairy-Free'];
-    const generateAIPlan = () => {
+    const DIETARY_OPTS = [
+      {id:'Omnivore',    icon:'🍖', label:'Omnivore'},
+      {id:'Pescatarian', icon:'🐟', label:'Pescatarian'},
+      {id:'Vegetarian',  icon:'🥦', label:'Vegetarian'},
+      {id:'Vegan',       icon:'🌱', label:'Vegan'},
+      {id:'Kosher',      icon:'🕎', label:'Kosher'},
+    ];
+
+    // ── Natural language parser ─────────────────────────────────────────────
+    const parseChat = (text) => {
+      const t = text.toLowerCase();
+      // Dietary detection
+      let dietary = 'Omnivore';
+      if(/pescatarian|fish only|no meat/.test(t))     dietary = 'Pescatarian';
+      else if(/vegan/.test(t))                    dietary = 'Vegan';
+      else if(/vegetarian|veggie|no meat|no fish/.test(t)) dietary = 'Vegetarian';
+      else if(/kosher/.test(t))                       dietary = 'Kosher';
+      // Time detection
+      let maxTime = 120;
+      const timeMatch = t.match(/(\d+)\s*min/);
+      if(timeMatch) maxTime = Math.max(10, Math.min(120, parseInt(timeMatch[1])));
+      // Cuisine detection
+      const CUISINE_KW = {mediterranean:'Mediterranean',italian:'Italian',japanese:'Japanese',mexican:'Mexican',
+        indian:'Indian',french:'French',greek:'Greek',thai:'Thai',chinese:'Chinese','middle eastern':'Middle Eastern',
+        moroccan:'Moroccan',spanish:'Spanish',turkish:'Turkish'};
+      const cuisines = Object.entries(CUISINE_KW).filter(([kw])=>t.includes(kw)).map(([,v])=>v);
+      // Include/exclude extraction
+      const includeMatch = [];
+      const excludeMatch = [];
+      t.split(/[.,;]/).forEach(seg=>{
+        const uSeg = seg.trim();
+        if(/(use|with|include|featuring|add|want)/.test(uSeg)) {
+          const after = uSeg.replace(/.*?(use|with|include|featuring|add|want)\s+/,'').replace(/\s*(and|,)\s*/g,',');
+          after.split(',').forEach(w=>{const wt=w.trim(); if(wt.length>2) includeMatch.push(wt);});
+        }
+        if(/(avoid|no |without|exclude|hate|don.t like)/.test(uSeg)) {
+          const after = uSeg.replace(/.*?(avoid|no |without|exclude|hate|don.t like)\s+/,'').replace(/\s*(and|,)\s*/g,',');
+          after.split(',').forEach(w=>{const wt=w.trim(); if(wt.length>2) excludeMatch.push(wt);});
+        }
+      });
+      return { dietary, cuisines, maxTime, include:includeMatch.join(', '), exclude:excludeMatch.join(', ') };
+    };
+
+    const handleParseChat = () => {
+      if(!chatInput.trim()) return;
+      const parsed = parseChat(chatInput);
+      setChatParsed(parsed);
+      setAiForm(f=>({...f,...parsed}));
+    };
+
+    // ── Plan generation ─────────────────────────────────────────────────────
+    const generateAIPlan = (form) => {
+      const f = form || aiForm;
       let pool = recipePool;
-      if(aiForm.dietary !== 'Any') pool = pool.filter(r => r.dietary?.includes(aiForm.dietary));
-      if(aiForm.cuisines.length > 0) pool = pool.filter(r => aiForm.cuisines.includes(r.cuisine));
-      if(aiForm.maxTime < 120) pool = pool.filter(r => r.time <= aiForm.maxTime);
-      if(aiForm.include.trim()) {
-        const inc = aiForm.include.toLowerCase().split(',').map(s=>s.trim()).filter(Boolean);
+      // Apply dietary filter using isRecipeAllowedForUser logic
+      const syntheticPrefs = { dietary: f.dietary==='Omnivore' ? [] : [f.dietary] };
+      pool = pool.filter(r => isRecipeAllowedForUser(r, syntheticPrefs));
+      if(f.cuisines.length > 0) pool = pool.filter(r => f.cuisines.includes(r.cuisine));
+      if(f.maxTime < 120) pool = pool.filter(r => r.time <= f.maxTime);
+      if(f.include.trim()) {
+        const inc = f.include.toLowerCase().split(',').map(s=>s.trim()).filter(Boolean);
         pool = pool.filter(r => inc.some(kw => r.title.toLowerCase().includes(kw) || (r.ingredients||[]).some(i=>i.n.toLowerCase().includes(kw))));
       }
-      if(aiForm.exclude.trim()) {
-        const exc = aiForm.exclude.toLowerCase().split(',').map(s=>s.trim()).filter(Boolean);
+      if(f.exclude.trim()) {
+        const exc = f.exclude.toLowerCase().split(',').map(s=>s.trim()).filter(Boolean);
         pool = pool.filter(r => !exc.some(kw => r.title.toLowerCase().includes(kw) || (r.ingredients||[]).some(i=>i.n.toLowerCase().includes(kw))));
       }
-      if(pool.length < 5) { showToast?.("⚠️ Too few recipes match your filters — try loosening them"); return; }
+      if(pool.length < 5) { showToast?.("⚠️ Too few recipes match — try loosening filters"); return; }
       const plan = buildWeekFromFilter(r => pool.includes(r), recipePool);
       setMealPlan(plan);
       showToast?.("✨ AI plan generated! Check your Planner tab.");
       onClose();
     };
+
     return (
       <div className="modal-overlay" onClick={onClose}>
-        <div className="modal-box" onClick={e=>e.stopPropagation()} style={{maxWidth:440,maxHeight:'85vh',overflow:'auto'}}>
-          <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:16}}>
-            <div style={{fontWeight:700,fontSize:15}}>✨ Create New Plan</div>
+        <div className="modal-box" onClick={e=>e.stopPropagation()} style={{maxWidth:480,maxHeight:'90vh',overflow:'auto'}}>
+          <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:18}}>
+            <div style={{fontWeight:700,fontSize:16}}>✨ Create New Plan</div>
             <button className="btn btn-xs btn-g" onClick={onClose}>✕</button>
           </div>
+
+          {/* ── Mode selection ─────────────────────────────────── */}
           {!mode && <div style={{display:'flex',flexDirection:'column',gap:10}}>
             <button style={{textAlign:'left',padding:'14px 16px',borderRadius:'var(--r)',border:'1px solid var(--bor)',background:'var(--white)',cursor:'pointer'}}
               onClick={()=>{setMealPlan(prev=>prev.map(d=>({...d,meals:[null,null,null]})));showToast?.("📝 Blank week ready in Planner!");onClose();}}>
               <div style={{fontWeight:700,fontSize:14,color:'var(--ch)'}}>📝 Manual — Start blank</div>
-              <div style={{fontSize:12,color:'var(--mu)',marginTop:4}}>Clear the week and fill slots yourself using the Planner</div>
+              <div style={{fontSize:12,color:'var(--mu)',marginTop:4}}>Clear the planner and fill slots yourself</div>
             </button>
             <button style={{textAlign:'left',padding:'14px 16px',borderRadius:'var(--r)',border:'1px solid rgba(106,158,114,.35)',background:'rgba(106,158,114,.05)',cursor:'pointer'}}
               onClick={()=>setMode('ai')}>
-              <div style={{fontWeight:700,fontSize:14,color:'var(--ch)'}}>🤖 Generate with AI <span style={{fontSize:10,background:'var(--sageBg)',color:'var(--sageH)',padding:'1px 5px',borderRadius:3,marginLeft:6,fontWeight:700}}>BETA</span></div>
-              <div style={{fontSize:12,color:'var(--mu)',marginTop:4}}>Set preferences — cuisines, dietary, time — and generate a full week</div>
+              <div style={{fontWeight:700,fontSize:14,color:'var(--ch)'}}>🤖 Generate with AI
+                <span style={{fontSize:10,background:'var(--sageBg)',color:'var(--sageH)',padding:'1px 5px',borderRadius:3,marginLeft:8,fontWeight:700}}>BETA</span>
+              </div>
+              <div style={{fontSize:12,color:'var(--mu)',marginTop:4}}>Tell us what you want — or use filters — and get a full week instantly</div>
             </button>
           </div>}
-          {mode==='ai' && <div style={{display:'flex',flexDirection:'column',gap:14}}>
-            <button className="btn btn-g btn-sm" style={{alignSelf:'flex-start'}} onClick={()=>setMode(null)}>← Back</button>
-            <div>
-              <label style={{fontSize:12,fontWeight:600,color:'var(--mu)',display:'block',marginBottom:6}}>Cuisines (select any — leave blank for all)</label>
-              <div style={{display:'flex',flexWrap:'wrap',gap:6}}>
-                {CUISINES.map(c=><button key={c} className={`btn btn-xs ${aiForm.cuisines.includes(c)?'btn-p':'btn-g'}`}
-                  onClick={()=>setAiForm(f=>({...f,cuisines:f.cuisines.includes(c)?f.cuisines.filter(x=>x!==c):[...f.cuisines,c]}))}>{c}</button>)}
+
+          {/* ── AI generator ───────────────────────────────────── */}
+          {mode==='ai' && <div style={{display:'flex',flexDirection:'column',gap:16}}>
+            <button className="btn btn-g btn-sm" style={{alignSelf:'flex-start'}} onClick={()=>{setMode(null);setChatParsed(null);}}>← Back</button>
+
+            {/* Chat box */}
+            <div style={{background:'rgba(106,158,114,.05)',border:'1px solid rgba(106,158,114,.2)',borderRadius:10,padding:14}}>
+              <label style={{fontSize:12,fontWeight:700,color:'var(--sageH)',display:'block',marginBottom:8}}>
+                🤖 Describe your ideal week
+                <span style={{fontSize:10,fontWeight:400,color:'var(--mu)',marginLeft:6}}>(AI beta — rule-based)</span>
+              </label>
+              <textarea
+                style={{width:'100%',minHeight:72,padding:'8px 10px',borderRadius:8,border:'1px solid var(--bor)',fontSize:13,resize:'vertical',fontFamily:'inherit',boxSizing:'border-box',background:'var(--white)'}}
+                placeholder={'e.g. "Mediterranean, pescatarian, max 30 min, use salmon, avoid mushrooms"'}
+                value={chatInput}
+                onChange={e=>setChatInput(e.target.value)}
+                onKeyDown={e=>{if(e.key==='Enter'&&(e.metaKey||e.ctrlKey)){handleParseChat();}}}
+              />
+              <div style={{display:'flex',justifyContent:'flex-end',marginTop:6}}>
+                <button className="btn btn-s btn-sm" onClick={handleParseChat} disabled={!chatInput.trim()}>
+                  Parse → fill filters
+                </button>
+              </div>
+              {chatParsed && <div style={{marginTop:8,fontSize:11,color:'var(--sageH)',background:'rgba(106,158,114,.08)',borderRadius:6,padding:'6px 10px',lineHeight:1.7}}>
+                ✓ Parsed: <b>{chatParsed.dietary}</b>
+                {chatParsed.cuisines.length>0&&<> · {chatParsed.cuisines.join(', ')}</>}
+                {chatParsed.maxTime<120&&<> · max {chatParsed.maxTime} min</>}
+                {chatParsed.include&&<> · include: {chatParsed.include}</>}
+                {chatParsed.exclude&&<> · exclude: {chatParsed.exclude}</>}
+              </div>}
+            </div>
+
+            {/* Structured filters */}
+            <div style={{borderTop:'1px solid var(--bor)',paddingTop:14}}>
+              <div style={{fontSize:11,fontWeight:700,color:'var(--mu)',textTransform:'uppercase',letterSpacing:.5,marginBottom:12}}>Or set filters manually</div>
+
+              {/* Dietary */}
+              <div style={{marginBottom:12}}>
+                <label style={{fontSize:12,fontWeight:600,color:'var(--mu)',display:'block',marginBottom:6}}>Dietary mode</label>
+                <div style={{display:'flex',flexWrap:'wrap',gap:6}}>
+                  {DIETARY_OPTS.map(o=>(
+                    <button key={o.id}
+                      className={`btn btn-xs ${aiForm.dietary===o.id?'btn-p':'btn-g'}`}
+                      onClick={()=>setAiForm(f=>({...f,dietary:o.id}))}>
+                      {o.icon} {o.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Cuisines */}
+              <div style={{marginBottom:12}}>
+                <label style={{fontSize:12,fontWeight:600,color:'var(--mu)',display:'block',marginBottom:6}}>Cuisines <span style={{fontWeight:400}}>(leave blank for all)</span></label>
+                <div style={{display:'flex',flexWrap:'wrap',gap:5}}>
+                  {CUISINES.map(c=><button key={c} className={`btn btn-xs ${aiForm.cuisines.includes(c)?'btn-p':'btn-g'}`}
+                    onClick={()=>setAiForm(f=>({...f,cuisines:f.cuisines.includes(c)?f.cuisines.filter(x=>x!==c):[...f.cuisines,c]}))}>{c}</button>)}
+                </div>
+              </div>
+
+              {/* Max time */}
+              <div style={{marginBottom:12}}>
+                <label style={{fontSize:12,fontWeight:600,color:'var(--mu)',display:'block',marginBottom:4}}>Max cook time: <b>{aiForm.maxTime} min</b></label>
+                <input type="range" min={15} max={120} step={5} value={aiForm.maxTime}
+                  onChange={e=>setAiForm(f=>({...f,maxTime:+e.target.value}))}
+                  style={{width:'100%',accentColor:'var(--clay)'}}/>
+              </div>
+
+              {/* Include / Exclude */}
+              <div style={{display:'flex',gap:10,marginBottom:4}}>
+                <div style={{flex:1}}>
+                  <label style={{fontSize:12,fontWeight:600,color:'var(--mu)',display:'block',marginBottom:4}}>Include keywords</label>
+                  <input className="inp" style={{fontSize:12}} placeholder="salmon, pasta, lemon…" value={aiForm.include} onChange={e=>setAiForm(f=>({...f,include:e.target.value}))}/>
+                </div>
+                <div style={{flex:1}}>
+                  <label style={{fontSize:12,fontWeight:600,color:'var(--mu)',display:'block',marginBottom:4}}>Exclude keywords</label>
+                  <input className="inp" style={{fontSize:12}} placeholder="pork, cheese, spicy…" value={aiForm.exclude} onChange={e=>setAiForm(f=>({...f,exclude:e.target.value}))}/>
+                </div>
               </div>
             </div>
-            <div>
-              <label style={{fontSize:12,fontWeight:600,color:'var(--mu)',display:'block',marginBottom:6}}>Dietary</label>
-              <select className="sel" value={aiForm.dietary} onChange={e=>setAiForm(f=>({...f,dietary:e.target.value}))}>
-                {DIETARIES.map(d=><option key={d}>{d}</option>)}
-              </select>
-            </div>
-            <div>
-              <label style={{fontSize:12,fontWeight:600,color:'var(--mu)',display:'block',marginBottom:4}}>Max cooking time: {aiForm.maxTime} min</label>
-              <input type="range" min={15} max={120} step={5} value={aiForm.maxTime} onChange={e=>setAiForm(f=>({...f,maxTime:+e.target.value}))} style={{width:'100%',accentColor:'var(--clay)'}}/>
-            </div>
-            <div>
-              <label style={{fontSize:12,fontWeight:600,color:'var(--mu)',display:'block',marginBottom:4}}>Must include (comma-separated keywords)</label>
-              <input className="inp" placeholder="e.g. chicken, pasta, lemon" value={aiForm.include} onChange={e=>setAiForm(f=>({...f,include:e.target.value}))}/>
-            </div>
-            <div>
-              <label style={{fontSize:12,fontWeight:600,color:'var(--mu)',display:'block',marginBottom:4}}>Exclude (comma-separated keywords)</label>
-              <input className="inp" placeholder="e.g. pork, cheese, spicy" value={aiForm.exclude} onChange={e=>setAiForm(f=>({...f,exclude:e.target.value}))}/>
-            </div>
-            <p style={{fontSize:11,color:'var(--mu)',margin:'0',lineHeight:1.5}}>
-              🤖 Uses smart rule-based matching. Full AI backend coming soon.
-            </p>
-            <button className="btn btn-p btn-full" onClick={generateAIPlan}>✨ Generate Plan</button>
+
+            <button className="btn btn-p btn-full" onClick={()=>generateAIPlan(aiForm)} style={{marginTop:2}}>
+              ✨ Generate Week Plan
+            </button>
           </div>}
         </div>
       </div>
@@ -22792,47 +22902,55 @@ function PlanLibraryTab({ allRecipes, mealPlan, setMealPlan, pantry, showToast, 
       <div>
         {showShoppingList && <ShoppingListModal plan={plan} entry={entry} onClose={()=>setShowShoppingList(null)}/>}
         {showCopySafety && <CopySafetyModal plan={showCopySafety.plan} onClose={()=>setShowCopySafety(null)}/>}
-        <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:20,flexWrap:"wrap"}}>
+        <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:16,flexWrap:"wrap"}}>
           <button className="btn btn-s btn-sm" onClick={()=>setPreview(null)}>← Back to library</button>
-          <h2 style={{fontFamily:"var(--fd)",fontSize:22,flex:1,minWidth:0}}>{entry.emoji} {entry.name}</h2>
+          <h2 style={{fontFamily:"var(--fd)",fontSize:20,flex:1,minWidth:0}}>{entry.emoji} {entry.name}</h2>
         </div>
-        <div style={{display:"flex",gap:12,marginBottom:16,flexWrap:"wrap",alignItems:"center"}}>
+        <div style={{display:"flex",gap:12,marginBottom:14,flexWrap:"wrap",alignItems:"center"}}>
           <span style={{fontSize:13,color:"var(--sageH)",fontWeight:600}}>✅ {stats.pp}% pantry match</span>
-          <span style={{fontSize:13,color:"var(--mu)"}}>{stats.missingCount} ingredients to buy</span>
-          <span style={{fontSize:13,color:"var(--mu)"}}>{stats.mealCount} meals planned</span>
+          <span style={{fontSize:13,color:"var(--mu)"}}>{stats.missingCount} to buy</span>
+          <span style={{fontSize:13,color:"var(--mu)"}}>{stats.mealCount} meals</span>
+          <span style={{fontSize:12,color:"var(--mu)",marginLeft:"auto"}}>Click a meal to view · ✏️ to swap</span>
         </div>
-        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(190px,1fr))",gap:10,marginBottom:20}}>
-          {plan.map((day, dayIdx) => (
-            <div key={day.day} style={{background:"var(--white)",border:"1px solid var(--bor)",borderRadius:"var(--r)",padding:14}}>
-              <div style={{fontWeight:700,fontSize:13,marginBottom:8,color:"var(--clay)"}}>{day.day}</div>
-              {day.meals.map((meal, mi) => {
-                const mealType = ["Breakfast","Lunch","Dinner"][mi];
-                const recipeObj = meal ? recipePool.find(r=>r.id===meal.id) : null;
+        {/* ── Planner-style grid (same CSS as Weekly Planner) ── */}
+        <div className="pwrap" style={{marginBottom:18}}>
+          <div style={{display:"grid",gridTemplateColumns:"60px repeat(7,1fr)",gap:6,minWidth:580}}>
+            <div/>
+            {plan.map(d=><div key={d.day} className="pdh">{d.day}</div>)}
+            {[["☀️","Breakfast",0],["🌤️","Lunch",1],["🌙","Dinner",2]].map(([icon,label,mi])=>[
+              <div key={label} style={{display:"flex",alignItems:"center",justifyContent:"flex-end",paddingRight:6}}>
+                <div className="prl" style={{fontSize:10,gap:3}}>{icon}<span style={{display:"none"}}>{label}</span></div>
+              </div>,
+              ...plan.map((day,dayIdx)=>{
+                const meal=day.meals[mi];
+                const mealType=label;
+                const recipeObj=meal?recipePool.find(r=>r.id===meal.id):null;
                 return (
-                  <div key={mi} style={{padding:"5px 0",borderBottom:mi<2?"1px solid var(--bor)":"none",display:"flex",gap:6,alignItems:"center",justifyContent:"space-between"}}>
-                    <div style={{display:"flex",gap:5,alignItems:"center",flex:1,minWidth:0,overflow:"hidden"}}>
-                      <span style={{flexShrink:0,fontSize:12}}>{["☀️","🌤️","🌙"][mi]}</span>
-                      {meal
-                        ? <span
-                            style={{fontSize:11,cursor:"pointer",textDecoration:"underline",textDecorationStyle:"dotted",textDecorationColor:"var(--mu)",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",lineHeight:1.3}}
-                            onClick={()=>recipeObj && onViewRecipe(recipeObj)}
-                            title={`View recipe: ${meal.name}`}
-                          >{meal.emoji} {meal.name}</span>
-                        : <span style={{fontSize:11,color:"var(--mu)",fontStyle:"italic"}}>Empty</span>
-                      }
-                    </div>
-                    <button
-                      style={{fontSize:10,padding:"2px 6px",borderRadius:4,border:"1px solid var(--bor)",background:"none",cursor:"pointer",color:"var(--mu)",flexShrink:0,lineHeight:1.4}}
-                      onClick={()=>setPreviewSlotPicker({dayIdx,mealIdx:mi,mealType})}
-                      title="Replace this meal"
-                    >✏️</button>
+                  <div
+                    key={`${day.day}${label}`}
+                    className={`mslot ${meal?"filled":""}`}
+                    style={{cursor:meal&&recipeObj?"pointer":"default",position:"relative",minHeight:70}}
+                    onClick={()=>meal&&recipeObj&&onViewRecipe(recipeObj)}
+                    title={meal?`${meal.name} — click to view`:"Empty slot"}
+                  >
+                    {meal
+                      ? <div className="msi">
+                          <div className="msem">{meal.emoji}</div>
+                          <div className="msn">{meal.name}</div>
+                          <button
+                            style={{position:"absolute",top:3,right:3,fontSize:9,padding:"1px 4px",borderRadius:3,border:"1px solid var(--bor)",background:"rgba(255,255,255,.92)",cursor:"pointer",lineHeight:1.5,color:"var(--mu)",zIndex:5}}
+                            onClick={e=>{e.stopPropagation();setPreviewSlotPicker({dayIdx,mealIdx:mi,mealType});}}
+                            title="Swap this meal"
+                          >✏️</button>
+                        </div>
+                      : <div className="msadd" style={{fontSize:16}}>+</div>
+                    }
                   </div>
                 );
-              })}
-            </div>
-          ))}
+              })
+            ])}
+          </div>
         </div>
-        <p style={{fontSize:12,color:"var(--mu)",marginBottom:12}}>Click a meal name to view the recipe · Click ✏️ to swap a slot</p>
         <div style={{display:"flex",gap:10,flexWrap:"wrap"}}>
           <button className="btn btn-p" onClick={()=>handleCopyRequest(plan)}>📋 Copy to my week</button>
           <button className="btn btn-s" onClick={()=>setShowShoppingList({plan,entry})}>🛒 Shopping list</button>
@@ -24400,6 +24518,72 @@ function CommunityTab({ mealPlan, setMealPlan, allRecipes, user, isGuest, collec
   );
 }
 
+// ══════════════════════════════════════════════════════════════════════════════
+// PANTRY-FIRST ENGINE — simple meals generated directly from pantry contents
+// Priority: these beat all complex recipes because missingCount = 0 and they
+// use ONLY what the user already has. This is the core of "What can I cook now?"
+// ══════════════════════════════════════════════════════════════════════════════
+const PANTRY_MEAL_TEMPLATES = [
+  // ── Breakfast ──────────────────────────────────────────────────────────────
+  { name:"Scrambled Eggs",       emoji:"🍳", meal:"breakfast", time:5,  requires:["eggs"],              optionals:["butter","milk","salt","cheese"],        contains_meat:false, contains_fish:false, contains_dairy:false },
+  { name:"Fried Eggs",           emoji:"🍳", meal:"breakfast", time:5,  requires:["eggs","oil"],        optionals:["salt","pepper"],                        contains_meat:false, contains_fish:false, contains_dairy:false },
+  { name:"Soft-Boiled Eggs",     emoji:"🥚", meal:"breakfast", time:8,  requires:["eggs"],              optionals:["salt"],                                 contains_meat:false, contains_fish:false, contains_dairy:false },
+  { name:"Classic Omelet",       emoji:"🥚", meal:"breakfast", time:8,  requires:["eggs","butter"],     optionals:["cheese","onion","salt","pepper"],        contains_meat:false, contains_fish:false, contains_dairy:true  },
+  { name:"Banana Pancakes",      emoji:"🥞", meal:"breakfast", time:12, requires:["banana","eggs"],     optionals:["flour","milk","butter","honey"],         contains_meat:false, contains_fish:false, contains_dairy:false },
+  { name:"Porridge / Oatmeal",   emoji:"🥣", meal:"breakfast", time:8,  requires:["oats"],              optionals:["milk","banana","honey","cinnamon"],      contains_meat:false, contains_fish:false, contains_dairy:false },
+  { name:"Avocado Toast",        emoji:"🥑", meal:"breakfast", time:5,  requires:["bread","avocado"],   optionals:["salt","pepper","lemon","chili flakes"],  contains_meat:false, contains_fish:false, contains_dairy:false },
+  { name:"Peanut Butter Toast",  emoji:"🍞", meal:"breakfast", time:3,  requires:["bread","peanut butter"], optionals:["banana","honey"],                   contains_meat:false, contains_fish:false, contains_dairy:false },
+  { name:"Yogurt & Honey",       emoji:"🍯", meal:"breakfast", time:2,  requires:["yogurt","honey"],    optionals:["banana","granola","berries"],            contains_meat:false, contains_fish:false, contains_dairy:true  },
+  // ── Lunch ──────────────────────────────────────────────────────────────────
+  { name:"Pasta Aglio e Olio",   emoji:"🍝", meal:"lunch",     time:15, requires:["pasta","garlic","olive oil"], optionals:["chili flakes","parsley","parmesan"], contains_meat:false, contains_fish:false, contains_dairy:false },
+  { name:"Tuna Salad",           emoji:"🥗", meal:"lunch",     time:5,  requires:["tuna"],              optionals:["mayo","lemon","onion","salt","pepper"],  contains_meat:false, contains_fish:true,  contains_dairy:false },
+  { name:"Egg Salad Sandwich",   emoji:"🥪", meal:"lunch",     time:10, requires:["eggs","bread"],      optionals:["mayo","mustard","salt","pepper"],        contains_meat:false, contains_fish:false, contains_dairy:false },
+  { name:"Lentil Soup",          emoji:"🍲", meal:"lunch",     time:30, requires:["lentils"],           optionals:["onion","garlic","cumin","tomato","salt"], contains_meat:false, contains_fish:false, contains_dairy:false },
+  { name:"Rice & Beans",         emoji:"🍚", meal:"lunch",     time:20, requires:["rice","beans"],      optionals:["garlic","onion","cumin","salt"],         contains_meat:false, contains_fish:false, contains_dairy:false },
+  { name:"Chickpea Salad",       emoji:"🥗", meal:"lunch",     time:5,  requires:["chickpeas"],         optionals:["lemon","olive oil","garlic","parsley","onion"], contains_meat:false, contains_fish:false, contains_dairy:false },
+  { name:"Tomato Soup",          emoji:"🍅", meal:"lunch",     time:20, requires:["tomato","onion"],    optionals:["garlic","olive oil","basil","salt"],     contains_meat:false, contains_fish:false, contains_dairy:false },
+  { name:"Simple Fried Rice",    emoji:"🍳", meal:"lunch",     time:12, requires:["rice","eggs"],       optionals:["soy sauce","garlic","sesame oil","spring onion"], contains_meat:false, contains_fish:false, contains_dairy:false },
+  // ── Dinner ─────────────────────────────────────────────────────────────────
+  { name:"Baked Salmon",         emoji:"🐟", meal:"dinner",    time:20, requires:["salmon"],            optionals:["lemon","garlic","olive oil","salt","pepper","dill"], contains_meat:false, contains_fish:true,  contains_dairy:false },
+  { name:"Pan-Seared White Fish",emoji:"🐠", meal:"dinner",    time:15, requires:["white fish"],        optionals:["garlic","butter","lemon","salt","parsley"], contains_meat:false, contains_fish:true,  contains_dairy:true  },
+  { name:"Garlic Butter Pasta",  emoji:"🍝", meal:"dinner",    time:12, requires:["pasta","butter","garlic"], optionals:["parmesan","parsley","chili","lemon"], contains_meat:false, contains_fish:false, contains_dairy:true  },
+  { name:"Pasta with Tomato",    emoji:"🍝", meal:"dinner",    time:20, requires:["pasta","tomato"],    optionals:["garlic","olive oil","basil","onion"],    contains_meat:false, contains_fish:false, contains_dairy:false },
+  { name:"Simple Lentil Stew",   emoji:"🥘", meal:"dinner",    time:35, requires:["lentils","onion"],   optionals:["tomato","garlic","cumin","olive oil"],   contains_meat:false, contains_fish:false, contains_dairy:false },
+  { name:"Chickpea Stew",        emoji:"🥘", meal:"dinner",    time:25, requires:["chickpeas"],         optionals:["onion","garlic","tomato","cumin","olive oil"], contains_meat:false, contains_fish:false, contains_dairy:false },
+  { name:"Egg Fried Rice",       emoji:"🍚", meal:"dinner",    time:15, requires:["rice","eggs"],       optionals:["soy sauce","sesame oil","garlic","spring onion","peas"], contains_meat:false, contains_fish:false, contains_dairy:false },
+  { name:"Stuffed Omelette",     emoji:"🥚", meal:"dinner",    time:12, requires:["eggs","onion"],      optionals:["tomato","cheese","pepper","salt","oil"], contains_meat:false, contains_fish:false, contains_dairy:false },
+  { name:"Beans on Toast",       emoji:"🍞", meal:"dinner",    time:8,  requires:["beans","bread"],     optionals:["butter","salt","pepper","cheese"],       contains_meat:false, contains_fish:false, contains_dairy:false },
+  { name:"Potato & Egg Bake",    emoji:"🥔", meal:"dinner",    time:30, requires:["potato","eggs"],     optionals:["onion","olive oil","salt","pepper","paprika"], contains_meat:false, contains_fish:false, contains_dairy:false },
+  { name:"Tuna Pasta",           emoji:"🍝", meal:"dinner",    time:15, requires:["pasta","tuna"],      optionals:["olive oil","garlic","lemon","capers"],   contains_meat:false, contains_fish:true,  contains_dairy:false },
+];
+
+// Generate pantry meals from templates — returns recipe-like objects with missingCount=0
+const generatePantryMeals = (pantrySet) => {
+  if(!pantrySet || pantrySet.size === 0) return [];
+  return PANTRY_MEAL_TEMPLATES
+    .filter(tmpl => tmpl.requires.every(req => ingInPantry(req, pantrySet)))
+    .map((tmpl, idx) => ({
+      id: `pantry-${idx}-${tmpl.name.replace(/\s+/g,'-').toLowerCase()}`,
+      title: tmpl.name,
+      emoji: tmpl.emoji,
+      meal: tmpl.meal,
+      time: tmpl.time,
+      diff: "Easy",
+      dietary: [],
+      ingredients: tmpl.requires.map(r => ({ n: r })),
+      contains_meat: tmpl.contains_meat,
+      contains_fish: tmpl.contains_fish,
+      contains_shellfish: false,
+      contains_dairy: tmpl.contains_dairy,
+      kosher_safe: !tmpl.contains_shellfish && !tmpl.contains_dairy,
+      missingCount: 0,
+      coreDishKey: `pantry-${tmpl.name}`,
+      isPantryGenerated: true,
+      pp: 100,
+      cuisine: "Pantry",
+    }));
+};
+
 function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, prefs, pantry, setPantry, setShopping, isPremium, subscription, setSubscription, onUpgrade, allRecipes: allRecipesProp, userRecipes, avoidedIngredients = [], user, publishedMenus, setPublishedMenus, showToast, collections, setCollections }) {
   // Use allRecipes from props (built-in + user-created), fallback to RECIPES if not provided
   const allRecipes = allRecipesProp || RECIPES;
@@ -24561,7 +24745,18 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
       setTooRestrictive(false);
     }
 
-    // ── 2. Score every recipe (missing count) ─────────────────────────
+    // ── 2a. Generate pantry-first meals (0-missing, ultra-simple) ─────
+    // These ALWAYS beat complex recipes because the user already has everything.
+    const rawPantryMeals = generatePantryMeals(pantrySet);
+    const pantryMeals = rawPantryMeals.filter(r => isRecipeAllowedForUser(r, prefs));
+    const bPantry = pantryMeals.filter(r => r.meal === 'breakfast');
+    const lPantry = pantryMeals.filter(r => r.meal === 'lunch');
+    const dPantry = pantryMeals.filter(r => r.meal === 'dinner');
+    console.log('🥘 Pantry-generated meals available:',
+      `B:${bPantry.length} L:${lPantry.length} D:${dPantry.length}`,
+      pantryMeals.map(r=>r.title).join(', ') || '(none)');
+
+    // ── 2b. Score every recipe (missing count) ─────────────────────────
     const scored = allowedRecipes.map(r => {
       const ings = r.ingredients || [];
       const missingCount = ings.filter(i => !ingInPantry(i.n, pantrySet)).length;
@@ -24605,9 +24800,11 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
     const lAll = scored.filter(r => getMealType(r) === 'lunch');
     const dAll = scored.filter(r => getMealType(r) === 'dinner');
 
-    const bPool = buildSortedPool(bAll.length >= 3 ? bAll : scored);
-    const lPool = buildSortedPool(lAll.length >= 3 ? lAll : scored);
-    const dPool = buildSortedPool(dAll.length >= 3 ? dAll : scored);
+    // Pantry-generated meals always go first (missingCount=0, isPantryGenerated=true)
+    // They get a big noveltyScore bonus in pickFrom, ensuring they beat complex 0-missing recipes
+    const bPool = [...shuffleArr(bPantry), ...buildSortedPool(bAll.length >= 3 ? bAll : scored)];
+    const lPool = [...shuffleArr(lPantry), ...buildSortedPool(lAll.length >= 3 ? lAll : scored)];
+    const dPool = [...shuffleArr(dPantry), ...buildSortedPool(dAll.length >= 3 ? dAll : scored)];
 
     // Fish/seafood pantry detection for dev log
     const FISH_TERMS = ['salmon','cod','tuna','trout','mackerel','haddock','tilapia','halibut','sea bass','white fish','fish fillet'];
@@ -24651,11 +24848,13 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
     const usedPantryIngs = new Set(); // pantry ings already used this week
 
     // Dynamic novelty score: higher = more new pantry diversity + high-value items
+    // isPantryGenerated gets a large bonus to ensure they always beat complex 0-missing recipes
     const noveltyScore = r => {
       const ings = getPantryIngsOf(r);
-      const novelBonus   = ings.filter(n => !usedPantryIngs.has(n)).length * 10;
-      const highValBonus = ings.filter(n => [...pantryHighValueNorms].some(hv => n.includes(hv) || hv.includes(n))).length * 15;
-      return novelBonus + highValBonus;
+      const novelBonus    = ings.filter(n => !usedPantryIngs.has(n)).length * 10;
+      const highValBonus  = ings.filter(n => [...pantryHighValueNorms].some(hv => n.includes(hv) || hv.includes(n))).length * 15;
+      const pantryBonus   = r.isPantryGenerated ? 200 : 0; // Strong preference — pantry-first is core mission
+      return novelBonus + highValBonus + pantryBonus;
     };
 
     const pickFrom = pool => {
@@ -25878,7 +26077,19 @@ function FoldersView({ onBack, isGuest }) {
 function PrefsModal({ prefs, setPrefs, onClose }) {
   const [local,setLocal]=useState({...prefs});
   const toggle=(k,v)=>setLocal(p=>({...p,[k]:p[k].includes(v)?p[k].filter(x=>x!==v):[...p[k],v]}));
-  const D=["None","Kosher","Halal","Vegetarian","Vegan","Gluten-free","Dairy-free"];
+  // Dietary mode is SINGLE-SELECT (exclusive)
+  const DIETARY_MODES = [
+    {id:"Omnivore",    icon:"🍖", desc:"No restrictions"},
+    {id:"Pescatarian", icon:"🐟", desc:"Fish ok, no meat"},
+    {id:"Vegetarian",  icon:"🥦", desc:"No meat or fish"},
+    {id:"Vegan",       icon:"🌱", desc:"No animal products"},
+    {id:"Kosher",      icon:"🕎", desc:"Kosher certified"},
+  ];
+  const currentDietary = local.dietary[0] || "Omnivore";
+  const selectDietary = (id) => setLocal(p => ({
+    ...p,
+    dietary: id === "Omnivore" ? [] : [id]
+  }));
   const C=["Italian","Japanese","Mediterranean","Mexican","Indian","French","Middle Eastern","Thai","Chinese","American"];
   const G=["Balanced","High protein","Low carb","Low calorie"];
   const SK=["Beginner","Intermediate","Advanced"];
@@ -25887,7 +26098,26 @@ function PrefsModal({ prefs, setPrefs, onClose }) {
       <div className="modal" style={{maxWidth:580}}>
         <div className="mhd"><div className="mtitle">Dietary Preferences</div><button className="mclose" onClick={onClose}><Ic n="x" s={16}/></button></div>
         <div className="mbody" style={{display:"flex",flexDirection:"column",gap:20}}>
-          <div><label className="fl">Dietary Mode</label><div className="mopts">{D.map(d=><button key={d} className={`mopt ${local.dietary.includes(d)?"sel":""}`} onClick={()=>toggle("dietary",d)}>{d}</button>)}</div></div>
+          <div>
+            <label className="fl">Dietary Mode <span style={{fontSize:11,color:"var(--mu)",fontWeight:400}}>(select one)</span></label>
+            <div style={{display:"flex",flexWrap:"wrap",gap:8,marginTop:6}}>
+              {DIETARY_MODES.map(m=>(
+                <button key={m.id}
+                  onClick={()=>selectDietary(m.id)}
+                  style={{padding:"8px 14px",borderRadius:8,border:`1.5px solid ${currentDietary===m.id?"var(--clay)":"var(--bor)"}`,background:currentDietary===m.id?"var(--clayBg)":"var(--white)",cursor:"pointer",textAlign:"left",transition:"all .15s"}}>
+                  <div style={{fontSize:13,fontWeight:600,color:currentDietary===m.id?"var(--clay)":"var(--ch)"}}>{m.icon} {m.id}</div>
+                  <div style={{fontSize:11,color:"var(--mu)",marginTop:2}}>{m.desc}</div>
+                </button>
+              ))}
+            </div>
+            {currentDietary==="Kosher"&&<div style={{marginTop:10,background:"var(--clayBg)",border:"1px solid rgba(192,106,62,.2)",borderRadius:"var(--rs)",padding:12}}>
+              <div className="togrow"><span style={{fontSize:13,fontWeight:500}}>🕎 Strict separation mode</span><button className={`tog ${local.strictKosher?"on":""}`} onClick={()=>setLocal(p=>({...p,strictKosher:!p.strictKosher}))}/></div>
+              <div style={{fontSize:11,color:"var(--mu)",marginTop:4}}>Full meat/dairy separation. Excludes any unlabelled recipes.</div>
+            </div>}
+            {currentDietary==="Pescatarian"&&<div style={{marginTop:8,padding:"8px 12px",background:"rgba(100,140,200,.06)",border:"1px solid rgba(100,140,200,.2)",borderRadius:8,fontSize:12,color:"var(--mu)"}}>
+              🐟 Fish and shellfish recipes will be included. Land meat (chicken, beef, pork) will be excluded.
+            </div>}
+          </div>
           <div><label className="fl">Favorite Cuisines</label><div className="mopts">{C.map(c=><button key={c} className={`mopt ${local.cuisines.includes(c)?"sel":""}`} onClick={()=>toggle("cuisines",c)}>{c}</button>)}</div></div>
           <div><label className="fl">Health Goal</label><div className="mopts">{G.map(g=><button key={g} className={`mopt ${local.health===g?"sel":""}`} onClick={()=>setLocal(p=>({...p,health:g}))}>{g}</button>)}</div></div>
           <div><label className="fl">Cooking Skill</label><div className="mopts">{SK.map(s=><button key={s} className={`mopt ${local.skill===s?"sel":""}`} onClick={()=>setLocal(p=>({...p,skill:s}))}>{s}</button>)}</div></div>
@@ -25895,7 +26125,6 @@ function PrefsModal({ prefs, setPrefs, onClose }) {
             <div className="half"><label className="fl">Max cook time (min)</label><input className="fi" type="number" value={local.maxTime} onChange={e=>setLocal(p=>({...p,maxTime:+e.target.value}))}/></div>
             <div className="half"><label className="fl">Household size</label><input className="fi" type="number" value={local.household} onChange={e=>setLocal(p=>({...p,household:+e.target.value}))}/></div>
           </div>
-          {local.dietary.includes("Kosher")&&<div style={{background:"var(--clayBg)",border:"1px solid rgba(192,106,62,.2)",borderRadius:"var(--rs)",padding:14}}><div className="togrow"><span style={{fontSize:14,fontWeight:500}}>🕎 Strict separation mode</span><button className={`tog ${local.strictKosher?"on":""}`} onClick={()=>setLocal(p=>({...p,strictKosher:!p.strictKosher}))}/></div><div style={{fontSize:12,color:"var(--mu)",marginTop:5}}>Full meat/dairy separation tracking</div></div>}
           <button className="btn btn-p btn-full btn-lg" onClick={()=>{setPrefs(local);onClose();}}>Save preferences</button>
         </div>
       </div>
