@@ -22552,14 +22552,34 @@ function buildWeekFromFilter(filterFn, allRecipes) {
   }));
 }
 
-function PlanLibraryTab({ allRecipes, mealPlan, setMealPlan, pantry, showToast, onViewRecipe }) {
+function PlanLibraryTab({ allRecipes, mealPlan, setMealPlan, pantry, showToast, onViewRecipe, user }) {
   const [preview, setPreview] = useState(null); // { plan: [...], entry }
   const [showCopySafety, setShowCopySafety] = useState(null); // { plan }
   const [showShoppingList, setShowShoppingList] = useState(null); // { plan, entry }
   const [showCreatePlan, setShowCreatePlan] = useState(false);
   const [previewSlotPicker, setPreviewSlotPicker] = useState(null); // {dayIdx, mealIdx, mealType}
+  const [draftPlan, setDraftPlan] = useState(null); // { plan, title } — AI-generated pending confirm
+  const [draftTitle, setDraftTitle] = useState(''); // editable title for current draft
+  const [savedPlans, setSavedPlans] = useState(() => {
+    if (!user?.id) return [];
+    try { return JSON.parse(localStorage.getItem(`sc_${user.id}_savedPlans`) || '[]'); } catch { return []; }
+  });
   const recipePool = allRecipes || RECIPES;
   const pantrySet = React.useMemo(() => buildPantrySet(pantry || []), [pantry]);
+
+  const saveMyPlan = (plan, title) => {
+    const entry = { id: Date.now(), title: title || 'My Plan', emoji: '📋', plan, createdAt: new Date().toISOString() };
+    const updated = [entry, ...savedPlans];
+    setSavedPlans(updated);
+    if (user?.id) localStorage.setItem(`sc_${user.id}_savedPlans`, JSON.stringify(updated));
+    showToast?.('💾 Plan saved to My Plans!');
+  };
+  const deleteMyPlan = (id) => {
+    const updated = savedPlans.filter(p => p.id !== id);
+    setSavedPlans(updated);
+    if (user?.id) localStorage.setItem(`sc_${user.id}_savedPlans`, JSON.stringify(updated));
+    showToast?.('🗑 Plan removed');
+  };
 
   const getPlanStats = (plan) => {
     const meals = plan.flatMap(d => d.meals).filter(Boolean);
@@ -22581,20 +22601,64 @@ function PlanLibraryTab({ allRecipes, mealPlan, setMealPlan, pantry, showToast, 
   const ShoppingListModal = ({ plan, entry, onClose }) => {
     const ps = buildPantrySet(pantry || []);
     const ingMap = {};
+
+    // Helper: parse a quantity string into { value: number, unit: string }
+    const parseQty = (amt) => {
+      if (!amt) return null;
+      const s = String(amt).trim();
+      // e.g. "400g", "1.5 kg", "2 tbsp", "3", "1/2 cup"
+      const m = s.match(/^([\d./\s]+)\s*([a-zA-Z]*)/);
+      if (!m) return null;
+      let num = m[1].trim();
+      // Handle fractions like "1/2"
+      if (num.includes('/')) {
+        const [a,b] = num.split('/');
+        num = parseFloat(a) / parseFloat(b);
+      } else {
+        num = parseFloat(num);
+      }
+      const unit = m[2].toLowerCase().trim();
+      return isNaN(num) ? null : { value: num, unit };
+    };
+
     plan.flatMap(d => d.meals).filter(Boolean).forEach(m => {
       const r = recipePool.find(x => x.id === m.id);
       if (!r?.ingredients) return;
       r.ingredients.forEach(i => {
         if (!ingInPantry(i.n, ps)) {
           const key = normalizeIng(i.n);
-          if (!ingMap[key]) ingMap[key] = { name: i.n, amount: i.amount || '', recipes: [] };
+          if (!ingMap[key]) ingMap[key] = { name: i.n, amounts: [], recipes: [] };
+          if (i.amount) ingMap[key].amounts.push(i.amount);
           if (!ingMap[key].recipes.includes(m.name)) ingMap[key].recipes.push(m.name);
         }
       });
     });
-    const items = Object.values(ingMap);
+
+    // Aggregate quantities: sum same unit, list different units separately
+    const aggregateAmounts = (amounts) => {
+      if (!amounts.length) return '';
+      const byUnit = {};
+      let raw = [];
+      amounts.forEach(a => {
+        const q = parseQty(a);
+        if (q) {
+          byUnit[q.unit || '_'] = (byUnit[q.unit || '_'] || 0) + q.value;
+        } else {
+          raw.push(a);
+        }
+      });
+      const parts = [];
+      Object.entries(byUnit).forEach(([unit, val]) => {
+        const rounded = Math.round(val * 100) / 100;
+        parts.push(unit && unit !== '_' ? `${rounded} ${unit}` : String(rounded));
+      });
+      return [...parts, ...raw].join(' + ');
+    };
+
+    const items = Object.values(ingMap).map(i => ({...i, totalAmount: aggregateAmounts(i.amounts)}));
+
     const exportCSV = () => {
-      const rows = [['Ingredient','Amount','Used In'],...items.map(i=>[i.name,i.amount,i.recipes.join('; ')])];
+      const rows = [['Ingredient','Total Amount','Used In'],...items.map(i=>[i.name,i.totalAmount,i.recipes.join('; ')])];
       const csv = rows.map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
       const blob = new Blob([csv],{type:'text/csv'});
       const url = URL.createObjectURL(blob);
@@ -22613,20 +22677,18 @@ function PlanLibraryTab({ allRecipes, mealPlan, setMealPlan, pantry, showToast, 
             ? <div style={{textAlign:'center',padding:'32px 0',color:'var(--sageH)',fontWeight:600}}>✅ Everything is in your pantry!</div>
             : <div style={{overflowY:'auto',flex:1,marginBottom:12}}>
                 {items.map(i=>(
-                  <div key={i.name} style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'8px 0',borderBottom:'1px solid var(--bor)'}}>
-                    <div>
+                  <div key={i.name} style={{display:'flex',alignItems:'flex-start',justifyContent:'space-between',padding:'8px 0',borderBottom:'1px solid var(--bor)',gap:8}}>
+                    <div style={{flex:1,minWidth:0}}>
                       <div style={{fontWeight:600,fontSize:13}}>{i.name}</div>
                       <div style={{fontSize:11,color:'var(--mu)'}}>Used in: {i.recipes.join(', ')}</div>
                     </div>
-                    {i.amount && <span style={{fontSize:12,color:'var(--mu)',whiteSpace:'nowrap',marginLeft:8}}>{i.amount}</span>}
+                    {i.totalAmount && <span style={{fontSize:12,color:'var(--ch)',fontWeight:600,whiteSpace:'nowrap',marginLeft:4,background:'rgba(0,0,0,.04)',padding:'2px 6px',borderRadius:4}}>{i.totalAmount}</span>}
                   </div>
                 ))}
               </div>
           }
           <div style={{display:'flex',gap:8,flexWrap:'wrap',marginTop:4}}>
             <button className="btn btn-p btn-sm" onClick={exportCSV} disabled={items.length===0}>📥 Export CSV</button>
-            <button className="btn btn-s btn-sm" style={{opacity:.55,cursor:'not-allowed'}} disabled title="Coming soon">📧 Email — Coming soon</button>
-            <button className="btn btn-s btn-sm" style={{opacity:.55,cursor:'not-allowed'}} disabled title="Coming soon">💬 WhatsApp — Coming soon</button>
           </div>
         </div>
       </div>
@@ -22666,10 +22728,10 @@ function PlanLibraryTab({ allRecipes, mealPlan, setMealPlan, pantry, showToast, 
   };
 
   // ── Create Plan Modal ───────────────────────────────────────────────────────
-  const CreatePlanModal = ({ onClose }) => {
+  const CreatePlanModal = ({ onClose, onDraft }) => {
     const [mode, setMode] = useState(null); // null | 'ai' | 'manual'
     // Structured form state
-    const [aiForm, setAiForm] = useState({ cuisines:[], dietary:'Omnivore', maxTime:60, include:'', exclude:'' });
+    const [aiForm, setAiForm] = useState({ cuisines:[], dietary:'Omnivore', maxTime:60 });
     // Natural language chat state
     const [chatInput, setChatInput] = useState('');
     const [chatParsed, setChatParsed] = useState(null); // parsed filters from NL
@@ -22733,18 +22795,11 @@ function PlanLibraryTab({ allRecipes, mealPlan, setMealPlan, pantry, showToast, 
       pool = pool.filter(r => isRecipeAllowedForUser(r, syntheticPrefs));
       if(f.cuisines.length > 0) pool = pool.filter(r => f.cuisines.includes(r.cuisine));
       if(f.maxTime < 120) pool = pool.filter(r => r.time <= f.maxTime);
-      if(f.include.trim()) {
-        const inc = f.include.toLowerCase().split(',').map(s=>s.trim()).filter(Boolean);
-        pool = pool.filter(r => inc.some(kw => r.title.toLowerCase().includes(kw) || (r.ingredients||[]).some(i=>i.n.toLowerCase().includes(kw))));
-      }
-      if(f.exclude.trim()) {
-        const exc = f.exclude.toLowerCase().split(',').map(s=>s.trim()).filter(Boolean);
-        pool = pool.filter(r => !exc.some(kw => r.title.toLowerCase().includes(kw) || (r.ingredients||[]).some(i=>i.n.toLowerCase().includes(kw))));
-      }
       if(pool.length < 5) { showToast?.("⚠️ Too few recipes match — try loosening filters"); return; }
       const plan = buildWeekFromFilter(r => pool.includes(r), recipePool);
-      setMealPlan(plan);
-      showToast?.("✨ AI plan generated! Check your Planner tab.");
+      // Store as draft — user confirms before it goes to the planner
+      const title = chatInput.trim() ? chatInput.trim().slice(0, 40) : `AI Plan (${f.dietary})`;
+      onDraft({ plan, title });
       onClose();
     };
 
@@ -22759,9 +22814,9 @@ function PlanLibraryTab({ allRecipes, mealPlan, setMealPlan, pantry, showToast, 
           {/* ── Mode selection ─────────────────────────────────── */}
           {!mode && <div style={{display:'flex',flexDirection:'column',gap:10}}>
             <button style={{textAlign:'left',padding:'14px 16px',borderRadius:'var(--r)',border:'1px solid var(--bor)',background:'var(--white)',cursor:'pointer'}}
-              onClick={()=>{setMealPlan(prev=>prev.map(d=>({...d,meals:[null,null,null]})));showToast?.("📝 Blank week ready in Planner!");onClose();}}>
-              <div style={{fontWeight:700,fontSize:14,color:'var(--ch)'}}>📝 Manual — Start blank</div>
-              <div style={{fontSize:12,color:'var(--mu)',marginTop:4}}>Clear the planner and fill slots yourself</div>
+              onClick={()=>{onDraft({plan:mealPlan.map(d=>({...d,meals:[null,null,null]})),title:'Blank Plan'});onClose();}}>
+              <div style={{fontWeight:700,fontSize:14,color:'var(--ch)'}}>📝 Manual — Blank plan</div>
+              <div style={{fontSize:12,color:'var(--mu)',marginTop:4}}>Start a blank weekly plan — fill slots yourself, then save or copy to week</div>
             </button>
             <button style={{textAlign:'left',padding:'14px 16px',borderRadius:'var(--r)',border:'1px solid rgba(106,158,114,.35)',background:'rgba(106,158,114,.05)',cursor:'pointer'}}
               onClick={()=>setMode('ai')}>
@@ -22831,23 +22886,11 @@ function PlanLibraryTab({ allRecipes, mealPlan, setMealPlan, pantry, showToast, 
               </div>
 
               {/* Max time */}
-              <div style={{marginBottom:12}}>
+              <div style={{marginBottom:4}}>
                 <label style={{fontSize:12,fontWeight:600,color:'var(--mu)',display:'block',marginBottom:4}}>Max cook time: <b>{aiForm.maxTime} min</b></label>
                 <input type="range" min={15} max={120} step={5} value={aiForm.maxTime}
                   onChange={e=>setAiForm(f=>({...f,maxTime:+e.target.value}))}
                   style={{width:'100%',accentColor:'var(--clay)'}}/>
-              </div>
-
-              {/* Include / Exclude */}
-              <div style={{display:'flex',gap:10,marginBottom:4}}>
-                <div style={{flex:1}}>
-                  <label style={{fontSize:12,fontWeight:600,color:'var(--mu)',display:'block',marginBottom:4}}>Include keywords</label>
-                  <input className="inp" style={{fontSize:12}} placeholder="salmon, pasta, lemon…" value={aiForm.include} onChange={e=>setAiForm(f=>({...f,include:e.target.value}))}/>
-                </div>
-                <div style={{flex:1}}>
-                  <label style={{fontSize:12,fontWeight:600,color:'var(--mu)',display:'block',marginBottom:4}}>Exclude keywords</label>
-                  <input className="inp" style={{fontSize:12}} placeholder="pork, cheese, spicy…" value={aiForm.exclude} onChange={e=>setAiForm(f=>({...f,exclude:e.target.value}))}/>
-                </div>
               </div>
             </div>
 
@@ -22873,7 +22916,7 @@ function PlanLibraryTab({ allRecipes, mealPlan, setMealPlan, pantry, showToast, 
   };
 
   // ── Preview slot picker (replace recipe in preview) ────────────────────────
-  if (previewSlotPicker && preview) {
+  if (previewSlotPicker && (preview || draftPlan)) {
     return (
       <RecipePickerModal
         mealType={previewSlotPicker.mealType}
@@ -22883,18 +22926,112 @@ function PlanLibraryTab({ allRecipes, mealPlan, setMealPlan, pantry, showToast, 
         avoidedIngredients={[]}
         onClose={()=>setPreviewSlotPicker(null)}
         onSelect={r=>{
-          setPreview(prev=>{
-            const newPlan = prev.plan.map(d=>({...d,meals:[...d.meals]}));
-            newPlan[previewSlotPicker.dayIdx].meals[previewSlotPicker.mealIdx] = {kind:"recipe",emoji:r.emoji,name:r.title,id:r.id};
-            return {...prev, plan:newPlan};
-          });
+          const slot = {kind:"recipe",emoji:r.emoji,name:r.title,id:r.id};
+          if (previewSlotPicker.isDraft && draftPlan) {
+            setDraftPlan(prev=>{
+              const newPlan = prev.plan.map(d=>({...d,meals:[...d.meals]}));
+              newPlan[previewSlotPicker.dayIdx].meals[previewSlotPicker.mealIdx] = slot;
+              return {...prev, plan:newPlan};
+            });
+          } else {
+            setPreview(prev=>{
+              const newPlan = prev.plan.map(d=>({...d,meals:[...d.meals]}));
+              newPlan[previewSlotPicker.dayIdx].meals[previewSlotPicker.mealIdx] = slot;
+              return {...prev, plan:newPlan};
+            });
+          }
           setPreviewSlotPicker(null);
         }}
       />
     );
   }
 
-  // ── Preview view ────────────────────────────────────────────────────────────
+  // ── Shared plan grid renderer (used in preview + draft) ──────────────────────
+  const renderPlanGrid = (plan, onSlotSwap) => (
+    <div className="pwrap" style={{marginBottom:18}}>
+      <div style={{display:"grid",gridTemplateColumns:"60px repeat(7,1fr)",gap:6,minWidth:580}}>
+        <div/>
+        {plan.map(d=><div key={d.day} className="pdh">{d.day}</div>)}
+        {[["☀️","Breakfast",0],["🌤️","Lunch",1],["🌙","Dinner",2]].map(([icon,label,mi])=>[
+          <div key={label} style={{display:"flex",alignItems:"center",justifyContent:"flex-end",paddingRight:6}}>
+            <div className="prl" style={{fontSize:10,gap:3}}>{icon}<span style={{display:"none"}}>{label}</span></div>
+          </div>,
+          ...plan.map((day,dayIdx)=>{
+            const meal=day.meals[mi];
+            const mealType=label;
+            const recipeObj=meal?recipePool.find(r=>r.id===meal.id):null;
+            return (
+              <div
+                key={`${day.day}${label}`}
+                className={`mslot ${meal?"filled":""}`}
+                style={{cursor:meal&&recipeObj?"pointer":"default",position:"relative",minHeight:70}}
+                onClick={()=>meal&&recipeObj&&onViewRecipe(recipeObj)}
+                title={meal?`${meal.name} — click to view, ↔ to swap`:"Empty slot"}
+              >
+                {meal
+                  ? <div className="msi">
+                      <div className="msem">{meal.emoji}</div>
+                      <div className="msn">{meal.name}</div>
+                      {onSlotSwap && <button
+                        style={{position:"absolute",top:3,right:3,fontSize:10,padding:"1px 5px",borderRadius:3,border:"1px solid var(--bor)",background:"rgba(255,255,255,.92)",cursor:"pointer",lineHeight:1.5,color:"var(--mu)",zIndex:5,fontWeight:600}}
+                        onClick={e=>{e.stopPropagation();onSlotSwap({dayIdx,mealIdx:mi,mealType});}}
+                        title="Replace this meal"
+                      >↔</button>}
+                    </div>
+                  : <div className="msadd" style={{fontSize:16}}>+</div>
+                }
+              </div>
+            );
+          })
+        ])}
+      </div>
+    </div>
+  );
+
+  // Sync draftTitle when draftPlan changes
+  React.useEffect(() => { if (draftPlan) setDraftTitle(draftPlan.title || ''); }, [draftPlan?.title]);
+
+  // ── Draft plan view (AI-generated or blank, pending save/copy) ───────────────
+  if (draftPlan) {
+    const { plan } = draftPlan;
+    const stats = getPlanStats(plan);
+    const draftEntry = { name: draftTitle, emoji: '✨' };
+    return (
+      <div>
+        {showShoppingList && <ShoppingListModal plan={plan} entry={draftEntry} onClose={()=>setShowShoppingList(null)}/>}
+        {showCopySafety && <CopySafetyModal plan={showCopySafety.plan} onClose={()=>setShowCopySafety(null)}/>}
+        <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:16,flexWrap:"wrap"}}>
+          <button className="btn btn-s btn-sm" onClick={()=>setDraftPlan(null)}>← Back to library</button>
+          <div style={{flex:1,minWidth:0,display:'flex',alignItems:'center',gap:8}}>
+            <span style={{fontSize:18,fontFamily:"var(--fd)"}}>✨</span>
+            <input
+              value={draftTitle}
+              onChange={e=>setDraftTitle(e.target.value)}
+              style={{flex:1,fontSize:17,fontWeight:700,fontFamily:"var(--fd)",border:'none',outline:'none',background:'transparent',color:'var(--ch)'}}
+              placeholder="Plan name…"
+            />
+          </div>
+          <span style={{fontSize:11,background:'rgba(192,106,62,.12)',color:'var(--clay)',padding:'3px 8px',borderRadius:4,fontWeight:700}}>DRAFT</span>
+        </div>
+        <div style={{display:"flex",gap:12,marginBottom:14,flexWrap:"wrap",alignItems:"center"}}>
+          <span style={{fontSize:13,color:"var(--sageH)",fontWeight:600}}>✅ {stats.pp}% pantry match</span>
+          <span style={{fontSize:13,color:"var(--mu)"}}>{stats.missingCount} to buy</span>
+          <span style={{fontSize:13,color:"var(--mu)"}}>{stats.mealCount} meals</span>
+          <span style={{fontSize:12,color:"var(--mu)",marginLeft:"auto"}}>Click meal to view · ↔ to swap</span>
+        </div>
+        {renderPlanGrid(plan, ({dayIdx,mealIdx,mealType})=>setPreviewSlotPicker({dayIdx,mealIdx,mealType,isDraft:true}))}
+        <div style={{display:"flex",gap:10,flexWrap:"wrap",marginTop:4}}>
+          <button className="btn btn-p" onClick={()=>{saveMyPlan(plan,draftTitle);setDraftPlan(null);}}>💾 Save to My Plans</button>
+          <button className="btn btn-s" onClick={()=>handleCopyRequest(plan)}>📋 Copy to my week</button>
+          <button className="btn btn-s" onClick={()=>setShowShoppingList({plan,entry:draftEntry})}>🛒 Shopping list</button>
+          <button className="btn btn-g btn-sm" style={{marginLeft:'auto'}} onClick={()=>setShowCreatePlan(true)}>🔄 Regenerate</button>
+        </div>
+        {showCreatePlan && <CreatePlanModal onClose={()=>setShowCreatePlan(false)} onDraft={(d)=>{setDraftPlan(d);setShowCreatePlan(false);}}/>}
+      </div>
+    );
+  }
+
+  // ── Preview view (library plan) ──────────────────────────────────────────────
   if (preview) {
     const { plan, entry } = preview;
     const stats = getPlanStats(plan);
@@ -22910,50 +23047,13 @@ function PlanLibraryTab({ allRecipes, mealPlan, setMealPlan, pantry, showToast, 
           <span style={{fontSize:13,color:"var(--sageH)",fontWeight:600}}>✅ {stats.pp}% pantry match</span>
           <span style={{fontSize:13,color:"var(--mu)"}}>{stats.missingCount} to buy</span>
           <span style={{fontSize:13,color:"var(--mu)"}}>{stats.mealCount} meals</span>
-          <span style={{fontSize:12,color:"var(--mu)",marginLeft:"auto"}}>Click a meal to view · ✏️ to swap</span>
+          <span style={{fontSize:12,color:"var(--mu)",marginLeft:"auto"}}>Click meal to view · ↔ to swap</span>
         </div>
-        {/* ── Planner-style grid (same CSS as Weekly Planner) ── */}
-        <div className="pwrap" style={{marginBottom:18}}>
-          <div style={{display:"grid",gridTemplateColumns:"60px repeat(7,1fr)",gap:6,minWidth:580}}>
-            <div/>
-            {plan.map(d=><div key={d.day} className="pdh">{d.day}</div>)}
-            {[["☀️","Breakfast",0],["🌤️","Lunch",1],["🌙","Dinner",2]].map(([icon,label,mi])=>[
-              <div key={label} style={{display:"flex",alignItems:"center",justifyContent:"flex-end",paddingRight:6}}>
-                <div className="prl" style={{fontSize:10,gap:3}}>{icon}<span style={{display:"none"}}>{label}</span></div>
-              </div>,
-              ...plan.map((day,dayIdx)=>{
-                const meal=day.meals[mi];
-                const mealType=label;
-                const recipeObj=meal?recipePool.find(r=>r.id===meal.id):null;
-                return (
-                  <div
-                    key={`${day.day}${label}`}
-                    className={`mslot ${meal?"filled":""}`}
-                    style={{cursor:meal&&recipeObj?"pointer":"default",position:"relative",minHeight:70}}
-                    onClick={()=>meal&&recipeObj&&onViewRecipe(recipeObj)}
-                    title={meal?`${meal.name} — click to view`:"Empty slot"}
-                  >
-                    {meal
-                      ? <div className="msi">
-                          <div className="msem">{meal.emoji}</div>
-                          <div className="msn">{meal.name}</div>
-                          <button
-                            style={{position:"absolute",top:3,right:3,fontSize:9,padding:"1px 4px",borderRadius:3,border:"1px solid var(--bor)",background:"rgba(255,255,255,.92)",cursor:"pointer",lineHeight:1.5,color:"var(--mu)",zIndex:5}}
-                            onClick={e=>{e.stopPropagation();setPreviewSlotPicker({dayIdx,mealIdx:mi,mealType});}}
-                            title="Swap this meal"
-                          >✏️</button>
-                        </div>
-                      : <div className="msadd" style={{fontSize:16}}>+</div>
-                    }
-                  </div>
-                );
-              })
-            ])}
-          </div>
-        </div>
+        {renderPlanGrid(plan, ({dayIdx,mealIdx,mealType})=>setPreviewSlotPicker({dayIdx,mealIdx,mealType}))}
         <div style={{display:"flex",gap:10,flexWrap:"wrap"}}>
           <button className="btn btn-p" onClick={()=>handleCopyRequest(plan)}>📋 Copy to my week</button>
           <button className="btn btn-s" onClick={()=>setShowShoppingList({plan,entry})}>🛒 Shopping list</button>
+          <button className="btn btn-s" onClick={()=>{saveMyPlan(plan,entry.name);setPreview(null);}}>💾 Save to My Plans</button>
         </div>
       </div>
     );
@@ -22964,7 +23064,7 @@ function PlanLibraryTab({ allRecipes, mealPlan, setMealPlan, pantry, showToast, 
     <div>
       {showShoppingList && <ShoppingListModal plan={showShoppingList.plan} entry={showShoppingList.entry} onClose={()=>setShowShoppingList(null)}/>}
       {showCopySafety && <CopySafetyModal plan={showCopySafety.plan} onClose={()=>setShowCopySafety(null)}/>}
-      {showCreatePlan && <CreatePlanModal onClose={()=>setShowCreatePlan(false)}/>}
+      {showCreatePlan && <CreatePlanModal onClose={()=>setShowCreatePlan(false)} onDraft={(d)=>{setDraftPlan(d);setShowCreatePlan(false);}}/>}
       <div style={{display:"flex",alignItems:"flex-start",justifyContent:"space-between",marginBottom:20,flexWrap:"wrap",gap:12}}>
         <div>
           <h1 className="stitle">Plan Library</h1>
@@ -22972,6 +23072,39 @@ function PlanLibraryTab({ allRecipes, mealPlan, setMealPlan, pantry, showToast, 
         </div>
         <button className="btn btn-p btn-sm" onClick={()=>setShowCreatePlan(true)}>✨ Create new plan</button>
       </div>
+
+      {/* ── My Plans section ─────────────────────────────────────────── */}
+      {savedPlans.length > 0 && (
+        <div style={{marginBottom:28}}>
+          <div style={{fontFamily:"var(--fd)",fontSize:16,fontWeight:700,marginBottom:12,color:"var(--ch)"}}>💾 My Plans</div>
+          <div className="plan-lib-grid">
+            {savedPlans.map(sp => {
+              const stats = getPlanStats(sp.plan);
+              return (
+                <div key={sp.id} className="plan-card" style={{background:'rgba(192,106,62,.04)',border:'1px solid rgba(192,106,62,.2)'}}>
+                  <div className="plan-card-emoji">{sp.emoji || '📋'}</div>
+                  <div className="plan-card-name">{sp.title}</div>
+                  <div className="plan-card-desc" style={{fontSize:11,color:'var(--mu)'}}>{new Date(sp.createdAt).toLocaleDateString()}</div>
+                  <div className="plan-card-stats">
+                    <span>✅ {stats.pp}% pantry</span>
+                    <span>🍽️ {stats.mealCount} meals</span>
+                  </div>
+                  <div style={{display:"flex",gap:6,marginTop:12,flexWrap:"wrap"}}>
+                    <button className="btn btn-s btn-sm" onClick={()=>setPreview({plan:sp.plan,entry:{emoji:sp.emoji||'📋',name:sp.title}})}>Preview</button>
+                    <button className="btn btn-p btn-sm" onClick={()=>handleCopyRequest(sp.plan)}>Copy to week</button>
+                    <button className="btn btn-g btn-sm" title="Shopping list" onClick={()=>setShowShoppingList({plan:sp.plan,entry:sp})}>🛒</button>
+                    <button className="btn btn-g btn-sm" style={{color:'var(--clay)',marginLeft:'auto'}} title="Delete plan" onClick={()=>{if(confirm(`Delete "${sp.title}"?`))deleteMyPlan(sp.id);}}>🗑</button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          <div style={{borderTop:'1px solid var(--bor)',marginTop:20,marginBottom:20}}/>
+        </div>
+      )}
+
+      {/* ── Pre-made library ─────────────────────────────────────────── */}
+      <div style={{fontFamily:"var(--fd)",fontSize:16,fontWeight:700,marginBottom:12,color:"var(--ch)"}}>📚 Pre-made Plans</div>
       <div className="plan-lib-grid">
         {PLAN_LIBRARY.map(entry => {
           const week = buildWeekFromFilter(entry.filter, recipePool);
@@ -24673,6 +24806,21 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
     });
   };
 
+  // Helper: build a recipe-like object from a pantry-generated meal slot
+  const getPantryRecipeObj = (mealId) => {
+    const m = String(mealId).match(/^pantry-(\d+)-/);
+    const t = m ? PANTRY_MEAL_TEMPLATES[parseInt(m[1])] : null;
+    if (!t) return null;
+    return {
+      id: mealId, title: t.name, emoji: t.emoji, time: t.time, diff: 'Easy',
+      cuisine: 'Pantry', dietary: [],
+      ingredients: [...(t.requires||[]).map(n=>({n})), ...(t.optionals||[]).map(n=>({n}))],
+      contains_meat: t.contains_meat||false, contains_fish: t.contains_fish||false,
+      contains_shellfish: false, contains_dairy: t.contains_dairy||false,
+      isPantryGenerated: true, missingCount: 0,
+    };
+  };
+
   const handleSlotClick = (dayIdx, mealIdx, mealType, meal) => {
     // Close any open popover first
     setSlotPopover(null);
@@ -24693,7 +24841,13 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
         setCustomMealModal({ dayIdx, mealIdx, dayLabel: mealPlan[dayIdx]?.day, mealType, existing: meal });
       } else {
         // Recipe meals: open RecipeDetail directly
-        const recipeObj = meal.id ? allRecipes.find(r => r.id === meal.id) : null;
+        // Pantry-generated meals have string IDs like "pantry-0-scrambled-eggs" — look up from templates
+        let recipeObj = null;
+        if (meal.id && String(meal.id).startsWith('pantry-')) {
+          recipeObj = getPantryRecipeObj(meal.id);
+        } else {
+          recipeObj = meal.id ? allRecipes.find(r => r.id === meal.id) : null;
+        }
         if (recipeObj) onViewRecipe(recipeObj);
       }
     } else {
@@ -25047,7 +25201,7 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
                 const dayIdx=mealPlan.indexOf(day);
                 const meal=day.meals[mi];
                 const slotKey=`${dayIdx}-${mi}`;
-                const recipeObj=meal&&meal.kind!=="custom"&&meal.id?allRecipes.find(r=>r.id===meal.id):null;
+                const recipeObj=meal&&meal.kind!=="custom"&&meal.id?(String(meal.id).startsWith('pantry-')?getPantryRecipeObj(meal.id):allRecipes.find(r=>r.id===meal.id)):null;
                 return(
                 <div
                   key={`${day.day}${mealType}`}
@@ -26077,19 +26231,28 @@ function FoldersView({ onBack, isGuest }) {
 function PrefsModal({ prefs, setPrefs, onClose }) {
   const [local,setLocal]=useState({...prefs});
   const toggle=(k,v)=>setLocal(p=>({...p,[k]:p[k].includes(v)?p[k].filter(x=>x!==v):[...p[k],v]}));
-  // Dietary mode is SINGLE-SELECT (exclusive)
+  // Dietary mode — MULTI-SELECT with conflict resolution
   const DIETARY_MODES = [
     {id:"Omnivore",    icon:"🍖", desc:"No restrictions"},
-    {id:"Pescatarian", icon:"🐟", desc:"Fish ok, no meat"},
+    {id:"Pescatarian", icon:"🐟", desc:"Fish ok, no land meat"},
     {id:"Vegetarian",  icon:"🥦", desc:"No meat or fish"},
     {id:"Vegan",       icon:"🌱", desc:"No animal products"},
-    {id:"Kosher",      icon:"🕎", desc:"Kosher certified"},
+    {id:"Kosher",      icon:"🕎", desc:"Stackable with any diet"},
   ];
-  const currentDietary = local.dietary[0] || "Omnivore";
-  const selectDietary = (id) => setLocal(p => ({
-    ...p,
-    dietary: id === "Omnivore" ? [] : [id]
-  }));
+  const activeDietary = local.dietary || [];
+  const isOmnivore = activeDietary.length === 0;
+  const toggleDietary = (id) => setLocal(p => {
+    const cur = p.dietary || [];
+    if (id === 'Omnivore') return {...p, dietary: []};
+    const isOn = cur.includes(id);
+    if (isOn) return {...p, dietary: cur.filter(x => x !== id)};
+    // Select — apply conflict rules (Pescatarian/Vegetarian/Vegan are mutually exclusive)
+    let next = [...cur, id];
+    if (id === 'Pescatarian') next = next.filter(x => x !== 'Vegetarian' && x !== 'Vegan');
+    if (id === 'Vegetarian')  next = next.filter(x => x !== 'Pescatarian' && x !== 'Vegan');
+    if (id === 'Vegan')       next = next.filter(x => x !== 'Pescatarian' && x !== 'Vegetarian');
+    return {...p, dietary: next};
+  });
   const C=["Italian","Japanese","Mediterranean","Mexican","Indian","French","Middle Eastern","Thai","Chinese","American"];
   const G=["Balanced","High protein","Low carb","Low calorie"];
   const SK=["Beginner","Intermediate","Advanced"];
@@ -26099,23 +26262,29 @@ function PrefsModal({ prefs, setPrefs, onClose }) {
         <div className="mhd"><div className="mtitle">Dietary Preferences</div><button className="mclose" onClick={onClose}><Ic n="x" s={16}/></button></div>
         <div className="mbody" style={{display:"flex",flexDirection:"column",gap:20}}>
           <div>
-            <label className="fl">Dietary Mode <span style={{fontSize:11,color:"var(--mu)",fontWeight:400}}>(select one)</span></label>
+            <label className="fl">Dietary Mode <span style={{fontSize:11,color:"var(--mu)",fontWeight:400}}>(mix &amp; match — Kosher stacks with any)</span></label>
             <div style={{display:"flex",flexWrap:"wrap",gap:8,marginTop:6}}>
-              {DIETARY_MODES.map(m=>(
-                <button key={m.id}
-                  onClick={()=>selectDietary(m.id)}
-                  style={{padding:"8px 14px",borderRadius:8,border:`1.5px solid ${currentDietary===m.id?"var(--clay)":"var(--bor)"}`,background:currentDietary===m.id?"var(--clayBg)":"var(--white)",cursor:"pointer",textAlign:"left",transition:"all .15s"}}>
-                  <div style={{fontSize:13,fontWeight:600,color:currentDietary===m.id?"var(--clay)":"var(--ch)"}}>{m.icon} {m.id}</div>
-                  <div style={{fontSize:11,color:"var(--mu)",marginTop:2}}>{m.desc}</div>
-                </button>
-              ))}
+              {DIETARY_MODES.map(m=>{
+                const isActive = m.id==='Omnivore' ? isOmnivore : activeDietary.includes(m.id);
+                return (
+                  <button key={m.id}
+                    onClick={()=>toggleDietary(m.id)}
+                    style={{padding:"8px 14px",borderRadius:8,border:`1.5px solid ${isActive?"var(--clay)":"var(--bor)"}`,background:isActive?"var(--clayBg)":"var(--white)",cursor:"pointer",textAlign:"left",transition:"all .15s"}}>
+                    <div style={{fontSize:13,fontWeight:600,color:isActive?"var(--clay)":"var(--ch)"}}>{m.icon} {m.id}</div>
+                    <div style={{fontSize:11,color:"var(--mu)",marginTop:2}}>{m.desc}</div>
+                  </button>
+                );
+              })}
             </div>
-            {currentDietary==="Kosher"&&<div style={{marginTop:10,background:"var(--clayBg)",border:"1px solid rgba(192,106,62,.2)",borderRadius:"var(--rs)",padding:12}}>
+            {activeDietary.includes("Kosher")&&<div style={{marginTop:10,background:"var(--clayBg)",border:"1px solid rgba(192,106,62,.2)",borderRadius:"var(--rs)",padding:12}}>
               <div className="togrow"><span style={{fontSize:13,fontWeight:500}}>🕎 Strict separation mode</span><button className={`tog ${local.strictKosher?"on":""}`} onClick={()=>setLocal(p=>({...p,strictKosher:!p.strictKosher}))}/></div>
               <div style={{fontSize:11,color:"var(--mu)",marginTop:4}}>Full meat/dairy separation. Excludes any unlabelled recipes.</div>
             </div>}
-            {currentDietary==="Pescatarian"&&<div style={{marginTop:8,padding:"8px 12px",background:"rgba(100,140,200,.06)",border:"1px solid rgba(100,140,200,.2)",borderRadius:8,fontSize:12,color:"var(--mu)"}}>
-              🐟 Fish and shellfish recipes will be included. Land meat (chicken, beef, pork) will be excluded.
+            {activeDietary.includes("Pescatarian")&&<div style={{marginTop:8,padding:"8px 12px",background:"rgba(100,140,200,.06)",border:"1px solid rgba(100,140,200,.2)",borderRadius:8,fontSize:12,color:"var(--mu)"}}>
+              🐟 Fish and shellfish included. Land meat (chicken, beef, pork) excluded.
+            </div>}
+            {activeDietary.includes("Vegan")&&<div style={{marginTop:8,padding:"8px 12px",background:"rgba(80,160,80,.06)",border:"1px solid rgba(80,160,80,.2)",borderRadius:8,fontSize:12,color:"var(--mu)"}}>
+              🌱 Fully plant-based — no meat, fish, or dairy.
             </div>}
           </div>
           <div><label className="fl">Favorite Cuisines</label><div className="mopts">{C.map(c=><button key={c} className={`mopt ${local.cuisines.includes(c)?"sel":""}`} onClick={()=>toggle("cuisines",c)}>{c}</button>)}</div></div>
