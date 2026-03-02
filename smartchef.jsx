@@ -475,6 +475,37 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
   .land-nav{padding:14px 20px}.price-cards{grid-template-columns:1fr}
   .land-stats{gap:24px;flex-wrap:wrap}.land-footer{flex-direction:column;gap:8px;text-align:center}
 }
+/* ── RECIPE CARD POPOVER ── */
+.card{position:relative}
+.card-dot-btn{position:absolute;top:8px;right:8px;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.92);border:1px solid var(--bor);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;z-index:10;color:var(--ch);box-shadow:0 1px 4px rgba(0,0,0,.1);transition:background .15s;line-height:1}
+.card-dot-btn:hover{background:#fff}
+.card-popover{position:absolute;top:40px;right:8px;background:var(--white);border:1px solid var(--bor);border-radius:var(--r);box-shadow:0 4px 20px rgba(0,0,0,.13);z-index:200;min-width:176px;overflow:hidden}
+.card-pop-item{display:flex;align-items:center;gap:10px;padding:10px 14px;font-size:13px;font-weight:500;cursor:pointer;color:var(--ch);border:none;background:none;width:100%;text-align:left;transition:background .1s}
+.card-pop-item:hover{background:var(--cream)}
+.card-pop-divider{height:1px;background:var(--bor)}
+/* ── STICKY RECIPE CONTROLS ── */
+.recipe-controls-sticky{position:sticky;top:0;z-index:40;background:var(--bg);padding:12px 0 8px;border-bottom:1px solid var(--bor);margin-bottom:12px}
+/* ── ADD TO WEEK MODAL ── */
+.atw-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.atw-grid{display:grid;grid-template-columns:auto repeat(7,1fr);gap:4px;min-width:500px}
+.atw-day-hdr{font-size:10px;font-weight:700;text-align:center;color:var(--mu);text-transform:uppercase;letter-spacing:.3px;padding:4px 2px}
+.atw-slot{border-radius:6px;border:1.5px solid var(--bor);background:var(--cream);padding:5px 4px;text-align:center;cursor:pointer;transition:all .15s;min-height:50px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.atw-slot:hover{border-color:var(--clay);background:var(--clayBg)}
+.atw-slot.occupied{background:rgba(106,158,114,.08);border-color:rgba(106,158,114,.3)}
+.atw-slot.occupied:hover{border-color:var(--clay);background:var(--clayBg)}
+.atw-slot.empty-slot{background:var(--white)}
+.atw-slot-em{font-size:13px}
+.atw-slot-nm{font-size:9px;color:var(--mu);line-height:1.2;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;max-width:100%}
+.atw-row-lbl{font-size:10px;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.3px;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;white-space:nowrap}
+/* ── PLAN LIBRARY ── */
+.plan-lib-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;margin-top:16px}
+.plan-card{background:var(--white);border:1px solid var(--bor);border-radius:var(--r);padding:20px;transition:border-color .15s,box-shadow .15s}
+.plan-card:hover{border-color:var(--clay);box-shadow:0 2px 12px rgba(0,0,0,.07)}
+.plan-card-emoji{font-size:32px;margin-bottom:8px}
+.plan-card-name{font-family:var(--fd);font-size:17px;margin-bottom:4px}
+.plan-card-desc{font-size:13px;color:var(--mu);margin-bottom:12px;line-height:1.5}
+.plan-card-stats{display:flex;gap:12px;font-size:12px;color:var(--mu);padding-top:10px;border-top:1px solid var(--bor);flex-wrap:wrap}
+
 `;
 
 /* ── ICONS ── */
@@ -21295,6 +21326,14 @@ export default function App() {
   const [avoidedIngredients, setAvoidedIngredients] = useState([]); // normalized ingredient names
   const [publishedMenus, setPublishedMenus] = useState([]); // user's published weekly menus
   const [collections, setCollections] = useState([{id:"saved",name:"Saved",emoji:"🔖",items:[]}]); // recipe/menu collections
+  // Lifted HomeTab filter state — persists across recipe opens and tab switches
+  const [homeFilter, setHomeFilter] = useState("All");
+  const [homeSearch, setHomeSearch] = useState("");
+  const [homeSortMode, setHomeSortMode] = useState("default");
+  const [homeCuisineFilter, setHomeCuisineFilter] = useState("all");
+  const [homeMealCat, setHomeMealCat] = useState("All"); // Breakfast/Lunch/Dinner/Snacks/All
+  // Add-to-week flow state
+  const [addToWeekRecipe, setAddToWeekRecipe] = useState(null);
 
   const isPremium = subscription.isPremium;
 
@@ -21555,7 +21594,9 @@ export default function App() {
   if (screen==="signup")    return <SignupScreen onBack={()=>setScreen("welcome")} onLogin={login} onSwitch={()=>setScreen("login")} />;
   if (screen==="onboarding") return <Onboarding onDone={items=>{setPantry(items);setScreen("main");}} onSkip={()=>setScreen("main")} />;
 
-  if (viewRecipe) return <RecipeDetail recipe={viewRecipe} saved={saved.has(viewRecipe.id)} onSave={()=>toggleSave(viewRecipe.id)} onBack={()=>setViewRecipe(null)} onAddToList={m=>addToList(m)} pantry={pantry} setPantry={setPantry} isRecipeSaved={isRecipeSaved} favFolders={favFolders} favItems={favItems} saveToFolder={saveToFolder} createFavFolder={createFavFolder} removeFromAllFolders={removeFromAllFolders} showToast={showToast} avoidedIngredients={avoidedIngredients} setAvoidedIngredients={setAvoidedIngredients} />;
+  if (viewRecipe) return <><RecipeDetail recipe={viewRecipe} saved={saved.has(viewRecipe.id)} onSave={()=>toggleSave(viewRecipe.id)} onBack={()=>setViewRecipe(null)} onAddToList={m=>addToList(m)} pantry={pantry} setPantry={setPantry} isRecipeSaved={isRecipeSaved} favFolders={favFolders} favItems={favItems} saveToFolder={saveToFolder} createFavFolder={createFavFolder} removeFromAllFolders={removeFromAllFolders} showToast={showToast} avoidedIngredients={avoidedIngredients} setAvoidedIngredients={setAvoidedIngredients} onAddToWeek={setAddToWeekRecipe} mealPlan={mealPlan} setMealPlan={setMealPlan} />{addToWeekRecipe&&<AddToWeekModal recipe={addToWeekRecipe} mealPlan={mealPlan} setMealPlan={setMealPlan} onClose={()=>setAddToWeekRecipe(null)} showToast={showToast}/>}</>;
+
+  const onAddToWeek = (recipe) => setAddToWeekRecipe(recipe);
 
   const tp = {
     tab,setTab,pantry,setPantry,shopping,setShopping,saved,toggleSave,mealPlan,setMealPlan,
@@ -21568,6 +21609,12 @@ export default function App() {
     avoidedIngredients, setAvoidedIngredients,
     publishedMenus, setPublishedMenus,
     collections, setCollections,
+    // Lifted HomeTab filter state (persists navigation)
+    homeFilter, setHomeFilter, homeSearch, setHomeSearch,
+    homeSortMode, setHomeSortMode, homeCuisineFilter, setHomeCuisineFilter,
+    homeMealCat, setHomeMealCat,
+    // Add-to-week
+    onAddToWeek,
   };
 
   return (
@@ -21589,6 +21636,7 @@ export default function App() {
           {tab==="shopping"  && <ShoppingListTab {...tp} pantry={pantry} mealPlan={mealPlan} />}
           {tab==="chat"      && <ChatTab      {...tp} pantry={pantry} prefs={prefs} addToList={addToList} />}
           {tab==="planner"   && <PlannerTab   {...tp} shopping={shopping} prefs={prefs} pantry={pantry} />}
+          {tab==="plans"     && <PlanLibraryTab {...tp} />}
           {tab==="profile"   && <ProfileTab   {...tp} />}
           {/* TODO [ROADMAP]: CommunityTab removed from active nav — code retained as stub */}
         </div>
@@ -21596,6 +21644,7 @@ export default function App() {
       {showUpgrade && <UpgradeModal reason={showUpgrade} onClose={()=>setShowUpgrade(null)} onActivate={activatePremium} />}
       {showSaveFav && <SaveFavModal recipe={showSaveFav} favFolders={favFolders} favItems={favItems} onSave={saveToFolder} onClose={()=>setShowSaveFav(null)} onCreateFolder={createFavFolder}/>}
       {toastMsg && <div className="toast-wrap"><div className="toast">{toastMsg.msg}</div></div>}
+      {addToWeekRecipe && <AddToWeekModal recipe={addToWeekRecipe} mealPlan={mealPlan} setMealPlan={setMealPlan} onClose={()=>setAddToWeekRecipe(null)} showToast={showToast}/>}
     </div>
   );
 }
@@ -21609,6 +21658,7 @@ function Sidebar({ tab, setTab, user, isGuest, onLogout, isPremium, onUpgrade })
     {id:"shopping",label:"Shopping List",icon:"cart"},
     {id:"chat",label:"Chef AI",icon:"chat",premium:true},
     {id:"planner",label:"Planner",icon:"cal"},
+    {id:"plans",label:"Plan Library",icon:"list"},
     // TODO [ROADMAP]: Community tab — social features (published menus, community feed). Frozen.
     {id:"profile",label:"Profile",icon:"user"}
   ];
@@ -21986,17 +22036,28 @@ function Onboarding({ onDone, onSkip }) {
 }
 
 /* ── HOME TAB ── */
-function HomeTab({ isGuest, saved, toggleSave, onViewRecipe, pantry, addToList, isPremium, onUpgrade, onSaveFav, isRecipeSaved, allRecipes, avoidedIngredients }) {
-  const [filter,setFilter]=useState("All");
-  const [search,setSearch]=useState("");
+function HomeTab({ isGuest, saved, toggleSave, onViewRecipe, pantry, addToList, isPremium, onUpgrade, onSaveFav, isRecipeSaved, allRecipes, avoidedIngredients,
+  homeFilter, setHomeFilter, homeSearch, setHomeSearch, homeSortMode, setHomeSortMode,
+  homeCuisineFilter, setHomeCuisineFilter, homeMealCat, setHomeMealCat, onAddToWeek }) {
+  // Lifted state from App — persists across recipe navigation
+  const [filter, setFilter_] = [homeFilter || "All", setHomeFilter || (()=>{})];
+  const setFilter = setHomeFilter || (()=>{});
+  const [search, setSearch_] = [homeSearch || "", setHomeSearch || (()=>{})];
+  const setSearch = setHomeSearch || (()=>{});
+  const [sortMode, setSortMode_] = [homeSortMode || "default", setHomeSortMode || (()=>{})];
+  const setSortMode = setHomeSortMode || (()=>{});
+  const [cuisineFilter, setCuisineFilter_] = [homeCuisineFilter || "all", setHomeCuisineFilter || (()=>{})];
+  const setCuisineFilter = setHomeCuisineFilter || (()=>{});
+  const [mealCat, setMealCat_] = [homeMealCat || "All", setHomeMealCat || (()=>{})];
+  const setMealCat = setHomeMealCat || (()=>{});
   const [showRandom,setShowRandom]=useState(false);
   const [cookNow,setCookNow]=useState(false);
   const [pantryPerfect,setPantryPerfect]=useState(false);
   const [ppCollapsed,setPpCollapsed]=useState({1:false,2:false,3:false});
-  const [sortMode,setSortMode]=useState("default"); // default | pantry | quick | random
   const [randomSeed,setRandomSeed]=useState(()=>Date.now());
-  const [cuisineFilter,setCuisineFilter]=useState("all");
-  const FILTERS=["All","Quick","Vegetarian","Vegan","High Pantry","Breakfast","My Recipes"];
+  // Meal category filter chips
+  const MEAL_CATS = ["All","Breakfast","Lunch","Dinner","Snacks"];
+  const FILTERS=["All","Quick","Vegetarian","Vegan","High Pantry","My Recipes"];
 
   // Detect if search looks like an ingredient query (not just recipe title)
   const searchQ = search.trim().toLowerCase();
@@ -22025,7 +22086,11 @@ function HomeTab({ isGuest, saved, toggleSave, onViewRecipe, pantry, addToList, 
     if(filter==="Vegetarian"&&!r.dietary.includes("Vegetarian"))return false;
     if(filter==="Vegan"&&!r.dietary.includes("Vegan"))return false;
     if(filter==="High Pantry"&&r.pp<80)return false;
-    if(filter==="Breakfast"&&getMealType(r)!=="breakfast")return false;
+    // Meal category filter chip (separate from old Breakfast filter chip)
+    if(mealCat==="Breakfast"&&getMealType(r)!=="breakfast")return false;
+    if(mealCat==="Lunch"&&getMealType(r)!=="lunch")return false;
+    if(mealCat==="Dinner"&&getMealType(r)!=="dinner")return false;
+    if(mealCat==="Snacks"&&getMealType(r)!=="snack")return false;
     // Cuisine filter
     if(cuisineFilter!=="all"&&r.cuisine!==cuisineFilter)return false;
     // Search: match title OR ingredients
@@ -22114,33 +22179,44 @@ function HomeTab({ isGuest, saved, toggleSave, onViewRecipe, pantry, addToList, 
         <div><h1 className="stitle">Recipe Feed</h1><p className="ssub">Matched to your pantry · {isPremium?RECIPES.length:FREE_RECIPE_LIMIT} of {RECIPES.length} recipes available{!isPremium&&<span style={{color:"var(--clay)",fontWeight:600,marginLeft:6,cursor:"pointer"}} onClick={()=>onUpgrade("recipes")}>Unlock all →</span>}</p></div>
         <button className="btn btn-gs" onClick={()=>setShowRandom(true)} style={{flexShrink:0}}><Ic n="shuffle" s={16}/>Random Plate</button>
       </div>
-      <div style={{display:"flex",gap:12,marginBottom:12,flexWrap:"wrap"}}>
-        <div className="sw" style={{flex:1,minWidth:200}}><div className="si"><Ic n="list" s={16}/></div><input className="sin" placeholder="Search recipes or ingredients…" value={search} onChange={e=>setSearch(e.target.value)}/></div>
-        <select className="sel" value={cuisineFilter} onChange={e=>setCuisineFilter(e.target.value)} style={{width:"auto",padding:"8px 12px",fontSize:13,height:40,borderRadius:"var(--rs)"}}>
-          {allCuisines.map(c=><option key={c} value={c}>{c==="all"?"All cuisines":c}</option>)}
-        </select>
-        <select className="sel" value={sortMode} onChange={e=>{setSortMode(e.target.value);if(e.target.value==="random")setRandomSeed(Date.now());}} style={{width:"auto",padding:"8px 12px",fontSize:13,height:40,borderRadius:"var(--rs)"}}>
-          <option value="default">Default order</option>
-          <option value="pantry">Best pantry match</option>
-          <option value="quick">Quickest first</option>
-          <option value="random">Random shuffle</option>
-        </select>
-        {sortMode==="random"&&<button className="btn btn-gs btn-sm" title="Shuffle again" onClick={()=>setRandomSeed(Date.now())}>🔀 Shuffle</button>}
-      </div>
-      <div style={{display:"flex",gap:8,marginBottom:16,flexWrap:"wrap",alignItems:"center"}}>
-        {FILTERS.map(f=><button key={f} className={`cchip ${filter===f?"ac":""}`} onClick={()=>setFilter(f)}>{f}</button>)}
-        <button
-          className={`cchip ${cookNow?"ac":""}`}
-          title="Show recipes you can cook with your pantry first. Then we show recipes missing 1, 2, 3… ingredients."
-          onClick={()=>{setCookNow(v=>!v);setPantryPerfect(false);}}
-          style={cookNow ? {background:'var(--sageBg)',color:'var(--sageH)',borderColor:'var(--sage)'} : {}}
-        >🥗 Cook now</button>
-        <button
-          className={`cchip ${pantryPerfect?"ac":""}`}
-          title="Show Pantry Perfect first, then near-misses grouped by how many ingredients you're missing."
-          onClick={()=>{setPantryPerfect(v=>!v);setCookNow(false);}}
-          style={pantryPerfect ? {background:'rgba(106,158,114,.18)',color:'var(--sageH)',borderColor:'var(--sage)'} : {}}
-        >✅ Pantry Perfect</button>
+      {/* ── STICKY CONTROLS WRAPPER ── */}
+      <div className="recipe-controls-sticky">
+        {/* Row 1: Search + Cuisine + Sort */}
+        <div style={{display:"flex",gap:10,marginBottom:10,flexWrap:"wrap"}}>
+          <div className="sw" style={{flex:1,minWidth:180}}><div className="si"><Ic n="list" s={16}/></div><input className="sin" placeholder="Search recipes or ingredients…" value={search} onChange={e=>setSearch(e.target.value)}/></div>
+          <select className="sel" value={cuisineFilter} onChange={e=>setCuisineFilter(e.target.value)} style={{width:"auto",padding:"8px 12px",fontSize:13,height:40,borderRadius:"var(--rs)"}}>
+            {allCuisines.map(c=><option key={c} value={c}>{c==="all"?"All cuisines":c}</option>)}
+          </select>
+          <select className="sel" value={sortMode} onChange={e=>{setSortMode(e.target.value);if(e.target.value==="random")setRandomSeed(Date.now());}} style={{width:"auto",padding:"8px 12px",fontSize:13,height:40,borderRadius:"var(--rs)"}}>
+            <option value="default">Default order</option>
+            <option value="pantry">Best pantry match</option>
+            <option value="quick">Quickest first</option>
+            <option value="random">Random shuffle</option>
+          </select>
+          {sortMode==="random"&&<button className="btn btn-gs btn-sm" title="Shuffle again" onClick={()=>setRandomSeed(Date.now())}>🔀 Shuffle</button>}
+        </div>
+        {/* Row 2: Meal category chips */}
+        <div style={{display:"flex",gap:6,marginBottom:8,flexWrap:"wrap",alignItems:"center"}}>
+          {MEAL_CATS.map(cat=>(
+            <button key={cat} className={`cchip ${mealCat===cat?"ac":""}`} onClick={()=>setMealCat(cat)}>{cat}</button>
+          ))}
+        </div>
+        {/* Row 3: Style filters + pantry modes */}
+        <div style={{display:"flex",gap:8,flexWrap:"wrap",alignItems:"center"}}>
+          {FILTERS.map(f=><button key={f} className={`cchip ${filter===f?"ac":""}`} onClick={()=>setFilter(f)}>{f}</button>)}
+          <button
+            className={`cchip ${cookNow?"ac":""}`}
+            title="Show recipes you can cook with your pantry first."
+            onClick={()=>{setCookNow(v=>!v);setPantryPerfect(false);}}
+            style={cookNow ? {background:'var(--sageBg)',color:'var(--sageH)',borderColor:'var(--sage)'} : {}}
+          >🥗 Cook now</button>
+          <button
+            className={`cchip ${pantryPerfect?"ac":""}`}
+            title="Show Pantry Perfect first, then near-misses grouped by missing ingredients."
+            onClick={()=>{setPantryPerfect(v=>!v);setCookNow(false);}}
+            style={pantryPerfect ? {background:'rgba(106,158,114,.18)',color:'var(--sageH)',borderColor:'var(--sage)'} : {}}
+          >✅ Pantry Perfect</button>
+        </div>
       </div>
       {/* ── Ingredient search label + suggestion chips ── */}
       {isIngSearch && searchQ && (
@@ -22186,7 +22262,7 @@ function HomeTab({ isGuest, saved, toggleSave, onViewRecipe, pantry, addToList, 
                           {group.map(r => {
                             // In "Cook now" section hide missing text; in others use live-computed list
                             const rDisp = {...r, missing: k===0 ? [] : r._mn};
-                            return <RecipeCard key={r.id} r={rDisp} saved={isRecipeSaved?isRecipeSaved(r):saved.has(r.id)} onSave={()=>onSaveFav?onSaveFav(r):toggleSave(r.id)} onView={()=>onViewRecipe(r)} addToList={addToList} pantry={pantry}/>;
+                            return <RecipeCard key={r.id} r={rDisp} saved={isRecipeSaved?isRecipeSaved(r):saved.has(r.id)} onSave={()=>onSaveFav?onSaveFav(r):toggleSave(r.id)} onView={()=>onViewRecipe(r)} addToList={addToList} pantry={pantry} onAddToWeek={onAddToWeek}/>;
                           })}
                         </div>
                       </div>
@@ -22235,7 +22311,7 @@ function HomeTab({ isGuest, saved, toggleSave, onViewRecipe, pantry, addToList, 
                     {group.map(r=>{
                       const rDisp = {...r, missing: k===0?[]:r._mn};
                       const ingMatchLabel = r._ingMatch && searchQ ? <span style={{fontSize:10,color:"var(--clay)",fontWeight:600,display:"block",marginTop:2}}>Includes: {searchQ}</span> : null;
-                      return <RecipeCard key={r.id} r={rDisp} saved={isRecipeSaved?isRecipeSaved(r):saved.has(r.id)} onSave={()=>onSaveFav?onSaveFav(r):toggleSave(r.id)} onView={()=>onViewRecipe(r)} addToList={addToList} pantry={pantry}/>;
+                      return <RecipeCard key={r.id} r={rDisp} saved={isRecipeSaved?isRecipeSaved(r):saved.has(r.id)} onSave={()=>onSaveFav?onSaveFav(r):toggleSave(r.id)} onView={()=>onViewRecipe(r)} addToList={addToList} pantry={pantry} onAddToWeek={onAddToWeek}/>;
                     })}
                   </div>}
                 </div>
@@ -22260,7 +22336,7 @@ function HomeTab({ isGuest, saved, toggleSave, onViewRecipe, pantry, addToList, 
             {filtered.length===0?<div className="empty"><div className="eic">🍽️</div><div className="etitle">No recipes found</div><div className="esub">Try a different filter or add more pantry items.</div></div>
               :visibleRecipes.map(r=>{
                 const ingMatchLabel = r._ingMatch && searchQ ? <span style={{fontSize:10,color:"var(--clay)",fontWeight:600,display:"block",marginTop:2}}>Includes: {searchQ}</span> : null;
-                return <RecipeCard key={r.id} r={r} saved={isRecipeSaved?isRecipeSaved(r):saved.has(r.id)} onSave={()=>onSaveFav?onSaveFav(r):toggleSave(r.id)} onView={()=>onViewRecipe(r)} addToList={addToList} pantry={pantry}/>;
+                return <RecipeCard key={r.id} r={r} saved={isRecipeSaved?isRecipeSaved(r):saved.has(r.id)} onSave={()=>onSaveFav?onSaveFav(r):toggleSave(r.id)} onView={()=>onViewRecipe(r)} addToList={addToList} pantry={pantry} onAddToWeek={onAddToWeek}/>;
               })}
           </div>
           {lockedCount>0&&(
@@ -22296,7 +22372,277 @@ function HomeTab({ isGuest, saved, toggleSave, onViewRecipe, pantry, addToList, 
   );
 }
 
-function RecipeCard({ r, saved, onSave, onView, addToList, inFav, pantry }) {
+
+// ══════════════════════════════════════════════════════════════════════
+// ADD TO WEEK MODAL — Pick day + meal slot to add a recipe to planner
+// ══════════════════════════════════════════════════════════════════════
+function AddToWeekModal({ recipe, mealPlan, setMealPlan, onClose, showToast }) {
+  const DAYS = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+  const MEALS = [
+    { label:"Breakfast", emoji:"☀️", idx:0 },
+    { label:"Lunch",     emoji:"🌤️", idx:1 },
+    { label:"Dinner",    emoji:"🌙", idx:2 },
+  ];
+  const [confirmSlot, setConfirmSlot] = useState(null); // {dayIdx,mealIdx,existing}
+
+  const handleSlotClick = (dayIdx, mealIdx) => {
+    const existing = mealPlan[dayIdx]?.meals[mealIdx];
+    if (existing) {
+      setConfirmSlot({ dayIdx, mealIdx, existing });
+    } else {
+      applyToSlot(dayIdx, mealIdx);
+    }
+  };
+
+  const applyToSlot = (dayIdx, mealIdx) => {
+    setMealPlan(prev => {
+      const next = prev.map(d => ({ ...d, meals: [...d.meals] }));
+      next[dayIdx].meals[mealIdx] = { kind:"recipe", emoji: recipe.emoji, name: recipe.title, id: recipe.id };
+      return next;
+    });
+    if (showToast) showToast(`✅ ${recipe.emoji} ${recipe.title} added to ${DAYS[dayIdx]} ${MEALS[mealIdx].label}`);
+    onClose();
+  };
+
+  return (
+    <div className="modal-overlay" onClick={e=>e.target===e.currentTarget&&onClose()}>
+      <div className="modal-box" onClick={e=>e.stopPropagation()} style={{maxWidth:600,width:"95vw"}}>
+        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:16}}>
+          <div>
+            <div style={{fontWeight:700,fontSize:15}}>📅 Add to Week</div>
+            <div style={{fontSize:12,color:"var(--mu)",marginTop:2}}>{recipe.emoji} {recipe.title} — pick a slot</div>
+          </div>
+          <button className="btn btn-xs btn-g" onClick={onClose}>✕</button>
+        </div>
+        {/* Confirm replace prompt */}
+        {confirmSlot && (
+          <div style={{marginBottom:14,padding:"12px 14px",background:"rgba(201,149,58,.08)",border:"1px solid rgba(201,149,58,.3)",borderRadius:8}}>
+            <div style={{fontSize:13,fontWeight:600,marginBottom:8}}>
+              🔄 Replace "{confirmSlot.existing?.name || confirmSlot.existing?.title}" with "{recipe.title}"?
+            </div>
+            <div style={{display:"flex",gap:8}}>
+              <button className="btn btn-p btn-sm" onClick={()=>{applyToSlot(confirmSlot.dayIdx,confirmSlot.mealIdx);setConfirmSlot(null);}}>Replace</button>
+              <button className="btn btn-s btn-sm" onClick={()=>setConfirmSlot(null)}>Cancel</button>
+            </div>
+          </div>
+        )}
+        <div className="atw-scroll">
+          <div className="atw-grid">
+            {/* Header row */}
+            <div/>
+            {DAYS.map(d=><div key={d} className="atw-day-hdr">{d}</div>)}
+            {/* Meal rows */}
+            {MEALS.map(meal=>(
+              <React.Fragment key={meal.idx}>
+                <div className="atw-row-lbl">{meal.emoji} {meal.label}</div>
+                {mealPlan.map((day, dayIdx) => {
+                  const slot = day.meals[meal.idx];
+                  const isOccupied = !!slot;
+                  return (
+                    <div
+                      key={dayIdx}
+                      className={`atw-slot ${isOccupied ? "occupied" : "empty-slot"}`}
+                      onClick={()=>handleSlotClick(dayIdx, meal.idx)}
+                    >
+                      {isOccupied ? (
+                        <>
+                          <div className="atw-slot-em">{slot.emoji||"📝"}</div>
+                          <div className="atw-slot-nm">{slot.name||slot.title}</div>
+                        </>
+                      ) : (
+                        <div style={{fontSize:18,color:"var(--bor)"}}>+</div>
+                      )}
+                    </div>
+                  );
+                })}
+              </React.Fragment>
+            ))}
+          </div>
+        </div>
+        <div style={{marginTop:12,fontSize:11,color:"var(--mu)"}}>
+          Green slots are already filled — click to replace. White slots are empty.
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// PLAN LIBRARY TAB — Pre-made weekly menus from SmartChef
+// ══════════════════════════════════════════════════════════════════════
+const PLAN_LIBRARY = [
+  {
+    id:"quick-week",
+    emoji:"⚡",
+    name:"30-Min Meals Week",
+    desc:"Every meal under 30 minutes — zero stress, full flavour",
+    filter: r => r.time <= 30,
+    color:"rgba(201,149,58,.08)",
+    border:"rgba(201,149,58,.3)",
+  },
+  {
+    id:"protein-week",
+    emoji:"💪",
+    name:"High-Protein Week",
+    desc:"Lean proteins and muscle-building meals for an active week",
+    filter: r => r.contains_meat || r.contains_fish ||
+      (r.ingredients||[]).some(i=>['egg','chicken','tuna','salmon','tofu','lentil','chickpea'].some(p=>i.n.toLowerCase().includes(p))),
+    color:"rgba(192,106,62,.07)",
+    border:"rgba(192,106,62,.25)",
+  },
+  {
+    id:"veg-week",
+    emoji:"🌱",
+    name:"Vegetarian Week",
+    desc:"A full week of satisfying meat-free meals",
+    filter: r => r.dietary && r.dietary.includes("Vegetarian"),
+    color:"rgba(106,158,114,.08)",
+    border:"rgba(106,158,114,.3)",
+  },
+  {
+    id:"budget-week",
+    emoji:"💰",
+    name:"Budget Week",
+    desc:"Hearty meals with ≤6 ingredients, ready in under 35 minutes",
+    filter: r => (r.ingredients||[]).length <= 6 && r.time <= 35,
+    color:"rgba(106,158,114,.06)",
+    border:"rgba(106,158,114,.2)",
+  },
+  {
+    id:"med-week",
+    emoji:"🫒",
+    name:"Mediterranean Week",
+    desc:"Sun-kissed flavours from Italy, Greece, and beyond",
+    filter: r => ["Mediterranean","Italian","Greek","Turkish","Spanish","Lebanese","Moroccan"].includes(r.cuisine),
+    color:"rgba(100,140,200,.07)",
+    border:"rgba(100,140,200,.25)",
+  },
+  {
+    id:"comfort-week",
+    emoji:"🍲",
+    name:"Comfort Food Week",
+    desc:"Warm, hearty meals for cozy evenings",
+    filter: r => r.time >= 30 && !r.dietary?.includes("Vegan"),
+    color:"rgba(180,100,80,.07)",
+    border:"rgba(180,100,80,.22)",
+  },
+];
+
+function buildWeekFromFilter(filterFn, allRecipes) {
+  // Build a 7-day plan using recipes matching the filter
+  // One breakfast, lunch, dinner per day, no repeats
+  const allowed = (allRecipes || RECIPES).filter(r => filterFn(r));
+  const breakfasts = allowed.filter(r => getMealType(r) === "breakfast");
+  const lunches    = allowed.filter(r => getMealType(r) === "lunch");
+  const dinners    = allowed.filter(r => getMealType(r) === "dinner");
+  // Shuffle each pool deterministically using index
+  const pick = (pool, i) => pool[i % Math.max(pool.length, 1)];
+  const DAYS = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+  return DAYS.map((day, i) => ({
+    day,
+    meals: [
+      breakfasts[i % Math.max(breakfasts.length,1)] ? { kind:"recipe", emoji:pick(breakfasts,i).emoji, name:pick(breakfasts,i).title, id:pick(breakfasts,i).id } : null,
+      lunches[i % Math.max(lunches.length,1)]       ? { kind:"recipe", emoji:pick(lunches,i).emoji,    name:pick(lunches,i).title,    id:pick(lunches,i).id }    : null,
+      dinners[i % Math.max(dinners.length,1)]       ? { kind:"recipe", emoji:pick(dinners,i).emoji,    name:pick(dinners,i).title,    id:pick(dinners,i).id }    : null,
+    ],
+  }));
+}
+
+function PlanLibraryTab({ allRecipes, mealPlan, setMealPlan, pantry, showToast, onViewRecipe }) {
+  const [preview, setPreview] = useState(null); // { plan, libraryEntry }
+  const recipePool = allRecipes || RECIPES;
+  const pantrySet = React.useMemo(() => buildPantrySet(pantry || []), [pantry]);
+
+  const getPlanStats = (entry) => {
+    const week = buildWeekFromFilter(entry.filter, recipePool);
+    const meals = week.flatMap(d => d.meals).filter(Boolean);
+    const allIngs = new Set();
+    const missingIngs = new Set();
+    meals.forEach(m => {
+      const r = recipePool.find(x => x.id === m.id);
+      if (!r?.ingredients) return;
+      r.ingredients.forEach(i => {
+        allIngs.add(i.n);
+        if (!ingInPantry(i.n, pantrySet)) missingIngs.add(i.n);
+      });
+    });
+    const pp = allIngs.size > 0 ? Math.round(((allIngs.size - missingIngs.size) / allIngs.size) * 100) : 0;
+    return { week, mealCount: meals.length, missingCount: missingIngs.size, pp };
+  };
+
+  const handleCopy = (week) => {
+    setMealPlan(week);
+    if (showToast) showToast("📅 Plan copied to your week! Check the Planner tab.");
+    setPreview(null);
+  };
+
+  if (preview) {
+    const { plan, entry } = preview;
+    const stats = getPlanStats(entry);
+    return (
+      <div>
+        <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:20}}>
+          <button className="btn btn-s btn-sm" onClick={()=>setPreview(null)}>← Back to library</button>
+          <h2 style={{fontFamily:"var(--fd)",fontSize:22}}>{entry.emoji} {entry.name}</h2>
+        </div>
+        <div style={{display:"flex",gap:12,marginBottom:16,flexWrap:"wrap"}}>
+          <span style={{fontSize:13,color:"var(--sageH)",fontWeight:600}}>✅ {stats.pp}% pantry match</span>
+          <span style={{fontSize:13,color:"var(--mu)"}}>{stats.missingCount} ingredients to buy</span>
+          <span style={{fontSize:13,color:"var(--mu)"}}>{stats.mealCount} meals planned</span>
+        </div>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(200px,1fr))",gap:10,marginBottom:20}}>
+          {plan.map((day) => (
+            <div key={day.day} style={{background:"var(--white)",border:"1px solid var(--bor)",borderRadius:"var(--r)",padding:14}}>
+              <div style={{fontWeight:700,fontSize:13,marginBottom:8,color:"var(--clay)"}}>{day.day}</div>
+              {day.meals.map((meal, mi) => meal ? (
+                <div key={mi} style={{fontSize:12,padding:"4px 0",borderBottom:mi<2?"1px solid var(--bor)":"none",display:"flex",gap:6,alignItems:"center"}}>
+                  <span>{["☀️","🌤️","🌙"][mi]}</span>
+                  <span style={{fontSize:11}}>{meal.emoji} {meal.name}</span>
+                </div>
+              ) : null)}
+            </div>
+          ))}
+        </div>
+        <button className="btn btn-p" onClick={()=>handleCopy(plan)} style={{minWidth:180}}>
+          📋 Copy to my week
+        </button>
+        <p style={{fontSize:12,color:"var(--mu)",marginTop:8}}>This will replace your current week's plan.</p>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <div style={{marginBottom:20}}>
+        <h1 className="stitle">Plan Library</h1>
+        <p className="ssub">Pre-made weekly menus — preview and copy to your week in one click</p>
+      </div>
+      <div className="plan-lib-grid">
+        {PLAN_LIBRARY.map(entry => {
+          const stats = getPlanStats(entry);
+          return (
+            <div key={entry.id} className="plan-card" style={{background:entry.color,border:`1px solid ${entry.border}`}}>
+              <div className="plan-card-emoji">{entry.emoji}</div>
+              <div className="plan-card-name">{entry.name}</div>
+              <div className="plan-card-desc">{entry.desc}</div>
+              <div className="plan-card-stats">
+                <span>✅ {stats.pp}% pantry match</span>
+                <span>🛒 {stats.missingCount} missing</span>
+                <span>🍽️ {stats.mealCount} meals</span>
+              </div>
+              <div style={{display:"flex",gap:8,marginTop:12}}>
+                <button className="btn btn-s btn-sm" onClick={()=>setPreview({plan:stats.week,entry})}>Preview</button>
+                <button className="btn btn-p btn-sm" onClick={()=>{handleCopy(stats.week);}}>Copy to week</button>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function RecipeCard({ r, saved, onSave, onView, addToList, inFav, pantry, onAddToWeek }) {
   // STEP 4 STABILIZATION: Compute missing ingredients dynamically from pantry.
   // Do NOT use the static r.missing field for display — it is hardcoded and not pantry-aware.
   const dynamicMissing = React.useMemo(() => {
@@ -22314,6 +22660,18 @@ function RecipeCard({ r, saved, onSave, onView, addToList, inFav, pantry }) {
 
   const handleAddMissing = () => addToList(dynamicMissing);
 
+  // 3-dot popover state
+  const [popOpen, setPopOpen] = useState(false);
+  const popRef = useRef(null);
+  useEffect(() => {
+    if (!popOpen) return;
+    const handler = (e) => {
+      if (popRef.current && !popRef.current.contains(e.target)) setPopOpen(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [popOpen]);
+
   return (
     <div className="card">
       <div className="rimg" onClick={onView}>
@@ -22321,6 +22679,36 @@ function RecipeCard({ r, saved, onSave, onView, addToList, inFav, pantry }) {
         <div className="rtag">{r.cuisine}</div>
         {r.worth && <div className="rbadge">⭐ Worth buying</div>}
         {r.isUserCreated && <div className="rbadge" style={{background:"var(--sage)"}}>My Recipe</div>}
+        {/* ── 3-dot menu ── */}
+        <button
+          className="card-dot-btn"
+          onClick={e=>{e.stopPropagation();setPopOpen(v=>!v);}}
+          aria-label="Recipe options"
+        >⋯</button>
+        {popOpen && (
+          <div className="card-popover" ref={popRef} onClick={e=>e.stopPropagation()}>
+            <button className="card-pop-item" onClick={()=>{setPopOpen(false);onView();}}>
+              <Ic n="list" s={14}/>View recipe
+            </button>
+            {onAddToWeek && (
+              <button className="card-pop-item" onClick={()=>{setPopOpen(false);onAddToWeek(r);}}>
+                <Ic n="cal" s={14}/>Add to week
+              </button>
+            )}
+            <div className="card-pop-divider"/>
+            <button className="card-pop-item" onClick={e=>{e.stopPropagation();setPopOpen(false);onSave(r);}}>
+              <Ic n={saved?"bookmarkOn":"bookmark"} s={14}/>{saved?"Saved ✓":"Save recipe"}
+            </button>
+            {dynamicMissing.length > 0 && (
+              <>
+                <div className="card-pop-divider"/>
+                <button className="card-pop-item" onClick={()=>{setPopOpen(false);handleAddMissing();}}>
+                  <Ic n="cart" s={14}/>Add missing to list
+                </button>
+              </>
+            )}
+          </div>
+        )}
       </div>
       <div className="rbody">
         <div className="rtitle" onClick={onView}>{r.title}</div>
@@ -22336,12 +22724,17 @@ function RecipeCard({ r, saved, onSave, onView, addToList, inFav, pantry }) {
           </div>
         )}
         {dynamicMissing.length > 0 && (
-          <div style={{fontSize:12,color:"var(--mu)",marginBottom:12}}>
-            Missing: {dynamicMissing.slice(0,4).join(", ")}{dynamicMissing.length > 4 ? ` +${dynamicMissing.length - 4} more` : ""}
+          <div style={{fontSize:12,color:"var(--mu)",marginBottom:8}}>
+            Missing: {dynamicMissing.slice(0,3).join(", ")}{dynamicMissing.length > 3 ? ` +${dynamicMissing.length - 3} more` : ""}
           </div>
         )}
         <div className="ractions">
-          <button className="btn btn-sm btn-cs" onClick={onView}>View recipe</button>
+          <button className="btn btn-sm btn-cs" onClick={onView}>View</button>
+          {onAddToWeek && (
+            <button className="btn btn-sm btn-s" onClick={()=>onAddToWeek(r)} title="Add to week">
+              <Ic n="cal" s={13}/>
+            </button>
+          )}
           <button
             className={`bm-btn ${saved?"on":""}`}
             onClick={e=>{e.stopPropagation();onSave(r);}}
@@ -22349,11 +22742,6 @@ function RecipeCard({ r, saved, onSave, onView, addToList, inFav, pantry }) {
           >
             <Ic n={saved?"bookmarkOn":"bookmark"} s={15}/>
           </button>
-          {dynamicMissing.length > 0 && (
-            <button className="btn btn-sm btn-g" style={{border:"1px solid var(--bor)"}} onClick={handleAddMissing}>
-              <Ic n="cart" s={13}/>
-            </button>
-          )}
         </div>
       </div>
     </div>
@@ -22478,7 +22866,7 @@ const getAvoidVerdict = ingName => {
 
 function RecipeDetail({ recipe, saved, onSave, onBack, onAddToList, pantry, setPantry,
   isRecipeSaved, favFolders, favItems, saveToFolder, createFavFolder, removeFromAllFolders, showToast,
-  avoidedIngredients, setAvoidedIngredients }) {
+  avoidedIngredients, setAvoidedIngredients, onAddToWeek, mealPlan, setMealPlan }) {
   const [markedHave,     setMarkedHave]     = useState({});
   const [showLocalFavModal, setShowLocalFavModal] = useState(false);
   
@@ -22562,15 +22950,24 @@ function RecipeDetail({ recipe, saved, onSave, onBack, onAddToList, pantry, setP
         {missingIngredients.length>0 ? (
           <button className="btn btn-sm btn-cs" onClick={()=>{
             onAddToList(missingIngredients);
-            alert(`Added ${missingIngredients.length} missing item${missingIngredients.length>1?'s':''} to shopping list`);
+            if(showToast) showToast(`🛒 ${missingIngredients.length} item${missingIngredients.length>1?'s':''} added to list`);
+            else alert(`Added ${missingIngredients.length} missing item${missingIngredients.length>1?'s':''} to shopping list`);
           }}>
-            <Ic n="cart" s={14}/>Add missing to shopping list
+            <Ic n="cart" s={14}/>Add missing
           </button>
         ) : (
-          <button className="btn btn-sm btn-g" disabled style={{opacity:0.5}}>
-            <Ic n="check" s={14}/>Nothing missing
+          <span style={{fontSize:12,color:"var(--sageH)",fontWeight:600,display:"flex",alignItems:"center",gap:4}}>
+            <Ic n="check" s={13}/>All in pantry
+          </span>
+        )}
+        {onAddToWeek && (
+          <button className="btn btn-sm btn-s" onClick={()=>onAddToWeek(recipe)}>
+            <Ic n="cal" s={14}/>Add to week
           </button>
         )}
+        {/* TODO [ROADMAP-AI]: Recipe AI button — needs Anthropic API key on backend.
+            When ready: open a mini drawer pre-loaded with this recipe context.
+            Example prompts: "Make it quicker", "Substitute dairy", "Healthier version", "Explain steps". */}
       </div>
       <div style={{maxWidth:860,margin:"0 auto",padding:"40px 32px"}}>
         <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:12}}>{recipe.dietary.map(d=><span key={d} className="tag td">{d}</span>)}<span className="tag tc">{recipe.cuisine}</span></div>
