@@ -20824,6 +20824,37 @@ const isSameCoreDish = (recipeA, recipeB) => {
 };
 
 // DIETARY COMPLIANCE FUNCTION - SHARED EVERYWHERE
+// ── Health scoring heuristic (used when prefs.dietary includes "Healthy") ──────
+// Returns a score: positive = healthier, negative = less healthy.
+// Does NOT ban recipes — just sorts them. Max range ~ ±6.
+const getHealthScore = (recipe) => {
+  if (!recipe) return 0;
+  const title = (recipe.title || '').toLowerCase();
+  const ings  = (recipe.ingredients || []).map(i => (i.n || '').toLowerCase()).join(' ');
+  const text   = title + ' ' + ings;
+  let score = 0;
+  // ── Penalise ────────────────────────────────────────────────────────────────
+  const SUGAR_TERMS   = /sugar|brown sugar|honey|maple syrup|condensed milk|sweetened|syrup|chocolate|candy|sprinkles|caramel|frosting|icing/;
+  const FRIED_TERMS   = /deep.?fr(y|ied|ying)|deep fr|battered and fried|tempura/;
+  const HEAVY_DAIRY   = /heavy cream|double cream|full.fat cream|large amount.*butter/;
+  const JUNK_TERMS    = /cookie|cookies|cake|donut|donuts|ice cream|soda|chips|crackers|pastry|croissant|brownie|muffin/;
+  const HEAVY_CHEESE  = /cheddar.*\d{2,}g|mozzarella.*\d{2,}g|parmesan.*\d{2,}g/;
+  if (SUGAR_TERMS.test(text))  score -= 2;
+  if (FRIED_TERMS.test(text))  score -= 2;
+  if (HEAVY_DAIRY.test(text))  score -= 1;
+  if (JUNK_TERMS.test(text))   score -= 2;
+  if (HEAVY_CHEESE.test(ings)) score -= 1;
+  // Extra penalty for recipes labelled "fried" in the title
+  if (/fried/.test(title) && !/pan.?fried|stir.?fried/.test(title)) score -= 1;
+  // ── Reward ──────────────────────────────────────────────────────────────────
+  const HEALTHY_TERMS = /salad|lentil|chickpea|quinoa|brown rice|oats|oatmeal|vegetable|broccoli|spinach|kale|zucchini|asparagus|legume|tofu|tempeh|bean|edamame|avocado|baked|steamed|grilled|poached|whole grain|wholegrain/;
+  if (HEALTHY_TERMS.test(text)) score += 2;
+  if ((recipe.dietary||[]).includes('Vegan'))       score += 1;
+  if ((recipe.dietary||[]).includes('Vegetarian'))  score += 1;
+  if ((recipe.dietary||[]).includes('Gluten-free')) score += 0.5;
+  return score;
+};
+
 const isRecipeAllowedForUser = (recipe, prefs) => {
   if(!recipe || !prefs) return true;
   const dietary = prefs.dietary || [];
@@ -22604,14 +22635,19 @@ const PLAN_LIBRARY = [
   },
 ];
 
-function buildWeekFromFilter(filterFn, allRecipes) {
+function buildWeekFromFilter(filterFn, allRecipes, prefs) {
   // Build a 7-day plan using recipes matching the filter
   // One breakfast, lunch, dinner per day, no repeats
+  const wantHealthy = (prefs?.dietary || []).includes('Healthy');
   const allowed = (allRecipes || RECIPES).filter(r => filterFn(r));
-  const breakfasts = allowed.filter(r => getMealType(r) === "breakfast");
-  const lunches    = allowed.filter(r => getMealType(r) === "lunch");
-  const dinners    = allowed.filter(r => getMealType(r) === "dinner");
-  // Shuffle each pool deterministically using index
+  // Sort by health score when Healthy preference is active
+  const sortPool = (pool) => {
+    if (!wantHealthy) return pool;
+    return [...pool].sort((a,b) => getHealthScore(b) - getHealthScore(a));
+  };
+  const breakfasts = sortPool(allowed.filter(r => getMealType(r) === "breakfast"));
+  const lunches    = sortPool(allowed.filter(r => getMealType(r) === "lunch"));
+  const dinners    = sortPool(allowed.filter(r => getMealType(r) === "dinner"));
   const pick = (pool, i) => pool[i % Math.max(pool.length, 1)];
   const DAYS = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
   return DAYS.map((day, i) => ({
@@ -22659,6 +22695,8 @@ function PlanLibraryTab({ allRecipes, mealPlan, setMealPlan, pantry, showToast, 
   });
   const recipePool = allRecipes || RECIPES;
   const pantrySet = React.useMemo(() => buildPantrySet(pantry || []), [pantry]);
+  // Sync draftTitle when draftPlan changes — MUST be here (top-level, before all early returns)
+  React.useEffect(() => { if (draftPlan) setDraftTitle(draftPlan.title || ''); }, [draftPlan?.title]); // eslint-disable-line
 
   const saveMyPlan = (plan, title) => {
     const entry = { id: Date.now(), title: title || 'My Plan', emoji: '📋', plan, createdAt: new Date().toISOString() };
@@ -22846,10 +22884,11 @@ function PlanLibraryTab({ allRecipes, mealPlan, setMealPlan, pantry, showToast, 
                   ? <div className="msi">
                       <div className="msem">{meal.emoji}</div>
                       <div className="msn">{meal.name}</div>
-                      {onSlotSwap && <button
+                      {onSlotSwap && meal && <button
                         style={{position:"absolute",top:3,right:3,fontSize:10,padding:"1px 5px",borderRadius:3,border:"1px solid var(--bor)",background:"rgba(255,255,255,.92)",cursor:"pointer",lineHeight:1.5,color:"var(--mu)",zIndex:5,fontWeight:600}}
                         onClick={e=>{e.stopPropagation();onSlotSwap({dayIdx,mealIdx:mi,mealType});}}
                         title="Replace this meal"
+                        aria-label="Replace meal"
                       >↔</button>}
                     </div>
                   : <div className="msadd" style={{fontSize:16}}>+</div>
@@ -22879,6 +22918,7 @@ function PlanLibraryTab({ allRecipes, mealPlan, setMealPlan, pantry, showToast, 
       {id:'Vegetarian',icon:'🥦',label:'Vegetarian',desc:'No meat or fish'},
       {id:'Vegan',icon:'🌱',label:'Vegan',desc:'No animal products'},
       {id:'Kosher',icon:'🕎',label:'Kosher',desc:'Stackable'},
+      {id:'Healthy',icon:'💚',label:'Healthy',desc:'Less sugar/fried, more whole foods'},
     ];
 
     React.useEffect(() => { chatEndRef.current?.scrollIntoView({behavior:'smooth'}); }, [chatMessages]);
@@ -22908,6 +22948,7 @@ function PlanLibraryTab({ allRecipes, mealPlan, setMealPlan, pantry, showToast, 
       if(/\bvegan\b/.test(t)) dietary.push('Vegan');
       else if(/vegetarian|veggie/.test(t)) dietary.push('Vegetarian');
       if(/kosher/.test(t)) dietary.push('Kosher');
+      if(/\bhealthy\b|whole food|less sugar|less fried|light meals|clean eating|nutritious/.test(t)) dietary.push('Healthy');
       if(dietary.length) updates.dietary = dietary;
       // Time
       const tm = t.match(/(\d+)\s*min/);
@@ -22952,7 +22993,17 @@ function PlanLibraryTab({ allRecipes, mealPlan, setMealPlan, pantry, showToast, 
         return pat && (pat.test(r.title) || (r.ingredients||[]).some(i=>pat.test(i.n)));
       });
 
-      const shuffle = arr => [...arr].sort(()=>Math.random()-.5);
+      const wantHealthy = (f.dietary||[]).includes('Healthy');
+      // Sort pool by health score descending if Healthy is active (then shuffle within tiers)
+      const healthSort = (arr) => {
+        if (!wantHealthy) return [...arr].sort(()=>Math.random()-.5);
+        return [...arr].sort((a,b) => {
+          const diff = getHealthScore(b) - getHealthScore(a);
+          if (diff !== 0) return diff;
+          return Math.random() - 0.5; // shuffle within same score tier
+        });
+      };
+      const shuffle = arr => healthSort(arr);
       const dinnerPool   = shuffle(pool.filter(r => getMealType(r) === 'dinner'));
       const lunchPool    = shuffle(pool.filter(r => getMealType(r) === 'lunch'));
       const bfastPool    = shuffle(pool.filter(r => getMealType(r) === 'breakfast'));
@@ -22969,7 +23020,11 @@ function PlanLibraryTab({ allRecipes, mealPlan, setMealPlan, pantry, showToast, 
         if(r) usedIds.add(r.id);
         return r ? {emoji:r.emoji, name:r.title, id:r.id} : null;
       };
-      return mealPlan.map(d => ({...d, meals:[pick(bFallback), pick(lFallback), pick(orderedDinner)]}));
+      const rawPlan = mealPlan.map(d => ({...d, meals:[pick(bFallback), pick(lFallback), pick(orderedDinner)]}));
+      // Verify plan has at least some meals (safety net)
+      const totalFilled = rawPlan.reduce((n, d) => n + d.meals.filter(Boolean).length, 0);
+      if (totalFilled === 0) return null;
+      return rawPlan;
     };
 
     const handleSend = () => {
@@ -23190,36 +23245,48 @@ function PlanLibraryTab({ allRecipes, mealPlan, setMealPlan, pantry, showToast, 
         mealType={previewSlotPicker.mealType}
         pantry={pantry}
         allRecipes={allRecipes}
-        prefs={{}}
+        prefs={prefs || {}}
         avoidedIngredients={[]}
         onClose={()=>setPreviewSlotPicker(null)}
         onSelect={r=>{
-          const slot = {kind:"recipe",emoji:r.emoji,name:r.title,id:r.id};
+          if (!r || !r.id) { showToast?.('⚠️ Recipe not found — try another.'); setPreviewSlotPicker(null); return; }
+          const slot = {kind:"recipe",emoji:r.emoji||'🍽️',name:r.title||'Meal',id:r.id};
           if (previewSlotPicker.isDraft && draftPlan) {
             setDraftPlan(prev=>{
+              if (!prev?.plan) return prev;
               const newPlan = prev.plan.map(d=>({...d,meals:[...d.meals]}));
-              newPlan[previewSlotPicker.dayIdx].meals[previewSlotPicker.mealIdx] = slot;
+              if (newPlan[previewSlotPicker.dayIdx]) {
+                newPlan[previewSlotPicker.dayIdx].meals[previewSlotPicker.mealIdx] = slot;
+              }
               return {...prev, plan:newPlan};
             });
           } else {
             setPreview(prev=>{
+              if (!prev?.plan) return prev;
               const newPlan = prev.plan.map(d=>({...d,meals:[...d.meals]}));
-              newPlan[previewSlotPicker.dayIdx].meals[previewSlotPicker.mealIdx] = slot;
+              if (newPlan[previewSlotPicker.dayIdx]) {
+                newPlan[previewSlotPicker.dayIdx].meals[previewSlotPicker.mealIdx] = slot;
+              }
               return {...prev, plan:newPlan};
             });
           }
           setPreviewSlotPicker(null);
+          showToast?.('↔ Meal replaced!');
         }}
       />
     );
   }
 
-  // Sync draftTitle when draftPlan changes
-  React.useEffect(() => { if (draftPlan) setDraftTitle(draftPlan.title || ''); }, [draftPlan?.title]);
+
 
   // ── Draft plan view (AI-generated or blank, pending save/copy) ───────────────
   if (draftPlan) {
     const { plan } = draftPlan;
+    if (!plan || !Array.isArray(plan) || plan.length === 0) {
+      // Invalid draft — silently clear it
+      setDraftPlan(null);
+      return null;
+    }
     const stats = getPlanStats(plan);
     const draftEntry = { name: draftTitle, emoji: '✨' };
     return (
@@ -23331,7 +23398,7 @@ function PlanLibraryTab({ allRecipes, mealPlan, setMealPlan, pantry, showToast, 
       <div style={{fontFamily:"var(--fd)",fontSize:16,fontWeight:700,marginBottom:12,color:"var(--ch)"}}>📚 Pre-made Plans</div>
       <div className="plan-lib-grid">
         {PLAN_LIBRARY.map(entry => {
-          const week = buildWeekFromFilter(entry.filter, recipePool);
+          const week = buildWeekFromFilter(entry.filter, recipePool, prefs);
           const stats = getPlanStats(week);
           return (
             <div key={entry.id} className="plan-card" style={{background:entry.color,border:`1px solid ${entry.border}`}}>
@@ -25337,7 +25404,8 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
       const novelBonus    = ings.filter(n => !usedPantryIngs.has(n)).length * 10;
       const highValBonus  = ings.filter(n => [...pantryHighValueNorms].some(hv => n.includes(hv) || hv.includes(n))).length * 15;
       const pantryBonus   = r.isPantryGenerated ? 200 : 0; // Strong preference — pantry-first is core mission
-      return novelBonus + highValBonus + pantryBonus;
+      const healthBonus   = prefs.dietary.includes('Healthy') ? getHealthScore(r) * 8 : 0;
+      return novelBonus + highValBonus + pantryBonus + healthBonus;
     };
 
     const pickFrom = pool => {
@@ -26567,6 +26635,7 @@ function PrefsModal({ prefs, setPrefs, onClose }) {
     {id:"Vegetarian",  icon:"🥦", desc:"No meat or fish"},
     {id:"Vegan",       icon:"🌱", desc:"No animal products"},
     {id:"Kosher",      icon:"🕎", desc:"Stackable with any diet"},
+    {id:"Healthy",     icon:"💚", desc:"Prefer whole foods, less sugar/fried"},
   ];
   const activeDietary = local.dietary || [];
   const isOmnivore = activeDietary.length === 0;
