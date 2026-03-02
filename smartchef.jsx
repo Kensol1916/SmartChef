@@ -483,6 +483,14 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
 .card-pop-item{display:flex;align-items:center;gap:10px;padding:10px 14px;font-size:13px;font-weight:500;cursor:pointer;color:var(--ch);border:none;background:none;width:100%;text-align:left;transition:background .1s}
 .card-pop-item:hover{background:var(--cream)}
 .card-pop-divider{height:1px;background:var(--bor)}
+.slot-dot-btn{position:absolute;top:4px;right:4px;width:22px;height:22px;border-radius:5px;background:rgba(255,255,255,.88);border:1px solid rgba(0,0,0,.1);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;line-height:1;z-index:10;color:var(--ch);opacity:0;transition:opacity .15s}
+.mslot.filled:hover .slot-dot-btn{opacity:1}
+.slot-dot-btn:hover{background:#fff}
+.slot-popover{position:absolute;top:26px;right:4px;background:#fff;border:1px solid var(--bor);border-radius:10px;box-shadow:0 4px 18px rgba(0,0,0,.14);z-index:999;min-width:158px;overflow:hidden;padding:4px 0}
+.slot-pop-item{display:flex;align-items:center;gap:8px;width:100%;padding:7px 12px;background:none;border:none;font-size:12px;color:var(--ch);cursor:pointer;text-align:left;white-space:nowrap;transition:background .1s}
+.slot-pop-item:hover{background:var(--cream)}
+.slot-pop-item.danger{color:#c04040}
+.slot-pop-divider{height:1px;background:var(--bor);margin:3px 0}
 /* ── STICKY RECIPE CONTROLS ── */
 .recipe-controls-sticky{position:sticky;top:0;z-index:40;background:var(--bg);padding:12px 0 8px;border-bottom:1px solid var(--bor);margin-bottom:12px}
 /* ── ADD TO WEEK MODAL ── */
@@ -22549,13 +22557,16 @@ function buildWeekFromFilter(filterFn, allRecipes) {
 }
 
 function PlanLibraryTab({ allRecipes, mealPlan, setMealPlan, pantry, showToast, onViewRecipe }) {
-  const [preview, setPreview] = useState(null); // { plan, libraryEntry }
+  const [preview, setPreview] = useState(null); // { plan: [...], entry }
+  const [showCopySafety, setShowCopySafety] = useState(null); // { plan }
+  const [showShoppingList, setShowShoppingList] = useState(null); // { plan, entry }
+  const [showCreatePlan, setShowCreatePlan] = useState(false);
+  const [previewSlotPicker, setPreviewSlotPicker] = useState(null); // {dayIdx, mealIdx, mealType}
   const recipePool = allRecipes || RECIPES;
   const pantrySet = React.useMemo(() => buildPantrySet(pantry || []), [pantry]);
 
-  const getPlanStats = (entry) => {
-    const week = buildWeekFromFilter(entry.filter, recipePool);
-    const meals = week.flatMap(d => d.meals).filter(Boolean);
+  const getPlanStats = (plan) => {
+    const meals = plan.flatMap(d => d.meals).filter(Boolean);
     const allIngs = new Set();
     const missingIngs = new Set();
     meals.forEach(m => {
@@ -22567,59 +22578,286 @@ function PlanLibraryTab({ allRecipes, mealPlan, setMealPlan, pantry, showToast, 
       });
     });
     const pp = allIngs.size > 0 ? Math.round(((allIngs.size - missingIngs.size) / allIngs.size) * 100) : 0;
-    return { week, mealCount: meals.length, missingCount: missingIngs.size, pp };
+    return { mealCount: meals.length, missingCount: missingIngs.size, pp };
   };
 
-  const handleCopy = (week) => {
-    setMealPlan(week);
-    if (showToast) showToast("📅 Plan copied to your week! Check the Planner tab.");
-    setPreview(null);
+  // ── Shopping List Modal ─────────────────────────────────────────────────────
+  const ShoppingListModal = ({ plan, entry, onClose }) => {
+    const ps = buildPantrySet(pantry || []);
+    const ingMap = {};
+    plan.flatMap(d => d.meals).filter(Boolean).forEach(m => {
+      const r = recipePool.find(x => x.id === m.id);
+      if (!r?.ingredients) return;
+      r.ingredients.forEach(i => {
+        if (!ingInPantry(i.n, ps)) {
+          const key = normalizeIng(i.n);
+          if (!ingMap[key]) ingMap[key] = { name: i.n, amount: i.amount || '', recipes: [] };
+          if (!ingMap[key].recipes.includes(m.name)) ingMap[key].recipes.push(m.name);
+        }
+      });
+    });
+    const items = Object.values(ingMap);
+    const exportCSV = () => {
+      const rows = [['Ingredient','Amount','Used In'],...items.map(i=>[i.name,i.amount,i.recipes.join('; ')])];
+      const csv = rows.map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
+      const blob = new Blob([csv],{type:'text/csv'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href=url; a.download=`${(entry?.name||'plan').replace(/\s+/g,'-').toLowerCase()}-shopping-list.csv`;
+      document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+    };
+    return (
+      <div className="modal-overlay" onClick={onClose}>
+        <div className="modal-box" onClick={e=>e.stopPropagation()} style={{maxWidth:480,maxHeight:'85vh',display:'flex',flexDirection:'column'}}>
+          <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:16}}>
+            <div style={{fontWeight:700,fontSize:15}}>🛒 Shopping List{entry?' — '+entry.name:''}</div>
+            <button className="btn btn-xs btn-g" onClick={onClose}>✕</button>
+          </div>
+          {items.length === 0
+            ? <div style={{textAlign:'center',padding:'32px 0',color:'var(--sageH)',fontWeight:600}}>✅ Everything is in your pantry!</div>
+            : <div style={{overflowY:'auto',flex:1,marginBottom:12}}>
+                {items.map(i=>(
+                  <div key={i.name} style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'8px 0',borderBottom:'1px solid var(--bor)'}}>
+                    <div>
+                      <div style={{fontWeight:600,fontSize:13}}>{i.name}</div>
+                      <div style={{fontSize:11,color:'var(--mu)'}}>Used in: {i.recipes.join(', ')}</div>
+                    </div>
+                    {i.amount && <span style={{fontSize:12,color:'var(--mu)',whiteSpace:'nowrap',marginLeft:8}}>{i.amount}</span>}
+                  </div>
+                ))}
+              </div>
+          }
+          <div style={{display:'flex',gap:8,flexWrap:'wrap',marginTop:4}}>
+            <button className="btn btn-p btn-sm" onClick={exportCSV} disabled={items.length===0}>📥 Export CSV</button>
+            <button className="btn btn-s btn-sm" style={{opacity:.55,cursor:'not-allowed'}} disabled title="Coming soon">📧 Email — Coming soon</button>
+            <button className="btn btn-s btn-sm" style={{opacity:.55,cursor:'not-allowed'}} disabled title="Coming soon">💬 WhatsApp — Coming soon</button>
+          </div>
+        </div>
+      </div>
+    );
   };
 
+  // ── Copy Safety Modal ───────────────────────────────────────────────────────
+  const CopySafetyModal = ({ plan, onClose }) => {
+    const doReplace = () => { setMealPlan(plan); showToast?.("📅 Plan copied to your week!"); onClose(); setPreview(null); };
+    const doMerge  = () => {
+      setMealPlan(prev => prev.map((day, di) => ({
+        ...day,
+        meals: day.meals.map((m, mi) => m ? m : (plan[di]?.meals[mi] || null))
+      })));
+      showToast?.("📅 Plan merged into empty slots!");
+      onClose(); setPreview(null);
+    };
+    return (
+      <div className="modal-overlay" onClick={onClose}>
+        <div className="modal-box" onClick={e=>e.stopPropagation()} style={{maxWidth:400}}>
+          <div style={{fontWeight:700,fontSize:15,marginBottom:8}}>Copy plan to your week</div>
+          <p style={{fontSize:13,color:'var(--mu)',marginBottom:18,lineHeight:1.5}}>Your planner already has some meals. How would you like to copy?</p>
+          <div style={{display:'flex',flexDirection:'column',gap:10}}>
+            <button style={{textAlign:'left',padding:'12px 14px',borderRadius:'var(--r)',border:'1px solid var(--bor)',background:'var(--white)',cursor:'pointer'}} onClick={doMerge}>
+              <div style={{fontWeight:600,fontSize:13,color:'var(--ch)'}}>📋 Fill empty slots only <span style={{fontSize:11,background:'var(--sageBg)',color:'var(--sageH)',padding:'1px 6px',borderRadius:3,marginLeft:6,fontWeight:700}}>Recommended</span></div>
+              <div style={{fontSize:11,color:'var(--mu)',marginTop:3}}>Keep your existing meals — add plan only to empty slots</div>
+            </button>
+            <button style={{textAlign:'left',padding:'12px 14px',borderRadius:'var(--r)',border:'1px solid rgba(192,106,62,.3)',background:'var(--clayBg)',cursor:'pointer'}} onClick={doReplace}>
+              <div style={{fontWeight:600,fontSize:13,color:'var(--ch)'}}>🔄 Replace all</div>
+              <div style={{fontSize:11,color:'var(--mu)',marginTop:3}}>Overwrite your entire week with this plan</div>
+            </button>
+            <button className="btn btn-g btn-sm" onClick={onClose} style={{alignSelf:'flex-start',marginTop:2}}>Cancel</button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  // ── Create Plan Modal ───────────────────────────────────────────────────────
+  const CreatePlanModal = ({ onClose }) => {
+    const [mode, setMode] = useState(null); // null | 'ai'
+    const [aiForm, setAiForm] = useState({ cuisines:[], dietary:'Any', maxTime:60, include:'', exclude:'' });
+    const CUISINES = ['Italian','Japanese','Mediterranean','Mexican','Indian','French','Greek','Thai','Chinese','Middle Eastern'];
+    const DIETARIES = ['Any','Vegetarian','Vegan','Gluten-Free','Dairy-Free'];
+    const generateAIPlan = () => {
+      let pool = recipePool;
+      if(aiForm.dietary !== 'Any') pool = pool.filter(r => r.dietary?.includes(aiForm.dietary));
+      if(aiForm.cuisines.length > 0) pool = pool.filter(r => aiForm.cuisines.includes(r.cuisine));
+      if(aiForm.maxTime < 120) pool = pool.filter(r => r.time <= aiForm.maxTime);
+      if(aiForm.include.trim()) {
+        const inc = aiForm.include.toLowerCase().split(',').map(s=>s.trim()).filter(Boolean);
+        pool = pool.filter(r => inc.some(kw => r.title.toLowerCase().includes(kw) || (r.ingredients||[]).some(i=>i.n.toLowerCase().includes(kw))));
+      }
+      if(aiForm.exclude.trim()) {
+        const exc = aiForm.exclude.toLowerCase().split(',').map(s=>s.trim()).filter(Boolean);
+        pool = pool.filter(r => !exc.some(kw => r.title.toLowerCase().includes(kw) || (r.ingredients||[]).some(i=>i.n.toLowerCase().includes(kw))));
+      }
+      if(pool.length < 5) { showToast?.("⚠️ Too few recipes match your filters — try loosening them"); return; }
+      const plan = buildWeekFromFilter(r => pool.includes(r), recipePool);
+      setMealPlan(plan);
+      showToast?.("✨ AI plan generated! Check your Planner tab.");
+      onClose();
+    };
+    return (
+      <div className="modal-overlay" onClick={onClose}>
+        <div className="modal-box" onClick={e=>e.stopPropagation()} style={{maxWidth:440,maxHeight:'85vh',overflow:'auto'}}>
+          <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:16}}>
+            <div style={{fontWeight:700,fontSize:15}}>✨ Create New Plan</div>
+            <button className="btn btn-xs btn-g" onClick={onClose}>✕</button>
+          </div>
+          {!mode && <div style={{display:'flex',flexDirection:'column',gap:10}}>
+            <button style={{textAlign:'left',padding:'14px 16px',borderRadius:'var(--r)',border:'1px solid var(--bor)',background:'var(--white)',cursor:'pointer'}}
+              onClick={()=>{setMealPlan(prev=>prev.map(d=>({...d,meals:[null,null,null]})));showToast?.("📝 Blank week ready in Planner!");onClose();}}>
+              <div style={{fontWeight:700,fontSize:14,color:'var(--ch)'}}>📝 Manual — Start blank</div>
+              <div style={{fontSize:12,color:'var(--mu)',marginTop:4}}>Clear the week and fill slots yourself using the Planner</div>
+            </button>
+            <button style={{textAlign:'left',padding:'14px 16px',borderRadius:'var(--r)',border:'1px solid rgba(106,158,114,.35)',background:'rgba(106,158,114,.05)',cursor:'pointer'}}
+              onClick={()=>setMode('ai')}>
+              <div style={{fontWeight:700,fontSize:14,color:'var(--ch)'}}>🤖 Generate with AI <span style={{fontSize:10,background:'var(--sageBg)',color:'var(--sageH)',padding:'1px 5px',borderRadius:3,marginLeft:6,fontWeight:700}}>BETA</span></div>
+              <div style={{fontSize:12,color:'var(--mu)',marginTop:4}}>Set preferences — cuisines, dietary, time — and generate a full week</div>
+            </button>
+          </div>}
+          {mode==='ai' && <div style={{display:'flex',flexDirection:'column',gap:14}}>
+            <button className="btn btn-g btn-sm" style={{alignSelf:'flex-start'}} onClick={()=>setMode(null)}>← Back</button>
+            <div>
+              <label style={{fontSize:12,fontWeight:600,color:'var(--mu)',display:'block',marginBottom:6}}>Cuisines (select any — leave blank for all)</label>
+              <div style={{display:'flex',flexWrap:'wrap',gap:6}}>
+                {CUISINES.map(c=><button key={c} className={`btn btn-xs ${aiForm.cuisines.includes(c)?'btn-p':'btn-g'}`}
+                  onClick={()=>setAiForm(f=>({...f,cuisines:f.cuisines.includes(c)?f.cuisines.filter(x=>x!==c):[...f.cuisines,c]}))}>{c}</button>)}
+              </div>
+            </div>
+            <div>
+              <label style={{fontSize:12,fontWeight:600,color:'var(--mu)',display:'block',marginBottom:6}}>Dietary</label>
+              <select className="sel" value={aiForm.dietary} onChange={e=>setAiForm(f=>({...f,dietary:e.target.value}))}>
+                {DIETARIES.map(d=><option key={d}>{d}</option>)}
+              </select>
+            </div>
+            <div>
+              <label style={{fontSize:12,fontWeight:600,color:'var(--mu)',display:'block',marginBottom:4}}>Max cooking time: {aiForm.maxTime} min</label>
+              <input type="range" min={15} max={120} step={5} value={aiForm.maxTime} onChange={e=>setAiForm(f=>({...f,maxTime:+e.target.value}))} style={{width:'100%',accentColor:'var(--clay)'}}/>
+            </div>
+            <div>
+              <label style={{fontSize:12,fontWeight:600,color:'var(--mu)',display:'block',marginBottom:4}}>Must include (comma-separated keywords)</label>
+              <input className="inp" placeholder="e.g. chicken, pasta, lemon" value={aiForm.include} onChange={e=>setAiForm(f=>({...f,include:e.target.value}))}/>
+            </div>
+            <div>
+              <label style={{fontSize:12,fontWeight:600,color:'var(--mu)',display:'block',marginBottom:4}}>Exclude (comma-separated keywords)</label>
+              <input className="inp" placeholder="e.g. pork, cheese, spicy" value={aiForm.exclude} onChange={e=>setAiForm(f=>({...f,exclude:e.target.value}))}/>
+            </div>
+            <p style={{fontSize:11,color:'var(--mu)',margin:'0',lineHeight:1.5}}>
+              🤖 Uses smart rule-based matching. Full AI backend coming soon.
+            </p>
+            <button className="btn btn-p btn-full" onClick={generateAIPlan}>✨ Generate Plan</button>
+          </div>}
+        </div>
+      </div>
+    );
+  };
+
+  // ── Copy request handler ────────────────────────────────────────────────────
+  const handleCopyRequest = (plan) => {
+    const hasExisting = mealPlan.some(d => d.meals.some(Boolean));
+    if (hasExisting) {
+      setShowCopySafety({ plan });
+    } else {
+      setMealPlan(plan);
+      showToast?.("📅 Plan copied to your week! Check the Planner tab.");
+      setPreview(null);
+    }
+  };
+
+  // ── Preview slot picker (replace recipe in preview) ────────────────────────
+  if (previewSlotPicker && preview) {
+    return (
+      <RecipePickerModal
+        mealType={previewSlotPicker.mealType}
+        pantry={pantry}
+        allRecipes={allRecipes}
+        prefs={{}}
+        avoidedIngredients={[]}
+        onClose={()=>setPreviewSlotPicker(null)}
+        onSelect={r=>{
+          setPreview(prev=>{
+            const newPlan = prev.plan.map(d=>({...d,meals:[...d.meals]}));
+            newPlan[previewSlotPicker.dayIdx].meals[previewSlotPicker.mealIdx] = {kind:"recipe",emoji:r.emoji,name:r.title,id:r.id};
+            return {...prev, plan:newPlan};
+          });
+          setPreviewSlotPicker(null);
+        }}
+      />
+    );
+  }
+
+  // ── Preview view ────────────────────────────────────────────────────────────
   if (preview) {
     const { plan, entry } = preview;
-    const stats = getPlanStats(entry);
+    const stats = getPlanStats(plan);
     return (
       <div>
-        <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:20}}>
+        {showShoppingList && <ShoppingListModal plan={plan} entry={entry} onClose={()=>setShowShoppingList(null)}/>}
+        {showCopySafety && <CopySafetyModal plan={showCopySafety.plan} onClose={()=>setShowCopySafety(null)}/>}
+        <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:20,flexWrap:"wrap"}}>
           <button className="btn btn-s btn-sm" onClick={()=>setPreview(null)}>← Back to library</button>
-          <h2 style={{fontFamily:"var(--fd)",fontSize:22}}>{entry.emoji} {entry.name}</h2>
+          <h2 style={{fontFamily:"var(--fd)",fontSize:22,flex:1,minWidth:0}}>{entry.emoji} {entry.name}</h2>
         </div>
-        <div style={{display:"flex",gap:12,marginBottom:16,flexWrap:"wrap"}}>
+        <div style={{display:"flex",gap:12,marginBottom:16,flexWrap:"wrap",alignItems:"center"}}>
           <span style={{fontSize:13,color:"var(--sageH)",fontWeight:600}}>✅ {stats.pp}% pantry match</span>
           <span style={{fontSize:13,color:"var(--mu)"}}>{stats.missingCount} ingredients to buy</span>
           <span style={{fontSize:13,color:"var(--mu)"}}>{stats.mealCount} meals planned</span>
         </div>
-        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(200px,1fr))",gap:10,marginBottom:20}}>
-          {plan.map((day) => (
+        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(190px,1fr))",gap:10,marginBottom:20}}>
+          {plan.map((day, dayIdx) => (
             <div key={day.day} style={{background:"var(--white)",border:"1px solid var(--bor)",borderRadius:"var(--r)",padding:14}}>
               <div style={{fontWeight:700,fontSize:13,marginBottom:8,color:"var(--clay)"}}>{day.day}</div>
-              {day.meals.map((meal, mi) => meal ? (
-                <div key={mi} style={{fontSize:12,padding:"4px 0",borderBottom:mi<2?"1px solid var(--bor)":"none",display:"flex",gap:6,alignItems:"center"}}>
-                  <span>{["☀️","🌤️","🌙"][mi]}</span>
-                  <span style={{fontSize:11}}>{meal.emoji} {meal.name}</span>
-                </div>
-              ) : null)}
+              {day.meals.map((meal, mi) => {
+                const mealType = ["Breakfast","Lunch","Dinner"][mi];
+                const recipeObj = meal ? recipePool.find(r=>r.id===meal.id) : null;
+                return (
+                  <div key={mi} style={{padding:"5px 0",borderBottom:mi<2?"1px solid var(--bor)":"none",display:"flex",gap:6,alignItems:"center",justifyContent:"space-between"}}>
+                    <div style={{display:"flex",gap:5,alignItems:"center",flex:1,minWidth:0,overflow:"hidden"}}>
+                      <span style={{flexShrink:0,fontSize:12}}>{["☀️","🌤️","🌙"][mi]}</span>
+                      {meal
+                        ? <span
+                            style={{fontSize:11,cursor:"pointer",textDecoration:"underline",textDecorationStyle:"dotted",textDecorationColor:"var(--mu)",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",lineHeight:1.3}}
+                            onClick={()=>recipeObj && onViewRecipe(recipeObj)}
+                            title={`View recipe: ${meal.name}`}
+                          >{meal.emoji} {meal.name}</span>
+                        : <span style={{fontSize:11,color:"var(--mu)",fontStyle:"italic"}}>Empty</span>
+                      }
+                    </div>
+                    <button
+                      style={{fontSize:10,padding:"2px 6px",borderRadius:4,border:"1px solid var(--bor)",background:"none",cursor:"pointer",color:"var(--mu)",flexShrink:0,lineHeight:1.4}}
+                      onClick={()=>setPreviewSlotPicker({dayIdx,mealIdx:mi,mealType})}
+                      title="Replace this meal"
+                    >✏️</button>
+                  </div>
+                );
+              })}
             </div>
           ))}
         </div>
-        <button className="btn btn-p" onClick={()=>handleCopy(plan)} style={{minWidth:180}}>
-          📋 Copy to my week
-        </button>
-        <p style={{fontSize:12,color:"var(--mu)",marginTop:8}}>This will replace your current week's plan.</p>
+        <p style={{fontSize:12,color:"var(--mu)",marginBottom:12}}>Click a meal name to view the recipe · Click ✏️ to swap a slot</p>
+        <div style={{display:"flex",gap:10,flexWrap:"wrap"}}>
+          <button className="btn btn-p" onClick={()=>handleCopyRequest(plan)}>📋 Copy to my week</button>
+          <button className="btn btn-s" onClick={()=>setShowShoppingList({plan,entry})}>🛒 Shopping list</button>
+        </div>
       </div>
     );
   }
 
+  // ── Main library list ───────────────────────────────────────────────────────
   return (
     <div>
-      <div style={{marginBottom:20}}>
-        <h1 className="stitle">Plan Library</h1>
-        <p className="ssub">Pre-made weekly menus — preview and copy to your week in one click</p>
+      {showShoppingList && <ShoppingListModal plan={showShoppingList.plan} entry={showShoppingList.entry} onClose={()=>setShowShoppingList(null)}/>}
+      {showCopySafety && <CopySafetyModal plan={showCopySafety.plan} onClose={()=>setShowCopySafety(null)}/>}
+      {showCreatePlan && <CreatePlanModal onClose={()=>setShowCreatePlan(false)}/>}
+      <div style={{display:"flex",alignItems:"flex-start",justifyContent:"space-between",marginBottom:20,flexWrap:"wrap",gap:12}}>
+        <div>
+          <h1 className="stitle">Plan Library</h1>
+          <p className="ssub">Pre-made weekly menus — preview, edit slots, then copy to your week</p>
+        </div>
+        <button className="btn btn-p btn-sm" onClick={()=>setShowCreatePlan(true)}>✨ Create new plan</button>
       </div>
       <div className="plan-lib-grid">
         {PLAN_LIBRARY.map(entry => {
-          const stats = getPlanStats(entry);
+          const week = buildWeekFromFilter(entry.filter, recipePool);
+          const stats = getPlanStats(week);
           return (
             <div key={entry.id} className="plan-card" style={{background:entry.color,border:`1px solid ${entry.border}`}}>
               <div className="plan-card-emoji">{entry.emoji}</div>
@@ -22630,9 +22868,10 @@ function PlanLibraryTab({ allRecipes, mealPlan, setMealPlan, pantry, showToast, 
                 <span>🛒 {stats.missingCount} missing</span>
                 <span>🍽️ {stats.mealCount} meals</span>
               </div>
-              <div style={{display:"flex",gap:8,marginTop:12}}>
-                <button className="btn btn-s btn-sm" onClick={()=>setPreview({plan:stats.week,entry})}>Preview</button>
-                <button className="btn btn-p btn-sm" onClick={()=>{handleCopy(stats.week);}}>Copy to week</button>
+              <div style={{display:"flex",gap:6,marginTop:12,flexWrap:"wrap"}}>
+                <button className="btn btn-s btn-sm" onClick={()=>setPreview({plan:week,entry})}>Preview & edit</button>
+                <button className="btn btn-p btn-sm" onClick={()=>handleCopyRequest(week)}>Copy to week</button>
+                <button className="btn btn-g btn-sm" title="Shopping list" onClick={()=>setShowShoppingList({plan:week,entry})}>🛒</button>
               </div>
             </div>
           );
@@ -24166,7 +24405,7 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
   const allRecipes = allRecipesProp || RECIPES;
   const [slots,setSlots]=useState({Breakfast:true,Lunch:true,Dinner:true});
   // Slot interaction state
-  const [slotActions, setSlotActions] = useState(null);
+  const [slotPopover, setSlotPopover] = useState(null); // {dayIdx,mealIdx,mealType,key,dayLabel}
   const [replacePicker, setReplacePicker] = useState(null);
   const [customMealModal, setCustomMealModal] = useState(null);
   const [swapSource, setSwapSource] = useState(null);
@@ -24250,7 +24489,9 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
     });
   };
 
-  const handleSlotClick = (dayIdx, mealIdx, mealType) => {
+  const handleSlotClick = (dayIdx, mealIdx, mealType, meal) => {
+    // Close any open popover first
+    setSlotPopover(null);
     if (swapSource) {
       if (swapSource.mealType !== mealType) {
         if (showToast) showToast("⚠️ Can only swap within the same meal type (Breakfast↔Breakfast, etc.)");
@@ -24262,7 +24503,19 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
       setSwapSource(null);
       return;
     }
-    setSlotActions({ dayIdx, mealIdx, dayLabel: mealPlan[dayIdx]?.day, mealType });
+    if (meal) {
+      if (meal.kind === "custom") {
+        // Custom meals: open the custom meal editor
+        setCustomMealModal({ dayIdx, mealIdx, dayLabel: mealPlan[dayIdx]?.day, mealType, existing: meal });
+      } else {
+        // Recipe meals: open RecipeDetail directly
+        const recipeObj = meal.id ? allRecipes.find(r => r.id === meal.id) : null;
+        if (recipeObj) onViewRecipe(recipeObj);
+      }
+    } else {
+      // Empty slot: open recipe picker
+      setReplacePicker({ dayIdx, mealIdx, mealType });
+    }
   };
 
   const publishMenu = (menu) => {
@@ -24315,7 +24568,7 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
       return { ...r, missingCount, coreDishKey: computeCoreDishKey(r) };
     });
 
-    // ── 3. Seeded shuffle within groups (0-missing first, then 1, 2, …)
+    // ── 3. Seeded shuffle + high-value pantry term detection ─────────────────
     const seededRand = (() => {
       let s = seed >>> 0;
       return () => { s = (Math.imul(s, 1664525) + 1013904223) >>> 0; return s / 0x100000000; };
@@ -24328,8 +24581,19 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
       }
       return a;
     };
+    // High-value pantry ingredients (fish, seafood, meat) — prefer these when in pantry
+    const HIGH_VALUE_TERMS = ['salmon','cod','tuna','trout','mackerel','haddock','tilapia','halibut',
+      'sea bass','white fish','fish fillet','chicken','beef','pork','lamb','shrimp','prawn','crab','scallop'];
+    const pantryHighValueNorms = new Set(
+      HIGH_VALUE_TERMS.filter(t => ingInPantry(t, pantrySet)).map(t => normalizeIng(t))
+    );
+    // Get pantry ingredient normalized names used by a recipe
+    const getPantryIngsOf = r => (r.ingredients||[])
+      .filter(i => ingInPantry(i.n, pantrySet))
+      .map(i => normalizeIng(i.n));
+
+    // Build shuffled-within-groups pool (0-missing first for variety baseline)
     const buildSortedPool = pool => {
-      // Group by missingCount, shuffle within each group for variety
       const groups = {};
       pool.forEach(r => { const k = Math.min(r.missingCount, 9); (groups[k] = groups[k] || []).push(r); });
       const result = [];
@@ -24345,41 +24609,76 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
     const lPool = buildSortedPool(lAll.length >= 3 ? lAll : scored);
     const dPool = buildSortedPool(dAll.length >= 3 ? dAll : scored);
 
-    // ── 4. Debug logging ───────────────────────────────────────────────
+    // Fish/seafood pantry detection for dev log
+    const FISH_TERMS = ['salmon','cod','tuna','trout','mackerel','haddock','tilapia','halibut','sea bass','white fish','fish fillet'];
+    const fishInPantry = FISH_TERMS.filter(t => ingInPantry(t, pantrySet));
+    const fishInZeroMissingDinner = fishInPantry.length > 0
+      ? dAll.filter(r => r.missingCount === 0 && (r.ingredients||[]).some(i => fishInPantry.some(f => normalizeIng(i.n).includes(normalizeIng(f)))))
+      : [];
+
+    // ── 4. Enhanced debug logging ──────────────────────────────────────
     console.group('🍽️  AUTO-PLAN DEBUG — run seed: ' + seed);
     console.log('totalRecipes (allRecipes):', allRecipes.length);
     console.log('totalRecipes (RECIPES built-in):', RECIPES.length);
     console.log('dietaryAllowed:', allowedRecipes.length);
     console.log('breakfastCandidates:', bAll.length,
-      ' | zeroMissing:', bAll.filter(r => r.missingCount === 0).length,
-      ' | uniqueCoreDishKeys:', new Set(bAll.map(r => r.coreDishKey)).size);
+      '| zeroMissing:', bAll.filter(r => r.missingCount === 0).length,
+      '| uniqueKeys:', new Set(bAll.map(r => r.coreDishKey)).size);
     console.log('lunchCandidates:', lAll.length,
-      ' | zeroMissing:', lAll.filter(r => r.missingCount === 0).length,
-      ' | uniqueCoreDishKeys:', new Set(lAll.map(r => r.coreDishKey)).size);
+      '| zeroMissing:', lAll.filter(r => r.missingCount === 0).length,
+      '| uniqueKeys:', new Set(lAll.map(r => r.coreDishKey)).size);
     console.log('dinnerCandidates:', dAll.length,
-      ' | zeroMissing:', dAll.filter(r => r.missingCount === 0).length,
-      ' | uniqueCoreDishKeys:', new Set(dAll.map(r => r.coreDishKey)).size);
+      '| zeroMissing:', dAll.filter(r => r.missingCount === 0).length,
+      '| uniqueKeys:', new Set(dAll.map(r => r.coreDishKey)).size);
     console.log('pantryItems:', pantry.length, '| pantrySetSize:', pantrySet.size);
+    console.log('highValueInPantry:', [...pantryHighValueNorms].join(', ') || '(none)');
+    if(fishInPantry.length) {
+      console.log('🐟 Fish/seafood in pantry:', fishInPantry.join(', '));
+      console.log('   → 0-missing dinner options with fish:', fishInZeroMissingDinner.map(r=>r.title).join(', ') || '(none found)');
+    } else {
+      console.log('🐟 No fish/seafood detected in pantry');
+    }
+    // Top pantry ingredients used across all candidates
+    const ingUsage = {};
+    scored.forEach(r => getPantryIngsOf(r).forEach(n => { ingUsage[n] = (ingUsage[n]||0)+1; }));
+    const topIngs = Object.entries(ingUsage).sort((a,b)=>b[1]-a[1]).slice(0,8).map(([n,c])=>`${n}(${c})`);
+    console.log('topPantryIngsAcrossAll:', topIngs.join(', '));
     console.groupEnd();
 
-    // ── 5. Select recipes with dedup ──────────────────────────────────
+    // ── 5. Dynamic pick with pantry diversity + high-value scoring ─────
     const usedIds  = new Set();
     const usedKeys = new Set();
+    const usedPantryIngs = new Set(); // pantry ings already used this week
+
+    // Dynamic novelty score: higher = more new pantry diversity + high-value items
+    const noveltyScore = r => {
+      const ings = getPantryIngsOf(r);
+      const novelBonus   = ings.filter(n => !usedPantryIngs.has(n)).length * 10;
+      const highValBonus = ings.filter(n => [...pantryHighValueNorms].some(hv => n.includes(hv) || hv.includes(n))).length * 15;
+      return novelBonus + highValBonus;
+    };
+
     const pickFrom = pool => {
-      // Pass 1: unique ID + unique core-dish key
-      for(const r of pool) {
-        if(usedIds.has(r.id)) continue;
-        if(usedKeys.has(r.coreDishKey)) continue;
+      // Pass 1: unique ID + unique core-dish key, sort by [missingCount ASC, noveltyScore DESC]
+      const c1 = pool.filter(r => !usedIds.has(r.id) && !usedKeys.has(r.coreDishKey));
+      if (c1.length) {
+        c1.sort((a, b) => a.missingCount !== b.missingCount
+          ? a.missingCount - b.missingCount
+          : noveltyScore(b) - noveltyScore(a));
+        const r = c1[0];
         usedIds.add(r.id); usedKeys.add(r.coreDishKey);
+        getPantryIngsOf(r).forEach(n => usedPantryIngs.add(n));
         return { emoji: r.emoji, name: r.title, id: r.id };
       }
       // Pass 2: unique ID only (core-dish repeat allowed when pool thin)
-      for(const r of pool) {
-        if(usedIds.has(r.id)) continue;
+      const c2 = pool.filter(r => !usedIds.has(r.id));
+      if (c2.length) {
+        const r = c2[0];
         usedIds.add(r.id);
+        getPantryIngsOf(r).forEach(n => usedPantryIngs.add(n));
         return { emoji: r.emoji, name: r.title, id: r.id };
       }
-      // Pass 3: emergency (full repeat — should be extremely rare)
+      // Pass 3: emergency (full repeat — extremely rare)
       const r = pool[0];
       return r ? { emoji: r.emoji, name: r.title, id: r.id } : null;
     };
@@ -24392,6 +24691,13 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
         slots.Dinner    ? pickFrom(dPool) : null,
       ]
     }));
+
+    // Dev log: what pantry ings ended up being used
+    console.group('🍽️  AUTO-PLAN RESULT — pantry diversity');
+    console.log('usedPantryIngs across week:', [...usedPantryIngs].join(', ') || '(none)');
+    const fishUsed = [...usedPantryIngs].filter(n => FISH_TERMS.some(f => n.includes(normalizeIng(f)) || normalizeIng(f).includes(n)));
+    console.log('fish/seafood used in plan:', fishUsed.join(', ') || '(none)');
+    console.groupEnd();
 
     setMealPlan(newPlan);
     setPlanning(false);
@@ -24538,16 +24844,21 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
             {mealPlan.map(d=><div key={d.day} className="pdh">{d.day}</div>)}
             {active.map((mealType,mi)=>[
               <div key={`L${mealType}`} style={{display:"flex",alignItems:"center",justifyContent:"flex-end",paddingRight:8}}><div className="prl" style={{fontSize:11}}>{ME[mealType]}<span>{mealType}</span></div></div>,
-              ...mealPlan.map((day)=>{const meal=day.meals[mi];return(
+              ...mealPlan.map((day)=>{
+                const dayIdx=mealPlan.indexOf(day);
+                const meal=day.meals[mi];
+                const slotKey=`${dayIdx}-${mi}`;
+                const recipeObj=meal&&meal.kind!=="custom"&&meal.id?allRecipes.find(r=>r.id===meal.id):null;
+                return(
                 <div
                   key={`${day.day}${mealType}`}
                   className={`mslot ${meal?"filled":""}${swapSource&&swapSource.mealType===mealType?" swap-target":""}`}
-                  style={{cursor:"pointer",outline:swapSource&&swapSource.dayIdx===mealPlan.indexOf(day)&&swapSource.mealIdx===mi?"2px solid var(--clay)":"none",borderRadius:swapSource?"8px":"",position:"relative"}}
+                  style={{cursor:"pointer",outline:swapSource&&swapSource.dayIdx===dayIdx&&swapSource.mealIdx===mi?"2px solid var(--clay)":"none",borderRadius:swapSource?"8px":"",position:"relative"}}
                   draggable={!!meal}
-                  onClick={()=>handleSlotClick(mealPlan.indexOf(day), mi, mealType)}
+                  onClick={()=>handleSlotClick(dayIdx,mi,mealType,meal)}
                   onDragStart={e=>{
                     if(!meal) return;
-                    setDragSource({dayIdx:mealPlan.indexOf(day),mealIdx:mi,mealType});
+                    setDragSource({dayIdx,mealIdx:mi,mealType});
                     e.dataTransfer.effectAllowed="move";
                   }}
                   onDragOver={e=>{e.preventDefault();e.currentTarget.classList.add("drag-over");}}
@@ -24580,6 +24891,21 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
                               {recipeNeedsShopping(meal)&&<div style={{fontSize:10,color:"var(--gold)",fontWeight:600,marginTop:2}}>🛒 Needs shopping</div>}
                             </>
                         }
+                        {/* ⋯ slot options button */}
+                        <button
+                          className="slot-dot-btn"
+                          onClick={e=>{e.stopPropagation();setSlotPopover(v=>v?.key===slotKey?null:{dayIdx,mealIdx:mi,mealType,key:slotKey,dayLabel:day.day});}}
+                        >⋯</button>
+                        {slotPopover?.key===slotKey&&(
+                          <div className="slot-popover" onClick={e=>e.stopPropagation()}>
+                            {recipeObj&&<button className="slot-pop-item" onClick={()=>{setSlotPopover(null);onViewRecipe(recipeObj);}}>📖 View recipe</button>}
+                            <button className="slot-pop-item" onClick={()=>{setSlotPopover(null);setReplacePicker({dayIdx,mealIdx:mi,mealType});}}>🔄 Replace meal</button>
+                            <button className="slot-pop-item" onClick={()=>{setSlotPopover(null);setSwapSource({dayIdx,mealIdx:mi,mealType});if(showToast)showToast("↔ Click another slot to swap (same meal type)");}}>↔ Swap meal</button>
+                            <button className="slot-pop-item" onClick={()=>{setSlotPopover(null);setCustomMealModal({dayIdx,mealIdx:mi,dayLabel:day.day,mealType,existing:meal});}}>✏️ Custom meal</button>
+                            <div className="slot-pop-divider"/>
+                            <button className="slot-pop-item danger" onClick={()=>{setSlotPopover(null);setSlotMeal(dayIdx,mi,null);}}>🗑 Remove</button>
+                          </div>
+                        )}
                       </div>
                     : <div className="msadd">+</div>
                   }
@@ -24603,26 +24929,7 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
 
       {/* TODO [ROADMAP]: MealPrepPlanner — code retained as stub, not rendered */}
 
-      {slotActions && (()=>{
-        const { dayIdx, mealIdx, dayLabel, mealType } = slotActions;
-        const meal = mealPlan[dayIdx]?.meals[mealIdx];
-        const recipeObj = meal && meal.kind!=="custom" && meal.id ? allRecipes.find(r=>r.id===meal.id) : null;
-        return (
-          <SlotActionsModal
-            slot={slotActions}
-            meal={meal}
-            mealType={mealType}
-            dayLabel={dayLabel}
-            allRecipes={allRecipes}
-            onClose={()=>setSlotActions(null)}
-            onRemove={()=>setSlotMeal(dayIdx,mealIdx,null)}
-            onReplace={()=>setReplacePicker({dayIdx,mealIdx,mealType})}
-            onSwapStart={()=>{ setSwapSource({dayIdx,mealIdx,mealType}); if(showToast) showToast("↔ Now click the slot you want to swap with (same meal type)"); }}
-            onAddCustom={()=>setCustomMealModal({dayIdx,mealIdx,dayLabel,mealType,existing:meal})}
-            onViewRecipe={()=>{ if(recipeObj) onViewRecipe(recipeObj); }}
-          />
-        );
-      })()}
+      {/* SlotActionsModal removed — inline ⋯ popover used instead */}
 
       {replacePicker && (
         <RecipePickerModal
