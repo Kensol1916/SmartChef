@@ -22680,7 +22680,7 @@ class PlanLibraryErrorBoundary extends React.Component {
   }
 }
 
-function PlanLibraryTab({ allRecipes, mealPlan, setMealPlan, pantry, showToast, onViewRecipe, user,
+function PlanLibraryTab({ allRecipes, mealPlan, setMealPlan, pantry, showToast, onViewRecipe, user, prefs,
   libraryPreview: preview, setLibraryPreview: setPreview,
   libraryDraft: draftPlan, setLibraryDraft: setDraftPlan,
   libraryDraftTitle: draftTitle, setLibraryDraftTitle: setDraftTitle,
@@ -25039,12 +25039,15 @@ const generatePantrySteps = (t) => {
   const all   = [...reqs, ...opts];
   const ingList = all.slice(0, 5).join(', ');
   // Build generic 4-step instructions based on meal type + title
+  const nameLC   = (t.name||'').toLowerCase();
   const isEgg    = reqs.some(r => r.includes('egg'));
+  const isSoftBoiled = /soft.?boil|boiled egg/.test(nameLC);
+  const isFried  = /fried egg|eggs? fried/.test(nameLC);
   const isPasta  = reqs.some(r => r.includes('pasta'));
-  const isSoup   = /soup|stew|lentil|broth/.test((t.name||'').toLowerCase());
-  const isBaked  = /bake|baked|roast/.test((t.name||'').toLowerCase());
-  const isSalad  = /salad|bowl/.test((t.name||'').toLowerCase());
-  const isToast  = /toast|bread/.test((t.name||'').toLowerCase());
+  const isSoup   = /soup|stew|lentil|broth/.test(nameLC);
+  const isBaked  = /bake|baked|roast/.test(nameLC);
+  const isSalad  = /salad|bowl/.test(nameLC);
+  const isToast  = /toast|bread/.test(nameLC);
   if (isToast) return [
     {n:1, t:'Toast bread',     d:`Toast bread to your liking. ${opts.length?'Gather: '+opts.slice(0,3).join(', ')+'.':''}`},
     {n:2, t:'Prepare topping', d:`Prepare your topping: ${reqs.filter(r=>!r.includes('bread')).join(', ')||'spread'}.`},
@@ -25068,6 +25071,19 @@ const generatePantrySteps = (t) => {
     {n:2, t:'Make sauce',  d:`Heat olive oil. Add ${opts.slice(0,3).join(', ') || 'garlic'} and cook 2–3 min.`},
     {n:3, t:'Combine',     d:`Toss drained pasta in sauce, adding pasta water as needed for consistency.`},
     {n:4, t:'Finish',      d:`Season with salt and pepper. Serve with parmesan if available.`},
+  ];
+  if (isSoftBoiled) return [
+    {n:1, t:'Bring water to boil', d:`Fill a saucepan with enough water to fully cover the eggs. Bring to a rolling boil over high heat.`},
+    {n:2, t:'Lower eggs in',       d:`Using a spoon, gently lower the eggs into the boiling water. Reduce heat to a gentle simmer.`},
+    {n:3, t:'Cook 6–7 minutes',    d:`Simmer for 6–7 minutes for a soft, jammy yolk. Adjust to 5 min for runny or 9 min for firm.`},
+    {n:4, t:'Ice bath',            d:`Transfer immediately to a bowl of ice water for 1–2 minutes to stop cooking.`},
+    {n:5, t:'Peel and serve',      d:`Peel carefully, season with salt and serve on toast or as desired.`},
+  ];
+  if (isFried) return [
+    {n:1, t:'Heat pan',     d:`Heat a non-stick pan over medium heat. Add a teaspoon of butter or oil.`},
+    {n:2, t:'Crack egg',    d:`Crack egg(s) directly into the pan. Season with salt and pepper.`},
+    {n:3, t:'Cook',         d:`Cook until whites are set, about 2–3 minutes. For over-easy, flip briefly for 30 seconds.`},
+    {n:4, t:'Serve',        d:`Slide onto plate immediately and serve hot.`},
   ];
   if (isEgg) return [
     {n:1, t:'Prep',    d:`Crack eggs into a bowl. Beat lightly. Prepare any mix-ins: ${opts.slice(0,3).join(', ') || 'salt, pepper'}.`},
@@ -25135,9 +25151,15 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
     if (!meal) return false;
     if (meal.kind === "custom") return false;
     const recipeId = meal.id;
+    const ps = buildPantrySet(pantry);
+    // Pantry-generated meals: use getPantryRecipeObj which includes optionals
+    if (String(recipeId).startsWith('pantry-')) {
+      const pantryRecipe = getPantryRecipeObj(recipeId);
+      if (!pantryRecipe?.ingredients) return false;
+      return pantryRecipe.ingredients.some(ing => !ingInPantry(ing.n, ps));
+    }
     const recipe = allRecipes.find(r => r.id === recipeId);
     if(!recipe || !recipe.ingredients) return false;
-    const ps = buildPantrySet(pantry);
     return recipe.ingredients.some(ing => !ingInPantry(ing.n, ps));
   };
 
