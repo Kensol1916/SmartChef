@@ -25119,71 +25119,325 @@ const PANTRY_MEAL_TEMPLATES = [
   { name:"Tuna Pasta",           emoji:"🍝", meal:"dinner",    time:15, requires:["pasta","tuna"],      optionals:["olive oil","garlic","lemon","capers"],   contains_meat:false, contains_fish:true,  contains_dairy:false },
 ];
 
-// Generate sensible cooking steps from a pantry meal template
+// Generate detailed, ingredient-aware cooking steps from a pantry meal template
 const generatePantrySteps = (t) => {
-  const reqs = (t.requires || []);
-  const opts  = (t.optionals || []);
-  const all   = [...reqs, ...opts];
-  const ingList = all.slice(0, 5).join(', ');
-  // Build generic 4-step instructions based on meal type + title
-  const nameLC   = (t.name||'').toLowerCase();
+  const nameLC = (t.name || '').toLowerCase();
+  const reqs   = (t.requires  || []);
+  const opts   = (t.optionals || []);
+
+  // ── Exact name matches — specific, ingredient-aware steps ──────────────────
+
+  // SCRAMBLED EGGS
+  if (nameLC === 'scrambled eggs') return [
+    {n:1, t:'Crack & beat eggs',  d:'Crack 2–3 eggs into a bowl. Add a splash of milk if available. Season with a pinch of salt and beat with a fork until yolks and whites are fully combined.'},
+    {n:2, t:'Heat pan',           d:'Place a non-stick pan over low-medium heat. Add 1 tsp butter and let it melt gently — do not let it brown or sizzle.'},
+    {n:3, t:'Add eggs',           d:'Pour the beaten eggs into the pan. Let them sit undisturbed for 10–15 seconds until the edges just begin to set.'},
+    {n:4, t:'Fold slowly',        d:'Using a spatula, push the eggs from the edges to the centre in slow, wide folds every 15–20 seconds. Keep the heat low.'},
+    {n:5, t:'Finish & serve',     d:'Remove from heat while still slightly glossy and soft — they finish cooking from residual heat. Add shredded cheese if using. Season with black pepper and serve immediately.'},
+  ];
+
+  // FRIED EGGS
+  if (nameLC === 'fried eggs') return [
+    {n:1, t:'Heat pan',           d:'Pour a thin layer of oil into a non-stick pan. Heat over medium heat until the oil shimmers but is not smoking.'},
+    {n:2, t:'Crack eggs',         d:'Crack each egg one at a time into a small cup first, then slide gently into the hot oil — this prevents broken yolks.'},
+    {n:3, t:'Cook whites',        d:'Cook undisturbed for 2–3 minutes until the whites are fully set and the edges are lightly golden. Season with salt and pepper.'},
+    {n:4, t:'Serve',              d:'For sunny-side up, slide straight onto the plate. For over-easy, flip gently and cook 30 more seconds, then serve immediately.'},
+  ];
+
+  // SOFT-BOILED EGGS
+  if (nameLC === 'soft-boiled eggs') return [
+    {n:1, t:'Bring water to boil', d:'Fill a small saucepan with enough water to fully submerge the eggs. Bring to a rolling boil over high heat.'},
+    {n:2, t:'Lower eggs in',       d:'Using a slotted spoon, gently lower eggs into the boiling water. Set a timer immediately.'},
+    {n:3, t:'Boil to preference',  d:'Boil for exactly 6 minutes for a runny yolk, 7 minutes for jammy, or 9 minutes for fully set. Do not lift the lid.'},
+    {n:4, t:'Ice bath',            d:'Transfer eggs straight into a bowl of cold water (with ice if available) for 2 minutes to stop cooking.'},
+    {n:5, t:'Peel & serve',        d:'Tap each egg gently on the counter and peel under cold running water. Halve and season with a pinch of salt. Serve on toast or with soldiers.'},
+  ];
+
+  // CLASSIC OMELET
+  if (nameLC === 'classic omelet') return [
+    {n:1, t:'Beat eggs',          d:'Crack 2–3 eggs into a bowl. Add a pinch of salt and beat vigorously with a fork until fully combined and slightly foamy — about 30 seconds.'},
+    {n:2, t:'Prep filling',       d:'Dice or grate any fillings (cheese, onion) into small pieces. Have everything ready before the eggs go in — the omelet cooks fast.'},
+    {n:3, t:'Heat pan',           d:'Melt 1 tsp butter in a non-stick pan over medium-high heat. Swirl to coat. Heat until the foam subsides and butter just begins to colour.'},
+    {n:4, t:'Cook eggs',          d:'Pour in beaten eggs. Shake the pan and stir the centre with a spatula for 20–30 seconds until nearly set but the top is still slightly wet.'},
+    {n:5, t:'Add filling & fold', d:'Scatter cheese or other fillings over one half. Fold the other half over the filling and slide immediately onto a warm plate.'},
+    {n:6, t:'Serve',              d:'Season with black pepper. A properly made omelet should be pale yellow, not browned. Serve at once.'},
+  ];
+
+  // BANANA PANCAKES
+  if (nameLC === 'banana pancakes') return [
+    {n:1, t:'Mash banana',        d:'Peel one very ripe banana and mash thoroughly with a fork in a mixing bowl until smooth with no large lumps.'},
+    {n:2, t:'Mix batter',         d:'Add 2 eggs to the mashed banana and stir until combined. If using flour, add 2 tbsp and mix. Add a splash of milk to thin the batter slightly if needed.'},
+    {n:3, t:'Heat pan',           d:'Heat a non-stick pan over medium-low heat. Add a small amount of butter and swirl to coat. The pan is ready when a drop of batter sizzles gently.'},
+    {n:4, t:'Cook pancakes',      d:'Drop spoonfuls of batter into the pan (about 7–8cm wide). Cook for 2–3 minutes until bubbles form on the surface and the edges look set and dry.'},
+    {n:5, t:'Flip',               d:'Flip each pancake carefully — they are delicate — and cook for 1–2 more minutes until lightly golden on the second side.'},
+    {n:6, t:'Serve',              d:'Stack on a warm plate and drizzle with honey. Serve immediately while warm.'},
+  ];
+
+  // PORRIDGE / OATMEAL
+  if (/porridge|oatmeal/.test(nameLC)) return [
+    {n:1, t:'Measure oats',       d:'Add ½ cup (45g) of rolled oats to a small saucepan. For a creamier result, use a mix of milk and water rather than water alone.'},
+    {n:2, t:'Add liquid & heat',  d:'Pour in 1 cup (240ml) of water, milk, or a mix of both. Stir to combine and place over medium heat.'},
+    {n:3, t:'Cook & stir',        d:'Bring to a gentle boil, stirring frequently. Reduce to low and simmer for 4–5 minutes, stirring constantly, until the oats are thick and creamy.'},
+    {n:4, t:'Add toppings',       d:'Remove from heat. Slice in banana, stir in a drizzle of honey, or sprinkle with cinnamon. Stir gently.'},
+    {n:5, t:'Serve',              d:'Pour into a bowl and serve immediately. The porridge will thicken as it cools — add a splash of milk to loosen if needed.'},
+  ];
+
+  // AVOCADO TOAST
+  if (nameLC === 'avocado toast') return [
+    {n:1, t:'Toast bread',        d:'Toast 1–2 slices of bread until golden and crisp — use a toaster, or a dry pan over medium heat for 2 minutes per side.'},
+    {n:2, t:'Prep avocado',       d:'Halve the avocado and remove the pit. Scoop the flesh into a bowl and mash with a fork until mostly smooth. Add a squeeze of lemon juice, salt, and black pepper.'},
+    {n:3, t:'Spread & season',    d:'Spoon the mashed avocado onto the warm toast and spread evenly to the edges. Sprinkle with chili flakes if using.'},
+    {n:4, t:'Serve',              d:'Serve immediately — avocado browns quickly once mashed.'},
+  ];
+
+  // PEANUT BUTTER TOAST
+  if (nameLC === 'peanut butter toast') return [
+    {n:1, t:'Toast bread',        d:'Toast 1–2 slices of bread to your preferred doneness — lightly golden for soft, darker for crisp.'},
+    {n:2, t:'Spread peanut butter',d:'Spread a generous layer of peanut butter across each slice while still hot from the toaster so it softens and melts slightly into the bread.'},
+    {n:3, t:'Add toppings',       d:'Peel and slice one banana into thin rounds and arrange on top. Drizzle lightly with honey if using.'},
+    {n:4, t:'Serve',              d:'Serve immediately while the toast is still warm.'},
+  ];
+
+  // YOGURT & HONEY
+  if (/yogurt.*honey|honey.*yogurt/.test(nameLC)) return [
+    {n:1, t:'Spoon yogurt',       d:'Scoop 150–200g of yogurt into a bowl. Greek yogurt works best for a thick, creamy base.'},
+    {n:2, t:'Add fruit',          d:'Peel and slice one banana into rounds and layer over the yogurt. Add berries if using.'},
+    {n:3, t:'Add crunch',         d:'Sprinkle a handful of granola over the fruit for texture if you have it.'},
+    {n:4, t:'Drizzle honey',      d:'Drizzle 1–2 tsp of honey in a zigzag over everything. Do not stir — serve as is so the layers stay distinct.'},
+  ];
+
+  // PASTA AGLIO E OLIO
+  if (/pasta aglio/.test(nameLC)) return [
+    {n:1, t:'Boil pasta',         d:'Bring a large pot of well-salted water to a rolling boil (1 tsp salt per litre). Add pasta and cook until al dente per packet. Reserve 1 cup of pasta water before draining.'},
+    {n:2, t:'Slice garlic',       d:'Peel and thinly slice 4–6 garlic cloves. The thinner they are, the faster they will crisp — aim for 1–2mm slices.'},
+    {n:3, t:'Toast garlic',       d:'Warm 4 tbsp olive oil in a large pan over medium-low heat. Add the garlic slices and cook gently for 3–4 minutes, stirring often, until golden but not browned.'},
+    {n:4, t:'Add chili',          d:'Add a generous pinch of chili flakes and stir for 30 seconds. Remove pan from heat immediately to stop the garlic cooking further.'},
+    {n:5, t:'Toss pasta',         d:'Add the drained pasta to the pan. Return to low heat. Toss energetically to coat, adding reserved pasta water 2 tbsp at a time until the sauce is glossy and just coats the pasta.'},
+    {n:6, t:'Finish & serve',     d:'Remove from heat. Scatter chopped parsley and freshly grated parmesan over the top. Serve immediately in warmed bowls.'},
+  ];
+
+  // TUNA SALAD
+  if (nameLC === 'tuna salad') return [
+    {n:1, t:'Drain tuna',         d:'Open the tuna can and drain thoroughly, pressing the lid against the contents to squeeze out all excess liquid. Flake into a bowl with a fork.'},
+    {n:2, t:'Make dressing',      d:'Add 1–2 tbsp mayonnaise and a squeeze of lemon juice. Stir gently to combine — do not over-mix or the tuna will turn mushy.'},
+    {n:3, t:'Add aromatics',      d:'Finely dice the onion (use as little or as much as you like) and stir into the tuna. Season generously with salt and black pepper.'},
+    {n:4, t:'Serve',              d:'Serve on toast, in a sandwich, or on a bed of greens. Best eaten immediately but keeps refrigerated for up to 2 days.'},
+  ];
+
+  // EGG SALAD SANDWICH
+  if (/egg salad/.test(nameLC)) return [
+    {n:1, t:'Boil eggs',          d:'Place eggs in a saucepan, cover with cold water, and bring to a boil. Reduce to a gentle simmer and cook for 10 minutes. Transfer to cold water for 5 minutes, then peel and chop into small pieces.'},
+    {n:2, t:'Make filling',       d:'In a bowl, mash the chopped eggs with 1–2 tbsp mayonnaise and ½ tsp mustard. Season with salt and black pepper. Keep it slightly chunky for texture.'},
+    {n:3, t:'Toast bread',        d:'Toast both slices of bread to your liking. Toasting prevents the filling from making the sandwich soggy.'},
+    {n:4, t:'Assemble',           d:'Spread the egg salad generously on one slice. Add any extras you have (sliced cucumber, lettuce), then top with the second slice.'},
+    {n:5, t:'Serve',              d:'Cut diagonally and serve immediately.'},
+  ];
+
+  // LENTIL SOUP
+  if (nameLC === 'lentil soup') return [
+    {n:1, t:'Rinse lentils',      d:'Place lentils in a fine sieve and rinse under cold running water for 30 seconds until the water runs clear. No pre-soaking needed for red or green lentils.'},
+    {n:2, t:'Sauté aromatics',    d:'Heat 1 tbsp olive oil in a medium pot over medium heat. Finely dice the onion and cook for 5–6 minutes, stirring often, until soft and lightly golden.'},
+    {n:3, t:'Add garlic & spice', d:'Add 2 minced garlic cloves and 1 tsp cumin. Stir for 60 seconds until fragrant. Add diced tomato if using and cook for 2 more minutes.'},
+    {n:4, t:'Add lentils & water',d:'Add the rinsed lentils and 750ml (3 cups) water or stock. Stir well. Bring to a full boil over high heat.'},
+    {n:5, t:'Simmer 20–25 min',   d:'Reduce to a steady simmer. Cook uncovered for 20–25 minutes, stirring occasionally, until lentils are completely soft and beginning to break down into the broth.'},
+    {n:6, t:'Season & serve',     d:'Season with 1 tsp salt. Taste and adjust — add more cumin or a squeeze of lemon if available. Serve hot with flatbread or crusty bread.'},
+  ];
+
+  // RICE & BEANS
+  if (/rice.*beans|beans.*rice/.test(nameLC) && !nameLC.includes('fried')) return [
+    {n:1, t:'Cook rice',          d:'Rinse the rice in a sieve until the water runs clear. Add to a pot with 1.5× its volume in cold water. Bring to a boil, cover tightly, reduce to the lowest heat, and cook for 15 minutes. Remove from heat and steam with the lid on for 5 more minutes.'},
+    {n:2, t:'Sauté aromatics',    d:'In a separate pan, heat 1 tbsp oil over medium heat. Finely dice the onion and cook for 5 minutes until translucent. Add minced garlic and stir for 1 more minute.'},
+    {n:3, t:'Season beans',       d:'Drain and rinse the beans, then add to the pan. Stir in ½ tsp cumin and a good pinch of salt. Cook for 3–4 minutes, stirring, until the beans are heated through and coated in flavour.'},
+    {n:4, t:'Combine & serve',    d:'Fluff the cooked rice with a fork. Spoon the seasoned beans over the rice or mix together. Taste and adjust salt.'},
+  ];
+
+  // CHICKPEA SALAD
+  if (nameLC === 'chickpea salad') return [
+    {n:1, t:'Drain chickpeas',    d:'Drain and rinse the chickpeas thoroughly in a sieve under cold water. Shake well and pat dry with a paper towel — drier chickpeas absorb the dressing better.'},
+    {n:2, t:'Chop aromatics',     d:'Finely dice the onion. Mince the garlic very finely. Roughly chop any parsley, using both leaves and tender stems.'},
+    {n:3, t:'Make dressing',      d:'In a large bowl, whisk together 2 tbsp olive oil and the juice of half a lemon. Season with salt and black pepper.'},
+    {n:4, t:'Toss & rest',        d:'Add chickpeas, onion, garlic, and parsley to the dressing. Toss well. Let rest for 5 minutes so the chickpeas soak up the flavour.'},
+    {n:5, t:'Serve',              d:'Taste and adjust seasoning with more salt, lemon, or olive oil. Serve at room temperature or lightly chilled.'},
+  ];
+
+  // TOMATO SOUP
+  if (nameLC === 'tomato soup') return [
+    {n:1, t:'Chop tomatoes',      d:'Roughly chop the tomatoes into large pieces — no need to peel. Dice the onion into 1–2cm chunks.'},
+    {n:2, t:'Sauté base',         d:'Heat 1 tbsp olive oil in a medium pot over medium heat. Add the onion and cook for 6–7 minutes, stirring, until soft and beginning to turn golden.'},
+    {n:3, t:'Add garlic & tomato',d:'Add 2 minced garlic cloves and cook for 1 minute until fragrant. Add all the chopped tomatoes and stir well to combine.'},
+    {n:4, t:'Simmer',             d:'Add 300ml water or stock. Season with 1 tsp salt and a small pinch of sugar to balance acidity. Bring to a boil, then simmer for 15 minutes until tomatoes are completely soft and collapsing.'},
+    {n:5, t:'Blend',              d:'Use a hand blender to blend until completely smooth. Alternatively, mash roughly with a potato masher for a chunky texture. Stir in torn basil leaves if available.'},
+    {n:6, t:'Serve',              d:'Taste and adjust seasoning. Ladle into bowls and add a swirl of olive oil on top. Serve with crusty bread.'},
+  ];
+
+  // SIMPLE FRIED RICE (lunch)
+  if (nameLC === 'simple fried rice') return [
+    {n:1, t:'Prep cold rice',     d:'Day-old cold rice is ideal — fresh rice is too moist and turns gluey. If using fresh, spread it on a plate and refrigerate for 30 minutes. Break up all clumps before cooking.'},
+    {n:2, t:'Beat eggs',          d:'Beat 2 eggs in a small bowl with a pinch of salt. Set aside.'},
+    {n:3, t:'Fry aromatics',      d:'Heat 1 tbsp oil in a wok or large frying pan over high heat until almost smoking. Add minced garlic if using and stir-fry for 20 seconds.'},
+    {n:4, t:'Fry rice',           d:'Add the rice all at once. Press flat against the hot pan and leave undisturbed for 1–2 minutes to develop a light crust. Then stir-fry constantly for 2 more minutes.'},
+    {n:5, t:'Add eggs',           d:'Push the rice to one side of the pan. Pour the beaten eggs into the empty space. Scramble for 30 seconds until just set, then fold through the rice.'},
+    {n:6, t:'Season & serve',     d:'Drizzle 1–2 tbsp soy sauce and a few drops of sesame oil if available over the rice. Toss well for 30 more seconds. Scatter sliced spring onion on top and serve immediately.'},
+  ];
+
+  // BAKED SALMON
+  if (nameLC === 'baked salmon') return [
+    {n:1, t:'Preheat oven',       d:'Preheat oven to 200°C (400°F / Gas 6). Line a baking tray with foil or baking paper.'},
+    {n:2, t:'Prepare salmon',     d:'Pat the salmon fillet(s) dry with a paper towel — removing surface moisture helps the fish roast rather than steam. Place skin-side down on the lined tray.'},
+    {n:3, t:'Season',             d:'Rub the surface with 1 tsp olive oil. Season generously with salt and black pepper. Lay thin lemon slices over the top, add minced garlic and a sprinkle of dill if using.'},
+    {n:4, t:'Bake 12–15 minutes', d:'Bake in the hot oven for 12–15 minutes depending on the thickness of the fillet. The salmon is done when it flakes easily when pressed gently with a fork and the flesh is opaque throughout.'},
+    {n:5, t:'Rest & serve',       d:'Remove from the oven and rest on the tray for 2 minutes. Squeeze extra lemon juice over the top and serve immediately.'},
+  ];
+
+  // PAN-SEARED WHITE FISH
+  if (/pan.?sear|white fish/.test(nameLC)) return [
+    {n:1, t:'Pat fish dry',       d:'Pat the fish fillet completely dry on both sides with paper towel. This is the single most important step for a good sear — any moisture causes steaming instead of browning.'},
+    {n:2, t:'Season',             d:'Season both sides generously with salt and black pepper immediately before cooking. Do not season early as salt draws out moisture.'},
+    {n:3, t:'Heat pan',           d:'Heat a stainless steel or non-stick pan over medium-high heat until very hot — about 2 minutes. Add 1 tbsp oil and let it shimmer.'},
+    {n:4, t:'Sear',               d:'Place fish presentation-side down (non-skin side). Press gently with a spatula for 10 seconds. Cook undisturbed for 3–4 minutes until golden and the fish releases naturally from the pan without sticking.'},
+    {n:5, t:'Flip & baste',       d:'Flip the fillet carefully. Add a knob of butter and minced garlic to the pan. Tilt the pan and spoon the foaming butter repeatedly over the fish for 1–2 minutes until cooked through.'},
+    {n:6, t:'Serve',              d:'Transfer to a warm plate. Squeeze lemon juice over the top and scatter chopped parsley. Serve at once — fish cools quickly.'},
+  ];
+
+  // GARLIC BUTTER PASTA
+  if (nameLC === 'garlic butter pasta') return [
+    {n:1, t:'Boil pasta',         d:'Bring a large pot of well-salted water (tastes like mild seawater) to a rolling boil. Cook pasta until al dente per packet. Reserve 1 cup of the starchy cooking water before draining.'},
+    {n:2, t:'Toast garlic',       d:'Mince 3–4 garlic cloves. Melt 2 tbsp butter in a large pan over medium-low heat. Add garlic and cook gently for 2 minutes, stirring, until fragrant and lightly golden — not browned.'},
+    {n:3, t:'Add flavour',        d:'Add a pinch of chili flakes and a squeeze of lemon juice if available. Stir for 30 seconds, then remove from heat to stop the garlic cooking.'},
+    {n:4, t:'Toss pasta',         d:'Add the drained pasta to the butter pan. Return to low heat. Toss vigorously to coat, adding pasta water 2 tbsp at a time until you have a silky, glossy sauce that clings to the pasta.'},
+    {n:5, t:'Finish & serve',     d:'Remove from heat. Grate parmesan over the top and add chopped parsley if using. Grind black pepper generously. Serve in warm bowls immediately.'},
+  ];
+
+  // PASTA WITH TOMATO
+  if (/pasta.*tomato|tomato.*pasta/.test(nameLC)) return [
+    {n:1, t:'Boil pasta',         d:'Bring a large pot of salted water to a rolling boil. Cook pasta until al dente per packet. Reserve ½ cup pasta water before draining.'},
+    {n:2, t:'Sauté base',         d:'Heat 2 tbsp olive oil in a wide pan over medium heat. Finely dice the onion and cook for 5–6 minutes until soft. Add minced garlic and stir for 1 more minute.'},
+    {n:3, t:'Make tomato sauce',  d:'Add chopped tomatoes (fresh or tinned). Season with 1 tsp salt and a pinch of sugar. Simmer over medium heat for 12–15 minutes, stirring occasionally, until the sauce thickens and the raw tomato taste is gone.'},
+    {n:4, t:'Toss pasta',         d:'Add the drained pasta directly to the sauce. Toss well over low heat to coat, adding a splash of reserved pasta water if the sauce is too thick.'},
+    {n:5, t:'Finish & serve',     d:'Remove from heat. Add torn basil leaves if available and a drizzle of olive oil. Serve at once.'},
+  ];
+
+  // SIMPLE LENTIL STEW
+  if (nameLC === 'simple lentil stew') return [
+    {n:1, t:'Rinse lentils',      d:'Rinse the lentils in a sieve under cold water until the water runs completely clear. Set aside.'},
+    {n:2, t:'Caramelise onion',   d:'Heat 2 tbsp olive oil in a heavy-bottomed pot over medium heat. Finely dice the onion and cook for 7–8 minutes, stirring often, until deep golden — this sweetness is the base of the stew.'},
+    {n:3, t:'Add garlic & spice', d:'Add 2 minced garlic cloves and 1 tsp cumin. Stir for 60 seconds. Add diced tomato if using and cook for 2 minutes until it breaks down slightly.'},
+    {n:4, t:'Add lentils & water',d:'Add the rinsed lentils and 800ml (3½ cups) water. Stir well and bring to a full boil.'},
+    {n:5, t:'Simmer 25–30 min',   d:'Reduce to a low simmer. Cook uncovered for 25–30 minutes, stirring every 10 minutes. The stew is ready when lentils are completely tender. Add water if it gets too thick.'},
+    {n:6, t:'Season & serve',     d:'Season generously with salt. Taste and adjust spices. Serve hot in deep bowls with crusty bread or over rice.'},
+  ];
+
+  // CHICKPEA STEW
+  if (nameLC === 'chickpea stew') return [
+    {n:1, t:'Prep chickpeas',     d:'Drain and rinse tinned chickpeas in a sieve under cold water. Shake off excess water and set aside.'},
+    {n:2, t:'Sauté aromatics',    d:'Heat 2 tbsp olive oil in a wide pan or pot over medium heat. Finely dice the onion and cook for 6 minutes until soft. Add minced garlic and stir for 1 minute more.'},
+    {n:3, t:'Add tomato & spice', d:'Add diced tomato and ½ tsp cumin. Stir and cook for 3–4 minutes, pressing the tomato with the back of the spoon until it breaks down into a rough sauce.'},
+    {n:4, t:'Add chickpeas',      d:'Add the drained chickpeas and 200ml water. Stir to combine. Season with 1 tsp salt.'},
+    {n:5, t:'Simmer 15 minutes',  d:'Simmer over medium-low heat for 15 minutes, stirring occasionally, until the sauce has thickened and the chickpeas are fully flavoured all the way through.'},
+    {n:6, t:'Serve',              d:'Taste and adjust seasoning. Serve over rice, with flatbread, or as a standalone stew.'},
+  ];
+
+  // EGG FRIED RICE (dinner)
+  if (nameLC === 'egg fried rice') return [
+    {n:1, t:'Prep cold rice',     d:'Use cooked, cold rice (day-old is ideal). Break up all clumps with clean hands before it goes in the pan — cold separated rice fries properly; warm clumped rice steams.'},
+    {n:2, t:'Beat eggs',          d:'Beat 2–3 eggs in a bowl with a pinch of salt. Set aside.'},
+    {n:3, t:'Heat wok',           d:'Heat a wok or large frying pan over the highest heat your hob allows. Add 2 tbsp oil. Wait until the oil is very hot — almost smoking.'},
+    {n:4, t:'Fry rice',           d:'Add minced garlic if using and stir-fry for 15 seconds. Add all the cold rice. Press flat against the hot wok and leave for 1 minute to crisp, then stir-fry continuously for 2 minutes.'},
+    {n:5, t:'Add eggs',           d:'Push the rice to one side. Pour the beaten eggs into the empty space and scramble for 30 seconds until just set. Immediately fold through the rice.'},
+    {n:6, t:'Season & serve',     d:'Add 2 tbsp soy sauce, a few drops of sesame oil, and frozen peas if using. Toss everything together for 1 final minute. Scatter sliced spring onion on top and serve piping hot.'},
+  ];
+
+  // STUFFED OMELETTE
+  if (/stuffed omelet|stuffed omelette/.test(nameLC)) return [
+    {n:1, t:'Prep filling',       d:'Finely dice the onion into 5mm pieces. Dice any tomato small and pat dry with paper towel to remove excess moisture. Grate cheese if using.'},
+    {n:2, t:'Cook filling',       d:'Heat a small amount of oil in a pan over medium heat. Cook the onion for 3–4 minutes until softened and lightly golden. Add tomato and cook 1 more minute. Slide onto a plate and set aside.'},
+    {n:3, t:'Beat eggs',          d:'Crack 3 eggs into a bowl. Season with salt and pepper and beat until well combined.'},
+    {n:4, t:'Cook egg base',      d:'Wipe the pan clean and return to medium heat. Add a thin layer of oil. Pour in the eggs and tilt the pan immediately to spread evenly. Cook for 1–2 minutes until the edges are set but the centre is still slightly soft.'},
+    {n:5, t:'Fill & fold',        d:'Spoon the filling onto one half of the omelette. Add grated cheese on top if using. Fold the bare half over the filling and press gently with the spatula.'},
+    {n:6, t:'Serve',              d:'Slide immediately onto a plate. A good stuffed omelette should be golden outside and just moist inside. Serve at once.'},
+  ];
+
+  // BEANS ON TOAST
+  if (/beans on toast/.test(nameLC)) return [
+    {n:1, t:'Heat beans',         d:'Tip the tinned beans into a small saucepan. Heat over medium heat, stirring occasionally, for 4–5 minutes until piping hot throughout. Season with salt and black pepper.'},
+    {n:2, t:'Toast bread',        d:'Toast the bread to your liking while the beans heat. For extra richness, spread butter on the toast as soon as it comes out, while it is still hot.'},
+    {n:3, t:'Plate',              d:'Place the toast on a plate and spoon the hot beans generously over the top, letting them pool slightly.'},
+    {n:4, t:'Finish & serve',     d:'Grate or crumble cheese over the beans if using — the heat of the beans will melt it slightly. Serve immediately.'},
+  ];
+
+  // POTATO & EGG BAKE
+  if (/potato.*egg bake|potato.*egg/.test(nameLC)) return [
+    {n:1, t:'Preheat oven',       d:'Preheat oven to 200°C (400°F / Gas 6). Lightly grease a baking dish or oven-safe pan with olive oil.'},
+    {n:2, t:'Prep potatoes',      d:'Wash the potatoes thoroughly. Slice into 5mm-thick rounds — no need to peel. Toss in a bowl with 2 tbsp olive oil, ½ tsp salt, black pepper, and paprika if using.'},
+    {n:3, t:'Par-bake potatoes',  d:'Spread potato slices in a single overlapping layer in the baking dish. Bake at 200°C for 20 minutes until starting to turn golden and tender when poked with a knife.'},
+    {n:4, t:'Add onion',          d:'If using onion, peel and slice into thin rings. Scatter over the potatoes after the first 10 minutes of their baking time so the onion softens without burning.'},
+    {n:5, t:'Add eggs',           d:'Remove the dish from the oven. Use the back of a spoon to create small shallow wells in the potatoes. Crack one egg into each well, being careful not to break the yolk.'},
+    {n:6, t:'Bake 8–10 minutes',  d:'Return to the oven and bake for 8–10 more minutes until the egg whites are completely set and opaque. For runny yolks, check at 8 minutes; for set yolks, give it 12.'},
+    {n:7, t:'Serve',              d:'Bring the dish straight to the table. Season eggs with salt, pepper, and a pinch of paprika. Serve with crusty bread to scoop up the yolk.'},
+  ];
+
+  // TUNA PASTA
+  if (/tuna pasta/.test(nameLC)) return [
+    {n:1, t:'Boil pasta',         d:'Bring a large pot of well-salted water to a rolling boil. Cook pasta until al dente per packet. Reserve ½ cup of the starchy pasta water before draining.'},
+    {n:2, t:'Drain & flake tuna', d:'While the pasta cooks, drain the tuna can thoroughly and flake the fish with a fork into rough chunks. Mince the garlic if using.'},
+    {n:3, t:'Sauté garlic',       d:'Heat 2 tbsp olive oil in a wide pan over medium heat. Add minced garlic and cook for 1–2 minutes, stirring, until fragrant and lightly golden — do not burn it.'},
+    {n:4, t:'Add tuna',           d:'Add the flaked tuna to the pan. Stir gently to coat in the garlicky oil. Squeeze in lemon juice and add capers if using. Cook for 1–2 minutes to warm through.'},
+    {n:5, t:'Toss pasta',         d:'Add the drained pasta directly to the pan. Toss well to combine, adding pasta water 2 tbsp at a time to loosen into a light, saucy consistency.'},
+    {n:6, t:'Season & serve',     d:'Taste and season with salt and black pepper. No parmesan needed — the tuna adds the savoury depth. Serve immediately in warm bowls.'},
+  ];
+
+  // ── Type-based fallbacks for any future unmatched recipes ──────────────────
   const isEgg    = reqs.some(r => r.includes('egg'));
-  const isSoftBoiled = /soft.?boil|boiled egg/.test(nameLC);
-  const isFried  = /fried egg|eggs? fried/.test(nameLC);
   const isPasta  = reqs.some(r => r.includes('pasta'));
-  const isSoup   = /soup|stew|lentil|broth/.test(nameLC);
+  const isSoup   = /soup|stew|broth/.test(nameLC);
   const isBaked  = /bake|baked|roast/.test(nameLC);
   const isSalad  = /salad|bowl/.test(nameLC);
   const isToast  = /toast|bread/.test(nameLC);
+  const all      = [...reqs, ...opts];
+
   if (isToast) return [
-    {n:1, t:'Toast bread',     d:`Toast bread to your liking. ${opts.length?'Gather: '+opts.slice(0,3).join(', ')+'.':''}`},
-    {n:2, t:'Prepare topping', d:`Prepare your topping: ${reqs.filter(r=>!r.includes('bread')).join(', ')||'spread'}.`},
-    {n:3, t:'Assemble',        d:`Layer topping on toast. Add salt, pepper, or any extras to taste.`},
-    {n:4, t:'Serve',           d:`Serve immediately while warm.`},
+    {n:1, t:'Toast bread',        d:`Toast the bread until golden and crisp, about 2 minutes per side in a dry pan or using a toaster.`},
+    {n:2, t:'Prepare topping',    d:`Prepare your topping: ${reqs.filter(r=>!r.includes('bread')).join(', ') || 'spread of choice'}. Keep preparation simple and focused.`},
+    {n:3, t:'Assemble',           d:`Spread or layer the topping on the hot toast. Add salt, pepper, or any optional extras to taste.`},
+    {n:4, t:'Serve',              d:`Serve immediately while the toast is still warm and crisp.`},
   ];
   if (isSalad) return [
-    {n:1, t:'Prep ingredients', d:`Wash and chop: ${ingList}.`},
-    {n:2, t:'Mix dressing',     d:`Combine olive oil, lemon juice (or vinegar), salt and pepper.`},
-    {n:3, t:'Combine',          d:`Toss all ingredients together with the dressing.`},
-    {n:4, t:'Serve',            d:`Adjust seasoning and serve.`},
+    {n:1, t:'Rinse & prep',       d:`Drain and rinse any tinned ingredients. Wash and chop fresh produce: ${all.slice(0,4).join(', ')}.`},
+    {n:2, t:'Make dressing',      d:`Whisk together 2 tbsp olive oil and 1 tbsp lemon juice or vinegar in the serving bowl. Season with salt and black pepper.`},
+    {n:3, t:'Toss',               d:`Add all ingredients to the bowl. Toss thoroughly so every piece is coated in the dressing.`},
+    {n:4, t:'Rest & serve',       d:`Let sit for 3–5 minutes so the flavours meld. Taste, adjust seasoning, and serve.`},
   ];
-  if (isSoup || isBaked) return [
-    {n:1, t:'Prep',   d:`Dice or prepare: ${reqs.slice(0,3).join(', ')}.`},
-    {n:2, t:'Cook base', d:`Heat oil in a pot. Sauté onion and garlic (if using) until soft, about 5 min.`},
-    {n:3, t:'Simmer',    d:`Add remaining ingredients (${reqs.slice(1).concat(opts.slice(0,2)).join(', ')}). Add water or stock to cover. Simmer ${t.time||20} min.`},
-    {n:4, t:'Season',    d:`Season with salt and pepper. Adjust to taste and serve hot.`},
+  if (isBaked) return [
+    {n:1, t:'Preheat oven',       d:`Preheat oven to 200°C (400°F). Lightly grease a baking dish with oil.`},
+    {n:2, t:'Prep ingredients',   d:`Slice or dice the main ingredients: ${reqs.join(', ')}. Season with salt, pepper, and olive oil and toss to coat.`},
+    {n:3, t:'Bake',               d:`Spread in a single layer in the baking dish. Bake for ${t.time || 20} minutes, checking halfway and turning if the edges are browning too fast.`},
+    {n:4, t:'Serve',              d:`Remove from oven when golden and cooked through. Rest for 2 minutes before serving.`},
+  ];
+  if (isSoup) return [
+    {n:1, t:'Chop vegetables',    d:`Dice the main vegetables into even pieces — onion into 1cm chunks, root vegetables into 2cm cubes.`},
+    {n:2, t:'Sauté base',         d:`Heat 1 tbsp oil in a pot over medium heat. Cook onion and garlic for 5–6 minutes until soft and fragrant.`},
+    {n:3, t:'Add main ingredients',d:`Add ${reqs.join(', ')} and enough water or stock to cover by 5cm. Bring to a boil.`},
+    {n:4, t:'Simmer',             d:`Reduce to a steady simmer and cook for ${t.time || 20} minutes until everything is tender.`},
+    {n:5, t:'Season & serve',     d:`Taste and season generously with salt and pepper. Serve hot with crusty bread.`},
   ];
   if (isPasta) return [
-    {n:1, t:'Boil pasta',  d:`Cook pasta in salted boiling water per packet instructions. Drain, reserve ½ cup water.`},
-    {n:2, t:'Make sauce',  d:`Heat olive oil. Add ${opts.slice(0,3).join(', ') || 'garlic'} and cook 2–3 min.`},
-    {n:3, t:'Combine',     d:`Toss drained pasta in sauce, adding pasta water as needed for consistency.`},
-    {n:4, t:'Finish',      d:`Season with salt and pepper. Serve with parmesan if available.`},
-  ];
-  if (isSoftBoiled) return [
-    {n:1, t:'Bring water to boil', d:`Fill a saucepan with enough water to fully cover the eggs. Bring to a rolling boil over high heat.`},
-    {n:2, t:'Lower eggs in',       d:`Using a spoon, gently lower the eggs into the boiling water. Reduce heat to a gentle simmer.`},
-    {n:3, t:'Cook 6–7 minutes',    d:`Simmer for 6–7 minutes for a soft, jammy yolk. Adjust to 5 min for runny or 9 min for firm.`},
-    {n:4, t:'Ice bath',            d:`Transfer immediately to a bowl of ice water for 1–2 minutes to stop cooking.`},
-    {n:5, t:'Peel and serve',      d:`Peel carefully, season with salt and serve on toast or as desired.`},
-  ];
-  if (isFried) return [
-    {n:1, t:'Heat pan',     d:`Heat a non-stick pan over medium heat. Add a teaspoon of butter or oil.`},
-    {n:2, t:'Crack egg',    d:`Crack egg(s) directly into the pan. Season with salt and pepper.`},
-    {n:3, t:'Cook',         d:`Cook until whites are set, about 2–3 minutes. For over-easy, flip briefly for 30 seconds.`},
-    {n:4, t:'Serve',        d:`Slide onto plate immediately and serve hot.`},
+    {n:1, t:'Boil pasta',         d:`Bring a large pot of well-salted water to a rolling boil. Cook pasta until al dente per packet. Reserve ½ cup pasta water before draining.`},
+    {n:2, t:'Make sauce',         d:`Heat 2 tbsp olive oil in a pan. Cook any aromatics (garlic, onion) for 2–3 minutes, then add the remaining sauce ingredients.`},
+    {n:3, t:'Combine',            d:`Add the drained pasta to the sauce. Toss over low heat, adding pasta water a little at a time to reach a silky consistency.`},
+    {n:4, t:'Season & serve',     d:`Season with salt and black pepper. Serve immediately in warmed bowls.`},
   ];
   if (isEgg) return [
-    {n:1, t:'Prep',    d:`Crack eggs into a bowl. Beat lightly. Prepare any mix-ins: ${opts.slice(0,3).join(', ') || 'salt, pepper'}.`},
-    {n:2, t:'Heat pan', d:`Heat a non-stick pan over medium heat. Add a little butter or oil.`},
-    {n:3, t:'Cook',    d:`Add eggs. Cook, stirring gently (for scrambled) or leaving to set (for fried/omelet), ${t.time||5} min.`},
-    {n:4, t:'Serve',   d:`Plate immediately. Season with salt and pepper.`},
+    {n:1, t:'Beat eggs',          d:`Crack the eggs into a bowl. Season with salt and pepper and beat well with a fork. Stir in any mix-ins: ${opts.slice(0,3).join(', ') || 'none'}.`},
+    {n:2, t:'Heat pan',           d:`Heat a non-stick pan over medium heat. Add a small knob of butter or a splash of oil and let it melt.`},
+    {n:3, t:'Cook eggs',          d:`Pour in the egg mixture. Stir gently for scrambled, or leave to set for an omelette, cooking for about ${t.time || 5} minutes.`},
+    {n:4, t:'Plate & serve',      d:`Slide onto a warm plate. Season with black pepper and serve at once.`},
   ];
   // Generic fallback
   return [
-    {n:1, t:'Gather & prep',   d:`Measure out: ${reqs.join(', ')}.${opts.length ? ' Optional extras: '+opts.slice(0,3).join(', ')+'.' : ''}`},
-    {n:2, t:'Cook',            d:`Heat pan or pot over medium heat. Add ingredients in order, cooking according to type (fry, boil, or bake as needed), about ${t.time||15} min total.`},
-    {n:3, t:'Season & adjust', d:`Taste and season with salt and pepper. Add any optional extras to taste.`},
-    {n:4, t:'Serve',           d:`Plate and serve immediately.`},
+    {n:1, t:'Gather ingredients', d:`Measure out all ingredients: ${reqs.join(', ')}.${opts.length ? ' Optional extras: '+opts.slice(0,3).join(', ')+'.' : ''}`},
+    {n:2, t:'Prep',               d:`Peel, chop, or rinse ingredients as needed. Cut vegetables into even-sized pieces for uniform cooking.`},
+    {n:3, t:'Cook',               d:`Heat a pan or pot over medium heat with a little oil. Add ingredients in order of longest cooking time first. Cook for approximately ${t.time || 15} minutes total.`},
+    {n:4, t:'Season & serve',     d:`Taste and season with salt and black pepper. Plate immediately and serve hot.`},
   ];
 };
 
