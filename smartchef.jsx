@@ -21498,8 +21498,16 @@ export default function App() {
     } catch {}
   };
 
-  // Auto-save when data changes
-  useEffect(() => { if(user && !isGuest) saveUserData(user.email); }, [pantry, shopping, saved, mealPlan, prefs, avoidedIngredients, publishedMenus, collections]);
+  // Auto-save when data changes; also keep demo snapshot current for real users
+  useEffect(() => {
+    if(user && !isGuest) {
+      saveUserData(user.email);
+      // Keep demo snapshot in sync with pantry/prefs/avoided so "Continue as Demo"
+      // always reflects the latest real-user state. snapshotToDemo guards against
+      // the demo email itself triggering a snapshot.
+      if (!isDemo) snapshotToDemo(user.email);
+    }
+  }, [pantry, shopping, saved, mealPlan, prefs, avoidedIngredients, publishedMenus, collections]);
   useEffect(() => { if(user && !isGuest) saveSubData(user.email, subscription); }, [subscription]);
 
   const activatePremium = () => {
@@ -21665,10 +21673,23 @@ export default function App() {
   };
 
   // ── DEMO MODE ─────────────────────────────────────────────────────────────
-  // Loads the last-snapshotted pantry/prefs into an isolated demo slot.
+  // Clones real user data into an isolated demo slot before launching.
   // Changes made in demo mode never touch the real user's keys.
   const DEMO_EMAIL = '__demo__';
   const enterDemo = () => {
+    // Always refresh the demo snapshot from the real user's data right now,
+    // so the demo session starts with the current pantry + prefs.
+    // Priority: 1) still-stored session email, 2) first registered account.
+    try {
+      const session = localStorage.getItem('sc_session');
+      let targetEmail = session ? (JSON.parse(session)?.email || null) : null;
+      if (!targetEmail) {
+        const accounts = JSON.parse(localStorage.getItem('sc_accounts') || '{}');
+        const emails = Object.keys(accounts);
+        if (emails.length > 0) targetEmail = emails[0];
+      }
+      if (targetEmail) snapshotToDemo(targetEmail);
+    } catch {}
     setUser({ name: 'Demo', email: DEMO_EMAIL });
     setIsGuest(false);
     setIsDemo(true);
@@ -21705,6 +21726,18 @@ export default function App() {
   if (screen==="signup")    return <SignupScreen onBack={()=>setScreen("welcome")} onLogin={login} onSwitch={()=>setScreen("login")} />;
   if (screen==="onboarding") return <Onboarding onDone={items=>{setPantry(items);setScreen("main");}} onSkip={()=>setScreen("main")} />;
 
+  if (viewRecipe && viewRecipe.__notFound) return (
+    <div style={{minHeight:"100vh",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",background:"var(--cream)",fontFamily:"var(--fb)"}}>
+      <style>{S}</style>
+      <div style={{textAlign:"center",maxWidth:400,padding:32}}>
+        <div style={{fontSize:48,marginBottom:16}}>🔍</div>
+        <h2 style={{fontFamily:"var(--fd)",fontSize:22,color:"var(--ch)",marginBottom:8}}>Recipe not found</h2>
+        <p style={{color:"var(--mu)",marginBottom:8}}>"{viewRecipe.title}"</p>
+        <p style={{color:"var(--mu)",fontSize:13,marginBottom:24}}>This recipe couldn't be loaded. It may have been removed.</p>
+        <button className="btn btn-p" onClick={()=>setViewRecipe(null)}>← Back</button>
+      </div>
+    </div>
+  );
   if (viewRecipe) return (
     <RecipeErrorBoundary onBack={()=>setViewRecipe(null)}>
       <RecipeDetail
@@ -25293,7 +25326,11 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
     };
   };
 
-  const handleSlotClick = (dayIdx, mealIdx, mealType, meal) => {
+  const handleSlotClick = (dayIdx, mealIdx, mealType) => {
+    // Re-read meal directly from current mealPlan state using canonical indices.
+    // This eliminates any stale-closure risk — the recipeId is always sourced
+    // from mealPlan[dayIdx].meals[mealIdx], never from a closure-captured object.
+    const meal = mealPlan[dayIdx]?.meals[mealIdx] ?? null;
     // Close any open popover first
     setSlotPopover(null);
     if (swapSource) {
@@ -25312,15 +25349,21 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
         // Custom meals: open the custom meal editor
         setCustomMealModal({ dayIdx, mealIdx, dayLabel: mealPlan[dayIdx]?.day, mealType, existing: meal });
       } else {
-        // Recipe meals: open RecipeDetail directly
-        // Pantry-generated meals have string IDs like "pantry-0-scrambled-eggs" — look up from templates
+        // Recipe meals: look up by recipeId as the single source of truth.
+        // Never use array position or card index for lookup.
+        const recipeId = meal.id;
         let recipeObj = null;
-        if (meal.id && String(meal.id).startsWith('pantry-')) {
-          recipeObj = getPantryRecipeObj(meal.id);
+        if (recipeId && String(recipeId).startsWith('pantry-')) {
+          recipeObj = getPantryRecipeObj(recipeId);
         } else {
-          recipeObj = meal.id ? allRecipes.find(r => r.id === meal.id) : null;
+          recipeObj = recipeId != null ? (allRecipes.find(r => r.id === recipeId) ?? null) : null;
         }
-        if (recipeObj) onViewRecipe(recipeObj);
+        if (recipeObj) {
+          onViewRecipe(recipeObj);
+        } else if (recipeId != null) {
+          // ID present but recipe not found — show a safe not-found page
+          onViewRecipe({ __notFound: true, id: recipeId, title: meal.name || meal.title || 'Unknown Recipe' });
+        }
       }
     } else {
       // Empty slot: open recipe picker
@@ -25682,11 +25725,11 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
                 const recipeObj=meal&&meal.kind!=="custom"&&meal.id?(String(meal.id).startsWith('pantry-')?getPantryRecipeObj(meal.id):allRecipes.find(r=>r.id===meal.id)):null;
                 return(
                 <div
-                  key={`${day.day}${mealType}`}
+                  key={`${day.day}-${mealType}-${meal?.id??'empty'}`}
                   className={`mslot ${meal?"filled":""}${swapSource&&swapSource.mealType===mealType?" swap-target":""}`}
                   style={{cursor:"pointer",outline:swapSource&&swapSource.dayIdx===dayIdx&&swapSource.mealIdx===mealIdx?"2px solid var(--clay)":"none",borderRadius:swapSource?"8px":"",position:"relative"}}
                   draggable={!!meal}
-                  onClick={()=>handleSlotClick(dayIdx,mealIdx,mealType,meal)}
+                  onClick={()=>handleSlotClick(dayIdx,mealIdx,mealType)}
                   onDragStart={e=>{
                     if(!meal) return;
                     setDragSource({dayIdx,mealIdx,mealType});
