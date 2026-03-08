@@ -25192,8 +25192,10 @@ const generatePantryMeals = (pantrySet) => {
   if(!pantrySet || pantrySet.size === 0) return [];
   return PANTRY_MEAL_TEMPLATES
     .filter(tmpl => tmpl.requires.every(req => ingInPantry(req, pantrySet)))
-    .map((tmpl, idx) => ({
-      id: `pantry-${idx}-${tmpl.name.replace(/\s+/g,'-').toLowerCase()}`,
+    .map((tmpl) => ({
+      // Use the template's actual index in PANTRY_MEAL_TEMPLATES (not filtered-list index)
+      // so getPantryRecipeObj can safely look up by name slug rather than position.
+      id: `pantry-${PANTRY_MEAL_TEMPLATES.indexOf(tmpl)}-${tmpl.name.replace(/\s+/g,'-').toLowerCase()}`,
       title: tmpl.name,
       emoji: tmpl.emoji,
       meal: tmpl.meal,
@@ -25312,8 +25314,15 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
 
   // Helper: build a recipe-like object from a pantry-generated meal slot
   const getPantryRecipeObj = (mealId) => {
-    const m = String(mealId).match(/^pantry-(\d+)-/);
-    const t = m ? PANTRY_MEAL_TEMPLATES[parseInt(m[1])] : null;
+    // The numeric index in the ID is relative to the FILTERED pantry list, NOT to
+    // PANTRY_MEAL_TEMPLATES directly. Using it as PANTRY_MEAL_TEMPLATES[idx] causes
+    // wrong-recipe lookup (e.g., "Pasta Aglio e Olio" opens "Peanut Butter Toast").
+    // Fix: use the name-slug in the ID to find the correct template by name.
+    const m = String(mealId).match(/^pantry-\d+-(.+)$/);
+    const slug = m ? m[1] : null;
+    const t = slug
+      ? PANTRY_MEAL_TEMPLATES.find(tmpl => tmpl.name.replace(/\s+/g, '-').toLowerCase() === slug)
+      : null;
     if (!t) return null;
     return {
       id: mealId, title: t.name, emoji: t.emoji, time: t.time, diff: 'Easy',
