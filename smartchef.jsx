@@ -21365,6 +21365,7 @@ export default function App() {
   const [tab, setTab] = useState("home");
   const [user, setUser] = useState(null);
   const [isGuest, setIsGuest] = useState(false);
+  const [isDemo,  setIsDemo]  = useState(false);
   const [pantry, setPantry] = useState([]);
   const [shopping, setShopping] = useState([]);
   const [saved, setSaved] = useState(new Set());
@@ -21436,7 +21437,9 @@ export default function App() {
         const userData = JSON.parse(session);
         setUser(userData);
         setIsGuest(false);
+        setIsDemo(false);
         loadUserData(userData.email);
+        snapshotToDemo(userData.email); // refresh demo snapshot on auto-login
         setSubscription(getSubData(userData.email));
         setScreen("main");
       } catch {
@@ -21476,6 +21479,22 @@ export default function App() {
       localStorage.setItem(`sc_${uid}_avoided`, JSON.stringify(avoidedIngredients));
       localStorage.setItem(`sc_${uid}_publishedMenus`, JSON.stringify(publishedMenus));
       localStorage.setItem(`sc_${uid}_collections`, JSON.stringify(collections));
+    } catch {}
+  };
+
+  // Snapshot real-user data into the shared demo slot (pantry + prefs + avoided only).
+  // Called every time the real user logs in so the demo snapshot stays current.
+  const snapshotToDemo = (email) => {
+    const uid = email.toLowerCase();
+    // Never snapshot from the demo slot itself
+    if (uid === '__demo__') return;
+    try {
+      ['pantry','prefs','avoided'].forEach(k => {
+        const v = localStorage.getItem(`sc_${uid}_${k}`);
+        if (v !== null) localStorage.setItem(`sc___demo___${k}`, v);
+      });
+      localStorage.setItem('sc___demo___snapshot_email', email);
+      localStorage.setItem('sc___demo___snapshot_ts', String(Date.now()));
     } catch {}
   };
 
@@ -21637,10 +21656,25 @@ export default function App() {
   const login = u => {
     setUser(u);
     setIsGuest(false);
+    setIsDemo(false);
     localStorage.setItem("sc_session", JSON.stringify(u));
     loadUserData(u.email);
+    snapshotToDemo(u.email); // keep demo snapshot current whenever real user logs in
     setSubscription(getSubData(u.email));
     setScreen(pantry.length===0?"onboarding":"main");
+  };
+
+  // ── DEMO MODE ─────────────────────────────────────────────────────────────
+  // Loads the last-snapshotted pantry/prefs into an isolated demo slot.
+  // Changes made in demo mode never touch the real user's keys.
+  const DEMO_EMAIL = '__demo__';
+  const enterDemo = () => {
+    setUser({ name: 'Demo', email: DEMO_EMAIL });
+    setIsGuest(false);
+    setIsDemo(true);
+    loadUserData(DEMO_EMAIL); // reads sc___demo___pantry / prefs / avoided
+    setSubscription({ isPremium: false, autoplanUsed: 0 });
+    setScreen('main');
   };
 
   const guest = () => {
@@ -21656,7 +21690,7 @@ export default function App() {
 
   const logout = () => {
     localStorage.removeItem("sc_session");
-    setUser(null); setIsGuest(false);
+    setUser(null); setIsGuest(false); setIsDemo(false);
     setPantry([]); setShopping([]); setSaved(new Set());
     setMealPlan([{day:"Mon",meals:[null,null,null]},{day:"Tue",meals:[null,null,null]},{day:"Wed",meals:[null,null,null]},{day:"Thu",meals:[null,null,null]},{day:"Fri",meals:[null,null,null]},{day:"Sat",meals:[null,null,null]},{day:"Sun",meals:[null,null,null]}]);
     setPrefs({ dietary:[],cuisines:["Italian","Mediterranean"],health:"Balanced",skill:"Intermediate",maxTime:60,household:2 });
@@ -21667,7 +21701,7 @@ export default function App() {
 
   if (screen==="loading") return <div style={{minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",background:"var(--cream)"}}><style>{S}</style><div className="ldots"><div className="dot"/><div className="dot"/><div className="dot"/></div></div>;
   if (screen==="welcome")   return <LandingPage onLogin={()=>setScreen("login")} onSignup={()=>setScreen("signup")} onGuest={guest} />;
-  if (screen==="login")     return <LoginScreen onBack={()=>setScreen("welcome")} onLogin={login} onSignup={()=>setScreen("signup")} />;
+  if (screen==="login")     return <LoginScreen onBack={()=>setScreen("welcome")} onLogin={login} onSignup={()=>setScreen("signup")} onDemo={enterDemo} />;
   if (screen==="signup")    return <SignupScreen onBack={()=>setScreen("welcome")} onLogin={login} onSwitch={()=>setScreen("login")} />;
   if (screen==="onboarding") return <Onboarding onDone={items=>{setPantry(items);setScreen("main");}} onSkip={()=>setScreen("main")} />;
 
@@ -21702,7 +21736,7 @@ export default function App() {
 
   const tp = {
     tab,setTab,pantry,setPantry,shopping,setShopping,saved,toggleSave,mealPlan,setMealPlan,
-    prefs,setPrefs,isGuest,user,onViewRecipe:setViewRecipe,addToList,onLogout:logout,
+    prefs,setPrefs,isGuest,isDemo,user,onViewRecipe:setViewRecipe,addToList,onLogout:logout,
     isPremium,subscription,setSubscription,onUpgrade:(reason)=>setShowUpgrade(reason),
     // Favorites
     favFolders, setFavFolders, favItems, setFavItems, userRecipes, allRecipes,
@@ -21732,7 +21766,10 @@ export default function App() {
         <div className="mmhdr">
           <div style={{fontFamily:"var(--fd)",fontSize:18}}>🍳 SmartChef</div>
           <div style={{display:"flex",alignItems:"center",gap:8}}>
-            {isPremium ? <span className="pro-badge">⭐ PRO</span> : <span className="free-badge">FREE</span>}
+            {isDemo
+              ? <span style={{background:"rgba(99,102,241,.12)",color:"#6366f1",padding:"2px 9px",borderRadius:4,fontSize:11,fontWeight:700,letterSpacing:.4}}>🧪 DEMO</span>
+              : isPremium ? <span className="pro-badge">⭐ PRO</span> : <span className="free-badge">FREE</span>
+            }
             <div style={{fontSize:13,color:"var(--mu)"}}>{user?.name}</div>
           </div>
         </div>
@@ -21757,7 +21794,7 @@ export default function App() {
 }
 
 /* ── SIDEBAR ── */
-function Sidebar({ tab, setTab, user, isGuest, onLogout, isPremium, onUpgrade }) {
+function Sidebar({ tab, setTab, user, isGuest, isDemo, onLogout, isPremium, onUpgrade }) {
   const NAV = [
     {id:"home",label:"Recipes",icon:"home"},
     {id:"favorites",label:"Favorites",icon:"bookmark"},
@@ -21794,8 +21831,9 @@ function Sidebar({ tab, setTab, user, isGuest, onLogout, isPremium, onUpgrade })
         )}
         <div style={{padding:"10px 12px",fontSize:13,color:"var(--mu)"}}>
           <div style={{fontWeight:600,color:"var(--ch)",fontSize:14}}>{user?.name||"Guest"}</div>
-          {!isGuest&&<div style={{marginTop:2,fontSize:12}}>{user?.email}</div>}
+          {!isGuest&&!isDemo&&<div style={{marginTop:2,fontSize:12}}>{user?.email}</div>}
           {isGuest&&<div style={{marginTop:3}}><span style={{background:"var(--clayBg)",color:"var(--clayH)",padding:"2px 8px",borderRadius:4,fontSize:11,fontWeight:700}}>GUEST</span></div>}
+          {isDemo&&<div style={{marginTop:3}}><span style={{background:"rgba(99,102,241,.12)",color:"#6366f1",padding:"2px 8px",borderRadius:4,fontSize:11,fontWeight:700,letterSpacing:.4}}>🧪 DEMO MODE</span></div>}
         </div>
         <button className="ni" onClick={onLogout}><Ic n="logout" s={18}/>Sign out</button>
       </div>
@@ -21986,8 +22024,13 @@ function LandingPage({ onLogin, onSignup, onGuest }) {
 }
 
 /* ── LOGIN ── */
-function LoginScreen({ onBack, onLogin, onSignup }) {
+function LoginScreen({ onBack, onLogin, onSignup, onDemo }) {
   const [email,setEmail]=useState(""); const [pw,setPw]=useState(""); const [err,setErr]=useState(""); const [loading,setLoading]=useState(false);
+  // Check whether a demo snapshot exists so we can show richer label
+  const demoTs = localStorage.getItem('sc___demo___snapshot_ts');
+  const demoLabel = demoTs
+    ? `Quick demo access · snapshot ${new Date(Number(demoTs)).toLocaleDateString()}`
+    : 'Quick demo access (no snapshot yet — log in first)';
   const go=()=>{
     if(!email||!pw){setErr("Fill in all fields.");return;}
     setLoading(true);
@@ -22021,6 +22064,17 @@ function LoginScreen({ onBack, onLogin, onSignup }) {
           {err&&<p className="ferr">{err}</p>}
           <button className="btn btn-p btn-full btn-lg" onClick={go} disabled={loading} style={{marginTop:8}}>{loading?"Signing in…":"Sign In"}</button>
           <p className="ffoot">No account? <a onClick={onSignup}>Sign up</a></p>
+          {/* ── DEMO ACCESS ─────────────────────────────────────── */}
+          <div style={{marginTop:20,paddingTop:16,borderTop:"1px solid var(--bor)"}}>
+            <button
+              className="btn btn-g btn-full"
+              onClick={onDemo}
+              style={{display:"flex",alignItems:"center",justifyContent:"center",gap:8,fontSize:13,color:"var(--mu)",border:"1px dashed var(--bor)",background:"transparent"}}
+            >
+              <span style={{fontSize:16}}>🧪</span>
+              <span><strong style={{color:"var(--ch)"}}>Continue as demo</strong><br/><span style={{fontSize:11}}>{demoLabel}</span></span>
+            </button>
+          </div>
         </div>
         <div className="avisual"><div className="ablob" style={{width:500,height:500,background:"rgba(192,106,62,.18)",top:-150,left:-150}}/><div className="avTitle">Taste-tested <em>recipes,</em><br/>every night.</div><div className="avSub">Using only what's already in your kitchen.</div></div>
       </div>
