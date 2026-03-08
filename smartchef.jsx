@@ -25668,23 +25668,28 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
           <div style={{display:"grid",gridTemplateColumns:"70px repeat(7,1fr)",gap:8,minWidth:640}}>
             <div/>
             {mealPlan.map(d=><div key={d.day} className="pdh">{d.day}</div>)}
-            {active.map((mealType,mi)=>[
+            {active.map((mealType)=>{
+              // Use the FIXED position in the canonical [Breakfast,Lunch,Dinner] array
+              // so meals[mealIdx] always refers to the correct slot regardless of which
+              // slots are toggled on/off. Using the active-array index (mi) here was the
+              // root cause of wrong-recipe navigation when any slot was hidden.
+              const mealIdx=["Breakfast","Lunch","Dinner"].indexOf(mealType);
+              return [
               <div key={`L${mealType}`} style={{display:"flex",alignItems:"center",justifyContent:"flex-end",paddingRight:8}}><div className="prl" style={{fontSize:11}}>{ME[mealType]}<span>{mealType}</span></div></div>,
-              ...mealPlan.map((day)=>{
-                const dayIdx=mealPlan.indexOf(day);
-                const meal=day.meals[mi];
-                const slotKey=`${dayIdx}-${mi}`;
+              ...mealPlan.map((day,dayIdx)=>{
+                const meal=day.meals[mealIdx];
+                const slotKey=`${dayIdx}-${mealIdx}`;
                 const recipeObj=meal&&meal.kind!=="custom"&&meal.id?(String(meal.id).startsWith('pantry-')?getPantryRecipeObj(meal.id):allRecipes.find(r=>r.id===meal.id)):null;
                 return(
                 <div
                   key={`${day.day}${mealType}`}
                   className={`mslot ${meal?"filled":""}${swapSource&&swapSource.mealType===mealType?" swap-target":""}`}
-                  style={{cursor:"pointer",outline:swapSource&&swapSource.dayIdx===dayIdx&&swapSource.mealIdx===mi?"2px solid var(--clay)":"none",borderRadius:swapSource?"8px":"",position:"relative"}}
+                  style={{cursor:"pointer",outline:swapSource&&swapSource.dayIdx===dayIdx&&swapSource.mealIdx===mealIdx?"2px solid var(--clay)":"none",borderRadius:swapSource?"8px":"",position:"relative"}}
                   draggable={!!meal}
-                  onClick={()=>handleSlotClick(dayIdx,mi,mealType,meal)}
+                  onClick={()=>handleSlotClick(dayIdx,mealIdx,mealType,meal)}
                   onDragStart={e=>{
                     if(!meal) return;
-                    setDragSource({dayIdx,mealIdx:mi,mealType});
+                    setDragSource({dayIdx,mealIdx,mealType});
                     e.dataTransfer.effectAllowed="move";
                   }}
                   onDragOver={e=>{e.preventDefault();e.currentTarget.classList.add("drag-over");}}
@@ -25692,13 +25697,11 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
                   onDrop={e=>{
                     e.currentTarget.classList.remove("drag-over");
                     if(!dragSource) return;
-                    const tDayIdx=mealPlan.indexOf(day);
-                    const tMealIdx=mi;
                     if(dragSource.mealType !== mealType) {
                       if(showToast) showToast(`⚠️ ${dragSource.mealType} recipes must stay in ${dragSource.mealType} slots`);
                       setDragSource(null); return;
                     }
-                    swapSlots(dragSource, {dayIdx:tDayIdx, mealIdx:tMealIdx, mealType});
+                    swapSlots(dragSource, {dayIdx,mealIdx,mealType});
                     setDragSource(null);
                   }}
                   onDragEnd={()=>setDragSource(null)}
@@ -25720,16 +25723,16 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
                         {/* ⋯ slot options button */}
                         <button
                           className="slot-dot-btn"
-                          onClick={e=>{e.stopPropagation();setSlotPopover(v=>v?.key===slotKey?null:{dayIdx,mealIdx:mi,mealType,key:slotKey,dayLabel:day.day});}}
+                          onClick={e=>{e.stopPropagation();setSlotPopover(v=>v?.key===slotKey?null:{dayIdx,mealIdx,mealType,key:slotKey,dayLabel:day.day});}}
                         >⋯</button>
                         {slotPopover?.key===slotKey&&(
                           <div className="slot-popover" onClick={e=>e.stopPropagation()}>
                             {recipeObj&&<button className="slot-pop-item" onClick={()=>{setSlotPopover(null);onViewRecipe(recipeObj);}}>📖 View recipe</button>}
-                            <button className="slot-pop-item" onClick={()=>{setSlotPopover(null);setReplacePicker({dayIdx,mealIdx:mi,mealType});}}>🔄 Replace meal</button>
-                            <button className="slot-pop-item" onClick={()=>{setSlotPopover(null);setSwapSource({dayIdx,mealIdx:mi,mealType});if(showToast)showToast("↔ Click another slot to swap (same meal type)");}}>↔ Swap meal</button>
-                            <button className="slot-pop-item" onClick={()=>{setSlotPopover(null);setCustomMealModal({dayIdx,mealIdx:mi,dayLabel:day.day,mealType,existing:meal});}}>✏️ Custom meal</button>
+                            <button className="slot-pop-item" onClick={()=>{setSlotPopover(null);setReplacePicker({dayIdx,mealIdx,mealType});}}>🔄 Replace meal</button>
+                            <button className="slot-pop-item" onClick={()=>{setSlotPopover(null);setSwapSource({dayIdx,mealIdx,mealType});if(showToast)showToast("↔ Click another slot to swap (same meal type)");}}>↔ Swap meal</button>
+                            <button className="slot-pop-item" onClick={()=>{setSlotPopover(null);setCustomMealModal({dayIdx,mealIdx,dayLabel:day.day,mealType,existing:meal});}}>✏️ Custom meal</button>
                             <div className="slot-pop-divider"/>
-                            <button className="slot-pop-item danger" onClick={()=>{setSlotPopover(null);setSlotMeal(dayIdx,mi,null);}}>🗑 Remove</button>
+                            <button className="slot-pop-item danger" onClick={()=>{setSlotPopover(null);setSlotMeal(dayIdx,mealIdx,null);}}>🗑 Remove</button>
                           </div>
                         )}
                       </div>
@@ -25737,7 +25740,7 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
                   }
                 </div>
               );})
-            ])}
+            ];})}
           </div>
         </div>
 
