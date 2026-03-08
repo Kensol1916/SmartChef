@@ -21830,12 +21830,9 @@ export default function App() {
 function Sidebar({ tab, setTab, user, isGuest, isDemo, onLogout, isPremium, onUpgrade }) {
   const NAV = [
     {id:"home",label:"Recipes",icon:"home"},
-    {id:"favorites",label:"Favorites",icon:"bookmark"},
     {id:"pantry",label:"Pantry",icon:"pantry"},
     {id:"shopping",label:"Shopping List",icon:"cart"},
-    {id:"chat",label:"Chef AI",icon:"chat",premium:true},
     {id:"planner",label:"Planner",icon:"cal"},
-    {id:"plans",label:"Plan Library",icon:"list"},
     // TODO [ROADMAP]: Community tab — social features (published menus, community feed). Frozen.
     {id:"profile",label:"Profile",icon:"user"}
   ];
@@ -22232,7 +22229,12 @@ function Onboarding({ onDone, onSkip }) {
 /* ── HOME TAB ── */
 function HomeTab({ isGuest, saved, toggleSave, onViewRecipe, pantry, addToList, isPremium, onUpgrade, onSaveFav, isRecipeSaved, allRecipes, avoidedIngredients,
   homeFilter, setHomeFilter, homeSearch, setHomeSearch, homeSortMode, setHomeSortMode,
-  homeCuisineFilter, setHomeCuisineFilter, homeMealCat, setHomeMealCat, onAddToWeek }) {
+  homeCuisineFilter, setHomeCuisineFilter, homeMealCat, setHomeMealCat, onAddToWeek,
+  // Favorites / Collections (forwarded from tp)
+  favFolders=[], setFavFolders, favItems=[], setFavItems, userRecipes=[], removeFavItem, removeFromAllFolders,
+  addUserRecipe, deleteUserRecipe, createFavFolder, deleteFavFolder, showToast, saveToFolder,
+  collections=[], setCollections, setAvoidedIngredients }) {
+  const [recipeView, setRecipeView] = useState('all'); // 'all' | 'favorites'
   // Lifted state from App — persists across recipe navigation
   const [filter, setFilter_] = [homeFilter || "All", setHomeFilter || (()=>{})];
   const setFilter = setHomeFilter || (()=>{});
@@ -22364,6 +22366,29 @@ function HomeTab({ isGuest, saved, toggleSave, onViewRecipe, pantry, addToList, 
   }, [cookNow, visibleRecipes, pantrySet, avoidSet]);
   return (
     <div>
+      {/* ── Recipes sub-tabs ── */}
+      <div style={{display:'flex',gap:0,marginBottom:20,borderBottom:'1px solid var(--bor)'}}>
+        {[['all','🍽 All Recipes'],['favorites','🔖 Favorites']].map(([v,label])=>(
+          <button key={v} onClick={()=>setRecipeView(v)} style={{padding:'10px 18px',fontSize:13,fontWeight:recipeView===v?700:500,color:recipeView===v?'var(--clay)':'var(--mu)',background:'none',border:'none',borderBottom:recipeView===v?'2px solid var(--clay)':'2px solid transparent',cursor:'pointer',transition:'all .15s'}}>
+            {label}
+          </button>
+        ))}
+      </div>
+      {/* ── Favorites sub-view ── */}
+      {recipeView==='favorites' && (
+        <FavoritesTab
+          favFolders={favFolders} setFavFolders={setFavFolders}
+          favItems={favItems} setFavItems={setFavItems}
+          userRecipes={userRecipes} allRecipes={allRecipes}
+          onViewRecipe={onViewRecipe} onSaveFav={onSaveFav} saveToFolder={saveToFolder}
+          removeFavItem={removeFavItem} removeFromAllFolders={removeFromAllFolders}
+          addUserRecipe={addUserRecipe} deleteUserRecipe={deleteUserRecipe}
+          createFavFolder={createFavFolder} deleteFavFolder={deleteFavFolder}
+          isRecipeSaved={isRecipeSaved} showToast={showToast} pantry={pantry}
+        />
+      )}
+      {/* ── All Recipes sub-view ── */}
+      {recipeView==='all' && <>
       {isGuest&&<div className="gnotice"><span>👋</span><span><strong>Guest mode:</strong> Browse freely. Create an account to save recipes and plan meals.</span></div>}
       {!isPremium&&!isGuest&&<div style={{background:"linear-gradient(135deg,var(--clayBg) 0%,rgba(201,149,58,.06) 100%)",border:"1px solid rgba(192,106,62,.2)",borderRadius:10,padding:"12px 16px",marginBottom:20,display:"flex",alignItems:"center",justifyContent:"space-between",gap:12,flexWrap:"wrap"}}>
         <div style={{display:"flex",alignItems:"center",gap:10}}><span style={{fontSize:20}}>🍽️</span><div><div style={{fontWeight:600,fontSize:14}}>Free plan: {FREE_RECIPE_LIMIT} of {RECIPES.length} recipes</div><div style={{fontSize:12,color:"var(--mu)",marginTop:1}}>Upgrade to unlock all {RECIPES.length} recipes + AI chef + unlimited planning</div></div></div>
@@ -22562,6 +22587,7 @@ function HomeTab({ isGuest, saved, toggleSave, onViewRecipe, pantry, addToList, 
         </div>
       </div>
       {showRandom&&<RandomModal onClose={()=>setShowRandom(false)} onView={r=>{setShowRandom(false);onViewRecipe(r);}} addToList={addToList}/>}
+    </>}
     </div>
   );
 }
@@ -22776,6 +22802,8 @@ function PlanLibraryTab({ allRecipes, mealPlan, setMealPlan, pantry, showToast, 
   const [showCopySafety, setShowCopySafety] = useState(null); // { plan }
   const [showShoppingList, setShowShoppingList] = useState(null); // { plan, entry }
   const [previewSlotPicker, setPreviewSlotPicker] = useState(null); // {dayIdx, mealIdx, mealType}
+  const [renamingId, setRenamingId] = useState(null); // sp.id being renamed
+  const [renameInput, setRenameInput] = useState('');
   const [savedPlans, setSavedPlans] = useState(() => {
     if (!user?.id) return [];
     try { return JSON.parse(localStorage.getItem(`sc_${user.id}_savedPlans`) || '[]'); } catch { return []; }
@@ -22797,6 +22825,22 @@ function PlanLibraryTab({ allRecipes, mealPlan, setMealPlan, pantry, showToast, 
     setSavedPlans(updated);
     if (user?.id) localStorage.setItem(`sc_${user.id}_savedPlans`, JSON.stringify(updated));
     showToast?.('🗑 Plan removed');
+  };
+  const renameMyPlan = (id, newTitle) => {
+    const trimmed = newTitle.trim();
+    if (!trimmed) return;
+    const updated = savedPlans.map(p => p.id === id ? {...p, title: trimmed} : p);
+    setSavedPlans(updated);
+    if (user?.id) localStorage.setItem(`sc_${user.id}_savedPlans`, JSON.stringify(updated));
+    setRenamingId(null);
+    showToast?.('✏️ Plan renamed');
+  };
+  const duplicateMyPlan = (sp) => {
+    const entry = { id: Date.now(), title: `Copy of ${sp.title}`, emoji: sp.emoji || '📋', plan: sp.plan, createdAt: new Date().toISOString() };
+    const updated = [entry, ...savedPlans];
+    setSavedPlans(updated);
+    if (user?.id) localStorage.setItem(`sc_${user.id}_savedPlans`, JSON.stringify(updated));
+    showToast?.('📋 Plan duplicated');
   };
 
   const getPlanStats = (plan) => {
@@ -23461,7 +23505,20 @@ function PlanLibraryTab({ allRecipes, mealPlan, setMealPlan, pantry, showToast, 
               return (
                 <div key={sp.id} className="plan-card" style={{background:'rgba(192,106,62,.04)',border:'1px solid rgba(192,106,62,.2)'}}>
                   <div className="plan-card-emoji">{sp.emoji || '📋'}</div>
-                  <div className="plan-card-name">{sp.title}</div>
+                  {renamingId === sp.id
+                    ? <div style={{display:'flex',gap:4,marginBottom:6}}>
+                        <input
+                          autoFocus
+                          value={renameInput}
+                          onChange={e=>setRenameInput(e.target.value)}
+                          onKeyDown={e=>{if(e.key==='Enter')renameMyPlan(sp.id,renameInput);if(e.key==='Escape')setRenamingId(null);}}
+                          style={{flex:1,padding:'4px 8px',fontSize:12,borderRadius:4,border:'1px solid var(--clay)',outline:'none',fontFamily:'var(--fd)',fontWeight:700}}
+                        />
+                        <button className="btn btn-p btn-xs" onClick={()=>renameMyPlan(sp.id,renameInput)}>✓</button>
+                        <button className="btn btn-g btn-xs" onClick={()=>setRenamingId(null)}>✕</button>
+                      </div>
+                    : <div className="plan-card-name">{sp.title}</div>
+                  }
                   <div className="plan-card-desc" style={{fontSize:11,color:'var(--mu)'}}>{new Date(sp.createdAt).toLocaleDateString()}</div>
                   <div className="plan-card-stats">
                     <span>✅ {stats.pp}% pantry</span>
@@ -23471,6 +23528,8 @@ function PlanLibraryTab({ allRecipes, mealPlan, setMealPlan, pantry, showToast, 
                     <button className="btn btn-s btn-sm" onClick={()=>setPreview({plan:sp.plan,entry:{emoji:sp.emoji||'📋',name:sp.title}})}>Preview</button>
                     <button className="btn btn-p btn-sm" onClick={()=>handleCopyRequest(sp.plan)}>Copy to week</button>
                     <button className="btn btn-g btn-sm" title="Shopping list" onClick={()=>setShowShoppingList({plan:sp.plan,entry:sp})}>🛒</button>
+                    <button className="btn btn-g btn-sm" title="Rename plan" onClick={()=>{setRenamingId(sp.id);setRenameInput(sp.title);}}>✏️</button>
+                    <button className="btn btn-g btn-sm" title="Duplicate plan" onClick={()=>duplicateMyPlan(sp)}>⧉</button>
                     <button className="btn btn-g btn-sm" style={{color:'var(--clay)',marginLeft:'auto'}} title="Delete plan" onClick={()=>{if(confirm(`Delete "${sp.title}"?`))deleteMyPlan(sp.id);}}>🗑</button>
                   </div>
                 </div>
@@ -25473,7 +25532,11 @@ const generatePantryMeals = (pantrySet) => {
     }));
 };
 
-function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, prefs, pantry, setPantry, setShopping, isPremium, subscription, setSubscription, onUpgrade, allRecipes: allRecipesProp, userRecipes, avoidedIngredients = [], user, publishedMenus, setPublishedMenus, showToast, collections, setCollections }) {
+function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, prefs, pantry, setPantry, setShopping, isPremium, subscription, setSubscription, onUpgrade, allRecipes: allRecipesProp, userRecipes, avoidedIngredients = [], user, publishedMenus, setPublishedMenus, showToast, collections, setCollections,
+  // Plan Library state (lifted from App, forwarded via tp)
+  libraryPreview, setLibraryPreview, libraryDraft, setLibraryDraft,
+  libraryDraftTitle, setLibraryDraftTitle, libraryShowCreate, setLibraryShowCreate }) {
+  const [plannerView, setPlannerView] = useState('week'); // 'week' | 'library'
   // Use allRecipes from props (built-in + user-created), fallback to RECIPES if not provided
   const allRecipes = allRecipesProp || RECIPES;
   const [slots,setSlots]=useState({Breakfast:true,Lunch:true,Dinner:true});
@@ -25491,7 +25554,7 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
   // Missing panel + Planner Chat
   const [showMissingPanel, setShowMissingPanel] = useState(true);
   const [chatOpen, setChatOpen] = useState(false);
-  const [chatMessages, setChatMessages] = useState([{role:'bot',text:'Hi! Tell me how to edit your plan.\nTry: "Make dinners simpler", "Pantry only", "More fish", "Replace Wednesday dinner", "Remove missing meals", or "New week".'}]);
+  const [chatMessages, setChatMessages] = useState([{role:'bot',text:'Hi! Tell me how to edit your plan.'}]);
   const [chatInput, setChatInput] = useState('');
   const ME={Breakfast:"☀️",Lunch:"🌤️",Dinner:"🌙"};
   
@@ -25849,86 +25912,137 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
     const DAY_LABELS = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
     const getMealIdx = s => s.includes('breakfast')?0:s.includes('lunch')?1:s.includes('dinner')?2:-1;
     const getDayIdx  = s => DAYS.findIndex(d => s.includes(d));
-    const pickFrom   = (pool) => pool.length ? pool[Math.floor(Math.random()*pool.length)] : null;
     const toSlot     = r => r ? {kind:'recipe',emoji:r.emoji,name:r.title,id:r.id} : null;
 
-    // "new week" / "redo all" / "regenerate whole week"
+    // Build filtered pool respecting dietary prefs + avoided ingredients
+    const ps = buildPantrySet(pantry);
+    const avoidNorms = (avoidedIngredients||[]).map(x=>normalizeIng(x));
+    const isAllowed = r => {
+      if (!isRecipeAllowedForUser(r, prefs)) return false;
+      if (avoidNorms.length && (r.ingredients||[]).some(i=>avoidNorms.some(av=>normalizeIng(i.n||'').includes(av)||av.includes(normalizeIng(i.n||''))))) return false;
+      return true;
+    };
+    const pantryMeals = generatePantryMeals(ps).filter(isAllowed);
+    const allAvail = [...pantryMeals, ...allRecipes.filter(isAllowed)];
+
+    // Track used IDs in the current plan — prefer non-repeated meals
+    const usedIds = new Set(mealPlan.flatMap(d=>d.meals).filter(Boolean).map(m=>m.id));
+    const pickFrom = (pool) => {
+      const fresh = pool.filter(r=>!usedIds.has(r.id));
+      const r = (fresh.length ? fresh : pool)[Math.floor(Math.random()*Math.max(fresh.length||pool.length,1))];
+      if (r) usedIds.add(r.id);
+      return r || null;
+    };
+
+    // "new week" / "redo all" / "fresh plan"
     if (/new week|redo.*(all|week)|regenerate.*(all|week|whole)|fresh.*plan|start.?over/.test(t)) {
-      autoplan(); return '✨ Regenerating the whole week…';
+      autoplan(); return '✨ Regenerating the whole week with fresh meals…';
     }
 
-    // "replace [day] [meal type]" / "change wednesday dinner"
+    // "replace/change/swap [day] [meal type]" → open picker
     const di = getDayIdx(t); const mi = getMealIdx(t);
     if ((t.includes('replace')||t.includes('change')||t.includes('swap')||t.includes('regenerate')) && di>=0 && mi>=0) {
       setReplacePicker({dayIdx:di, mealIdx:mi, mealType:['Breakfast','Lunch','Dinner'][mi]});
       return `🔄 Opening recipe picker for ${DAY_LABELS[di]} ${['Breakfast','Lunch','Dinner'][mi]}…`;
     }
-    // "replace [day]" — any meal
+    // "replace/change [day]" — all meals for that day
     if ((t.includes('replace')||t.includes('change')||t.includes('regenerate')) && di>=0) {
-      const ps=buildPantrySet(pantry); const allAvail=[...generatePantryMeals(ps),...allRecipes];
       setMealPlan(prev=>prev.map((day,idx)=>{
         if(idx!==di) return day;
         return {...day, meals:day.meals.map((_,mi2)=>{
           const mt=['breakfast','lunch','dinner'][mi2];
           const pool=allAvail.filter(r=>getMealType(r)===mt);
-          return toSlot(pickFrom(pool))||day.meals[mi2];
+          return toSlot(pickFrom(pool));
         })};
       }));
-      return `🔄 Regenerated all meals for ${DAY_LABELS[di]}.`;
+      return `🔄 All meals for ${DAY_LABELS[di]} have been replaced with fresh picks.`;
     }
 
     // "pantry only" / "no shopping" / "use what I have"
     if (/pantry|no.?shop|cook.*have|what.*have|avoid.*shop/.test(t)) {
-      const ps=buildPantrySet(pantry); const pm=generatePantryMeals(ps);
-      if(!pm.length) return '❌ No pantry-only meals match your current pantry items.';
+      if(!pantryMeals.length) return '❌ No pantry-only meals match your current pantry. Add more items to your pantry first.';
       setMealPlan(prev=>prev.map(day=>({...day,meals:day.meals.map((meal,mi2)=>{
         if(!meal) return null;
         const mt=['breakfast','lunch','dinner'][mi2];
-        const pool=pm.filter(r=>r.meal===mt);
-        return pool.length?toSlot(pickFrom(pool)):meal;
+        const pool=pantryMeals.filter(r=>r.meal===mt);
+        return pool.length ? toSlot(pickFrom(pool)) : meal;
       })})));
-      return '✅ Switched to pantry-only meals where possible.';
+      return '✅ Switched to pantry-only meals — no extra shopping needed!';
     }
 
-    // "remove missing" / "clear missing meals" / "no missing"
+    // "remove missing" / "clear missing meals"
     if (/remove.*miss|clear.*miss|no.*miss|delet.*miss/.test(t)) {
       setMealPlan(prev=>prev.map(day=>({...day,meals:day.meals.map(meal=>meal&&recipeNeedsShopping(meal)?null:meal)})));
-      return '🗑 Removed meals that need shopping. Empty slots remain.';
+      return '🗑 Cleared meals that require missing ingredients. Empty slots remain.';
     }
 
-    // "simplify [meal type]" / "make it easier" / "quicker breakfasts"
-    if (/simpl|easy|easier|quick|fast/.test(t)) {
-      const mealTypeFilter = mi>=0?['Breakfast','Lunch','Dinner'][mi]:null;
-      const ps=buildPantrySet(pantry); const allAvail=[...generatePantryMeals(ps),...allRecipes];
-      const quick=allAvail.filter(r=>(r.time||30)<=15);
-      if(!quick.length) return '❌ No quick meals found (≤15 min).';
+    // "too simple" / "boring" / "too plain" / "need variety" → UPGRADE to more interesting meals
+    if (/too.*(simple|easy|plain|basic|boring)|boring|need.*var|more.*interest|less.*boring|upgrade|more.*complex/.test(t)) {
+      const mealTypeFilter = mi>=0 ? ['Breakfast','Lunch','Dinner'][mi] : null;
+      // Upgrade = recipes with more ingredients (≥5) or longer cook time (≥30 min)
+      const complex = allAvail.filter(r=>(r.ingredients||[]).length>=5||(r.time||30)>=30);
+      if(!complex.length) return '❌ No more complex recipes found. Try adding more recipes or adjusting dietary filters.';
+      setMealPlan(prev=>prev.map(day=>({...day,meals:day.meals.map((meal,mi2)=>{
+        if(!meal) return null;
+        const mt=['Breakfast','Lunch','Dinner'][mi2];
+        if(mealTypeFilter&&mt!==mealTypeFilter) return meal;
+        const pool=complex.filter(r=>getMealType(r)===mt.toLowerCase());
+        return pool.length ? toSlot(pickFrom(pool)) : meal;
+      })})));
+      return mealTypeFilter
+        ? `🌟 Upgraded ${mealTypeFilter.toLowerCase()}s to more interesting, involved recipes.`
+        : '🌟 Upgraded meals across the week to more interesting options.';
+    }
+
+    // "make simpler" / "easier" / "quicker" / "faster" → SIMPLIFY to quick meals
+    if (/make.*simpl|make.*eas|simpler|easier|quicker|faster|quick.*meal|fast.*meal|under.*min|15.*min|20.*min|less.*complex|low.*effort/.test(t)) {
+      const mealTypeFilter = mi>=0 ? ['Breakfast','Lunch','Dinner'][mi] : null;
+      const quick = allAvail.filter(r=>(r.time||30)<=20);
+      if(!quick.length) return '❌ No quick meals found (≤20 min) in your recipe pool.';
       setMealPlan(prev=>prev.map(day=>({...day,meals:day.meals.map((meal,mi2)=>{
         if(!meal) return null;
         const mt=['Breakfast','Lunch','Dinner'][mi2];
         if(mealTypeFilter&&mt!==mealTypeFilter) return meal;
         const pool=quick.filter(r=>getMealType(r)===mt.toLowerCase());
-        return pool.length?toSlot(pickFrom(pool)):meal;
+        return pool.length ? toSlot(pickFrom(pool)) : meal;
       })})));
-      return mealTypeFilter?`⚡ Simplified ${mealTypeFilter.toLowerCase()}s to quick options (≤15 min).`:'⚡ Simplified all meals to quicker options where possible.';
+      return mealTypeFilter
+        ? `⚡ ${mealTypeFilter}s swapped for quick recipes (≤20 min).`
+        : '⚡ Replaced meals with quicker options (≤20 min) across the week.';
     }
 
-    // "more [food]" / "use more fish" / "add soups"
-    const foodMatch=t.match(/\b(fish|salmon|tuna|chicken|beef|pasta|rice|soup|salad|egg|bean|lentil|vegetable|veg|seafood)\b/);
-    if(foodMatch&&(t.includes('more')||t.includes('prefer')||t.includes('use')||t.includes('add'))) {
+    // "more [food]" / "use more fish" / "add chicken"
+    const foodMatch=t.match(/\b(fish|salmon|tuna|chicken|beef|pasta|rice|soup|salad|egg|bean|lentil|vegetable|veg|seafood|shrimp|pork|tofu|mushroom)\b/);
+    if(foodMatch&&(t.includes('more')||t.includes('prefer')||t.includes('use')||t.includes('add')||t.includes('want'))) {
       const food=foodMatch[1];
-      const ps=buildPantrySet(pantry); const allAvail=[...generatePantryMeals(ps),...allRecipes];
       const pool=allAvail.filter(r=>(r.title||'').toLowerCase().includes(food)||(r.ingredients||[]).some(i=>(i.n||'').toLowerCase().includes(food)));
-      if(!pool.length) return `❌ No recipes found featuring "${food}".`;
+      if(!pool.length) return `❌ No recipes found featuring "${food}". Try a different ingredient.`;
       setMealPlan(prev=>prev.map(day=>({...day,meals:day.meals.map((meal,mi2)=>{
         if(!meal||Math.random()>0.55) return meal;
         const mt=['Breakfast','Lunch','Dinner'][mi2];
         const typed=pool.filter(r=>getMealType(r)===mt.toLowerCase());
-        return typed.length?toSlot(pickFrom(typed)):meal;
+        return typed.length ? toSlot(pickFrom(typed)) : meal;
       })})));
       return `🍴 Added more ${food}-focused meals to your plan.`;
     }
 
-    return "🤔 I didn't understand that. Try:\n• \"Make dinners simpler\"\n• \"Pantry only\"\n• \"More fish\"\n• \"Replace Wednesday dinner\"\n• \"Remove missing meals\"\n• \"New week\"";
+    // "vegetarian" / "vegan" / "pescatarian" / "meatless" override for the week
+    const dietMatch=t.match(/\b(vegetarian|vegan|pescatarian|meatless)\b/);
+    if(dietMatch) {
+      const diet=dietMatch[1]==='meatless'?'Vegetarian':dietMatch[1].charAt(0).toUpperCase()+dietMatch[1].slice(1);
+      const mockPrefs={...prefs,dietary:[...(prefs.dietary||[]),diet]};
+      const pool=allAvail.filter(r=>isRecipeAllowedForUser(r,mockPrefs));
+      if(!pool.length) return `❌ No ${diet.toLowerCase()} recipes found — check your dietary settings in Profile.`;
+      setMealPlan(prev=>prev.map(day=>({...day,meals:day.meals.map((meal,mi2)=>{
+        if(!meal) return null;
+        const mt=['breakfast','lunch','dinner'][mi2];
+        const typed=pool.filter(r=>getMealType(r)===mt);
+        return typed.length ? toSlot(pickFrom(typed)) : meal;
+      })})));
+      return `🥦 Swapped the week to ${diet.toLowerCase()} meals.`;
+    }
+
+    return "🤔 I didn't get that. Try:\n• \"Make dinners simpler\" — quick meals\n• \"Too boring — upgrade\" — more interesting recipes\n• \"Pantry only\" — no shopping needed\n• \"More fish\"\n• \"Replace Wednesday dinner\"\n• \"New week\"";
   };
 
   const handleChatSend = () => {
@@ -25950,6 +26064,30 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
 
   return (
     <div>
+      {/* ── Planner sub-tabs ── */}
+      <div style={{display:'flex',gap:0,marginBottom:20,borderBottom:'1px solid var(--bor)'}}>
+        {[['week','📅 This Week'],['library','📚 Plan Library']].map(([v,label])=>(
+          <button key={v} onClick={()=>setPlannerView(v)} style={{padding:'10px 18px',fontSize:13,fontWeight:plannerView===v?700:500,color:plannerView===v?'var(--clay)':'var(--mu)',background:'none',border:'none',borderBottom:plannerView===v?'2px solid var(--clay)':'2px solid transparent',cursor:'pointer',transition:'all .15s'}}>
+            {label}
+          </button>
+        ))}
+      </div>
+      {/* ── Plan Library sub-view ── */}
+      {plannerView==='library' && (
+        <PlanLibraryErrorBoundary resetKey="planner-library">
+          <PlanLibraryTab
+            allRecipes={allRecipesProp||RECIPES} mealPlan={mealPlan} setMealPlan={setMealPlan}
+            pantry={pantry} showToast={showToast} onViewRecipe={onViewRecipe}
+            user={user} prefs={prefs}
+            libraryPreview={libraryPreview} setLibraryPreview={setLibraryPreview}
+            libraryDraft={libraryDraft} setLibraryDraft={setLibraryDraft}
+            libraryDraftTitle={libraryDraftTitle} setLibraryDraftTitle={setLibraryDraftTitle}
+            libraryShowCreate={libraryShowCreate} setLibraryShowCreate={setLibraryShowCreate}
+          />
+        </PlanLibraryErrorBoundary>
+      )}
+      {/* ── This Week view ── */}
+      {plannerView==='week' && <>
       <div style={{display:"flex",alignItems:"flex-start",justifyContent:"space-between",marginBottom:20,flexWrap:"wrap",gap:12}}>
         <div><h1 className="stitle">Weekly Planner</h1><p className="ssub">{(()=>{
           const now = new Date();
@@ -26157,7 +26295,7 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
             onClick={()=>setChatOpen(p=>!p)}
           >
             <span style={{fontSize:16}}>💬</span>
-            <span style={{fontWeight:600,fontSize:13}}>Edit plan with chat</span>
+            <span style={{fontWeight:600,fontSize:13}}>Edit with chat</span>
             <span style={{marginLeft:"auto",fontSize:11,color:"var(--mu)"}}>{chatOpen?"▲ Hide":"▼ Open"}</span>
           </button>
           {chatOpen&&(
@@ -26221,6 +26359,7 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
       {/* TODO [ROADMAP]: PublishMenuModal — retained as code stub, not rendered */}
 
       {/* TODO [ROADMAP]: PlannerChatDrawer — AI-powered plan chat (needs backend API key). Frozen. */}
+      </>}
     </div>
   );
 }
