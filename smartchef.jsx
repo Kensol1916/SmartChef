@@ -23921,9 +23921,11 @@ function RecipeDetail({ recipe, saved, onSave, onBack, onAddToList, pantry, setP
                 const markState = markedHave[ing.n]; // "added" | "removing" | undefined
                 return(
                   <div key={i} style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"11px 0",borderBottom:i<(recipe.ingredients||[]).length-1?"1px solid var(--bor)":"none",gap:8}}>
-                    <span style={{fontSize:14,fontWeight:500}}>{ing.n}</span>
+                    <div style={{display:"flex",alignItems:"baseline",gap:8,flex:1,minWidth:0}}>
+                      <span style={{fontSize:14,fontWeight:500}}>{ing.n}</span>
+                      {ing.a && <span style={{fontSize:12,color:"var(--mu)",whiteSpace:"nowrap"}}>— {ing.a}</span>}
+                    </div>
                     <div style={{display:"flex",alignItems:"center",gap:6,flexShrink:0}}>
-                      <span style={{fontSize:13,color:"var(--mu)"}}>{ing.a}</span>
                       {inPantry || markState ? (
                         <span style={{
                           fontSize:10,fontWeight:700,color:"var(--sage)",background:"var(--sageBg)",
@@ -25486,6 +25488,11 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
   const [showMissingModal,setShowMissingModal]=useState(false);
   const [tooRestrictive,setTooRestrictive]=useState(false);       // avoid filter blocked all slots
   const [allowAvoidedLastResort,setAllowAvoidedLastResort]=useState(false); // override toggle
+  // Missing panel + Planner Chat
+  const [showMissingPanel, setShowMissingPanel] = useState(true);
+  const [chatOpen, setChatOpen] = useState(false);
+  const [chatMessages, setChatMessages] = useState([{role:'bot',text:'Hi! Tell me how to edit your plan.\nTry: "Make dinners simpler", "Pantry only", "More fish", "Replace Wednesday dinner", "Remove missing meals", or "New week".'}]);
+  const [chatInput, setChatInput] = useState('');
   const ME={Breakfast:"☀️",Lunch:"🌤️",Dinner:"🌙"};
   
   // SHARED HELPER: Check if recipe has missing ingredients (needs shopping)
@@ -25835,7 +25842,106 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
     setPlanning(false);
   };
 
-  // At a glance stats
+  // ── Planner Chat: rule-based plan editor ───────────────────────────────────
+  const processChatCommand = (msg) => {
+    const t = msg.toLowerCase();
+    const DAYS = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday'];
+    const DAY_LABELS = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+    const getMealIdx = s => s.includes('breakfast')?0:s.includes('lunch')?1:s.includes('dinner')?2:-1;
+    const getDayIdx  = s => DAYS.findIndex(d => s.includes(d));
+    const pickFrom   = (pool) => pool.length ? pool[Math.floor(Math.random()*pool.length)] : null;
+    const toSlot     = r => r ? {kind:'recipe',emoji:r.emoji,name:r.title,id:r.id} : null;
+
+    // "new week" / "redo all" / "regenerate whole week"
+    if (/new week|redo.*(all|week)|regenerate.*(all|week|whole)|fresh.*plan|start.?over/.test(t)) {
+      autoplan(); return '✨ Regenerating the whole week…';
+    }
+
+    // "replace [day] [meal type]" / "change wednesday dinner"
+    const di = getDayIdx(t); const mi = getMealIdx(t);
+    if ((t.includes('replace')||t.includes('change')||t.includes('swap')||t.includes('regenerate')) && di>=0 && mi>=0) {
+      setReplacePicker({dayIdx:di, mealIdx:mi, mealType:['Breakfast','Lunch','Dinner'][mi]});
+      return `🔄 Opening recipe picker for ${DAY_LABELS[di]} ${['Breakfast','Lunch','Dinner'][mi]}…`;
+    }
+    // "replace [day]" — any meal
+    if ((t.includes('replace')||t.includes('change')||t.includes('regenerate')) && di>=0) {
+      const ps=buildPantrySet(pantry); const allAvail=[...generatePantryMeals(ps),...allRecipes];
+      setMealPlan(prev=>prev.map((day,idx)=>{
+        if(idx!==di) return day;
+        return {...day, meals:day.meals.map((_,mi2)=>{
+          const mt=['breakfast','lunch','dinner'][mi2];
+          const pool=allAvail.filter(r=>getMealType(r)===mt);
+          return toSlot(pickFrom(pool))||day.meals[mi2];
+        })};
+      }));
+      return `🔄 Regenerated all meals for ${DAY_LABELS[di]}.`;
+    }
+
+    // "pantry only" / "no shopping" / "use what I have"
+    if (/pantry|no.?shop|cook.*have|what.*have|avoid.*shop/.test(t)) {
+      const ps=buildPantrySet(pantry); const pm=generatePantryMeals(ps);
+      if(!pm.length) return '❌ No pantry-only meals match your current pantry items.';
+      setMealPlan(prev=>prev.map(day=>({...day,meals:day.meals.map((meal,mi2)=>{
+        if(!meal) return null;
+        const mt=['breakfast','lunch','dinner'][mi2];
+        const pool=pm.filter(r=>r.meal===mt);
+        return pool.length?toSlot(pickFrom(pool)):meal;
+      })})));
+      return '✅ Switched to pantry-only meals where possible.';
+    }
+
+    // "remove missing" / "clear missing meals" / "no missing"
+    if (/remove.*miss|clear.*miss|no.*miss|delet.*miss/.test(t)) {
+      setMealPlan(prev=>prev.map(day=>({...day,meals:day.meals.map(meal=>meal&&recipeNeedsShopping(meal)?null:meal)})));
+      return '🗑 Removed meals that need shopping. Empty slots remain.';
+    }
+
+    // "simplify [meal type]" / "make it easier" / "quicker breakfasts"
+    if (/simpl|easy|easier|quick|fast/.test(t)) {
+      const mealTypeFilter = mi>=0?['Breakfast','Lunch','Dinner'][mi]:null;
+      const ps=buildPantrySet(pantry); const allAvail=[...generatePantryMeals(ps),...allRecipes];
+      const quick=allAvail.filter(r=>(r.time||30)<=15);
+      if(!quick.length) return '❌ No quick meals found (≤15 min).';
+      setMealPlan(prev=>prev.map(day=>({...day,meals:day.meals.map((meal,mi2)=>{
+        if(!meal) return null;
+        const mt=['Breakfast','Lunch','Dinner'][mi2];
+        if(mealTypeFilter&&mt!==mealTypeFilter) return meal;
+        const pool=quick.filter(r=>getMealType(r)===mt.toLowerCase());
+        return pool.length?toSlot(pickFrom(pool)):meal;
+      })})));
+      return mealTypeFilter?`⚡ Simplified ${mealTypeFilter.toLowerCase()}s to quick options (≤15 min).`:'⚡ Simplified all meals to quicker options where possible.';
+    }
+
+    // "more [food]" / "use more fish" / "add soups"
+    const foodMatch=t.match(/\b(fish|salmon|tuna|chicken|beef|pasta|rice|soup|salad|egg|bean|lentil|vegetable|veg|seafood)\b/);
+    if(foodMatch&&(t.includes('more')||t.includes('prefer')||t.includes('use')||t.includes('add'))) {
+      const food=foodMatch[1];
+      const ps=buildPantrySet(pantry); const allAvail=[...generatePantryMeals(ps),...allRecipes];
+      const pool=allAvail.filter(r=>(r.title||'').toLowerCase().includes(food)||(r.ingredients||[]).some(i=>(i.n||'').toLowerCase().includes(food)));
+      if(!pool.length) return `❌ No recipes found featuring "${food}".`;
+      setMealPlan(prev=>prev.map(day=>({...day,meals:day.meals.map((meal,mi2)=>{
+        if(!meal||Math.random()>0.55) return meal;
+        const mt=['Breakfast','Lunch','Dinner'][mi2];
+        const typed=pool.filter(r=>getMealType(r)===mt.toLowerCase());
+        return typed.length?toSlot(pickFrom(typed)):meal;
+      })})));
+      return `🍴 Added more ${food}-focused meals to your plan.`;
+    }
+
+    return "🤔 I didn't understand that. Try:\n• \"Make dinners simpler\"\n• \"Pantry only\"\n• \"More fish\"\n• \"Replace Wednesday dinner\"\n• \"Remove missing meals\"\n• \"New week\"";
+  };
+
+  const handleChatSend = () => {
+    const msg = chatInput.trim();
+    if(!msg) return;
+    setChatInput('');
+    setChatMessages(prev=>[...prev,{role:'user',text:msg}]);
+    const reply = processChatCommand(msg);
+    setTimeout(()=>setChatMessages(prev=>[...prev,{role:'bot',text:reply}]),300);
+  };
+  // ── End Planner Chat ───────────────────────────────────────────────────────
+
+  // At a glance stats (kept for internal use)
   const planned = mealPlan.flatMap(d=>d.meals).filter(Boolean);
   const totalMeals = planned.length;
   const totalTime = planned.reduce((a,m)=>{const r=allRecipes.find(x=>x.id===m.id);return a+(r?.time||30);},0);
@@ -25901,47 +26007,9 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
             {totalMissingIng > 0 && (
               <span style={{fontSize:13,color:'var(--mu)'}}>
                 · {totalMissingIng} missing ingredient{totalMissingIng!==1?'s':''}{' '}
-                <button className="btn btn-xs btn-s" style={{marginLeft:4}} onClick={()=>setShowMissingModal(true)}>View list</button>
+                <button className="btn btn-xs btn-s" style={{marginLeft:4}} onClick={()=>setShowMissingPanel(true)}>View list</button>
               </span>
             )}
-          </div>
-        );
-      })()}
-      {/* Missing Ingredients Modal */}
-      {showMissingModal && (()=>{
-        const missingData = computeMissingIngredients().sort((a,b)=>b.count-a.count);
-        return (
-          <div className="modal-overlay" onClick={()=>setShowMissingModal(false)}>
-            <div className="modal-box" onClick={e=>e.stopPropagation()} style={{maxWidth:480,maxHeight:'80vh',overflow:'hidden',display:'flex',flexDirection:'column'}}>
-              <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:16}}>
-                <div style={{fontWeight:700,fontSize:15}}>🛒 Missing Ingredients</div>
-                <button className="btn btn-xs btn-g" onClick={()=>setShowMissingModal(false)}>✕</button>
-              </div>
-              <div style={{overflowY:'auto',flex:1,marginBottom:16}}>
-                {missingData.length === 0
-                  ? <div style={{textAlign:'center',padding:'32px 0',color:'var(--sageH)',fontWeight:600}}>✅ All meals are cookable from your pantry!</div>
-                  : missingData.map(ing=>(
-                    <div key={ing.normalized} style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'8px 0',borderBottom:'1px solid var(--bor)'}}>
-                      <div>
-                        <span style={{fontWeight:600,fontSize:13}}>{ing.name}</span>
-                        <span style={{fontSize:11,color:'var(--mu)',marginLeft:8}}>{ing.count} meal{ing.count!==1?'s':''} need this</span>
-                      </div>
-                    </div>
-                  ))
-                }
-              </div>
-              {missingData.length > 0 && (
-                <button className="btn btn-p" onClick={()=>{
-                  missingData.forEach(ing=>{
-                    setShopping(prev=>{
-                      if(prev.some(s=>s.name.toLowerCase()===ing.name.toLowerCase())) return prev;
-                      return [...prev,{id:Date.now()+Math.random(),name:ing.name,qty:"as needed",checked:false}];
-                    });
-                  });
-                  setShowMissingModal(false);
-                }}>Add all missing to shopping list</button>
-              )}
-            </div>
           </div>
         );
       })()}
@@ -25961,16 +26029,8 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
 
       {/* Weekly grid — only view. Prep Plan tab removed (TODO [ROADMAP]). */}
       {true&&<>
-        {/* Meal slot toggles */}
-        <div style={{background:"var(--white)",border:"1px solid var(--bor)",borderRadius:"var(--r)",padding:"14px 18px",marginBottom:16}}>
-          <div style={{fontSize:11,fontWeight:700,color:"var(--mu)",textTransform:"uppercase",letterSpacing:.5,marginBottom:10}}>Meal slots</div>
-          <div className="mtoggles">
-            {["Breakfast","Lunch","Dinner"].map(m=><label key={m} className="mtog"><input type="checkbox" checked={slots[m]} onChange={e=>setSlots(p=>({...p,[m]:e.target.checked}))}/><span className="mtog-l">{ME[m]} {m}</span></label>)}
-          </div>
-        </div>
-
-        {/* Grid */}
-        <div className="pwrap">
+        {/* Grid — main focus, shown first */}
+        <div className="pwrap" style={{marginBottom:0}}>
           <div style={{display:"grid",gridTemplateColumns:"70px repeat(7,1fr)",gap:8,minWidth:640}}>
             <div/>
             {mealPlan.map(d=><div key={d.day} className="pdh">{d.day}</div>)}
@@ -26050,15 +26110,79 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
           </div>
         </div>
 
-        {/* At a glance */}
-        <div style={{marginTop:28}}>
-          <h3 style={{fontFamily:"var(--fd)",fontSize:18,marginBottom:14}}>This week at a glance</h3>
-          <div className="glance-grid">
-            <div className="glance-card"><div className="glance-val">{totalMeals}</div><div className="glance-lbl">meals planned</div></div>
-            <div className="glance-card"><div className="glance-val" style={{fontSize:totalTime>99?24:32}}>{totalTime}<span style={{fontSize:14,color:"var(--mu)",fontFamily:"var(--fb)",fontWeight:400}}> min</span></div><div className="glance-lbl">total cooking time</div></div>
-            <div className="glance-card"><div className="glance-val">0</div><div className="glance-lbl">meals use expiring ingredients</div></div>
-            <div className="glance-card"><div className="glance-val">{missingItems}</div><div className="glance-lbl">shopping items still needed</div></div>
+        {/* Meal slot toggles — BELOW the grid */}
+        <div style={{background:"var(--white)",border:"1px solid var(--bor)",borderRadius:"var(--r)",padding:"12px 18px",marginTop:12,marginBottom:12}}>
+          <div style={{fontSize:11,fontWeight:700,color:"var(--mu)",textTransform:"uppercase",letterSpacing:.5,marginBottom:8}}>Meal slots</div>
+          <div className="mtoggles">
+            {["Breakfast","Lunch","Dinner"].map(m=><label key={m} className="mtog"><input type="checkbox" checked={slots[m]} onChange={e=>setSlots(p=>({...p,[m]:e.target.checked}))}/><span className="mtog-l">{ME[m]} {m}</span></label>)}
           </div>
+        </div>
+
+        {/* Missing ingredients inline panel — BELOW the grid */}
+        {showMissingPanel && (()=>{
+          const missingData = computeMissingIngredients().sort((a,b)=>b.count-a.count);
+          if(missingData.length === 0) return null;
+          return (
+            <div style={{background:"var(--white)",border:"1px solid rgba(201,149,58,.3)",borderRadius:"var(--r)",padding:"12px 16px",marginBottom:12}}>
+              <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:8}}>
+                <div style={{fontWeight:700,fontSize:13,color:"var(--goldH)"}}>🛒 Missing ingredients ({missingData.length})</div>
+                <div style={{display:"flex",gap:8,alignItems:"center"}}>
+                  <button className="btn btn-xs btn-p" onClick={()=>{
+                    missingData.forEach(ing=>{
+                      setShopping(prev=>{
+                        if(prev.some(s=>s.name.toLowerCase()===ing.name.toLowerCase())) return prev;
+                        return [...prev,{id:Date.now()+Math.random(),name:ing.name,qty:"as needed",checked:false}];
+                      });
+                    });
+                  }}>+ Add all to list</button>
+                  <button style={{background:"none",border:"none",cursor:"pointer",fontSize:16,color:"var(--mu)",padding:"1px 4px",lineHeight:1}} title="Dismiss" onClick={()=>setShowMissingPanel(false)}>✕</button>
+                </div>
+              </div>
+              <div style={{display:"flex",flexWrap:"wrap",gap:5}}>
+                {missingData.map(ing=>(
+                  <span key={ing.normalized} style={{fontSize:12,background:"var(--goldBg)",color:"var(--goldH)",padding:"3px 10px",borderRadius:99,fontWeight:600,display:"inline-flex",alignItems:"center",gap:4}}>
+                    {ing.name}
+                    <span style={{fontSize:10,fontWeight:400,color:"var(--mu)"}}>×{ing.count}</span>
+                  </span>
+                ))}
+              </div>
+            </div>
+          );
+        })()}
+
+        {/* Planner Chat panel */}
+        <div style={{marginBottom:8}}>
+          <button
+            style={{display:"flex",alignItems:"center",gap:8,width:"100%",padding:"10px 16px",background:chatOpen?"var(--cream)":"var(--white)",border:"1px solid var(--bor)",borderRadius:chatOpen?"var(--r) var(--r) 0 0":"var(--r)",cursor:"pointer",textAlign:"left"}}
+            onClick={()=>setChatOpen(p=>!p)}
+          >
+            <span style={{fontSize:16}}>💬</span>
+            <span style={{fontWeight:600,fontSize:13}}>Edit plan with chat</span>
+            <span style={{marginLeft:"auto",fontSize:11,color:"var(--mu)"}}>{chatOpen?"▲ Hide":"▼ Open"}</span>
+          </button>
+          {chatOpen&&(
+            <div style={{background:"var(--white)",border:"1px solid var(--bor)",borderTop:"none",borderRadius:"0 0 var(--r) var(--r)"}}>
+              <div style={{height:200,overflowY:"auto",padding:"12px 14px",display:"flex",flexDirection:"column",gap:7}}>
+                {chatMessages.map((m,i)=>(
+                  <div key={i} style={{display:"flex",justifyContent:m.role==="user"?"flex-end":"flex-start"}}>
+                    <div style={{maxWidth:"84%",padding:"8px 12px",borderRadius:10,fontSize:13,lineHeight:1.55,background:m.role==="user"?"var(--clay)":"var(--cream)",color:m.role==="user"?"#fff":"var(--ch)",borderBottomRightRadius:m.role==="user"?2:10,borderBottomLeftRadius:m.role==="bot"?2:10,whiteSpace:"pre-wrap"}}>
+                      {m.text}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div style={{padding:"10px 12px",borderTop:"1px solid var(--bor)",display:"flex",gap:8}}>
+                <input
+                  value={chatInput}
+                  onChange={e=>setChatInput(e.target.value)}
+                  onKeyDown={e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();handleChatSend();}}}
+                  placeholder='Try: "Make dinners simpler" or "More fish"…'
+                  style={{flex:1,padding:"8px 12px",borderRadius:6,border:"1px solid var(--bor)",fontSize:13,background:"var(--cream)",outline:"none"}}
+                />
+                <button className="btn btn-p btn-sm" onClick={handleChatSend} disabled={!chatInput.trim()}>Send</button>
+              </div>
+            </div>
+          )}
         </div>
       </>}
 
