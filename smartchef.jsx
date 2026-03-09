@@ -23207,8 +23207,8 @@ function PlanLibraryTab({ allRecipes, mealPlan, setMealPlan, pantry, showToast, 
     const handleSend = () => {
       const text = chatInput.trim();
       if(!text) return;
-      setChatInput(‘’);
-      addMsg(‘user’, text);
+      setChatInput('');
+      addMsg('user', text);
       setIsGenerating(true);
       setGenerateError(null);
       // Parse message and merge with existing filters
@@ -23220,22 +23220,22 @@ function PlanLibraryTab({ allRecipes, mealPlan, setMealPlan, pantry, showToast, 
         try {
           plan = runGenerate(newFilters);
         } catch(e) {
-          console.error(‘[SmartChef] Plan Creator runGenerate error:’, e);
-          setGenerateError(‘Generation failed: ‘ + e.message);
+          console.error('[SmartChef] Plan Creator runGenerate error:', e);
+          setGenerateError('Generation failed: ' + e.message);
           setIsGenerating(false);
           return;
         }
         if(!plan) {
-          addMsg(‘bot’, ‘⚠️ Too few recipes match those filters. Try loosening the dietary or cuisine restrictions.’);
+          addMsg('bot', '⚠️ Too few recipes match those filters. Try loosening the dietary or cuisine restrictions.');
         } else {
           setCreatorPlan(plan);
           const parts = [];
-          if(updates.dietary?.length) parts.push(updates.dietary.join(‘ + ‘));
-          if(updates.cuisines?.length) parts.push(updates.cuisines.join(‘, ‘));
-          if(updates.dinnerThemes?.length) parts.push(`dinners: ${updates.dinnerThemes.join(‘, ‘)}`);
+          if(updates.dietary?.length) parts.push(updates.dietary.join(' + '));
+          if(updates.cuisines?.length) parts.push(updates.cuisines.join(', '));
+          if(updates.dinnerThemes?.length) parts.push(`dinners: ${updates.dinnerThemes.join(', ')}`);
           if(updates.maxTime) parts.push(`max ${updates.maxTime} min`);
-          const summary = parts.length ? `(${parts.join(‘ · ‘)})` : ‘’;
-          addMsg(‘bot’, `✨ Plan updated! ${summary} Tap a slot’s ↔ button to swap any meal. When ready, hit Confirm.`);
+          const summary = parts.length ? `(${parts.join(' · ')})` : '';
+          addMsg('bot', `✨ Plan updated! ${summary} Tap a slot's ↔ button to swap any meal. When ready, hit Confirm.`);
         }
         setIsGenerating(false);
       }, 300);
