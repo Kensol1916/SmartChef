@@ -25995,21 +25995,32 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
     const allAvail = [...pantryMeals, ...allRecipes.filter(isAllowed)];
 
     // ── Duplicate-safe picker ──────────────────────────────────────────────
-    // existingIds = meals already in plan BEFORE this edit (avoid re-selecting)
-    // pickedInRun = meals chosen so far IN this edit (never duplicate within one edit)
-    const existingIds = new Set(mealPlan.flatMap(d=>d.meals).filter(Boolean).map(m=>m.id));
+    // existingIds  = recipe IDs already in plan BEFORE this edit
+    // existingKeys = coreDishKeys of meals in plan (near-duplicate detection)
+    // pickedInRun  = IDs chosen so far IN this edit (no within-run dupes)
+    // pickedKeys   = coreDishKeys chosen in this run
+    const planMeals = mealPlan.flatMap(d=>d.meals).filter(Boolean);
+    const existingIds  = new Set(planMeals.map(m=>m.id));
+    const existingKeys = new Set(planMeals.map(m=>{
+      const rx = String(m.id).startsWith('pantry-') ? getPantryRecipeObj(m.id) : allRecipes.find(x=>x.id===m.id);
+      return rx ? computeCoreDishKey(rx) : null;
+    }).filter(Boolean));
     const pickedInRun = new Set();
+    const pickedKeys  = new Set();
     let forcedRepeat = false;
     const pickFrom = (pool) => {
       if (!pool.length) return null;
-      // Tier 1: completely new and not picked this run
-      let candidates = pool.filter(r => !existingIds.has(r.id) && !pickedInRun.has(r.id));
-      // Tier 2: not picked this run (allows re-using one from current plan, but no within-run dupe)
+      const key = r => r.coreDishKey || computeCoreDishKey(r);
+      // Tier 1: brand-new ID + brand-new coreDishKey
+      let candidates = pool.filter(r => !existingIds.has(r.id) && !pickedInRun.has(r.id) && !existingKeys.has(key(r)) && !pickedKeys.has(key(r)));
+      // Tier 2: new ID + not picked this run (coreDishKey repeat allowed when pool is thin)
+      if (!candidates.length) candidates = pool.filter(r => !existingIds.has(r.id) && !pickedInRun.has(r.id));
+      // Tier 3: at least don't repeat within this run
       if (!candidates.length) candidates = pool.filter(r => !pickedInRun.has(r.id));
-      // Tier 3: pool exhausted — must repeat, flag it
+      // Tier 4: pool exhausted — must repeat, flag it
       if (!candidates.length) { forcedRepeat = true; candidates = pool; }
       const r = candidates[Math.floor(Math.random() * candidates.length)];
-      if (r) pickedInRun.add(r.id);
+      if (r) { pickedInRun.add(r.id); pickedKeys.add(key(r)); }
       return r || null;
     };
 
@@ -26020,28 +26031,39 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
 
     // "no duplicates" / "remove duplicates" / "deduplicate" → fix repeated meals in current plan
     if (/no.?duplic|remove.?duplic|dedup|stop.*repeat|no.*repeat|all different|unique meals/.test(t)) {
-      // Scan current plan for duplicates and replace them
+      // Scan current plan for duplicates (by ID and coreDishKey) and replace them
       const seenIds = new Set();
+      const seenKeys = new Set();
       let dupCount = 0;
+      const keyOf = m => {
+        const rx = String(m.id).startsWith('pantry-') ? getPantryRecipeObj(m.id) : allRecipes.find(x=>x.id===m.id);
+        return rx ? computeCoreDishKey(rx) : m.id;
+      };
       const newPlan = mealPlan.map(day => ({
         ...day,
         meals: day.meals.map((meal, mi2) => {
           if (!meal || meal.kind === 'custom') return meal;
-          if (seenIds.has(meal.id)) {
-            // Replace this duplicate
+          const k = keyOf(meal);
+          if (seenIds.has(meal.id) || seenKeys.has(k)) {
+            // Replace this duplicate — temporarily clear its ID/key from existingIds/existingKeys
+            existingIds.delete(meal.id);
+            existingKeys.delete(k);
             const mt = ['breakfast','lunch','dinner'][mi2];
             const pool = allAvail.filter(r => getMealType(r) === mt);
             const replacement = pickFrom(pool);
             if (replacement) { dupCount++; return toSlot(replacement); }
           }
           seenIds.add(meal.id);
+          seenKeys.add(k);
           pickedInRun.add(meal.id);
+          pickedKeys.add(k);
           return meal;
         }),
       }));
       setMealPlan(newPlan);
+      const suffix = forcedRepeat ? ' (some near-duplicates unavoidable with current pantry/filters)' : '';
       return dupCount > 0
-        ? `✅ Replaced ${dupCount} duplicate meal${dupCount>1?'s':''} with unique options.`
+        ? `✅ Replaced ${dupCount} duplicate meal${dupCount>1?'s':''} with unique options.${suffix}`
         : '✅ No duplicates found — your plan is already unique!';
     }
 
@@ -26053,8 +26075,13 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
     }
     // "replace/change [day]" — all meals for that day
     if ((t.includes('replace')||t.includes('change')||t.includes('regenerate')) && di>=0) {
-      // Remove existing day meals from existingIds so they can be freshly re-picked
-      mealPlan[di]?.meals.forEach(m => m && existingIds.delete(m.id));
+      // Remove existing day meals from existingIds/existingKeys so they can be freshly re-picked
+      mealPlan[di]?.meals.forEach(m => {
+        if (!m) return;
+        existingIds.delete(m.id);
+        const rx = String(m.id).startsWith('pantry-') ? getPantryRecipeObj(m.id) : allRecipes.find(x=>x.id===m.id);
+        if (rx) existingKeys.delete(computeCoreDishKey(rx));
+      });
       const newDayMeals = ['breakfast','lunch','dinner'].map(mt => {
         const pool = allAvail.filter(r => getMealType(r) === mt);
         return toSlot(pickFrom(pool));
@@ -26269,8 +26296,15 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
         let cookable = 0;
         planned.forEach(m=>{
           if(m.kind==="custom"){ cookable++; return; }
-          const r = allRecipes.find(x=>x.id===m.id);
-          if(!r||!r.ingredients?.length||r.ingredients.every(i=>ingInPantry(i.n,ps))) cookable++;
+          // Handle pantry-generated meals (IDs start with 'pantry-') separately
+          let r = null;
+          if(String(m.id).startsWith('pantry-')) {
+            r = getPantryRecipeObj(m.id);
+          } else {
+            r = allRecipes.find(x=>x.id===m.id);
+          }
+          // A meal is cookable if ALL non-optional ingredients are in pantry
+          if(!r||!r.ingredients?.length||r.ingredients.every(i=>i.optional||isOptionalIng(i.n)||ingInPantry(i.n,ps))) cookable++;
         });
         const missingData = computeMissingIngredients();
         const totalMissingIng = missingData.length;
