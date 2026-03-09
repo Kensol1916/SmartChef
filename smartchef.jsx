@@ -966,6 +966,50 @@ function buildPantrySet(pantry) {
   return new Set(pantry.map(p => normalizeIng(p.name)));
 }
 
+// ── Optional ingredient detection ─────────────────────────────────────────
+// These are garnishes / seasonings that should never count as "missing".
+// Applies to: planner cards, missing-ingredients panel, RecipeDetail display,
+// pantry match % calculations. Add a pattern to extend the list.
+const OPTIONAL_ING_PATTERNS = [
+  // Salt & pepper
+  /^(black |white |ground |cracked )?pepper(corns?)?$/i,
+  /^(sea |kosher |table |fine |coarse )?salt$/i,
+  // Chili / spice finishers
+  /^(crushed |dried |red )?chili flakes?$/i,
+  /^(crushed )?red pepper flakes?$/i,
+  /^(smoked |sweet )?paprika$/i,
+  // Herbs as garnish
+  /^(fresh |dried |chopped |flat.?leaf )?parsley( garnish| leaves?)?$/i,
+  /^(fresh |dried |chopped )?dill$/i,
+  /^(fresh |dried |chopped )?basil( garnish| leaves?)?$/i,
+  /^(fresh |dried |chopped )?cilantro$/i,
+  /^(fresh |dried )?mint$/i,
+  /^(dried )?oregano$/i,
+  /^(dried )?thyme$/i,
+  /^(fresh )?chives?$/i,
+  /^(green |spring )?onion(s)?( garnish| topping)?$/i,
+  /^scallion(s)?( garnish)?$/i,
+  // Citrus zest
+  /^(fresh )?(lemon|lime|orange) zest$/i,
+  // Cheese toppings
+  /^(grated |shaved |freshly grated )?(parmesan|pecorino)( topping| cheese)?$/i,
+  /^(crumbled )?feta( topping| cheese)?$/i,
+  // Nut / seed toppings
+  /^(chopped |sliced |toasted )?almonds?( topping)?$/i,
+  /^(toasted )?pine nuts?$/i,
+  /^(toasted |black |white )?sesame seeds?$/i,
+  // Other finishing touches
+  /^nutritional yeast$/i,
+  /^(olive oil )?drizzle$/i,
+  /^lemon (juice|wedge|slice)s?$/i,
+  /^lime (juice|wedge)s?$/i,
+];
+/** Returns true if the ingredient name is optional (garnish / finishing touch). */
+function isOptionalIng(name) {
+  if (!name) return false;
+  return OPTIONAL_ING_PATTERNS.some(pat => pat.test(name.trim()));
+}
+
 // ═══════════════════════════════════════════════════════════════════════
 // PANTRY INTELLIGENCE ENGINE
 // Centralised coverage logic — used by ALL pantry intelligence features.
@@ -23039,6 +23083,7 @@ function PlanLibraryTab({ allRecipes, mealPlan, setMealPlan, pantry, showToast, 
     const [filters, setFilters] = React.useState({ cuisines:[], dietary:[], maxTime:120, dinnerThemes:[] });
     const [creatorPlan, setCreatorPlan] = React.useState(null); // generated plan
     const [isGenerating, setIsGenerating] = React.useState(false);
+    const [generateError, setGenerateError] = React.useState(null);
     const [creatorSlotPicker, setCreatorSlotPicker] = React.useState(null);
     const chatEndRef = React.useRef(null);
 
@@ -23138,12 +23183,13 @@ function PlanLibraryTab({ allRecipes, mealPlan, setMealPlan, pantry, showToast, 
       const dinnerPool   = shuffle(pool.filter(r => getMealType(r) === 'dinner'));
       const lunchPool    = shuffle(pool.filter(r => getMealType(r) === 'lunch'));
       const bfastPool    = shuffle(pool.filter(r => getMealType(r) === 'breakfast'));
-      const dinnerThemed = dinnerPool.filter(matchesTheme);
-      const dinnerOther  = dinnerPool.filter(r => !matchesTheme(r));
-      const orderedDinner = dinnerThemes.length ? [...dinnerThemed, ...dinnerOther] : dFallback;
+      // Define fallback pools FIRST (dFallback must exist before orderedDinner uses it)
       const bFallback = bfastPool.length >= 3 ? bfastPool : shuffle(pool.filter(r=>['breakfast','lunch'].includes(getMealType(r))).concat(pool)).slice(0,21);
       const lFallback = lunchPool.length >= 3 ? lunchPool : shuffle(pool.filter(r=>['lunch','breakfast'].includes(getMealType(r))).concat(pool)).slice(0,21);
       const dFallback = dinnerPool.length >= 3 ? dinnerPool : shuffle(pool.filter(r=>['dinner','lunch'].includes(getMealType(r))).concat(pool)).slice(0,21);
+      const dinnerThemed = dinnerPool.filter(matchesTheme);
+      const dinnerOther  = dinnerPool.filter(r => !matchesTheme(r));
+      const orderedDinner = dinnerThemes.length ? [...dinnerThemed, ...dinnerOther] : dFallback;
 
       const usedIds = new Set();
       const pick = arr => {
@@ -23161,26 +23207,35 @@ function PlanLibraryTab({ allRecipes, mealPlan, setMealPlan, pantry, showToast, 
     const handleSend = () => {
       const text = chatInput.trim();
       if(!text) return;
-      setChatInput('');
-      addMsg('user', text);
+      setChatInput(‘’);
+      addMsg(‘user’, text);
       setIsGenerating(true);
+      setGenerateError(null);
       // Parse message and merge with existing filters
       const updates = parseMsg(text);
       const newFilters = {...filters, ...updates};
       setFilters(newFilters);
       setTimeout(() => {
-        const plan = runGenerate(newFilters);
+        let plan = null;
+        try {
+          plan = runGenerate(newFilters);
+        } catch(e) {
+          console.error(‘[SmartChef] Plan Creator runGenerate error:’, e);
+          setGenerateError(‘Generation failed: ‘ + e.message);
+          setIsGenerating(false);
+          return;
+        }
         if(!plan) {
-          addMsg('bot', '⚠️ Too few recipes match those filters. Try loosening the dietary or cuisine restrictions.');
+          addMsg(‘bot’, ‘⚠️ Too few recipes match those filters. Try loosening the dietary or cuisine restrictions.’);
         } else {
           setCreatorPlan(plan);
           const parts = [];
-          if(updates.dietary?.length) parts.push(updates.dietary.join(' + '));
-          if(updates.cuisines?.length) parts.push(updates.cuisines.join(', '));
-          if(updates.dinnerThemes?.length) parts.push(`dinners: ${updates.dinnerThemes.join(', ')}`);
+          if(updates.dietary?.length) parts.push(updates.dietary.join(‘ + ‘));
+          if(updates.cuisines?.length) parts.push(updates.cuisines.join(‘, ‘));
+          if(updates.dinnerThemes?.length) parts.push(`dinners: ${updates.dinnerThemes.join(‘, ‘)}`);
           if(updates.maxTime) parts.push(`max ${updates.maxTime} min`);
-          const summary = parts.length ? `(${parts.join(' · ')})` : '';
-          addMsg('bot', `✨ Plan updated! ${summary} Tap a slot’s ↔ button to swap any meal. When ready, hit Confirm.`);
+          const summary = parts.length ? `(${parts.join(‘ · ‘)})` : ‘’;
+          addMsg(‘bot’, `✨ Plan updated! ${summary} Tap a slot’s ↔ button to swap any meal. When ready, hit Confirm.`);
         }
         setIsGenerating(false);
       }, 300);
@@ -23303,29 +23358,36 @@ function PlanLibraryTab({ allRecipes, mealPlan, setMealPlan, pantry, showToast, 
             </div>
             {!creatorPlan && <button className="btn btn-s btn-sm" style={{marginTop:6}} onClick={()=>{
               setIsGenerating(true);
+              setGenerateError(null);
               setTimeout(()=>{
                 let _gp = null;
                 try { _gp = runGenerate(filters); } catch(e) {
-                  console.error('[SmartChef] runGenerate error:', e);
-                  setGenerateError('Couldn\'t generate plan — ' + e.message);
+                  console.error('[SmartChef] Plan Creator error:', e);
+                  setGenerateError('Couldn\'t generate — ' + e.message);
                   setIsGenerating(false);
                   return;
                 }
-                setGenerateError(null);
                 if(_gp){setCreatorPlan(_gp);addMsg('bot','✨ Here\'s your plan! Chat to refine, or hit Confirm.');}
                 else{addMsg('bot','⚠️ Too few matches — adjust filters above.');}
                 setIsGenerating(false);
               },300);
             }}>✨ Generate plan</button>}
+            {generateError && (
+              <div style={{marginTop:6,padding:'8px 10px',background:'rgba(224,92,92,.1)',border:'1px solid rgba(224,92,92,.3)',borderRadius:6,fontSize:11,color:'#c04040'}}>
+                ⚠️ {generateError}
+                <button style={{marginLeft:8,fontSize:11,color:'var(--clay)',background:'none',border:'none',cursor:'pointer',fontWeight:600}} onClick={()=>setGenerateError(null)}>Dismiss</button>
+              </div>
+            )}
           </div>
 
           {/* Right: Plan grid or placeholder */}
           <div style={{flex:1,minWidth:300}}>
             {!creatorPlan
-              ? <div style={{border:'2px dashed var(--bor)',borderRadius:'var(--r)',padding:40,textAlign:'center',color:'var(--mu)',fontSize:14}}>
-                  <div style={{fontSize:40,marginBottom:12}}>✨</div>
-                  <div style={{fontWeight:600,marginBottom:6}}>Your plan will appear here</div>
-                  <div style={{fontSize:12}}>Type in the chat or click "Generate plan"</div>
+              ? <div style={{border:`2px dashed ${generateError?'rgba(224,92,92,.4)':'var(--bor)'}`,borderRadius:'var(--r)',padding:40,textAlign:'center',color:'var(--mu)',fontSize:14}}>
+                  <div style={{fontSize:40,marginBottom:12}}>{generateError?'⚠️':'✨'}</div>
+                  <div style={{fontWeight:600,marginBottom:6}}>{generateError?'Generation failed':'Your plan will appear here'}</div>
+                  <div style={{fontSize:12}}>{generateError?generateError:'Type in the chat or click "Generate plan"'}</div>
+                  {generateError&&<button className="btn btn-s btn-sm" style={{marginTop:12}} onClick={()=>{setGenerateError(null);}}>Try again</button>}
                 </div>
               : <>
                   {renderPlanGrid(creatorPlan, ({dayIdx,mealIdx,mealType})=>setCreatorSlotPicker({dayIdx,mealIdx,mealType}))}
@@ -23889,8 +23951,9 @@ function RecipeDetail({ recipe, saved, onSave, onBack, onAddToList, pantry, setP
   };
   
   // Get list of missing ingredients (live — updates as user marks items)
+  // Excludes optional ingredients — they never count as "missing"
   const missingIngredients = (recipe.ingredients || [])
-    .filter(ing => !isInPantry(ing.n))
+    .filter(ing => !isInPantry(ing.n) && !ing.optional && !isOptionalIng(ing.n))
     .map(ing => ing.n);
   
   return (
@@ -23977,6 +24040,7 @@ function RecipeDetail({ recipe, saved, onSave, onBack, onAddToList, pantry, setP
               {(recipe.ingredients||[]).length===0&&<div style={{padding:'16px 0',color:'var(--mu)',fontSize:13}}>No ingredient details available.</div>}
               {(recipe.ingredients||[]).map((ing,i)=>{
                 const inPantry = isInPantry(ing.n);
+                const isOptional = ing.optional || isOptionalIng(ing.n);
                 const markState = markedHave[ing.n]; // "added" | "removing" | undefined
                 return(
                   <div key={i} style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"11px 0",borderBottom:i<(recipe.ingredients||[]).length-1?"1px solid var(--bor)":"none",gap:8}}>
@@ -23995,6 +24059,8 @@ function RecipeDetail({ recipe, saved, onSave, onBack, onAddToList, pantry, setP
                         }}>
                           {markState === "added" ? "Added ✓" : "Have"}
                         </span>
+                      ) : isOptional ? (
+                        <span style={{fontSize:10,fontWeight:600,color:"var(--mu)",background:"var(--cream)",border:"1px solid var(--bor)",padding:"2px 8px",borderRadius:4,whiteSpace:"nowrap"}}>Optional</span>
                       ) : (
                         <div style={{display:"flex",alignItems:"center",gap:4}}>
                           <span style={{fontSize:10,fontWeight:700,color:"var(--gold)",background:"var(--goldBg)",padding:"2px 8px",borderRadius:4,whiteSpace:"nowrap"}}>Missing</span>
@@ -25565,52 +25631,55 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
     if (meal.kind === "custom") return false;
     const recipeId = meal.id;
     const ps = buildPantrySet(pantry);
-    // Pantry-generated meals: use getPantryRecipeObj which includes optionals
+    // Pantry-generated meals: look up via slug — optionals already tagged with .optional:true
     if (String(recipeId).startsWith('pantry-')) {
       const pantryRecipe = getPantryRecipeObj(recipeId);
       if (!pantryRecipe?.ingredients) return false;
-      return pantryRecipe.ingredients.some(ing => !ingInPantry(ing.n, ps));
+      return pantryRecipe.ingredients.some(ing => !ing.optional && !isOptionalIng(ing.n) && !ingInPantry(ing.n, ps));
     }
     const recipe = allRecipes.find(r => r.id === recipeId);
     if(!recipe || !recipe.ingredients) return false;
-    return recipe.ingredients.some(ing => !ingInPantry(ing.n, ps));
+    return recipe.ingredients.some(ing => !ing.optional && !isOptionalIng(ing.n) && !ingInPantry(ing.n, ps));
   };
 
   // SHARED HELPER: Compute missing ingredients from current plan + pantry
+  // Handles both regular recipes and pantry-generated meals.
+  // Excludes optional ingredients (garnishes / finishing touches).
   const computeMissingIngredients = () => {
     const ps = buildPantrySet(pantry);
     const ingredientMap = {}; // {normalized: {name, recipesNeedingIt: [...], count}}
 
-    // Aggregate all ingredients from planned meals
     mealPlan.forEach(day => {
       day.meals.forEach(meal => {
-        if(meal) {
-          if(meal.kind === "custom") return;
-          const recipe = allRecipes.find(r => r.id === (meal.kind === "recipe" ? meal.id : meal.id));
-          if(recipe && recipe.ingredients) {
-            recipe.ingredients.forEach(ing => {
-              const normalized = normalizeIng(ing.n);
-              // Only include if NOT satisfied by pantry (uses family matching)
-              if(normalized && !ingInPantry(ing.n, ps)) {
-                if(!ingredientMap[normalized]) {
-                  ingredientMap[normalized] = {
-                    name: ing.n, // Keep original name for display
-                    normalized,
-                    recipesNeedingIt: [],
-                    count: 0
-                  };
-                }
-                if(!ingredientMap[normalized].recipesNeedingIt.includes(recipe.title)) {
-                  ingredientMap[normalized].recipesNeedingIt.push(recipe.title);
-                  ingredientMap[normalized].count++;
-                }
-              }
-            });
-          }
+        if (!meal || meal.kind === 'custom') return;
+        // Look up recipe — handle both regular and pantry-generated meals
+        let recipe = null;
+        let recipeTitle = meal.name || '';
+        if (String(meal.id).startsWith('pantry-')) {
+          recipe = getPantryRecipeObj(meal.id);
+          if (recipe) recipeTitle = recipe.title;
+        } else {
+          recipe = allRecipes.find(r => r.id === meal.id);
+          if (recipe) recipeTitle = recipe.title;
         }
+        if (!recipe?.ingredients) return;
+
+        recipe.ingredients.forEach(ing => {
+          // Skip optional ingredients — they never count as missing
+          if (ing.optional || isOptionalIng(ing.n)) return;
+          const normalized = normalizeIng(ing.n);
+          if (!normalized || ingInPantry(ing.n, ps)) return;
+          if (!ingredientMap[normalized]) {
+            ingredientMap[normalized] = { name: ing.n, normalized, recipesNeedingIt: [], count: 0 };
+          }
+          if (!ingredientMap[normalized].recipesNeedingIt.includes(recipeTitle)) {
+            ingredientMap[normalized].recipesNeedingIt.push(recipeTitle);
+            ingredientMap[normalized].count++;
+          }
+        });
       });
     });
-    
+
     return Object.values(ingredientMap);
   };
   
@@ -25651,7 +25720,7 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
     return {
       id: mealId, title: t.name, emoji: t.emoji, time: t.time, diff: 'Easy',
       cuisine: 'Pantry', dietary: [],
-      ingredients: [...(t.requires||[]).map(n=>({n})), ...(t.optionals||[]).map(n=>({n}))],
+      ingredients: [...(t.requires||[]).map(n=>({n})), ...(t.optionals||[]).map(n=>({n, optional:true}))],
       contains_meat: t.contains_meat||false, contains_fish: t.contains_fish||false,
       contains_shellfish: false, contains_dairy: t.contains_dairy||false,
       isPantryGenerated: true, missingCount: 0,
@@ -25925,18 +25994,55 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
     const pantryMeals = generatePantryMeals(ps).filter(isAllowed);
     const allAvail = [...pantryMeals, ...allRecipes.filter(isAllowed)];
 
-    // Track used IDs in the current plan — prefer non-repeated meals
-    const usedIds = new Set(mealPlan.flatMap(d=>d.meals).filter(Boolean).map(m=>m.id));
+    // ── Duplicate-safe picker ──────────────────────────────────────────────
+    // existingIds = meals already in plan BEFORE this edit (avoid re-selecting)
+    // pickedInRun = meals chosen so far IN this edit (never duplicate within one edit)
+    const existingIds = new Set(mealPlan.flatMap(d=>d.meals).filter(Boolean).map(m=>m.id));
+    const pickedInRun = new Set();
+    let forcedRepeat = false;
     const pickFrom = (pool) => {
-      const fresh = pool.filter(r=>!usedIds.has(r.id));
-      const r = (fresh.length ? fresh : pool)[Math.floor(Math.random()*Math.max(fresh.length||pool.length,1))];
-      if (r) usedIds.add(r.id);
+      if (!pool.length) return null;
+      // Tier 1: completely new and not picked this run
+      let candidates = pool.filter(r => !existingIds.has(r.id) && !pickedInRun.has(r.id));
+      // Tier 2: not picked this run (allows re-using one from current plan, but no within-run dupe)
+      if (!candidates.length) candidates = pool.filter(r => !pickedInRun.has(r.id));
+      // Tier 3: pool exhausted — must repeat, flag it
+      if (!candidates.length) { forcedRepeat = true; candidates = pool; }
+      const r = candidates[Math.floor(Math.random() * candidates.length)];
+      if (r) pickedInRun.add(r.id);
       return r || null;
     };
 
     // "new week" / "redo all" / "fresh plan"
     if (/new week|redo.*(all|week)|regenerate.*(all|week|whole)|fresh.*plan|start.?over/.test(t)) {
       autoplan(); return '✨ Regenerating the whole week with fresh meals…';
+    }
+
+    // "no duplicates" / "remove duplicates" / "deduplicate" → fix repeated meals in current plan
+    if (/no.?duplic|remove.?duplic|dedup|stop.*repeat|no.*repeat|all different|unique meals/.test(t)) {
+      // Scan current plan for duplicates and replace them
+      const seenIds = new Set();
+      let dupCount = 0;
+      const newPlan = mealPlan.map(day => ({
+        ...day,
+        meals: day.meals.map((meal, mi2) => {
+          if (!meal || meal.kind === 'custom') return meal;
+          if (seenIds.has(meal.id)) {
+            // Replace this duplicate
+            const mt = ['breakfast','lunch','dinner'][mi2];
+            const pool = allAvail.filter(r => getMealType(r) === mt);
+            const replacement = pickFrom(pool);
+            if (replacement) { dupCount++; return toSlot(replacement); }
+          }
+          seenIds.add(meal.id);
+          pickedInRun.add(meal.id);
+          return meal;
+        }),
+      }));
+      setMealPlan(newPlan);
+      return dupCount > 0
+        ? `✅ Replaced ${dupCount} duplicate meal${dupCount>1?'s':''} with unique options.`
+        : '✅ No duplicates found — your plan is already unique!';
     }
 
     // "replace/change/swap [day] [meal type]" → open picker
@@ -25947,19 +26053,29 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
     }
     // "replace/change [day]" — all meals for that day
     if ((t.includes('replace')||t.includes('change')||t.includes('regenerate')) && di>=0) {
-      setMealPlan(prev=>prev.map((day,idx)=>{
-        if(idx!==di) return day;
-        return {...day, meals:day.meals.map((_,mi2)=>{
-          const mt=['breakfast','lunch','dinner'][mi2];
-          const pool=allAvail.filter(r=>getMealType(r)===mt);
-          return toSlot(pickFrom(pool));
-        })};
-      }));
-      return `🔄 All meals for ${DAY_LABELS[di]} have been replaced with fresh picks.`;
+      // Remove existing day meals from existingIds so they can be freshly re-picked
+      mealPlan[di]?.meals.forEach(m => m && existingIds.delete(m.id));
+      const newDayMeals = ['breakfast','lunch','dinner'].map(mt => {
+        const pool = allAvail.filter(r => getMealType(r) === mt);
+        return toSlot(pickFrom(pool));
+      });
+      setMealPlan(prev => prev.map((day,idx) => idx===di ? {...day, meals: newDayMeals} : day));
+      const suffix = forcedRepeat ? ' (pool was small — some repeats unavoidable)' : '';
+      return `🔄 All meals for ${DAY_LABELS[di]} have been replaced.${suffix}`;
     }
 
-    // "pantry only" / "no shopping" / "use what I have"
-    if (/pantry|no.?shop|cook.*have|what.*have|avoid.*shop/.test(t)) {
+    // "replace one meal" / "change just one" / "swap one"
+    if (/replace.?one|change.?one|swap.?one|just.?one/.test(t)) {
+      const filledSlots = [];
+      mealPlan.forEach((day,di2) => day.meals.forEach((meal,mi2) => { if(meal) filledSlots.push({di2,mi2,meal}); }));
+      if (!filledSlots.length) return '❌ No meals to replace yet.';
+      const slot = filledSlots[Math.floor(Math.random()*filledSlots.length)];
+      setReplacePicker({dayIdx:slot.di2, mealIdx:slot.mi2, mealType:['Breakfast','Lunch','Dinner'][slot.mi2]});
+      return `🔄 Opening picker for ${mealPlan[slot.di2].day} ${['Breakfast','Lunch','Dinner'][slot.mi2]}…`;
+    }
+
+    // "pantry only" / "no shopping" / "use what I have" / "no missing ingredients"
+    if (/pantry|no.?shop|cook.*have|what.*have|avoid.*shop|no.*miss|nothing.*miss|all.*pantry/.test(t)) {
       if(!pantryMeals.length) return '❌ No pantry-only meals match your current pantry. Add more items to your pantry first.';
       setMealPlan(prev=>prev.map(day=>({...day,meals:day.meals.map((meal,mi2)=>{
         if(!meal) return null;
@@ -25970,18 +26086,36 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
       return '✅ Switched to pantry-only meals — no extra shopping needed!';
     }
 
-    // "remove missing" / "clear missing meals"
-    if (/remove.*miss|clear.*miss|no.*miss|delet.*miss/.test(t)) {
+    // "remove missing" / "clear meals that need shopping"
+    if (/remove.*miss|clear.*miss|delet.*miss/.test(t)) {
       setMealPlan(prev=>prev.map(day=>({...day,meals:day.meals.map(meal=>meal&&recipeNeedsShopping(meal)?null:meal)})));
       return '🗑 Cleared meals that require missing ingredients. Empty slots remain.';
     }
 
-    // "too simple" / "boring" / "too plain" / "need variety" → UPGRADE to more interesting meals
-    if (/too.*(simple|easy|plain|basic|boring)|boring|need.*var|more.*interest|less.*boring|upgrade|more.*complex/.test(t)) {
+    // "healthier" / "more healthy" / "nutritious" / "clean eating" → health score filter
+    if (/healthi|more.?healthy|nutritious|clean.?eat|less.?fried|whole.?food|low.?calori/.test(t)) {
       const mealTypeFilter = mi>=0 ? ['Breakfast','Lunch','Dinner'][mi] : null;
-      // Upgrade = recipes with more ingredients (≥5) or longer cook time (≥30 min)
+      const healthy = [...allAvail].sort((a,b) => getHealthScore(b)-getHealthScore(a));
+      // Take top 40% by health score
+      const cutoff = Math.ceil(healthy.length * 0.4);
+      const healthPool = healthy.slice(0, Math.max(cutoff, 7));
+      setMealPlan(prev=>prev.map(day=>({...day,meals:day.meals.map((meal,mi2)=>{
+        if(!meal) return null;
+        const mt=['Breakfast','Lunch','Dinner'][mi2];
+        if(mealTypeFilter&&mt!==mealTypeFilter) return meal;
+        const pool=healthPool.filter(r=>getMealType(r)===mt.toLowerCase());
+        return pool.length ? toSlot(pickFrom(pool)) : meal;
+      })})));
+      return mealTypeFilter
+        ? `💚 Upgraded ${mealTypeFilter.toLowerCase()}s to healthier options.`
+        : '💚 Replaced meals with higher-nutrition options across the week.';
+    }
+
+    // "too simple" / "boring" / "too plain" / "more interesting" / "upgrade" → UPGRADE
+    if (/too.*(simple|easy|plain|basic|boring)|boring|need.*var|more.*interest|less.*boring|upgrade|more.*complex|make.*interest/.test(t)) {
+      const mealTypeFilter = mi>=0 ? ['Breakfast','Lunch','Dinner'][mi] : null;
       const complex = allAvail.filter(r=>(r.ingredients||[]).length>=5||(r.time||30)>=30);
-      if(!complex.length) return '❌ No more complex recipes found. Try adding more recipes or adjusting dietary filters.';
+      if(!complex.length) return '❌ No more complex recipes found. Try adjusting dietary filters.';
       setMealPlan(prev=>prev.map(day=>({...day,meals:day.meals.map((meal,mi2)=>{
         if(!meal) return null;
         const mt=['Breakfast','Lunch','Dinner'][mi2];
@@ -25989,12 +26123,13 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
         const pool=complex.filter(r=>getMealType(r)===mt.toLowerCase());
         return pool.length ? toSlot(pickFrom(pool)) : meal;
       })})));
+      const suffix = forcedRepeat ? ' (some repeats — pool was limited)' : '';
       return mealTypeFilter
-        ? `🌟 Upgraded ${mealTypeFilter.toLowerCase()}s to more interesting, involved recipes.`
-        : '🌟 Upgraded meals across the week to more interesting options.';
+        ? `🌟 Upgraded ${mealTypeFilter.toLowerCase()}s to more involved recipes.${suffix}`
+        : `🌟 Upgraded meals to more interesting options.${suffix}`;
     }
 
-    // "make simpler" / "easier" / "quicker" / "faster" → SIMPLIFY to quick meals
+    // "make simpler" / "easier" / "quicker" / "faster" / "simpler breakfasts" → SIMPLIFY
     if (/make.*simpl|make.*eas|simpler|easier|quicker|faster|quick.*meal|fast.*meal|under.*min|15.*min|20.*min|less.*complex|low.*effort/.test(t)) {
       const mealTypeFilter = mi>=0 ? ['Breakfast','Lunch','Dinner'][mi] : null;
       const quick = allAvail.filter(r=>(r.time||30)<=20);
@@ -26006,24 +26141,10 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
         const pool=quick.filter(r=>getMealType(r)===mt.toLowerCase());
         return pool.length ? toSlot(pickFrom(pool)) : meal;
       })})));
+      const suffix = forcedRepeat ? ' (some repeats — limited quick options available)' : '';
       return mealTypeFilter
-        ? `⚡ ${mealTypeFilter}s swapped for quick recipes (≤20 min).`
-        : '⚡ Replaced meals with quicker options (≤20 min) across the week.';
-    }
-
-    // "more [food]" / "use more fish" / "add chicken"
-    const foodMatch=t.match(/\b(fish|salmon|tuna|chicken|beef|pasta|rice|soup|salad|egg|bean|lentil|vegetable|veg|seafood|shrimp|pork|tofu|mushroom)\b/);
-    if(foodMatch&&(t.includes('more')||t.includes('prefer')||t.includes('use')||t.includes('add')||t.includes('want'))) {
-      const food=foodMatch[1];
-      const pool=allAvail.filter(r=>(r.title||'').toLowerCase().includes(food)||(r.ingredients||[]).some(i=>(i.n||'').toLowerCase().includes(food)));
-      if(!pool.length) return `❌ No recipes found featuring "${food}". Try a different ingredient.`;
-      setMealPlan(prev=>prev.map(day=>({...day,meals:day.meals.map((meal,mi2)=>{
-        if(!meal||Math.random()>0.55) return meal;
-        const mt=['Breakfast','Lunch','Dinner'][mi2];
-        const typed=pool.filter(r=>getMealType(r)===mt.toLowerCase());
-        return typed.length ? toSlot(pickFrom(typed)) : meal;
-      })})));
-      return `🍴 Added more ${food}-focused meals to your plan.`;
+        ? `⚡ ${mealTypeFilter}s swapped for quick recipes (≤20 min).${suffix}`
+        : `⚡ Replaced meals with quicker options (≤20 min).${suffix}`;
     }
 
     // "vegetarian" / "vegan" / "pescatarian" / "meatless" override for the week
@@ -26042,7 +26163,24 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
       return `🥦 Swapped the week to ${diet.toLowerCase()} meals.`;
     }
 
-    return "🤔 I didn't get that. Try:\n• \"Make dinners simpler\" — quick meals\n• \"Too boring — upgrade\" — more interesting recipes\n• \"Pantry only\" — no shopping needed\n• \"More fish\"\n• \"Replace Wednesday dinner\"\n• \"New week\"";
+    // "more [food/category]" / "use more fish" / "add chicken" / "more soups" / "more pasta"
+    const foodMatch=t.match(/\b(fish|salmon|tuna|chicken|beef|pasta|noodle|rice|soup|stew|salad|egg|bean|lentil|vegetable|veg|seafood|shrimp|pork|tofu|mushroom|curry|wrap|bowl)\b/);
+    if(foodMatch&&(t.includes('more')||t.includes('prefer')||t.includes('use')||t.includes('add')||t.includes('want')||t.includes('feature'))) {
+      const food=foodMatch[1];
+      // Match by title OR ingredient name
+      const pool=allAvail.filter(r=>(r.title||'').toLowerCase().includes(food)||(r.ingredients||[]).some(i=>(i.n||'').toLowerCase().includes(food)));
+      if(!pool.length) return `❌ No recipes found featuring "${food}". Try a different ingredient.`;
+      setMealPlan(prev=>prev.map(day=>({...day,meals:day.meals.map((meal,mi2)=>{
+        if(!meal||Math.random()>0.6) return meal;
+        const mt=['Breakfast','Lunch','Dinner'][mi2];
+        const typed=pool.filter(r=>getMealType(r)===mt.toLowerCase());
+        return typed.length ? toSlot(pickFrom(typed)) : meal;
+      })})));
+      const suffix = forcedRepeat ? ' (note: limited options caused some repeats)' : '';
+      return `🍴 Added more ${food}-focused meals to your plan.${suffix}`;
+    }
+
+    return "🤔 I didn't get that. Try:\n• \"Make dinners simpler\" — quicker meals\n• \"More interesting\" — upgrade to complex recipes\n• \"No duplicates\" — remove repeated meals\n• \"Pantry only\" — no shopping needed\n• \"Healthier\" — higher-nutrition meals\n• \"More fish\" / \"More pasta\" / \"More soup\"\n• \"Replace Wednesday dinner\"\n• \"New week\"";
   };
 
   const handleChatSend = () => {
