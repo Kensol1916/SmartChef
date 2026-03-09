@@ -25622,6 +25622,8 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
   const [chatOpen, setChatOpen] = useState(false);
   const [chatMessages, setChatMessages] = useState([{role:'bot',text:'Hi! Tell me how to edit your plan.'}]);
   const [chatInput, setChatInput] = useState('');
+  // Pending two-step confirmation (e.g. clear plan)
+  const [chatPendingAction, setChatPendingAction] = useState(null);
   const ME={Breakfast:"☀️",Lunch:"🌤️",Dinner:"🌙"};
   
   // SHARED HELPER: Check if recipe has missing ingredients (needs shopping)
@@ -25976,12 +25978,39 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
 
   // ── Planner Chat: rule-based plan editor ───────────────────────────────────
   const processChatCommand = (msg) => {
-    const t = msg.toLowerCase();
+    const t = msg.toLowerCase().trim();
     const DAYS = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday'];
     const DAY_LABELS = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
     const getMealIdx = s => s.includes('breakfast')?0:s.includes('lunch')?1:s.includes('dinner')?2:-1;
     const getDayIdx  = s => DAYS.findIndex(d => s.includes(d));
     const toSlot     = r => r ? {kind:'recipe',emoji:r.emoji,name:r.title,id:r.id} : null;
+
+    // ── Two-step confirmation handler ─────────────────────────────────────
+    if (chatPendingAction === 'clearPlan') {
+      const isYes = /^(yes|yeah|yep|yup|ok|okay|sure|go ahead|confirm|do it|clear|empty|delete|proceed|affirmative)/.test(t);
+      const isNo  = /^(no|nope|nah|cancel|stop|nevermind|never mind|abort)/.test(t);
+      if (isYes) {
+        setChatPendingAction(null);
+        setMealPlan(prev => prev.map(day => ({...day, meals: [null, null, null]})));
+        return '✅ I cleared the current weekly plan. All meal slots are now empty.';
+      }
+      if (isNo) {
+        setChatPendingAction(null);
+        return '👍 No changes made — your plan is untouched.';
+      }
+      // User said something unrelated while pending — re-prompt
+      return '⚠️ Still waiting for confirmation. Reply "yes" to clear all meals, or "no" to cancel.';
+    }
+
+    // ── Intent: clear / empty / delete plan ──────────────────────────────
+    // Matches: "delete the plan", "empty the week", "clear the week",
+    //          "remove all meals", "start from scratch", "blank the plan"
+    if (/\b(delete|clear|empty|erase|blank|wipe|remove|reset)\b.*\b(plan|week|meal|all|everything|schedule)\b|\bremove all\b|\bstart from scratch\b|\bblank the plan\b|\bempty the week\b|\bclear the week\b|\bdelete the plan\b/.test(t)) {
+      const filled = mealPlan.flatMap(d=>d.meals).filter(Boolean).length;
+      if (!filled) return '📭 The planner is already empty.';
+      setChatPendingAction('clearPlan');
+      return `⚠️ Do you want me to clear all ${filled} meal${filled!==1?'s':''} from this week? Reply "yes" to confirm or "no" to cancel.`;
+    }
 
     // Build filtered pool respecting dietary prefs + avoided ingredients
     const ps = buildPantrySet(pantry);
@@ -26119,23 +26148,30 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
       return '🗑 Cleared meals that require missing ingredients. Empty slots remain.';
     }
 
-    // "healthier" / "more healthy" / "nutritious" / "clean eating" → health score filter
-    if (/healthi|more.?healthy|nutritious|clean.?eat|less.?fried|whole.?food|low.?calori/.test(t)) {
+    // "healthier" / "more healthy" / "nutritious" / "clean eating" / "better for me" / "less junk"
+    // Matches: "make all meals healthier", "make the meals healthier", "healthier week",
+    //          "improve the healthiness", "make this week more healthy", "better for me", "less junk"
+    if (/healthi|more.?health|nutritious|clean.?eat|less.?fried|whole.?food|low.?calori|better.?for.?(me|us)|less.?junk|improve.*health|health.*week/.test(t)) {
       const mealTypeFilter = mi>=0 ? ['Breakfast','Lunch','Dinner'][mi] : null;
+      // Sort by health score descending; prefer fewer sugary/fried, more veg/legume/lean protein
       const healthy = [...allAvail].sort((a,b) => getHealthScore(b)-getHealthScore(a));
-      // Take top 40% by health score
+      // Take top 40% by health score (at least 7 recipes)
       const cutoff = Math.ceil(healthy.length * 0.4);
       const healthPool = healthy.slice(0, Math.max(cutoff, 7));
+      let replaced = 0;
       setMealPlan(prev=>prev.map(day=>({...day,meals:day.meals.map((meal,mi2)=>{
         if(!meal) return null;
         const mt=['Breakfast','Lunch','Dinner'][mi2];
         if(mealTypeFilter&&mt!==mealTypeFilter) return meal;
         const pool=healthPool.filter(r=>getMealType(r)===mt.toLowerCase());
-        return pool.length ? toSlot(pickFrom(pool)) : meal;
+        if(!pool.length) return meal;
+        replaced++;
+        return toSlot(pickFrom(pool));
       })})));
-      return mealTypeFilter
-        ? `💚 Upgraded ${mealTypeFilter.toLowerCase()}s to healthier options.`
-        : '💚 Replaced meals with higher-nutrition options across the week.';
+      const suffix = forcedRepeat ? ' (some repeats were unavoidable given your current filters)' : '';
+      if (mealTypeFilter) return `💚 Upgraded ${mealTypeFilter.toLowerCase()}s to healthier options.${suffix}`;
+      if (replaced === 0) return '❌ No meals to upgrade — your plan is already empty. Try Auto-plan first.';
+      return `💚 Replaced ${replaced} meal${replaced!==1?'s':''} with higher-nutrition options across the week.${suffix}`;
     }
 
     // "too simple" / "boring" / "too plain" / "more interesting" / "upgrade" → UPGRADE
@@ -26207,7 +26243,7 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
       return `🍴 Added more ${food}-focused meals to your plan.${suffix}`;
     }
 
-    return "🤔 I didn't get that. Try:\n• \"Make dinners simpler\" — quicker meals\n• \"More interesting\" — upgrade to complex recipes\n• \"No duplicates\" — remove repeated meals\n• \"Pantry only\" — no shopping needed\n• \"Healthier\" — higher-nutrition meals\n• \"More fish\" / \"More pasta\" / \"More soup\"\n• \"Replace Wednesday dinner\"\n• \"New week\"";
+    return "🤔 I'm not sure what you want to change. Try:\n• \"Clear the week\" — remove all meals\n• \"Make the week healthier\" — switch to nutritious options\n• \"Make dinners simpler\" — quicker meals\n• \"More interesting\" — upgrade to complex recipes\n• \"No duplicates\" — remove repeated meals\n• \"Pantry only\" — no shopping needed\n• \"More fish\" / \"More pasta\" / \"More soup\"\n• \"Replace Wednesday dinner\"\n• \"New week\"";
   };
 
   const handleChatSend = () => {
