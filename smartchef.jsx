@@ -25627,6 +25627,7 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
   const [chatConstraintMemory, setChatConstraintMemory] = useState({
     goals: { whole_week: [], breakfast: [], lunch: [], dinner: [] },
     pantryThreshold: null, maxTime: null, dietary: [], foodFocus: null,
+    exclusions: { whole_week: [], breakfast: [], lunch: [], dinner: [] },
   });
   const ME={Breakfast:"☀️",Lunch:"🌤️",Dinner:"🌙"};
   
@@ -26035,8 +26036,9 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
     const DAYS = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday'];
 
     const delta = {
-      add:    { whole_week: [], breakfast: [], lunch: [], dinner: [] },
-      remove: { whole_week: [], breakfast: [], lunch: [], dinner: [] },
+      add:     { whole_week: [], breakfast: [], lunch: [], dinner: [] },
+      remove:  { whole_week: [], breakfast: [], lunch: [], dinner: [] },
+      exclude: { whole_week: [], breakfast: [], lunch: [], dinner: [] },
       pantryThreshold: null,
       maxTime:         null,
       dietary:         [],
@@ -26109,11 +26111,11 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
     const dayIdx = DAYS.findIndex(d => t.includes(d));
     if (dayIdx >= 0) delta.day = dayIdx;
 
-    // Primary scope of this message
+    // Primary scope of this message (handle plurals: lunches, breakfasts, dinners)
     let msgScope = 'whole_week';
-    if      (/\bbreakfast\b/.test(t))  msgScope = 'breakfast';
-    else if (/\blunch\b/.test(t))      msgScope = 'lunch';
-    else if (/\bdinner\b/.test(t))     msgScope = 'dinner';
+    if      (/\bbreakfasts?\b/.test(t))  msgScope = 'breakfast';
+    else if (/\blunches?\b/.test(t))     msgScope = 'lunch';
+    else if (/\bdinners?\b/.test(t))     msgScope = 'dinner';
     delta.scope = msgScope;
 
     // "Only change lunch" / "Don't change breakfast" guards — applied at end
@@ -26230,6 +26232,37 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
       delta.add.whole_week.push('food_focus');
     }
 
+
+    // ── Cuisine / category exclusion intent ──────────────────────────────
+    // Detects: "no X", "remove X", "don't want X", "avoid X", "without X"
+    // followed by a cuisine or food category.  Does NOT fire on duplicate/
+    // missing-ingredient commands (those are handled earlier).
+    const isExclusionIntent =
+      /\bno\b|\bremove\b|\bdon.t\b|\bdont\b|\bwithout\b|\bavoid\b|\bexclude\b/.test(t) &&
+      !/no.?duplic|no.*repeat|remove.*duplic|remove.*miss/.test(t);
+    if (isExclusionIntent) {
+      const CUISINE_DETECT = {
+        asian:         /\basian\b|\bchinese\b|\bjapanese\b|\bthai\b|\bkorean\b|\bvietnamese\b|\bsushi\b|\bramen\b|\bwok\b/,
+        mediterranean: /\bmediterranean\b|\bgreek\b|\blebanese\b|\bmoroc/,
+        italian:       /\bitalian\b/,
+        mexican:       /\bmexican\b/,
+        indian:        /\bindian\b/,
+        soup:          /\bsoups?\b/,
+        pasta:         /\bpasta\b/,
+        fish:          /\bfish\b|\bseafood\b/,
+        meat:          /\bmeat\b|\bmeaty\b/,
+        spicy:         /\bspicy\b/,
+      };
+      for (const [cuisineKey, rx] of Object.entries(CUISINE_DETECT)) {
+        if (rx.test(t)) {
+          const exScope = (msgScope !== 'whole_week') ? msgScope : 'whole_week';
+          if (!delta.exclude[exScope].includes(cuisineKey)) {
+            delta.exclude[exScope].push(cuisineKey);
+          }
+        }
+      }
+    }
+
     // ── Apply "Don't change X" locks (clear goals added for locked scope) ──
     if (lockBreakfast) { delta.add.breakfast = []; delta.remove.breakfast = []; }
     if (lockLunch)     { delta.add.lunch     = []; delta.remove.lunch     = []; }
@@ -26244,11 +26277,12 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
   const mergeMemory = (existing, delta) => {
     if (delta.clearAll) {
       return {
-        goals: { whole_week: [], breakfast: [], lunch: [], dinner: [] },
+        goals:     { whole_week: [], breakfast: [], lunch: [], dinner: [] },
         pantryThreshold: null,
         maxTime:         null,
         dietary:         [],
         foodFocus:       null,
+        exclusions: { whole_week: [], breakfast: [], lunch: [], dinner: [] },
       };
     }
 
@@ -26263,6 +26297,12 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
       maxTime:         existing.maxTime,
       dietary:         [...existing.dietary],
       foodFocus:       existing.foodFocus,
+      exclusions: {
+        whole_week: [...(existing.exclusions?.whole_week || [])],
+        breakfast:  [...(existing.exclusions?.breakfast  || [])],
+        lunch:      [...(existing.exclusions?.lunch      || [])],
+        dinner:     [...(existing.exclusions?.dinner     || [])],
+      },
     };
 
     // Add goals (set semantics)
@@ -26276,6 +26316,13 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
     for (const s of ['whole_week','breakfast','lunch','dinner']) {
       for (const g of (delta.remove[s] || [])) {
         mem.goals[s] = mem.goals[s].filter(x => x !== g);
+      }
+    }
+
+    // Accumulate exclusions (set semantics)
+    for (const s of ['whole_week','breakfast','lunch','dinner']) {
+      for (const ex of (delta.exclude?.[s] || [])) {
+        if (!mem.exclusions[s].includes(ex)) mem.exclusions[s].push(ex);
       }
     }
 
@@ -26324,6 +26371,33 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
       const have = ings.filter(i => ingInPantry(i.n, ps)).length;
       return Math.round((have / ings.length) * 100);
     };
+
+    // Cuisine/category pattern matcher — checks recipe title + ingredient text
+    const CUISINE_PATTERNS = {
+      asian:         { title: /stir.?fry|fried.?rice|ramen|sushi|pad.?thai|teriyaki|dumpling|spring.?roll|lo.?mein|chow.?mein|kung.?pao|miso|tempura|bibimbap|pho|banh.?mi|dim.?sum|nasi|satay|kimchi|udon|soba|gyoza|wonton|szechuan|yakitori|edamame|laksa|rendang/, ingredients: /soy.?sauce|sesame.?oil|fish.?sauce|rice.?noodle|oyster.?sauce|hoisin|wasabi|miso|dashi|rice.?vinegar|gochujang|\btamari\b|nori/ },
+      mediterranean: { title: /mediterranean|greek|hummus|falafel|tzatziki|pita|dolma|tabbouleh|shakshuka|moussaka|spanakopita|gyro|kebab|baklava|couscous|fattoush/, ingredients: /tahini|feta|kalamata|harissa|za.?atar|sumac/ },
+      italian:       { title: /italian|pasta|pizza|risotto|carbonara|bolognese|lasagna|gnocchi|bruschetta|caprese|minestrone|ossobuco/, ingredients: /parmesan|pecorino|pancetta|prosciutto|mozzarella|ricotta/ },
+      mexican:       { title: /mexican|taco|burrito|enchilada|quesadilla|fajita|guacamole|tamale|nachos|torta|pozole|chilaquiles|tex.?mex/, ingredients: /jalape|chipotle|tomatillo|queso|cotija|corn.?tortilla|flour.?tortilla/ },
+      indian:        { title: /indian|curry|masala|tikka|biryani|korma|vindaloo|saag|palak|paneer|chana|dal|butter.?chicken|tandoor/, ingredients: /garam.?masala|turmeric|cardamom|fenugreek|ghee|naan|chapati/ },
+      soup:          { title: /\bsoup\b|\bstew\b|\bchowder\b|\bbisque\b|\bgazpacho\b|\bborscht\b|\bgumbo\b/, ingredients: null },
+      pasta:         { title: /\bpasta\b|\bspaghetti\b|\bpenne\b|\bfettuccine\b|\blinguine\b|\bmacaroni\b|\brigatoni\b|\bfarfalle\b|\borzo\b|\bnoodle\b/, ingredients: null },
+      fish:          { title: /\bfish\b|\bsalmon\b|\btuna\b|\bcod\b|\btilapia\b|\bseafood\b|\bshrimp\b|\bprawn\b|\blocster\b|\bcrab\b|\bscallop\b/, ingredients: /\bsalmon\b|\btuna\b|\bcod\b|\btilapia\b|\bshrimp\b|\bprawn\b|\bcrab\b|\bscallop\b/ },
+      meat:          { title: /\bbeef\b|\bsteak\b|\bpork\b|\blamb\b|\bbacon\b|\bsausage\b|\bmeatball\b|\bburger\b|\brib\b|\bbrisket\b|\bveal\b|\bpulled.?pork\b/, ingredients: /\bbeef\b|\bsteak\b|\bpork\b|\blamb\b|\bbacon\b|\bsausage\b/ },
+      spicy:         { title: /\bspicy\b/, ingredients: /chili.?flake|\bjalape|\bchipotle|\bsriracha|\bhabanero|\bcayenne|\bred.?pepper.?flake/ },
+    };
+    const recipeMatchesCuisine = (r, cuisineKey) => {
+      const pat = CUISINE_PATTERNS[cuisineKey];
+      if (!pat) return false;
+      const title = (r.title || '').toLowerCase();
+      const ingsT = (r.ingredients || []).map(i => (i.n || '').toLowerCase()).join(' ');
+      return (pat.title && pat.title.test(title)) || (pat.ingredients && pat.ingredients.test(ingsT));
+    };
+
+    // Active exclusions for a meal type = whole_week + meal-type exclusions
+    const exclusionsFor = mealType => [
+      ...(memory.exclusions?.whole_week || []),
+      ...(memory.exclusions?.[mealType] || []),
+    ];
 
     // Effective goals for a meal type = whole_week goals + meal-type goals
     const goalsFor = mealType => [
@@ -26399,6 +26473,13 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
           (r.title || '').toLowerCase().includes(fk) ||
           (r.ingredients || []).some(i => (i.n || '').toLowerCase().includes(fk)));
         if (fkF.length) pool = fkF;
+      }
+
+      // Cuisine/category exclusion hard filter
+      const activeExclusions = exclusionsFor(mealType);
+      if (activeExclusions.length) {
+        const excFiltered = pool.filter(r => !activeExclusions.some(ex => recipeMatchesCuisine(r, ex)));
+        if (excFiltered.length) pool = excFiltered;
       }
 
       pool = pool.map(r => ({ ...r, _score: scoreRecipe(r, mealType), _pct: pantryMatchPct(r) }));
@@ -26542,10 +26623,20 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
     }
 
     // ── whole week or single meal-type scope ───────────────────────────────
-    // Check if any active goals exist for a given meal type
-    const hasAnyGoals = mt => {
+    // Check if positive goals (healthier, pantry, etc.) exist for a meal type
+    const hasPositiveGoals = mt => {
       const goals = goalsFor(mt);
       return goals.length > 0 || memory.pantryThreshold || memory.dietary.length || memory.foodFocus;
+    };
+
+    // Check whether a current plan meal violates an active exclusion
+    const mealViolatesExclusion = (meal, mt) => {
+      const excs = exclusionsFor(mt);
+      if (!excs.length || !meal || meal.kind === 'custom') return false;
+      const r = String(meal.id).startsWith('pantry-')
+        ? getPantryRecipeObj(meal.id)
+        : allRecipes.find(x => x.id === meal.id);
+      return r ? excs.some(ex => recipeMatchesCuisine(r, ex)) : false;
     };
 
     const effectiveScope = scope || 'whole_week';
@@ -26554,7 +26645,13 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
         if (!meal) return null;
         const mt = MEAL_TYPES[mi];
         if (effectiveScope !== 'whole_week' && mt !== effectiveScope) return meal;
-        if (!hasAnyGoals(mt)) return meal;
+
+        const hasPositive  = hasPositiveGoals(mt);
+        const hasExclusion = exclusionsFor(mt).length > 0;
+        const violates     = hasExclusion && mealViolatesExclusion(meal, mt);
+        // Exclusion-only: replace only meals that violate; with goals: replace all
+        if (!violates && !hasPositive) return meal;
+
         const pool = buildPool(mt);
         if (!pool.length) { editLog.poolEmpty = true; return meal; }
         const picked = pickFrom(pool);
@@ -26610,6 +26707,16 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
     if (memory.foodFocus)
       lines.push(`featuring ${memory.foodFocus}`);
 
+    // Active exclusions
+    const excSummary = [];
+    for (const [scope2, items] of Object.entries(memory.exclusions || {})) {
+      for (const item of items) {
+        const lbl = scope2 === 'whole_week' ? `no ${item}` : `no ${item} ${scope2}s`;
+        if (!excSummary.includes(lbl)) excSummary.push(lbl);
+      }
+    }
+    for (const lbl of excSummary) lines.push(lbl);
+
     // Profile defaults always active
     lines.push('your dietary profile and avoided ingredients (always applied)');
 
@@ -26659,7 +26766,16 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
       delta.scope && delta.scope !== 'whole_week' ? `${delta.scope}s` :
       'meals across the week';
 
-    let reply = `Updated ${editLog.replaced} ${scopeLabel}.${activeSummary}`;
+    // Exclusion-driven: mention what was excluded in the first line
+    const excludedItems = Object.entries(delta.exclude || {})
+      .flatMap(([sc, items]) => items.map(item => (sc === 'whole_week' ? item : `${item} ${sc}`)));
+    let reply;
+    if (excludedItems.length && editLog.replaced > 0) {
+      const excDesc = excludedItems.join(' / ');
+      reply = `Replaced ${editLog.replaced} ${excDesc} meal${editLog.replaced > 1 ? 's' : ''} with non-${excludedItems.map(e => e.split(' ')[0]).join('/')} alternatives.${activeSummary}`;
+    } else {
+      reply = `Updated ${editLog.replaced} ${scopeLabel}.${activeSummary}`;
+    }
 
     // Honest caveats below the summary
     if (editLog.pantryMismatch && memory.pantryThreshold) {
@@ -26762,7 +26878,8 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
     // ── If memory is still empty after merge: fallback ────────────────────
     const memHasGoals =
       Object.values(updatedMemory.goals).some(g => g.length > 0) ||
-      updatedMemory.pantryThreshold || updatedMemory.dietary.length || updatedMemory.foodFocus;
+      updatedMemory.pantryThreshold || updatedMemory.dietary.length || updatedMemory.foodFocus ||
+      Object.values(updatedMemory.exclusions || {}).some(g => g.length > 0);
 
     if (!memHasGoals) {
       if (dayIdx >= 0) {
