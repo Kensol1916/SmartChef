@@ -1195,7 +1195,7 @@ const RECIPES = [
     steps:[{n:1,t:"Prep",d:"Drain+rinse chickpeas."},{n:2,t:"Dress",d:"Whisk oil, lemon, za'atar, salt."},{n:3,t:"Combine",d:"Toss all veg + chickpeas with dressing."},{n:4,t:"Top",d:"Crumble feta. Serve."}]},
   { id:3,meal:"lunch",emoji:"🍜",title:"Quick Miso Ramen",cuisine:"Japanese",time:25,diff:"Intermediate",dietary:["Vegetarian"],pp:60,missing:["Ramen noodles","Miso paste"],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Ramen noodles",a:"2 portions"},{n:"Miso paste",a:"3 tbsp"},{n:"Veg broth",a:"800ml"},{n:"Sesame oil",a:"1 tbsp"},{n:"Soy sauce",a:"2 tbsp"},{n:"Soft-boiled eggs",a:"2"},{n:"Green onions",a:"3, sliced"}],
-    steps:[{n:1,t:"Broth",d:"Heat vegetable or chicken broth in a saucepan over medium heat until steaming but not boiling. Whisk in miso paste, soy sauce, and sesame oil until fully dissolved. Keep warm on low."},{n:2,t:"Noodles",d:"Cook ramen noodles in a separate pot of boiling water according to package directions (usually 2–4 minutes). Drain and rinse briefly with warm water."},{n:3,t:"Assemble",d:"Divide noodles between bowls. Ladle the hot miso broth over the noodles."},{n:4,t:"Garnish",d:"Top with halved soft-boiled eggs, sliced green onions, and a drizzle of extra sesame oil. Serve immediately."}]},
+    steps:[{n:1,t:"Broth",d:"Heat broth in a saucepan over medium heat. Whisk in miso paste, soy sauce, and sesame oil until dissolved. Keep warm on low."},{n:2,t:"Noodles",d:"Boil noodles in a separate pot per package (2–4 min). Drain and rinse."},{n:3,t:"Assemble",d:"Divide noodles between bowls and ladle hot broth over them."},{n:4,t:"Garnish",d:"Top with halved soft-boiled eggs, green onions, and a drizzle of sesame oil."}]},
   { id:4,meal:"dinner",emoji:"🍗",title:"Lemon Herb Roast Chicken",cuisine:"French",time:70,diff:"Intermediate",dietary:["Gluten-free"],pp:80,missing:["Fresh thyme"],worth:false,contains_meat:true,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_risk:true,
     ingredients:[{n:"Whole chicken",a:"1.5kg"},{n:"Lemon",a:"2"},{n:"Garlic",a:"6 cloves"},{n:"Butter",a:"4 tbsp"},{n:"Fresh thyme",a:"6 sprigs"},{n:"Olive oil",a:"2 tbsp"}],
     steps:[{n:1,t:"Prep",d:"Pat dry. Mix butter+lemon zest+garlic, rub under/over skin."},{n:2,t:"Stuff",d:"Stuff with lemon halves + thyme."},{n:3,t:"Roast",d:"200°C for 60–70 min."},{n:4,t:"Rest",d:"Rest 10 min before carving."}]},
@@ -1274,7 +1274,7 @@ const RECIPES = [
     steps:[{n:1,t:"Toast",d:"Toast bread."},{n:2,t:"Dice",d:"Dice tomatoes."},{n:3,t:"Top",d:"Top toast with tomatoes and basil."},{n:4,t:"Drizzle",d:"Drizzle olive oil and salt."}]},
   { id:29,meal:"breakfast",emoji:"🥣",title:"Apple Cinnamon Oatmeal",cuisine:"American",time:13,diff:"Easy",dietary:["Vegetarian"],pp:75,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Rolled oats",a:"1 cup"},{n:"Apple",a:"1"},{n:"Cinnamon",a:"1 tsp"},{n:"Milk",a:"2 cups"},{n:"Maple syrup",a:"2 tbsp"}],
-    steps:[{n:1,t:"Prep",d:"Peel and dice the apple into small chunks. Set aside."},{n:2,t:"Cook oats",d:"Pour milk into a small saucepan and bring to a simmer over medium heat. Add rolled oats and stir to combine. Reduce heat to medium-low and cook, stirring frequently, for 8–10 minutes until the oats absorb the liquid and turn creamy."},{n:3,t:"Flavor",d:"Stir in diced apple, cinnamon, and maple syrup. Cook 2 more minutes until apple softens slightly."},{n:4,t:"Serve",d:"Spoon into a bowl and serve warm. Add a splash of extra milk if you prefer a looser texture."}]},
+    steps:[{n:1,t:"Prep",d:"Dice the apple into small chunks."},{n:2,t:"Cook oats",d:"Bring milk to a simmer in a saucepan over medium heat. Add oats, reduce heat to medium-low, and cook stirring often for 8–10 min until creamy."},{n:3,t:"Flavor",d:"Stir in diced apple, cinnamon, and maple syrup. Cook 2 more min until apple softens."},{n:4,t:"Serve",d:"Spoon into a bowl and serve warm."}]},
   { id:30,meal:"breakfast",emoji:"🌯",title:"Veggie Breakfast Wrap",cuisine:"Mexican",time:14,diff:"Easy",dietary:["Vegetarian"],pp:80,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Whole wheat tortilla",a:"1"},{n:"Eggs",a:"2"},{n:"Bell pepper",a:"½"},{n:"Onion",a:"¼"},{n:"Cheddar cheese",a:"50g"}],
     steps:[{n:1,t:"Scramble",d:"Scramble eggs with diced pepper and onion."},{n:2,t:"Warm",d:"Warm tortilla."},{n:3,t:"Fill",d:"Add eggs and cheese to tortilla."},{n:4,t:"Roll",d:"Roll and serve."}]},
@@ -1295,7 +1295,7 @@ const RECIPES = [
     steps:[{n:1,t:"Toast",d:"Toast bread."},{n:2,t:"Spread",d:"Spread ricotta on toast."},{n:3,t:"Drizzle",d:"Drizzle honey."},{n:4,t:"Top",d:"Sprinkle chopped pistachios."}]},
   { id:36,meal:"breakfast",emoji:"🥣",title:"Savory Oatmeal with Egg",cuisine:"Modern",time:12,diff:"Easy",dietary:["Vegetarian"],pp:80,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Oats",a:"½ cup"},{n:"Egg",a:"1"},{n:"Spinach",a:"1 cup"},{n:"Olive oil",a:"1 tbsp"}],
-    steps:[{n:1,t:"Cook oats",d:"Bring ¾ cup water or broth to a boil in a small saucepan over medium heat. Stir in oats, reduce heat to medium-low, and cook stirring often for 5–7 minutes until thick and creamy. Season with a pinch of salt."},{n:2,t:"Wilt spinach",d:"Heat olive oil in a small skillet over medium heat. Add spinach and a pinch of salt. Stir for 1–2 minutes until just wilted. Set aside."},{n:3,t:"Fry egg",d:"In the same skillet over medium heat, crack in the egg. Cook sunny-side up for 2–3 minutes, or flip for over-easy."},{n:4,t:"Assemble",d:"Spoon oats into a bowl, top with wilted spinach and the fried egg. Drizzle with a little olive oil and season with black pepper."}]},
+    steps:[{n:1,t:"Cook oats",d:"Boil ¾ cup water or broth in a saucepan. Add oats, reduce heat to medium-low, and cook stirring for 5–7 min until thick. Season with salt."},{n:2,t:"Wilt spinach",d:"Heat oil in a skillet over medium heat. Add spinach and stir 1–2 min until just wilted."},{n:3,t:"Fry egg",d:"In the same skillet, fry the egg for 2–3 min sunny-side up, or flip for over-easy."},{n:4,t:"Assemble",d:"Spoon oats into a bowl, top with spinach and egg. Drizzle oil, season with black pepper."}]},
   { id:37,meal:"breakfast",emoji:"🥣",title:"Apple Yogurt Parfait",cuisine:"Modern",time:5,diff:"Easy",dietary:["Vegetarian"],pp:70,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Plain yogurt",a:"200g"},{n:"Apple",a:"1"},{n:"Granola",a:"50g"},{n:"Cinnamon",a:"½ tsp"}],
     steps:[{n:1,t:"Dice",d:"Dice apple."},{n:2,t:"Layer",d:"Layer yogurt, apple, granola."},{n:3,t:"Repeat",d:"Repeat layers."},{n:4,t:"Top",d:"Sprinkle cinnamon."}]},
@@ -1337,7 +1337,7 @@ const RECIPES = [
     steps:[{n:1,t:"Warm",d:"Warm pita."},{n:2,t:"Spread",d:"Spread hummus inside."},{n:3,t:"Dice",d:"Dice cucumber and tomato."},{n:4,t:"Fill",d:"Fill pita and serve."}]},
   { id:50,meal:"breakfast",emoji:"🥣",title:"Pumpkin Oat Porridge",cuisine:"American",time:17,diff:"Easy",dietary:["Vegetarian"],pp:75,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Oats",a:"1 cup"},{n:"Pumpkin puree",a:"½ cup"},{n:"Milk",a:"2 cups"},{n:"Cinnamon",a:"1 tsp"},{n:"Maple syrup",a:"2 tbsp"}],
-    steps:[{n:1,t:"Heat liquid",d:"Pour milk into a medium saucepan and bring to a gentle simmer over medium heat. Stir occasionally to prevent scalding."},{n:2,t:"Cook porridge",d:"Add oats and pumpkin puree, stirring well to combine. Reduce heat to medium-low. Cook, stirring frequently, for 8–10 minutes until the porridge thickens to your liking."},{n:3,t:"Season",d:"Stir in cinnamon and maple syrup. Taste and adjust sweetness."},{n:4,t:"Serve",d:"Spoon into bowls and serve warm. Top with a sprinkle of pumpkin seeds or extra cinnamon if desired."}]},
+    steps:[{n:1,t:"Heat",d:"Bring milk to a simmer in a saucepan over medium heat."},{n:2,t:"Cook",d:"Stir in oats and pumpkin puree. Reduce heat to medium-low and cook, stirring often, for 8–10 min until thick."},{n:3,t:"Season",d:"Stir in cinnamon and maple syrup. Adjust sweetness to taste."},{n:4,t:"Serve",d:"Spoon into bowls and serve warm. Top with pumpkin seeds or extra cinnamon."}]},
   { id:51,meal:"breakfast",emoji:"🍳",title:"Savory Tomato Egg Skillet",cuisine:"Mediterranean",time:18,diff:"Easy",dietary:["Vegetarian"],pp:85,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Eggs",a:"4"},{n:"Tomatoes",a:"3"},{n:"Onion",a:"1"},{n:"Olive oil",a:"2 tbsp"},{n:"Salt",a:"pinch"},{n:"Pepper",a:"pinch"}],
     steps:[{n:1,t:"Sauté",d:"Sauté diced onion and tomatoes 8 min."},{n:2,t:"Eggs",d:"Crack eggs into skillet."},{n:3,t:"Cook",d:"Cook 5 min until set."},{n:4,t:"Serve",d:"Season and serve from skillet."}]},
@@ -1389,7 +1389,7 @@ const RECIPES = [
     steps:[{n:1,t:"Cook",d:"Boil pasta al dente."},{n:2,t:"Sauce",d:"Melt butter, add cream and garlic."},{n:3,t:"Cheese",d:"Stir in parmesan until melted."},{n:4,t:"Toss",d:"Toss pasta with sauce."}]},
   { id:67,meal:"lunch",emoji:"🥗",title:"Quinoa Salad",cuisine:"Modern",time:25,diff:"Easy",dietary:["Vegan"],pp:75,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Quinoa",a:"1 cup"},{n:"Cherry tomatoes",a:"1 cup"},{n:"Cucumber",a:"1"},{n:"Red onion",a:"½"},{n:"Lemon juice",a:"3 tbsp"},{n:"Olive oil",a:"2 tbsp"}],
-    steps:[{n:1,t:"Cook quinoa",d:"Rinse quinoa under cold water. Combine with 2 cups water in a saucepan, bring to a boil, then reduce heat to low. Cover and simmer for 12–15 minutes until all water is absorbed. Fluff with a fork and spread on a plate to cool for 5–10 minutes."},{n:2,t:"Chop",d:"Dice cucumber, tomatoes, and any other vegetables into small even pieces."},{n:3,t:"Mix",d:"Combine the cooled quinoa with the chopped vegetables in a large bowl."},{n:4,t:"Dress",d:"Drizzle with olive oil and squeeze over fresh lemon juice. Season with salt and pepper. Toss well and serve at room temperature or chilled."}]},
+    steps:[{n:1,t:"Cook quinoa",d:"Rinse quinoa, combine with 2 cups water in a saucepan. Boil, then reduce heat to low, cover, and simmer 12–15 min until absorbed. Fluff and cool."},{n:2,t:"Chop",d:"Dice cucumber, tomatoes, and other vegetables into small pieces."},{n:3,t:"Mix",d:"Combine cooled quinoa with chopped vegetables in a bowl."},{n:4,t:"Dress",d:"Drizzle with olive oil and lemon juice, season with salt and pepper, toss well."}]},
   { id:68,meal:"lunch",emoji:"🍲",title:"Tomato Basil Soup",cuisine:"Italian",time:30,diff:"Easy",dietary:["Vegetarian"],pp:85,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Tomatoes",a:"6"},{n:"Onion",a:"1"},{n:"Garlic",a:"4 cloves"},{n:"Fresh basil",a:"1 cup"},{n:"Cream",a:"½ cup"},{n:"Vegetable broth",a:"2 cups"}],
     steps:[{n:1,t:"Sauté",d:"Cook onion and garlic 5 min."},{n:2,t:"Add",d:"Add tomatoes and broth."},{n:3,t:"Simmer",d:"Simmer 20 min, blend smooth."},{n:4,t:"Finish",d:"Stir in cream and basil."}]},
@@ -3490,10 +3490,10 @@ const RECIPES = [
           {n:"Chia seeds",a:"1 tbsp"}
         ],
     steps:[
-          {n:1,t:"Cook oats",d:"Bring 2 cups of water or milk to a simmer in a small saucepan over medium heat. Add rolled oats, reduce heat to medium-low, and cook stirring often for 4–5 minutes until thick and creamy."},
-          {n:2,t:"Add protein",d:"Remove from heat. Stir in protein powder quickly until fully dissolved and smooth with no lumps. Add a splash of extra liquid if it becomes too thick."},
-          {n:3,t:"Slice & top",d:"Peel and slice the banana. Spoon oatmeal into a bowl, lay banana slices on top, and add a spoonful of almond butter."},
-          {n:4,t:"Finish",d:"Sprinkle chia seeds over the top. Serve warm immediately."}
+          {n:1,t:"Cook oats",d:"Bring 2 cups water or milk to a simmer in a saucepan. Add oats, reduce heat, and cook stirring for 4–5 min until creamy."},
+          {n:2,t:"Protein",d:"Off heat, stir in protein powder until fully dissolved and smooth."},
+          {n:3,t:"Top",d:"Spoon into a bowl, add banana slices and a spoonful of almond butter."},
+          {n:4,t:"Finish",d:"Sprinkle chia seeds and serve warm."}
         ]
   },
   {
@@ -4678,10 +4678,10 @@ const RECIPES = [
           {n:"Banana",a:"1"}
         ],
     steps:[
-          {n:1,t:"Cook oats",d:"Pour almond milk into a small saucepan over medium heat and bring to a gentle simmer. Add rolled oats and stir well. Reduce heat to medium-low and cook, stirring regularly, for 4–5 minutes until the oats have absorbed most of the liquid and the mixture is thick and creamy."},
-          {n:2,t:"Add peanut butter",d:"Remove from heat. Stir in peanut butter and cinnamon until fully incorporated. The residual heat will melt the peanut butter into the oats smoothly."},
-          {n:3,t:"Top",d:"Peel and slice the banana. Arrange slices on top of the oatmeal."},
-          {n:4,t:"Serve",d:"Drizzle with honey, serve warm. Add an extra sprinkle of cinnamon or crushed peanuts if you like."}
+          {n:1,t:"Cook oats",d:"Bring almond milk to a simmer in a saucepan over medium heat. Add oats, reduce heat to medium-low, and cook stirring for 4–5 min until thick and creamy."},
+          {n:2,t:"Peanut butter",d:"Off heat, stir in peanut butter and cinnamon until smooth."},
+          {n:3,t:"Top",d:"Slice banana and arrange on top."},
+          {n:4,t:"Serve",d:"Drizzle with honey and serve warm."}
         ]
   },
   {
@@ -21884,7 +21884,7 @@ export default function App() {
           {tab==="pantry"    && <PantryTab    {...tp} />}
           {tab==="shopping"  && <ShoppingListTab {...tp} pantry={pantry} mealPlan={mealPlan} />}
           {tab==="chat"      && <ChatTab      {...tp} pantry={pantry} prefs={prefs} addToList={addToList} />}
-          {tab==="planner"   && <PlannerTab   {...tp} shopping={shopping} prefs={prefs} pantry={pantry} />}
+          {tab==="planner"   && <PlannerTab   {...tp} shopping={shopping} prefs={prefs} setPrefs={setPrefs} pantry={pantry} />}
           {tab==="plans"     && <PlanLibraryErrorBoundary resetKey={tab}><PlanLibraryTab {...tp} /></PlanLibraryErrorBoundary>}
           {tab==="profile"   && <ProfileTab   {...tp} />}
           {/* TODO [ROADMAP]: CommunityTab removed from active nav — code retained as stub */}
@@ -25626,7 +25626,7 @@ const generatePantryMeals = (pantrySet) => {
     }));
 };
 
-function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, prefs, pantry, setPantry, setShopping, isPremium, subscription, setSubscription, onUpgrade, allRecipes: allRecipesProp, userRecipes, avoidedIngredients = [], user, publishedMenus, setPublishedMenus, showToast, collections, setCollections,
+function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, prefs, setPrefs, pantry, setPantry, setShopping, isPremium, subscription, setSubscription, onUpgrade, allRecipes: allRecipesProp, userRecipes, avoidedIngredients = [], user, publishedMenus, setPublishedMenus, showToast, collections, setCollections,
   // Plan Library state (lifted from App, forwarded via tp)
   libraryPreview, setLibraryPreview, libraryDraft, setLibraryDraft,
   libraryDraftTitle, setLibraryDraftTitle, libraryShowCreate, setLibraryShowCreate }) {
@@ -25648,7 +25648,7 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
   // Missing panel + Planner Chat
   const [showMissingPanel, setShowMissingPanel] = useState(true);
   const [chatOpen, setChatOpen] = useState(false);
-  const [chatMessages, setChatMessages] = useState([{role:'bot',text:'Hi! Tell me what you want to change. For example: "Make dinners healthier", "Only use what I already have", or "Replace Wednesday dinner with something pescatarian."'}]);
+  const [chatMessages, setChatMessages] = useState([{role:'bot',text:'Hi! I can change your plan or answer questions about it. Try: "Make dinners healthier", "Which meals have missing ingredients?", "For how many people is each dish?", or "Show me the quick breakfasts."'}]);
   const [chatInput, setChatInput] = useState('');
   // Pending two-step confirmation (e.g. clear plan)
   const [chatPendingAction, setChatPendingAction] = useState(null);
@@ -25657,6 +25657,9 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
     pantryThreshold: null, maxTime: null, dietary: [], foodFocus: null,
     exclusions: { whole_week: [], breakfast: [], lunch: [], dinner: [] },
   });
+  const [showPlannerPrefs, setShowPlannerPrefs] = useState(false);
+  const [showClearConfirm, setShowClearConfirm] = useState(false);
+  const [showPrefsModal, setShowPrefsModal] = useState(false);
   const ME={Breakfast:"☀️",Lunch:"🌤️",Dinner:"🌙"};
   
   // SHARED HELPER: Check if recipe has missing ingredients (needs shopping)
@@ -25824,7 +25827,9 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
     const seed = Date.now(); // Unique seed per run → different results every time
 
     // ── 1. Dietary filter ─────────────────────────────────────────────
-    const dietaryAllowed = allRecipes.filter(r => isRecipeAllowedForUser(r, prefs));
+    const pantryOnlyMode = (prefs.dietary||[]).includes('PantryOnly');
+    const effectivePrefs = pantryOnlyMode ? {...prefs, dietary:(prefs.dietary||[]).filter(x=>x!=='PantryOnly')} : prefs;
+    const dietaryAllowed = allRecipes.filter(r => isRecipeAllowedForUser(r, effectivePrefs));
 
     if(dietaryAllowed.length < 3) {
       alert(`Only ${dietaryAllowed.length} recipes match your dietary preferences. Add more pantry items or relax filters.`);
@@ -26874,6 +26879,99 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
       return 'Still waiting for confirmation. Reply "yes" to clear, or "no" to cancel.';
     }
 
+    // ── Answer mode: detect questions about the plan ──────────────
+    const isQuestion = /^(which|what|how|list|show me|tell me|do you|are there|can you tell|give me|find)/i.test(t)
+      || t.endsWith('?')
+      || /how many people|serves? how many|household size|people per dish|portion/i.test(t)
+      || /missing ingredient|need to (buy|shop)|what.s missing/i.test(t)
+      || /healthiest|most healthy|best for health/i.test(t)
+      || /\b(list|show|display)\b.*(breakfast|lunch|dinner|meal|recipe)/i.test(t)
+      || /what.s planned|what is planned|this week.s (meal|plan)|show.*(this|the) week/i.test(t);
+
+    if (isQuestion) {
+      const ps = buildPantrySet(pantry);
+      const allMeals = currentPlan.flatMap((day, di) =>
+        day.meals.map((meal, mi) => {
+          if (!meal) return null;
+          const mealTypeLabel = ['Breakfast','Lunch','Dinner'][mi];
+          let recipe = null;
+          if (meal.kind === 'custom') recipe = { title: meal.name, dietary:[], time:null, pp:null, contains_fish:false, contains_meat:false, contains_shellfish:false, contains_dairy:false, ingredients:[], cuisine:'' };
+          else if (String(meal.id).startsWith('pantry-')) recipe = getPantryRecipeObj(meal.id);
+          else recipe = allRecipes.find(x => x.id === meal.id);
+          if (!recipe) recipe = { title: meal.name || '(meal)', dietary:[], time:null, pp:null, contains_fish:false, contains_meat:false, contains_shellfish:false, contains_dairy:false, ingredients:[], cuisine:'' };
+          const missingIngs = (recipe.ingredients||[]).filter(i => !i.optional && !isOptionalIng(i.n) && !ingInPantry(i.n, ps));
+          return { day: DAYS[di], dayLabel: DAY_LABELS[di], mealType: mealTypeLabel, meal, recipe, missingIngs };
+        }).filter(Boolean)
+      );
+
+      // How many people / household
+      if (/how many people|serves? how many|household|portion|per dish/i.test(t)) {
+        const hh = prefs?.household || 2;
+        return `Each dish is sized for ${hh} ${hh===1?'person':'people'}, based on your household setting in Preferences.`;
+      }
+      // Missing ingredients
+      if (/missing|need to (buy|shop)|what.s missing/i.test(t)) {
+        const withMissing = allMeals.filter(m => m.missingIngs.length > 0);
+        if (!withMissing.length) return "Great news — all your planned meals can be made with what you currently have!";
+        return "Meals with missing ingredients:\n" + withMissing.map(m =>
+          `• ${m.dayLabel} ${m.mealType}: ${m.recipe.title} (missing: ${m.missingIngs.map(i=>i.n).join(', ')})`
+        ).join('\n');
+      }
+      // Healthiest
+      if (/healthi|most healthy|best for health/i.test(t)) {
+        const scope = t.includes('breakfast')?'Breakfast':t.includes('lunch')?'Lunch':t.includes('dinner')?'Dinner':null;
+        const filtered = scope ? allMeals.filter(m => m.mealType===scope) : allMeals;
+        const scored2 = filtered.map(m=>({...m,hs:getHealthScore(m.recipe)})).sort((a,b)=>b.hs-a.hs).slice(0,5);
+        if (!scored2.length) return `No ${scope?scope.toLowerCase()+'s':'meals'} are currently planned.`;
+        return `Healthiest ${scope?scope.toLowerCase()+'s':'meals'} this week:\n` + scored2.map((m,i)=>`${i+1}. ${m.dayLabel} ${m.mealType}: ${m.recipe.title}`).join('\n');
+      }
+      // Pescatarian
+      if (/pescatarian/i.test(t)) {
+        const hits = allMeals.filter(m => !m.recipe.contains_meat);
+        if (!hits.length) return "No meat-free meals in the current plan.";
+        return `Meat-free / pescatarian meals (${hits.length}):\n` + hits.map(m=>`• ${m.dayLabel} ${m.mealType}: ${m.recipe.title}`).join('\n');
+      }
+      // Vegetarian (no fish)
+      if (/vegetarian/i.test(t) && !/vegan/i.test(t)) {
+        const hits = allMeals.filter(m => !m.recipe.contains_meat && !m.recipe.contains_fish && !m.recipe.contains_shellfish);
+        if (!hits.length) return "No vegetarian meals in the current plan.";
+        return `Vegetarian meals (${hits.length}):\n` + hits.map(m=>`• ${m.dayLabel} ${m.mealType}: ${m.recipe.title}`).join('\n');
+      }
+      // Vegan
+      if (/vegan/i.test(t)) {
+        const hits = allMeals.filter(m => (m.recipe.dietary||[]).includes('Vegan'));
+        if (!hits.length) return "No vegan meals in the current plan.";
+        return `Vegan meals (${hits.length}):\n` + hits.map(m=>`• ${m.dayLabel} ${m.mealType}: ${m.recipe.title}`).join('\n');
+      }
+      // Fish / seafood
+      if (/\bfish\b|\bseafood\b|\bsalmon\b|\btuna\b|\bshrimp\b|\bprawn\b/i.test(t)) {
+        const hits = allMeals.filter(m => m.recipe.contains_fish || m.recipe.contains_shellfish);
+        if (!hits.length) return "No fish or seafood dishes are currently planned.";
+        return `Fish / seafood meals:\n` + hits.map(m=>`• ${m.dayLabel} ${m.mealType}: ${m.recipe.title}`).join('\n');
+      }
+      // Quick meals
+      if (/quick|fastest|fast|speedy/i.test(t) || /under \d+ min/i.test(t)) {
+        const lim = (()=>{ const mm=t.match(/under (\d+)/i); return mm?parseInt(mm[1]):20; })();
+        const scope = t.includes('breakfast')?'Breakfast':t.includes('lunch')?'Lunch':t.includes('dinner')?'Dinner':null;
+        const filtered = scope ? allMeals.filter(m => m.mealType===scope) : allMeals;
+        const hits = filtered.filter(m=>m.recipe.time&&m.recipe.time<=lim).sort((a,b)=>(a.recipe.time||99)-(b.recipe.time||99));
+        if (!hits.length) return `No meals under ${lim} min${scope?` for ${scope.toLowerCase()}`:''}  in the current plan.`;
+        return `Quick meals (under ${lim} min)${scope?' — '+scope.toLowerCase():''}:\n` + hits.map(m=>`• ${m.dayLabel} ${m.mealType}: ${m.recipe.title} (${m.recipe.time} min)`).join('\n');
+      }
+      // What's planned
+      if (/what.s planned|what is planned|this week|list.*(meals|week)|show.*(meals|week)/i.test(t)) {
+        if (!allMeals.length) return "The planner is empty — nothing is planned yet.";
+        const byDay = DAYS.map((d,di)=>{
+          const dayMeals=allMeals.filter(m=>m.day===d);
+          if(!dayMeals.length) return null;
+          return `${DAY_LABELS[di]}: `+dayMeals.map(m=>`${m.mealType[0].toLowerCase()}. ${m.recipe.title}`).join(' | ');
+        }).filter(Boolean);
+        return "Your plan this week:\n"+byDay.join('\n');
+      }
+      // Fallthrough
+      return "I can answer questions like:\n• \"For how many people is each dish?\"\n• \"Which meals have missing ingredients?\"\n• \"Which dinners are healthiest?\"\n• \"Which meals use fish?\"\n• \"Which breakfasts are quick?\"\n\nOr tell me what to change — e.g. \"Make dinners healthier\".";
+    }
+
     // ── Open picker: specific day + meal type, no goal keywords ─────────
     const dayIdx  = DAYS.findIndex(d => t.includes(d));
     const mealIdx = t.includes('breakfast') ? 0 : t.includes('lunch') ? 1 : t.includes('dinner') ? 2 : -1;
@@ -27001,17 +27099,18 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
       )}
       {/* ── This Week view ── */}
       {plannerView==='week' && <>
-      <div style={{display:"flex",alignItems:"flex-start",justifyContent:"space-between",marginBottom:20,flexWrap:"wrap",gap:12}}>
+      {/* ── Top header + action buttons ── */}
+      <div style={{display:"flex",alignItems:"flex-start",justifyContent:"space-between",marginBottom:12,flexWrap:"wrap",gap:12}}>
         <div><h1 className="stitle">Weekly Planner</h1><p className="ssub">{(()=>{
           const now = new Date();
-          const dow = now.getDay(); // 0=Sun, 1=Mon...
+          const dow = now.getDay();
           const diffToMon = (dow === 0) ? -6 : 1 - dow;
           const mon = new Date(now); mon.setDate(now.getDate() + diffToMon);
           const sun = new Date(mon); sun.setDate(mon.getDate() + 6);
           const fmt = d => d.toLocaleDateString(undefined,{month:"short",day:"numeric"});
           return `${fmt(mon)} – ${fmt(sun)}, ${sun.getFullYear()}`;
         })()}</p></div>
-        <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
+        <div style={{display:"flex",gap:8,flexWrap:"wrap",alignItems:"center"}}>
           <button className="btn btn-p btn-sm" onClick={()=>{
             if(isGuest){return;}
             if(!isPremium && (subscription.autoplanUsed||0) >= FREE_AUTOPLAN_USES){onUpgrade("autoplan");return;}
@@ -27020,8 +27119,58 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
           }} disabled={planning||isGuest}>
             {planning?"Planning…":<>✨ Auto-plan{!isPremium&&(subscription.autoplanUsed||0)<FREE_AUTOPLAN_USES&&<span style={{fontSize:10,marginLeft:5,background:"var(--sageBg)",color:"var(--sage)",padding:"1px 5px",borderRadius:3,fontWeight:700}}>1 FREE USE</span>}</>}
           </button>
+          <button className="btn btn-g btn-sm" onClick={()=>{
+            if(isGuest) return;
+            if(!isPremium && (subscription.autoplanUsed||0) >= FREE_AUTOPLAN_USES){onUpgrade("autoplan");return;}
+            autoplan();
+            if(!isPremium) setSubscription(p=>({...p,autoplanUsed:(p.autoplanUsed||0)+1}));
+          }} disabled={planning||isGuest}>🔄 Regenerate</button>
+          {showClearConfirm
+            ? <span style={{display:"flex",gap:6,alignItems:"center"}}>
+                <span style={{fontSize:12,color:"var(--mu)"}}>Clear week?</span>
+                <button className="btn btn-sm" style={{background:"#e05c5c",color:"#fff",border:"none"}} onClick={()=>{
+                  setMealPlan(prev=>prev.map(day=>({...day,meals:[null,null,null]})));
+                  setShowClearConfirm(false);
+                  showToast?.("✅ Plan cleared");
+                }}>Yes</button>
+                <button className="btn btn-g btn-sm" onClick={()=>setShowClearConfirm(false)}>No</button>
+              </span>
+            : <button className="btn btn-g btn-sm" onClick={()=>setShowClearConfirm(true)} disabled={isGuest}>🗑️ Clear</button>
+          }
+          <button className="btn btn-g btn-sm" onClick={()=>setShowPlannerPrefs(p=>!p)}>⚙️ Preferences{showPlannerPrefs?" ▲":" ▼"}</button>
         </div>
       </div>
+      {showPlannerPrefs && (
+        <div style={{marginBottom:16,padding:"14px 16px",background:"var(--cream)",border:"1px solid var(--bor)",borderRadius:"var(--r)"}}>
+          <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:10}}>
+            <span style={{fontWeight:600,fontSize:13}}>Quick Filters</span>
+            <button style={{fontSize:11,color:"var(--clay)",background:"none",border:"none",cursor:"pointer",padding:0}} onClick={()=>setShowPrefsModal(true)}>More options →</button>
+          </div>
+          <div style={{display:"flex",flexWrap:"wrap",gap:8}}>
+            {[{id:"Healthy",icon:"💚",label:"Healthy"},{id:"Kosher",icon:"🕎",label:"Kosher"},{id:"Vegetarian",icon:"🥦",label:"Vegetarian"},{id:"Vegan",icon:"🌱",label:"Vegan"},{id:"Pescatarian",icon:"🐟",label:"Pescatarian"}].map(({id,icon,label})=>{
+              const isActive=(prefs.dietary||[]).includes(id);
+              return (
+                <button key={id} onClick={()=>setPrefs&&setPrefs(p=>{
+                  const cur=p.dietary||[];
+                  if(cur.includes(id)) return {...p,dietary:cur.filter(x=>x!==id)};
+                  let next=[...cur,id];
+                  if(id==='Pescatarian') next=next.filter(x=>x!=='Vegetarian'&&x!=='Vegan');
+                  if(id==='Vegetarian')  next=next.filter(x=>x!=='Pescatarian'&&x!=='Vegan');
+                  if(id==='Vegan')       next=next.filter(x=>x!=='Pescatarian'&&x!=='Vegetarian');
+                  return {...p,dietary:next};
+                })} style={{padding:"6px 12px",borderRadius:20,border:`1.5px solid ${isActive?"var(--clay)":"var(--bor)"}`,background:isActive?"var(--clayBg)":"var(--white)",color:isActive?"var(--clay)":"var(--ch)",cursor:"pointer",fontSize:12,fontWeight:isActive?700:500,transition:"all .15s"}}>
+                  {icon} {label}
+                </button>
+              );
+            })}
+            {(()=>{const isActive=(prefs.dietary||[]).includes('PantryOnly');return(
+              <button onClick={()=>setPrefs&&setPrefs(p=>({...p,dietary:(p.dietary||[]).includes('PantryOnly')?(p.dietary||[]).filter(x=>x!=='PantryOnly'):[...(p.dietary||[]),'PantryOnly']}))} style={{padding:"6px 12px",borderRadius:20,border:`1.5px solid ${isActive?"var(--clay)":"var(--bor)"}`,background:isActive?"var(--clayBg)":"var(--white)",color:isActive?"var(--clay)":"var(--ch)",cursor:"pointer",fontSize:12,fontWeight:isActive?700:500,transition:"all .15s"}}>🏠 Pantry Only</button>
+            );})()}
+          </div>
+          {(prefs.dietary||[]).length>0&&<div style={{marginTop:8,display:"flex",alignItems:"center",gap:8}}><span style={{fontSize:11,color:"var(--mu)"}}>Active: {(prefs.dietary||[]).join(", ")}</span><button style={{fontSize:11,color:"var(--clay)",background:"none",border:"none",cursor:"pointer",padding:0}} onClick={()=>setPrefs&&setPrefs(p=>({...p,dietary:[]}))}>Reset</button></div>}
+        </div>
+      )}
+      {showPrefsModal&&setPrefs&&<PrefsModal prefs={prefs} setPrefs={setPrefs} onClose={()=>setShowPrefsModal(false)}/>}
       {isGuest&&<div className="gnotice" style={{marginBottom:16}}><span>🔒</span><span>Create an account to save your meal plan and generate shopping lists.</span></div>}
       {/* ── AVOID LIST TOO RESTRICTIVE WARNING ── */}
       {tooRestrictive && (
@@ -27215,7 +27364,7 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
             onClick={()=>setChatOpen(p=>!p)}
           >
             <span style={{fontSize:16}}>💬</span>
-            <span style={{fontWeight:600,fontSize:13}}>Edit with chat</span>
+            <span style={{fontWeight:600,fontSize:13}}>💬 Plan Assistant</span>
             <span style={{marginLeft:"auto",fontSize:11,color:"var(--mu)"}}>{chatOpen?"▲ Hide":"▼ Open"}</span>
           </button>
           {chatOpen&&(
@@ -27234,7 +27383,7 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
                   value={chatInput}
                   onChange={e=>setChatInput(e.target.value)}
                   onKeyDown={e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();handleChatSend();}}}
-                  placeholder='e.g. "Make lunches healthier" or "At least 80% from my pantry"…'
+                  placeholder='Ask a question or request a change — e.g. "Which meals have missing ingredients?" or "Make dinners healthier"…'
                   style={{flex:1,padding:"8px 12px",borderRadius:6,border:"1px solid var(--bor)",fontSize:13,background:"var(--cream)",outline:"none"}}
                 />
                 <button className="btn btn-p btn-sm" onClick={handleChatSend} disabled={!chatInput.trim()}>Send</button>
