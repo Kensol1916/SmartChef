@@ -1195,7 +1195,7 @@ const RECIPES = [
     steps:[{n:1,t:"Prep",d:"Drain+rinse chickpeas."},{n:2,t:"Dress",d:"Whisk oil, lemon, za'atar, salt."},{n:3,t:"Combine",d:"Toss all veg + chickpeas with dressing."},{n:4,t:"Top",d:"Crumble feta. Serve."}]},
   { id:3,meal:"lunch",emoji:"🍜",title:"Quick Miso Ramen",cuisine:"Japanese",time:25,diff:"Intermediate",dietary:["Vegetarian"],pp:60,missing:["Ramen noodles","Miso paste"],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Ramen noodles",a:"2 portions"},{n:"Miso paste",a:"3 tbsp"},{n:"Veg broth",a:"800ml"},{n:"Sesame oil",a:"1 tbsp"},{n:"Soy sauce",a:"2 tbsp"},{n:"Soft-boiled eggs",a:"2"},{n:"Green onions",a:"3, sliced"}],
-    steps:[{n:1,t:"Broth",d:"Heat broth. Whisk in miso, soy, sesame oil."},{n:2,t:"Noodles",d:"Cook per pack. Drain."},{n:3,t:"Bowl",d:"Noodles → broth."},{n:4,t:"Garnish",d:"Halved eggs + green onions."}]},
+    steps:[{n:1,t:"Broth",d:"Heat vegetable or chicken broth in a saucepan over medium heat until steaming but not boiling. Whisk in miso paste, soy sauce, and sesame oil until fully dissolved. Keep warm on low."},{n:2,t:"Noodles",d:"Cook ramen noodles in a separate pot of boiling water according to package directions (usually 2–4 minutes). Drain and rinse briefly with warm water."},{n:3,t:"Assemble",d:"Divide noodles between bowls. Ladle the hot miso broth over the noodles."},{n:4,t:"Garnish",d:"Top with halved soft-boiled eggs, sliced green onions, and a drizzle of extra sesame oil. Serve immediately."}]},
   { id:4,meal:"dinner",emoji:"🍗",title:"Lemon Herb Roast Chicken",cuisine:"French",time:70,diff:"Intermediate",dietary:["Gluten-free"],pp:80,missing:["Fresh thyme"],worth:false,contains_meat:true,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_risk:true,
     ingredients:[{n:"Whole chicken",a:"1.5kg"},{n:"Lemon",a:"2"},{n:"Garlic",a:"6 cloves"},{n:"Butter",a:"4 tbsp"},{n:"Fresh thyme",a:"6 sprigs"},{n:"Olive oil",a:"2 tbsp"}],
     steps:[{n:1,t:"Prep",d:"Pat dry. Mix butter+lemon zest+garlic, rub under/over skin."},{n:2,t:"Stuff",d:"Stuff with lemon halves + thyme."},{n:3,t:"Roast",d:"200°C for 60–70 min."},{n:4,t:"Rest",d:"Rest 10 min before carving."}]},
@@ -1274,7 +1274,7 @@ const RECIPES = [
     steps:[{n:1,t:"Toast",d:"Toast bread."},{n:2,t:"Dice",d:"Dice tomatoes."},{n:3,t:"Top",d:"Top toast with tomatoes and basil."},{n:4,t:"Drizzle",d:"Drizzle olive oil and salt."}]},
   { id:29,meal:"breakfast",emoji:"🥣",title:"Apple Cinnamon Oatmeal",cuisine:"American",time:13,diff:"Easy",dietary:["Vegetarian"],pp:75,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Rolled oats",a:"1 cup"},{n:"Apple",a:"1"},{n:"Cinnamon",a:"1 tsp"},{n:"Milk",a:"2 cups"},{n:"Maple syrup",a:"2 tbsp"}],
-    steps:[{n:1,t:"Cook",d:"Boil milk, add oats, cook 10 min."},{n:2,t:"Dice",d:"Dice apple."},{n:3,t:"Mix",d:"Stir in apple, cinnamon, syrup."},{n:4,t:"Serve",d:"Serve warm."}]},
+    steps:[{n:1,t:"Prep",d:"Peel and dice the apple into small chunks. Set aside."},{n:2,t:"Cook oats",d:"Pour milk into a small saucepan and bring to a simmer over medium heat. Add rolled oats and stir to combine. Reduce heat to medium-low and cook, stirring frequently, for 8–10 minutes until the oats absorb the liquid and turn creamy."},{n:3,t:"Flavor",d:"Stir in diced apple, cinnamon, and maple syrup. Cook 2 more minutes until apple softens slightly."},{n:4,t:"Serve",d:"Spoon into a bowl and serve warm. Add a splash of extra milk if you prefer a looser texture."}]},
   { id:30,meal:"breakfast",emoji:"🌯",title:"Veggie Breakfast Wrap",cuisine:"Mexican",time:14,diff:"Easy",dietary:["Vegetarian"],pp:80,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Whole wheat tortilla",a:"1"},{n:"Eggs",a:"2"},{n:"Bell pepper",a:"½"},{n:"Onion",a:"¼"},{n:"Cheddar cheese",a:"50g"}],
     steps:[{n:1,t:"Scramble",d:"Scramble eggs with diced pepper and onion."},{n:2,t:"Warm",d:"Warm tortilla."},{n:3,t:"Fill",d:"Add eggs and cheese to tortilla."},{n:4,t:"Roll",d:"Roll and serve."}]},
@@ -1295,7 +1295,7 @@ const RECIPES = [
     steps:[{n:1,t:"Toast",d:"Toast bread."},{n:2,t:"Spread",d:"Spread ricotta on toast."},{n:3,t:"Drizzle",d:"Drizzle honey."},{n:4,t:"Top",d:"Sprinkle chopped pistachios."}]},
   { id:36,meal:"breakfast",emoji:"🥣",title:"Savory Oatmeal with Egg",cuisine:"Modern",time:12,diff:"Easy",dietary:["Vegetarian"],pp:80,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Oats",a:"½ cup"},{n:"Egg",a:"1"},{n:"Spinach",a:"1 cup"},{n:"Olive oil",a:"1 tbsp"}],
-    steps:[{n:1,t:"Cook",d:"Cook oats in water 7 min."},{n:2,t:"Sauté",d:"Sauté spinach in oil."},{n:3,t:"Egg",d:"Fry egg."},{n:4,t:"Top",d:"Top oats with spinach and egg."}]},
+    steps:[{n:1,t:"Cook oats",d:"Bring ¾ cup water or broth to a boil in a small saucepan over medium heat. Stir in oats, reduce heat to medium-low, and cook stirring often for 5–7 minutes until thick and creamy. Season with a pinch of salt."},{n:2,t:"Wilt spinach",d:"Heat olive oil in a small skillet over medium heat. Add spinach and a pinch of salt. Stir for 1–2 minutes until just wilted. Set aside."},{n:3,t:"Fry egg",d:"In the same skillet over medium heat, crack in the egg. Cook sunny-side up for 2–3 minutes, or flip for over-easy."},{n:4,t:"Assemble",d:"Spoon oats into a bowl, top with wilted spinach and the fried egg. Drizzle with a little olive oil and season with black pepper."}]},
   { id:37,meal:"breakfast",emoji:"🥣",title:"Apple Yogurt Parfait",cuisine:"Modern",time:5,diff:"Easy",dietary:["Vegetarian"],pp:70,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Plain yogurt",a:"200g"},{n:"Apple",a:"1"},{n:"Granola",a:"50g"},{n:"Cinnamon",a:"½ tsp"}],
     steps:[{n:1,t:"Dice",d:"Dice apple."},{n:2,t:"Layer",d:"Layer yogurt, apple, granola."},{n:3,t:"Repeat",d:"Repeat layers."},{n:4,t:"Top",d:"Sprinkle cinnamon."}]},
@@ -1337,7 +1337,7 @@ const RECIPES = [
     steps:[{n:1,t:"Warm",d:"Warm pita."},{n:2,t:"Spread",d:"Spread hummus inside."},{n:3,t:"Dice",d:"Dice cucumber and tomato."},{n:4,t:"Fill",d:"Fill pita and serve."}]},
   { id:50,meal:"breakfast",emoji:"🥣",title:"Pumpkin Oat Porridge",cuisine:"American",time:17,diff:"Easy",dietary:["Vegetarian"],pp:75,missing:[],worth:true,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Oats",a:"1 cup"},{n:"Pumpkin puree",a:"½ cup"},{n:"Milk",a:"2 cups"},{n:"Cinnamon",a:"1 tsp"},{n:"Maple syrup",a:"2 tbsp"}],
-    steps:[{n:1,t:"Boil",d:"Boil milk."},{n:2,t:"Add",d:"Add oats and pumpkin, cook 10 min."},{n:3,t:"Season",d:"Stir in cinnamon and syrup."},{n:4,t:"Serve",d:"Serve warm."}]},
+    steps:[{n:1,t:"Heat liquid",d:"Pour milk into a medium saucepan and bring to a gentle simmer over medium heat. Stir occasionally to prevent scalding."},{n:2,t:"Cook porridge",d:"Add oats and pumpkin puree, stirring well to combine. Reduce heat to medium-low. Cook, stirring frequently, for 8–10 minutes until the porridge thickens to your liking."},{n:3,t:"Season",d:"Stir in cinnamon and maple syrup. Taste and adjust sweetness."},{n:4,t:"Serve",d:"Spoon into bowls and serve warm. Top with a sprinkle of pumpkin seeds or extra cinnamon if desired."}]},
   { id:51,meal:"breakfast",emoji:"🍳",title:"Savory Tomato Egg Skillet",cuisine:"Mediterranean",time:18,diff:"Easy",dietary:["Vegetarian"],pp:85,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Eggs",a:"4"},{n:"Tomatoes",a:"3"},{n:"Onion",a:"1"},{n:"Olive oil",a:"2 tbsp"},{n:"Salt",a:"pinch"},{n:"Pepper",a:"pinch"}],
     steps:[{n:1,t:"Sauté",d:"Sauté diced onion and tomatoes 8 min."},{n:2,t:"Eggs",d:"Crack eggs into skillet."},{n:3,t:"Cook",d:"Cook 5 min until set."},{n:4,t:"Serve",d:"Season and serve from skillet."}]},
@@ -1389,7 +1389,7 @@ const RECIPES = [
     steps:[{n:1,t:"Cook",d:"Boil pasta al dente."},{n:2,t:"Sauce",d:"Melt butter, add cream and garlic."},{n:3,t:"Cheese",d:"Stir in parmesan until melted."},{n:4,t:"Toss",d:"Toss pasta with sauce."}]},
   { id:67,meal:"lunch",emoji:"🥗",title:"Quinoa Salad",cuisine:"Modern",time:25,diff:"Easy",dietary:["Vegan"],pp:75,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Quinoa",a:"1 cup"},{n:"Cherry tomatoes",a:"1 cup"},{n:"Cucumber",a:"1"},{n:"Red onion",a:"½"},{n:"Lemon juice",a:"3 tbsp"},{n:"Olive oil",a:"2 tbsp"}],
-    steps:[{n:1,t:"Cook",d:"Cook quinoa 15 min."},{n:2,t:"Chop",d:"Dice vegetables."},{n:3,t:"Mix",d:"Combine cooled quinoa with vegetables."},{n:4,t:"Dress",d:"Toss with lemon and oil."}]},
+    steps:[{n:1,t:"Cook quinoa",d:"Rinse quinoa under cold water. Combine with 2 cups water in a saucepan, bring to a boil, then reduce heat to low. Cover and simmer for 12–15 minutes until all water is absorbed. Fluff with a fork and spread on a plate to cool for 5–10 minutes."},{n:2,t:"Chop",d:"Dice cucumber, tomatoes, and any other vegetables into small even pieces."},{n:3,t:"Mix",d:"Combine the cooled quinoa with the chopped vegetables in a large bowl."},{n:4,t:"Dress",d:"Drizzle with olive oil and squeeze over fresh lemon juice. Season with salt and pepper. Toss well and serve at room temperature or chilled."}]},
   { id:68,meal:"lunch",emoji:"🍲",title:"Tomato Basil Soup",cuisine:"Italian",time:30,diff:"Easy",dietary:["Vegetarian"],pp:85,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Tomatoes",a:"6"},{n:"Onion",a:"1"},{n:"Garlic",a:"4 cloves"},{n:"Fresh basil",a:"1 cup"},{n:"Cream",a:"½ cup"},{n:"Vegetable broth",a:"2 cups"}],
     steps:[{n:1,t:"Sauté",d:"Cook onion and garlic 5 min."},{n:2,t:"Add",d:"Add tomatoes and broth."},{n:3,t:"Simmer",d:"Simmer 20 min, blend smooth."},{n:4,t:"Finish",d:"Stir in cream and basil."}]},
@@ -3490,10 +3490,10 @@ const RECIPES = [
           {n:"Chia seeds",a:"1 tbsp"}
         ],
     steps:[
-          {n:1,t:"Cook",d:"Cook oats in water or milk 5 min."},
-          {n:2,t:"Protein",d:"Stir in protein powder until smooth."},
-          {n:3,t:"Top",d:"Top with banana and almond butter."},
-          {n:4,t:"Finish",d:"Sprinkle chia seeds, serve."}
+          {n:1,t:"Cook oats",d:"Bring 2 cups of water or milk to a simmer in a small saucepan over medium heat. Add rolled oats, reduce heat to medium-low, and cook stirring often for 4–5 minutes until thick and creamy."},
+          {n:2,t:"Add protein",d:"Remove from heat. Stir in protein powder quickly until fully dissolved and smooth with no lumps. Add a splash of extra liquid if it becomes too thick."},
+          {n:3,t:"Slice & top",d:"Peel and slice the banana. Spoon oatmeal into a bowl, lay banana slices on top, and add a spoonful of almond butter."},
+          {n:4,t:"Finish",d:"Sprinkle chia seeds over the top. Serve warm immediately."}
         ]
   },
   {
@@ -4678,10 +4678,10 @@ const RECIPES = [
           {n:"Banana",a:"1"}
         ],
     steps:[
-          {n:1,t:"Cook",d:"Cook oats in almond milk 5 min."},
-          {n:2,t:"Stir",d:"Stir in peanut butter and cinnamon."},
-          {n:3,t:"Top",d:"Slice banana on top."},
-          {n:4,t:"Serve",d:"Drizzle honey, serve warm."}
+          {n:1,t:"Cook oats",d:"Pour almond milk into a small saucepan over medium heat and bring to a gentle simmer. Add rolled oats and stir well. Reduce heat to medium-low and cook, stirring regularly, for 4–5 minutes until the oats have absorbed most of the liquid and the mixture is thick and creamy."},
+          {n:2,t:"Add peanut butter",d:"Remove from heat. Stir in peanut butter and cinnamon until fully incorporated. The residual heat will melt the peanut butter into the oats smoothly."},
+          {n:3,t:"Top",d:"Peel and slice the banana. Arrange slices on top of the oatmeal."},
+          {n:4,t:"Serve",d:"Drizzle with honey, serve warm. Add an extra sprinkle of cinnamon or crushed peanuts if you like."}
         ]
   },
   {
@@ -20780,19 +20780,47 @@ const computeCoreDishKey = (recipe) => {
   normalized = normalized.replace(/\s+/g, ' ').trim();
   
   // Synonym mapping for known dish variants
+  // Keys are substrings — any title containing the key maps to the canonical dish name.
+  // This groups regional/style variants of the same core dish (e.g. "Lentil Soup Lebanese"
+  // and "Turkish Red Lentil Soup" both normalize to "lentil soup").
   const synonymMap = {
+    // Shakshuka variants
     'shakshuka': 'shakshuka',
     'shakshouka': 'shakshuka',
+    // Chickpea curry / chana variants
     'chana masala': 'chickpea curry',
     'chole masala': 'chickpea curry',
+    // Pasta name normalizations
     'aglio e olio': 'spaghetti aglio olio',
     'aglio olio': 'spaghetti aglio olio',
     'cacio e pepe': 'cacio pepe',
+    // Other dish identities
     'ratatouille': 'ratatouille',
     'frittata': 'frittata',
     'omelette': 'omelette',
     'omelet': 'omelette',
     'avocado toast': 'avocado toast',
+    // Lentil soup/stew — all variants of the same concept dish
+    'lentil soup': 'lentil soup',    // catches: Lentil Soup Lebanese, Curried Lentil Soup, Turkish Red Lentil Soup
+    'lentil stew': 'lentil soup',    // catches: Simple Lentil Stew
+    'lentil and': 'lentil soup',     // catches: Lentil and Vegetable Soup etc.
+    // Scrambled eggs — any add-in variant is the same core dish
+    'scrambled egg': 'scrambled eggs',
+    // Overnight oats — all overnight variants are the same concept
+    'overnight oat': 'overnight oats',
+    // Other common duplicates
+    'fried rice': 'fried rice',
+    'stir-fry': 'stir fry',
+    'stir fry': 'stir fry',
+    'tomato soup': 'tomato soup',
+    'mushroom soup': 'mushroom soup',
+    'chicken soup': 'chicken soup',
+    'french toast': 'french toast',
+    'pad thai': 'pad thai',
+    'butter chicken': 'butter chicken',
+    'caesar salad': 'caesar salad',
+    'caprese salad': 'caprese',
+    'greek salad': 'greek salad',
   };
   
   // Apply synonym mapping
@@ -26385,9 +26413,25 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
       meat:          { title: /\bbeef\b|\bsteak\b|\bpork\b|\blamb\b|\bbacon\b|\bsausage\b|\bmeatball\b|\bburger\b|\brib\b|\bbrisket\b|\bveal\b|\bpulled.?pork\b/, ingredients: /\bbeef\b|\bsteak\b|\bpork\b|\blamb\b|\bbacon\b|\bsausage\b/ },
       spicy:         { title: /\bspicy\b/, ingredients: /chili.?flake|\bjalape|\bchipotle|\bsriracha|\bhabanero|\bcayenne|\bred.?pepper.?flake/ },
     };
+    // Map from recipe.cuisine field values to CUISINE_PATTERNS keys
+    const CUISINE_FIELD_MAP = {
+      'chinese': 'asian', 'japanese': 'asian', 'thai': 'asian', 'korean': 'asian',
+      'vietnamese': 'asian', 'asian': 'asian', 'southeast asian': 'asian',
+      'indian': 'indian', 'south asian': 'indian',
+      'mediterranean': 'mediterranean', 'greek': 'mediterranean',
+      'lebanese': 'mediterranean', 'north african': 'mediterranean',
+      'moroccan': 'mediterranean', 'middle eastern': 'mediterranean',
+      'italian': 'italian', 'french': null,
+      'mexican': 'mexican', 'tex-mex': 'mexican', 'latin american': 'mexican',
+    };
     const recipeMatchesCuisine = (r, cuisineKey) => {
       const pat = CUISINE_PATTERNS[cuisineKey];
       if (!pat) return false;
+      // Primary: check recipe.cuisine metadata field (most reliable)
+      const cuisineField = (r.cuisine || '').toLowerCase();
+      const mappedKey = CUISINE_FIELD_MAP[cuisineField];
+      if (mappedKey && mappedKey === cuisineKey) return true;
+      // Secondary: check recipe title + ingredients text patterns
       const title = (r.title || '').toLowerCase();
       const ingsT = (r.ingredients || []).map(i => (i.n || '').toLowerCase()).join(' ');
       return (pat.title && pat.title.test(title)) || (pat.ingredients && pat.ingredients.test(ingsT));
@@ -26805,6 +26849,14 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
   //   mergeMemory, executePlanEditsFromMemory, buildAgentResponseV2 stay as-is.
   //
   const planChatAgent = ({ userMessage, currentPlan }) => {
+    try {
+      return _planChatAgentInner({ userMessage, currentPlan });
+    } catch(err) {
+      console.error('[planChatAgent] error:', err);
+      return "Sorry, I ran into a problem processing that. Try rephrasing, or say \"start over\" to reset.";
+    }
+  };
+  const _planChatAgentInner = ({ userMessage, currentPlan }) => {
     const t = userMessage.toLowerCase().trim();
     const DAYS      = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday'];
     const DAY_LABELS = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
@@ -26904,7 +26956,7 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
 
     // ── [4] Reply showing full active constraint state ────────────────────
     return buildAgentResponseV2(updatedMemory, res, delta);
-  };
+  };  // end _planChatAgentInner
 
   const handleChatSend = () => {
     const msg = chatInput.trim();
