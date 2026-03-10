@@ -25620,7 +25620,7 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
   // Missing panel + Planner Chat
   const [showMissingPanel, setShowMissingPanel] = useState(true);
   const [chatOpen, setChatOpen] = useState(false);
-  const [chatMessages, setChatMessages] = useState([{role:'bot',text:'Hi! Tell me how to edit your plan.'}]);
+  const [chatMessages, setChatMessages] = useState([{role:'bot',text:'Hi! Tell me what you want to change. For example: "Make dinners healthier", "Only use what I already have", or "Replace Wednesday dinner with something pescatarian."'}]);
   const [chatInput, setChatInput] = useState('');
   // Pending two-step confirmation (e.g. clear plan)
   const [chatPendingAction, setChatPendingAction] = useState(null);
@@ -25976,403 +25976,669 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
     setPlanning(false);
   };
 
-  // ── Planner Chat: rule-based plan editor ───────────────────────────────────
-  const processChatCommand = (msg) => {
+  // ═══════════════════════════════════════════════════════════════════════════
+  // PLANNER CHAT AGENT
+  // ═══════════════════════════════════════════════════════════════════════════
+  //
+  // Architecture — designed for future LLM integration:
+  //
+  //   planChatAgent({ userMessage, currentPlan })   ← main entry point
+  //     │
+  //     ├─ [1] extractConstraints(msg, plan, recipes)
+  //     │       Temporary NL parser → PlanConstraints object.
+  //     │       ► To connect a real LLM later: replace this function with
+  //     │         an API call that returns the same PlanConstraints shape.
+  //     │         Everything else (engine + response) stays unchanged.
+  //     │
+  //     ├─ [2] executePlanEdits(constraints, ctx)
+  //     │       Pure plan-editing engine driven by the constraint object.
+  //     │       No user-facing strings — only plan mutations + an edit log.
+  //     │
+  //     └─ [3] buildAgentResponse(constraints, result)
+  //             Generates a natural-language reply from the edit log.
+  //             Understands partial failures and explains them honestly.
+  //
+  // PlanConstraints — the contract between parser and engine:
+  // {
+  //   action:          "replace" | "deduplicate" | "regenerate" |
+  //                    "remove_missing" | "clear" | "open_picker"
+  //   scope:           "whole_week" | "breakfast" | "lunch" |
+  //                    "dinner" | "specific_slot"
+  //   day:             0–6 (Mon–Sun) | null
+  //   goals:           Array< "healthier" | "pantry_only" | "reduce_missing" |
+  //                           "more_interesting" | "simpler" | "food_focus" >
+  //   dietary:         string[]     extra dietary filters (e.g. ["Pescatarian"])
+  //   pantryThreshold: number|null  min pantry match % (e.g. 80)
+  //   maxTime:         number|null  max cook time in minutes
+  //   foodFocus:       string|null  ingredient keyword to feature
+  //   singleTarget:    meal|null    specific plan meal to replace by name
+  // }
+  //
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  // ── [1] Constraint Extractor ──────────────────────────────────────────────
+  // Temporary NL parser.  Returns a PlanConstraints object.
+  // Replace the body of this function with an LLM API call to upgrade later.
+  const extractConstraints = (msg, currentPlan) => {
     const t = msg.toLowerCase().trim();
     const DAYS = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday'];
-    const DAY_LABELS = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
-    const getMealIdx = s => s.includes('breakfast')?0:s.includes('lunch')?1:s.includes('dinner')?2:-1;
-    const getDayIdx  = s => DAYS.findIndex(d => s.includes(d));
-    const toSlot     = r => r ? {kind:'recipe',emoji:r.emoji,name:r.title,id:r.id} : null;
 
-    // ── 1. Two-step confirmation guard ────────────────────────────────────
-    if (chatPendingAction === 'clearPlan') {
-      const isYes = /^(yes|yeah|yep|yup|ok|okay|sure|go ahead|confirm|do it|clear|empty|delete|proceed|affirmative)/.test(t);
-      const isNo  = /^(no|nope|nah|cancel|stop|nevermind|never mind|abort)/.test(t);
-      if (isYes) {
-        setChatPendingAction(null);
-        setMealPlan(prev => prev.map(day => ({...day, meals: [null, null, null]})));
-        return 'I cleared the current weekly plan. All meal slots are now empty.';
-      }
-      if (isNo) {
-        setChatPendingAction(null);
-        return 'No changes made — your plan is untouched.';
-      }
-      return 'Still waiting for confirmation. Reply "yes" to clear all meals, or "no" to cancel.';
-    }
+    const C = {
+      action:          'replace',
+      scope:           'whole_week',
+      day:             null,
+      goals:           [],
+      dietary:         [],
+      pantryThreshold: null,
+      maxTime:         null,
+      foodFocus:       null,
+      singleTarget:    null,
+    };
 
-    // ── 2. Clear/empty plan intent ────────────────────────────────────────
+    // ── Action: clear / empty plan ─────────────────────────────────────────
     if (/\b(delete|clear|empty|erase|blank|wipe|remove|reset)\b.*\b(plan|week|meal|all|everything|schedule)\b|\bremove all\b|\bstart from scratch\b|\bblank the plan\b|\bempty the week\b|\bclear the week\b|\bdelete the plan\b/.test(t)) {
-      const filled = mealPlan.flatMap(d=>d.meals).filter(Boolean).length;
-      if (!filled) return 'The planner is already empty.';
-      setChatPendingAction('clearPlan');
-      return `Do you want me to clear all ${filled} meal${filled!==1?'s':''} from this week? Reply "yes" to confirm or "no" to cancel.`;
+      C.action = 'clear';
+      return C;
     }
 
-    // ── 3. Build base recipe pool (dietary prefs + avoided ingredients) ───
-    const ps = buildPantrySet(pantry);
-    const avoidNorms = (avoidedIngredients||[]).map(x=>normalizeIng(x));
-    const isAllowed = r => {
-      if (!isRecipeAllowedForUser(r, prefs)) return false;
-      if (avoidNorms.length && (r.ingredients||[]).some(i=>avoidNorms.some(av=>normalizeIng(i.n||'').includes(av)||av.includes(normalizeIng(i.n||''))))) return false;
-      return true;
-    };
-    const pantryMeals = generatePantryMeals(ps).filter(isAllowed);
-    const allAvail = [...pantryMeals, ...allRecipes.filter(isAllowed)];
-
-    // Pantry match % for a recipe — excludes optional/garnish ingredients
-    const pantryMatchPct = r => {
-      const ings = (r.ingredients||[]).filter(i => !i.optional && !isOptionalIng(i.n));
-      if (!ings.length) return 100;
-      const have = ings.filter(i => ingInPantry(i.n, ps)).length;
-      return Math.round((have / ings.length) * 100);
-    };
-
-    // ── 4. Duplicate-safe picker ──────────────────────────────────────────
-    const planMeals = mealPlan.flatMap(d=>d.meals).filter(Boolean);
-    const existingIds  = new Set(planMeals.map(m=>m.id));
-    const existingKeys = new Set(planMeals.map(m=>{
-      const rx = String(m.id).startsWith('pantry-') ? getPantryRecipeObj(m.id) : allRecipes.find(x=>x.id===m.id);
-      return rx ? computeCoreDishKey(rx) : null;
-    }).filter(Boolean));
-    const pickedInRun = new Set();
-    const pickedKeys  = new Set();
-    let forcedRepeat = false;
-    const pickFrom = (pool) => {
-      if (!pool.length) return null;
-      const key = r => r.coreDishKey || computeCoreDishKey(r);
-      let candidates = pool.filter(r => !existingIds.has(r.id) && !pickedInRun.has(r.id) && !existingKeys.has(key(r)) && !pickedKeys.has(key(r)));
-      if (!candidates.length) candidates = pool.filter(r => !existingIds.has(r.id) && !pickedInRun.has(r.id));
-      if (!candidates.length) candidates = pool.filter(r => !pickedInRun.has(r.id));
-      if (!candidates.length) { forcedRepeat = true; candidates = pool; }
-      const r = candidates[Math.floor(Math.random() * candidates.length)];
-      if (r) { pickedInRun.add(r.id); pickedKeys.add(key(r)); }
-      return r || null;
-    };
-
-    // ── 5. Global single-purpose commands ────────────────────────────────
+    // ── Action: regenerate whole week ──────────────────────────────────────
     if (/new week|redo.*(all|week)|regenerate.*(all|week|whole)|fresh.*plan|start.?over/.test(t)) {
-      autoplan(); return 'Regenerating the whole week with fresh meals...';
-    }
-    if (/no.?duplic|remove.?duplic|dedup|stop.*repeat|no.*repeat|all different|unique meals/.test(t)) {
-      const seenIds = new Set(); const seenKeys = new Set(); let dupCount = 0;
-      const keyOf = m => { const rx = String(m.id).startsWith('pantry-') ? getPantryRecipeObj(m.id) : allRecipes.find(x=>x.id===m.id); return rx ? computeCoreDishKey(rx) : m.id; };
-      const newPlan = mealPlan.map(day => ({...day, meals: day.meals.map((meal, mi2) => {
-        if (!meal || meal.kind === 'custom') return meal;
-        const k = keyOf(meal);
-        if (seenIds.has(meal.id) || seenKeys.has(k)) {
-          existingIds.delete(meal.id); existingKeys.delete(k);
-          const mt = ['breakfast','lunch','dinner'][mi2];
-          const pool = allAvail.filter(r => getMealType(r) === mt);
-          const replacement = pickFrom(pool);
-          if (replacement) { dupCount++; return toSlot(replacement); }
-        }
-        seenIds.add(meal.id); seenKeys.add(k); pickedInRun.add(meal.id); pickedKeys.add(k);
-        return meal;
-      })}));
-      setMealPlan(newPlan);
-      const sfxD = forcedRepeat ? ' (some near-duplicates unavoidable with current pantry/filters)' : '';
-      return dupCount > 0 ? `Replaced ${dupCount} duplicate meal${dupCount>1?'s':''} with unique options.${sfxD}` : 'No duplicates found — your plan is already unique!';
-    }
-    if (/replace.?one|change.?one|swap.?one|just.?one/.test(t)) {
-      const filledSlots = [];
-      mealPlan.forEach((day,di2) => day.meals.forEach((meal,mi2) => { if(meal) filledSlots.push({di2,mi2,meal}); }));
-      if (!filledSlots.length) return 'No meals to replace yet.';
-      const slot = filledSlots[Math.floor(Math.random()*filledSlots.length)];
-      setReplacePicker({dayIdx:slot.di2, mealIdx:slot.mi2, mealType:['Breakfast','Lunch','Dinner'][slot.mi2]});
-      return `Opening picker for ${mealPlan[slot.di2].day} ${['Breakfast','Lunch','Dinner'][slot.mi2]}...`;
+      C.action = 'regenerate';
+      return C;
     }
 
-    // ── 6. Extract ALL constraints simultaneously ─────────────────────────
-    // Every flag is computed independently so multiple can be true at once.
-    // They are then combined into a single scoring pass over the recipe pool.
+    // ── Action: deduplicate ────────────────────────────────────────────────
+    if (/no.?duplic|remove.?duplic|\bdedup\b|stop.*repeat|no.*repeat|all different|unique meals/.test(t)) {
+      C.action = 'deduplicate';
+      return C;
+    }
 
-    const di = getDayIdx(t);
-    const mi = getMealIdx(t);
+    // ── Action: remove meals with missing ingredients (hard delete, no replace) ──
+    // Only activate when no other replacement-style goal is present
+    const hasReplacementGoal = /healthi|more.?health|nutritious|better.?for|less.*sugar|improve.*health|more.*interest|less.*boring|\bupgrade\b|more.*complex|more.*excit|more.*vari|\bsimpl|\bquicker\b|\bfaster\b|quick.?meal/.test(t);
+    if (!hasReplacementGoal && /remove.*miss|clear.*miss|delete.*miss/.test(t)) {
+      C.action = 'remove_missing';
+      return C;
+    }
 
-    // Scope: which meal slots to update
-    let C_mealScope = mi >= 0 ? ['Breakfast','Lunch','Dinner'][mi] : null;
-    const C_dayIdx  = di;
+    // ── Scope: specific day ────────────────────────────────────────────────
+    const dayIdx = DAYS.findIndex(d => t.includes(d));
+    if (dayIdx >= 0) C.day = dayIdx;
 
-    // Pantry % threshold: "80% from my pantry", "at least 70% pantry", "mostly from pantry"
-    const pctM = t.match(/(\d+)\s*%/);
-    const C_pantryPct = pctM ? parseInt(pctM[1]) : (/mostly.*pantry|largely.*pantry|mainly.*pantry/.test(t) ? 80 : null);
+    // ── Scope: meal type ───────────────────────────────────────────────────
+    if      (/\bbreakfast\b/.test(t)) C.scope = 'breakfast';
+    else if (/\blunch\b/.test(t))     C.scope = 'lunch';
+    else if (/\bdinner\b/.test(t))    C.scope = 'dinner';
+    else if (dayIdx >= 0)             C.scope = 'specific_slot';
+    else                              C.scope = 'whole_week';
 
-    // C_wantInteresting computed first — C_wantSimple depends on it
-    const C_wantInteresting = /too.*(simple|easy|plain|basic|boring)|\bboring\b|more.*interest|less.*boring|\bupgrade\b|more.*complex|these?\s+(breakfast|lunch|dinner)s?\s+(are|is|seem|feel|look)\s+too/.test(t);
+    // day + named meal type → specific slot
+    if (dayIdx >= 0 && ['breakfast','lunch','dinner'].includes(C.scope)) {
+      C.scope = 'specific_slot';
+    }
 
-    const C_wantHealthy    = /healthi|more.?health|nutritious|better.?for|less.?junk|not.?health|unhealthy|isn.{0,4}health|less.*sugar|improve.*health|health.*week/.test(t);
-    const C_wantSimple     = /\bsimpl|\beasier\b|\bquicker\b|\bfaster\b|quick.?meal|fast.?meal|low.*effort/.test(t) && !C_wantInteresting;
-    const C_wantPantryOnly = /\bpantry.?only\b|\bpantry.?friendly\b|no.?shop|use.*have|avoid.*shop/.test(t) && !C_pantryPct;
-    const C_wantReduceMiss = !!(C_pantryPct) || /reduce.*miss|fewer.*miss|less.*miss|don.{0,5}many.*miss|so many miss|too many miss|don.{0,5}want.*miss/.test(t);
-    // Hard-remove only (no replacement) — active only when no other goal is set
-    const C_wantRemoveMiss = !C_wantHealthy && !C_wantInteresting && !C_wantSimple && !C_pantryPct &&
-                              /remove.*miss|clear.*miss|delete.*miss/.test(t);
-
-    const timeM  = t.match(/(\d+)\s*min/);
-    const C_maxTime = timeM ? parseInt(timeM[1]) : (C_wantSimple ? 20 : null);
-
-    const dietM = t.match(/\b(vegetarian|vegan|pescatarian|meatless)\b/);
-    const C_diet = dietM ? (dietM[1]==='meatless'?'Vegetarian':dietM[1].charAt(0).toUpperCase()+dietM[1].slice(1)) : null;
-
-    const FOOD_KW = ['fish','salmon','tuna','chicken','beef','pasta','noodle','rice','soup','stew','salad','egg','bean','lentil','vegetable','veg','seafood','shrimp','pork','tofu','mushroom','curry','wrap','bowl'];
-    const foodMx  = t.match(new RegExp('\\b('+FOOD_KW.join('|')+')\\b'));
-    const C_foodKind = (foodMx && /more|use|add|want|feature|still|prefer/.test(t)) ? foodMx[1] : null;
-
-    // Natural language: "[recipe name] is not healthy / too sweet / unhealthy"
-    // Locate that specific recipe in the current plan and replace only it.
-    let singleRecipeTarget = null;
-    if (C_wantHealthy && /not.?health|unhealthy|isn.{0,4}health|is.*not.*good|too.*sweet|too.*heavy/.test(t)) {
+    // ── Natural language: "[recipe name] is unhealthy / too sweet / etc." ──
+    // Detect a specific plan meal mentioned by name → replace only that slot
+    if (/not.?health|unhealthy|isn.{0,4}health|is.*not.*good|too.*sweet|too.*heavy|too.*rich/.test(t)) {
+      const planMeals = currentPlan.flatMap(d => d.meals).filter(Boolean);
       for (const m of planMeals) {
-        const nw = (m.name||'').toLowerCase().split(/\s+/).filter(w=>w.length>3);
-        if (nw.length && nw.every(w=>t.includes(w))) { singleRecipeTarget = m; break; }
+        const words = (m.name || '').toLowerCase().split(/\s+/).filter(w => w.length > 3);
+        if (words.length && words.every(w => t.includes(w))) {
+          C.singleTarget = m;
+          C.scope = 'specific_slot';
+          C.day = null;
+          break;
+        }
       }
-      // Recipe not in current plan: infer its meal type from allAvail so we can scope correctly
-      if (!singleRecipeTarget && !C_mealScope) {
-        for (const r of allAvail) {
-          const nw = (r.title||'').toLowerCase().split(/\s+/).filter(w=>w.length>3);
-          if (nw.length >= 2 && nw.every(w=>t.includes(w))) {
+      // Recipe not currently in plan — infer meal type from recipe catalogue
+      if (!C.singleTarget && C.scope !== 'specific_slot') {
+        for (const r of allRecipes) {
+          const words = (r.title || '').toLowerCase().split(/\s+/).filter(w => w.length > 3);
+          if (words.length >= 2 && words.every(w => t.includes(w))) {
             const mt = getMealType(r);
-            if (mt==='breakfast') C_mealScope='Breakfast';
-            else if (mt==='lunch') C_mealScope='Lunch';
-            else if (mt==='dinner') C_mealScope='Dinner';
+            if (mt === 'breakfast') C.scope = 'breakfast';
+            else if (mt === 'lunch') C.scope = 'lunch';
+            else if (mt === 'dinner') C.scope = 'dinner';
             break;
           }
         }
       }
     }
 
-    const hasConstraints = C_wantHealthy||C_wantSimple||C_wantInteresting||C_wantPantryOnly||
-      C_wantReduceMiss||C_wantRemoveMiss||C_pantryPct||C_diet||C_foodKind||C_maxTime||singleRecipeTarget;
-
-    // ── 7. No-constraint navigation commands ─────────────────────────────
-    if (!hasConstraints) {
-      if (di>=0 && mi>=0) {
-        setReplacePicker({dayIdx:di, mealIdx:mi, mealType:['Breakfast','Lunch','Dinner'][mi]});
-        return `Opening recipe picker for ${DAY_LABELS[di]} ${['Breakfast','Lunch','Dinner'][mi]}...`;
-      }
-      if (di>=0) {
-        mealPlan[di]?.meals.forEach(m => {
-          if (!m) return;
-          existingIds.delete(m.id);
-          const rx2 = String(m.id).startsWith('pantry-') ? getPantryRecipeObj(m.id) : allRecipes.find(x=>x.id===m.id);
-          if (rx2) existingKeys.delete(computeCoreDishKey(rx2));
-        });
-        const newDayMeals = ['Breakfast','Lunch','Dinner'].map(mt2 => {
-          const basePool = allAvail.filter(r=>getMealType(r)===mt2.toLowerCase());
-          return toSlot(pickFrom(basePool));
-        });
-        setMealPlan(prev=>prev.map((day,idx)=>idx===di?{...day,meals:newDayMeals}:day));
-        const sfxN = forcedRepeat ? ' (pool was small — some repeats unavoidable)' : '';
-        return `All meals for ${DAY_LABELS[di]} have been replaced.${sfxN}`;
-      }
-      return "I'm not sure what you want to change. Try:\n- \"Clear the week\" — remove all meals\n- \"Make the week healthier\" — switch to nutritious options\n- \"Make dinners simpler\" — quicker meals\n- \"More interesting\" — upgrade to complex recipes\n- \"No duplicates\" — remove repeated meals\n- \"Pantry only\" — no shopping needed\n- \"More fish\" / \"More pasta\" / \"More soup\"\n- \"Replace Wednesday dinner\"\n- \"New week\"";
+    // ── Pantry threshold: "80% from my pantry", "at least 70% pantry" ──────
+    const pctMatch = t.match(/(\d+)\s*%/);
+    if (pctMatch) {
+      C.pantryThreshold = parseInt(pctMatch[1]);
+    } else if (/mostly.*pantry|largely.*pantry|mainly.*pantry/.test(t)) {
+      C.pantryThreshold = 80;
     }
 
-    // ── 8. Hard remove-missing only (no replacement) ──────────────────────
-    if (C_wantRemoveMiss) {
-      setMealPlan(prev=>prev.map(day=>({...day,meals:day.meals.map(meal=>meal&&recipeNeedsShopping(meal)?null:meal)})));
-      return 'Cleared meals that require missing ingredients. Empty slots remain.';
+    // ── Goals (all computed independently — multiple can be active) ─────────
+
+    // Healthier
+    if (/healthi|more.?health|nutritious|better.?for|less.?junk|not.?health|unhealthy|isn.{0,4}health|less.*sugar|improve.*health|health.*week/.test(t)) {
+      C.goals.push('healthier');
     }
 
-    // ── 9. Combined constraint scoring ────────────────────────────────────
-    // scoreRecipe() returns a combined score from ALL active goals simultaneously.
-    // Higher = better match for this message's full request.
-    const scoreRecipe = (r, mealTypeStr) => {
+    // Pantry-only (hard: no shopping) vs reduce-missing (soft: prefer pantry)
+    if (/\bpantry.?only\b|\bno.?shop(?:ping)?\b|use.*(?:what|what's|what i).*have|avoid.*shop(?:ping)?/.test(t) && !C.pantryThreshold) {
+      C.goals.push('pantry_only');
+    } else if (C.pantryThreshold || /reduce.*miss|fewer.*miss|less.*miss|don.{0,5}many.*miss|so many miss|too many miss|don.{0,5}want.*miss|don.{0,5}have.*many|missing.*ingredient|pantry.?friendly/.test(t)) {
+      C.goals.push('reduce_missing');
+    }
+
+    // More interesting / complex
+    if (/too.*(simple|easy|plain|basic|boring)|\bboring\b|more.*interest|less.*boring|\bupgrade\b|more.*complex|more.*excit|more.*vari/.test(t)) {
+      C.goals.push('more_interesting');
+    }
+
+    // Simpler / quicker (only when not also asking for interesting)
+    if (/\bsimpl|\beasier\b|\bquicker\b|\bfaster\b|quick.?meal|fast.?meal|low.*effort|less.*complex/.test(t) &&
+        !C.goals.includes('more_interesting')) {
+      C.goals.push('simpler');
+    }
+
+    // Max cook time
+    const timeMatch = t.match(/(\d+)\s*min/);
+    if (timeMatch) {
+      C.maxTime = parseInt(timeMatch[1]);
+      if (!C.goals.includes('simpler') && !C.goals.includes('more_interesting')) C.goals.push('simpler');
+    } else if (C.goals.includes('simpler') && !C.maxTime) {
+      C.maxTime = 20;
+    }
+
+    // Dietary constraints
+    const dietMatch = t.match(/\b(vegetarian|vegan|pescatarian|meatless|gluten.?free|dairy.?free)\b/);
+    if (dietMatch) {
+      const dm = dietMatch[1];
+      C.dietary.push(dm === 'meatless' ? 'Vegetarian' : dm.charAt(0).toUpperCase() + dm.slice(1).replace(/-/g,''));
+    }
+
+    // Food focus: "more fish", "use salmon", "still use pasta"
+    const FOOD_KW = ['fish','salmon','tuna','chicken','beef','pasta','noodle','rice','soup','stew','salad','egg','bean','lentil','vegetable','veg','seafood','shrimp','pork','tofu','mushroom','curry','wrap','bowl'];
+    const foodMatch = t.match(new RegExp('\\b(' + FOOD_KW.join('|') + ')\\b'));
+    if (foodMatch && /more|use|add|want|feature|still|prefer|with/.test(t)) {
+      C.foodFocus = foodMatch[1];
+      C.goals.push('food_focus');
+    }
+
+    // No goals, no singleTarget, but scope/day identified → open picker
+    if (!C.goals.length && !C.singleTarget && C.action === 'replace') {
+      if (C.day !== null || C.scope !== 'whole_week') {
+        C.action = 'open_picker';
+      }
+    }
+
+    return C;
+  };
+
+  // ── [2] Plan Editing Engine ───────────────────────────────────────────────
+  // Pure engine: takes a PlanConstraints object + context, returns:
+  //   { newPlan, editLog, action }
+  // editLog is consumed by the response generator — no UI strings here.
+  const executePlanEdits = (C, ctx) => {
+    const { plan, ps, preferences, avoidedIngredients: avoidList } = ctx;
+    const avoidNorms = (avoidList || []).map(x => normalizeIng(x));
+    const MEAL_TYPES = ['breakfast', 'lunch', 'dinner'];
+    const scopeMealIdx = { breakfast: 0, lunch: 1, dinner: 2 };
+
+    const isAllowed = r => {
+      if (!isRecipeAllowedForUser(r, preferences)) return false;
+      if (C.dietary.length) {
+        const extPrefs = { ...preferences, dietary: [...(preferences.dietary || []), ...C.dietary] };
+        if (!isRecipeAllowedForUser(r, extPrefs)) return false;
+      }
+      if (avoidNorms.length && (r.ingredients || []).some(i =>
+        avoidNorms.some(av => normalizeIng(i.n || '').includes(av) || av.includes(normalizeIng(i.n || ''))))) return false;
+      return true;
+    };
+
+    const pantryMeals = generatePantryMeals(ps).filter(isAllowed);
+    const allAvail = [...pantryMeals, ...allRecipes.filter(isAllowed)];
+
+    const pantryMatchPct = r => {
+      const ings = (r.ingredients || []).filter(i => !i.optional && !isOptionalIng(i.n));
+      if (!ings.length) return 100;
+      const have = ings.filter(i => ingInPantry(i.n, ps)).length;
+      return Math.round((have / ings.length) * 100);
+    };
+
+    // Combined recipe scorer — all active goals contribute simultaneously
+    const scoreRecipe = (r, mealType) => {
       let score = 0;
       const pct = pantryMatchPct(r);
 
-      // Pantry match
-      if (C_pantryPct) {
-        score += pct >= C_pantryPct ? 200 : pct;   // big bonus for meeting explicit threshold
-      } else if (C_wantPantryOnly) {
+      if (C.pantryThreshold) {
+        score += pct >= C.pantryThreshold ? 200 : pct;
+      } else if (C.goals.includes('pantry_only')) {
         score += pct >= 100 ? 200 : pct * 0.5;
-      } else if (C_wantReduceMiss) {
-        score += pct;                               // prefer higher pantry %
+      } else if (C.goals.includes('reduce_missing')) {
+        score += pct;
       }
 
-      // Health
-      if (C_wantHealthy) {
+      if (C.goals.includes('healthier')) {
         let hs = getHealthScore(r) * 10;
-        // Breakfast-specific: penalise sugary/dessert-like items, reward savoury/whole-food
-        if ((mealTypeStr||'').toLowerCase() === 'breakfast') {
-          const ttl   = (r.title||'').toLowerCase();
-          const ingsL = (r.ingredients||[]).map(i=>(i.n||'').toLowerCase()).join(' ');
-          if (/pancake|waffle|french.?toast|sweet.*(bread|roll)|sugary/.test(ttl)) hs -= 30;
-          if (/syrup|maple syrup|condensed milk|caramel/.test(ingsL)) hs -= 20;
-          if (/\b(egg|oatmeal|porridge|yogurt|avocado|oats)\b/.test(ttl)) hs += 20;
+        if (mealType === 'breakfast') {
+          const ttl  = (r.title || '').toLowerCase();
+          const ingsL = (r.ingredients || []).map(i => (i.n || '').toLowerCase()).join(' ');
+          if (/pancake|waffle|french.?toast|sweet.*(bread|roll)|sugary/.test(ttl))  hs -= 30;
+          if (/syrup|maple.?syrup|condensed.?milk|caramel/.test(ingsL))             hs -= 20;
+          if (/\b(egg|oatmeal|porridge|yogurt|avocado|oats)\b/.test(ttl))           hs += 20;
         }
         score += hs;
       }
 
-      // Interesting / complex
-      if (C_wantInteresting) {
-        score += ((r.ingredients||[]).length >= 5 ? 20 : 0) + ((r.time||30) >= 30 ? 10 : 0);
+      if (C.goals.includes('more_interesting')) {
+        score += ((r.ingredients || []).length >= 5 ? 20 : 0) + ((r.time || 30) >= 30 ? 10 : 0);
       }
 
-      // Simple / quick
-      if (C_wantSimple) {
-        const lim = C_maxTime || 20;
-        score += (r.time||30) <= lim ? 50 : Math.max(0, lim - (r.time||30)) * 2;
+      if (C.goals.includes('simpler')) {
+        const lim = C.maxTime || 20;
+        score += (r.time || 30) <= lim ? 50 : Math.max(0, lim - (r.time || 30)) * 2;
+      }
+
+      if (C.goals.includes('food_focus') && C.foodFocus) {
+        const fk = C.foodFocus;
+        if ((r.title || '').toLowerCase().includes(fk) ||
+            (r.ingredients || []).some(i => (i.n || '').toLowerCase().includes(fk))) score += 60;
       }
 
       return score;
     };
 
-    // buildPool() applies hard filters then scores all candidates for a meal type
-    const buildPool = (mealTypeStr) => {
-      let pool = allAvail.filter(r => getMealType(r) === mealTypeStr.toLowerCase());
+    // Build a scored, filtered candidate pool for a given meal type
+    const buildPool = (mealType) => {
+      let pool = allAvail.filter(r => getMealType(r) === mealType);
 
-      // Dietary override (layered on top of existing prefs)
-      if (C_diet) {
-        const mockPrefs = {...prefs, dietary:[...(prefs.dietary||[]), C_diet]};
-        pool = pool.filter(r => isRecipeAllowedForUser(r, mockPrefs));
-      }
-
-      // Food keyword — hard filter, relaxed only if it would empty the pool
-      if (C_foodKind) {
-        const fk = C_foodKind;
-        const fkF = pool.filter(r =>
-          (r.title||'').toLowerCase().includes(fk) ||
-          (r.ingredients||[]).some(i=>(i.n||'').toLowerCase().includes(fk))
-        );
-        if (fkF.length) pool = fkF;
-      }
-
-      // Max-time hard filter
-      if (C_maxTime && !C_wantSimple) {
-        const tmF = pool.filter(r => (r.time||30) <= C_maxTime);
-        if (tmF.length) pool = tmF;
-      }
-
-      // Pantry-only hard filter — only when explicitly requested with no % threshold
-      if (C_wantPantryOnly && !C_pantryPct) {
+      // Pantry-only hard filter (no threshold set)
+      if (!C.pantryThreshold && C.goals.includes('pantry_only')) {
         const pOnlyF = pool.filter(r => pantryMatchPct(r) === 100);
         if (pOnlyF.length) pool = pOnlyF;
       }
 
-      // Score all candidates and sort best-first
-      pool = pool.map(r => ({...r, _score: scoreRecipe(r, mealTypeStr), _pct: pantryMatchPct(r)}));
+      // Max time hard filter
+      if (C.maxTime && !C.goals.includes('simpler')) {
+        const tmF = pool.filter(r => (r.time || 30) <= C.maxTime);
+        if (tmF.length) pool = tmF;
+      }
+
+      // Food focus hard filter (relaxed if it would empty the pool)
+      if (C.goals.includes('food_focus') && C.foodFocus) {
+        const fk = C.foodFocus;
+        const fkF = pool.filter(r =>
+          (r.title || '').toLowerCase().includes(fk) ||
+          (r.ingredients || []).some(i => (i.n || '').toLowerCase().includes(fk)));
+        if (fkF.length) pool = fkF;
+      }
+
+      pool = pool.map(r => ({ ...r, _score: scoreRecipe(r, mealType), _pct: pantryMatchPct(r) }));
       pool.sort((a, b) => b._score - a._score);
       return pool;
     };
 
-    // ── 10. Apply changes to the plan ─────────────────────────────────────
-    let replaced       = 0;
-    let pantryMismatch = false;
-    let poolEmptySlots = false;
-    const pickedPcts   = [];
+    // Duplicate-safe top-pick from a scored pool
+    const planMeals = plan.flatMap(d => d.meals).filter(Boolean);
+    const existingIds  = new Set(planMeals.map(m => m.id));
+    const existingKeys = new Set(planMeals.map(m => {
+      const rx = String(m.id).startsWith('pantry-') ? getPantryRecipeObj(m.id) : allRecipes.find(x => x.id === m.id);
+      return rx ? computeCoreDishKey(rx) : null;
+    }).filter(Boolean));
+    const pickedInRun = new Set();
+    const pickedKeys  = new Set();
+    let   forcedRepeat = false;
+    const keyOf = r => r.coreDishKey || computeCoreDishKey(r);
+    const pickFrom = pool => {
+      if (!pool.length) return null;
+      let cands = pool.filter(r => !existingIds.has(r.id) && !pickedInRun.has(r.id) && !existingKeys.has(keyOf(r)) && !pickedKeys.has(keyOf(r)));
+      if (!cands.length) cands = pool.filter(r => !existingIds.has(r.id) && !pickedInRun.has(r.id));
+      if (!cands.length) cands = pool.filter(r => !pickedInRun.has(r.id));
+      if (!cands.length) { forcedRepeat = true; cands = pool; }
+      const r = cands[0]; // pool is pre-sorted best-first
+      if (r) { pickedInRun.add(r.id); pickedKeys.add(keyOf(r)); }
+      return r || null;
+    };
 
-    if (singleRecipeTarget) {
-      // Replace only the specific recipe the user complained about
-      const targetId = singleRecipeTarget.id;
+    const toSlot = r => r ? { kind: 'recipe', emoji: r.emoji, name: r.title, id: r.id } : null;
+    const editLog = { replaced: 0, removed: 0, pickedPcts: [], pantryMismatch: false, forcedRepeat: false, poolEmpty: false };
+
+    // ── deduplicate ────────────────────────────────────────────────────────
+    if (C.action === 'deduplicate') {
+      const seenIds = new Set(); const seenKeys = new Set();
+      const newPlan = plan.map(day => ({
+        ...day,
+        meals: day.meals.map((meal, mi) => {
+          if (!meal || meal.kind === 'custom') return meal;
+          const k = keyOf(meal);
+          if (seenIds.has(meal.id) || seenKeys.has(k)) {
+            existingIds.delete(meal.id);
+            if (k) existingKeys.delete(k);
+            const pool = allAvail.filter(r => getMealType(r) === MEAL_TYPES[mi]).map(r => ({ ...r, _score: 0 }));
+            const rep = pickFrom(pool);
+            if (rep) { editLog.replaced++; return toSlot(rep); }
+          }
+          seenIds.add(meal.id); if (k) seenKeys.add(k);
+          pickedInRun.add(meal.id); pickedKeys.add(k);
+          return meal;
+        })
+      }));
+      editLog.forcedRepeat = forcedRepeat;
+      return { newPlan, editLog, action: 'deduplicate' };
+    }
+
+    // ── remove_missing ─────────────────────────────────────────────────────
+    if (C.action === 'remove_missing') {
+      const newPlan = plan.map(day => ({
+        ...day,
+        meals: day.meals.map(meal => {
+          if (meal && recipeNeedsShopping(meal)) { editLog.removed++; return null; }
+          return meal;
+        })
+      }));
+      return { newPlan, editLog, action: 'remove_missing' };
+    }
+
+    // ── regenerate ─────────────────────────────────────────────────────────
+    if (C.action === 'regenerate') {
+      autoplan();
+      return { newPlan: null, editLog, action: 'regenerate' };
+    }
+
+    // ── single recipe target (e.g. "Banana pancakes is not healthy") ────────
+    if (C.singleTarget) {
+      const targetId = C.singleTarget.id;
       let targetMT = null;
-      mealPlan.forEach((day,di2) => day.meals.forEach((meal,mi2) => {
-        if (meal && meal.id===targetId) targetMT = ['Breakfast','Lunch','Dinner'][mi2];
+      plan.forEach(day => day.meals.forEach((meal, mi) => {
+        if (meal && meal.id === targetId) targetMT = MEAL_TYPES[mi];
       }));
       if (targetMT) {
         const pool = buildPool(targetMT);
         existingIds.delete(targetId);
-        const rx2 = String(targetId).startsWith('pantry-') ? getPantryRecipeObj(targetId) : allRecipes.find(x=>x.id===targetId);
+        const rx2 = String(targetId).startsWith('pantry-') ? getPantryRecipeObj(targetId) : allRecipes.find(x => x.id === targetId);
         if (rx2) existingKeys.delete(computeCoreDishKey(rx2));
-        setMealPlan(prev=>prev.map(day=>({...day, meals:day.meals.map(meal=>{
-          if (!meal||meal.id!==targetId) return meal;
-          const picked = pickFrom(pool);
-          if (picked) { replaced++; pickedPcts.push(picked._pct||100); return toSlot(picked); }
-          return meal;
-        })})));
-        const goalLabel = C_wantHealthy ? 'a healthier option' : C_wantInteresting ? 'a more interesting option' : 'a better match';
-        return replaced > 0
-          ? `Replaced "${singleRecipeTarget.name}" with ${goalLabel}.`
-          : `Could not find a suitable replacement for "${singleRecipeTarget.name}" with your current filters.`;
+        const newPlan = plan.map(day => ({
+          ...day,
+          meals: day.meals.map(meal => {
+            if (!meal || meal.id !== targetId) return meal;
+            const picked = pickFrom(pool);
+            if (picked) { editLog.replaced++; editLog.pickedPcts.push(picked._pct || 100); return toSlot(picked); }
+            return meal;
+          })
+        }));
+        return { newPlan, editLog, action: 'single_replace' };
       }
     }
 
-    if (C_dayIdx>=0 && C_mealScope) {
-      // Specific day + meal type with constraints
-      const pool = buildPool(C_mealScope);
-      if (!pool.length) return `No ${C_mealScope.toLowerCase()} recipes match all your constraints. Try relaxing one.`;
-      mealPlan[C_dayIdx]?.meals.forEach(m => {
+    // ── specific day + specific meal type ──────────────────────────────────
+    if (C.day !== null && C.scope === 'specific_slot' && ['breakfast','lunch','dinner'].includes(
+        (['monday','tuesday','wednesday','thursday','friday','saturday','sunday'][C.day], C.scope))) {
+      // handled below in general path
+    }
+    if (C.day !== null && ['breakfast','lunch','dinner'].includes(C.scope)) {
+      const di  = C.day;
+      const mt  = C.scope;
+      const mti = scopeMealIdx[mt];
+      const pool = buildPool(mt);
+      if (!pool.length) { editLog.poolEmpty = true; return { newPlan: plan, editLog, action: 'replace' }; }
+      plan[di]?.meals.forEach(m => {
         if (!m) return;
         existingIds.delete(m.id);
-        const rx2 = String(m.id).startsWith('pantry-') ? getPantryRecipeObj(m.id) : allRecipes.find(x=>x.id===m.id);
+        const rx2 = String(m.id).startsWith('pantry-') ? getPantryRecipeObj(m.id) : allRecipes.find(x => x.id === m.id);
         if (rx2) existingKeys.delete(computeCoreDishKey(rx2));
       });
-      const mealTypeIdx = ['Breakfast','Lunch','Dinner'].indexOf(C_mealScope);
       const picked = pickFrom(pool);
       if (picked) {
-        replaced++;
-        pickedPcts.push(picked._pct||100);
-        if (C_pantryPct && (picked._pct||0) < C_pantryPct) pantryMismatch = true;
-        setMealPlan(prev=>prev.map((day,idx)=>idx===C_dayIdx
-          ? {...day, meals:day.meals.map((m,mi3)=>mi3===mealTypeIdx?toSlot(picked):m)}
-          : day
-        ));
+        editLog.replaced++;
+        editLog.pickedPcts.push(picked._pct || 100);
+        if (C.pantryThreshold && (picked._pct || 0) < C.pantryThreshold) editLog.pantryMismatch = true;
+        const newPlan = plan.map((day, idx) =>
+          idx === di ? { ...day, meals: day.meals.map((m, mi) => mi === mti ? toSlot(picked) : m) } : day
+        );
+        return { newPlan, editLog, action: 'replace' };
       }
-    } else {
-      // Apply to all matching slots (whole week, or filtered by meal type scope)
-      setMealPlan(prev=>prev.map(day=>({...day, meals:day.meals.map((meal, mi2)=>{
-        if (!meal) return null;
-        const mt = ['Breakfast','Lunch','Dinner'][mi2];
-        if (C_mealScope && mt !== C_mealScope) return meal;
+    }
+
+    // ── specific day only (replace all 3 meals for that day) ──────────────
+    if (C.day !== null && C.scope === 'specific_slot' && !['breakfast','lunch','dinner'].includes(C.scope)) {
+      const di = C.day;
+      plan[di]?.meals.forEach(m => {
+        if (!m) return;
+        existingIds.delete(m.id);
+        const rx2 = String(m.id).startsWith('pantry-') ? getPantryRecipeObj(m.id) : allRecipes.find(x => x.id === m.id);
+        if (rx2) existingKeys.delete(computeCoreDishKey(rx2));
+      });
+      const newDayMeals = MEAL_TYPES.map(mt => {
         const pool = buildPool(mt);
-        if (!pool.length) { poolEmptySlots = true; return meal; }
         const picked = pickFrom(pool);
-        if (!picked) { poolEmptySlots = true; return meal; }
-        replaced++;
-        pickedPcts.push(picked._pct||100);
-        if (C_pantryPct && (picked._pct||0) < C_pantryPct) pantryMismatch = true;
+        if (picked) { editLog.replaced++; editLog.pickedPcts.push(picked._pct || 100); return toSlot(picked); }
+        editLog.poolEmpty = true;
+        return null;
+      });
+      const newPlan = plan.map((day, idx) => idx === di ? { ...day, meals: newDayMeals } : day);
+      editLog.forcedRepeat = forcedRepeat;
+      return { newPlan, editLog, action: 'replace_day' };
+    }
+
+    // ── whole week or single meal-type scope ───────────────────────────────
+    const newPlan = plan.map(day => ({
+      ...day,
+      meals: day.meals.map((meal, mi) => {
+        if (!meal) return null;
+        const mt = MEAL_TYPES[mi];
+        if (C.scope !== 'whole_week' && mt !== C.scope) return meal;
+        const pool = buildPool(mt);
+        if (!pool.length) { editLog.poolEmpty = true; return meal; }
+        const picked = pickFrom(pool);
+        if (!picked) { editLog.poolEmpty = true; return meal; }
+        editLog.replaced++;
+        editLog.pickedPcts.push(picked._pct || 100);
+        if (C.pantryThreshold && (picked._pct || 0) < C.pantryThreshold) editLog.pantryMismatch = true;
         return toSlot(picked);
-      })})));
+      })
+    }));
+    editLog.forcedRepeat = forcedRepeat;
+    return { newPlan, editLog, action: 'replace' };
+  };
+
+  // ── [3] Response Generator ────────────────────────────────────────────────
+  // Converts a PlanConstraints object + editLog into a natural-language reply.
+  // Explains what was understood, what changed, and any caveats honestly.
+  const buildAgentResponse = (C, result) => {
+    const { editLog, action } = result;
+    const DAY_LABELS = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+
+    if (action === 'regenerate') return 'Regenerating the whole week with fresh meals…';
+
+    if (action === 'deduplicate') {
+      if (editLog.replaced === 0) return "Your plan already has no duplicates — nothing to change.";
+      const sfx = editLog.forcedRepeat ? '\n(Some near-duplicates may remain — the available recipe pool is limited with your current filters.)' : '';
+      return `Replaced ${editLog.replaced} duplicate meal${editLog.replaced > 1 ? 's' : ''} with unique options.${sfx}`;
     }
 
-    // ── 11. Descriptive reply summarising what was understood ─────────────
+    if (action === 'remove_missing') {
+      return editLog.removed > 0
+        ? `Removed ${editLog.removed} meal${editLog.removed > 1 ? 's' : ''} that needed missing ingredients. Those slots are now empty.`
+        : "No meals with missing ingredients were found — your plan is already pantry-friendly.";
+    }
+
+    // Build a natural summary of understood goals
     const understood = [];
-    if (C_wantHealthy)     understood.push(C_mealScope==='Breakfast' ? 'healthy breakfast (eggs, oats, yogurt — no sugary items)' : 'healthier meals');
-    if (C_wantInteresting) understood.push('more interesting / complex recipes');
-    if (C_wantSimple)      understood.push(`quick meals (max ${C_maxTime||20} min)`);
-    if (C_pantryPct)       understood.push(`pantry match at least ${C_pantryPct}%`);
-    else if (C_wantPantryOnly) understood.push('pantry-only (no shopping)');
-    else if (C_wantReduceMiss) understood.push('fewer missing ingredients');
-    if (C_diet)            understood.push(C_diet.toLowerCase()+' only');
-    if (C_foodKind)        understood.push(`featuring ${C_foodKind}`);
-    if (C_maxTime && !C_wantSimple) understood.push(`max ${C_maxTime} minutes`);
+    if (C.goals.includes('healthier')) {
+      understood.push(C.scope === 'breakfast'
+        ? 'healthy breakfasts (eggs, oats, yogurt — avoiding pancakes and sugary items)'
+        : 'healthier meals');
+    }
+    if (C.goals.includes('more_interesting'))   understood.push('more interesting, complex recipes');
+    if (C.goals.includes('simpler'))             understood.push(`quick meals (under ${C.maxTime || 20} min)`);
+    if (C.pantryThreshold)                       understood.push(`at least ${C.pantryThreshold}% of ingredients from your pantry`);
+    else if (C.goals.includes('pantry_only'))    understood.push('only recipes you can make right now (no shopping needed)');
+    else if (C.goals.includes('reduce_missing')) understood.push('fewer missing ingredients');
+    if (C.dietary.length)                        understood.push(C.dietary.join(' + ').toLowerCase() + ' diet');
+    if (C.goals.includes('food_focus') && C.foodFocus) understood.push(`featuring ${C.foodFocus}`);
 
-    const scopeLabel = C_mealScope
-      ? C_mealScope.toLowerCase()+'s'
-      : (C_dayIdx>=0 ? `${DAY_LABELS[C_dayIdx]} meals` : 'all meals');
+    const scopeLabel = C.scope === 'whole_week'
+      ? 'meals across the whole week'
+      : C.scope === 'specific_slot' && C.day !== null
+        ? `meals for ${DAY_LABELS[C.day]}`
+        : C.scope + 's';
 
-    if (replaced === 0) {
-      return `No meals were replaced — the plan may be empty or the constraints are too strict.\nTry relaxing one constraint, or say "new week" to generate a fresh plan.`;
+    // Single-target replace
+    if (action === 'single_replace') {
+      if (editLog.replaced === 0) {
+        return `I understood you want to replace "${C.singleTarget?.name}", but I couldn't find a suitable alternative with your current filters. Try relaxing one constraint, or say "new week" to start fresh.`;
+      }
+      const goalDesc = understood.length ? ` that's ${understood.join(' and ')}` : ' that matches better';
+      return `Replaced "${C.singleTarget?.name}" with an option${goalDesc}.`;
     }
 
-    let reply = `Updated ${replaced} ${scopeLabel}`;
-    if (understood.length === 1) {
-      reply += ` with goal: ${understood[0]}.`;
-    } else if (understood.length > 1) {
-      reply += ` with these goals:\n${understood.map(g=>`- ${g}`).join('\n')}`;
+    // Pool was empty — explain honestly
+    if (editLog.poolEmpty && editLog.replaced === 0) {
+      const undLabel = understood.length ? ` (${understood.join(' + ')})` : '';
+      return `I understood your request${undLabel}, but couldn't find recipes that match all those constraints for the affected meal types. Try relaxing one constraint, or say "new week" to start fresh.`;
+    }
+
+    // Nothing changed (plan may already match, or was empty)
+    if (editLog.replaced === 0) {
+      return `No meals were updated — the plan may already match your goals, or those slots are empty.`;
+    }
+
+    // Main success reply
+    let reply = '';
+    if (understood.length === 0) {
+      reply = `Updated ${editLog.replaced} ${scopeLabel}.`;
+    } else if (understood.length === 1) {
+      reply = `Updated ${editLog.replaced} ${scopeLabel} with goal: ${understood[0]}.`;
     } else {
-      reply += '.';
+      reply = `Updated ${editLog.replaced} ${scopeLabel}. Here's what I understood:\n${understood.map(g => `• ${g}`).join('\n')}`;
     }
-    if (pantryMismatch && C_pantryPct) {
-      const avgPct = pickedPcts.length ? Math.round(pickedPcts.reduce((a,b)=>a+b,0)/pickedPcts.length) : 0;
-      reply += `\n\nI couldn't find enough recipes at ${C_pantryPct}% pantry match, so I used the best available (avg ${avgPct}% pantry match).`;
+
+    // Honest caveats
+    if (editLog.pantryMismatch && C.pantryThreshold) {
+      const avg = editLog.pickedPcts.length
+        ? Math.round(editLog.pickedPcts.reduce((a, b) => a + b, 0) / editLog.pickedPcts.length)
+        : 0;
+      reply += `\n\nI couldn't find enough recipes matching ${C.pantryThreshold}% pantry coverage, so I picked the closest available options (averaging ${avg}% pantry match). You may still need a few extra items.`;
     }
-    if (forcedRepeat)   reply += '\n\nSome meals were repeated — the available pool was limited with your current filters.';
-    if (poolEmptySlots) reply += '\n\nSome slots could not be updated — no recipes matched all constraints for that meal type.';
+    if (editLog.poolEmpty)     reply += '\n\nSome slots couldn\'t be updated — no recipes matched all constraints for that meal type.';
+    if (editLog.forcedRepeat)  reply += '\n\nSome meals were repeated — the available recipe pool is limited with your current filters.';
 
     return reply;
   };
 
+  // ── Main Agent Entry Point ────────────────────────────────────────────────
+  //
+  // planChatAgent({ userMessage, currentPlan })
+  //
+  // This is the LLM-ready boundary.  To connect a real model later:
+  //   1. Replace extractConstraints() with:
+  //        const C = await llmExtractConstraints({ userMessage, currentPlan, allRecipes, pantry, prefs })
+  //      where the LLM returns the same PlanConstraints shape.
+  //   2. Keep executePlanEdits() and buildAgentResponse() unchanged.
+  //   3. Make handleChatSend() async and await planChatAgent().
+  //
+  const planChatAgent = ({ userMessage, currentPlan }) => {
+    const t = userMessage.toLowerCase().trim();
+    const DAYS = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday'];
+    const DAY_LABELS = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+
+    // ── Two-step clear confirmation ──────────────────────────────────────
+    if (chatPendingAction === 'clearPlan') {
+      const isYes = /^(yes|yeah|yep|yup|ok|okay|sure|go ahead|confirm|do it|clear|empty|delete|proceed|affirmative)/.test(t);
+      const isNo  = /^(no|nope|nah|cancel|stop|nevermind|never mind|abort)/.test(t);
+      setChatPendingAction(null);
+      if (isYes) {
+        setMealPlan(prev => prev.map(day => ({ ...day, meals: [null, null, null] })));
+        return "Done — your plan has been cleared. All meal slots are now empty.";
+      }
+      if (isNo) return "No changes made — your plan is untouched.";
+      return "Still waiting for your confirmation. Reply \"yes\" to clear all meals, or \"no\" to cancel.";
+    }
+
+    // ── Open picker: specific day + meal type, no goal keywords ────────
+    const dayIdx  = DAYS.findIndex(d => t.includes(d));
+    const mealIdx = t.includes('breakfast') ? 0 : t.includes('lunch') ? 1 : t.includes('dinner') ? 2 : -1;
+    const hasGoalWords = /healthi|simpl|quicker|faster|interest|boring|pantry|missing|pescatarian|vegan|vegetarian|meatless|gluten|dairy|fish|salmon|chicken|beef|pasta|soup|stew|salad/.test(t);
+    if (dayIdx >= 0 && mealIdx >= 0 && !hasGoalWords) {
+      setReplacePicker({ dayIdx, mealIdx, mealType: ['Breakfast','Lunch','Dinner'][mealIdx] });
+      return `Opening recipe picker for ${DAY_LABELS[dayIdx]} ${['Breakfast','Lunch','Dinner'][mealIdx]}…`;
+    }
+
+    // ── [1] Extract structured constraints ──────────────────────────────
+    const C = extractConstraints(userMessage, currentPlan);
+
+    // ── Clear plan (two-step) ────────────────────────────────────────────
+    if (C.action === 'clear') {
+      const filled = currentPlan.flatMap(d => d.meals).filter(Boolean).length;
+      if (!filled) return "The planner is already empty.";
+      setChatPendingAction('clearPlan');
+      return `That will remove all ${filled} meal${filled !== 1 ? 's' : ''} from the week. Reply "yes" to confirm, or "no" to cancel.`;
+    }
+
+    // ── Open picker (no constraints found, just location) ───────────────
+    if (C.action === 'open_picker') {
+      if (dayIdx >= 0 && mealIdx >= 0) {
+        setReplacePicker({ dayIdx, mealIdx, mealType: ['Breakfast','Lunch','Dinner'][mealIdx] });
+        return `Opening recipe picker for ${DAY_LABELS[dayIdx]} ${['Breakfast','Lunch','Dinner'][mealIdx]}…`;
+      }
+      if (dayIdx >= 0) {
+        // Replace all meals for that day with fresh picks
+        const ps = buildPantrySet(pantry);
+        const avoidNorms = (avoidedIngredients || []).map(x => normalizeIng(x));
+        const isAllowed = r => {
+          if (!isRecipeAllowedForUser(r, prefs)) return false;
+          if (avoidNorms.length && (r.ingredients || []).some(i => avoidNorms.some(av => normalizeIng(i.n || '').includes(av) || av.includes(normalizeIng(i.n || ''))))) return false;
+          return true;
+        };
+        const pantryMeals = generatePantryMeals(ps).filter(isAllowed);
+        const allAvail = [...pantryMeals, ...allRecipes.filter(isAllowed)];
+        const planMeals = currentPlan.flatMap(d => d.meals).filter(Boolean);
+        const existingIds  = new Set(planMeals.map(m => m.id));
+        const existingKeys = new Set(planMeals.map(m => {
+          const rx = String(m.id).startsWith('pantry-') ? getPantryRecipeObj(m.id) : allRecipes.find(x => x.id === m.id);
+          return rx ? computeCoreDishKey(rx) : null;
+        }).filter(Boolean));
+        const picked = new Set();
+        const pickedK = new Set();
+        const keyOf = r => r.coreDishKey || computeCoreDishKey(r);
+        const pickOne = pool => {
+          let cands = pool.filter(r => !existingIds.has(r.id) && !picked.has(r.id) && !existingKeys.has(keyOf(r)) && !pickedK.has(keyOf(r)));
+          if (!cands.length) cands = pool.filter(r => !picked.has(r.id));
+          if (!cands.length) cands = pool;
+          const r = cands[Math.floor(Math.random() * cands.length)];
+          if (r) { picked.add(r.id); pickedK.add(keyOf(r)); }
+          return r;
+        };
+        const newMeals = ['breakfast','lunch','dinner'].map(mt => {
+          const pool = allAvail.filter(r => getMealType(r) === mt);
+          const r = pickOne(pool);
+          return r ? { kind: 'recipe', emoji: r.emoji, name: r.title, id: r.id } : null;
+        });
+        setMealPlan(prev => prev.map((day, idx) => idx === dayIdx ? { ...day, meals: newMeals } : day));
+        return `All meals for ${DAY_LABELS[dayIdx]} have been replaced.`;
+      }
+      // Totally unrecognised — natural fallback
+      return "I'm not sure how to help with that yet. You can try:\n• \"Make dinners healthier\"\n• \"Keep breakfasts pantry-only\"\n• \"Make lunches quicker but still healthy\"\n• \"At least 80% from my pantry\"\n• \"Replace Wednesday dinner with something pescatarian\"\n• \"Remove meals with missing ingredients\"\n• \"New week\"";
+    }
+
+    // ── [2] Execute plan edits ───────────────────────────────────────────
+    const ps = buildPantrySet(pantry);
+    const ctx = { plan: currentPlan, ps, preferences: prefs, avoidedIngredients };
+    const result = executePlanEdits(C, ctx);
+
+    if (result.newPlan) setMealPlan(result.newPlan);
+
+    // ── [3] Generate response ────────────────────────────────────────────
+    return buildAgentResponse(C, result);
+  };
+
   const handleChatSend = () => {
     const msg = chatInput.trim();
-    if(!msg) return;
+    if (!msg) return;
     setChatInput('');
-    setChatMessages(prev=>[...prev,{role:'user',text:msg}]);
-    const reply = processChatCommand(msg);
-    setTimeout(()=>setChatMessages(prev=>[...prev,{role:'bot',text:reply}]),300);
+    setChatMessages(prev => [...prev, { role: 'user', text: msg }]);
+    const reply = planChatAgent({ userMessage: msg, currentPlan: mealPlan });
+    setTimeout(() => setChatMessages(prev => [...prev, { role: 'bot', text: reply }]), 300);
   };
-  // ── End Planner Chat ───────────────────────────────────────────────────────
+  // ── End Planner Chat Agent ─────────────────────────────────────────────────
 
   // At a glance stats (kept for internal use)
   const planned = mealPlan.flatMap(d=>d.meals).filter(Boolean);
@@ -26640,7 +26906,7 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
                   value={chatInput}
                   onChange={e=>setChatInput(e.target.value)}
                   onKeyDown={e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();handleChatSend();}}}
-                  placeholder='Try: "Make dinners simpler" or "More fish"…'
+                  placeholder='e.g. "Make lunches healthier" or "At least 80% from my pantry"…'
                   style={{flex:1,padding:"8px 12px",borderRadius:6,border:"1px solid var(--bor)",fontSize:13,background:"var(--cream)",outline:"none"}}
                 />
                 <button className="btn btn-p btn-sm" onClick={handleChatSend} disabled={!chatInput.trim()}>Send</button>
