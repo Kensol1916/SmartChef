@@ -26725,7 +26725,7 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
   // Missing panel + Planner Chat
   const [showMissingPanel, setShowMissingPanel] = useState(true);
   const [chatOpen, setChatOpen] = useState(false);
-  const [chatMessages, setChatMessages] = useState([{role:'bot',text:'Hi! I can change your plan or answer questions about it. Try: "Make dinners healthier", "Which meals have missing ingredients?", "For how many people is each dish?", or "Show me the quick breakfasts."'}]);
+  const [chatMessages, setChatMessages] = useState([{role:'bot',text:'Hi! I\'m your cooking assistant. I can edit your plan, answer questions, and give cooking advice.\n\nTry:\n• "What should I cook tonight?"\n• "No pasta for lunch"\n• "Which meals need ingredients?"\n• "Suggest a quick healthy dinner"\n• "How long do I cook salmon?"\n• "What can I substitute for butter?"'}]);
   const [chatInput, setChatInput] = useState('');
   const [chatListening, setChatListening] = useState(false);
   // Pending two-step confirmation (e.g. clear plan)
@@ -27379,6 +27379,32 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
           if (!delta.exclude[exScope].includes(cuisineKey)) {
             delta.exclude[exScope].push(cuisineKey);
           }
+        }
+      }
+    }
+
+    // ── Ingredient-level exclusions: "avoid chickpeas", "no garlic", "remove lentils" ──
+    // Catches specific ingredients not covered by cuisine/category patterns above.
+    // Only fires when there's an exclusion intent word but no cuisine/category matched.
+    const noCuisineMatched = delta.exclude.whole_week.length === 0 && delta.exclude.breakfast.length === 0 &&
+      delta.exclude.lunch.length === 0 && delta.exclude.dinner.length === 0;
+    if (isExclusionIntent && noCuisineMatched) {
+      // Known ingredient keywords that aren't cuisines
+      const ING_DETECT = [
+        'chickpea','lentil','tofu','mushroom','onion','garlic','potato','broccoli',
+        'spinach','pepper','tomato','eggplant','zucchini','corn','pea','bean',
+        'cauliflower','carrot','celery','cream','dairy','milk','cheese','butter',
+        'shrimp','prawn','crab','lobster','scallop','anchovy','sardine',
+        'lamb','pork','bacon','ham','sausage','mince',
+        'ginger','cilantro','coriander','cumin','chili','jalapen',
+        'coconut','avocado','olive','lemon','lime','orange',
+        'nuts','almond','walnut','cashew','peanut','sesame',
+        'egg','gluten','wheat','barley','oat',
+      ];
+      const ingScope = msgScope !== 'whole_week' ? msgScope : 'whole_week';
+      for (const ing of ING_DETECT) {
+        if (t.includes(ing)) {
+          if (!delta.exclude[ingScope].includes(ing)) delta.exclude[ingScope].push(ing);
         }
       }
     }
@@ -28073,127 +28099,127 @@ const detectIntent = (msg) => {
 // Query handler — answers questions about the plan
 const _handlePlanQuery = (msg, plan) => {
   const lo = msg.toLowerCase();
-  const dayLabels = {mon:'Monday',tue:'Tuesday',wed:'Wednesday',thu:'Thursday',fri:'Friday',sat:'Saturday',sun:'Sunday'};
-  const dayOrder = ['mon','tue','wed','thu','fri','sat','sun'];
-  const allMeals = [];
-  if (plan) {
-    Object.entries(plan).forEach(([day, meals]) => {
-      if (!meals) return;
-      Object.entries(meals).forEach(([slot, recipe]) => {
-        if (recipe && recipe.id) allMeals.push({ day, slot, recipe });
+  const DAY_FULL = {Mon:'Monday',Tue:'Tuesday',Wed:'Wednesday',Thu:'Thursday',Fri:'Friday',Sat:'Saturday',Sun:'Sunday'};
+  const SLOT_NAMES = ['breakfast','lunch','dinner'];
+  const DAY_ORDER  = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+
+  // Build flat list of {day, slot, slotIdx, recipe} — recipe is the full object from allRecipes
+  const allPlanMeals = [];
+  if (plan && Array.isArray(plan)) {
+    plan.forEach(dayObj => {
+      if (!dayObj || !dayObj.meals) return;
+      dayObj.meals.forEach((slot, si) => {
+        if (!slot || !slot.id) return;
+        const recipe = allRecipes.find(r => r.id === slot.id);
+        if (recipe) allPlanMeals.push({ day: dayObj.day, slot: SLOT_NAMES[si], slotIdx: si, recipe, slotObj: slot });
       });
     });
   }
 
-  // Tonight / today
-  if (/\b(tonight|today|this evening)\b/.test(lo)) {
-    const todayIdx = new Date().getDay();
-    const dayMap = ['sun','mon','tue','wed','thu','fri','sat'];
+  const fmt = (r, day, slot) => `• ${r.emoji||'🍽️'} **${r.title}** (${slot}, ${DAY_FULL[day]||day})`;
+
+  // ── Tonight / today ─────────────────────────────────────────────────────
+  if (/\b(tonight|today|this evening|for dinner tonight)\b/.test(lo)) {
+    const todayIdx = new Date().getDay(); // 0=Sun
+    const dayMap = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
     const todayKey = dayMap[todayIdx];
-    const todayMeals = plan?.[todayKey];
-    if (!todayMeals) return "Nothing planned for today yet. Want me to suggest something?";
-    const items = Object.entries(todayMeals).filter(([,r])=>r&&r.id).map(([slot,r])=>`• ${slot}: ${r.emoji||'🍽️'} ${r.title}`);
-    if (items.length === 0) return "Nothing planned for today yet. Want a suggestion?";
-    const sorted = [...Object.values(todayMeals)].filter(Boolean).sort((a,b)=>(a.time||99)-(b.time||99));
-    const fastest = sorted[0];
-    return `Today you have:\n\n${items.join('\n')}\n\n${fastest ? `The **${fastest.title}** is the quickest at ${fastest.time} min. ` : ''}Would you like the recipe for any of these?`;
+    const todayMeals = allPlanMeals.filter(m => m.day === todayKey);
+    if (todayMeals.length === 0) return "Nothing planned for today yet. Want me to suggest something?";
+    const items = todayMeals.map(m => `• ${m.slot}: ${m.recipe.emoji||'🍽️'} ${m.recipe.title}`);
+    const fastest = todayMeals.slice().sort((a,b) => (a.recipe.time||99) - (b.recipe.time||99))[0];
+    return `Today you have:\n\n${items.join('\n')}\n\n${fastest ? `The **${fastest.recipe.title}** is the quickest at ${fastest.recipe.time} min. ` : ''}Would you like the recipe for any of these?`;
   }
 
-  // Missing ingredients
+  // ── Missing ingredients ──────────────────────────────────────────────────
   if (/\b(missing|need to (buy|shop|get)|grocery|shopping list)\b/.test(lo) && !/substitute|replace/.test(lo)) {
-    const withMissing = allMeals.filter(m => m.recipe.missing && m.recipe.missing.length > 0);
+    const withMissing = allPlanMeals.filter(m => m.recipe.missing && m.recipe.missing.length > 0);
     if (withMissing.length === 0) return "Great news — all your planned meals can be made with what you have! 🎉";
     const lines = withMissing.map(m => {
-      const dl = dayLabels[m.day] || m.day;
-      const missing = m.recipe.missing.slice(0,3).join(', ');
-      return `• **${dl} ${m.slot}**: ${m.recipe.title} — needs: ${missing}${m.recipe.missing.length>3?'…':''}`;
+      const miss = m.recipe.missing.slice(0,3).join(', ');
+      return `• **${DAY_FULL[m.day]||m.day} ${m.slot}**: ${m.recipe.title} — needs: ${miss}${m.recipe.missing.length>3?'…':''}`;
     });
     return `These meals need ingredients you may not have:\n\n${lines.join('\n')}\n\nWould you like me to swap them for pantry-friendly options?`;
   }
 
-  // Fastest / quickest
-  if (/\b(fastest|quickest|quick(est)?|least time|shortest|under \d+ min)\b/.test(lo)) {
-    const mealFilter = /\bdinner/.test(lo)?'dinner':/\blunch/.test(lo)?'lunch':/\bbreakfast/.test(lo)?'breakfast':null;
-    let cands = allMeals.filter(m => m.recipe.time);
-    if (mealFilter) cands = cands.filter(m => m.slot === mealFilter);
+  // ── Fastest / quickest ───────────────────────────────────────────────────
+  if (/\b(fastest|quickest|quick(est)?|least time|shortest)\b/.test(lo)) {
+    const mf = /\bdinner/.test(lo)?'dinner':/\blunch/.test(lo)?'lunch':/\bbreakfast/.test(lo)?'breakfast':null;
+    let cands = allPlanMeals.filter(m => m.recipe.time);
+    if (mf) cands = cands.filter(m => m.slot === mf);
     cands.sort((a,b) => a.recipe.time - b.recipe.time);
     const top = cands.slice(0,5);
-    if (top.length === 0) return "No meals with timing info found in your current plan.";
-    const lines = top.map(m => `• ${m.recipe.emoji||'🍽️'} **${m.recipe.title}** (${m.slot}, ${dayLabels[m.day]||m.day}) — ${m.recipe.time} min`);
-    return `Your quickest${mealFilter?' '+mealFilter:''} meals:\n\n${lines.join('\n')}`;
+    if (top.length === 0) return "No meals with timing info in your current plan.";
+    const lines = top.map(m => `• ${m.recipe.emoji||'🍽️'} **${m.recipe.title}** (${m.slot}, ${DAY_FULL[m.day]||m.day}) — ${m.recipe.time} min`);
+    return `Your quickest${mf?' '+mf:''} meals:\n\n${lines.join('\n')}`;
   }
 
-  // Pantry meals
+  // ── Pantry meals ─────────────────────────────────────────────────────────
   if (/\b(pantry|cook with what i have|use what i have|use what i.?ve got)\b/.test(lo)) {
-    const pantryMeals = allMeals.filter(m => !m.recipe.missing || m.recipe.missing.length === 0);
-    if (pantryMeals.length === 0) return "None of your current meals are fully covered by your pantry. Want me to swap to pantry-friendly options?";
-    const lines = pantryMeals.slice(0,7).map(m => `• ${m.recipe.emoji||'🍽️'} **${m.recipe.title}** (${m.slot}, ${dayLabels[m.day]||m.day})`);
-    return `Meals you can make from your pantry right now:\n\n${lines.join('\n')}${pantryMeals.length>7?`\n\n…and ${pantryMeals.length-7} more.`:''}`;
+    const pm = allPlanMeals.filter(m => !m.recipe.missing || m.recipe.missing.length === 0);
+    if (pm.length === 0) return "None of your current meals are fully covered by your pantry. Want me to swap to pantry-friendly options?";
+    const lines = pm.slice(0,7).map(m => fmt(m.recipe, m.day, m.slot));
+    return `Meals you can make from your pantry right now:\n\n${lines.join('\n')}${pm.length>7?`\n\n…and ${pm.length-7} more.`:''}`;
   }
 
-  // High protein
+  // ── High protein ─────────────────────────────────────────────────────────
   if (/\b(protein|high.?protein|protein.?rich|protein.?packed)\b/.test(lo)) {
-    const protMeals = allMeals.filter(m => {
+    const pm = allPlanMeals.filter(m => {
       const r = m.recipe;
-      return r.contains_meat || r.contains_fish || (r.ingredients||[]).some(i=>/\b(egg|lentil|chickpea|bean|tofu|greek yogurt|quinoa)\b/i.test(i.n||''));
+      return r.contains_meat || r.contains_fish || (r.ingredients||[]).some(i => /\b(egg|lentil|chickpea|bean|tofu|greek yogurt|quinoa)\b/i.test(i.n||''));
     });
-    if (protMeals.length === 0) return "I don't see many high-protein meals in your plan. Would you like me to add some?";
-    const lines = protMeals.slice(0,6).map(m => `• ${m.recipe.emoji||'🍽️'} **${m.recipe.title}** (${m.slot}, ${dayLabels[m.day]||m.day})`);
+    if (pm.length === 0) return "I don't see many high-protein meals in your plan. Want me to add some?";
+    const lines = pm.slice(0,6).map(m => fmt(m.recipe, m.day, m.slot));
     return `High-protein meals in your plan:\n\n${lines.join('\n')}`;
   }
 
-  // Fish meals
+  // ── Fish / seafood ───────────────────────────────────────────────────────
   if (/\b(fish|seafood|salmon|tuna|\bcod\b|shrimp|prawn)\b/.test(lo) && /\b(meal|recipe|dish|have|using|use|planned)\b/.test(lo)) {
-    const fishMeals = allMeals.filter(m => m.recipe.contains_fish || m.recipe.contains_shellfish);
-    if (fishMeals.length === 0) return "No fish or seafood meals in your current plan. Want me to add some?";
-    const lines = fishMeals.map(m => `• ${m.recipe.emoji||'🍽️'} **${m.recipe.title}** (${m.slot}, ${dayLabels[m.day]||m.day})`);
+    const fm = allPlanMeals.filter(m => m.recipe.contains_fish || m.recipe.contains_shellfish);
+    if (fm.length === 0) return "No fish or seafood meals in your current plan. Want me to add some?";
+    const lines = fm.map(m => fmt(m.recipe, m.day, m.slot));
     return `Fish & seafood meals in your plan:\n\n${lines.join('\n')}`;
   }
 
-  // Show week / what's planned
+  // ── Show full week ───────────────────────────────────────────────────────
   if (/\b(what.?s planned|show.*week|show.*plan|what.?s on|what do i have|this week.?s meals|full (week|plan)|entire (week|plan))\b/.test(lo)) {
-    const lines = [];
-    dayOrder.forEach(d => {
-      const meals = plan?.[d];
-      if (!meals) return;
-      const items = Object.entries(meals).filter(([,r])=>r&&r.id).map(([slot,r])=>`  ${slot}: ${r.emoji||''} ${r.title}`);
-      if (items.length > 0) lines.push(`**${dayLabels[d]}**\n${items.join('\n')}`);
+    const linesByDay = [];
+    DAY_ORDER.forEach(d => {
+      const dayMeals = allPlanMeals.filter(m => m.day === d);
+      if (dayMeals.length === 0) return;
+      const items = dayMeals.map(m => `  ${m.slot}: ${m.recipe.emoji||''} ${m.recipe.title}`);
+      linesByDay.push(`**${DAY_FULL[d]}**\n${items.join('\n')}`);
     });
-    if (lines.length === 0) return "Your plan looks empty. Say \"fill my week\" and I'll set it up!";
-    return `Here's your week:\n\n${lines.join('\n\n')}`;
+    if (linesByDay.length === 0) return "Your plan looks empty. Say \"fill my week\" and I'll set it up!";
+    return `Here's your week:\n\n${linesByDay.join('\n\n')}`;
   }
 
-  // Healthiest meals
+  // ── Healthiest meals ─────────────────────────────────────────────────────
   if (/\b(healthiest|most healthy|healthier meals|low.?cal|lightest|best for (me|my health|my diet))\b/.test(lo)) {
-    const scored = allMeals.map(m=>({...m,hs:getHealthScore(m.recipe)})).sort((a,b)=>b.hs-a.hs);
+    const scored = allPlanMeals.map(m => ({...m, hs: getHealthScore(m.recipe)})).sort((a,b) => b.hs - a.hs);
     const top = scored.slice(0,5);
     if (top.length === 0) return "No meals in your plan yet.";
-    const lines = top.map(m=>`• ${m.recipe.emoji||'🍽️'} **${m.recipe.title}** (${m.slot}, ${dayLabels[m.day]||m.day})`);
+    const lines = top.map(m => fmt(m.recipe, m.day, m.slot));
     return `Your healthiest planned meals:\n\n${lines.join('\n')}`;
   }
 
-  // How many people
+  // ── Household size ───────────────────────────────────────────────────────
   if (/\b(how many (people|servings|portions)|serves|household)\b/.test(lo)) {
-    const size = prefs?.houseSize || 2;
+    const size = prefs?.household || prefs?.houseSize || 2;
     return `Your plan is set for **${size} people**. You can change this in Settings → Household size.`;
   }
 
-  // Food category queries ("do I have any pasta?", "which meals use chicken?")
+  // ── Food category queries ("do I have pasta?", "which meals use chicken?") ──
   const cats = detectFoodCats(lo);
   if (cats.length > 0) {
-    const matched = allMeals.filter(m => cats.some(cat => recipeMatchesCat(m.recipe, cat)));
-    if (matched.length === 0) {
-      const catNames = cats.map(c => c.charAt(0).toUpperCase()+c.slice(1)).join('/');
-      return `No ${catNames} meals in your current plan. Would you like me to add some?`;
-    }
-    const lines = matched.map(m => `• ${m.recipe.emoji||'🍽️'} **${m.recipe.title}** (${m.slot}, ${dayLabels[m.day]||m.day})`);
+    const matched = allPlanMeals.filter(m => cats.some(cat => recipeMatchesCat(m.recipe, cat)));
     const catNames = cats.map(c => c.charAt(0).toUpperCase()+c.slice(1)).join('/');
+    if (matched.length === 0) return `No ${catNames} meals in your current plan. Would you like me to add some?`;
+    const lines = matched.map(m => fmt(m.recipe, m.day, m.slot));
     return `${catNames} meals in your plan:\n\n${lines.join('\n')}`;
   }
 
-  return null; // No match — fall through
+  return null;
 };
-
 // Cooking knowledge base
 const _SUBSTITUTES = {
   'butter': ['olive oil (equal amount)', 'coconut oil', 'vegetable oil', 'yogurt (in baking)'],
@@ -28217,7 +28243,7 @@ const _SUBSTITUTES = {
   'beef': ['turkey mince (leaner)', 'lentils (for bolognese)', 'mushrooms + walnuts (vegetarian)'],
   'yogurt': ['sour cream', 'crème fraîche', 'buttermilk (in baking, dilute slightly)'],
   'honey': ['maple syrup', 'agave nectar', 'golden syrup'],
-  'breadcrumbs': ['panko', 'crushed crackers', 'almond flour', 'oats (blended)'],
+  'panko': ['regular breadcrumbs', 'crushed crackers', 'almond flour', 'oats (blended)'],
   'heavy cream': ['coconut cream', 'evaporated milk', 'milk + butter (¾ cup milk + ¼ cup melted butter)'],
   'buttermilk': ['milk + 1 tbsp lemon juice or vinegar (let sit 5 min)', 'yogurt thinned with milk'],
   'parmesan': ['pecorino romano (sharper)', 'nutritional yeast (vegan)', 'grana padano'],
@@ -28342,6 +28368,36 @@ const _askClarification = (msg) => {
   return `I want to help! Could you be more specific? For example:\n\n• *"No pasta for lunch"* — to avoid a specific food\n• *"Make dinners healthier"* — to change a category\n• *"What can I cook tonight?"* — to ask a question\n• *"Suggest quick breakfasts"* — for recipe ideas\n• *"How long do I cook chicken?"* — cooking advice`;
 };
 
+  // Renders bot message text — supports **bold**, *italic*, and \n line breaks
+  const renderChatText = (text) => {
+    if (!text) return null;
+    return text.split('\n').map((line, li) => {
+      // Parse **bold** and *italic* inline
+      const parts = [];
+      let remaining = line;
+      let key = 0;
+      while (remaining.length > 0) {
+        const boldMatch = remaining.match(/\*\*(.+?)\*\*/);
+        const italicMatch = remaining.match(/\*(.+?)\*/);
+        const firstBold = boldMatch ? remaining.indexOf(boldMatch[0]) : Infinity;
+        const firstItalic = italicMatch ? remaining.indexOf(italicMatch[0]) : Infinity;
+        if (boldMatch && firstBold <= firstItalic) {
+          if (firstBold > 0) parts.push(<span key={key++}>{remaining.slice(0, firstBold)}</span>);
+          parts.push(<strong key={key++}>{boldMatch[1]}</strong>);
+          remaining = remaining.slice(firstBold + boldMatch[0].length);
+        } else if (italicMatch && firstItalic < Infinity) {
+          if (firstItalic > 0) parts.push(<span key={key++}>{remaining.slice(0, firstItalic)}</span>);
+          parts.push(<em key={key++}>{italicMatch[1]}</em>);
+          remaining = remaining.slice(firstItalic + italicMatch[0].length);
+        } else {
+          parts.push(<span key={key++}>{remaining}</span>);
+          break;
+        }
+      }
+      return <React.Fragment key={li}>{parts}{li < text.split('\n').length - 1 && <br/>}</React.Fragment>;
+    });
+  };
+
   const planChatAgent = ({ userMessage, currentPlan }) => {
     try {
       return _planChatAgentInner({ userMessage, currentPlan });
@@ -28405,7 +28461,7 @@ const _askClarification = (msg) => {
     }
 
     // ── 6. Plan modification pipeline ────────────────────────────
-    const delta = extractDelta(lo);
+    const delta = extractDelta(lo, currentPlan);
     const newMem = mergeMemory(chatConstraintMemory, delta);
     setChatConstraintMemory(newMem);
 
@@ -28413,15 +28469,23 @@ const _askClarification = (msg) => {
       newMem.goals.lunch.length > 0 || newMem.goals.dinner.length > 0 ||
       newMem.exclusions.whole_week.length > 0 || newMem.exclusions.breakfast.length > 0 ||
       newMem.exclusions.lunch.length > 0 || newMem.exclusions.dinner.length > 0 ||
-      newMem.pantryThreshold || newMem.maxTime || newMem.dietary.length > 0;
+      newMem.pantryThreshold || newMem.maxTime || newMem.dietary.length > 0 ||
+      newMem.foodFocus ||                           // "use more fish"
+      delta.day !== null && delta.day !== undefined; // "replace Wednesday dinner"
 
     if (!hasGoals && !delta.action && !delta.singleTarget) {
       return _askClarification(msg);
     }
 
-    const { editLog, newPlan } = executePlanEditsFromMemory(newMem, currentPlan);
-    if (newPlan && Object.keys(newPlan).length > 0) setMealPlan(newPlan);
-    return buildAgentResponseV2(editLog, newMem);
+    // Merge global avoidedIngredients with any ingredient-level chat exclusions
+    const allExcluded = Object.values(newMem.exclusions || {}).flat();
+    const CUISINE_KEYS = new Set(['asian','mediterranean','italian','mexican','indian','soup','pasta','fish','meat','spicy']);
+    const chatIngAvoid = allExcluded.filter(k => !CUISINE_KEYS.has(k));
+    const mergedAvoid = [...(avoidedIngredients||[]), ...chatIngAvoid];
+    const ctx = { plan: currentPlan, ps: pantry, preferences: prefs, avoidedIngredients: mergedAvoid };
+    const result = executePlanEditsFromMemory(newMem, delta, ctx);
+    if (result.newPlan && Object.keys(result.newPlan).length > 0) setMealPlan(result.newPlan);
+    return buildAgentResponseV2(newMem, result, delta);
   };  // end _planChatAgentInner
 
   const handleChatSend = () => {
@@ -28737,11 +28801,11 @@ const _askClarification = (msg) => {
           </button>
           {chatOpen&&(
             <div style={{background:"var(--white)",border:"1px solid var(--bor)",borderTop:"none",borderRadius:"0 0 var(--r) var(--r)"}}>
-              <div style={{height:200,overflowY:"auto",padding:"12px 14px",display:"flex",flexDirection:"column",gap:7}}>
+              <div style={{height:260,overflowY:"auto",padding:"12px 14px",display:"flex",flexDirection:"column",gap:7}}>
                 {chatMessages.map((m,i)=>(
                   <div key={i} style={{display:"flex",justifyContent:m.role==="user"?"flex-end":"flex-start"}}>
-                    <div style={{maxWidth:"84%",padding:"8px 12px",borderRadius:10,fontSize:13,lineHeight:1.55,background:m.role==="user"?"var(--clay)":"var(--cream)",color:m.role==="user"?"#fff":"var(--ch)",borderBottomRightRadius:m.role==="user"?2:10,borderBottomLeftRadius:m.role==="bot"?2:10,whiteSpace:"pre-wrap"}}>
-                      {m.text}
+                    <div style={{maxWidth:"84%",padding:"8px 12px",borderRadius:10,fontSize:13,lineHeight:1.55,background:m.role==="user"?"var(--clay)":"var(--cream)",color:m.role==="user"?"#fff":"var(--ch)",borderBottomRightRadius:m.role==="user"?2:10,borderBottomLeftRadius:m.role==="bot"?2:10}}>
+                      {m.role==="bot" ? renderChatText(m.text) : m.text}
                     </div>
                   </div>
                 ))}
@@ -28751,7 +28815,7 @@ const _askClarification = (msg) => {
                   value={chatInput}
                   onChange={e=>setChatInput(e.target.value)}
                   onKeyDown={e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();handleChatSend();}}}
-                  placeholder='Ask a question or request a change — e.g. "Which meals have missing ingredients?" or "Make dinners healthier"…'
+                  placeholder='Ask anything — "no pasta", "what can I cook tonight?", "suggest quick dinners"…'
                   style={{flex:1,padding:"8px 12px",borderRadius:6,border:"1px solid var(--bor)",fontSize:13,background:"var(--cream)",outline:"none"}}
                 />
                 <button
