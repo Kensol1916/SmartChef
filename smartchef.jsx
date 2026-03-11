@@ -24534,6 +24534,22 @@ function AddItemsModal({ onClose, onAdd }) {
   const [picks,setPicks]=useState(new Set());
   const [search,setSearch]=useState("");
   const [sortBy,setSortBy]=useState("default"); // default | az | za
+  const [voiceListening, setVoiceListening] = useState(false);
+  const [voiceError, setVoiceError] = useState('');
+  const SpeechRecognition = typeof window !== 'undefined' && (window.SpeechRecognition || window.webkitSpeechRecognition);
+  const startPantryVoice = () => {
+    if (!SpeechRecognition) { setVoiceError("Speech recognition is not supported in your browser. Try Chrome or Edge."); return; }
+    setVoiceError('');
+    const rec = new SpeechRecognition();
+    rec.continuous = false;
+    rec.interimResults = false;
+    rec.lang = 'en-US';
+    setVoiceListening(true);
+    rec.onresult = (e) => { const t = e.results[0][0].transcript; setText(prev => prev ? prev + ', ' + t : t); setVoiceListening(false); setStep('manual'); };
+    rec.onerror = (e) => { setVoiceListening(false); setVoiceError(e.error === 'not-allowed' ? 'Microphone access denied. Please allow microphone in your browser settings.' : 'Voice recognition failed. Please try again.'); };
+    rec.onend = () => setVoiceListening(false);
+    rec.start();
+  };
   const parseList=()=>{const items=smartParseList(text).map(it=>({...it,emoji:getIcon(it.name,it.category)}));setParsed(items);setStep("parsed");};
   const confirmParsed=()=>onAdd(parsed);
   const tp=name=>setPicks(p=>{const n=new Set(p);n.has(name)?n.delete(name):n.add(name);return n;});
@@ -24555,7 +24571,7 @@ function AddItemsModal({ onClose, onAdd }) {
           <button className="mclose" onClick={onClose}><Ic n="x" s={16}/></button>
         </div>
         {step==="choose"&&<div className="mbody"><div className="aopts">
-          {[{key:"manual",icon:"📝",bg:"var(--clayBg)",label:"Manual",sub:"Type or paste a list"},{key:"pick",icon:"📋",bg:"var(--sageBg)",label:"Pick from list",sub:"Browse by category"},{key:"camera",icon:"📷",bg:"var(--goldBg)",label:"Camera scan",sub:"Photo of your fridge"}].map(o=><div key={o.key} className="aocard" onClick={()=>setStep(o.key)}><div className="aoic" style={{background:o.bg}}>{o.icon}</div><div className="aolabel">{o.label}</div><div className="aosub">{o.sub}</div></div>)}
+          {[{key:"manual",icon:"📝",bg:"var(--clayBg)",label:"Manual",sub:"Type or paste a list"},{key:"pick",icon:"📋",bg:"var(--sageBg)",label:"Pick from list",sub:"Browse by category"},{key:"camera",icon:"📷",bg:"var(--goldBg)",label:"Camera scan",sub:"Photo of your fridge"},{key:"voice",icon:"🎤",bg:"var(--lavBg,#eeeeff)",label:"Speak pantry",sub:"Say items out loud"}].map(o=><div key={o.key} className="aocard" onClick={()=>setStep(o.key)}><div className="aoic" style={{background:o.bg}}>{o.icon}</div><div className="aolabel">{o.label}</div><div className="aosub">{o.sub}</div></div>)}
         </div></div>}
         {step==="manual"&&<div className="mbody" style={{display:"flex",flexDirection:"column",gap:14}}>
           <div><label className="fl">Type items or paste a list</label><textarea className="fi" placeholder={"tomatoes, pasta, eggs, yogurt…"} value={text} onChange={e=>setText(e.target.value)} style={{minHeight:100,resize:"vertical"}}/><div className="fhint">Separate items with commas or new lines.</div></div>
@@ -24604,6 +24620,38 @@ function AddItemsModal({ onClose, onAdd }) {
             {parsed.map((item,idx)=>{const needs=idx===2;return(<div key={item.id} className="pit"><span style={{fontSize:18}}>{item.emoji}</span><input className="fi" style={{flex:1,padding:"6px 10px",fontSize:13}} value={item.name.replace(" (detected)","")} onChange={e=>setParsed(p=>p.map((it,i)=>i===idx?{...it,name:e.target.value}:it))}/>{needs?<span className="bneeds">Needs confirmation</span>:<span style={{fontSize:11,color:"var(--sage)",fontWeight:600}}>✓ Detected</span>}<button className="pit-del" onClick={()=>setParsed(p=>p.filter((_,i)=>i!==idx))}><Ic n="x" s={14}/></button></div>);})}
           </div>
           <button className="btn btn-p btn-full" onClick={confirmParsed} style={{marginTop:16}}>Add confirmed items ({parsed.length})</button>
+        </div>}
+        {step==="voice"&&<div className="mbody" style={{display:"flex",flexDirection:"column",gap:14,alignItems:"center",textAlign:"center"}}>
+          {!SpeechRecognition
+            ? <div style={{padding:24}}>
+                <div style={{fontSize:36,marginBottom:12}}>🎤</div>
+                <div style={{fontWeight:600,marginBottom:8}}>Voice input not supported</div>
+                <div style={{fontSize:13,color:"var(--mu)",marginBottom:16}}>Your browser doesn’t support speech recognition. Try Chrome or Edge on desktop.</div>
+                <button className="btn btn-g btn-sm" onClick={()=>setStep("manual")}>Type instead</button>
+              </div>
+            : <>
+                <div style={{fontSize:13,color:"var(--mu)",marginBottom:4}}>Say your pantry items — e.g. <em>"eggs, milk, tomatoes, olive oil"</em></div>
+                <button
+                  onClick={startPantryVoice}
+                  disabled={voiceListening}
+                  style={{width:80,height:80,borderRadius:"50%",border:"none",background:voiceListening?"#e05c5c":"var(--clay)",color:"#fff",fontSize:32,cursor:voiceListening?"default":"pointer",boxShadow:voiceListening?"0 0 0 8px rgba(224,92,92,0.25)":"none",transition:"all .2s"}}
+                >
+                  {voiceListening ? "…" : "🎤"}
+                </button>
+                <div style={{fontSize:13,color:voiceListening?"var(--clay)":"var(--mu)",fontWeight:voiceListening?600:400}}>
+                  {voiceListening ? "Listening… speak now" : "Tap to start"}
+                </div>
+                {voiceError&&<div style={{fontSize:13,color:"#e05c5c",marginTop:4}}>{voiceError}</div>}
+                {text&&!voiceListening&&<div style={{width:"100%",textAlign:"left"}}>
+                  <label className="fl">Transcript — review before adding:</label>
+                  <textarea className="fi" value={text} onChange={e=>setText(e.target.value)} style={{minHeight:80,resize:"vertical"}}/>
+                  <div style={{display:"flex",gap:8,marginTop:8}}>
+                    <button className="btn btn-p btn-full" onClick={parseList}>Parse & Preview →</button>
+                    <button className="btn btn-g btn-sm" onClick={()=>{setText("");setVoiceError("");}}>Clear</button>
+                  </div>
+                </div>}
+              </>
+          }
         </div>}
       </div>
     </div>
@@ -25650,6 +25698,7 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
   const [chatOpen, setChatOpen] = useState(false);
   const [chatMessages, setChatMessages] = useState([{role:'bot',text:'Hi! I can change your plan or answer questions about it. Try: "Make dinners healthier", "Which meals have missing ingredients?", "For how many people is each dish?", or "Show me the quick breakfasts."'}]);
   const [chatInput, setChatInput] = useState('');
+  const [chatListening, setChatListening] = useState(false);
   // Pending two-step confirmation (e.g. clear plan)
   const [chatPendingAction, setChatPendingAction] = useState(null);
   const [chatConstraintMemory, setChatConstraintMemory] = useState({
@@ -27386,6 +27435,24 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
                   placeholder='Ask a question or request a change — e.g. "Which meals have missing ingredients?" or "Make dinners healthier"…'
                   style={{flex:1,padding:"8px 12px",borderRadius:6,border:"1px solid var(--bor)",fontSize:13,background:"var(--cream)",outline:"none"}}
                 />
+                <button
+                  title={chatListening?"Listening…":"Voice input"}
+                  onClick={()=>{
+                    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+                    if (!SR) { alert("Speech recognition is not supported in your browser. Try Chrome or Edge."); return; }
+                    if (chatListening) return;
+                    const rec = new SR();
+                    rec.continuous = false;
+                    rec.interimResults = false;
+                    rec.lang = 'en-US';
+                    setChatListening(true);
+                    rec.onresult = (e) => { setChatInput(prev => prev ? prev + ' ' + e.results[0][0].transcript : e.results[0][0].transcript); setChatListening(false); };
+                    rec.onerror = () => setChatListening(false);
+                    rec.onend = () => setChatListening(false);
+                    rec.start();
+                  }}
+                  style={{padding:"8px 10px",borderRadius:6,border:"1px solid var(--bor)",background:chatListening?"#e05c5c":"var(--cream)",color:chatListening?"#fff":"var(--ch)",cursor:"pointer",fontSize:16,lineHeight:1,flexShrink:0,boxShadow:chatListening?"0 0 0 3px rgba(224,92,92,0.25)":"none",transition:"all .2s"}}
+                >{chatListening?"⏳":"🎤"}</button>
                 <button className="btn btn-p btn-sm" onClick={handleChatSend} disabled={!chatInput.trim()}>Send</button>
               </div>
             </div>
