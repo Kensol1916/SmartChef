@@ -20927,6 +20927,35 @@ const getHealthScore = (recipe) => {
   return score;
 };
 
+// Returns a familiarity/commonness score for a recipe.
+// Positive = common household staple meal; negative = niche/unusual.
+// Used as a tiebreaker in auto-plan so familiar meals surface by default.
+const getCommonScore = (recipe) => {
+  const title = (recipe.title || '').toLowerCase();
+  const ings  = (recipe.ingredients || []).map(i => (i.n || '').toLowerCase()).join(' ');
+  const cuisine = (recipe.cuisine || '').toLowerCase();
+  let score = 0;
+
+  // ── Common meal title keywords → positive ─────────────────────────────
+  const COMMON_TITLE = /\b(egg|pasta|rice|toast|sandwich|soup|salad|wrap|bowl|chicken|fish|potato|oat|pancake|waffle|frittata|scramble|omelet|omelette|porridge|yogurt|smoothie|stir.?fry|fried rice|noodle|burger|pizza|taco|quesadilla|meatball|lasagna|casserole|roast|baked|grilled|stew|curry|pilaf|risotto|chili|mac.?and.?cheese|mac \u0026 cheese|spaghetti|penne|fettuccine|tagliatelle|linguine|ravioli|gnocchi|focaccia|flatbread|pita|crepe|french toast|muffin|banana bread|cookie|brownie|cake|pudding|custard|ice cream|granola|cereal)\b/;
+  if (COMMON_TITLE.test(title)) score += 3;
+
+  // ── Very common household ingredients → positive ──────────────────────
+  const STAPLE_ING = /\b(egg|pasta|rice|bread|flour|milk|butter|cheese|chicken|potato|tomato|onion|garlic|olive oil|lemon|carrot|cucumber|lettuce|spinach|banana|apple|oat|yogurt|bean|lentil|chickpea|tuna|salmon|beef|pork|lamb|broccoli|bell pepper|mushroom|zucchini|cream|sugar|honey|vinegar|soy sauce|stock|broth|canned tomato|can of bean|can of chickpea)\b/;
+  const ingMatches = (ings.match(STAPLE_ING) || []).length;
+  score += Math.min(ingMatches, 4); // cap at +4
+
+  // ── Niche/unusual ingredient penalty ─────────────────────────────────
+  const NICHE_ING = /\b(tahini|za.?atar|harissa|sumac|saffron|galangal|lemongrass|kaffir|tamarind|gochujang|doenjang|miso paste|dashi|bonito|koji|nutritional yeast|liquid smoke|annatto|epazote|fenugreek|asafoetida|pomegranate molasses|barberry|ras el hanout|berbere|jerk paste|mole|ponzu|wakame|nori|kimchi|gochugaru|doubanjiang|shaoxing|oyster sauce|fish sauce|shrimp paste|fermented)\b/;
+  const nicheCount = (ings.match(NICHE_ING) || []).length;
+  score -= nicheCount * 2;
+
+  // ── Common cuisines (slight positive) ────────────────────────────────
+  if (/^(american|british|italian|french|mediterranean|simple|classic|european)$/.test(cuisine)) score += 1;
+
+  return score;
+};
+
 const isRecipeAllowedForUser = (recipe, prefs) => {
   if(!recipe || !prefs) return true;
   const dietary = prefs.dietary || [];
@@ -25920,7 +25949,7 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
     const scored = allowedRecipes.map(r => {
       const ings = r.ingredients || [];
       const missingCount = ings.filter(i => !ingInPantry(i.n, pantrySet)).length;
-      return { ...r, missingCount, coreDishKey: computeCoreDishKey(r) };
+      return { ...r, missingCount, coreDishKey: computeCoreDishKey(r), commonScore: getCommonScore(r) };
     });
 
     // ── 3. Seeded shuffle + high-value pantry term detection ─────────────────
@@ -25952,7 +25981,15 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
       const groups = {};
       pool.forEach(r => { const k = Math.min(r.missingCount, 9); (groups[k] = groups[k] || []).push(r); });
       const result = [];
-      for(let k = 0; k <= 9; k++) { if(groups[k]) result.push(...shuffleArr(groups[k])); }
+      for(let k = 0; k <= 9; k++) {
+        if(groups[k]) {
+          // Within each missing-count group: shuffle first (for variety), then stable-sort
+          // by commonScore so familiar meals drift toward the front
+          const shuffled = shuffleArr(groups[k]);
+          shuffled.sort((a, b) => (b.commonScore || 0) - (a.commonScore || 0));
+          result.push(...shuffled);
+        }
+      }
       return result;
     };
 
@@ -26015,7 +26052,8 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
       const highValBonus  = ings.filter(n => [...pantryHighValueNorms].some(hv => n.includes(hv) || hv.includes(n))).length * 15;
       const pantryBonus   = r.isPantryGenerated ? 200 : 0; // Strong preference — pantry-first is core mission
       const healthBonus   = prefs.dietary.includes('Healthy') ? getHealthScore(r) * 8 : 0;
-      return novelBonus + highValBonus + pantryBonus + healthBonus;
+      const commonBonus   = (r.commonScore || 0) * 5; // prefer familiar meals as tiebreaker
+      return novelBonus + highValBonus + pantryBonus + healthBonus + commonBonus;
     };
 
     const pickFrom = pool => {
