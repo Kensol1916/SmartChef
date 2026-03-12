@@ -22022,7 +22022,7 @@ const ING_ICON = {
   "eggplant":"🍆","aubergine":"🍆","avocado":"🥑","lemon":"🍋","lime":"🍋",
   "tomato":"🍅","tomatoes":"🍅","cherry tomato":"🍅","cherry tomatoes":"🍅",
   "carrot":"🥕","carrots":"🥕","broccoli":"🥦","cucumber":"🥒","garlic":"🧄",
-  "onion":"🧅","onions":"🧅","red onion":"🧅","corn":"🌽","pepper":"🫑","bell pepper":"🫑",
+  "onion":"🧅","onions":"🧅","red onion":"🧅","corn":"🌽","bell pepper":"🫑",
   "mushroom":"🍄","mushrooms":"🍄","potato":"🥔","sweet potato":"🍠",
   "lettuce":"🥬","spinach":"🥬","kale":"🥬","cabbage":"🥬",
   
@@ -27234,7 +27234,7 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
     // Primary scope of this message (handle plurals: lunches, breakfasts, dinners)
     let msgScope = 'whole_week';
     if      (/\bbreakfasts?\b/.test(t))  msgScope = 'breakfast';
-    else if (/\blunches?\b/.test(t))     msgScope = 'lunch';
+    else if (/\blunch(?:es)?\b/.test(t)) msgScope = 'lunch';
     else if (/\bdinners?\b/.test(t))     msgScope = 'dinner';
     delta.scope = msgScope;
 
@@ -27368,7 +27368,7 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
         mexican:       /\bmexican\b/,
         indian:        /\bindian\b/,
         soup:          /\bsoups?\b/,
-        pasta:         /\bpasta\b/,
+        pasta:         /\bpastas?\b/,
         fish:          /\bfish\b|\bseafood\b/,
         meat:          /\bmeat\b|\bmeaty\b/,
         spicy:         /\bspicy\b/,
@@ -28131,7 +28131,7 @@ const _handlePlanQuery = (msg, plan) => {
   }
 
   // ── Missing ingredients ──────────────────────────────────────────────────
-  if (/\b(missing|need to (buy|shop|get)|grocery|shopping list)\b/.test(lo) && !/substitute|replace/.test(lo)) {
+  if ((/\b(missing|need to (buy|shop|get)|grocery|shopping list)\b/.test(lo) || /\bneed.*ingredient|\bwhat.*need|\bingredients.*need/.test(lo)) && !/substitute|replace/.test(lo)) {
     const withMissing = allPlanMeals.filter(m => m.recipe.missing && m.recipe.missing.length > 0);
     if (withMissing.length === 0) return "Great news — all your planned meals can be made with what you have! 🎉";
     const lines = withMissing.map(m => {
