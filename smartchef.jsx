@@ -206,8 +206,8 @@ html{font-size:15px}body{font-family:var(--fb);background:var(--cream);color:var
 .prl{font-size:12px;font-weight:600;color:var(--mu);display:flex;align-items:center;gap:5px;padding:4px 0}
 .mslot{min-height:80px;background:var(--white);border:1.5px dashed var(--bor);border-radius:var(--rs);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:var(--t);padding:6px}
 .mslot:hover{border-color:var(--clayL);background:var(--clayBg)}
-.mslot.filled{border-style:solid;border-color:var(--bor)}
-.msi{text-align:center}
+.mslot.filled{border-style:solid;border-color:var(--bor);align-items:stretch;padding:4px}
+.msi{text-align:center;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center}
 .msem{font-size:22px}
 .msn{font-size:10px;font-weight:500;margin-top:3px;line-height:1.2;color:var(--ch)}
 .msadd{font-size:20px;color:var(--bor)}
@@ -25011,14 +25011,8 @@ function PlanLibraryTab({ allRecipes, mealPlan, setMealPlan, pantry, showToast, 
                 title={meal?`${meal.name} — click to view, ↔ to swap`:"Empty slot"}
               >
                 {meal
-                  ? <div className="msi">
-                      {recipeObj?.image
-                        ? <div style={{width:48,height:48,borderRadius:8,overflow:'hidden',margin:'0 auto 4px'}}>
-                            <img src={recipeObj.image} alt={meal.name} style={{width:'100%',height:'100%',objectFit:'cover',display:'block'}}/>
-                          </div>
-                        : <div className="msem">{meal.emoji}</div>
-                      }
-                      <div className="msn">{meal.name}</div>
+                  ? <div className="msi" style={{width:'100%'}}>
+                      <PlannerThumb recipe={recipeObj} mealName={meal.name} emoji={meal.emoji}/>
                       {onSlotSwap && meal && <button
                         style={{position:"absolute",top:3,right:3,fontSize:10,padding:"1px 5px",borderRadius:3,border:"1px solid var(--bor)",background:"rgba(255,255,255,.92)",cursor:"pointer",lineHeight:1.5,color:"var(--mu)",zIndex:5,fontWeight:600}}
                         onClick={e=>{e.stopPropagation();onSlotSwap({dayIdx,mealIdx:mi,mealType});}}
@@ -25527,10 +25521,8 @@ function PlanLibraryTab({ allRecipes, mealPlan, setMealPlan, pantry, showToast, 
               return (
                 <div key={sp.id} className="plan-card" style={{background:'rgba(192,106,62,.04)',border:'1px solid rgba(192,106,62,.2)'}}>
                   {(()=>{
-                    const planImgs=(sp.plan||[]).flatMap(d=>d.meals).filter(Boolean).slice(0,4).map(m=>recipePool.find(x=>x.id===m.id)?.image).filter(Boolean);
-                    return planImgs.length>=2
-                      ? <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:2,width:52,height:52,borderRadius:8,overflow:'hidden',marginBottom:8}}>{planImgs.slice(0,4).map((img,i)=><img key={i} src={img} alt="" style={{width:'100%',height:'100%',objectFit:'cover',display:'block'}}/>)}</div>
-                      : <div className="plan-card-emoji">{sp.emoji || '📋'}</div>;
+                    const planImgs=(sp.plan||[]).flatMap(d=>d.meals).filter(Boolean).slice(0,4).map(m=>{const r=recipePool.find(x=>x.id===m.id);return r&&imgAllowedForRecipe(r.image,r)?r.image:null;}).filter(Boolean);
+                    return <PlanMosaicPreview images={planImgs} fallbackEmoji={sp.emoji||'\ud83d\udccb'}/>;
                   })()}
                   {renamingId === sp.id
                     ? <div style={{display:'flex',gap:4,marginBottom:6}}>
@@ -25576,10 +25568,8 @@ function PlanLibraryTab({ allRecipes, mealPlan, setMealPlan, pantry, showToast, 
           return (
             <div key={entry.id} className="plan-card" style={{background:entry.color,border:`1px solid ${entry.border}`}}>
               {(()=>{
-                const planImgs=week.flatMap(d=>d.meals).filter(Boolean).slice(0,4).map(m=>recipePool.find(x=>x.id===m.id)?.image).filter(Boolean);
-                return planImgs.length>=2
-                  ? <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:2,width:52,height:52,borderRadius:8,overflow:'hidden',marginBottom:8}}>{planImgs.slice(0,4).map((img,i)=><img key={i} src={img} alt="" style={{width:'100%',height:'100%',objectFit:'cover',display:'block'}}/>)}</div>
-                  : <div className="plan-card-emoji">{entry.emoji}</div>;
+                const planImgs=week.flatMap(d=>d.meals).filter(Boolean).slice(0,4).map(m=>{const r=recipePool.find(x=>x.id===m.id);return r&&imgAllowedForRecipe(r.image,r)?r.image:null;}).filter(Boolean);
+                return <PlanMosaicPreview images={planImgs} fallbackEmoji={entry.emoji}/>;
               })()}
               <div className="plan-card-name">{entry.name}</div>
               <div className="plan-card-desc">{entry.desc}</div>
@@ -25649,48 +25639,126 @@ const PHOTO_CATS = {
   '1533134242':  'pie',
 };
 
-// Returns false if the photo's visual category clearly conflicts with the recipe.
+// Strict image-recipe matching. Returns false if the photo category clearly
+// does not match the recipe's dish type. When in doubt, prefer emoji fallback.
 function imgAllowedForRecipe(url, recipe) {
   if (!url || !recipe) return false;
   const m = url.match(/photo-(\d+)/);
   if (!m) return false;
   const prefix = m[1].split('-')[0];
   const cat = PHOTO_CATS[prefix] || PHOTO_CATS[m[1]];
-  if (!cat) return true;
+  if (!cat) return true; // unknown photo ID — allow
   const title = (recipe.title || '').toLowerCase();
   const meal  = (recipe.meal  || '').toLowerCase();
   if (cat === 'pancakes' || cat === 'waffles') {
-    return /pancake|waffle|crepe|crêpe|flapjack/.test(title);
+    return /pancake|waffle|crepe|cr\u00eape|flapjack/.test(title);
   }
-  if (cat === 'pizza') return /pizza|flatbread|calzone/.test(title);
-  if (cat === 'tacos') return /taco|fajita|tortilla/.test(title);
-  if (cat === 'burger') return /burger|hamburger/.test(title);
-  if (cat === 'steak') return /steak/.test(title) || (/beef/.test(title) && /grill|sear|pan-fry/.test(title));
-  if (cat === 'salmon') return meal !== 'dessert' && /salmon|fish|tuna|cod|seafood|shrimp|prawn|scampi|trout|halibut/.test(title);
-  if (cat === 'chicken') return /chicken|poultry|turkey/.test(title);
-  if (cat === 'oatmeal') return /oatmeal|oat[s ]|porridge|granola/.test(title);
-  if (cat === 'smoothie_bowl') return /smoothie|àçáí|acai/.test(title);
-  if (cat === 'ramen') return /ramen|pho|miso soup|noodle soup|udon|soba/.test(title);
+  if (cat === 'pizza')    return /pizza|flatbread|calzone/.test(title);
+  if (cat === 'tacos')    return /taco|fajita|tortilla/.test(title);
+  if (cat === 'burger')   return /burger|hamburger/.test(title);
+  if (cat === 'steak')    return /steak/.test(title);
+  if (cat === 'salmon')   return meal !== 'dessert' && /salmon|fish|tuna|cod|seafood|shrimp|prawn|scampi|trout|halibut/.test(title);
+  if (cat === 'chicken')  return /chicken|poultry|turkey/.test(title);
+  if (cat === 'oatmeal')  return /oatmeal|oat[s ]|porridge|granola/.test(title);
+  if (cat === 'smoothie_bowl') return /smoothie|acai|a\u00e7a\u00ed/.test(title);
+  if (cat === 'ramen')    return /ramen|pho|miso soup|noodle soup|udon|soba/.test(title);
+  if (cat === 'stir_fry') return /stir.fry|pad thai|wok/.test(title);
+  if (cat === 'curry')    return /curry|korma|tikka|masala|tagine/.test(title);
+  if (cat === 'soup')     return /soup|broth|stew|chowder|bisque|minestrone|gazpacho|chili|goulash/.test(title);
+  if (cat === 'salad')    return /salad|slaw/.test(title);
+  if (cat === 'grain_bowl') return /bowl|biryani|paella|risotto|fried rice/.test(title);
+  if (cat === 'sandwich') return /wrap|sandwich|gyro|pita|sub|panini|quesadilla|shawarma|kebab|burrito/.test(title);
+  if (cat === 'pasta_tomato') {
+    const isPasta = /pasta|spaghetti|penne|fettuccine|rigatoni|linguine|lasagna|gnocchi|macaroni/.test(title);
+    const isTomato = /bolognese|arrabbiata|amatriciana|meatball|tomato|marinara|ragu|tuna|puttanesca/.test(title);
+    return isPasta && isTomato;
+  }
+  if (cat === 'pasta_cream') {
+    return /pasta|spaghetti|penne|fettuccine|rigatoni|linguine|lasagna|gnocchi|carbonara|cacio|alfredo|scampi/.test(title);
+  }
+  if (cat === 'eggs')  return meal === 'breakfast' && /egg|frittata|omelette|omelet|scramble|benedict/.test(title);
+  if (cat === 'avocado_toast') return /toast|bruschetta/.test(title);
+  if (cat === 'yogurt') return /yogurt|yoghurt|parfait|cottage cheese/.test(title) || (meal === 'breakfast' && /\bpudding\b/.test(title));
+  if (cat === 'middle_eastern') return /hummus|falafel|shawarma|gyro|fattoush|mezze/.test(title) || /moroccan|lebanese|turkish/.test((recipe.cuisine||'').toLowerCase());
   if (['cake','cookies','cheesecake','pie'].includes(cat)) return meal === 'dessert';
   return true;
 }
 
+// ── PlannerThumb ──────────────────────────────────────────────────────────────
+// Full-width image filling the meal slot, with the meal name as a bottom
+// gradient overlay. Falls back to emoji+name if image is absent or fails.
+function PlannerThumb({ recipe, mealName, emoji, showShopping }) {
+  const [failed, setFailed] = React.useState(false);
+  const imgSrc = recipe?.image;
+  const show = imgSrc && !failed && imgAllowedForRecipe(imgSrc, recipe);
+  if (show) {
+    return (
+      <div style={{width:'100%',position:'relative',borderRadius:6,overflow:'hidden',height:64,flexShrink:0}}>
+        <img
+          src={imgSrc}
+          alt={mealName}
+          style={{width:'100%',height:'100%',objectFit:'cover',display:'block'}}
+          onError={()=>setFailed(true)}
+        />
+        <div style={{position:'absolute',bottom:0,left:0,right:0,background:'linear-gradient(transparent,rgba(0,0,0,.58))',padding:'10px 4px 3px',textAlign:'center'}}>
+          <div style={{fontSize:9,fontWeight:600,color:'#fff',lineHeight:1.3,overflow:'hidden',display:'-webkit-box',WebkitLineClamp:2,WebkitBoxOrient:'vertical'}}>{mealName}</div>
+          {showShopping && <div style={{fontSize:8,color:'#FFD86B',fontWeight:700,marginTop:1}}>🛒</div>}
+        </div>
+      </div>
+    );
+  }
+  return (
+    <>
+      <div className="msem">{emoji || recipe?.emoji || '\ud83c\udf7d\ufe0f'}</div>
+      <div className="msn">{mealName}</div>
+      {showShopping && <div style={{fontSize:10,color:'var(--gold)',fontWeight:600,marginTop:2}}>🛒 Needs shopping</div>}
+    </>
+  );
+}
+
+// ── PlanMosaicPreview ─────────────────────────────────────────────────────────
+// 2×2 image grid for plan cards. Tracks per-tile load errors via React state;
+// shows emoji fallback when fewer than 2 tiles load successfully.
+function PlanMosaicPreview({ images, fallbackEmoji }) {
+  const [errors, setErrors] = React.useState({});
+  const markError = React.useCallback(i => setErrors(v => ({...v,[i]:true})), []);
+  const goodCount = images.filter((_,i) => !errors[i]).length;
+  if (goodCount < 2) {
+    return <div className="plan-card-emoji">{fallbackEmoji || '\ud83d\udccb'}</div>;
+  }
+  return (
+    <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:2,width:52,height:52,borderRadius:8,overflow:'hidden',marginBottom:8}}>
+      {images.slice(0,4).map((img,i) => errors[i] ? null : (
+        <img key={i} src={img} alt=""
+          style={{width:'100%',height:'100%',objectFit:'cover',display:'block'}}
+          onError={()=>markError(i)}
+        />
+      ))}
+    </div>
+  );
+}
+
+// ── RecipeImg ─────────────────────────────────────────────────────────────────
+// Used by RecipeCard (.rimg container) and RecipeDetail hero.
+// React state tracks load failure so emoji renders correctly — no empty boxes.
 function RecipeImg({ recipe, style, emojiSize }) {
+  const [failed, setFailed] = React.useState(false);
   const img = recipe?.image;
-  if (img && imgAllowedForRecipe(img, recipe)) {
+  if (img && !failed && imgAllowedForRecipe(img, recipe)) {
     return (
       <img
         src={img}
         alt={recipe?.title || ''}
         style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', ...style }}
-        onError={e => { e.currentTarget.style.display = 'none'; }}
+        onError={() => setFailed(true)}
       />
     );
   }
-  // Emoji placeholder — shows when no image or when image fails the quality filter
+  // Emoji placeholder — renders when no image, when quality filter rejects it,
+  // or when the image fails to load from the CDN.
   return (
     <span style={{ fontSize: emojiSize || 72, lineHeight: 1 }}>
-      {recipe?.emoji || '🍽️'}
+      {recipe?.emoji || '\ud83c\udf7d\ufe0f'}
     </span>
   );
 }
@@ -26075,9 +26143,9 @@ function RecipeDetail({ recipe, saved, onSave, onBack, onAddToList, pantry, setP
       <div style={{maxWidth:860,margin:"0 auto",padding:"40px 32px"}}>
         <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:12}}>{(recipe.dietary||[]).map(d=><span key={d} className="tag td">{d}</span>)}<span className="tag tc">{recipe.cuisine||'Other'}</span></div>
         <h1 style={{fontFamily:"var(--fd)",fontSize:38,marginBottom:10,lineHeight:1.1}}>{recipe.emoji} {recipe.title}</h1>
-        <div style={{display:"flex",gap:20,color:"var(--mu)",fontSize:14,marginBottom:recipe.image?20:32}}><span>⏱ {recipe.time} min</span><span>📊 {recipe.diff}</span><span>👥 2 servings</span></div>
-        {/* Recipe hero image — shown when recipe.image is set; hidden gracefully if missing */}
-        {recipe.image && (
+        <div style={{display:"flex",gap:20,color:"var(--mu)",fontSize:14,marginBottom:(recipe.image&&imgAllowedForRecipe(recipe.image,recipe))?20:32}}><span>⏱ {recipe.time} min</span><span>📊 {recipe.diff}</span><span>👥 2 servings</span></div>
+        {/* Recipe hero image — only shown when image passes quality filter */}
+        {recipe.image && imgAllowedForRecipe(recipe.image, recipe) && (
           <div style={{borderRadius:12,overflow:'hidden',marginBottom:32,height:280,background:'linear-gradient(135deg,#F0E8DC,#E4D4BE)',flexShrink:0}}>
             <img
               src={recipe.image}
@@ -29737,16 +29805,7 @@ const _askClarification = (msg) => {
                               <div className="msn">{meal.title}</div>
                               <div className="custom-badge">Custom</div>
                             </>
-                          : <>
-                              {recipeObj?.image
-                                ? <div style={{width:48,height:48,borderRadius:8,overflow:'hidden',margin:'0 auto 4px',flexShrink:0}}>
-                                    <img src={recipeObj.image} alt={meal.name} style={{width:'100%',height:'100%',objectFit:'cover',display:'block'}}/>
-                                  </div>
-                                : <div className="msem">{meal.emoji}</div>
-                              }
-                              <div className="msn">{meal.name}</div>
-                              {recipeNeedsShopping(meal)&&<div style={{fontSize:10,color:"var(--gold)",fontWeight:600,marginTop:2}}>🛒 Needs shopping</div>}
-                            </>
+                          : <PlannerThumb recipe={recipeObj} mealName={meal.name} emoji={meal.emoji} showShopping={recipeNeedsShopping(meal)}/>
                         }
                         {/* ⋯ slot options button */}
                         <button
