@@ -27193,11 +27193,504 @@ const generatePantryMeals = (pantrySet) => {
     }));
 };
 
+
+// ── BuildMyWeekTab ──────────────────────────────────────────────────────────
+// "Build My Week" — slot-by-slot guided meal planning with visual recipe cards.
+function BuildMyWeekTab({ mealPlan, setMealPlan, prefs, pantry, allRecipes, avoidedIngredients, showToast, onViewRecipe }) {
+  const DAYS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const MEALS = ['Breakfast','Lunch','Dinner'];
+  const MEAL_EMOJI = {Breakfast:'☀️', Lunch:'🌤️', Dinner:'🌙'};
+  const TOTAL = 21;
+
+  // Find first empty slot
+  const firstEmpty = (plan) => {
+    for (let i = 0; i < TOTAL; i++) {
+      const di = Math.floor(i/3), mi = i%3;
+      if (!plan[di]?.meals[mi]) return i;
+    }
+    return 0;
+  };
+
+  const [activeIdx, setActiveIdx] = React.useState(() => firstEmpty(mealPlan));
+  const [expandedId, setExpandedId] = React.useState(null);
+  const [showCuisinePicker, setShowCuisinePicker] = React.useState(false);
+  const [cuisineFilter, setCuisineFilter] = React.useState('');
+  const [dietFilter, setDietFilter] = React.useState('');
+  const [quickOnly, setQuickOnly] = React.useState(false);
+  const [pantryBoost, setPantryBoost] = React.useState(false);
+
+  const activeDay = Math.floor(activeIdx / 3);
+  const activeMealIdx = activeIdx % 3;
+  const activeMeal = MEALS[activeMealIdx];
+  const activeDayLabel = DAYS[activeDay];
+
+  const pantrySet = React.useMemo(() => buildPantrySet(pantry), [pantry]);
+
+  // Build recipe pool for current slot
+  const recipePool = React.useMemo(() => {
+    const mealType = activeMeal.toLowerCase();
+    const usedIds = new Set(mealPlan.flatMap(d => d.meals).filter(Boolean).map(m => m.id));
+    const avoidSet = new Set(avoidedIngredients || []);
+
+    const effectivePrefs = {
+      ...prefs,
+      dietary: dietFilter ? [dietFilter] : (prefs.dietary || []),
+    };
+
+    let pool = allRecipes
+      .filter(r => r.meal === mealType)
+      .filter(r => isRecipeAllowedForUser(r, effectivePrefs))
+      .filter(r => !usedIds.has(r.id))
+      .filter(r => {
+        if (avoidSet.size === 0) return true;
+        return !(r.ingredients||[]).some(i => avoidSet.has(normalizeIng(i.n)));
+      });
+
+    if (cuisineFilter) {
+      pool = pool.filter(r => (r.cuisine||'').toLowerCase() === cuisineFilter.toLowerCase());
+    }
+    if (quickOnly) pool = pool.filter(r => (r.time||99) <= 30);
+
+    // Score each recipe by pantry match
+    pool = pool.map(r => {
+      const ings = r.ingredients || [];
+      const missingCount = ings.filter(i => !i.optional && !isOptionalIng(i.n) && !ingInPantry(i.n, pantrySet)).length;
+      const pct = ings.length > 0 ? (ings.length - missingCount) / ings.length : 0.5;
+      return { ...r, _missing: missingCount, _pantryPct: pct };
+    });
+
+    if (pantryBoost) pool = pool.filter(r => r._pantryPct >= 0.6);
+
+    // Sort: pantry match first, then familiar/common score
+    pool.sort((a,b) => {
+      const diff = b._pantryPct - a._pantryPct;
+      if (Math.abs(diff) > 0.15) return diff;
+      return (getCommonScore(b)||0) - (getCommonScore(a)||0);
+    });
+
+    return pool;
+  }, [allRecipes, activeMeal, cuisineFilter, dietFilter, quickOnly, pantryBoost, pantry, mealPlan, prefs, avoidedIngredients]);
+
+  const selectRecipe = (recipe) => {
+    const updated = mealPlan.map((dayObj, di) => {
+      if (di !== activeDay) return dayObj;
+      const nm = [...dayObj.meals];
+      nm[activeMealIdx] = { id: recipe.id, name: recipe.title, emoji: recipe.emoji };
+      return { ...dayObj, meals: nm };
+    });
+    setMealPlan(updated);
+    showToast?.(`${recipe.emoji} ${recipe.title} → ${activeDayLabel} ${activeMeal}`);
+    setExpandedId(null);
+    // Auto-advance to next empty slot
+    for (let i = activeIdx + 1; i < TOTAL; i++) {
+      const di = Math.floor(i/3), mi = i%3;
+      if (!updated[di]?.meals[mi]) { setActiveIdx(i); return; }
+    }
+    // All slots after current are filled; just move to next slot
+    if (activeIdx < TOTAL - 1) setActiveIdx(activeIdx + 1);
+  };
+
+  const clearSlotAt = (di, mi) => {
+    setMealPlan(mealPlan.map((d, i) => {
+      if (i !== di) return d;
+      const nm = [...d.meals]; nm[mi] = null;
+      return { ...d, meals: nm };
+    }));
+  };
+
+  const filledCount = mealPlan.flatMap(d => d.meals).filter(Boolean).length;
+  const currentSlotFilled = Boolean(mealPlan[activeDay]?.meals[activeMealIdx]);
+
+  const CUISINE_OPTS = [
+    'Italian','Mexican','Asian','Mediterranean','American',
+    'Indian','Middle Eastern','French','Greek','Japanese','Chinese','Thai',
+    'Spanish','British','Moroccan'
+  ];
+  const DIET_OPTS = ['Vegetarian','Vegan','Pescatarian','Kosher','Gluten-free'];
+
+  return (
+    <div style={{maxWidth:900,margin:'0 auto'}}>
+
+      {/* ── Header ── */}
+      <div style={{display:'flex',alignItems:'flex-start',justifyContent:'space-between',marginBottom:20,flexWrap:'wrap',gap:12}}>
+        <div>
+          <h1 className="stitle" style={{marginBottom:4}}>Build My Week</h1>
+          <p className="ssub">Choose meals slot by slot — at your own pace</p>
+        </div>
+        <div style={{display:'flex',gap:8,alignItems:'center'}}>
+          <div style={{background:'var(--cream)',border:'1px solid var(--bor)',padding:'7px 14px',borderRadius:10,fontSize:13,fontWeight:600,color:'var(--ch)'}}>
+            {filledCount}<span style={{color:'var(--mu)',fontWeight:400}}>/21 meals</span>
+          </div>
+          {filledCount > 0 && (
+            <div style={{width:72,height:8,background:'var(--bor)',borderRadius:4,overflow:'hidden'}}>
+              <div style={{height:'100%',width:`${filledCount/21*100}%`,background:'var(--clay)',borderRadius:4,transition:'width .3s'}}/>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* ── Compact week grid ── */}
+      <div style={{background:'var(--white)',border:'1px solid var(--bor)',borderRadius:12,padding:'14px 16px',marginBottom:20}}>
+        {/* Day header row */}
+        <div style={{display:'grid',gridTemplateColumns:'44px repeat(7,1fr)',gap:3,marginBottom:6}}>
+          <div/>
+          {DAYS.map(d => (
+            <div key={d} style={{textAlign:'center',fontSize:10,fontWeight:700,color:'var(--mu)',letterSpacing:.5,padding:'2px 0'}}>
+              {d}
+            </div>
+          ))}
+        </div>
+        {/* Meal rows */}
+        {MEALS.map((meal, mi) => (
+          <div key={meal} style={{display:'grid',gridTemplateColumns:'44px repeat(7,1fr)',gap:3,marginBottom:3}}>
+            <div style={{display:'flex',alignItems:'center',gap:3,fontSize:10,color:'var(--mu)',fontWeight:600,paddingRight:4}}>
+              <span style={{fontSize:13}}>{MEAL_EMOJI[meal]}</span>
+              <span>{meal.slice(0,3)}</span>
+            </div>
+            {DAYS.map((day, di) => {
+              const sIdx = di*3+mi;
+              const filled = mealPlan[di]?.meals[mi];
+              const isActive = sIdx === activeIdx;
+              return (
+                <div
+                  key={di}
+                  onClick={() => { setActiveIdx(sIdx); setExpandedId(null); }}
+                  title={filled ? filled.name : `Choose ${meal} for ${day}`}
+                  style={{
+                    borderRadius:6,
+                    border:`2px solid ${isActive?'var(--clay)':filled?'rgba(201,149,58,.25)':'var(--bor)'}`,
+                    background: isActive ? 'var(--clayBg)' : filled ? 'var(--cream)' : 'var(--bg)',
+                    cursor:'pointer',
+                    minHeight:38,
+                    padding:'3px 3px',
+                    display:'flex',
+                    flexDirection:'column',
+                    alignItems:'center',
+                    justifyContent:'center',
+                    transition:'all .12s',
+                    boxShadow: isActive ? '0 0 0 3px rgba(201,149,58,.2)' : 'none',
+                    overflow:'hidden',
+                  }}
+                >
+                  {filled ? (
+                    <>
+                      <div style={{fontSize:13,lineHeight:1}}>{filled.emoji||'🍽️'}</div>
+                      <div style={{fontSize:8,color:'var(--mu)',overflow:'hidden',whiteSpace:'nowrap',maxWidth:'100%',textOverflow:'ellipsis',lineHeight:1.3,textAlign:'center',padding:'0 2px'}}>
+                        {(filled.name||'').split(' ').slice(0,2).join(' ')}
+                      </div>
+                    </>
+                  ) : (
+                    <div style={{fontSize:isActive?16:13,color:isActive?'var(--clay)':'var(--bor)',fontWeight:700,lineHeight:1}}>
+                      {isActive ? '●' : '+'}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        ))}
+      </div>
+
+      {/* ── Active slot banner ── */}
+      <div style={{
+        background:'linear-gradient(135deg,#c9953a 0%,#e8a94e 100%)',
+        borderRadius:12,
+        padding:'16px 20px',
+        marginBottom:16,
+        display:'flex',
+        alignItems:'center',
+        justifyContent:'space-between',
+        flexWrap:'wrap',
+        gap:12,
+        color:'#fff',
+      }}>
+        <div>
+          <div style={{fontSize:10,fontWeight:700,opacity:.8,letterSpacing:.8,marginBottom:3}}>
+            NOW CHOOSING — SLOT {activeIdx+1} OF {TOTAL}
+          </div>
+          <div style={{fontSize:22,fontWeight:800,letterSpacing:-.3,lineHeight:1.2}}>
+            {MEAL_EMOJI[activeMeal]} {activeDayLabel} {activeMeal}
+          </div>
+          <div style={{fontSize:12,opacity:.8,marginTop:4}}>
+            {currentSlotFilled
+              ? `✓ Filled — click a card to replace · ${recipePool.length} options available`
+              : `${recipePool.length} recipe${recipePool.length!==1?'s':''} available for this slot`}
+          </div>
+        </div>
+        <div style={{display:'flex',gap:8,alignItems:'center',flexWrap:'wrap'}}>
+          {currentSlotFilled && (
+            <button
+              onClick={() => clearSlotAt(activeDay, activeMealIdx)}
+              style={{background:'rgba(255,255,255,.15)',border:'1px solid rgba(255,255,255,.3)',borderRadius:8,padding:'7px 13px',color:'#fff',cursor:'pointer',fontSize:12,fontWeight:600}}>
+              🗑 Clear slot
+            </button>
+          )}
+          <button
+            onClick={() => setActiveIdx(i => Math.max(0, i-1))}
+            disabled={activeIdx===0}
+            style={{background:'rgba(255,255,255,.2)',border:'none',borderRadius:8,padding:'8px 16px',color:'#fff',cursor:activeIdx===0?'not-allowed':'pointer',fontSize:13,fontWeight:700,opacity:activeIdx===0?.4:1}}>
+            ← Back
+          </button>
+          <button
+            onClick={() => setActiveIdx(i => Math.min(TOTAL-1, i+1))}
+            disabled={activeIdx===TOTAL-1}
+            style={{background:'rgba(255,255,255,.2)',border:'none',borderRadius:8,padding:'8px 16px',color:'#fff',cursor:activeIdx===TOTAL-1?'not-allowed':'pointer',fontSize:13,fontWeight:700,opacity:activeIdx===TOTAL-1?.4:1}}>
+            Skip →
+          </button>
+        </div>
+      </div>
+
+      {/* ── Filter chips ── */}
+      <div style={{marginBottom:12}}>
+        <div style={{display:'flex',gap:6,flexWrap:'wrap',alignItems:'center',marginBottom:showCuisinePicker?10:0}}>
+          <span style={{fontSize:12,fontWeight:700,color:'var(--mu)',marginRight:2,whiteSpace:'nowrap'}}>Quick filters:</span>
+          {DIET_OPTS.map(d => (
+            <button key={d} onClick={() => setDietFilter(f => f===d?'':d)}
+              style={{padding:'4px 11px',borderRadius:20,border:`1px solid ${dietFilter===d?'var(--clay)':'var(--bor)'}`,fontSize:12,fontWeight:600,cursor:'pointer',background:dietFilter===d?'var(--clayBg)':'var(--white)',color:dietFilter===d?'var(--clay)':'var(--mu)',transition:'all .12s',whiteSpace:'nowrap'}}>
+              {d}
+            </button>
+          ))}
+          <button onClick={() => { setShowCuisinePicker(f=>!f); }}
+            style={{padding:'4px 11px',borderRadius:20,border:`1px solid ${(showCuisinePicker||cuisineFilter)?'var(--clay)':'var(--bor)'}`,fontSize:12,fontWeight:600,cursor:'pointer',background:(showCuisinePicker||cuisineFilter)?'var(--clayBg)':'var(--white)',color:(showCuisinePicker||cuisineFilter)?'var(--clay)':'var(--mu)',transition:'all .12s'}}>
+            🌍 {cuisineFilter||'Cuisine'}
+          </button>
+          <button onClick={() => setQuickOnly(f=>!f)}
+            style={{padding:'4px 11px',borderRadius:20,border:`1px solid ${quickOnly?'var(--sage)':'var(--bor)'}`,fontSize:12,fontWeight:600,cursor:'pointer',background:quickOnly?'var(--sageBg)':'var(--white)',color:quickOnly?'var(--sage)':'var(--mu)',transition:'all .12s',whiteSpace:'nowrap'}}>
+            ⚡ Under 30 min
+          </button>
+          <button onClick={() => setPantryBoost(f=>!f)}
+            style={{padding:'4px 11px',borderRadius:20,border:`1px solid ${pantryBoost?'#6366f1':'var(--bor)'}`,fontSize:12,fontWeight:600,cursor:'pointer',background:pantryBoost?'rgba(99,102,241,.08)':'var(--white)',color:pantryBoost?'#6366f1':'var(--mu)',transition:'all .12s',whiteSpace:'nowrap'}}>
+            🥫 High pantry match
+          </button>
+          {(cuisineFilter||dietFilter||quickOnly||pantryBoost) && (
+            <button onClick={() => { setCuisineFilter(''); setDietFilter(''); setQuickOnly(false); setPantryBoost(false); setShowCuisinePicker(false); }}
+              style={{padding:'4px 11px',borderRadius:20,border:'1px solid var(--bor)',fontSize:12,cursor:'pointer',color:'var(--mu)',background:'var(--white)'}}>
+              ✕ Clear
+            </button>
+          )}
+        </div>
+        {showCuisinePicker && (
+          <div style={{display:'flex',gap:5,flexWrap:'wrap',padding:'10px 12px',background:'var(--cream)',borderRadius:10,border:'1px solid var(--bor)',marginTop:8}}>
+            {CUISINE_OPTS.map(c => (
+              <button key={c}
+                onClick={() => { setCuisineFilter(f=>f===c?'':c); setShowCuisinePicker(false); }}
+                style={{padding:'5px 12px',borderRadius:20,border:`1px solid ${cuisineFilter===c?'var(--clay)':'var(--bor)'}`,fontSize:12,fontWeight:600,cursor:'pointer',background:cuisineFilter===c?'var(--clayBg)':'var(--white)',color:cuisineFilter===c?'var(--clay)':'var(--mu)'}}>
+                {c}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* ── Recipe feed ── */}
+      {recipePool.length === 0 ? (
+        <div style={{textAlign:'center',padding:'48px 24px',background:'var(--cream)',borderRadius:14,border:'1px solid var(--bor)'}}>
+          <div style={{fontSize:40,marginBottom:10}}>🔍</div>
+          <div style={{fontSize:15,fontWeight:700,marginBottom:6}}>No recipes match these filters</div>
+          <div style={{fontSize:13,color:'var(--mu)',marginBottom:16}}>Try clearing some filters or picking a different slot</div>
+          <button onClick={() => { setCuisineFilter(''); setDietFilter(''); setQuickOnly(false); setPantryBoost(false); }}
+            style={{padding:'8px 18px',background:'var(--clay)',color:'#fff',border:'none',borderRadius:8,fontWeight:700,cursor:'pointer',fontSize:13}}>
+            Clear all filters
+          </button>
+        </div>
+      ) : (
+        <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(260px,1fr))',gap:14}}>
+          {recipePool.slice(0,30).map(recipe => (
+            <BuildRecipeCard
+              key={recipe.id}
+              recipe={recipe}
+              expanded={expandedId===recipe.id}
+              onToggle={() => setExpandedId(id => id===recipe.id ? null : recipe.id)}
+              onSelect={() => selectRecipe(recipe)}
+              onView={() => { onViewRecipe?.(recipe); }}
+              dayLabel={activeDayLabel}
+              mealLabel={activeMeal}
+              pantrySet={pantrySet}
+              isCurrentSlotFilled={currentSlotFilled}
+            />
+          ))}
+        </div>
+      )}
+
+      {recipePool.length > 30 && (
+        <div style={{textAlign:'center',marginTop:14,fontSize:13,color:'var(--mu)',padding:'10px',background:'var(--cream)',borderRadius:8}}>
+          Showing 30 of {recipePool.length} · use filters to narrow down
+        </div>
+      )}
+
+      <div style={{height:40}}/>
+    </div>
+  );
+}
+
+// ── BuildRecipeCard ──────────────────────────────────────────────────────────
+function BuildRecipeCard({ recipe, expanded, onToggle, onSelect, onView, dayLabel, mealLabel, pantrySet, isCurrentSlotFilled }) {
+  const [imgFailed, setImgFailed] = React.useState(false);
+  const hasImg = recipe.image && !imgFailed && imgAllowedForRecipe(recipe.image, recipe);
+
+  const ings = recipe.ingredients || [];
+  const missingIngs = ings.filter(i => !i.optional && !isOptionalIng(i.n) && !ingInPantry(i.n, pantrySet));
+  const haveIngs = ings.filter(i => !i.optional && !isOptionalIng(i.n) && ingInPantry(i.n, pantrySet));
+  const pantryPct = ings.length > 0 ? Math.round((ings.length - missingIngs.length) / ings.length * 100) : 100;
+
+  return (
+    <div style={{
+      background:'var(--white)',
+      border:`2px solid ${expanded?'var(--clay)':'var(--bor)'}`,
+      borderRadius:14,
+      overflow:'hidden',
+      transition:'box-shadow .15s,border-color .15s',
+      boxShadow: expanded ? '0 4px 20px rgba(0,0,0,.1)' : 'none',
+    }}>
+
+      {/* Image/Emoji area — click to expand */}
+      <div
+        onClick={onToggle}
+        style={{
+          height: expanded ? 190 : 140,
+          background:'var(--cream)',
+          position:'relative',
+          overflow:'hidden',
+          cursor:'pointer',
+          transition:'height .2s ease',
+          display:'flex',alignItems:'center',justifyContent:'center',
+        }}
+      >
+        {hasImg ? (
+          <img src={recipe.image} alt={recipe.title}
+            style={{position:'absolute',inset:0,width:'100%',height:'100%',objectFit:'cover',display:'block'}}
+            onError={() => setImgFailed(true)}
+          />
+        ) : (
+          <span style={{fontSize:60,position:'relative',zIndex:1}}>{recipe.emoji||'🍽️'}</span>
+        )}
+        {/* Pantry badge */}
+        <div style={{
+          position:'absolute',top:8,left:8,
+          background: pantryPct===100 ? 'var(--sage)' : pantryPct>=70 ? 'rgba(255,255,255,.92)' : 'rgba(255,255,255,.85)',
+          color: pantryPct===100 ? '#fff' : 'var(--sage)',
+          padding:'3px 9px',borderRadius:20,
+          fontSize:11,fontWeight:700,
+          backdropFilter:'blur(4px)',
+          boxShadow:'0 1px 4px rgba(0,0,0,.12)',
+          display: pantryPct < 40 ? 'none' : 'block',
+        }}>
+          {pantryPct===100 ? '✓ In pantry' : `${pantryPct}% match`}
+        </div>
+        {/* Expand chevron */}
+        <div style={{
+          position:'absolute',bottom:8,right:8,
+          background:'rgba(0,0,0,.38)',
+          color:'#fff',
+          width:24,height:24,borderRadius:12,
+          display:'flex',alignItems:'center',justifyContent:'center',
+          fontSize:12,fontWeight:700,
+          transition:'transform .2s',
+          transform: expanded ? 'rotate(180deg)' : 'none',
+        }}>
+          ↓
+        </div>
+      </div>
+
+      {/* Card body — always visible */}
+      <div style={{padding:'11px 13px',cursor:'pointer'}} onClick={onToggle}>
+        <div style={{fontSize:14,fontWeight:700,lineHeight:1.35,marginBottom:6,color:'var(--ch)'}}>
+          {recipe.title}
+        </div>
+        <div style={{display:'flex',gap:10,flexWrap:'wrap',alignItems:'center'}}>
+          <span style={{fontSize:12,color:'var(--mu)'}}>⏱ {recipe.time||'?'} min</span>
+          <span style={{fontSize:12,color:'var(--mu)'}}>
+            {recipe.diff==='Easy'?'🟢':recipe.diff==='Hard'?'🔴':'🟡'} {recipe.diff||'Med'}
+          </span>
+          {recipe.cuisine && <span style={{fontSize:11,color:'var(--mu)',background:'var(--cream)',padding:'1px 7px',borderRadius:10}}>{recipe.cuisine}</span>}
+        </div>
+      </div>
+
+      {/* Expanded details */}
+      {expanded && (
+        <div style={{padding:'0 13px 13px'}}>
+          {/* Separator */}
+          <div style={{height:1,background:'var(--bor)',marginBottom:11}}/>
+
+          {/* Dietary tags */}
+          {(recipe.dietary||[]).length > 0 && (
+            <div style={{display:'flex',gap:4,flexWrap:'wrap',marginBottom:10}}>
+              {recipe.dietary.slice(0,4).map(d => (
+                <span key={d} style={{padding:'2px 8px',borderRadius:10,background:'var(--sageBg)',color:'var(--sage)',fontSize:11,fontWeight:600}}>
+                  {d}
+                </span>
+              ))}
+            </div>
+          )}
+
+          {/* Pantry status */}
+          <div style={{background:'var(--cream)',borderRadius:8,padding:'9px 11px',marginBottom:10}}>
+            <div style={{fontSize:12,fontWeight:700,color:'var(--ch)',marginBottom:missingIngs.length>0?4:0}}>
+              🥫 {haveIngs.length} of {ings.filter(i=>!i.optional&&!isOptionalIng(i.n)).length} ingredients in pantry
+            </div>
+            {missingIngs.length > 0 ? (
+              <div style={{fontSize:12,color:'var(--mu)'}}>
+                <span style={{color:'#e53e3e',fontWeight:600}}>Need: </span>
+                {missingIngs.slice(0,4).map(i=>i.n).join(' · ')}{missingIngs.length>4?` +${missingIngs.length-4}`:''}
+              </div>
+            ) : (
+              <div style={{fontSize:12,color:'var(--sage)',fontWeight:600}}>✓ You have everything!</div>
+            )}
+          </div>
+
+          {/* Ingredients summary */}
+          <div style={{fontSize:12,color:'var(--mu)',marginBottom:12,lineHeight:1.6}}>
+            <span style={{fontWeight:600,color:'var(--ch)'}}>Ingredients: </span>
+            {ings.slice(0,5).map(i=>i.n).join(', ')}{ings.length>5?` +${ings.length-5} more`:''}
+          </div>
+
+          {/* Action buttons */}
+          <div style={{display:'flex',gap:8}}>
+            <button
+              onClick={(e) => { e.stopPropagation(); onSelect(); }}
+              style={{
+                flex:1,
+                background:'var(--clay)',
+                color:'#fff',
+                border:'none',
+                borderRadius:9,
+                padding:'10px 12px',
+                fontSize:13,
+                fontWeight:700,
+                cursor:'pointer',
+                transition:'background .12s',
+              }}>
+              {isCurrentSlotFilled ? '↺ Replace' : `+ Add for ${dayLabel} ${mealLabel}`}
+            </button>
+            <button
+              onClick={(e) => { e.stopPropagation(); onView?.(); }}
+              style={{
+                background:'var(--cream)',
+                color:'var(--ch)',
+                border:'1px solid var(--bor)',
+                borderRadius:9,
+                padding:'10px 13px',
+                fontSize:13,
+                fontWeight:600,
+                cursor:'pointer',
+                whiteSpace:'nowrap',
+              }}>
+              Full recipe
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+
+
 function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, prefs, setPrefs, pantry, setPantry, setShopping, isPremium, subscription, setSubscription, onUpgrade, allRecipes: allRecipesProp, userRecipes, avoidedIngredients = [], user, publishedMenus, setPublishedMenus, showToast, collections, setCollections,
   // Plan Library state (lifted from App, forwarded via tp)
   libraryPreview, setLibraryPreview, libraryDraft, setLibraryDraft,
   libraryDraftTitle, setLibraryDraftTitle, libraryShowCreate, setLibraryShowCreate }) {
-  const [plannerView, setPlannerView] = useState('week'); // 'week' | 'library'
+  const [plannerView, setPlannerView] = useState('week'); // 'week' | 'build' | 'library'
   // Use allRecipes from props (built-in + user-created), fallback to RECIPES if not provided
   const allRecipes = allRecipesProp || RECIPES;
   const [slots,setSlots]=useState({Breakfast:true,Lunch:true,Dinner:true});
@@ -28999,12 +29492,23 @@ const _askClarification = (msg) => {
     <div>
       {/* ── Planner sub-tabs ── */}
       <div style={{display:'flex',gap:0,marginBottom:20,borderBottom:'1px solid var(--bor)'}}>
-        {[['week','📅 This Week'],['library','📚 Plan Library']].map(([v,label])=>(
+        {[['week','📅 This Week'],['build','🗓 Build My Week'],['library','📚 Plan Library']].map(([v,label])=>(
           <button key={v} onClick={()=>setPlannerView(v)} style={{padding:'10px 18px',fontSize:13,fontWeight:plannerView===v?700:500,color:plannerView===v?'var(--clay)':'var(--mu)',background:'none',border:'none',borderBottom:plannerView===v?'2px solid var(--clay)':'2px solid transparent',cursor:'pointer',transition:'all .15s'}}>
             {label}
           </button>
         ))}
       </div>
+      {/* ── Build My Week sub-view ── */}
+      {plannerView==='build' && (
+        <BuildMyWeekTab
+          mealPlan={mealPlan} setMealPlan={setMealPlan}
+          prefs={prefs} pantry={pantry}
+          allRecipes={allRecipes}
+          avoidedIngredients={avoidedIngredients}
+          showToast={showToast}
+          onViewRecipe={onViewRecipe}
+        />
+      )}
       {/* ── Plan Library sub-view ── */}
       {plannerView==='library' && (
         <PlanLibraryErrorBoundary resetKey="planner-library">
