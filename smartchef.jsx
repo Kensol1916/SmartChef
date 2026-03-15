@@ -27491,193 +27491,360 @@ function BuildMyWeekTab({ mealPlan, setMealPlan, prefs, pantry, allRecipes, avoi
   );
 }
 
+// ── getReelImage: picks the best image for a reel card ─────────────────────────────
+// Returns the validated recipe image if available, or an Unsplash food-search URL
+// derived from the recipe title so every card shows a real, relevant food photo.
+function getReelImage(recipe) {
+  // 1. Use the recipe's own image if it visually matches the dish
+  if (recipe.image && imgAllowedForRecipe(recipe.image, recipe)) return recipe.image;
+  // 2. Build a focused search query from the recipe title
+  const stopWords = new Set(['with','and','the','a','an','in','on','of','for','over','or','&']);
+  const words = recipe.title.toLowerCase()
+    .replace(/[^\w\s]/g,'')
+    .split(/\s+/)
+    .filter(w => w.length > 1 && !stopWords.has(w))
+    .slice(0,4);
+  // Append cuisine and meal type for better targeting
+  if (recipe.cuisine) words.push(recipe.cuisine.toLowerCase());
+  const query = encodeURIComponent(words.join(' '));
+  // Unsplash source URL — food context ensures relevant results
+  return `https://source.unsplash.com/800x1200/?food,${query}`;
+}
+
 // ── BuildReelCard ───────────────────────────────────────────────────────────────────────────
-// Full-height reel-style recipe card for Build My Week.
+// Full-height reel card with flip interaction.
+// Front: full-bleed food photo + overlay with title & stats.
+// Back (tap to reveal): ingredients, pantry status, add-to-slot button.
 function BuildReelCard({ recipe, dayLabel, mealLabel, pantrySet, isCurrentSlotFilled, onSelect, onView, onSave, isSaved }) {
-  const [imgFailed,setImgFailed] = React.useState(false);
-  const [showDetail,setShowDetail] = React.useState(false);
-  const hasImg = recipe.image && !imgFailed && imgAllowedForRecipe(recipe.image, recipe);
+  const [imgSrc, setImgSrc] = React.useState(() => getReelImage(recipe));
+  const [imgFailed, setImgFailed] = React.useState(false);
+  const [flipped, setFlipped] = React.useState(false);
+
   const ings = recipe.ingredients || [];
   const req = ings.filter(i => !i.optional && !isOptionalIng(i.n));
   const missingIngs = req.filter(i => !ingInPantry(i.n, pantrySet));
-  const haveCount = req.length - missingIngs.length;
-  const pantryPct = req.length > 0 ? Math.round(haveCount / req.length * 100) : 100;
+  const haveIngs = req.filter(i => ingInPantry(i.n, pantrySet));
+  const pantryPct = req.length > 0 ? Math.round(haveIngs.length / req.length * 100) : 100;
   const diffDot = recipe.diff==='Easy'?'🟢':recipe.diff==='Hard'?'🔴':'🟡';
+
+  // When the search-based fallback also fails, try a generic food query
+  const handleImgError = () => {
+    if (!imgFailed) {
+      const generic = `https://source.unsplash.com/800x1200/?food,cooking,${encodeURIComponent((recipe.meal||'food').toLowerCase())}`;
+      if (imgSrc !== generic) {
+        setImgSrc(generic);
+      } else {
+        setImgFailed(true);
+      }
+    }
+  };
 
   return (
     <div style={{
       height:'100%',
       scrollSnapAlign:'start',
       scrollSnapStop:'always',
-      position:'relative',
       flexShrink:0,
-      background:'#111',
+      position:'relative',
       overflow:'hidden',
+      perspective:'1200px',
+      background:'#0a0a0a',
     }}>
-      {/* Background: photo or deep gradient + emoji */}
-      {hasImg?(
-        <img src={recipe.image} alt={recipe.title} onError={()=>setImgFailed(true)}
-          style={{position:'absolute',inset:0,width:'100%',height:'100%',objectFit:'cover',display:'block'}}
-        />
-      ):(
-        <div style={{position:'absolute',inset:0,
-          background:'linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%)',
-          display:'flex',alignItems:'center',justifyContent:'center'}}>
-          <span style={{fontSize:120,opacity:.5,filter:'drop-shadow(0 8px 32px rgba(0,0,0,.6))'}}>{recipe.emoji||'🍽️'}</span>
-        </div>
-      )}
 
-      {/* Gradient overlay */}
-      <div style={{position:'absolute',inset:0,pointerEvents:'none',
-        background:'linear-gradient(to bottom, rgba(0,0,0,0.04) 0%, rgba(0,0,0,0.10) 28%, rgba(0,0,0,0.48) 58%, rgba(0,0,0,0.90) 100%)'  }}/>
-
-      {/* TOP-LEFT: Pantry badge */}
-      {pantryPct>=50&&(
-        <div style={{
-          position:'absolute',top:14,left:14,zIndex:2,
-          background:pantryPct===100?'rgba(59,186,87,.88)':'rgba(0,0,0,.52)',
-          color:'#fff',padding:'4px 12px',borderRadius:20,
-          fontSize:11,fontWeight:700,backdropFilter:'blur(8px)',
-          border:pantryPct===100?'none':'1px solid rgba(255,255,255,.22)',
-          boxShadow:'0 2px 8px rgba(0,0,0,.28)',
-        }}>
-          {pantryPct===100?'✓ Everything in pantry':`🧫 ${pantryPct}% pantry match`}
-        </div>
-      )}
-
-      {/* RIGHT SIDE: Reels-style vertical action buttons */}
+      {/* ── Flip container ── */}
       <div style={{
-        position:'absolute',right:14,
-        bottom:showDetail?330:220,
-        display:'flex',flexDirection:'column',gap:16,alignItems:'center',
-        transition:'bottom .25s ease',
-        zIndex:2,
+        position:'absolute',
+        inset:0,
+        transformStyle:'preserve-3d',
+        transition:'transform 0.55s cubic-bezier(0.4,0,0.2,1)',
+        transform:flipped?'rotateY(180deg)':'rotateY(0deg)',
+        cursor:'pointer',
       }}>
-        <div style={{display:'flex',flexDirection:'column',alignItems:'center',gap:3}}>
-          <button onClick={e=>{e.stopPropagation();onSave();}}
-            style={{
-              width:50,height:50,borderRadius:25,
-              background:isSaved?'rgba(231,76,60,.88)':'rgba(255,255,255,.14)',
-              border:isSaved?'none':'1px solid rgba(255,255,255,.32)',
-              color:'#fff',fontSize:22,cursor:'pointer',
-              display:'flex',alignItems:'center',justifyContent:'center',
-              backdropFilter:'blur(10px)',boxShadow:'0 3px 12px rgba(0,0,0,.38)',
-              transition:'background .15s',
+
+        {/* ══════════════════════════════════════════════════════════
+            FRONT FACE — full-bleed food photo + bottom overlay
+            ══════════════════════════════════════════════════════════ */}
+        <div style={{
+          position:'absolute',inset:0,
+          backfaceVisibility:'hidden',
+          WebkitBackfaceVisibility:'hidden',
+          overflow:'hidden',
+        }}>
+          {/* Food image — fills entire card */}
+          {!imgFailed ? (
+            <img
+              src={imgSrc}
+              alt={recipe.title}
+              onError={handleImgError}
+              style={{
+                position:'absolute',inset:0,
+                width:'100%',height:'100%',
+                objectFit:'cover',
+                display:'block',
+              }}
+            />
+          ):(
+            <div style={{
+              position:'absolute',inset:0,
+              background:'linear-gradient(160deg,#1c1917 0%,#292524 40%,#1c1917 100%)',
+              display:'flex',alignItems:'center',justifyContent:'center',flexDirection:'column',gap:12,
             }}>
-            {isSaved?'❤️':'🤍'}
-          </button>
-          <span style={{fontSize:10,color:'rgba(255,255,255,.72)',fontWeight:600}}>{isSaved?'Saved':'Save'}</span>
-        </div>
-        <div style={{display:'flex',flexDirection:'column',alignItems:'center',gap:3}}>
-          <button onClick={e=>{e.stopPropagation();onView();}}
-            style={{
-              width:50,height:50,borderRadius:25,
-              background:'rgba(255,255,255,.14)',border:'1px solid rgba(255,255,255,.32)',
-              color:'#fff',fontSize:20,cursor:'pointer',
-              display:'flex',alignItems:'center',justifyContent:'center',
-              backdropFilter:'blur(10px)',boxShadow:'0 3px 12px rgba(0,0,0,.38)',
-            }}>
-            📱
-          </button>
-          <span style={{fontSize:10,color:'rgba(255,255,255,.72)',fontWeight:600}}>Recipe</span>
-        </div>
-        <div style={{display:'flex',flexDirection:'column',alignItems:'center',gap:3}}>
-          <button onClick={e=>{e.stopPropagation();setShowDetail(f=>!f);}}
-            style={{
-              width:50,height:50,borderRadius:25,
-              background:showDetail?'rgba(255,255,255,.28)':'rgba(255,255,255,.14)',
-              border:'1px solid rgba(255,255,255,.32)',
-              color:'#fff',fontSize:20,cursor:'pointer',
-              display:'flex',alignItems:'center',justifyContent:'center',
-              backdropFilter:'blur(10px)',boxShadow:'0 3px 12px rgba(0,0,0,.38)',
-              transition:'background .15s',
-            }}>
-            ⓘ
-          </button>
-          <span style={{fontSize:10,color:'rgba(255,255,255,.72)',fontWeight:600}}>Details</span>
-        </div>
-      </div>
+              <span style={{fontSize:100,filter:'drop-shadow(0 6px 20px rgba(0,0,0,.7))'}}>{recipe.emoji||'🍽️'}</span>
+              <span style={{color:'rgba(255,255,255,.35)',fontSize:12,letterSpacing:'.5px'}}>{recipe.cuisine||recipe.meal||''}</span>
+            </div>
+          )}
 
-      {/* BOTTOM: title, stats, detail panel, add button */}
-      <div style={{position:'absolute',bottom:0,left:0,right:0,padding:'0 16px 16px',color:'#fff',zIndex:1}}>
-
-        {/* Dietary + cuisine tags */}
-        {((recipe.dietary||[]).length>0||recipe.cuisine)&&(
-          <div style={{display:'flex',gap:5,flexWrap:'wrap',marginBottom:8}}>
-            {(recipe.dietary||[]).slice(0,3).map(d=>(
-              <span key={d} style={{padding:'3px 9px',borderRadius:12,
-                background:'rgba(255,255,255,.16)',backdropFilter:'blur(6px)',
-                fontSize:10,fontWeight:700,border:'1px solid rgba(255,255,255,.22)'}}>{d}</span>
-            ))}
-            {recipe.cuisine&&(
-              <span style={{padding:'3px 9px',borderRadius:12,
-                background:'rgba(255,255,255,.10)',backdropFilter:'blur(6px)',
-                fontSize:10,fontWeight:600,border:'1px solid rgba(255,255,255,.18)',opacity:.85}}>{recipe.cuisine}</span>
-            )}
-          </div>
-        )}
-
-        {/* Title */}
-        <div style={{fontSize:24,fontWeight:800,lineHeight:1.2,marginBottom:7,
-          textShadow:'0 2px 10px rgba(0,0,0,.7)'}}>
-          {recipe.title}
-        </div>
-
-        {/* Quick stats */}
-        <div style={{display:'flex',gap:14,marginBottom:10,alignItems:'center',flexWrap:'wrap'}}>
-          <span style={{fontSize:13,opacity:.9}}>⏱ {recipe.time||'?'} min</span>
-          <span style={{fontSize:13,opacity:.9}}>{diffDot} {recipe.diff||'Med'}</span>
-          <span style={{fontSize:12,fontWeight:700,
-            color:missingIngs.length===0?'#4caf50':missingIngs.length<=3?'#FFD86B':'#ff9800'}}>
-            {missingIngs.length===0?'✓ Ready to cook'
-              :missingIngs.length===1?'Need 1 ingredient'
-              :`Need ${missingIngs.length} ingredients`}
-          </span>
-        </div>
-
-        {/* Detail panel (toggled via info button) */}
-        {showDetail&&(
+          {/* Bottom gradient for text legibility — starts at 45% */}
           <div style={{
-            background:'rgba(0,0,0,.60)',backdropFilter:'blur(14px)',
-            borderRadius:12,padding:'12px 14px',marginBottom:10,
-            border:'1px solid rgba(255,255,255,.14)',
+            position:'absolute',inset:0,pointerEvents:'none',
+            background:'linear-gradient(to bottom,rgba(0,0,0,0) 0%,rgba(0,0,0,0.05) 40%,rgba(0,0,0,0.55) 65%,rgba(0,0,0,0.93) 100%)',
+          }}/>
+
+          {/* Top-right: save + view pill buttons */}
+          <div style={{position:'absolute',top:14,right:14,display:'flex',flexDirection:'column',gap:10,alignItems:'center',zIndex:3}}>
+            <button
+              onClick={e=>{e.stopPropagation();onSave();}}
+              style={{
+                width:46,height:46,borderRadius:23,
+                background:isSaved?'rgba(239,68,68,.9)':'rgba(0,0,0,.45)',
+                border:'1.5px solid rgba(255,255,255,.28)',
+                backdropFilter:'blur(12px)',
+                color:'#fff',fontSize:20,cursor:'pointer',
+                display:'flex',alignItems:'center',justifyContent:'center',
+                boxShadow:'0 2px 10px rgba(0,0,0,.5)',
+                transition:'background .15s,transform .1s',
+              }}>
+              {isSaved?'❤️':'🤍'}
+            </button>
+            <button
+              onClick={e=>{e.stopPropagation();onView();}}
+              style={{
+                width:46,height:46,borderRadius:23,
+                background:'rgba(0,0,0,.45)',
+                border:'1.5px solid rgba(255,255,255,.28)',
+                backdropFilter:'blur(12px)',
+                color:'#fff',fontSize:18,cursor:'pointer',
+                display:'flex',alignItems:'center',justifyContent:'center',
+                boxShadow:'0 2px 10px rgba(0,0,0,.5)',
+              }}>
+              📋
+            </button>
+          </div>
+
+          {/* Top-left: pantry badge */}
+          {pantryPct >= 60 && (
+            <div style={{
+              position:'absolute',top:14,left:14,zIndex:3,
+              background:pantryPct===100?'rgba(34,197,94,.9)':'rgba(0,0,0,.50)',
+              color:'#fff',padding:'5px 12px',borderRadius:20,
+              fontSize:11,fontWeight:700,backdropFilter:'blur(10px)',
+              border:'1px solid rgba(255,255,255,.2)',
+              boxShadow:'0 2px 8px rgba(0,0,0,.3)',
+            }}>
+              {pantryPct===100?'✓ All in pantry':`🧫 ${pantryPct}%`}
+            </div>
+          )}
+
+          {/* Bottom overlay: dietary tags, title, stats, flip hint */}
+          <div style={{position:'absolute',bottom:0,left:0,right:0,padding:'0 18px 20px',zIndex:2}}>
+
+            {/* Dietary + cuisine pills */}
+            {((recipe.dietary||[]).length>0||recipe.cuisine)&&(
+              <div style={{display:'flex',gap:5,flexWrap:'wrap',marginBottom:10}}>
+                {(recipe.dietary||[]).slice(0,3).map(d=>(
+                  <span key={d} style={{
+                    padding:'3px 10px',borderRadius:20,
+                    background:'rgba(255,255,255,.15)',backdropFilter:'blur(8px)',
+                    fontSize:10,fontWeight:700,border:'1px solid rgba(255,255,255,.25)',
+                    color:'#fff',
+                  }}>{d}</span>
+                ))}
+                {recipe.cuisine&&(
+                  <span style={{
+                    padding:'3px 10px',borderRadius:20,
+                    background:'rgba(255,255,255,.10)',backdropFilter:'blur(8px)',
+                    fontSize:10,fontWeight:600,border:'1px solid rgba(255,255,255,.18)',
+                    color:'rgba(255,255,255,.85)',
+                  }}>{recipe.cuisine}</span>
+                )}
+              </div>
+            )}
+
+            {/* Recipe title */}
+            <div style={{
+              fontSize:26,fontWeight:800,lineHeight:1.15,color:'#fff',
+              textShadow:'0 2px 12px rgba(0,0,0,.8)',marginBottom:8,
+            }}>
+              {recipe.title}
+            </div>
+
+            {/* Stats row */}
+            <div style={{display:'flex',gap:16,alignItems:'center',marginBottom:14,flexWrap:'wrap'}}>
+              <span style={{fontSize:13,color:'rgba(255,255,255,.88)'}}>⏱ {recipe.time||'?'} min</span>
+              <span style={{fontSize:13,color:'rgba(255,255,255,.88)'}}>{diffDot} {recipe.diff||'Med'}</span>
+              {missingIngs.length===0?(
+                <span style={{fontSize:12,fontWeight:700,color:'#4ade80'}}>✓ Ready to cook</span>
+              ):(
+                <span style={{fontSize:12,fontWeight:700,color:missingIngs.length<=2?'#fbbf24':'#fb923c'}}>
+                  Need {missingIngs.length} ingredient{missingIngs.length>1?'s':''}
+                </span>
+              )}
+            </div>
+
+            {/* Flip hint */}
+            <div
+              onClick={()=>setFlipped(true)}
+              style={{
+                display:'flex',alignItems:'center',justifyContent:'center',gap:6,
+                background:'rgba(255,255,255,.12)',backdropFilter:'blur(10px)',
+                border:'1px solid rgba(255,255,255,.22)',
+                borderRadius:10,padding:'9px 16px',cursor:'pointer',
+                color:'#fff',fontSize:13,fontWeight:600,
+                transition:'background .15s',
+              }}>
+              <span style={{fontSize:15}}>&#x1F4CB;</span> Tap to see ingredients &amp; add
+            </div>
+
+            {/* Scroll hint */}
+            <div style={{textAlign:'center',marginTop:9,fontSize:10,opacity:.32,letterSpacing:'.8px',color:'#fff'}}>
+              scroll for more ↓
+            </div>
+          </div>
+        </div>
+
+        {/* ══════════════════════════════════════════════════════════
+            BACK FACE — ingredients, pantry status, action buttons
+            ══════════════════════════════════════════════════════════ */}
+        <div style={{
+          position:'absolute',inset:0,
+          backfaceVisibility:'hidden',
+          WebkitBackfaceVisibility:'hidden',
+          transform:'rotateY(180deg)',
+          overflow:'hidden',
+          background:'#0e0e0e',
+        }}>
+          {/* Blurred food image as back background */}
+          {!imgFailed&&(
+            <img src={imgSrc} alt=''
+              style={{position:'absolute',inset:0,width:'100%',height:'100%',objectFit:'cover',filter:'blur(22px) brightness(0.25) saturate(1.4)',transform:'scale(1.1)',pointerEvents:'none'}}
+            />
+          )}
+
+          {/* Scrollable content on back */}
+          <div style={{
+            position:'absolute',inset:0,
+            overflowY:'auto',
+            padding:'20px 20px 24px',
+            display:'flex',flexDirection:'column',
           }}>
+
+            {/* Back header: title + flip-back button */}
+            <div style={{display:'flex',alignItems:'flex-start',justifyContent:'space-between',marginBottom:16,gap:8}}>
+              <div style={{fontSize:18,fontWeight:800,color:'#fff',lineHeight:1.25,flex:1,textShadow:'0 1px 6px rgba(0,0,0,.5)'}}>
+                {recipe.emoji||'🍽️'} {recipe.title}
+              </div>
+              <button
+                onClick={e=>{e.stopPropagation();setFlipped(false);}}
+                style={{
+                  width:36,height:36,borderRadius:18,flexShrink:0,
+                  background:'rgba(255,255,255,.12)',border:'1px solid rgba(255,255,255,.22)',
+                  color:'#fff',fontSize:16,cursor:'pointer',
+                  display:'flex',alignItems:'center',justifyContent:'center',
+                  backdropFilter:'blur(8px)',
+                }}>
+                ✕
+              </button>
+            </div>
+
+            {/* Recipe stats row */}
+            <div style={{
+              display:'flex',gap:10,marginBottom:16,flexWrap:'wrap',
+            }}>
+              <div style={{background:'rgba(255,255,255,.10)',backdropFilter:'blur(8px)',borderRadius:10,padding:'7px 13px',border:'1px solid rgba(255,255,255,.15)'}}>
+                <div style={{fontSize:9,fontWeight:700,color:'rgba(255,255,255,.55)',letterSpacing:'.8px',marginBottom:2}}>TIME</div>
+                <div style={{fontSize:14,fontWeight:700,color:'#fff'}}>⏱ {recipe.time||'?'} min</div>
+              </div>
+              <div style={{background:'rgba(255,255,255,.10)',backdropFilter:'blur(8px)',borderRadius:10,padding:'7px 13px',border:'1px solid rgba(255,255,255,.15)'}}>
+                <div style={{fontSize:9,fontWeight:700,color:'rgba(255,255,255,.55)',letterSpacing:'.8px',marginBottom:2}}>DIFFICULTY</div>
+                <div style={{fontSize:14,fontWeight:700,color:'#fff'}}>{diffDot} {recipe.diff||'Med'}</div>
+              </div>
+              <div style={{background:'rgba(255,255,255,.10)',backdropFilter:'blur(8px)',borderRadius:10,padding:'7px 13px',border:'1px solid rgba(255,255,255,.15)'}}>
+                <div style={{fontSize:9,fontWeight:700,color:'rgba(255,255,255,.55)',letterSpacing:'.8px',marginBottom:2}}>PANTRY</div>
+                <div style={{fontSize:14,fontWeight:700,color:pantryPct===100?'#4ade80':pantryPct>=60?'#fbbf24':'#f87171'}}>{pantryPct}%</div>
+              </div>
+            </div>
+
+            {/* Ingredients list with pantry colour coding */}
+            <div style={{marginBottom:16}}>
+              <div style={{fontSize:11,fontWeight:700,color:'rgba(255,255,255,.5)',letterSpacing:'.8px',marginBottom:8}}>INGREDIENTS</div>
+              <div style={{display:'flex',flexDirection:'column',gap:4}}>
+                {req.slice(0,10).map((ing,i)=>{
+                  const inPantry = ingInPantry(ing.n, pantrySet);
+                  return (
+                    <div key={i} style={{
+                      display:'flex',alignItems:'center',gap:8,
+                      padding:'6px 10px',borderRadius:8,
+                      background:inPantry?'rgba(74,222,128,.1)':'rgba(248,113,113,.08)',
+                      border:`1px solid ${inPantry?'rgba(74,222,128,.2)':'rgba(248,113,113,.18)'}`,
+                    }}>
+                      <span style={{fontSize:13,flexShrink:0}}>{inPantry?'✅':'🛒'}</span>
+                      <span style={{fontSize:13,color:inPantry?'rgba(255,255,255,.85)':'rgba(255,255,255,.65)',flex:1}}>{ing.n}</span>
+                      {ing.a&&<span style={{fontSize:11,color:'rgba(255,255,255,.4)',flexShrink:0}}>{ing.a}</span>}
+                    </div>
+                  );
+                })}
+                {req.length>10&&(
+                  <div style={{fontSize:12,color:'rgba(255,255,255,.4)',textAlign:'center',paddingTop:4}}>+{req.length-10} more ingredients</div>
+                )}
+              </div>
+            </div>
+
+            {/* Missing summary */}
             {missingIngs.length>0&&(
-              <div style={{marginBottom:8}}>
-                <div style={{fontSize:11,fontWeight:700,color:'#ff9800',marginBottom:3}}>Need to buy:</div>
-                <div style={{fontSize:12,color:'rgba(255,255,255,.84)',lineHeight:1.65}}>
-                  {missingIngs.slice(0,5).map(i=>i.n).join(' · ')}{missingIngs.length>5?` +${missingIngs.length-5} more`:''}
+              <div style={{
+                background:'rgba(251,146,60,.12)',border:'1px solid rgba(251,146,60,.25)',
+                borderRadius:10,padding:'10px 12px',marginBottom:14,
+              }}>
+                <div style={{fontSize:11,fontWeight:700,color:'#fb923c',marginBottom:4}}>Need to shop for:</div>
+                <div style={{fontSize:12,color:'rgba(255,255,255,.78)',lineHeight:1.6}}>
+                  {missingIngs.map(i=>i.n).join(' · ')}
                 </div>
               </div>
             )}
-            <div>
-              <div style={{fontSize:11,fontWeight:700,color:'rgba(255,255,255,.55)',marginBottom:3}}>Ingredients:</div>
-              <div style={{fontSize:12,color:'rgba(255,255,255,.72)',lineHeight:1.65}}>
-                {ings.slice(0,6).map(i=>i.n).join(', ')}{ings.length>6?` +${ings.length-6} more`:''}
-              </div>
+
+            {/* Spacer to push buttons to bottom on short screens */}
+            <div style={{flex:1,minHeight:12}}/>
+
+            {/* Action buttons */}
+            <div style={{display:'flex',flexDirection:'column',gap:8}}>
+              <button
+                onClick={e=>{e.stopPropagation();onSelect();}}
+                style={{
+                  width:'100%',
+                  background:'linear-gradient(135deg,#c9953a,#e8a94e)',
+                  color:'#fff',border:'none',borderRadius:12,
+                  padding:'15px 20px',fontSize:15,fontWeight:800,cursor:'pointer',
+                  boxShadow:'0 4px 20px rgba(201,149,58,.5)',
+                  textShadow:'0 1px 3px rgba(0,0,0,.35)',
+                }}>
+                {isCurrentSlotFilled?`↺ Replace ${dayLabel} ${mealLabel}`:`+ Add for ${dayLabel} ${mealLabel}`}
+              </button>
+              <button
+                onClick={e=>{e.stopPropagation();onView();}}
+                style={{
+                  width:'100%',
+                  background:'rgba(255,255,255,.10)',
+                  color:'#fff',border:'1px solid rgba(255,255,255,.22)',borderRadius:12,
+                  padding:'12px 20px',fontSize:13,fontWeight:600,cursor:'pointer',
+                  backdropFilter:'blur(10px)',
+                }}>
+                📋 View full recipe
+              </button>
             </div>
           </div>
-        )}
-
-        {/* Add for slot button */}
-        <button onClick={e=>{e.stopPropagation();onSelect();}}
-          style={{
-            width:'100%',
-            background:'linear-gradient(135deg,#c9953a,#e8a94e)',
-            color:'#fff',border:'none',borderRadius:12,
-            padding:'14px 20px',fontSize:15,fontWeight:800,cursor:'pointer',
-            backdropFilter:'blur(8px)',
-            boxShadow:'0 4px 20px rgba(201,149,58,.48)',
-            textShadow:'0 1px 3px rgba(0,0,0,.3)',
-          }}>
-          {isCurrentSlotFilled?`↺ Replace ${dayLabel} ${mealLabel}`:`+ Add for ${dayLabel} ${mealLabel}`}
-        </button>
-
-        {/* Scroll hint */}
-        <div style={{textAlign:'center',marginTop:7,fontSize:10,opacity:.35,letterSpacing:'.6px'}}>
-          scroll for more ↓
         </div>
-      </div>
+
+      </div>{/* end flip container */}
     </div>
   );
 }
