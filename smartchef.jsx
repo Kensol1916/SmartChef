@@ -21743,25 +21743,15 @@ const IMAGE_MAP = {
   24: 'https://images.unsplash.com/photo-1488477181723-0b780a58ef09?auto=format&fit=crop&w=800&q=80', // Greek Yogurt Honey Bowl
   25: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=800&q=80', // Banana Oat Pancakes
   26: 'https://images.unsplash.com/photo-1541519227354-08fa5d50c820?auto=format&fit=crop&w=800&q=80', // Shakshuka
-  27: 'https://images.unsplash.com/photo-1488477181723-0b780a58ef09?auto=format&fit=crop&w=800&q=80', // Cottage Cheese Berry Bowl
-  28: 'https://images.unsplash.com/photo-1588566565463-180a5a8f1ac1?auto=format&fit=crop&w=800&q=80', // Tomato Basil Toast
   29: 'https://images.unsplash.com/photo-1484723091739-30990ceefcea?auto=format&fit=crop&w=800&q=80', // Apple Cinnamon Oatmeal
-  31: 'https://images.unsplash.com/photo-1488477181723-0b780a58ef09?auto=format&fit=crop&w=800&q=80', // Chia Almond Pudding
   32: 'https://images.unsplash.com/photo-1541519227354-08fa5d50c820?auto=format&fit=crop&w=800&q=80', // Zucchini Frittata
-  33: 'https://images.unsplash.com/photo-1588566565463-180a5a8f1ac1?auto=format&fit=crop&w=800&q=80', // Peanut Butter Banana Toast
   34: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=800&q=80', // Mushroom Spinach Quesadilla
-  35: 'https://images.unsplash.com/photo-1588566565463-180a5a8f1ac1?auto=format&fit=crop&w=800&q=80', // Ricotta Toast with Honey
   36: 'https://images.unsplash.com/photo-1541519227354-08fa5d50c820?auto=format&fit=crop&w=800&q=80', // Savory Oatmeal with Egg
   37: 'https://images.unsplash.com/photo-1488477181723-0b780a58ef09?auto=format&fit=crop&w=800&q=80', // Apple Yogurt Parfait
   38: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=800&q=80', // Breakfast Burrito Veggie
   39: 'https://images.unsplash.com/photo-1484723091739-30990ceefcea?auto=format&fit=crop&w=800&q=80', // Blueberry Oat Muffins
-  40: 'https://images.unsplash.com/photo-1588566565463-180a5a8f1ac1?auto=format&fit=crop&w=800&q=80', // Tomato Mozzarella Toast
-  41: 'https://images.unsplash.com/photo-1588566565463-180a5a8f1ac1?auto=format&fit=crop&w=800&q=80', // Date Tahini Toast
   42: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=800&q=80', // Savory Cottage Pancakes
-  43: 'https://images.unsplash.com/photo-1588566565463-180a5a8f1ac1?auto=format&fit=crop&w=800&q=80', // Almond Butter Apple Toast
-  44: 'https://images.unsplash.com/photo-1588566565463-180a5a8f1ac1?auto=format&fit=crop&w=800&q=80', // Eggplant Breakfast Toast
   45: 'https://images.unsplash.com/photo-1488477181723-0b780a58ef09?auto=format&fit=crop&w=800&q=80', // Mango Yogurt Bowl
-  47: 'https://images.unsplash.com/photo-1588566565463-180a5a8f1ac1?auto=format&fit=crop&w=800&q=80', // Savory French Toast
   48: 'https://images.unsplash.com/photo-1488477181723-0b780a58ef09?auto=format&fit=crop&w=800&q=80', // Pear Cinnamon Yogurt
   50: 'https://images.unsplash.com/photo-1484723091739-30990ceefcea?auto=format&fit=crop&w=800&q=80', // Pumpkin Oat Porridge
   51: 'https://images.unsplash.com/photo-1541519227354-08fa5d50c820?auto=format&fit=crop&w=800&q=80', // Savory Tomato Egg Skillet
@@ -21836,24 +21826,16 @@ const IMAGE_MAP = {
   163: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=800&q=80', // Swedish Pannkakor
   164: 'https://images.unsplash.com/photo-1484723091739-30990ceefcea?auto=format&fit=crop&w=800&q=80', // Steel Cut Oatmeal with Berries
   165: 'https://images.unsplash.com/photo-1484723091739-30990ceefcea?auto=format&fit=crop&w=800&q=80', // Overnight Oats with Chia
-  166: 'https://images.unsplash.com/photo-1517093728432-a0440f8d45af?auto=format&fit=crop&w=800&q=80', // Bircher Muesli
   168: 'https://images.unsplash.com/photo-1484723091739-30990ceefcea?auto=format&fit=crop&w=800&q=80', // Baked Oatmeal with Apples
   169: 'https://images.unsplash.com/photo-1541519227354-08fa5d50c820?auto=format&fit=crop&w=800&q=80', // Savory Oatmeal with Egg
   170: 'https://images.unsplash.com/photo-1484723091739-30990ceefcea?auto=format&fit=crop&w=800&q=80', // Congee Rice Porridge
-  172: 'https://images.unsplash.com/photo-1517093728432-a0440f8d45af?auto=format&fit=crop&w=800&q=80', // Homemade Granola
   173: 'https://images.unsplash.com/photo-1484723091739-30990ceefcea?auto=format&fit=crop&w=800&q=80', // Millet Porridge with Dates
   174: 'https://images.unsplash.com/photo-1484723091739-30990ceefcea?auto=format&fit=crop&w=800&q=80', // Teff Porridge
   176: 'https://images.unsplash.com/photo-1488477181723-0b780a58ef09?auto=format&fit=crop&w=800&q=80', // Acai Smoothie Bowl
   177: 'https://images.unsplash.com/photo-1488477181723-0b780a58ef09?auto=format&fit=crop&w=800&q=80', // Pitaya Dragon Fruit Bowl
   181: 'https://images.unsplash.com/photo-1488477181723-0b780a58ef09?auto=format&fit=crop&w=800&q=80', // Wild Blueberry Smoothie Bowl
   184: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&w=800&q=80', // Smoked Salmon Toast
-  185: 'https://images.unsplash.com/photo-1588566565463-180a5a8f1ac1?auto=format&fit=crop&w=800&q=80', // Ricotta Honey Toast
-  186: 'https://images.unsplash.com/photo-1588566565463-180a5a8f1ac1?auto=format&fit=crop&w=800&q=80', // Smashed Peas and Feta Toast
-  187: 'https://images.unsplash.com/photo-1588566565463-180a5a8f1ac1?auto=format&fit=crop&w=800&q=80', // Tahini and Banana Toast
-  188: 'https://images.unsplash.com/photo-1588566565463-180a5a8f1ac1?auto=format&fit=crop&w=800&q=80', // Brie and Fig Toast
-  189: 'https://images.unsplash.com/photo-1588566565463-180a5a8f1ac1?auto=format&fit=crop&w=800&q=80', // Pesto and Cherry Tomato Toast
-  190: 'https://images.unsplash.com/photo-1588566565463-180a5a8f1ac1?auto=format&fit=crop&w=800&q=80', // Hummus and Roasted Pepper Toast
-  199: 'https://images.unsplash.com/photo-1517093728432-a0440f8d45af?auto=format&fit=crop&w=800&q=80', // Yogurt Parfait with Granola
+  199: 'https://images.unsplash.com/photo-1488477181723-0b780a58ef09?auto=format&fit=crop&w=800&q=80', // Yogurt Parfait with Granola
   200: 'https://images.unsplash.com/photo-1488477181723-0b780a58ef09?auto=format&fit=crop&w=800&q=80', // Mixed Berry Parfait
   201: 'https://images.unsplash.com/photo-1488477181723-0b780a58ef09?auto=format&fit=crop&w=800&q=80', // Coconut Yogurt Bowl
   203: 'https://images.unsplash.com/photo-1540189549519-8bf0c5e5d0e3?auto=format&fit=crop&w=800&q=80', // Nut Butter Power Bowl
@@ -21865,25 +21847,20 @@ const IMAGE_MAP = {
   222: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=800&q=80', // Whey Protein Pancakes
   223: 'https://images.unsplash.com/photo-1541519227354-08fa5d50c820?auto=format&fit=crop&w=800&q=80', // Shakshuka with Chickpeas
   224: 'https://images.unsplash.com/photo-1488477181723-0b780a58ef09?auto=format&fit=crop&w=800&q=80', // Overnight Oat Parfait
-  226: 'https://images.unsplash.com/photo-1588566565463-180a5a8f1ac1?auto=format&fit=crop&w=800&q=80', // Peanut Butter and Jelly French Toast
-  227: 'https://images.unsplash.com/photo-1588566565463-180a5a8f1ac1?auto=format&fit=crop&w=800&q=80', // Banana Bread French Toast
   228: 'https://images.unsplash.com/photo-1546793665-c74683f339c1?auto=format&fit=crop&w=800&q=80', // Quinoa Power Bowl
   229: 'https://images.unsplash.com/photo-1541519227354-08fa5d50c820?auto=format&fit=crop&w=800&q=80', // Croissant Egg Sandwich
   230: 'https://images.unsplash.com/photo-1541519227354-08fa5d50c820?auto=format&fit=crop&w=800&q=80', // Masala Omelette
   231: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=800&q=80', // Coconut Flour Pancakes
-  232: 'https://images.unsplash.com/photo-1517093728432-a0440f8d45af?auto=format&fit=crop&w=800&q=80', // A\u00e7a\u00ed and Granola Bowl
   234: 'https://images.unsplash.com/photo-1488477181723-0b780a58ef09?auto=format&fit=crop&w=800&q=80', // Kefir Berry Smoothie Bowl
   235: 'https://images.unsplash.com/photo-1541519227354-08fa5d50c820?auto=format&fit=crop&w=800&q=80', // Avocado and Egg Breakfast Salad
   236: 'https://images.unsplash.com/photo-1541519227354-08fa5d50c820?auto=format&fit=crop&w=800&q=80', // Steak and Eggs
   238: 'https://images.unsplash.com/photo-1488477181723-0b780a58ef09?auto=format&fit=crop&w=800&q=80', // Chia Seed Pudding Parfait
-  240: 'https://images.unsplash.com/photo-1488477181723-0b780a58ef09?auto=format&fit=crop&w=800&q=80', // Overnight Chia Oat Bowl
+  240: 'https://images.unsplash.com/photo-1484723091739-30990ceefcea?auto=format&fit=crop&w=800&q=80', // Overnight Chia Oat Bowl
   242: 'https://images.unsplash.com/photo-1484723091739-30990ceefcea?auto=format&fit=crop&w=800&q=80', // Blueberry Overnight Oats
   243: 'https://images.unsplash.com/photo-1484723091739-30990ceefcea?auto=format&fit=crop&w=800&q=80', // Warm Spiced Oatmeal
   244: 'https://images.unsplash.com/photo-1541519227354-08fa5d50c820?auto=format&fit=crop&w=800&q=80', // Ricotta and Herb Omelette
   245: 'https://images.unsplash.com/photo-1568051243858-533a607809a5?auto=format&fit=crop&w=800&q=80', // Apple Cinnamon Waffles
-  246: 'https://images.unsplash.com/photo-1488477181723-0b780a58ef09?auto=format&fit=crop&w=800&q=80', // Cottage Cheese and Peach Bowl
   248: 'https://images.unsplash.com/photo-1541519227354-08fa5d50c820?auto=format&fit=crop&w=800&q=80', // Bagel with Avocado and Egg
-  250: 'https://images.unsplash.com/photo-1588566565463-180a5a8f1ac1?auto=format&fit=crop&w=800&q=80', // Mushroom on Toast
   251: 'https://images.unsplash.com/photo-1484723091739-30990ceefcea?auto=format&fit=crop&w=800&q=80', // Warm Almond Milk Oatmeal
   252: 'https://images.unsplash.com/photo-1541519227354-08fa5d50c820?auto=format&fit=crop&w=800&q=80', // Sweet Potato Egg Bake
   253: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=800&q=80', // Gingerbread Pancakes
@@ -21894,16 +21871,13 @@ const IMAGE_MAP = {
   262: 'https://images.unsplash.com/photo-1541519227354-08fa5d50c820?auto=format&fit=crop&w=800&q=80', // Bacon and Egg Wrap
   263: 'https://images.unsplash.com/photo-1484723091739-30990ceefcea?auto=format&fit=crop&w=800&q=80', // Mango Coconut Overnight Oats
   264: 'https://images.unsplash.com/photo-1541519227354-08fa5d50c820?auto=format&fit=crop&w=800&q=80', // Shakshuka Verde
-  265: 'https://images.unsplash.com/photo-1588566565463-180a5a8f1ac1?auto=format&fit=crop&w=800&q=80', // Walnut and Date Toast
   266: 'https://images.unsplash.com/photo-1488477181723-0b780a58ef09?auto=format&fit=crop&w=800&q=80', // Protein Smoothie Bowl
-  267: 'https://images.unsplash.com/photo-1488477181723-0b780a58ef09?auto=format&fit=crop&w=800&q=80', // Citrus Chia Bowl
   268: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=800&q=80', // Sweet Potato Pancakes
   269: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&w=800&q=80', // Smoked Trout Breakfast Bowl
   272: 'https://images.unsplash.com/photo-1484723091739-30990ceefcea?auto=format&fit=crop&w=800&q=80', // Peanut Butter Oat Bowl
   273: 'https://images.unsplash.com/photo-1529059894571-c9b4ec5b1b5d?auto=format&fit=crop&w=800&q=80', // Waldorf Breakfast Salad
   274: 'https://images.unsplash.com/photo-1541519227354-08fa5d50c820?auto=format&fit=crop&w=800&q=80', // Egg and Veggie Galette
   276: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=800&q=80', // Blueberry Ricotta Pancakes
-  277: 'https://images.unsplash.com/photo-1488477181723-0b780a58ef09?auto=format&fit=crop&w=800&q=80', // Mango Chia Pudding
   278: 'https://images.unsplash.com/photo-1541519227354-08fa5d50c820?auto=format&fit=crop&w=800&q=80', // Turkish Menemen
   279: 'https://images.unsplash.com/photo-1484723091739-30990ceefcea?auto=format&fit=crop&w=800&q=80', // Overnight Oats with Peaches
   280: 'https://images.unsplash.com/photo-1541519227354-08fa5d50c820?auto=format&fit=crop&w=800&q=80', // Israeli Shakshuka Verde
@@ -21921,8 +21895,6 @@ const IMAGE_MAP = {
   296: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=800&q=80', // Ham and Cheese Crepes
   297: 'https://images.unsplash.com/photo-1484723091739-30990ceefcea?auto=format&fit=crop&w=800&q=80', // PB&J Overnight Oat Bowl
   298: 'https://images.unsplash.com/photo-1541519227354-08fa5d50c820?auto=format&fit=crop&w=800&q=80', // Shakshuka with Merguez
-  299: 'https://images.unsplash.com/photo-1517093728432-a0440f8d45af?auto=format&fit=crop&w=800&q=80', // Coconut Mango Bircher Muesli
-  301: 'https://images.unsplash.com/photo-1517093728432-a0440f8d45af?auto=format&fit=crop&w=800&q=80', // Hazelnut Chocolate Granola Bowl
   303: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=800&q=80', // Protein Oat Pancakes
   304: 'https://images.unsplash.com/photo-1484723091739-30990ceefcea?auto=format&fit=crop&w=800&q=80', // Matcha Latte Overnight Oats
   305: 'https://images.unsplash.com/photo-1484723091739-30990ceefcea?auto=format&fit=crop&w=800&q=80', // Warm Semolina Porridge
@@ -22085,10 +22057,8 @@ const IMAGE_MAP = {
   793: 'https://images.unsplash.com/photo-1540189549519-8bf0c5e5d0e3?auto=format&fit=crop&w=800&q=80', // Roasted Fennel and Orange Salad
   803: 'https://images.unsplash.com/photo-1546793665-c74683f339c1?auto=format&fit=crop&w=800&q=80', // Caprese Skewers
   810: 'https://images.unsplash.com/photo-1541519227354-08fa5d50c820?auto=format&fit=crop&w=800&q=80', // Deviled Eggs
-  814: 'https://images.unsplash.com/photo-1588566565463-180a5a8f1ac1?auto=format&fit=crop&w=800&q=80', // Bruschetta al Pomodoro
   818: 'https://images.unsplash.com/photo-1598103442097-8b74394b95c3?auto=format&fit=crop&w=800&q=80', // Pizza Margherita Bites
   823: 'https://images.unsplash.com/photo-1541519227354-08fa5d50c820?auto=format&fit=crop&w=800&q=80', // Scotch Eggs
-  826: 'https://images.unsplash.com/photo-1588566565463-180a5a8f1ac1?auto=format&fit=crop&w=800&q=80', // Crostini with Ricotta
   829: 'https://images.unsplash.com/photo-1541519227354-08fa5d50c820?auto=format&fit=crop&w=800&q=80', // Mini Quiches
   832: 'https://images.unsplash.com/photo-1588566565463-180a5a8f1ac1?auto=format&fit=crop&w=800&q=80', // Avocado Toast Bites
   837: 'https://images.unsplash.com/photo-1541519227354-08fa5d50c820?auto=format&fit=crop&w=800&q=80', // Fried Egg on Toast
@@ -22101,7 +22071,6 @@ const IMAGE_MAP = {
   862: 'https://images.unsplash.com/photo-1541519227354-08fa5d50c820?auto=format&fit=crop&w=800&q=80', // Egg Salad on Rye
   865: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&w=800&q=80', // Salt and Pepper Prawns
   868: 'https://images.unsplash.com/photo-1546793665-c74683f339c1?auto=format&fit=crop&w=800&q=80', // Mini Caprese
-  870: 'https://images.unsplash.com/photo-1588566565463-180a5a8f1ac1?auto=format&fit=crop&w=800&q=80', // Bruschetta with Mushrooms
   871: 'https://images.unsplash.com/photo-1529059894571-c9b4ec5b1b5d?auto=format&fit=crop&w=800&q=80', // Fattoush with Pita Chips
   872: 'https://images.unsplash.com/photo-1541519227354-08fa5d50c820?auto=format&fit=crop&w=800&q=80', // Mini Frittatas
   875: 'https://images.unsplash.com/photo-1540189549519-8bf0c5e5d0e3?auto=format&fit=crop&w=800&q=80', // Smashed Cucumber Salad
@@ -22110,11 +22079,9 @@ const IMAGE_MAP = {
   885: 'https://images.unsplash.com/photo-1541519227354-08fa5d50c820?auto=format&fit=crop&w=800&q=80', // Turkish Menemen Snack
   886: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=800&q=80', // Crostini with Chicken Liver
   888: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=800&q=80', // Kimchi Pancake
-  889: 'https://images.unsplash.com/photo-1588566565463-180a5a8f1ac1?auto=format&fit=crop&w=800&q=80', // Beet and Goat Cheese Crostini
   891: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&w=800&q=80', // Prawn Toast
   892: 'https://images.unsplash.com/photo-1529059894571-c9b4ec5b1b5d?auto=format&fit=crop&w=800&q=80', // Seaweed Salad
   893: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=800&q=80', // Cheese Quesadilla
-  894: 'https://images.unsplash.com/photo-1517093728432-a0440f8d45af?auto=format&fit=crop&w=800&q=80', // Granola Bark
   895: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&w=800&q=80', // Fish and Chips Mini
   896: 'https://images.unsplash.com/photo-1540189549519-8bf0c5e5d0e3?auto=format&fit=crop&w=800&q=80', // Papaya Salad
   899: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&w=800&q=80', // Shrimp Avocado Crostini
@@ -22122,11 +22089,8 @@ const IMAGE_MAP = {
   908: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&w=800&q=80', // Coconut Shrimp
   915: 'https://images.unsplash.com/photo-1546793665-c74683f339c1?auto=format&fit=crop&w=800&q=80', // Panzanella Bites
   916: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&w=800&q=80', // Tempura Prawn
-  917: 'https://images.unsplash.com/photo-1588566565463-180a5a8f1ac1?auto=format&fit=crop&w=800&q=80', // Nut Butter Power Toast
-  923: 'https://images.unsplash.com/photo-1588566565463-180a5a8f1ac1?auto=format&fit=crop&w=800&q=80', // Brie and Cranberry Crostini
   926: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&w=800&q=80', // Avocado Boats with Tuna
   927: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=800&q=80', // Fish Tacos Baja Style
-  932: 'https://images.unsplash.com/photo-1588566565463-180a5a8f1ac1?auto=format&fit=crop&w=800&q=80', // Bruschetta with Cannellini
   934: 'https://images.unsplash.com/photo-1541519227354-08fa5d50c820?auto=format&fit=crop&w=800&q=80', // Miso Deviled Eggs
   944: 'https://images.unsplash.com/photo-1541519227354-08fa5d50c820?auto=format&fit=crop&w=800&q=80', // Egg Muffins
   951: 'https://images.unsplash.com/photo-1488477181723-0b780a58ef09?auto=format&fit=crop&w=800&q=80', // Pistachio Yogurt Dip
@@ -22138,10 +22102,10 @@ const IMAGE_MAP = {
   969: 'https://images.unsplash.com/photo-1541519227354-08fa5d50c820?auto=format&fit=crop&w=800&q=80', // Shakshuka Mini Pots
   971: 'https://images.unsplash.com/photo-1540189549519-8bf0c5e5d0e3?auto=format&fit=crop&w=800&q=80', // Fattoush Snack Plate
   979: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=800&q=80', // Crispy Skin Chicken Wings
-  982: 'https://images.unsplash.com/photo-1588566565463-180a5a8f1ac1?auto=format&fit=crop&w=800&q=80', // Cheese Toast Korean Baked
   991: 'https://images.unsplash.com/photo-1546793665-c74683f339c1?auto=format&fit=crop&w=800&q=80', // Japanese Potato Salad
   996: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&w=800&q=80', // Prawn Toasts with Sesame
 };
+
 
 
 RECIPES.forEach(r => { if (!r.image && IMAGE_MAP[r.id]) r.image = IMAGE_MAP[r.id]; });
@@ -25146,7 +25110,6 @@ const PHOTO_CATS = {
   '1541519227354': 'eggs',
   '1588566565463': 'avocado_toast',
   '1488477181723': 'yogurt',
-  '1517093728432': 'granola',
   '1578985545062': 'cake',
   '1505253716362': 'cookies',
   '1558961363':    'cheesecake',
@@ -25191,14 +25154,12 @@ function imgAllowedForRecipe(url, recipe) {
     return /\bpancakes?\b|\bflapjacks?\b|crêpes?|\bcrepes?\b|\bpannkakor\b|dutch\s*baby/.test(t);
   // waffles
   if (cat === 'waffles')   return /\bwaffles?\b/.test(t);
-  // granola / muesli / bircher
-  if (cat === 'granola')   return /\bgranola\b|\bmuesli\b|\bbircher\b/.test(t);
-  // yogurt — smoothie bowls, parfait, acai, cottage cheese bowls, chia pudding
+  // yogurt — smoothie bowls, parfait, acai only (NOT cottage cheese / chia / berry bowls)
   if (cat === 'yogurt')
-    return /\byogurts?\b|\byoghurts?\b|\bparfait\b|smoothie\s*bowl|\bacai\b|pitaya|dragon\s*fruit|cottage\s*cheese.*bowl|berry\s*bowl|chia.*pud|chia.*bowl/.test(t);
-  // avocado_toast — any toast dish including non-avocado
+    return /\byogurts?\b|\byoghurts?\b|\bparfait\b|smoothie\s*bowl|\bacai\b|pitaya|dragon\s*fruit/.test(t);
+  // avocado_toast — ONLY dishes that actually contain avocado on toast
   if (cat === 'avocado_toast')
-    return /\btoast\b|\bbruschetta\b|\bcrostini\b/.test(t);
+    return /avocado.*toast|toast.*avocado/.test(t);
   // oatmeal / porridge — breakfast only
   if (cat === 'oatmeal')
     return ml === 'breakfast' && /\boatmeal\b|\bporridge\b|\boats?\b|overnight\s*oat/.test(t);
