@@ -3359,7 +3359,7 @@ const RECIPES = [
           {n:"Baking powder",a:"1 tbsp"}
         ],
     steps:[
-          {n:1,t:"Biscuits",d:"Make biscuit dough, cut rounds, bake 220\u00b0C for 12 min."},
+          {n:1,t:"Biscuits",d:"Make biscuit|quiche dough, cut rounds, bake 220\u00b0C for 12 min."},
           {n:2,t:"Sausage",d:"Brown sausage, breaking up. Remove, leave fat."},
           {n:3,t:"Gravy",d:"Add flour to fat, cook 1 min. Whisk in milk, season."},
           {n:4,t:"Serve",d:"Split biscuits, top with sausage gravy."}
@@ -21735,7 +21735,7 @@ const IMAGE_MAP = {
   5: 'https://images.unsplash.com/photo-1590412200988-a436970781fa?auto=format&fit=crop&w=800&q=80', // One-Pan Shakshuka
   6: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=800&q=80', // Fluffy Buttermilk Pancakes
   7: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=800&q=80', // Chickpea Curry
-  8: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=800&q=80', // Fish Tacos
+  8: 'https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=800&q=80', // Fish Tacos
   9: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=800&q=80', // Lentil Soup
   10: 'https://images.unsplash.com/photo-1598103442097-8b74394b95c3?auto=format&fit=crop&w=800&q=80', // Margherita Pizza
   11: 'https://images.unsplash.com/photo-1529006557810-274b9b2fc783?auto=format&fit=crop&w=800&q=80', // Chicken Shawarma Wrap
@@ -21749,7 +21749,7 @@ const IMAGE_MAP = {
   19: 'https://images.unsplash.com/photo-1540189549519-8bf0c5e5d0e3?auto=format&fit=crop&w=800&q=80', // Greek Salad
   20: 'https://images.unsplash.com/photo-1588566565463-180a5a8f1ac1?auto=format&fit=crop&w=800&q=80', // Avocado Toast
   21: 'https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=800&q=80', // Carbonara
-  22: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=800&q=80', // Spinach Mushroom Omelette
+  22: 'https://images.unsplash.com/photo-1510693206972-df098062cb71?auto=format&fit=crop&w=800&q=80', // Spinach Mushroom Omelette
   23: 'https://images.unsplash.com/photo-1541519227354-08fa5d50c44d?auto=format&fit=crop&w=800&q=80', // Avocado Toast with Lemon
   24: 'https://images.unsplash.com/photo-1488477181723-0b780a58ef09?auto=format&fit=crop&w=800&q=80', // Greek Yogurt Honey Bowl
   25: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=800&q=80', // Banana Oat Pancakes
@@ -21834,10 +21834,10 @@ const IMAGE_MAP = {
   104: 'https://images.unsplash.com/photo-1561651823-34feb02f2c28?auto=format&fit=crop&w=800&q=80', // BBQ Tofu Wrap
   105: 'https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=800&q=80', // Sun-Dried Tomato Pasta
   106: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=800&q=80', // Moroccan Tagine
-  107: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=800&q=80', // Fish Tacos
+  107: 'https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=800&q=80', // Fish Tacos
   108: 'https://images.unsplash.com/photo-1565680532505-8d789c0fbb30?auto=format&fit=crop&w=800&q=80', // Shrimp Scampi
   109: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=80', // Chicken Stir-Fry
-  110: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=800&q=80', // Beef Tacos
+  110: 'https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=800&q=80', // Beef Tacos
   111: 'https://images.unsplash.com/photo-1540189549519-8bf0c5e5d0e3?auto=format&fit=crop&w=800&q=80', // Grilled Chicken Salad
   112: 'https://images.unsplash.com/photo-1519708227418-b5a578b37a76?auto=format&fit=crop&w=800&q=80', // Salmon Pasta
   113: 'https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=800&q=80', // BBQ Chicken
@@ -21974,7 +21974,7 @@ const IMAGE_MAP = {
   244: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=800&q=80', // Ricotta and Herb Omelette
   245: 'https://images.unsplash.com/photo-1568051243858-533a607809a5?auto=format&fit=crop&w=800&q=80', // Apple Cinnamon Waffles
   246: 'https://images.unsplash.com/photo-1488477181946-13b12e5cef46?auto=format&fit=crop&w=800&q=80', // Cottage Cheese and Peach Bowl
-  247: 'https://images.unsplash.com/photo-1574894709920-11b28e7367e3?auto=format&fit=crop&w=800&q=80', // Full English Breakfast
+  247: 'https://images.unsplash.com/photo-1510693206972-df098062cb71?auto=format&fit=crop&w=800&q=80', // Full English Breakfast
   248: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=800&q=80', // Bagel with Avocado and Egg
   249: 'https://images.unsplash.com/photo-1590301157890-4810ed352733?auto=format&fit=crop&w=800&q=80', // Tropical Fruit Bowl
   250: 'https://images.unsplash.com/photo-1482049016688-2d3e1b311543?auto=format&fit=crop&w=800&q=80', // Mushroom on Toast
@@ -22102,7 +22102,7 @@ const IMAGE_MAP = {
   372: 'https://images.unsplash.com/photo-1548507045-a0e949407f19?auto=format&fit=crop&w=800&q=80', // Indian Kati Roll
   373: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=800&q=80', // Tuna Melt Sandwich
   374: 'https://images.unsplash.com/photo-1553909489-cd47e0907980?auto=format&fit=crop&w=800&q=80', // Grilled Cheese Deluxe
-  375: 'https://images.unsplash.com/photo-1553163147-622ab57be1c7?auto=format&fit=crop&w=800&q=80', // Korean Bulgogi Sandwich
+  375: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=800&q=80', // Korean Bulgogi Sandwich
   376: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80', // Japanese Egg Salad Sandwich
   377: 'https://images.unsplash.com/photo-1561651823-34feb02f2c28?auto=format&fit=crop&w=800&q=80', // Smoked Turkey Cranberry Wrap
   378: 'https://images.unsplash.com/photo-1577805947829-1e0fbb7c722b?auto=format&fit=crop&w=800&q=80', // Veggie Hummus Wrap
@@ -22245,7 +22245,7 @@ const IMAGE_MAP = {
   515: 'https://images.unsplash.com/photo-1572453800999-e8d2d1589b7c?auto=format&fit=crop&w=800&q=80', // Eggplant Parmigiana
   516: 'https://images.unsplash.com/photo-1546964124-0cce460f38ef?auto=format&fit=crop&w=800&q=80', // Bistecca Fiorentina
   517: 'https://images.unsplash.com/photo-1556761223-4c4282c73f77?auto=format&fit=crop&w=800&q=80', // Seafood Linguine
-  518: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800&q=80', // Lamb Rag\u00f9 Tagliatelle
+  518: 'https://images.unsplash.com/photo-1563379926898-05f4575a45d8?auto=format&fit=crop&w=800&q=80', // Lamb Rag\u00f9 Tagliatelle
   519: 'https://images.unsplash.com/photo-1476124369491-e7addf5db371?auto=format&fit=crop&w=800&q=80', // Risotto ai Funghi
   520: 'https://images.unsplash.com/photo-1498579150354-977475b7ea0b?auto=format&fit=crop&w=800&q=80', // Saltimbocca alla Romana
   521: 'https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?auto=format&fit=crop&w=800&q=80', // Crab Pasta
@@ -25719,46 +25719,48 @@ function PlanLibraryTab({ allRecipes, mealPlan, setMealPlan, pantry, showToast, 
 // Maps Unsplash photo ID prefix → visual category. Used by imgAllowedForRecipe()
 // to reject photos that don't match the recipe's dish type.
 const PHOTO_CATS = {
-  '1414235077': 'french_dish',
-  '1455619452': 'thai_curry',
-  '1467003909': 'salmon',
-  '1473093226': 'pesto_pasta',
-  '1473093295': 'carbonara',
-  '1476124369': 'risotto',
-  '1476718406': 'soup',
-  '1482049016': 'toast',
-  '1488477181': 'yogurt',
-  '1490474418': 'chia_pudding',
-  '1494597564': 'smoothie_bowl',
-  '1495214783': 'oatmeal',
-  '1496116218': 'dumplings',
-  '1498579150': 'italian_dish',
-  '1504674900': 'greek_dish',
-  '1504754524': 'breakfast_plate',
-  '1510693206': 'eggs',
-  '1512058564': 'stir_fry',
-  '1512621776': 'salad',
-  '1517673400': 'oatmeal',
-  '1517840901': 'french_toast',
-  '1519624014': 'soba',
-  '1519676867': 'crepe',
-  '1525351484': 'toast',
-  '1528207776': 'pancakes',
-  '1528735602': 'sandwich',
-  '1529006557': 'shawarma',
-  '1532550907': 'chicken',
-  '1533089860': 'breakfast_plate',
-  '1534080564': 'paella',
-  '1534352956': 'enchilada',
-  '1534939561': 'french_stew',
-  '1540420773': 'salad',
-  '1540914124': 'veggie_dish',
+  '1414235077428': 'french_dish',
+  '1455619452474': 'thai_curry',
+  '1467003909585': 'salmon',
+  '1473093226795': 'pesto_pasta',
+  '1473093295043': 'carbonara',
+  '1476124369491': 'risotto',
+  '1476718406336': 'soup',
+  '1482049016688': 'toast',
+  '1484723091739': 'oatmeal',
+  '1488477181723': 'yogurt',
+  '1488477181946': 'yogurt',
+  '1490474418585': 'chia_pudding',
+  '1494597564530': 'smoothie_bowl',
+  '1495214783159': 'oatmeal',
+  '1496116218417': 'dumplings',
+  '1498579150354': 'italian_dish',
+  '1504674900247': 'greek_dish',
+  '1510693206972': 'eggs',
+  '1512058564366': 'stir_fry',
+  '1512621776951': 'salad',
+  '1517673400267': 'oatmeal',
+  '1517840901100': 'french_toast',
+  '1519624014191': 'soba',
+  '1519676867240': 'crepe',
+  '1519708227418': 'salmon',
+  '1525351484163': 'toast',
+  '1528207776546': 'pancakes',
+  '1528735602780': 'sandwich',
+  '1529006557810': 'shawarma',
+  '1532550907401': 'chicken',
+  '1534080564583': 'paella',
+  '1534352956036': 'enchilada',
+  '1534939561126': 'french_stew',
+  '1540189549519': 'salad',
+  '1540420773420': 'salad',
   '1541014741': 'hummus',
-  '1541519227': 'avocado_toast',
+  '1541519227354': 'avocado_toast',
   '1543352634': 'burrito_bowl',
   '1544943910': 'fish',
   '1546069901': 'tofu',
   '1546549032': 'tuna',
+  '1546833999': 'chicken',
   '1546964124': 'steak',
   '1547592166': 'soup',
   '1547592180': 'minestrone',
@@ -25781,40 +25783,46 @@ const PHOTO_CATS = {
   '1561651823': 'wrap',
   '1562376552': 'waffles',
   '1562565651': 'southeast_asian',
-  '1563379091': 'biryani',
-  '1563379926': 'bolognese',
-  '1565299585': 'tacos',
-  '1565299624': 'pizza',
+  '1563379091339': 'biryani',
+  '1563379926898': 'bolognese',
+  '1565299585323': 'tacos',
+  '1565299624946': 'pizza',
   '1565680532': 'shrimp',
-  '1567188040': 'indian_dish',
-  '1567306226': 'ratatouille',
-  '1567620905': 'pancakes',
-  '1568901346': 'burger',
-  '1569718212': 'ramen',
-  '1572453800': 'ratatouille',
-  '1574071318': 'pizza',
-  '1574484284': 'curry',
-  '1574894709': 'lasagna',
-  '1577805947': 'hummus',
-  '1579584425': 'sushi',
-  '1582878826': 'pho',
-  '1583224871': 'korean_dish',
-  '1585032226': 'lo_mein',
-  '1585937421': 'curry',
-  '1590301157': 'smoothie_bowl',
-  '1590412200': 'shakshuka',
-  '1593001874': 'falafel',
-  '1596797038': 'indian_dish',
-  '1598515213': 'chicken',
+  '1565680532505': 'shrimp',
+  '1567188040759': 'indian_dish',
+  '1567306226416': 'ratatouille',
+  '1567620905732': 'pancakes',
+  '1568051243858': 'waffles',
+  '1568901346375': 'burger',
+  '1569718212165': 'ramen',
+  '1572453800999': 'ratatouille',
+  '1574071318508': 'pizza',
+  '1574484284002': 'curry',
+  '1574894709920': 'lasagna',
+  '1577805947697': 'hummus',
+  '1577805947829': 'hummus',
+  '1579584425555': 'sushi',
+  '1582878826629': 'pho',
+  '1583224871284': 'korean_dish',
+  '1585032226651': 'lo_mein',
+  '1585937421612': 'curry',
+  '1588566565463': 'avocado_toast',
+  '1590301157890': 'smoothie_bowl',
+  '1590412200988': 'shakshuka',
+  '1593001874117': 'falafel',
+  '1596797038530': 'indian_dish',
+  '1598103442097': 'pizza',
+  '1598515213496': 'chicken',
   '1603105029': 'fried_rice',
-  '1603133872': 'stir_fry',
-  '1607532941': 'salad',
-  '1608897013': 'penne',
-  '1612874742': 'fettuccine',
-  '1618040996': 'quesadilla',
-  '1621996346': 'pasta_generic',
-  '1625167174': 'mexican_dish',
-  '1626700051': 'breakfast_burrito',
+  '1603105029258': 'fried_rice',
+  '1603133872878': 'stir_fry',
+  '1607532941433': 'salad',
+  '1608897013039': 'penne',
+  '1612874742237': 'fettuccine',
+  '1618040996337': 'quesadilla',
+  '1621996346565': 'pasta_generic',
+  '1625167174228': 'mexican_dish',
+  '1626700051175': 'breakfast_burrito',
 };
 
 // Title-driven filter: only show the photo if the recipe title clearly matches
@@ -25824,140 +25832,60 @@ function imgAllowedForRecipe(url, recipe) {
   if (!url || !recipe) return false;
   const m = url.match(/photo-(\d+)/);
   if (!m) return false;
-  const prefix = m[1].split('-')[0];
+  const prefix = m[1];
   const cat = PHOTO_CATS[prefix];
   if (!cat) return false;
   const t = (recipe.title || '').toLowerCase();
   const ml = (recipe.meal  || '').toLowerCase();
   const c = (recipe.cuisine || '').toLowerCase();
 
-  // === SPECIFIC PASTA ===
-  if (cat === 'spaghetti')      return /\bspaghetti\b|aglio|cacio/.test(t);
-  if (cat === 'carbonara')      return /\bcarbonara\b/.test(t);
-  if (cat === 'bolognese')      return /bolognese|rag[uù]/.test(t);
-  if (cat === 'penne')          return /\bpenne\b|arrabbiata/.test(t);
-  if (cat === 'fettuccine')     return /fettuccine|alfredo/.test(t);
-  if (cat === 'lasagna')        return /lasagn[ae]/.test(t);
-  if (cat === 'gnocchi')        return /\bgnocchi\b/.test(t);
-  if (cat === 'pesto_pasta')    return /\bpesto\b/.test(t);
-  if (cat === 'mushroom_pasta') return /mushroom.*pasta|creamy.*pasta/.test(t);
-  if (cat === 'pasta_generic')  return /pasta|linguine|rigatoni|fusilli|macaroni|mac |orzo|tortellini|ravioli|ziti|farfalle|primavera|caponata|amatriciana/.test(t);
+  // Visual groups: photo categories that look similar enough to share
+  const GROUPS = {
+    pasta: ['spaghetti','carbonara','bolognese','penne','fettuccine','lasagna','gnocchi','pesto_pasta','mushroom_pasta','pasta_generic'],
+    noodle: ['ramen','pad_thai','pho','soba','lo_mein','noodles'],
+    rice: ['fried_rice','biryani','paella','risotto','bibimbap'],
+    soup: ['soup','lentil_soup','minestrone','tom_yum','french_stew'],
+    salad_bowl: ['salad','grain_bowl','tofu','smoothie_bowl'],
+    curry: ['curry','thai_curry','indian_dish'],
+    protein: ['chicken','grilled_chicken','steak','salmon','fish','shrimp','tuna','seafood'],
+    bread: ['sandwich','toast','wrap','avocado_toast','french_toast'],
+    breakfast: ['pancakes','waffles','oatmeal','eggs','shakshuka','frittata','omelette','yogurt','chia_pudding','crepe','smoothie','breakfast_plate'],
+    mexican: ['tacos','burrito_bowl','quesadilla','enchilada','breakfast_burrito','mexican_dish','latin_american'],
+    mideast: ['shawarma','falafel','hummus','kebab','middle_eastern','turkish_dish'],
+    pizza: ['pizza','burger'],
+    dumpling: ['dumplings','spring_rolls','sushi','appetizer'],
+    veggie: ['ratatouille','stir_fry'],
+    world: ['korean_dish','french_dish','italian_dish','greek_dish','ethiopian_dish','british_dish','southeast_asian','snack_plate'],
+    sweet: ['dessert']
+  };
 
-  // === NOODLES / ASIAN ===
-  if (cat === 'ramen')     return /\bramen\b/.test(t);
-  if (cat === 'pad_thai')  return /pad\s*thai/.test(t);
-  if (cat === 'pho')       return /\bpho\b/.test(t);
-  if (cat === 'soba')      return /\bsoba\b/.test(t);
-  if (cat === 'lo_mein')   return /lo\s*mein/.test(t);
-  if (cat === 'noodles')   return /noodle|udon|char kway|mee goreng|laksa/.test(t);
+  // Find which group the photo's category belongs to
+  let photoGroup = null;
+  for (const [group, cats] of Object.entries(GROUPS)) {
+    if (cats.includes(cat)) { photoGroup = group; break; }
+  }
+  if (!photoGroup) return true; // unknown category but in PHOTO_CATS → allow
 
-  // === RICE ===
-  if (cat === 'fried_rice') return /fried rice|nasi goreng|pilaf|plov|rice|makloubeh|maqluba/.test(t);
-  if (cat === 'biryani')    return /\bbiryani\b/.test(t);
-  if (cat === 'paella')     return /\bpaella\b/.test(t);
-  if (cat === 'risotto')    return /\brisotto\b/.test(t);
-  if (cat === 'bibimbap')   return /bibimbap|bibim guksu/.test(t);
+  // Now check if the recipe's dish type matches the photo's group
+  // Pasta group
+  if (photoGroup === 'pasta') return /pasta|spaghetti|linguine|penne|fettuccine|rigatoni|lasagn|gnocchi|carbonara|bolognese|alfredo|pesto|primavera|mac |orzo|tortellini|ravioli|ziti|fusilli|farfalle|cavatappi|amatriciana|arrabbiata|cacio|aglio|ragù|ragu|mushroom.*pasta|creamy.*pasta/.test(t);
+  if (photoGroup === 'noodle') return /ramen|noodle|pho|soba|lo mein|pad thai|udon|miso|laksa|char kway|mee goreng|japchae|chow|bibim/.test(t);
+  if (photoGroup === 'rice') return /rice|biryani|paella|risotto|pilaf|bibimbap|plov|nasi|makloub|fried rice|upma|oyakodon|jjigae|doenjang|kimchi|guksu/.test(t);
+  if (photoGroup === 'soup') return /soup|stew|chili|chowder|bisque|goulash|gazpacho|harira|borscht|caldo|ribollita|broth|gumbo|jambalaya|feijoada|tagine|lentil|pozole|shorba|pot au feu|bouillabaisse|cassoulet|minestrone|avgolemono|tom kha|clam/.test(t);
+  if (photoGroup === 'salad_bowl') return /salad|slaw|bowl|grain|buddha|quinoa|chickpea|nourish|harvest|tabbouleh|fattoush|tofu|tempeh|power bowl|fruit|berry|kushari|koshari|mjaddara|mujaddara|couscous|broccolini|side/.test(t) || ml === 'breakfast';
+  if (photoGroup === 'curry') return /curry|masala|tikka|korma|vindaloo|saag|palak|dal[^a-z]|daal|dhal|rajma|chole|dhansak|keema|aloo|baingan|paratha|paneer|tagine|moroccan|ethiopian|fit-fit|misir|wot/.test(t) || c === 'indian' || c === 'ethiopian';
+  if (photoGroup === 'protein') return /chicken|pollo|salmon|fish|\bcod\b|tuna|steak|beef|lamb|pork|shrimp|prawn|duck|turkey|halibut|trout|sea bass|scallop|lobster|crab|calamari|gosht|tonkatsu|schnitzel|bistecca|saltimbocca|porchetta|stroganoff|clam|ceviche/.test(t);
+  if (photoGroup === 'bread') return /sandwich|toast|panini|wrap|burrito|bagel|focaccia|blt|melt|grilled cheese|croque|bánh mì|banh mi|pita|croissant|sub|bruschetta|crostini|bread|scone|muffin|biscuit/.test(t) || ml === 'breakfast';
+  if (photoGroup === 'breakfast') return ml === 'breakfast' || /pancake|waffle|oatmeal|porridge|egg|omelette?|omelet|frittata|shakshuka|menemen|yogurt|parfait|granola|muesli|smoothie|chia|crepe|french toast/.test(t);
+  if (photoGroup === 'mexican') return /taco|burrito|quesadilla|enchilada|fajita|tostada|tamale|carnita|mole|chiles|nachos|torta/.test(t) || c === 'mexican';
+  if (photoGroup === 'mideast') return /shawarma|falafel|hummus|kebab|skewer|pita|labneh|baba|tzatziki|dukkah|kibbeh|börek|borek|kofta|dip|spread|lamb/.test(t) || ['middle eastern','lebanese','turkish','israeli','syrian','egyptian','moroccan','persian'].includes(c);
+  if (photoGroup === 'pizza') return /pizza|flatbread|burger|slider/.test(t);
+  if (photoGroup === 'dumpling') return /dumpling|gyoza|wonton|spring roll|egg roll|sushi|maki|samosa|pakora|arancini|tempura|fritter|croqueta|onigiri|kati/.test(t) || ml === 'snack';
+  if (photoGroup === 'veggie') return /ratatouille|stuffed|roasted|grilled|baked|braised|sauteed|vegetable|eggplant|zucchini|cauliflower|mushroom|wellington|stir.?fry|phad see|pad see|pad prik|pad woon|larb|adobo|lomo saltado|wok|beef|chicken|pork|shrimp|tofu|spinach|sesame/.test(t);
+  if (photoGroup === 'world') return true; // cuisine-based fallback photos always allowed
+  if (photoGroup === 'sweet') return /cake|brownie|cookie|tart|cheesecake|pudding|crumble|dessert|pie|muffin/.test(t);
 
-  // === CURRY ===
-  if (cat === 'curry')      return /curry|masala|tikka|korma|vindaloo|saag|palak|\bdal[^a-z]|daal|dhal|rajma|chole|dhansak|keema|fesenjan|ghormeh/.test(t);
-  if (cat === 'thai_curry') return /thai.*curry|green.*curry|red.*curry|massaman|panang/.test(t);
-
-  // === SOUPS ===
-  if (cat === 'soup')        return /soup|chowder|bisque|stew|chili|goulash|gazpacho|harira|borscht|caldo|avgolemono|ribollita|scotch broth|shorba|gumbo|jambalaya|feijoada|tagine|lentil/.test(t);
-  if (cat === 'lentil_soup') return /lentil.*soup|lentil/.test(t);
-  if (cat === 'minestrone')  return /\bminestrone\b/.test(t);
-  if (cat === 'tom_yum')    return /tom\s*yum|tom\s*kha/.test(t);
-  if (cat === 'french_stew') return /bourguignon|cassoulet|pot au feu|bouillabaisse|coq au vin/.test(t);
-
-  // === SALADS ===
-  if (cat === 'salad') return /salad|slaw|tabbouleh|fattoush/.test(t);
-
-  // === PROTEINS ===
-  if (cat === 'chicken')         return /chicken|pollo|peking duck/.test(t);
-  if (cat === 'grilled_chicken') return /chicken.*(grilled|roast|baked)|grilled.*chicken/.test(t);
-  if (cat === 'salmon')          return /\bsalmon\b/.test(t);
-  if (cat === 'fish')            return /fish|cod |tilapia|mahi|halibut|trout|sea bass|snapper|sole|branzino/.test(t);
-  if (cat === 'shrimp')          return /shrimp|prawn|calamari|crab|lobster|scallop/.test(t);
-  if (cat === 'tuna')            return /\btuna\b/.test(t);
-  if (cat === 'steak')           return /steak|beef|lamb|gosht|pork|pulled|pigs in|bistecca|tonkatsu|schnitzel/.test(t);
-  if (cat === 'seafood')         return /seafood|ceviche|pescado|camarones/.test(t);
-  if (cat === 'tofu')            return /tofu|tempeh/.test(t);
-
-  // === VEGETABLE DISHES ===
-  if (cat === 'ratatouille') return /ratatouille|stuffed|rollatini|parmigiana|grilled|roasted|roast|baked|braised|sauteed|saut[eé]ed|vegetable/.test(t) || (ml === 'dinner' && !(/chicken|beef|pork|lamb|fish|shrimp|salmon/).test(t));
-
-  // === SANDWICHES / TOAST / WRAPS ===
-  if (cat === 'sandwich')    return /sandwich|panini|club|blt|grilled cheese|melt|bagel|focaccia|croque|b[aá]nh m[iì]|pita|croissant|sub /.test(t);
-  if (cat === 'toast')       return /toast|bruschetta|crostini|pan con|scone|muffin|biscuit|bread/.test(t);
-  if (cat === 'wrap')        return /\bwrap\b|burrito(?!.*bowl)/.test(t);
-  if (cat === 'avocado_toast') return /avocado.*toast|avo.*toast/.test(t);
-  if (cat === 'french_toast')  return /french toast|pain perdu/.test(t);
-
-  // === BREAKFAST ===
-  if (cat === 'pancakes')        return /pancake|hotcake|pannkakor/.test(t);
-  if (cat === 'waffles')         return /\bwaffle/.test(t);
-  if (cat === 'crepe')           return /cr[eê]pe/.test(t);
-  if (cat === 'oatmeal')         return /oatmeal|porridge|muesli|overnight oats|granola/.test(t);
-  if (cat === 'eggs')            return /egg|scramble|benedict|quiche|huevos|migas|chilaquiles|gyeran|tortilla/.test(t);
-  if (cat === 'shakshuka')       return /shakshuka|menemen/.test(t);
-  if (cat === 'frittata')        return /\bfrittata\b/.test(t);
-  if (cat === 'omelette')        return /omelette?|omelet/.test(t);
-  if (cat === 'yogurt')          return /yogurt|parfait|cottage cheese/.test(t);
-  if (cat === 'smoothie_bowl')   return /smoothie.*bowl|bowl/.test(t) && ml === 'breakfast';
-  if (cat === 'smoothie')        return /smoothie|shake/.test(t);
-  if (cat === 'chia_pudding')    return /\bchia\b/.test(t);
-  if (cat === 'breakfast_plate') return ml === 'breakfast';
-
-  // === MEXICAN ===
-  if (cat === 'tacos')             return /taco|fajita|tostada/.test(t);
-  if (cat === 'burrito_bowl')      return /burrito.*bowl/.test(t);
-  if (cat === 'quesadilla')        return /quesadilla/.test(t);
-  if (cat === 'enchilada')         return /enchilada/.test(t);
-  if (cat === 'breakfast_burrito') return /breakfast.*burrito/.test(t);
-  if (cat === 'mexican_dish')      return /tamale|carnita|cochinita|tinga|mole|chiles|rajas|sopa azteca|pozole|sopa de lima|torta/.test(t) || c === 'mexican';
-
-  // === MIDDLE EASTERN ===
-  if (cat === 'shawarma') return /\bshawarma\b/.test(t);
-  if (cat === 'falafel')  return /\bfalafel\b/.test(t);
-  if (cat === 'hummus')   return /hummus|labneh|baba|muhammara|moutabel|tzatziki|ajvar|tapenade|skordalia|dukkah|raita|ranch|guacamole|peanut sauce|dip|spread|fondue/.test(t);
-  if (cat === 'kebab')    return /kebab|skewer|satay|kofta|kofte|seekh/.test(t);
-
-  // === PIZZA / BURGER ===
-  if (cat === 'pizza')  return /pizza|flatbread/.test(t);
-  if (cat === 'burger') return /burger|slider/.test(t);
-
-  // === DUMPLINGS / ASIAN SMALL ===
-  if (cat === 'dumplings')    return /dumpling|gyoza|wonton|potsticker|pot sticker|dim sum|pierogi|samosa|pakora|bhaji|arancini|croqueta|fritter|poppers|fries|rings|crisps|sticks|tempura|buffalo|battered|halloumi|edamame|kibbeh|b[oö]rek|g[oö]z/.test(t);
-  if (cat === 'spring_rolls') return /spring roll|egg roll|summer roll/.test(t);
-  if (cat === 'sushi')        return /sushi|maki/.test(t);
-
-  // === STIR FRY ===
-  if (cat === 'stir_fry') return /stir.?fry|phad see|pad see|pad prik|pad woon|larb|adobo|lomo saltado/.test(t) || (c === 'japanese' || c === 'chinese');
-
-  // === DESSERT ===
-  if (cat === 'dessert') return /cake|brownie|cookie|tart|cheesecake|crumble|galette|pudding/.test(t);
-
-  // === BOWLS ===
-  if (cat === 'grain_bowl') return /bowl|grain|buddha|quinoa|chickpea|nourish|harvest|kushari|koshari|mjaddara|mujaddara|couscous/.test(t);
-
-  // === CUISINE-SPECIFIC BROADER CATEGORIES ===
-  if (cat === 'korean_dish')     return c === 'korean' || /bibimbap|bulgogi|sundubu|jjigae|doenjang|oyakodon|nikujaga|banchan|tteok/.test(t);
-  if (cat === 'french_dish')     return c === 'french' || /bourguignon|daurade|souffl[eé]|camembert|fromage|remoulade/.test(t);
-  if (cat === 'italian_dish')    return c === 'italian' || /osso buco|porchetta|saltimbocca|caprese|antipasto|prosciutto|fagioli|tiella|caponata/.test(t);
-  if (cat === 'greek_dish')      return c === 'greek' || c === 'cypriot' || /moussaka|musakka|dolmades|gigantes/.test(t);
-  if (cat === 'turkish_dish')    return c === 'turkish' || /g[oö]zleme|b[oö]rek|imam|simit/.test(t);
-  if (cat === 'ethiopian_dish')  return c === 'ethiopian' || /injera|fit-fit|beyaynetu|misir|wot/.test(t);
-  if (cat === 'british_dish')    return /wellington|shepherd.*pie|british|scottish/.test(t) || ['british','scottish','irish','austrian','polish','swiss'].includes(c);
-  if (cat === 'indian_dish')     return c === 'indian' || c === 'pakistani' || c === 'bangladeshi' || /aloo|baingan|bharta|paratha|ful medames/.test(t);
-  if (cat === 'southeast_asian') return /laksa|soto|gado gado|nasi lemak/.test(t) || ['thai','malaysian','indonesian','filipino','vietnamese','penang'].includes(c);
-  if (cat === 'middle_eastern')  return ['middle eastern','lebanese','israeli','syrian','palestinian','jordanian','egyptian','north african','moroccan','persian'].includes(c);
-  if (cat === 'latin_american')  return ['mexican','peruvian','brazilian'].includes(c);
-
-  // === SNACK FALLBACKS ===
-  if (cat === 'snack_plate') return ml === 'snack';
-  if (cat === 'appetizer')   return ml === 'snack';
-
-  return false;
+  return true; // fallback: if in PHOTO_CATS, allow
 }
 
 // ── PlannerThumb ──────────────────────────────────────────────────────────────
