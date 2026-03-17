@@ -21728,16 +21728,16 @@ const RECIPES = [
 // ── Recipe Image Map (title-driven) ────────────────────────────────────────
 // 320 title-matched photos · 681 emoji fallbacks
 const IMAGE_MAP = {
-  1: 'https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=800&q=80', // Spaghetti Aglio e Olio
+  1: 'https://images.unsplash.com/photo-1481931098730-318b6f776db0?auto=format&fit=crop&w=800&q=80', // Spaghetti Aglio e Olio
   2: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80', // Mediterranean Chickpea Bowl
   3: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=800&q=80', // Quick Miso Ramen
-  4: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=800&q=80', // Lemon Herb Roast Chicken
+  4: 'https://images.unsplash.com/photo-1594221708779-94832f4320d1?auto=format&fit=crop&w=800&q=80', // Lemon Herb Roast Chicken
   5: 'https://images.unsplash.com/photo-1590412200988-a436970781fa?auto=format&fit=crop&w=800&q=80', // One-Pan Shakshuka
   6: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=800&q=80', // Fluffy Buttermilk Pancakes
   7: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=800&q=80', // Chickpea Curry
   8: 'https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=800&q=80', // Fish Tacos
   9: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=800&q=80', // Lentil Soup
-  10: 'https://images.unsplash.com/photo-1598103442097-8b74394b95c3?auto=format&fit=crop&w=800&q=80', // Margherita Pizza
+  10: 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=800&q=80', // Margherita Pizza
   11: 'https://images.unsplash.com/photo-1529006557810-274b9b2fc783?auto=format&fit=crop&w=800&q=80', // Chicken Shawarma Wrap
   12: 'https://images.unsplash.com/photo-1510693206972-df098062cb71?auto=format&fit=crop&w=800&q=80', // Veggie Frittata
   13: 'https://images.unsplash.com/photo-1559314809-0d155014e29e?auto=format&fit=crop&w=800&q=80', // Pad Thai
@@ -25722,6 +25722,7 @@ const PHOTO_CATS = {
   '1414235077428': 'french_dish',
   '1455619452474': 'thai_curry',
   '1467003909585': 'salmon',
+  '1481931098730': 'spaghetti',
   '1473093226795': 'pesto_pasta',
   '1473093295043': 'carbonara',
   '1476124369491': 'risotto',
@@ -25810,6 +25811,7 @@ const PHOTO_CATS = {
   '1590301157890': 'smoothie_bowl',
   '1590412200988': 'shakshuka',
   '1593001874117': 'falafel',
+  '1594221708779': 'chicken',
   '1596797038530': 'indian_dish',
   '1598103442097': 'pizza',
   '1598515213496': 'chicken',
