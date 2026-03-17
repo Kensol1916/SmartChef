@@ -22181,7 +22181,7 @@ const IMAGE_MAP = {
   451: 'https://images.unsplash.com/photo-1598515213496-7396b19fa281?auto=format&fit=crop&w=800&q=80', // Moroccan Lemon Chicken
   452: 'https://images.unsplash.com/photo-1607532941433-304659e8198a?auto=format&fit=crop&w=800&q=80', // Waldorf Chicken Salad
   453: 'https://images.unsplash.com/photo-1625167174228-58dd0f6d7cc4?auto=format&fit=crop&w=800&q=80', // Sopa de Lima
-  454: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=800&q=80', // Broccolini with Almonds
+  454: 'https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=800&q=80', // Broccolini with Almonds
   455: 'https://images.unsplash.com/photo-1546964124-0cce460f38ef?auto=format&fit=crop&w=800&q=80', // Schnitzel Sandwich
   456: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80', // Thai Green Papaya Salad
   457: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80', // Roasted Pepper Couscous
@@ -22487,7 +22487,7 @@ const IMAGE_MAP = {
   757: 'https://images.unsplash.com/photo-1547592166-23ac45744aec?auto=format&fit=crop&w=800&q=80', // White Bean and Kale Soup
   758: 'https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?auto=format&fit=crop&w=800&q=80', // Roasted Tomato Chickpea
   759: 'https://images.unsplash.com/photo-1596797038530-2c107229654b?auto=format&fit=crop&w=800&q=80', // Black Lentil Dahl
-  760: 'https://images.unsplash.com/photo-1553909489-cd47e0907980?auto=format&fit=crop&w=800&q=80', // Vegan Breakfast Hash for Dinner
+  760: 'https://images.unsplash.com/photo-1510693206972-df098062cb71?auto=format&fit=crop&w=800&q=80', // Vegan Breakfast Hash for Dinner
   761: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=80', // Vegan Thai Larb
   762: 'https://images.unsplash.com/photo-1476718406336-bb5a9690ee2a?auto=format&fit=crop&w=800&q=80', // Vegan Jambalaya
   763: 'https://images.unsplash.com/photo-1547592166-23ac45744aec?auto=format&fit=crop&w=800&q=80', // Curried Lentil Soup
@@ -22515,7 +22515,7 @@ const IMAGE_MAP = {
   785: 'https://images.unsplash.com/photo-1572453800999-e8d2d1589b7c?auto=format&fit=crop&w=800&q=80', // Mushroom and Leek Pie
   786: 'https://images.unsplash.com/photo-1510693206972-df098062cb71?auto=format&fit=crop&w=800&q=80', // Beetroot and Dill Quiche
   787: 'https://images.unsplash.com/photo-1562565651-7d4948f339eb?auto=format&fit=crop&w=800&q=80', // Khao Niao Mamuang
-  788: 'https://images.unsplash.com/photo-1546964124-0cce460f38ef?auto=format&fit=crop&w=800&q=80', // Vegan Pulled Jackfruit
+  788: 'https://images.unsplash.com/photo-1553909489-cd47e0907980?auto=format&fit=crop&w=800&q=80', // Vegan Pulled Jackfruit
   789: 'https://images.unsplash.com/photo-1572453800999-e8d2d1589b7c?auto=format&fit=crop&w=800&q=80', // Vegan Shepherd's Pie
   790: 'https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&w=800&q=80', // Aubergine and Chickpea Bake
   791: 'https://images.unsplash.com/photo-1561651823-34feb02f2c28?auto=format&fit=crop&w=800&q=80', // Spinach and Feta G\u00f6zleme
@@ -22668,7 +22668,7 @@ const IMAGE_MAP = {
   938: 'https://images.unsplash.com/photo-1574484284002-952d92456975?auto=format&fit=crop&w=800&q=80', // Paneer Tikka Bites
   939: 'https://images.unsplash.com/photo-1541014741-1e8d9b6a1c5d?auto=format&fit=crop&w=800&q=80', // Dates Stuffed with Almond
   940: 'https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&w=800&q=80', // Moutabel
-  941: 'https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&w=800&q=80', // Pigs in Blankets
+  941: 'https://images.unsplash.com/photo-1548507045-a97a2cf7de3c?auto=format&fit=crop&w=800&q=80', // Pigs in Blankets
   942: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Cold Sesame Noodles
   943: 'https://images.unsplash.com/photo-1593001874117-c99c800e3eb6?auto=format&fit=crop&w=800&q=80', // Falafel with Harissa
   944: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=800&q=80', // Egg Muffins
@@ -25868,22 +25868,22 @@ function imgAllowedForRecipe(url, recipe) {
 
   // Now check if the recipe's dish type matches the photo's group
   // Pasta group
-  if (photoGroup === 'pasta') return /pasta|spaghetti|linguine|penne|fettuccine|rigatoni|lasagn|gnocchi|carbonara|bolognese|alfredo|pesto|primavera|mac |orzo|tortellini|ravioli|ziti|fusilli|farfalle|cavatappi|amatriciana|arrabbiata|cacio|aglio|ragù|ragu|mushroom.*pasta|creamy.*pasta/.test(t);
+  if (photoGroup === 'pasta') return /pasta|spaghetti|linguine|penne|fettuccine|rigatoni|lasagn|gnocchi|carbonara|bolognese|alfredo|pesto|primavera|mac |orzo|tortellini|ravioli|ziti|fusilli|farfalle|cavatappi|amatriciana|arrabbiata|cacio|aglio|ragù|ragu|stroganoff|tagliatelle|mushroom.*pasta|creamy.*pasta/.test(t);
   if (photoGroup === 'noodle') return /ramen|noodle|pho|soba|lo mein|pad thai|udon|miso|laksa|char kway|mee goreng|japchae|chow|bibim/.test(t);
-  if (photoGroup === 'rice') return /rice|biryani|paella|risotto|pilaf|bibimbap|plov|nasi|makloub|fried rice|upma|oyakodon|jjigae|doenjang|kimchi|guksu/.test(t);
-  if (photoGroup === 'soup') return /soup|stew|chili|chowder|bisque|goulash|gazpacho|harira|borscht|caldo|ribollita|broth|gumbo|jambalaya|feijoada|tagine|lentil|pozole|shorba|pot au feu|bouillabaisse|cassoulet|minestrone|avgolemono|tom kha|clam/.test(t);
+  if (photoGroup === 'rice') return /rice|biryani|paella|risotto|pilaf|bibimbap|plov|nasi|makloub|fried rice|upma|oyakodon|jjigae|doenjang|kimchi|guksu|onigiri|maqluba/.test(t);
+  if (photoGroup === 'soup') return /soup|stew|chili|chowder|bisque|goulash|gazpacho|harira|borscht|caldo|ribollita|broth|gumbo|jambalaya|feijoada|tagine|lentil|pozole|shorba|pot au feu|bouillabaisse|cassoulet|minestrone|avgolemono|tom kha|clam|bourguignon|coq au vin/.test(t);
   if (photoGroup === 'salad_bowl') return /salad|slaw|bowl|grain|buddha|quinoa|chickpea|nourish|harvest|tabbouleh|fattoush|tofu|tempeh|power bowl|fruit|berry|kushari|koshari|mjaddara|mujaddara|couscous|broccolini|side/.test(t) || ml === 'breakfast';
-  if (photoGroup === 'curry') return /curry|masala|tikka|korma|vindaloo|saag|palak|dal[^a-z]|daal|dhal|rajma|chole|dhansak|keema|aloo|baingan|paratha|paneer|tagine|moroccan|ethiopian|fit-fit|misir|wot/.test(t) || c === 'indian' || c === 'ethiopian';
-  if (photoGroup === 'protein') return /chicken|pollo|salmon|fish|\bcod\b|tuna|steak|beef|lamb|pork|shrimp|prawn|duck|turkey|halibut|trout|sea bass|scallop|lobster|crab|calamari|gosht|tonkatsu|schnitzel|bistecca|saltimbocca|porchetta|stroganoff|clam|ceviche/.test(t);
-  if (photoGroup === 'bread') return /sandwich|toast|panini|wrap|burrito|bagel|focaccia|blt|melt|grilled cheese|croque|bánh mì|banh mi|pita|croissant|sub|bruschetta|crostini|bread|scone|muffin|biscuit/.test(t) || ml === 'breakfast';
-  if (photoGroup === 'breakfast') return ml === 'breakfast' || /pancake|waffle|oatmeal|porridge|egg|omelette?|omelet|frittata|shakshuka|menemen|yogurt|parfait|granola|muesli|smoothie|chia|crepe|french toast/.test(t);
+  if (photoGroup === 'curry') return /curry|masala|tikka|korma|vindaloo|saag|palak|dal[^a-z]|daal|dhal|rajma|chole|dhansak|keema|aloo|baingan|paratha|paneer|tagine|moroccan|ethiopian|fit-fit|misir|wot|fesenjan|ghormeh|khoresh/.test(t) || c === 'indian' || c === 'ethiopian' || c === 'persian';
+  if (photoGroup === 'protein') return /chicken|pollo|salmon|fish|\bcod\b|tuna|steak|beef|lamb|pork|shrimp|prawn|duck|turkey|halibut|trout|sea bass|scallop|lobster|crab|calamari|gosht|tonkatsu|schnitzel|bistecca|saltimbocca|porchetta|stroganoff|clam|ceviche|branzino|sole|meuni[eè]re|pescado|camarones|jackfruit|pigs in/.test(t);
+  if (photoGroup === 'bread') return /sandwich|toast|panini|wrap|burrito|bagel|focaccia|blt|melt|grilled cheese|croque|bánh mì|banh mi|pita|croissant|sub|bruschetta|crostini|bread|scone|muffin|biscuit|quiche|hash|gözleme|gozleme|imam bayildi|bayıldı|pulled/.test(t) || ml === 'breakfast' || ml === 'snack';
+  if (photoGroup === 'breakfast') return ml === 'breakfast' || /pancake|waffle|oatmeal|porridge|egg|omelette?|omelet|frittata|shakshuka|menemen|yogurt|parfait|granola|muesli|smoothie|chia|crepe|french toast|quiche|breakfast/.test(t);
   if (photoGroup === 'mexican') return /taco|burrito|quesadilla|enchilada|fajita|tostada|tamale|carnita|mole|chiles|nachos|torta/.test(t) || c === 'mexican';
-  if (photoGroup === 'mideast') return /shawarma|falafel|hummus|kebab|skewer|pita|labneh|baba|tzatziki|dukkah|kibbeh|börek|borek|kofta|dip|spread|lamb/.test(t) || ['middle eastern','lebanese','turkish','israeli','syrian','egyptian','moroccan','persian'].includes(c);
+  if (photoGroup === 'mideast') return /shawarma|falafel|hummus|kebab|skewer|pita|labneh|baba|tzatziki|dukkah|kibbeh|börek|borek|kofta|dip|spread|lamb|satay|harissa/.test(t) || ['middle eastern','lebanese','turkish','israeli','syrian','egyptian','moroccan','persian'].includes(c) || ml === 'snack';
   if (photoGroup === 'pizza') return /pizza|flatbread|burger|slider/.test(t);
-  if (photoGroup === 'dumpling') return /dumpling|gyoza|wonton|spring roll|egg roll|sushi|maki|samosa|pakora|arancini|tempura|fritter|croqueta|onigiri|kati/.test(t) || ml === 'snack';
-  if (photoGroup === 'veggie') return /ratatouille|stuffed|roasted|grilled|baked|braised|sauteed|vegetable|eggplant|zucchini|cauliflower|mushroom|wellington|stir.?fry|phad see|pad see|pad prik|pad woon|larb|adobo|lomo saltado|wok|beef|chicken|pork|shrimp|tofu|spinach|sesame/.test(t);
+  if (photoGroup === 'dumpling') return /dumpling|gyoza|wonton|spring roll|egg roll|sushi|maki|samosa|pakora|arancini|tempura|fritter|croqueta|onigiri|kati|pierogi/.test(t) || ml === 'snack';
+  if (photoGroup === 'veggie') return /ratatouille|stuffed|roasted|grilled|baked|braised|sauteed|vegetable|eggplant|zucchini|cauliflower|mushroom|wellington|stir.?fry|phad see|pad see|pad prik|pad woon|larb|adobo|lomo saltado|wok|beef|chicken|pork|shrimp|tofu|spinach|sesame|shepherd|caponata|pie|lentil|broccolini|broccoli|almond/.test(t);
   if (photoGroup === 'world') return true; // cuisine-based fallback photos always allowed
-  if (photoGroup === 'sweet') return /cake|brownie|cookie|tart|cheesecake|pudding|crumble|dessert|pie|muffin/.test(t);
+  if (photoGroup === 'sweet') return /cake|brownie|cookie|tart|cheesecake|pudding|crumble|dessert|pie|muffin|galette/.test(t) || ml === 'snack';
 
   return true; // fallback: if in PHOTO_CATS, allow
 }
