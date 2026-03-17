@@ -21729,7 +21729,7 @@ const RECIPES = [
 // 320 title-matched photos · 681 emoji fallbacks
 const IMAGE_MAP = {
   1: 'https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=800&q=80', // Spaghetti Aglio e Olio
-  2: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80', // Mediterranean Chickpea Bowl
+  2: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80', // Mediterranean Chickpea Bowl
   3: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=800&q=80', // Quick Miso Ramen
   4: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=800&q=80', // Lemon Herb Roast Chicken
   5: 'https://images.unsplash.com/photo-1590412200988-a436970781fa?auto=format&fit=crop&w=800&q=80', // One-Pan Shakshuka
@@ -21779,7 +21779,7 @@ const IMAGE_MAP = {
   49: 'https://images.unsplash.com/photo-1577805947829-1e0fbb7c722b?auto=format&fit=crop&w=800&q=80', // Breakfast Pita with Hummus
   50: 'https://images.unsplash.com/photo-1495214783159-3503fd1b572d?auto=format&fit=crop&w=800&q=80', // Pumpkin Oat Porridge
   51: 'https://images.unsplash.com/photo-1510693206972-df098062cb71?auto=format&fit=crop&w=800&q=80', // Savory Tomato Egg Skillet
-  52: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80', // Caesar Salad
+  52: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80', // Caesar Salad
   53: 'https://images.unsplash.com/photo-1547592166-23ac45744aec?auto=format&fit=crop&w=800&q=80', // Lentil Soup
   54: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=800&q=80', // Margherita Pizza
   55: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=800&q=80', // Chickpea Curry
@@ -22149,7 +22149,7 @@ const IMAGE_MAP = {
   419: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=80', // Filipino Adobo Lunch
   420: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Greek Gigantes Plaki
   421: 'https://images.unsplash.com/photo-1528207776546-365bb710ee93?auto=format&fit=crop&w=800&q=80', // Korean Kimchi Pancake
-  422: 'https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?auto=format&fit=crop&w=800&q=80', // Japanese Onigiri
+  422: 'https://images.unsplash.com/photo-1603105029258-be1f432f8d0a?auto=format&fit=crop&w=800&q=80', // Japanese Onigiri
   423: 'https://images.unsplash.com/photo-1574484284002-952d92456975?auto=format&fit=crop&w=800&q=80', // Pakistani Daal Chana
   424: 'https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=800&q=80', // Peruvian Lomo Saltado
   425: 'https://images.unsplash.com/photo-1561651823-34feb02f2c28?auto=format&fit=crop&w=800&q=80', // Turkish Lahmacun Wrap
@@ -22219,7 +22219,7 @@ const IMAGE_MAP = {
   489: 'https://images.unsplash.com/photo-1607532941433-304659e8198a?auto=format&fit=crop&w=800&q=80', // Spinach Strawberry Salad
   490: 'https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=800&q=80', // Elote Street Corn Taco
   491: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=800&q=80', // Saag Paneer Lunch
-  492: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80', // Chickpea Cucumber Feta Salad
+  492: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80', // Chickpea Cucumber Feta Salad
   493: 'https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=800&q=80', // Pho Chay Vegetarian
   494: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80', // Brown Rice Power Bowl
   495: 'https://images.unsplash.com/photo-1553909489-cd47e0907980?auto=format&fit=crop&w=800&q=80', // Tuna Melt Sandwich
@@ -22460,12 +22460,12 @@ const IMAGE_MAP = {
   730: 'https://images.unsplash.com/photo-1476718406336-bb5a9690ee2a?auto=format&fit=crop&w=800&q=80', // Roasted Red Pepper Soup
   731: 'https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?auto=format&fit=crop&w=800&q=80', // Vegan Sushi Rolls
   732: 'https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=800&q=80', // Pad Woon Sen Vegan
-  733: 'https://images.unsplash.com/photo-1574894709920-11b28e7367e3?auto=format&fit=crop&w=800&q=80', // Lentil Shepherd's Pie
+  733: 'https://images.unsplash.com/photo-1572453800999-e8d2d1589b7c?auto=format&fit=crop&w=800&q=80', // Lentil Shepherd's Pie
   734: 'https://images.unsplash.com/photo-1476718406336-bb5a9690ee2a?auto=format&fit=crop&w=800&q=80', // Vegan Tagine
   735: 'https://images.unsplash.com/photo-1547592166-23ac45744aec?auto=format&fit=crop&w=800&q=80', // Vegan Miso Soup
   736: 'https://images.unsplash.com/photo-1574894709920-11b28e7367e3?auto=format&fit=crop&w=800&q=80', // Vegan Lasagne
   737: 'https://images.unsplash.com/photo-1598515213496-7396b19fa281?auto=format&fit=crop&w=800&q=80', // Vegan Butter Chicken
-  738: 'https://images.unsplash.com/photo-1574894709920-11b28e7367e3?auto=format&fit=crop&w=800&q=80', // Vegetable Wellington
+  738: 'https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?auto=format&fit=crop&w=800&q=80', // Vegetable Wellington
   739: 'https://images.unsplash.com/photo-1548943487-a2e4e43b4853?auto=format&fit=crop&w=800&q=80', // Vegan Tom Kha
   740: 'https://images.unsplash.com/photo-1590412200988-a436970781fa?auto=format&fit=crop&w=800&q=80', // Shakshuka with Chickpeas
   741: 'https://images.unsplash.com/photo-1476718406336-bb5a9690ee2a?auto=format&fit=crop&w=800&q=80', // Roasted Vegetable Tagine
@@ -22504,19 +22504,19 @@ const IMAGE_MAP = {
   774: 'https://images.unsplash.com/photo-1476124369491-e7addf5db371?auto=format&fit=crop&w=800&q=80', // Baked Mushroom Risotto
   775: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=800&q=80', // Cheese Souffl\u00e9
   776: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=800&q=80', // Greek Spanakopita
-  777: 'https://images.unsplash.com/photo-1574894709920-11b28e7367e3?auto=format&fit=crop&w=800&q=80', // Mushroom Wellington
+  777: 'https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?auto=format&fit=crop&w=800&q=80', // Mushroom Wellington
   778: 'https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?auto=format&fit=crop&w=800&q=80', // Stuffed Onions
   779: 'https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&w=800&q=80', // Celeriac Schnitzel
   780: 'https://images.unsplash.com/photo-1574484284002-952d92456975?auto=format&fit=crop&w=800&q=80', // Vegan Dal Bati
-  781: 'https://images.unsplash.com/photo-1556761223-4c4282c73f77?auto=format&fit=crop&w=800&q=80', // Caponata Siciliana
+  781: 'https://images.unsplash.com/photo-1572453800999-e8d2d1589b7c?auto=format&fit=crop&w=800&q=80', // Caponata Siciliana
   782: 'https://images.unsplash.com/photo-1603105029-7d00e3f6e8f3?auto=format&fit=crop&w=800&q=80', // Vegan Nasi Goreng
   783: 'https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=800&q=80', // Smoky Sweet Potato Black Bean Tacos
   784: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Vegan Moussaka Lentil
-  785: 'https://images.unsplash.com/photo-1574894709920-11b28e7367e3?auto=format&fit=crop&w=800&q=80', // Mushroom and Leek Pie
+  785: 'https://images.unsplash.com/photo-1572453800999-e8d2d1589b7c?auto=format&fit=crop&w=800&q=80', // Mushroom and Leek Pie
   786: 'https://images.unsplash.com/photo-1510693206972-df098062cb71?auto=format&fit=crop&w=800&q=80', // Beetroot and Dill Quiche
   787: 'https://images.unsplash.com/photo-1562565651-7d4948f339eb?auto=format&fit=crop&w=800&q=80', // Khao Niao Mamuang
   788: 'https://images.unsplash.com/photo-1546964124-0cce460f38ef?auto=format&fit=crop&w=800&q=80', // Vegan Pulled Jackfruit
-  789: 'https://images.unsplash.com/photo-1574894709920-11b28e7367e3?auto=format&fit=crop&w=800&q=80', // Vegan Shepherd's Pie
+  789: 'https://images.unsplash.com/photo-1572453800999-e8d2d1589b7c?auto=format&fit=crop&w=800&q=80', // Vegan Shepherd's Pie
   790: 'https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&w=800&q=80', // Aubergine and Chickpea Bake
   791: 'https://images.unsplash.com/photo-1561651823-34feb02f2c28?auto=format&fit=crop&w=800&q=80', // Spinach and Feta G\u00f6zleme
   792: 'https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&w=800&q=80', // Potato and Mushroom Pierogi
