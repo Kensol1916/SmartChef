@@ -1346,21 +1346,9 @@ const RECIPES = [
   { id:52,meal:"lunch",emoji:"🥗",title:"Caesar Salad",cuisine:"Italian",time:15,diff:"Easy",dietary:["Vegetarian"],pp:80,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Romaine lettuce",a:"1 head"},{n:"Parmesan",a:"50g"},{n:"Croutons",a:"1 cup"},{n:"Caesar dressing",a:"¼ cup"},{n:"Lemon juice",a:"1 tbsp"}],
     steps:[{n:1,t:"Prep",d:"Chop romaine into bite-size pieces."},{n:2,t:"Toss",d:"Mix lettuce with dressing."},{n:3,t:"Top",d:"Add croutons and parmesan."},{n:4,t:"Serve",d:"Finish with lemon juice."}]},
-  { id:53,meal:"lunch",emoji:"🍲",title:"Lentil Soup",cuisine:"Mediterranean",time:35,diff:"Easy",dietary:["Vegan"],pp:90,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
-    ingredients:[{n:"Lentils",a:"1 cup"},{n:"Carrots",a:"2"},{n:"Celery",a:"2 stalks"},{n:"Onion",a:"1"},{n:"Vegetable broth",a:"4 cups"},{n:"Cumin",a:"1 tsp"}],
-    steps:[{n:1,t:"Sauté",d:"Dice vegetables, sauté 5 min."},{n:2,t:"Add",d:"Add lentils and broth."},{n:3,t:"Simmer",d:"Simmer 25 min until lentils tender."},{n:4,t:"Season",d:"Add cumin and salt."}]},
-  { id:54,meal:"dinner",emoji:"🍕",title:"Margherita Pizza",cuisine:"Italian",time:25,diff:"Easy",dietary:["Vegetarian"],pp:75,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
-    ingredients:[{n:"Pizza dough",a:"1 ball"},{n:"Tomato sauce",a:"½ cup"},{n:"Mozzarella",a:"200g"},{n:"Fresh basil",a:"10 leaves"},{n:"Olive oil",a:"2 tbsp"}],
-    steps:[{n:1,t:"Roll",d:"Roll dough into circle."},{n:2,t:"Top",d:"Spread sauce, add cheese and basil."},{n:3,t:"Bake",d:"Bake at 220°C for 12-15 min."},{n:4,t:"Serve",d:"Drizzle olive oil and serve."}]},
-  { id:55,meal:"dinner",emoji:"🍛",title:"Chickpea Curry",cuisine:"Indian",time:30,diff:"Easy",dietary:["Vegan"],pp:85,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
-    ingredients:[{n:"Chickpeas",a:"2 cans"},{n:"Coconut milk",a:"1 can"},{n:"Tomatoes",a:"2"},{n:"Curry powder",a:"2 tbsp"},{n:"Onion",a:"1"},{n:"Garlic",a:"3 cloves"}],
-    steps:[{n:1,t:"Sauté",d:"Cook onion and garlic 3 min."},{n:2,t:"Spice",d:"Add curry powder, cook 1 min."},{n:3,t:"Simmer",d:"Add chickpeas, tomatoes, coconut milk. Simmer 20 min."},{n:4,t:"Serve",d:"Serve with rice."}]},
   { id:56,meal:"lunch",emoji:"🥙",title:"Falafel Wrap",cuisine:"Middle Eastern",time:20,diff:"Easy",dietary:["Vegan"],pp:70,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Falafel",a:"6 pieces"},{n:"Pita bread",a:"2"},{n:"Hummus",a:"¼ cup"},{n:"Cucumber",a:"1"},{n:"Tomato",a:"1"},{n:"Lettuce",a:"1 cup"}],
     steps:[{n:1,t:"Heat",d:"Warm falafel and pita."},{n:2,t:"Spread",d:"Spread hummus on pita."},{n:3,t:"Fill",d:"Add falafel and chopped vegetables."},{n:4,t:"Roll",d:"Roll and serve."}]},
-  { id:57,meal:"dinner",emoji:"🍜",title:"Pad Thai",cuisine:"Thai",time:25,diff:"Medium",dietary:["Vegetarian"],pp:65,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
-    ingredients:[{n:"Rice noodles",a:"200g"},{n:"Eggs",a:"2"},{n:"Tofu",a:"100g"},{n:"Bean sprouts",a:"1 cup"},{n:"Peanuts",a:"¼ cup"},{n:"Tamarind paste",a:"2 tbsp"}],
-    steps:[{n:1,t:"Soak",d:"Soak noodles 10 min."},{n:2,t:"Stir-fry",d:"Fry tofu and eggs 3 min."},{n:3,t:"Add",d:"Add noodles, tamarind, bean sprouts."},{n:4,t:"Toss",d:"Toss 5 min, top with peanuts."}]},
   { id:58,meal:"dinner",emoji:"🥘",title:"Vegetable Paella",cuisine:"Spanish",time:40,diff:"Medium",dietary:["Vegan"],pp:75,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Rice",a:"2 cups"},{n:"Bell peppers",a:"2"},{n:"Green beans",a:"1 cup"},{n:"Tomatoes",a:"2"},{n:"Saffron",a:"pinch"},{n:"Vegetable broth",a:"4 cups"}],
     steps:[{n:1,t:"Sauté",d:"Cook peppers and beans 5 min."},{n:2,t:"Add",d:"Add rice, tomatoes, saffron."},{n:3,t:"Simmer",d:"Add broth, simmer 30 min."},{n:4,t:"Rest",d:"Let rest 5 min before serving."}]},
@@ -1370,9 +1358,6 @@ const RECIPES = [
   { id:60,meal:"dinner",emoji:"🍝",title:"Penne Arrabbiata",cuisine:"Italian",time:20,diff:"Easy",dietary:["Vegan"],pp:90,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Penne pasta",a:"400g"},{n:"Tomato sauce",a:"2 cups"},{n:"Garlic",a:"4 cloves"},{n:"Chili flakes",a:"2 tsp"},{n:"Olive oil",a:"3 tbsp"},{n:"Parsley",a:"¼ cup"}],
     steps:[{n:1,t:"Boil",d:"Cook pasta al dente."},{n:2,t:"Sauce",d:"Sauté garlic and chili in oil."},{n:3,t:"Simmer",d:"Add tomato sauce, simmer 10 min."},{n:4,t:"Toss",d:"Toss pasta with sauce, top with parsley."}]},
-  { id:61,meal:"lunch",emoji:"🥗",title:"Greek Salad",cuisine:"Greek",time:10,diff:"Easy",dietary:["Vegetarian"],pp:85,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
-    ingredients:[{n:"Cucumber",a:"1"},{n:"Tomatoes",a:"3"},{n:"Feta",a:"100g"},{n:"Olives",a:"½ cup"},{n:"Red onion",a:"½"},{n:"Olive oil",a:"3 tbsp"}],
-    steps:[{n:1,t:"Chop",d:"Dice all vegetables."},{n:2,t:"Mix",d:"Combine in bowl."},{n:3,t:"Dress",d:"Drizzle olive oil and lemon."},{n:4,t:"Top",d:"Crumble feta on top."}]},
   { id:62,meal:"lunch",emoji:"🍲",title:"Minestrone Soup",cuisine:"Italian",time:35,diff:"Easy",dietary:["Vegan"],pp:80,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Pasta",a:"1 cup"},{n:"Kidney beans",a:"1 can"},{n:"Zucchini",a:"1"},{n:"Carrots",a:"2"},{n:"Tomato sauce",a:"2 cups"},{n:"Vegetable broth",a:"4 cups"}],
     steps:[{n:1,t:"Sauté",d:"Cook diced vegetables 5 min."},{n:2,t:"Add",d:"Add broth, sauce, beans."},{n:3,t:"Simmer",d:"Simmer 20 min."},{n:4,t:"Pasta",d:"Add pasta, cook 10 min more."}]},
@@ -1400,9 +1385,6 @@ const RECIPES = [
   { id:70,meal:"dinner",emoji:"🍝",title:"Pesto Pasta",cuisine:"Italian",time:15,diff:"Easy",dietary:["Vegetarian"],pp:80,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Pasta",a:"400g"},{n:"Pesto sauce",a:"½ cup"},{n:"Cherry tomatoes",a:"1 cup"},{n:"Parmesan",a:"50g"},{n:"Pine nuts",a:"2 tbsp"}],
     steps:[{n:1,t:"Cook",d:"Boil pasta al dente."},{n:2,t:"Toss",d:"Mix hot pasta with pesto."},{n:3,t:"Add",d:"Add halved cherry tomatoes."},{n:4,t:"Top",d:"Garnish with parmesan and pine nuts."}]},
-  { id:71,meal:"dinner",emoji:"🥘",title:"Ratatouille",cuisine:"French",time:45,diff:"Medium",dietary:["Vegan"],pp:75,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
-    ingredients:[{n:"Eggplant",a:"1"},{n:"Zucchini",a:"2"},{n:"Bell peppers",a:"2"},{n:"Tomatoes",a:"4"},{n:"Onion",a:"1"},{n:"Thyme",a:"2 tsp"}],
-    steps:[{n:1,t:"Slice",d:"Slice all vegetables thinly."},{n:2,t:"Layer",d:"Layer in baking dish."},{n:3,t:"Season",d:"Drizzle oil, add thyme, salt."},{n:4,t:"Bake",d:"Bake 180°C for 40 min."}]},
   { id:72,meal:"dinner",emoji:"🍛",title:"Mushroom Risotto",cuisine:"Italian",time:35,diff:"Medium",dietary:["Vegetarian"],pp:75,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Arborio rice",a:"1½ cups"},{n:"Mushrooms",a:"300g"},{n:"Vegetable broth",a:"5 cups"},{n:"White wine",a:"½ cup"},{n:"Parmesan",a:"100g"},{n:"Butter",a:"3 tbsp"}],
     steps:[{n:1,t:"Sauté",d:"Cook mushrooms 5 min, set aside."},{n:2,t:"Toast",d:"Toast rice 2 min, add wine."},{n:3,t:"Add",d:"Add broth gradually, stirring 25 min."},{n:4,t:"Finish",d:"Stir in mushrooms, butter, parmesan."}]},
@@ -1508,9 +1490,6 @@ const RECIPES = [
   { id:106,meal:"dinner",emoji:"🥘",title:"Moroccan Tagine",cuisine:"Moroccan",time:50,diff:"Medium",dietary:["Vegan"],pp:70,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Chickpeas",a:"2 cans"},{n:"Sweet potato",a:"2"},{n:"Dried apricots",a:"½ cup"},{n:"Onion",a:"1"},{n:"Cumin",a:"2 tsp"},{n:"Vegetable broth",a:"2 cups"}],
     steps:[{n:1,t:"Sauté",d:"Cook onion 5 min."},{n:2,t:"Spice",d:"Add cumin, cook 1 min."},{n:3,t:"Add",d:"Add chickpeas, sweet potato, apricots, broth."},{n:4,t:"Simmer",d:"Cover, simmer 40 min until tender."}]},
-  { id:107,meal:"lunch",emoji:"🌮",title:"Fish Tacos",cuisine:"Mexican",time:25,diff:"Easy",dietary:[],pp:70,missing:[],worth:false,contains_meat:false,contains_fish:true,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
-    ingredients:[{n:"White fish",a:"300g"},{n:"Tortillas",a:"6"},{n:"Cabbage",a:"1 cup"},{n:"Lime",a:"1"},{n:"Sour cream",a:"¼ cup"},{n:"Cilantro",a:"¼ cup"}],
-    steps:[{n:1,t:"Season",d:"Season fish with cumin, salt."},{n:2,t:"Cook",d:"Pan-fry fish 4 min per side."},{n:3,t:"Warm",d:"Heat tortillas."},{n:4,t:"Assemble",d:"Flake fish into tortillas, top with cabbage, lime, cream."}]},
   { id:108,meal:"dinner",emoji:"🍝",title:"Shrimp Scampi",cuisine:"Italian",time:20,diff:"Easy",dietary:[],pp:75,missing:[],worth:false,contains_meat:false,contains_fish:false,contains_shellfish:true,contains_dairy:true,kosher_risk:true,
     ingredients:[{n:"Shrimp",a:"400g"},{n:"Linguine",a:"400g"},{n:"Garlic",a:"5 cloves"},{n:"Butter",a:"4 tbsp"},{n:"White wine",a:"½ cup"},{n:"Lemon",a:"1"}],
     steps:[{n:1,t:"Cook",d:"Boil pasta."},{n:2,t:"Sauté",d:"Cook garlic in butter 1 min."},{n:3,t:"Shrimp",d:"Add shrimp, wine, lemon. Cook 5 min."},{n:4,t:"Toss",d:"Toss pasta with shrimp sauce."}]},
@@ -1529,9 +1508,6 @@ const RECIPES = [
   { id:113,meal:"dinner",emoji:"🍗",title:"BBQ Chicken",cuisine:"American",time:40,diff:"Easy",dietary:[],pp:85,missing:[],worth:false,contains_meat:true,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
     ingredients:[{n:"Chicken legs",a:"4"},{n:"BBQ sauce",a:"1 cup"},{n:"Honey",a:"2 tbsp"},{n:"Paprika",a:"1 tsp"},{n:"Garlic powder",a:"1 tsp"}],
     steps:[{n:1,t:"Season",d:"Rub chicken with spices."},{n:2,t:"Bake",d:"Bake 200°C for 25 min."},{n:3,t:"Glaze",d:"Brush with BBQ sauce and honey."},{n:4,t:"Finish",d:"Bake 10 min more until glazed."}]},
-  { id:114,meal:"dinner",emoji:"🥩",title:"Beef Stir-Fry",cuisine:"Asian",time:20,diff:"Easy",dietary:[],pp:75,missing:[],worth:false,contains_meat:true,contains_fish:false,contains_shellfish:false,contains_dairy:false,kosher_safe:true,
-    ingredients:[{n:"Beef strips",a:"300g"},{n:"Broccoli",a:"2 cups"},{n:"Carrots",a:"2"},{n:"Soy sauce",a:"3 tbsp"},{n:"Oyster sauce",a:"2 tbsp"},{n:"Ginger",a:"1 tbsp"}],
-    steps:[{n:1,t:"Marinate",d:"Marinate beef in soy sauce 10 min."},{n:2,t:"Fry",d:"Stir-fry beef 3 min, set aside."},{n:3,t:"Vegetables",d:"Stir-fry vegetables 5 min."},{n:4,t:"Combine",d:"Add beef, oyster sauce, toss."}]},
   { id:115,meal:"lunch",emoji:"🍗",title:"Chicken Quesadilla",cuisine:"Mexican",time:15,diff:"Easy",dietary:[],pp:85,missing:[],worth:false,contains_meat:true,contains_fish:false,contains_shellfish:false,contains_dairy:true,kosher_safe:true,
     ingredients:[{n:"Chicken breast",a:"200g cooked"},{n:"Tortillas",a:"4"},{n:"Cheese",a:"150g"},{n:"Bell peppers",a:"1"},{n:"Onion",a:"½"}],
     steps:[{n:1,t:"Slice",d:"Shred chicken, slice vegetables."},{n:2,t:"Fill",d:"Layer chicken, vegetables, cheese on tortilla."},{n:3,t:"Cook",d:"Top with another tortilla, cook 3 min per side."},{n:4,t:"Cut",d:"Cut into wedges and serve."}]},
@@ -2395,28 +2371,6 @@ const RECIPES = [
           {n:2,t:"Wet",d:"Whisk milk, egg, maple syrup."},
           {n:3,t:"Layer",d:"Slice apples in baking dish, pour oat mixture over."},
           {n:4,t:"Bake",d:"Bake 180\u00b0C for 30 min until golden."}
-        ]
-  },
-  {
-    id:169, emoji:"\ud83e\udd63", title:"Savory Oatmeal with Egg",
-    cuisine:"Modern", time:15, diff:"Easy",
-    dietary:["Vegetarian"], pp:90, missing:[], worth:false,
-    contains_meat:false, contains_fish:false,
-    contains_shellfish:false, contains_dairy:false,
-    kosher_safe:true,
-    meal:"breakfast",
-    ingredients:[
-          {n:"Rolled oats",a:"1 cup"},
-          {n:"Egg",a:"1"},
-          {n:"Cheddar",a:"30g"},
-          {n:"Soy sauce",a:"1 tsp"},
-          {n:"Green onion",a:"1"}
-        ],
-    steps:[
-          {n:1,t:"Cook",d:"Cook oats in water or broth 5 min."},
-          {n:2,t:"Season",d:"Stir in soy sauce and cheddar."},
-          {n:3,t:"Egg",d:"Top with fried or poached egg."},
-          {n:4,t:"Finish",d:"Scatter green onion and chili flakes."}
         ]
   },
   {
@@ -4752,28 +4706,6 @@ const RECIPES = [
         ]
   },
   {
-    id:307, emoji:"\ud83e\udd57", title:"Caesar Salad",
-    cuisine:"Italian", time:15, diff:"Easy",
-    dietary:["Vegetarian"], pp:80, missing:[], worth:false,
-    contains_meat:false, contains_fish:false,
-    contains_shellfish:false, contains_dairy:false,
-    kosher_safe:true,
-    meal:"lunch",
-    ingredients:[
-          {n:"Romaine lettuce",a:"1 head"},
-          {n:"Parmesan",a:"60g"},
-          {n:"Croutons",a:"1 cup"},
-          {n:"Caesar dressing",a:"4 tbsp"},
-          {n:"Lemon",a:"\u00bd"}
-        ],
-    steps:[
-          {n:1,t:"Tear",d:"Tear lettuce into large pieces."},
-          {n:2,t:"Toss",d:"Toss with Caesar dressing."},
-          {n:3,t:"Add",d:"Add croutons and parmesan."},
-          {n:4,t:"Serve",d:"Finish with lemon squeeze and black pepper."}
-        ]
-  },
-  {
     id:308, emoji:"\ud83e\udd57", title:"Ni\u00e7oise Salad",
     cuisine:"French", time:20, diff:"Easy",
     dietary:[], pp:75, missing:["Tuna", "Green beans"], worth:false,
@@ -4815,28 +4747,6 @@ const RECIPES = [
           {n:2,t:"Crisp",d:"Cook bacon until crisp, crumble."},
           {n:3,t:"Arrange",d:"Arrange lettuce in bowl with rows of toppings."},
           {n:4,t:"Dress",d:"Serve with ranch or blue cheese dressing."}
-        ]
-  },
-  {
-    id:310, emoji:"\ud83e\udd57", title:"Caprese Salad",
-    cuisine:"Italian", time:10, diff:"Easy",
-    dietary:["Vegetarian", "Gluten-free"], pp:80, missing:["Mozzarella"], worth:false,
-    contains_meat:true, contains_fish:false,
-    contains_shellfish:false, contains_dairy:false,
-    kosher_safe:true,
-    meal:"lunch",
-    ingredients:[
-          {n:"Mozzarella",a:"200g"},
-          {n:"Tomatoes",a:"3 large"},
-          {n:"Fresh basil",a:"20 leaves"},
-          {n:"Olive oil",a:"3 tbsp"},
-          {n:"Balsamic glaze",a:"1 tbsp"}
-        ],
-    steps:[
-          {n:1,t:"Slice",d:"Slice mozzarella and tomatoes same thickness."},
-          {n:2,t:"Layer",d:"Alternate tomato and mozzarella on plate."},
-          {n:3,t:"Tuck",d:"Tuck basil leaves between slices."},
-          {n:4,t:"Dress",d:"Drizzle olive oil and balsamic glaze, season."}
         ]
   },
   {
@@ -5544,28 +5454,6 @@ const RECIPES = [
         ]
   },
   {
-    id:343, emoji:"\ud83e\uddc5", title:"French Onion Soup",
-    cuisine:"French", time:60, diff:"Intermediate",
-    dietary:["Vegetarian"], pp:75, missing:["Gruy\u00e8re"], worth:false,
-    contains_meat:true, contains_fish:false,
-    contains_shellfish:false, contains_dairy:false,
-    kosher_safe:true,
-    meal:"lunch",
-    ingredients:[
-          {n:"Onions",a:"4 large"},
-          {n:"Beef stock",a:"1L"},
-          {n:"Gruy\u00e8re",a:"150g"},
-          {n:"Baguette",a:"4 slices"},
-          {n:"Butter",a:"3 tbsp"}
-        ],
-    steps:[
-          {n:1,t:"Caramelise",d:"Cook onions in butter over very low heat 40 min until deep golden."},
-          {n:2,t:"Stock",d:"Add stock, thyme, bay leaf, simmer 15 min."},
-          {n:3,t:"Toast",d:"Toast baguette slices."},
-          {n:4,t:"Gratin\u00e9e",d:"Ladle soup into bowls, float bread, pile cheese, broil until bubbly."}
-        ]
-  },
-  {
     id:344, emoji:"\ud83c\udf72", title:"Minestrone",
     cuisine:"Italian", time:40, diff:"Easy",
     dietary:["Vegan"], pp:85, missing:[], worth:false,
@@ -5959,28 +5847,6 @@ const RECIPES = [
           {n:2,t:"Simmer",d:"Simmer pork in water with garlic 1 hr until tender."},
           {n:3,t:"Add",d:"Add chile paste, hominy, oregano, simmer 30 min."},
           {n:4,t:"Serve",d:"Top with shredded cabbage, radish, lime, oregano."}
-        ]
-  },
-  {
-    id:362, emoji:"\ud83c\udf72", title:"Split Pea Soup",
-    cuisine:"American", time:60, diff:"Easy",
-    dietary:["Vegan", "Gluten-free"], pp:85, missing:[], worth:false,
-    contains_meat:false, contains_fish:false,
-    contains_shellfish:false, contains_dairy:false,
-    kosher_safe:true,
-    meal:"lunch",
-    ingredients:[
-          {n:"Split peas",a:"1 cup"},
-          {n:"Carrot",a:"2"},
-          {n:"Celery",a:"2 stalks"},
-          {n:"Vegetable stock",a:"1.5L"},
-          {n:"Cumin",a:"1 tsp"}
-        ],
-    steps:[
-          {n:1,t:"Saut\u00e9",d:"Saut\u00e9 onion, carrot, celery in oil 5 min."},
-          {n:2,t:"Add",d:"Add peas, stock, cumin, bay leaf."},
-          {n:3,t:"Simmer",d:"Simmer 45 min until peas break down."},
-          {n:4,t:"Serve",d:"Season, serve with crusty bread."}
         ]
   },
   {
@@ -6864,28 +6730,6 @@ const RECIPES = [
         ]
   },
   {
-    id:403, emoji:"\ud83e\udd58", title:"Stuffed Bell Peppers",
-    cuisine:"Mediterranean", time:40, diff:"Easy",
-    dietary:["Vegetarian", "Gluten-free"], pp:85, missing:[], worth:false,
-    contains_meat:false, contains_fish:false,
-    contains_shellfish:false, contains_dairy:false,
-    kosher_safe:true,
-    meal:"lunch",
-    ingredients:[
-          {n:"Bell peppers",a:"4 large"},
-          {n:"Rice",a:"1 cup cooked"},
-          {n:"Tomatoes",a:"2"},
-          {n:"Feta",a:"80g"},
-          {n:"Onion",a:"1"}
-        ],
-    steps:[
-          {n:1,t:"Prep",d:"Cut tops off peppers, remove seeds."},
-          {n:2,t:"Fill",d:"Mix rice, diced tomato, onion, feta, herbs."},
-          {n:3,t:"Stuff",d:"Fill peppers, replace tops."},
-          {n:4,t:"Bake",d:"Roast 190\u00b0C for 30 min until tender."}
-        ]
-  },
-  {
     id:404, emoji:"\ud83e\udd57", title:"Rice Paper Spring Rolls",
     cuisine:"Vietnamese", time:20, diff:"Easy",
     dietary:["Vegan", "Gluten-free"], pp:80, missing:[], worth:false,
@@ -7436,28 +7280,6 @@ const RECIPES = [
         ]
   },
   {
-    id:278, emoji:"\ud83c\udf73", title:"Turkish Menemen",
-    cuisine:"Turkish", time:20, diff:"Easy",
-    dietary:["Vegetarian", "Gluten-free"], pp:80, missing:[], worth:false,
-    contains_meat:false, contains_fish:false,
-    contains_shellfish:false, contains_dairy:true,
-    kosher_safe:true,
-    meal:"breakfast",
-    ingredients:[
-          {n:"Eggs",a:"3"},
-          {n:"Tomatoes",a:"2 large diced"},
-          {n:"Green peppers",a:"2"},
-          {n:"Feta",a:"50g"},
-          {n:"Red pepper flakes",a:"\u00bd tsp"}
-        ],
-    steps:[
-          {n:1,t:"Soften",d:"Fry peppers in olive oil 5 min. Add tomatoes, cook 8 min."},
-          {n:2,t:"Eggs",d:"Crack in eggs, stir gently until just set."},
-          {n:3,t:"Top",d:"Crumble feta on top."},
-          {n:4,t:"Serve",d:"Eat directly from pan with crusty bread."}
-        ]
-  },
-  {
     id:279, emoji:"\ud83e\udd63", title:"Overnight Oats with Peaches",
     cuisine:"American", time:5, diff:"Easy",
     dietary:["Vegan"], pp:90, missing:[], worth:false,
@@ -7521,28 +7343,6 @@ const RECIPES = [
           {n:2,t:"Toast",d:"Toast bread."},
           {n:3,t:"Mash",d:"Mash avocado with lemon juice and salt."},
           {n:4,t:"Assemble",d:"Spread avo on toast, top with egg whites, sprinkle seasoning."}
-        ]
-  },
-  {
-    id:282, emoji:"\ud83e\uded0", title:"Acai Smoothie Bowl",
-    cuisine:"Brazilian", time:10, diff:"Easy",
-    dietary:["Vegan"], pp:85, missing:[], worth:false,
-    contains_meat:false, contains_fish:false,
-    contains_shellfish:false, contains_dairy:false,
-    kosher_safe:true,
-    meal:"breakfast",
-    ingredients:[
-          {n:"Acai packet",a:"100g frozen"},
-          {n:"Frozen banana",a:"1"},
-          {n:"Mixed berries",a:"\u00bd cup"},
-          {n:"Granola",a:"\u00bc cup"},
-          {n:"Hemp seeds",a:"1 tbsp"}
-        ],
-    steps:[
-          {n:1,t:"Blend",d:"Blend acai with banana and splash of milk until thick."},
-          {n:2,t:"Pour",d:"Pour into bowl."},
-          {n:3,t:"Top",d:"Top with granola, berries, hemp seeds."},
-          {n:4,t:"Drizzle",d:"Drizzle with honey."}
         ]
   },
   {
@@ -7722,28 +7522,6 @@ const RECIPES = [
         ]
   },
   {
-    id:291, emoji:"\ud83c\udf73", title:"Migas Tex-Mex",
-    cuisine:"Mexican", time:15, diff:"Easy",
-    dietary:[], pp:80, missing:[], worth:false,
-    contains_meat:true, contains_fish:false,
-    contains_shellfish:false, contains_dairy:true,
-    kosher_risk:true,
-    meal:"breakfast",
-    ingredients:[
-          {n:"Eggs",a:"4"},
-          {n:"Tortilla chips",a:"1 cup"},
-          {n:"Jalape\u00f1o",a:"1"},
-          {n:"Cheddar",a:"50g"},
-          {n:"Salsa",a:"3 tbsp"}
-        ],
-    steps:[
-          {n:1,t:"Fry",d:"Scramble eggs in butter with jalape\u00f1os."},
-          {n:2,t:"Add chips",d:"When almost set, stir in broken tortilla chips."},
-          {n:3,t:"Cheese",d:"Add shredded cheddar, fold in."},
-          {n:4,t:"Serve",d:"Plate with salsa and sour cream."}
-        ]
-  },
-  {
     id:292, emoji:"\ud83e\udd63", title:"Multigrain Porridge",
     cuisine:"British", time:15, diff:"Easy",
     dietary:["Vegan"], pp:90, missing:[], worth:false,
@@ -7807,28 +7585,6 @@ const RECIPES = [
           {n:2,t:"Rest",d:"Rest 20 min."},
           {n:3,t:"Roll",d:"Roll into thin circles."},
           {n:4,t:"Cook",d:"Cook on tawa with ghee 2 min per side. Serve with pickle."}
-        ]
-  },
-  {
-    id:295, emoji:"\ud83e\udd5b", title:"Mango Lassi Smoothie",
-    cuisine:"Indian", time:5, diff:"Easy",
-    dietary:["Vegetarian", "Gluten-free"], pp:85, missing:[], worth:false,
-    contains_meat:false, contains_fish:false,
-    contains_shellfish:false, contains_dairy:true,
-    kosher_safe:true,
-    meal:"breakfast",
-    ingredients:[
-          {n:"Mango",a:"1 large"},
-          {n:"Yogurt",a:"\u00be cup"},
-          {n:"Milk",a:"\u00bd cup"},
-          {n:"Cardamom",a:"\u00bc tsp"},
-          {n:"Honey",a:"1 tsp"}
-        ],
-    steps:[
-          {n:1,t:"Blend",d:"Blend mango, yogurt, milk, cardamom, honey smooth."},
-          {n:2,t:"Taste",d:"Adjust sweetness."},
-          {n:3,t:"Chill",d:"Serve over ice."},
-          {n:4,t:"Garnish",d:"Sprinkle a pinch of cardamom on top."}
         ]
   },
   {
@@ -8074,28 +7830,6 @@ const RECIPES = [
         ]
   },
   {
-    id:427, emoji:"\ud83e\udd57", title:"Roasted Beet and Goat Cheese Salad",
-    cuisine:"American", time:40, diff:"Easy",
-    dietary:["Vegetarian", "Gluten-free"], pp:80, missing:[], worth:false,
-    contains_meat:false, contains_fish:false,
-    contains_shellfish:false, contains_dairy:true,
-    kosher_safe:true,
-    meal:"lunch",
-    ingredients:[
-          {n:"Beets",a:"3 medium"},
-          {n:"Goat cheese",a:"80g"},
-          {n:"Arugula",a:"100g"},
-          {n:"Walnuts",a:"\u00bc cup"},
-          {n:"Balsamic",a:"2 tbsp"}
-        ],
-    steps:[
-          {n:1,t:"Roast",d:"Wrap beets in foil, roast 200\u00b0C 40 min."},
-          {n:2,t:"Cool",d:"Peel and slice when cool."},
-          {n:3,t:"Assemble",d:"Arrange arugula, beets, walnuts."},
-          {n:4,t:"Dress",d:"Crumble goat cheese, drizzle balsamic dressing."}
-        ]
-  },
-  {
     id:428, emoji:"\ud83c\udf71", title:"Thai Basil Rice Bowl",
     cuisine:"Thai", time:20, diff:"Easy",
     dietary:[], pp:75, missing:[], worth:false,
@@ -8162,28 +7896,6 @@ const RECIPES = [
         ]
   },
   {
-    id:431, emoji:"\ud83e\udd57", title:"Ni\u00e7oise Salad",
-    cuisine:"French", time:20, diff:"Easy",
-    dietary:["Gluten-free"], pp:80, missing:[], worth:false,
-    contains_meat:false, contains_fish:true,
-    contains_shellfish:false, contains_dairy:false,
-    kosher_safe:true,
-    meal:"lunch",
-    ingredients:[
-          {n:"Tuna",a:"2 cans"},
-          {n:"Green beans",a:"150g"},
-          {n:"Eggs",a:"3 boiled"},
-          {n:"Olives",a:"\u00bd cup"},
-          {n:"Anchovy",a:"4 fillets"}
-        ],
-    steps:[
-          {n:1,t:"Blanch",d:"Blanch green beans 3 min, refresh in cold water."},
-          {n:2,t:"Arrange",d:"Arrange tuna, beans, halved eggs, olives on platter."},
-          {n:3,t:"Anchovy",d:"Lay anchovies over salad."},
-          {n:4,t:"Dress",d:"Drizzle with Dijon vinaigrette."}
-        ]
-  },
-  {
     id:432, emoji:"\ud83c\udf71", title:"Korean Bibimbap",
     cuisine:"Korean", time:30, diff:"Intermediate",
     dietary:[], pp:80, missing:[], worth:false,
@@ -8225,28 +7937,6 @@ const RECIPES = [
           {n:2,t:"Dress",d:"Toss with Caesar dressing."},
           {n:3,t:"Top",d:"Add croutons and shaved Parmesan."},
           {n:4,t:"Serve",d:"Top with more black pepper."}
-        ]
-  },
-  {
-    id:434, emoji:"\ud83e\udd59", title:"Falafel Wrap",
-    cuisine:"Middle Eastern", time:30, diff:"Intermediate",
-    dietary:["Vegan"], pp:85, missing:[], worth:false,
-    contains_meat:false, contains_fish:false,
-    contains_shellfish:false, contains_dairy:false,
-    kosher_safe:true,
-    meal:"lunch",
-    ingredients:[
-          {n:"Falafel",a:"6 pieces"},
-          {n:"Pita",a:"2"},
-          {n:"Hummus",a:"4 tbsp"},
-          {n:"Cucumber",a:"\u00bd"},
-          {n:"Tahini",a:"2 tbsp"}
-        ],
-    steps:[
-          {n:1,t:"Falafel",d:"Bake or fry falafel until crispy."},
-          {n:2,t:"Prep",d:"Slice cucumber, make quick pickled red onion."},
-          {n:3,t:"Spread",d:"Spread hummus on pita."},
-          {n:4,t:"Assemble",d:"Add falafel, cucumber, tahini drizzle, parsley."}
         ]
   },
   {
@@ -8423,28 +8113,6 @@ const RECIPES = [
           {n:2,t:"Broth",d:"Add stock, bring to simmer."},
           {n:3,t:"Tofu",d:"Add tofu cubes gently, simmer 5 min."},
           {n:4,t:"Serve",d:"Drizzle sesame oil. Serve over rice with sliced green onions."}
-        ]
-  },
-  {
-    id:443, emoji:"\ud83e\udd57", title:"Panzanella Bread Salad",
-    cuisine:"Italian", time:20, diff:"Easy",
-    dietary:["Vegan"], pp:85, missing:[], worth:false,
-    contains_meat:false, contains_fish:false,
-    contains_shellfish:false, contains_dairy:false,
-    kosher_safe:true,
-    meal:"lunch",
-    ingredients:[
-          {n:"Stale ciabatta",a:"200g"},
-          {n:"Tomatoes",a:"4 large"},
-          {n:"Basil",a:"handful"},
-          {n:"Red onion",a:"\u00bd"},
-          {n:"Capers",a:"2 tbsp"}
-        ],
-    steps:[
-          {n:1,t:"Toast",d:"Tear bread into chunks, toast in oven."},
-          {n:2,t:"Tomatoes",d:"Chop tomatoes, toss with salt, rest 10 min."},
-          {n:3,t:"Combine",d:"Toss bread with tomatoes and all juices."},
-          {n:4,t:"Finish",d:"Add basil, capers, onion, dress with olive oil and vinegar."}
         ]
   },
   {
@@ -8797,28 +8465,6 @@ const RECIPES = [
           {n:2,t:"Cucumber",d:"Spiralise or julienne cucumber."},
           {n:3,t:"Dressing",d:"Mix sesame oil, lime, soy, chili."},
           {n:4,t:"Toss",d:"Combine noodles, cucumber, dressing. Top with sesame seeds."}
-        ]
-  },
-  {
-    id:460, emoji:"\ud83e\udd59", title:"Croque Monsieur",
-    cuisine:"French", time:20, diff:"Easy",
-    dietary:[], pp:70, missing:[], worth:false,
-    contains_meat:false, contains_fish:false,
-    contains_shellfish:false, contains_dairy:true,
-    kosher_safe:true,
-    meal:"lunch",
-    ingredients:[
-          {n:"White bread",a:"4 slices"},
-          {n:"Ham",a:"4 slices"},
-          {n:"Gruyere",a:"100g"},
-          {n:"Butter",a:"2 tbsp"},
-          {n:"Dijon mustard",a:"1 tsp"}
-        ],
-    steps:[
-          {n:1,t:"Sauce",d:"Make b\u00e9chamel: butter, flour, milk, grated Gruyere."},
-          {n:2,t:"Build",d:"Spread mustard on bread, layer ham and cheese."},
-          {n:3,t:"Top",d:"Spread b\u00e9chamel on top."},
-          {n:4,t:"Grill",d:"Grill 5 min until golden and bubbling."}
         ]
   },
   {
@@ -9218,28 +8864,6 @@ const RECIPES = [
         ]
   },
   {
-    id:479, emoji:"\ud83e\udd57", title:"Caprese Sandwich",
-    cuisine:"Italian", time:10, diff:"Easy",
-    dietary:["Vegetarian"], pp:90, missing:[], worth:false,
-    contains_meat:false, contains_fish:false,
-    contains_shellfish:false, contains_dairy:true,
-    kosher_safe:true,
-    meal:"lunch",
-    ingredients:[
-          {n:"Ciabatta",a:"1 loaf"},
-          {n:"Fresh mozzarella",a:"200g"},
-          {n:"Tomatoes",a:"3"},
-          {n:"Basil",a:"handful"},
-          {n:"Pesto",a:"2 tbsp"}
-        ],
-    steps:[
-          {n:1,t:"Slice",d:"Slice ciabatta, toast if desired."},
-          {n:2,t:"Layer",d:"Alternate slices of tomato and mozzarella."},
-          {n:3,t:"Basil",d:"Tuck basil leaves between slices."},
-          {n:4,t:"Dress",d:"Drizzle pesto, olive oil, balsamic. Season."}
-        ]
-  },
-  {
     id:480, emoji:"\ud83c\udf5c", title:"Red Bean and Rice Soup",
     cuisine:"Southern US", time:35, diff:"Easy",
     dietary:["Vegan", "Gluten-free"], pp:90, missing:[], worth:false,
@@ -9570,28 +9194,6 @@ const RECIPES = [
         ]
   },
   {
-    id:495, emoji:"\ud83e\udd59", title:"Tuna Melt Sandwich",
-    cuisine:"American", time:15, diff:"Easy",
-    dietary:[], pp:80, missing:[], worth:false,
-    contains_meat:false, contains_fish:true,
-    contains_shellfish:false, contains_dairy:true,
-    kosher_safe:true,
-    meal:"lunch",
-    ingredients:[
-          {n:"Canned tuna",a:"2 cans"},
-          {n:"Cheddar",a:"80g"},
-          {n:"Sourdough",a:"4 slices"},
-          {n:"Mayo",a:"2 tbsp"},
-          {n:"Celery",a:"2 stalks"}
-        ],
-    steps:[
-          {n:1,t:"Mix",d:"Mix tuna with mayo, celery, lemon juice."},
-          {n:2,t:"Build",d:"Layer tuna mix and cheddar on bread."},
-          {n:3,t:"Grill",d:"Grill or toast in pan until cheese melts."},
-          {n:4,t:"Serve",d:"Cut diagonally and serve hot."}
-        ]
-  },
-  {
     id:496, emoji:"\ud83c\udf71", title:"Japanese Teriyaki Bowl",
     cuisine:"Japanese", time:25, diff:"Easy",
     dietary:[], pp:80, missing:[], worth:false,
@@ -9655,28 +9257,6 @@ const RECIPES = [
           {n:2,t:"Pickles",d:"Quick pickle carrot and daikon."},
           {n:3,t:"Bread",d:"Warm baguette, slice open."},
           {n:4,t:"Fill",d:"Spread sriracha mayo, layer tofu, pickles, cucumber, cilantro."}
-        ]
-  },
-  {
-    id:499, emoji:"\ud83c\udf5c", title:"Pozole Rojo",
-    cuisine:"Mexican", time:60, diff:"Intermediate",
-    dietary:[], pp:75, missing:[], worth:false,
-    contains_meat:true, contains_fish:false,
-    contains_shellfish:false, contains_dairy:false,
-    kosher_safe:true,
-    meal:"lunch",
-    ingredients:[
-          {n:"Pork shoulder",a:"600g"},
-          {n:"Hominy",a:"2 cans"},
-          {n:"Chili peppers",a:"3 dried"},
-          {n:"Oregano",a:"1 tbsp"},
-          {n:"Cabbage",a:"\u00bc"}
-        ],
-    steps:[
-          {n:1,t:"Chili paste",d:"Toast dried chilies, blend with garlic and stock."},
-          {n:2,t:"Broth",d:"Simmer pork in broth 40 min until tender."},
-          {n:3,t:"Add",d:"Shred pork. Add hominy and chili paste."},
-          {n:4,t:"Serve",d:"Top with shredded cabbage, radish, lime, oregano."}
         ]
   },
   {
@@ -9768,28 +9348,6 @@ const RECIPES = [
         ]
   },
   {
-    id:504, emoji:"\ud83c\udf5c", title:"French Onion Soup",
-    cuisine:"French", time:50, diff:"Intermediate",
-    dietary:[], pp:75, missing:[], worth:false,
-    contains_meat:false, contains_fish:false,
-    contains_shellfish:false, contains_dairy:true,
-    kosher_safe:true,
-    meal:"lunch",
-    ingredients:[
-          {n:"Onions",a:"4 large"},
-          {n:"Beef stock",a:"1L"},
-          {n:"Baguette",a:"4 slices"},
-          {n:"Gruyere",a:"120g"},
-          {n:"Butter",a:"3 tbsp"}
-        ],
-    steps:[
-          {n:1,t:"Caramelise",d:"Cook onions in butter 35 min until deeply caramelised."},
-          {n:2,t:"Deglaze",d:"Add wine, then beef stock. Simmer 10 min."},
-          {n:3,t:"Toast",d:"Rub baguette slices with garlic, toast."},
-          {n:4,t:"Gratinate",d:"Ladle soup into bowls, float toast, pile Gruyere, grill until bubbling."}
-        ]
-  },
-  {
     id:505, emoji:"\ud83e\udd57", title:"Antipasto Plate",
     cuisine:"Italian", time:15, diff:"Easy",
     dietary:[], pp:75, missing:[], worth:false,
@@ -9856,28 +9414,6 @@ const RECIPES = [
         ]
   },
   {
-    id:508, emoji:"\ud83c\udf55", title:"Margherita Pizza",
-    cuisine:"Italian", time:30, diff:"Intermediate",
-    dietary:["Vegetarian"], pp:75, missing:[], worth:false,
-    contains_meat:false, contains_fish:false,
-    contains_shellfish:false, contains_dairy:true,
-    kosher_safe:true,
-    meal:"dinner",
-    ingredients:[
-          {n:"Pizza dough",a:"300g"},
-          {n:"Mozzarella",a:"200g"},
-          {n:"Tomato sauce",a:"150ml"},
-          {n:"Basil",a:"handful"},
-          {n:"Olive oil",a:"1 tbsp"}
-        ],
-    steps:[
-          {n:1,t:"Heat",d:"Preheat oven to 250\u00b0C with pizza stone."},
-          {n:2,t:"Stretch",d:"Stretch dough thin on floured surface."},
-          {n:3,t:"Top",d:"Spread sauce, tear mozzarella, drizzle oil."},
-          {n:4,t:"Bake",d:"Bake 10 min until bubbling. Add fresh basil."}
-        ]
-  },
-  {
     id:509, emoji:"\ud83c\udf56", title:"Osso Buco",
     cuisine:"Italian", time:90, diff:"Advanced",
     dietary:[], pp:65, missing:["Veal shanks"], worth:false,
@@ -9897,28 +9433,6 @@ const RECIPES = [
           {n:2,t:"Braise",d:"Add wine, tomatoes, stock, herbs. Braise 90 min."},
           {n:3,t:"Gremolata",d:"Mix lemon zest, garlic, parsley."},
           {n:4,t:"Serve",d:"Top with gremolata. Serve with risotto milanese."}
-        ]
-  },
-  {
-    id:510, emoji:"\ud83c\udf5d", title:"Cacio e Pepe",
-    cuisine:"Italian", time:20, diff:"Intermediate",
-    dietary:["Vegetarian"], pp:80, missing:[], worth:false,
-    contains_meat:false, contains_fish:false,
-    contains_shellfish:false, contains_dairy:true,
-    kosher_safe:true,
-    meal:"dinner",
-    ingredients:[
-          {n:"Tonnarelli pasta",a:"400g"},
-          {n:"Pecorino Romano",a:"120g"},
-          {n:"Parmesan",a:"60g"},
-          {n:"Black pepper",a:"3 tsp"},
-          {n:"Pasta water",a:"1 cup"}
-        ],
-    steps:[
-          {n:1,t:"Toast",d:"Toast cracked black pepper in dry pan."},
-          {n:2,t:"Cook",d:"Cook pasta al dente."},
-          {n:3,t:"Mix",d:"Combine grated cheeses with pasta water to make paste."},
-          {n:4,t:"Toss",d:"Toss pasta with pepper, then cheese paste. Add water as needed."}
         ]
   },
   {
@@ -10626,28 +10140,6 @@ const RECIPES = [
         ]
   },
   {
-    id:543, emoji:"\ud83e\uded5", title:"Paneer Tikka Masala",
-    cuisine:"Indian", time:45, diff:"Intermediate",
-    dietary:["Vegetarian", "Gluten-free"], pp:85, missing:[], worth:false,
-    contains_meat:false, contains_fish:false,
-    contains_shellfish:false, contains_dairy:true,
-    kosher_safe:true,
-    meal:"dinner",
-    ingredients:[
-          {n:"Paneer",a:"400g"},
-          {n:"Tikka masala sauce",a:"400ml"},
-          {n:"Cream",a:"100ml"},
-          {n:"Bell peppers",a:"2"},
-          {n:"Onion",a:"1"}
-        ],
-    steps:[
-          {n:1,t:"Tikka",d:"Marinate paneer in tikka spices. Grill until charred."},
-          {n:2,t:"Sauce",d:"Prepare tikka masala sauce."},
-          {n:3,t:"Peppers",d:"Saut\u00e9 peppers and onion."},
-          {n:4,t:"Finish",d:"Add paneer and veg to sauce with cream. Simmer 10 min."}
-        ]
-  },
-  {
     id:544, emoji:"\ud83c\udf5b", title:"Vindaloo Pork",
     cuisine:"Indian", time:60, diff:"Intermediate",
     dietary:[], pp:65, missing:[], worth:false,
@@ -10799,28 +10291,6 @@ const RECIPES = [
           {n:2,t:"Onion",d:"Remove okra. Fry onion until golden."},
           {n:3,t:"Sauce",d:"Add tomatoes, spices, cook 5 min."},
           {n:4,t:"Combine",d:"Return okra, toss. Serve with roti."}
-        ]
-  },
-  {
-    id:551, emoji:"\ud83c\udf5c", title:"Pad Thai",
-    cuisine:"Thai", time:25, diff:"Intermediate",
-    dietary:[], pp:80, missing:[], worth:false,
-    contains_meat:true, contains_fish:true,
-    contains_shellfish:false, contains_dairy:false,
-    kosher_safe:true,
-    meal:"dinner",
-    ingredients:[
-          {n:"Rice noodles",a:"300g"},
-          {n:"Shrimp",a:"200g"},
-          {n:"Tofu",a:"150g"},
-          {n:"Eggs",a:"2"},
-          {n:"Tamarind paste",a:"3 tbsp"}
-        ],
-    steps:[
-          {n:1,t:"Soak",d:"Soak noodles in warm water."},
-          {n:2,t:"Wok",d:"Fry tofu until golden. Add shrimp."},
-          {n:3,t:"Noodles",d:"Add noodles, tamarind, fish sauce, sugar."},
-          {n:4,t:"Eggs",d:"Push to side, scramble eggs, mix in. Top with peanuts, lime, bean sprouts."}
         ]
   },
   {
@@ -11107,28 +10577,6 @@ const RECIPES = [
           {n:2,t:"Rice",d:"Cook rice in chicken fat and stock."},
           {n:3,t:"Chill",d:"Cool chicken in ice water for silky skin."},
           {n:4,t:"Serve",d:"Slice chicken, serve with rice, ginger sauce, dark soy, chili."}
-        ]
-  },
-  {
-    id:565, emoji:"\ud83c\udf5c", title:"Tom Yum Soup",
-    cuisine:"Thai", time:30, diff:"Easy",
-    dietary:[], pp:80, missing:[], worth:false,
-    contains_meat:false, contains_fish:true,
-    contains_shellfish:false, contains_dairy:false,
-    kosher_safe:true,
-    meal:"dinner",
-    ingredients:[
-          {n:"Shrimp",a:"300g"},
-          {n:"Lemongrass",a:"2"},
-          {n:"Galangal",a:"4 slices"},
-          {n:"Kaffir lime leaves",a:"4"},
-          {n:"Fish sauce",a:"2 tbsp"}
-        ],
-    steps:[
-          {n:1,t:"Broth",d:"Simmer stock with lemongrass, galangal, kaffir lime 15 min."},
-          {n:2,t:"Add",d:"Add mushrooms, tomatoes, chili."},
-          {n:3,t:"Shrimp",d:"Add shrimp, cook 3 min."},
-          {n:4,t:"Season",d:"Fish sauce, lime juice. Scatter cilantro."}
         ]
   },
   {
@@ -12364,28 +11812,6 @@ const RECIPES = [
         ]
   },
   {
-    id:622, emoji:"\ud83c\udf4b", title:"Lemon Herb Roast Chicken",
-    cuisine:"Mediterranean", time:75, diff:"Easy",
-    dietary:[], pp:75, missing:[], worth:false,
-    contains_meat:true, contains_fish:false,
-    contains_shellfish:false, contains_dairy:false,
-    kosher_safe:true,
-    meal:"dinner",
-    ingredients:[
-          {n:"Whole chicken",a:"1.5kg"},
-          {n:"Lemon",a:"3"},
-          {n:"Thyme",a:"bunch"},
-          {n:"Garlic",a:"8 cloves"},
-          {n:"Olive oil",a:"4 tbsp"}
-        ],
-    steps:[
-          {n:1,t:"Prep",d:"Stuff cavity with lemon, thyme, garlic."},
-          {n:2,t:"Rub",d:"Rub skin with olive oil, salt, zest."},
-          {n:3,t:"Roast",d:"Roast 200\u00b0C 70 min."},
-          {n:4,t:"Rest",d:"Rest 15 min. Pan juices as gravy."}
-        ]
-  },
-  {
     id:623, emoji:"\ud83e\uded5", title:"Spanish Oxtail Stew",
     cuisine:"Spanish", time:120, diff:"Advanced",
     dietary:[], pp:65, missing:[], worth:false,
@@ -12669,28 +12095,6 @@ const RECIPES = [
           {n:2,t:"Crust",d:"Mix breadcrumbs, herbs, garlic, butter."},
           {n:3,t:"Mustard",d:"Brush with mustard. Press crust on."},
           {n:4,t:"Roast",d:"Roast 200\u00b0C 20 min for medium rare. Rest 10 min."}
-        ]
-  },
-  {
-    id:636, emoji:"\ud83e\uded5", title:"Ratatouille",
-    cuisine:"French", time:50, diff:"Intermediate",
-    dietary:["Vegan", "Gluten-free"], pp:90, missing:[], worth:false,
-    contains_meat:false, contains_fish:false,
-    contains_shellfish:false, contains_dairy:false,
-    kosher_safe:true,
-    meal:"dinner",
-    ingredients:[
-          {n:"Eggplant",a:"1"},
-          {n:"Zucchini",a:"2"},
-          {n:"Tomatoes",a:"3"},
-          {n:"Bell peppers",a:"2"},
-          {n:"Thyme",a:"3 sprigs"}
-        ],
-    steps:[
-          {n:1,t:"Fry",d:"Fry each vegetable separately in olive oil."},
-          {n:2,t:"Combine",d:"Cook together with tomatoes and herbs."},
-          {n:3,t:"Simmer",d:"Simmer 30 min until jammy."},
-          {n:4,t:"Serve",d:"Drizzle olive oil. Serve with crusty bread or as side dish."}
         ]
   },
   {
@@ -13329,28 +12733,6 @@ const RECIPES = [
           {n:2,t:"Grill",d:"Grill 4 min per side."},
           {n:3,t:"Rest",d:"Rest 5 min, slice across grain."},
           {n:4,t:"Serve",d:"In warm tortillas with guacamole, salsa, onion, cilantro."}
-        ]
-  },
-  {
-    id:666, emoji:"\ud83e\uded5", title:"Huevos Rancheros",
-    cuisine:"Mexican", time:20, diff:"Easy",
-    dietary:["Vegetarian"], pp:85, missing:[], worth:false,
-    contains_meat:false, contains_fish:false,
-    contains_shellfish:false, contains_dairy:true,
-    kosher_risk:true,
-    meal:"dinner",
-    ingredients:[
-          {n:"Eggs",a:"4"},
-          {n:"Tomatillo salsa",a:"300ml"},
-          {n:"Corn tortillas",a:"4"},
-          {n:"Black beans",a:"1 can"},
-          {n:"Cotija",a:"60g"}
-        ],
-    steps:[
-          {n:1,t:"Salsa",d:"Simmer tomatillo salsa 10 min."},
-          {n:2,t:"Tortillas",d:"Fry or warm tortillas."},
-          {n:3,t:"Eggs",d:"Fry eggs."},
-          {n:4,t:"Assemble",d:"Tortilla, beans, egg, salsa, cotija, avocado, cilantro."}
         ]
   },
   {
@@ -14168,28 +13550,6 @@ const RECIPES = [
         ]
   },
   {
-    id:704, emoji:"\ud83e\udd66", title:"Roasted Tomato Soup",
-    cuisine:"French", time:40, diff:"Easy",
-    dietary:["Vegan", "Gluten-free"], pp:90, missing:[], worth:false,
-    contains_meat:false, contains_fish:false,
-    contains_shellfish:false, contains_dairy:false,
-    kosher_safe:true,
-    meal:"dinner",
-    ingredients:[
-          {n:"Tomatoes",a:"1kg"},
-          {n:"Garlic",a:"6 cloves"},
-          {n:"Basil",a:"handful"},
-          {n:"Olive oil",a:"4 tbsp"},
-          {n:"Vegetable stock",a:"500ml"}
-        ],
-    steps:[
-          {n:1,t:"Roast",d:"Halve tomatoes and garlic. Roast 200\u00b0C 35 min."},
-          {n:2,t:"Blend",d:"Blend with stock and basil."},
-          {n:3,t:"Season",d:"Season with salt, sugar, balsamic."},
-          {n:4,t:"Serve",d:"With crusty bread and basil oil."}
-        ]
-  },
-  {
     id:705, emoji:"\ud83e\udd66", title:"Cauliflower Tikka Masala",
     cuisine:"Indian", time:35, diff:"Easy",
     dietary:["Vegan", "Gluten-free"], pp:90, missing:[], worth:false,
@@ -14297,28 +13657,6 @@ const RECIPES = [
           {n:2,t:"Cook",d:"Fry mixture in olive oil 10 min."},
           {n:3,t:"Sauce",d:"Add wine, tomatoes, herbs. Simmer 25 min."},
           {n:4,t:"Serve",d:"Over pasta with nutritional yeast."}
-        ]
-  },
-  {
-    id:710, emoji:"\ud83e\udd66", title:"Buddha Bowl",
-    cuisine:"American", time:30, diff:"Easy",
-    dietary:["Vegan", "Gluten-free"], pp:95, missing:[], worth:false,
-    contains_meat:false, contains_fish:false,
-    contains_shellfish:false, contains_dairy:false,
-    kosher_safe:true,
-    meal:"dinner",
-    ingredients:[
-          {n:"Brown rice",a:"1 cup"},
-          {n:"Roasted vegetables",a:"2 cups"},
-          {n:"Chickpeas",a:"1 cup"},
-          {n:"Tahini",a:"3 tbsp"},
-          {n:"Avocado",a:"1"}
-        ],
-    steps:[
-          {n:1,t:"Rice",d:"Cook brown rice."},
-          {n:2,t:"Roast",d:"Roast vegetables and chickpeas."},
-          {n:3,t:"Assemble",d:"Layer rice, veg, chickpeas, avocado."},
-          {n:4,t:"Dress",d:"Drizzle tahini sauce. Top with seeds and lemon juice."}
         ]
   },
   {
@@ -14960,28 +14298,6 @@ const RECIPES = [
         ]
   },
   {
-    id:740, emoji:"\ud83e\udd66", title:"Shakshuka with Chickpeas",
-    cuisine:"North African", time:25, diff:"Easy",
-    dietary:["Vegan", "Gluten-free"], pp:90, missing:[], worth:false,
-    contains_meat:false, contains_fish:false,
-    contains_shellfish:false, contains_dairy:false,
-    kosher_safe:true,
-    meal:"dinner",
-    ingredients:[
-          {n:"Chickpeas",a:"1 can"},
-          {n:"Tomatoes",a:"400g canned"},
-          {n:"Cumin",a:"1 tsp"},
-          {n:"Smoked paprika",a:"1 tsp"},
-          {n:"Parsley",a:"handful"}
-        ],
-    steps:[
-          {n:1,t:"Sauce",d:"Simmer tomatoes with spices and garlic."},
-          {n:2,t:"Chickpeas",d:"Add chickpeas."},
-          {n:3,t:"Simmer",d:"Cook 10 min."},
-          {n:4,t:"Serve",d:"Top with parsley and a drizzle of olive oil. With bread."}
-        ]
-  },
-  {
     id:741, emoji:"\ud83e\udd66", title:"Roasted Vegetable Tagine",
     cuisine:"Moroccan", time:50, diff:"Easy",
     dietary:["Vegan"], pp:90, missing:[], worth:false,
@@ -15001,28 +14317,6 @@ const RECIPES = [
           {n:2,t:"Roast",d:"Roast 200\u00b0C 30 min."},
           {n:3,t:"Chickpeas",d:"Add chickpeas last 10 min."},
           {n:4,t:"Serve",d:"Over couscous. Garnish with cilantro and harissa."}
-        ]
-  },
-  {
-    id:742, emoji:"\ud83e\udd66", title:"Green Shakshuka",
-    cuisine:"Israeli", time:25, diff:"Easy",
-    dietary:["Vegetarian", "Gluten-free"], pp:90, missing:[], worth:false,
-    contains_meat:false, contains_fish:false,
-    contains_shellfish:false, contains_dairy:false,
-    kosher_safe:true,
-    meal:"dinner",
-    ingredients:[
-          {n:"Eggs",a:"4"},
-          {n:"Kale",a:"150g"},
-          {n:"Zucchini",a:"1"},
-          {n:"Feta",a:"80g"},
-          {n:"Za'atar",a:"1 tsp"}
-        ],
-    steps:[
-          {n:1,t:"Cook",d:"Saut\u00e9 zucchini and kale."},
-          {n:2,t:"Eggs",d:"Make wells, crack in eggs."},
-          {n:3,t:"Cover",d:"Cook 5 min."},
-          {n:4,t:"Top",d:"Crumble feta and sprinkle za'atar."}
         ]
   },
   {
@@ -19536,28 +18830,6 @@ const RECIPES = [
         ]
   },
   {
-    id:948, emoji:"\ud83e\uddc0", title:"Cheese and Herb Scones",
-    cuisine:"British", time:30, diff:"Intermediate",
-    dietary:["Vegetarian"], pp:85, missing:[], worth:false,
-    contains_meat:false, contains_fish:false,
-    contains_shellfish:false, contains_dairy:true,
-    kosher_safe:true,
-    meal:"snack",
-    ingredients:[
-          {n:"Flour",a:"300g"},
-          {n:"Cheddar",a:"100g"},
-          {n:"Rosemary",a:"1 tsp"},
-          {n:"Butter",a:"60g"},
-          {n:"Buttermilk",a:"150ml"}
-        ],
-    steps:[
-          {n:1,t:"Rub",d:"Rub butter into flour."},
-          {n:2,t:"Add",d:"Mix in cheese and rosemary."},
-          {n:3,t:"Dough",d:"Add buttermilk to form dough."},
-          {n:4,t:"Bake",d:"Bake 200\u00b0C 15 min."}
-        ]
-  },
-  {
     id:949, emoji:"\ud83e\udd5c", title:"Peanut Sauce with Crudit\u00e9s",
     cuisine:"Thai", time:10, diff:"Easy",
     dietary:["Vegan", "Gluten-free"], pp:95, missing:[], worth:false,
@@ -22027,7 +21299,7 @@ const IMAGE_MAP = {
   297: 'https://images.unsplash.com/photo-1590301157890-4810ed352733?auto=format&fit=crop&w=800&q=80', // PB&J Overnight Oat Bowl
   298: 'https://images.unsplash.com/photo-1590412200988-a436970781fa?auto=format&fit=crop&w=800&q=80', // Shakshuka with Merguez
   299: 'https://images.unsplash.com/photo-1495214783159-3503fd1b572d?auto=format&fit=crop&w=800&q=80', // Coconut Mango Bircher Muesli
-  300: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Korean Tteok Breakfast
+  300: 'https://images.unsplash.com/photo-1510693206972-df098062cb71?auto=format&fit=crop&w=800&q=80', // Korean Tteok Breakfast
   301: 'https://images.unsplash.com/photo-1495214783159-3503fd1b572d?auto=format&fit=crop&w=800&q=80', // Hazelnut Chocolate Granola Bowl
   302: 'https://images.unsplash.com/photo-1510693206972-df098062cb71?auto=format&fit=crop&w=800&q=80', // Spanish Tortilla Slice
   303: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=800&q=80', // Protein Oat Pancakes
@@ -22194,7 +21466,7 @@ const IMAGE_MAP = {
   464: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=800&q=80', // Muffuletta Sandwich
   465: 'https://images.unsplash.com/photo-1476718406336-bb5a9690ee2a?auto=format&fit=crop&w=800&q=80', // Hot and Sour Soup
   466: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=800&q=80', // Roasted Carrot and Chickpea Salad
-  467: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Bulgogi Beef Bowl
+  467: 'https://images.unsplash.com/photo-1546964124-0cce460f38ef?auto=format&fit=crop&w=800&q=80', // Bulgogi Beef Bowl
   468: 'https://images.unsplash.com/photo-1607532941433-304659e8198a?auto=format&fit=crop&w=800&q=80', // Raw Zucchini Ribbon Salad
   469: 'https://images.unsplash.com/photo-1529006557810-274b9b2fc783?auto=format&fit=crop&w=800&q=80', // Shawarma Rice Bowl
   470: 'https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=800&q=80', // Minestrone Primavera
@@ -22289,7 +21561,7 @@ const IMAGE_MAP = {
   559: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80', // Mapo Tofu
   560: 'https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=800&q=80', // Chicken Teriyaki
   561: 'https://images.unsplash.com/photo-1552611052-33e04de081de?auto=format&fit=crop&w=800&q=80', // Char Kway Teow
-  562: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Bulgogi Korean BBQ
+  562: 'https://images.unsplash.com/photo-1498579150354-977475b7ea0b?auto=format&fit=crop&w=800&q=80', // Bulgogi Korean BBQ
   563: 'https://images.unsplash.com/photo-1562565651-7d4948f339eb?auto=format&fit=crop&w=800&q=80', // Laksa Lemak
   564: 'https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=800&q=80', // Hainanese Chicken Rice
   565: 'https://images.unsplash.com/photo-1548943487-a2e4e43b4853?auto=format&fit=crop&w=800&q=80', // Tom Yum Soup
@@ -22300,7 +21572,7 @@ const IMAGE_MAP = {
   570: 'https://images.unsplash.com/photo-1562565651-7d4948f339eb?auto=format&fit=crop&w=800&q=80', // Laksa Asam
   571: 'https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=800&q=80', // Yakitori Chicken
   572: 'https://images.unsplash.com/photo-1519624014191-508652cbd7b5?auto=format&fit=crop&w=800&q=80', // Soba Noodles with Duck
-  573: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Korean Sundubu Jjigae
+  573: 'https://images.unsplash.com/photo-1553163147-622ab57be1c7?auto=format&fit=crop&w=800&q=80', // Korean Sundubu Jjigae
   574: 'https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&w=800&q=80', // Vietnamese Shaking Beef
   575: 'https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&w=800&q=80', // Wonton Noodle Soup
   576: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=800&q=80', // Japanese Gyudon
@@ -22313,7 +21585,7 @@ const IMAGE_MAP = {
   583: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=800&q=80', // Beef Bulgogi Ramen
   584: 'https://images.unsplash.com/photo-1553163147-622ab57be1c7?auto=format&fit=crop&w=800&q=80', // Oyakodon
   585: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=80', // Phad See Ew
-  586: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Japanase Nikujaga
+  586: 'https://images.unsplash.com/photo-1476718406336-bb5a9690ee2a?auto=format&fit=crop&w=800&q=80', // Japanase Nikujaga
   587: 'https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&w=800&q=80', // Vietnamese Caramel Pork
   588: 'https://images.unsplash.com/photo-1574484284002-952d92456975?auto=format&fit=crop&w=800&q=80', // Japanese Curry
   589: 'https://images.unsplash.com/photo-1553163147-622ab57be1c7?auto=format&fit=crop&w=800&q=80', // Korean Kimchi Jjigae
@@ -22322,7 +21594,7 @@ const IMAGE_MAP = {
   592: 'https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?auto=format&fit=crop&w=800&q=80', // Thai Massaman Curry
   593: 'https://images.unsplash.com/photo-1519624014191-508652cbd7b5?auto=format&fit=crop&w=800&q=80', // Japanese Yakisoba
   594: 'https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&w=800&q=80', // Rendang Beef
-  595: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Korean Doenjang Jjigae
+  595: 'https://images.unsplash.com/photo-1553163147-622ab57be1c7?auto=format&fit=crop&w=800&q=80', // Korean Doenjang Jjigae
   596: 'https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=800&q=80', // Pad Prik King
   597: 'https://images.unsplash.com/photo-1552611052-33e04de081de?auto=format&fit=crop&w=800&q=80', // Mee Goreng
   598: 'https://images.unsplash.com/photo-1546964124-0cce460f38ef?auto=format&fit=crop&w=800&q=80', // Twice-Cooked Pork
@@ -22550,23 +21822,23 @@ const IMAGE_MAP = {
   820: 'https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&w=800&q=80', // Onion Bhaji
   821: 'https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&w=800&q=80', // Sweet Potato Chips
   822: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=800&q=80', // Pita Chips with Tzatziki
-  823: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Scotch Eggs
+  823: 'https://images.unsplash.com/photo-1510693206972-df098062cb71?auto=format&fit=crop&w=800&q=80', // Scotch Eggs
   824: 'https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&w=800&q=80', // Arancini
   825: 'https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&w=800&q=80', // Gyoza Pan-Fried
   826: 'https://images.unsplash.com/photo-1482049016688-2d3e1b311543?auto=format&fit=crop&w=800&q=80', // Crostini with Ricotta
   827: 'https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&w=800&q=80', // Popcorn with Various Flavors
-  828: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Nachos Supreme
+  828: 'https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=800&q=80', // Nachos Supreme
   829: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=800&q=80', // Mini Quiches
   830: 'https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&w=800&q=80', // Peanut Butter Energy Balls
   831: 'https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&w=800&q=80', // Muhammara Dip
   832: 'https://images.unsplash.com/photo-1541519227354-08fa5d50c44d?auto=format&fit=crop&w=800&q=80', // Avocado Toast Bites
   833: 'https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&w=800&q=80', // Spring Rolls Crispy
-  834: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Stuffed Mushrooms
+  834: 'https://images.unsplash.com/photo-1572453800999-e8d2d1589b7c?auto=format&fit=crop&w=800&q=80', // Stuffed Mushrooms
   835: 'https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&w=800&q=80', // Jalape\u00f1o Poppers
   836: 'https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&w=800&q=80', // Labneh with Olive Oil
   837: 'https://images.unsplash.com/photo-1482049016688-2d3e1b311543?auto=format&fit=crop&w=800&q=80', // Fried Egg on Toast
   838: 'https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&w=800&q=80', // Roasted Chickpeas
-  839: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Garlic Bread
+  839: 'https://images.unsplash.com/photo-1482049016688-2d3e1b311543?auto=format&fit=crop&w=800&q=80', // Garlic Bread
   840: 'https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&w=800&q=80', // Roasted Veggie Dip Platter
   841: 'https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&w=800&q=80', // Fromage Fort
   842: 'https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&w=800&q=80', // Tzatziki Dip
@@ -22586,8 +21858,8 @@ const IMAGE_MAP = {
   856: 'https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&w=800&q=80', // Vegetable Pakoras
   857: 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=800&q=80', // Mini Pepperoni Pizzas
   858: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800&q=80', // Greek Salad Skewers
-  859: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Naan Chips with Mango Salsa
-  860: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Almond and Date Bars
+  859: 'https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&w=800&q=80', // Naan Chips with Mango Salsa
+  860: 'https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=800&q=80', // Almond and Date Bars
   861: 'https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=800&q=80', // Smoked Salmon Dip
   862: 'https://images.unsplash.com/photo-1607532941433-304659e8198a?auto=format&fit=crop&w=800&q=80', // Egg Salad on Rye
   863: 'https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&w=800&q=80', // Cheese Crisps
@@ -22605,11 +21877,11 @@ const IMAGE_MAP = {
   875: 'https://images.unsplash.com/photo-1607532941433-304659e8198a?auto=format&fit=crop&w=800&q=80', // Smashed Cucumber Salad
   876: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80', // Poke Bowl Snack
   877: 'https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&w=800&q=80', // Zucchini Fritters
-  878: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Mango Lassi
+  878: 'https://images.unsplash.com/photo-1574484284002-952d92456975?auto=format&fit=crop&w=800&q=80', // Mango Lassi
   879: 'https://images.unsplash.com/photo-1559737558-2f5a35f4523b?auto=format&fit=crop&w=800&q=80', // Shrimp Cocktail
   880: 'https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&w=800&q=80', // Pimento Cheese Dip
   881: 'https://images.unsplash.com/photo-1574484284002-952d92456975?auto=format&fit=crop&w=800&q=80', // Taramasalata
-  882: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Turkish B\u00f6rek
+  882: 'https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&w=800&q=80', // Turkish B\u00f6rek
   883: 'https://images.unsplash.com/photo-1559737558-2f5a35f4523b?auto=format&fit=crop&w=800&q=80', // Ceviche
   884: 'https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&w=800&q=80', // Smoked Gouda Fondue
   885: 'https://images.unsplash.com/photo-1590412200988-a436970781fa?auto=format&fit=crop&w=800&q=80', // Turkish Menemen Snack
@@ -22624,11 +21896,11 @@ const IMAGE_MAP = {
   894: 'https://images.unsplash.com/photo-1495214783159-3503fd1b572d?auto=format&fit=crop&w=800&q=80', // Granola Bark
   895: 'https://images.unsplash.com/photo-1544943910-4c1dc44aab44?auto=format&fit=crop&w=800&q=80', // Fish and Chips Mini
   896: 'https://images.unsplash.com/photo-1607532941433-304659e8198a?auto=format&fit=crop&w=800&q=80', // Papaya Salad
-  897: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Corn Bhel
+  897: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=800&q=80', // Corn Bhel
   898: 'https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&w=800&q=80', // Artichoke Dip
   899: 'https://images.unsplash.com/photo-1482049016688-2d3e1b311543?auto=format&fit=crop&w=800&q=80', // Shrimp Avocado Crostini
   900: 'https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&w=800&q=80', // Hard-Boiled Eggs with Dukkah
-  901: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Baked Brie with Honey
+  901: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=800&q=80', // Baked Brie with Honey
   902: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80', // Crispy Tofu Bites
   903: 'https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&w=800&q=80', // Tapenade
   904: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=800&q=80', // Masala Fries
@@ -22638,10 +21910,10 @@ const IMAGE_MAP = {
   908: 'https://images.unsplash.com/photo-1559737558-2f5a35f4523b?auto=format&fit=crop&w=800&q=80', // Coconut Shrimp
   909: 'https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&w=800&q=80', // Tzatziki Stuffed Peppers
   910: 'https://images.unsplash.com/photo-1553909489-cd47e0907980?auto=format&fit=crop&w=800&q=80', // Vegetable Croquetas
-  911: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Roasted Almonds with Herbs
+  911: 'https://images.unsplash.com/photo-1572453800999-e8d2d1589b7c?auto=format&fit=crop&w=800&q=80', // Roasted Almonds with Herbs
   912: 'https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&w=800&q=80', // Muhammara Walnut Dip
-  913: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Rainbow Veggie Rolls
-  914: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Loaded Potato Skins
+  913: 'https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&w=800&q=80', // Rainbow Veggie Rolls
+  914: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=800&q=80', // Loaded Potato Skins
   915: 'https://images.unsplash.com/photo-1498579150354-977475b7ea0b?auto=format&fit=crop&w=800&q=80', // Panzanella Bites
   916: 'https://images.unsplash.com/photo-1559737558-2f5a35f4523b?auto=format&fit=crop&w=800&q=80', // Tempura Prawn
   917: 'https://images.unsplash.com/photo-1482049016688-2d3e1b311543?auto=format&fit=crop&w=800&q=80', // Nut Butter Power Toast
@@ -22652,7 +21924,7 @@ const IMAGE_MAP = {
   922: 'https://images.unsplash.com/photo-1553530666-ba11a7da3888?auto=format&fit=crop&w=800&q=80', // Protein Smoothie
   923: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=800&q=80', // Brie and Cranberry Crostini
   924: 'https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&w=800&q=80', // Pot Stickers
-  925: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Tahin with Grape Molasses
+  925: 'https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&w=800&q=80', // Tahin with Grape Molasses
   926: 'https://images.unsplash.com/photo-1546549032-9571cd6b27df?auto=format&fit=crop&w=800&q=80', // Avocado Boats with Tuna
   927: 'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=800&q=80', // Fish Tacos Baja Style
   928: 'https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&w=800&q=80', // Crispy Shallots
@@ -22661,7 +21933,7 @@ const IMAGE_MAP = {
   931: 'https://images.unsplash.com/photo-1498579150354-977475b7ea0b?auto=format&fit=crop&w=800&q=80', // Sevillana Olives
   932: 'https://images.unsplash.com/photo-1482049016688-2d3e1b311543?auto=format&fit=crop&w=800&q=80', // Bruschetta with Cannellini
   933: 'https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&w=800&q=80', // Corn Pakora
-  934: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Miso Deviled Eggs
+  934: 'https://images.unsplash.com/photo-1510693206972-df098062cb71?auto=format&fit=crop&w=800&q=80', // Miso Deviled Eggs
   935: 'https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&w=800&q=80', // Green Goddess Dip
   936: 'https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&w=800&q=80', // Zucchini Fritter Bites
   937: 'https://images.unsplash.com/photo-1553530666-ba11a7da3888?auto=format&fit=crop&w=800&q=80', // A\u00e7a\u00ed Smoothie
@@ -22669,7 +21941,7 @@ const IMAGE_MAP = {
   939: 'https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&w=800&q=80', // Dates Stuffed with Almond
   940: 'https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&w=800&q=80', // Moutabel
   941: 'https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&w=800&q=80', // Pigs in Blankets
-  942: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Cold Sesame Noodles
+  942: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=800&q=80', // Cold Sesame Noodles
   943: 'https://images.unsplash.com/photo-1529006557810-274b9b2fc783?auto=format&fit=crop&w=800&q=80', // Falafel with Harissa
   944: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=800&q=80', // Egg Muffins
   945: 'https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&w=800&q=80', // Mozzarella Sticks
@@ -22681,11 +21953,11 @@ const IMAGE_MAP = {
   951: 'https://images.unsplash.com/photo-1490474418585-ba9bad8fd0ea?auto=format&fit=crop&w=800&q=80', // Pistachio Yogurt Dip
   952: 'https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&w=800&q=80', // Crispy Onion Rings
   953: 'https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&w=800&q=80', // Roasted Garlic Spread
-  954: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Scotch Quail Eggs
-  955: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Trail Mix
+  954: 'https://images.unsplash.com/photo-1510693206972-df098062cb71?auto=format&fit=crop&w=800&q=80', // Scotch Quail Eggs
+  955: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=800&q=80', // Trail Mix
   956: 'https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=800&q=80', // Smoked Salmon Blinis
   957: 'https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&w=800&q=80', // Truffle Mac Bites
-  958: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Smashed Avocado Cups
+  958: 'https://images.unsplash.com/photo-1541519227354-08fa5d50c44d?auto=format&fit=crop&w=800&q=80', // Smashed Avocado Cups
   959: 'https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&w=800&q=80', // Chermoula Dipping Sauce
   960: 'https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&w=800&q=80', // Khinkali Georgian Dumplings
   961: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800&q=80', // Antipasto Skewers
@@ -22697,7 +21969,7 @@ const IMAGE_MAP = {
   967: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=800&q=80', // Pomegranate Walnut Salad
   968: 'https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&w=800&q=80', // B\u00f6rek Rolls
   969: 'https://images.unsplash.com/photo-1590412200988-a436970781fa?auto=format&fit=crop&w=800&q=80', // Shakshuka Mini Pots
-  970: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Charred Corn Salsa
+  970: 'https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=800&q=80', // Charred Corn Salsa
   971: 'https://images.unsplash.com/photo-1607532941433-304659e8198a?auto=format&fit=crop&w=800&q=80', // Fattoush Snack Plate
   972: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=800&q=80', // Open Sandwich Sm\u00f8rrebr\u00f8d
   973: 'https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&w=800&q=80', // Cauliflower Buffalo Bites
@@ -22705,17 +21977,17 @@ const IMAGE_MAP = {
   975: 'https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&w=800&q=80', // Garlicky White Bean Spread
   976: 'https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=800&q=80', // Tahini Brownies
   977: 'https://images.unsplash.com/photo-1546964124-0cce460f38ef?auto=format&fit=crop&w=800&q=80', // Tarte Flamb\u00e9e
-  978: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Ants on a Log
+  978: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=800&q=80', // Ants on a Log
   979: 'https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=800&q=80', // Crispy Skin Chicken Wings
   980: 'https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&w=800&q=80', // Matcha Energy Balls
   981: 'https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&w=800&q=80', // Romesco Dip
   982: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=800&q=80', // Cheese Toast Korean Baked
-  983: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Celeriac Remoulade
+  983: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=800&q=80', // Celeriac Remoulade
   984: 'https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&w=800&q=80', // Kibbeh Balls
   985: 'https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&w=800&q=80', // Labneh and Zaatar Plate
   986: 'https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&w=800&q=80', // Battered Halloumi
   987: 'https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&w=800&q=80', // Chipotle Sour Cream Dip
-  988: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Roasted Pumpkin Seed Snack
+  988: 'https://images.unsplash.com/photo-1572453800999-e8d2d1589b7c?auto=format&fit=crop&w=800&q=80', // Roasted Pumpkin Seed Snack
   989: 'https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&w=800&q=80', // G\u00f6zleme
   990: 'https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=800&q=80', // Tomato Galette
   991: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=800&q=80', // Japanese Potato Salad
@@ -22724,7 +21996,7 @@ const IMAGE_MAP = {
   994: 'https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&w=800&q=80', // Mango Habanero Salsa
   995: 'https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&w=800&q=80', // Korean Cucumber Banchan
   996: 'https://images.unsplash.com/photo-1482049016688-2d3e1b311543?auto=format&fit=crop&w=800&q=80', // Prawn Toasts with Sesame
-  997: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Coconut Bliss Balls
+  997: 'https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=800&q=80', // Coconut Bliss Balls
   998: 'https://images.unsplash.com/photo-1553909489-cd47e0907980?auto=format&fit=crop&w=800&q=80', // Melted Provolone
   999: 'https://images.unsplash.com/photo-1473093226795-af9932fe5856?auto=format&fit=crop&w=800&q=80', // Pesto Palmiers
   1000: 'https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&w=800&q=80', // Loaded Fries
@@ -25873,10 +25145,10 @@ function imgAllowedForRecipe(url, recipe) {
   if (photoGroup === 'pasta') return /pasta|spaghetti|linguine|penne|fettuccine|rigatoni|lasagn|gnocchi|carbonara|bolognese|alfredo|pesto|primavera|mac |orzo|tortellini|ravioli|ziti|fusilli|farfalle|cavatappi|amatriciana|arrabbiata|cacio|aglio|ragù|ragu|stroganoff|tagliatelle|mushroom.*pasta|creamy.*pasta/.test(t);
   if (photoGroup === 'noodle') return /ramen|noodle|pho|soba|lo mein|pad thai|udon|miso|laksa|char kway|mee goreng|japchae|chow|bibim/.test(t);
   if (photoGroup === 'rice') return /rice|biryani|paella|risotto|pilaf|bibimbap|plov|nasi|makloub|fried rice|upma|oyakodon|jjigae|doenjang|kimchi|guksu|onigiri|maqluba/.test(t);
-  if (photoGroup === 'soup') return /soup|stew|chili|chowder|bisque|goulash|gazpacho|harira|borscht|caldo|ribollita|broth|gumbo|jambalaya|feijoada|tagine|lentil|pozole|shorba|pot au feu|bouillabaisse|cassoulet|minestrone|avgolemono|tom kha|clam|bourguignon|coq au vin/.test(t);
+  if (photoGroup === 'soup') return /soup|stew|nikujaga|chili|chowder|bisque|goulash|gazpacho|harira|borscht|caldo|ribollita|broth|gumbo|jambalaya|feijoada|tagine|lentil|pozole|shorba|pot au feu|bouillabaisse|cassoulet|minestrone|avgolemono|tom kha|clam|bourguignon|coq au vin/.test(t);
   if (photoGroup === 'salad_bowl') return /salad|slaw|bowl|grain|buddha|quinoa|chickpea|nourish|harvest|tabbouleh|fattoush|tofu|tempeh|power bowl|fruit|berry|kushari|koshari|mjaddara|mujaddara|couscous|broccolini|side/.test(t) || ml === 'breakfast';
   if (photoGroup === 'curry') return /curry|masala|tikka|korma|vindaloo|saag|palak|dal[^a-z]|daal|dhal|rajma|chole|dhansak|keema|aloo|baingan|paratha|paneer|tagine|moroccan|ethiopian|fit-fit|misir|wot|fesenjan|ghormeh|khoresh/.test(t) || c === 'indian' || c === 'ethiopian' || c === 'persian';
-  if (photoGroup === 'protein') return /chicken|pollo|salmon|fish|\bcod\b|tuna|steak|beef|lamb|pork|shrimp|prawn|duck|turkey|halibut|trout|sea bass|scallop|lobster|crab|calamari|gosht|tonkatsu|schnitzel|bistecca|saltimbocca|porchetta|stroganoff|clam|ceviche|branzino|sole|meuni[eè]re|pescado|camarones|jackfruit|pigs in/.test(t);
+  if (photoGroup === 'protein') return /chicken|pollo|salmon|fish|\bcod\b|tuna|steak|beef|bulgogi|lamb|pork|shrimp|prawn|duck|turkey|halibut|trout|sea bass|scallop|lobster|crab|calamari|gosht|tonkatsu|schnitzel|bistecca|saltimbocca|porchetta|stroganoff|clam|ceviche|branzino|sole|meuni[eè]re|pescado|camarones|jackfruit|pigs in/.test(t);
   if (photoGroup === 'bread') return /sandwich|toast|panini|wrap|burrito|bagel|focaccia|blt|melt|grilled cheese|croque|bánh mì|banh mi|pita|croissant|sub|bruschetta|crostini|bread|scone|muffin|biscuit|quiche|hash|gözleme|gozleme|imam bayildi|bayıldı|pulled/.test(t) || ml === 'breakfast' || ml === 'snack';
   if (photoGroup === 'breakfast') return ml === 'breakfast' || /pancake|waffle|oatmeal|porridge|egg|omelette?|omelet|frittata|shakshuka|menemen|yogurt|parfait|granola|muesli|smoothie|chia|crepe|french toast|quiche|breakfast/.test(t);
   if (photoGroup === 'mexican') return /taco|burrito|quesadilla|enchilada|fajita|tostada|tamale|carnita|mole|chiles|nachos|torta/.test(t) || c === 'mexican';
