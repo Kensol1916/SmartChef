@@ -194,6 +194,20 @@ html{font-size:15px;scroll-behavior:smooth}body{font-family:var(--fb);background
 .feed-card{background:var(--white);border:1px solid var(--bor);border-radius:var(--r);padding:20px;transition:all .3s cubic-bezier(.4,0,.2,1);animation:fadeInUp .4s ease both}
 .feed-card:hover{box-shadow:var(--sh2);border-color:var(--borH);transform:translateY(-3px)}
 .feed-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
+.comm-card{background:var(--white);border:1px solid var(--bor);border-radius:16px;overflow:hidden;transition:all .3s ease;animation:fadeInUp .4s ease both}
+.comm-card:hover{box-shadow:0 8px 32px rgba(0,0,0,.08);transform:translateY(-2px)}
+.comm-img{height:220px;overflow:hidden;position:relative;cursor:pointer}
+.comm-img img{width:100%;height:100%;object-fit:cover;transition:transform .4s ease}
+.comm-card:hover .comm-img img{transform:scale(1.03)}
+.comm-overlay{position:absolute;top:10px;left:10px;display:flex;gap:6px}
+.comm-pill{background:rgba(0,0,0,.55);backdrop-filter:blur(4px);color:#fff;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600}
+.comm-body{padding:16px 18px}
+.comm-author{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.comm-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:15px;flex-shrink:0}
+.comm-actions{display:flex;align-items:center;gap:14px;padding-top:12px;border-top:1px solid var(--bor)}
+.comm-action-btn{background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:5px;font-size:13px;color:var(--mu);transition:all .2s;padding:4px 0}
+.comm-action-btn:hover{color:var(--ch)}
+.comm-action-btn.liked{color:#E05C5C;font-weight:700}
 /* profile tabs */
 .prof-tab{padding:8px 18px;border-radius:var(--rs);font-size:13px;font-weight:600;cursor:pointer;border:none;background:none;color:var(--mu);transition:all .25s ease}
 .prof-tab:hover:not(.ac){color:var(--ch)}
@@ -228,7 +242,11 @@ html{font-size:15px;scroll-behavior:smooth}body{font-family:var(--fb);background
 .card:nth-child(1){animation-delay:0s}.card:nth-child(2){animation-delay:.05s}.card:nth-child(3){animation-delay:.1s}
 .card:nth-child(4){animation-delay:.15s}.card:nth-child(5){animation-delay:.2s}.card:nth-child(6){animation-delay:.25s}
 .card:nth-child(7){animation-delay:.3s}.card:nth-child(8){animation-delay:.35s}.card:nth-child(9){animation-delay:.4s}
-.rimg{height:200px;background:linear-gradient(135deg,#F0E8DC 0%,#E8D8C4 50%,#E4D4BE 100%);background-size:200% 200%;animation:gradientShift 5s ease infinite;display:flex;align-items:center;justify-content:center;font-size:72px;position:relative;cursor:pointer;overflow:hidden;border-radius:var(--r) var(--r) 0 0}
+.rimg-flip-container{perspective:800px}
+.rimg-flip-inner{position:relative;transition:transform .5s ease;transform-style:preserve-3d}
+.rimg-flip-inner.flipped{transform:rotateY(180deg)}
+.rimg{height:200px;background:linear-gradient(135deg,#F0E8DC 0%,#E8D8C4 50%,#E4D4BE 100%);background-size:200% 200%;animation:gradientShift 5s ease infinite;display:flex;align-items:center;justify-content:center;font-size:72px;position:relative;cursor:pointer;overflow:hidden;border-radius:var(--r) var(--r) 0 0;backface-visibility:hidden}
+.rimg-back{backface-visibility:hidden;transform:rotateY(180deg)}
 .rimg::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.08),transparent 40%);pointer-events:none;opacity:0;transition:opacity .3s}
 .card:hover .rimg::after{opacity:1}
 .rimg img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s cubic-bezier(.4,0,.2,1),opacity .4s ease}
@@ -692,7 +710,7 @@ html{font-size:15px;scroll-behavior:smooth}body{font-family:var(--fb);background
 .slot-pop-item.danger{color:#c04040}
 .slot-pop-divider{height:1px;background:var(--bor);margin:3px 0}
 /* ── STICKY RECIPE CONTROLS ── */
-.recipe-controls-sticky{position:sticky;top:0;z-index:40;background:var(--bg);padding:12px 0 8px;border-bottom:1px solid var(--bor);margin-bottom:12px}
+.recipe-controls-sticky{position:sticky;top:0;z-index:40;background:var(--cream);padding:12px 0 8px;border-bottom:1px solid var(--bor);margin-bottom:12px;margin-left:-32px;margin-right:-32px;padding-left:32px;padding-right:32px}
 /* ── ADD TO WEEK MODAL ── */
 .atw-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
 .atw-grid{display:grid;grid-template-columns:auto repeat(7,1fr);gap:4px;min-width:500px}
@@ -22318,7 +22336,7 @@ const IMAGE_MAP = {
   1097: 'https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=800&q=80', // Tuna and Sweetcorn Wrap
   1098: 'https://images.unsplash.com/photo-1607532941433-304659e8198a?auto=format&fit=crop&w=800&q=80', // Spinach and Strawberry Salad
   1099: 'https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=800&q=80', // Pasta e Fagioli
-  1100: 'https://images.unsplash.com/photo-1626700051175-6818013e1d4f?auto=format&fit=crop&w=800&q=80', // Cheese and Pickle Sandwich
+  1100: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=800&q=80', // Cheese and Pickle Sandwich
   1101: 'https://images.unsplash.com/photo-1548943487-a2e4e43b4853?auto=format&fit=crop&w=800&q=80', // Tuscan Bean Soup
   1102: 'https://images.unsplash.com/photo-1559314809-0d155014e29e?auto=format&fit=crop&w=800&q=80', // Thai-Style Noodle Salad
   1103: 'https://images.unsplash.com/photo-1608897013039-887f21d8c804?auto=format&fit=crop&w=800&q=80', // Orzo Salad
@@ -22358,7 +22376,7 @@ const IMAGE_MAP = {
   1137: 'https://images.unsplash.com/photo-1556761223-4c4282c73f77?auto=format&fit=crop&w=800&q=80', // Lasagna
   1138: 'https://images.unsplash.com/photo-1546964124-0cce460f38ef?auto=format&fit=crop&w=800&q=80', // Chicken Cacciatore
   1139: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=800&q=80', // Baked Salmon with Honey Glaze
-  1140: 'https://images.unsplash.com/photo-1553163147-622ab57be1c7?auto=format&fit=crop&w=800&q=80', // Meatballs in Tomato Sauce
+  1140: 'https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=800&q=80', // Meatballs in Tomato Sauce
   1141: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=800&q=80', // Vegetable Curry
   1142: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=800&q=80', // Paella
   1143: 'https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=800&q=80', // Shepherd's Pie
@@ -22410,7 +22428,7 @@ const IMAGE_MAP = {
   1189: 'https://images.unsplash.com/photo-1562565651-7d4948f339eb?auto=format&fit=crop&w=800&q=80', // Toad in the Hole
   1190: 'https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=800&q=80', // Chicken Laksa
   1191: 'https://images.unsplash.com/photo-1529006557810-274b9b2fc783?auto=format&fit=crop&w=800&q=80', // Classic Hummus
-  1192: 'https://images.unsplash.com/photo-1553163147-622ab57be1c7?auto=format&fit=crop&w=800&q=80', // Cheese and Crackers Platter
+  1192: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Cheese and Crackers Platter
   1193: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Peanut Butter Banana Snack
   1194: 'https://images.unsplash.com/photo-1498579150354-977475b7ea0b?auto=format&fit=crop&w=800&q=80', // Cheese and Apple Slices
   1195: 'https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=800&q=80', // Oat and Raisin Cookies
@@ -22420,7 +22438,7 @@ const IMAGE_MAP = {
   1199: 'https://images.unsplash.com/photo-1572453800999-e8d2d1589b7c?auto=format&fit=crop&w=800&q=80', // Spiced Almonds
   1200: 'https://images.unsplash.com/photo-1482049016688-2d3e1b311543?auto=format&fit=crop&w=800&q=80', // Cheese Biscuits
   1201: 'https://images.unsplash.com/photo-1562565651-7d4948f339eb?auto=format&fit=crop&w=800&q=80', // Olive and Feta Bites
-  1202: 'https://images.unsplash.com/photo-1553163147-622ab57be1c7?auto=format&fit=crop&w=800&q=80', // Peanut Butter Energy Bites
+  1202: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=800&q=80', // Peanut Butter Energy Bites
   1203: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=800&q=80', // Veggie Spring Rolls
   1204: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=800&q=80', // Pita with Hummus and Veggies
   1205: 'https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=800&q=80', // Shortbread Cookies
@@ -22450,7 +22468,7 @@ const IMAGE_MAP = {
   1229: 'https://images.unsplash.com/photo-1510693206972-df098062cb71?auto=format&fit=crop&w=800&q=80', // Yogurt Parfait
   1230: 'https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?auto=format&fit=crop&w=800&q=80', // Celery with Almond Butter
   1231: 'https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=800&q=80', // Peanut Butter Cookies
-  1232: 'https://images.unsplash.com/photo-1553163147-622ab57be1c7?auto=format&fit=crop&w=800&q=80', // Candied Walnuts
+  1232: 'https://images.unsplash.com/photo-1498579150354-977475b7ea0b?auto=format&fit=crop&w=800&q=80', // Candied Walnuts
   1233: 'https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=800&q=80', // Chocolate Sponge Cake
   1234: 'https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=800&q=80', // Strawberry Jam Tart
   1235: 'https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=800&q=80', // Peach Cobbler
@@ -22485,7 +22503,7 @@ const IMAGE_MAP = {
   1264: 'https://images.unsplash.com/photo-1495214783159-3503fd1b572d?auto=format&fit=crop&w=800&q=80', // Cinnamon Toast
   1265: 'https://images.unsplash.com/photo-1528207776546-365bb710ee93?auto=format&fit=crop&w=800&q=80', // Green Smoothie Bowl
   1266: 'https://images.unsplash.com/photo-1568051243858-533a607809a5?auto=format&fit=crop&w=800&q=80', // Strawberry Shortcake Pancakes
-  1267: 'https://images.unsplash.com/photo-1626700051175-6818013e1d4f?auto=format&fit=crop&w=800&q=80', // Classic BLT Sandwich
+  1267: 'https://images.unsplash.com/photo-1553909489-cd47e0907980?auto=format&fit=crop&w=800&q=80', // Classic BLT Sandwich
   1268: 'https://images.unsplash.com/photo-1559737558-2f5a35f4523b?auto=format&fit=crop&w=800&q=80', // Chicken Wrap
   1269: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=800&q=80', // Chicken Taco Bowl
   1270: 'https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=800&q=80', // Beef Taco
@@ -22596,7 +22614,7 @@ const IMAGE_MAP = {
   1375: 'https://images.unsplash.com/photo-1546549032-9571cd6b27df?auto=format&fit=crop&w=800&q=80', // Branzino with Fennel
   1376: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=800&q=80', // Vanilla Shortbread
   1377: 'https://images.unsplash.com/photo-1590412200988-a436970781fa?auto=format&fit=crop&w=800&q=80', // Peanut Butter Granola Bars
-  1378: 'https://images.unsplash.com/photo-1553163147-622ab57be1c7?auto=format&fit=crop&w=800&q=80', // Cinnamon Apple Chips
+  1378: 'https://images.unsplash.com/photo-1562565651-7d4948f339eb?auto=format&fit=crop&w=800&q=80', // Cinnamon Apple Chips
   1379: 'https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=800&q=80', // Espresso Cake
   1380: 'https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=800&q=80', // Strawberry Trifle
   1381: 'https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=800&q=80', // Orange Mousse
@@ -22626,7 +22644,7 @@ const IMAGE_MAP = {
   1405: 'https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=800&q=80', // Beef Bourguignon
   1406: 'https://images.unsplash.com/photo-1498579150354-977475b7ea0b?auto=format&fit=crop&w=800&q=80', // Coconut Bites
   1407: 'https://images.unsplash.com/photo-1590301157890-4810ed352733?auto=format&fit=crop&w=800&q=80', // Strawberry Cream Cheese Spread
-  1408: 'https://images.unsplash.com/photo-1626700051175-6818013e1d4f?auto=format&fit=crop&w=800&q=80', // Banana Walnut Bread
+  1408: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=800&q=80', // Banana Walnut Bread
   1409: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=800&q=80', // Spiced Pecans
   1410: 'https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=800&q=80', // Sticky Toffee Pudding
   1411: 'https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=800&q=80', // Vanilla Custard Tart
@@ -22690,7 +22708,7 @@ const IMAGE_MAP = {
   1469: 'https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&w=800&q=80', // Beef Fajitas
   1470: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=80', // Vegetable Bake
   1471: 'https://images.unsplash.com/photo-1544943910-4c1dc44aab44?auto=format&fit=crop&w=800&q=80', // Chicken Cordon Bleu
-  1472: 'https://images.unsplash.com/photo-1553163147-622ab57be1c7?auto=format&fit=crop&w=800&q=80', // Snapper with Lemon Butter
+  1472: 'https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=800&q=80', // Snapper with Lemon Butter
   1473: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=800&q=80', // Black Bean and Rice Bowl
   1474: 'https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=800&q=80', // Lemon Shortbread Cookies
   1475: 'https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?auto=format&fit=crop&w=800&q=80', // Cinnamon Sugar Almonds
@@ -22807,7 +22825,7 @@ const IMAGE_MAP = {
   1586: 'https://images.unsplash.com/photo-1528207776546-365bb710ee93?auto=format&fit=crop&w=800&q=80', // Mango Smoothie
   1587: 'https://images.unsplash.com/photo-1568051243858-533a607809a5?auto=format&fit=crop&w=800&q=80', // Raspberry Smoothie
   1588: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=800&q=80', // Sandwich with Lettuce
-  1589: 'https://images.unsplash.com/photo-1626700051175-6818013e1d4f?auto=format&fit=crop&w=800&q=80', // Sandwich with Tomato
+  1589: 'https://images.unsplash.com/photo-1553909489-cd47e0907980?auto=format&fit=crop&w=800&q=80', // Sandwich with Tomato
   1590: 'https://images.unsplash.com/photo-1517840901100-8179e982acb7?auto=format&fit=crop&w=800&q=80', // Sandwich with Cheese
   1591: 'https://images.unsplash.com/photo-1494597564530-871f2b93ac55?auto=format&fit=crop&w=800&q=80', // Tuna Salad
   1592: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80', // Chicken Salad
@@ -22829,7 +22847,7 @@ const IMAGE_MAP = {
   1608: 'https://images.unsplash.com/photo-1544943910-4c1dc44aab44?auto=format&fit=crop&w=800&q=80', // Cheesesteak
   1609: 'https://images.unsplash.com/photo-1562565651-7d4948f339eb?auto=format&fit=crop&w=800&q=80', // Hot Dog
   1610: 'https://images.unsplash.com/photo-1476718406336-bb5a9690ee2a?auto=format&fit=crop&w=800&q=80', // Chili Dog
-  1611: 'https://images.unsplash.com/photo-1553163147-622ab57be1c7?auto=format&fit=crop&w=800&q=80', // Chicago Hot Dog
+  1611: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Chicago Hot Dog
   1612: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Sloppy Joe
   1613: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=800&q=80', // Meatball Sub
   1614: 'https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=800&q=80', // Alfredo Pasta
@@ -22857,7 +22875,7 @@ const IMAGE_MAP = {
   1636: 'https://images.unsplash.com/photo-1494597564530-871f2b93ac55?auto=format&fit=crop&w=800&q=80', // Sushi Bowl
   1637: 'https://images.unsplash.com/photo-1552611052-33e04de081de?auto=format&fit=crop&w=800&q=80', // Ramen
   1638: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=800&q=80', // Pho
-  1639: 'https://images.unsplash.com/photo-1553163147-622ab57be1c7?auto=format&fit=crop&w=800&q=80', // Banh Mi
+  1639: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=800&q=80', // Banh Mi
   1640: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80', // Curry Bowl
   1641: 'https://images.unsplash.com/photo-1534080564583-6be75777b70a?auto=format&fit=crop&w=800&q=80', // Biryani
   1642: 'https://images.unsplash.com/photo-1596797038530-2c107229654b?auto=format&fit=crop&w=800&q=80', // Tikka Masala
@@ -22874,7 +22892,7 @@ const IMAGE_MAP = {
   1653: 'https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&w=800&q=80', // Hummus Plate
   1654: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=800&q=80', // Bento Box
   1655: 'https://images.unsplash.com/photo-1562565651-7d4948f339eb?auto=format&fit=crop&w=800&q=80', // Onigiri
-  1656: 'https://images.unsplash.com/photo-1553163147-622ab57be1c7?auto=format&fit=crop&w=800&q=80', // Edamame
+  1656: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=800&q=80', // Edamame
   1657: 'https://images.unsplash.com/photo-1559314809-0d155014e29e?auto=format&fit=crop&w=800&q=80', // Miso Soup
   1658: 'https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&w=800&q=80', // Tempura
   1659: 'https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=800&q=80', // Tomato Soup
@@ -22950,7 +22968,7 @@ const IMAGE_MAP = {
   1729: 'https://images.unsplash.com/photo-1534939561126-855b8675edd7?auto=format&fit=crop&w=800&q=80', // Fish Soup
   1730: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=800&q=80', // Cheese and Crackers
   1731: 'https://images.unsplash.com/photo-1562565651-7d4948f339eb?auto=format&fit=crop&w=800&q=80', // Nuts Mix
-  1732: 'https://images.unsplash.com/photo-1553163147-622ab57be1c7?auto=format&fit=crop&w=800&q=80', // Cereal Bar
+  1732: 'https://images.unsplash.com/photo-1498579150354-977475b7ea0b?auto=format&fit=crop&w=800&q=80', // Cereal Bar
   1733: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Popcorn
   1734: 'https://images.unsplash.com/photo-1498579150354-977475b7ea0b?auto=format&fit=crop&w=800&q=80', // Chips
   1735: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=800&q=80', // Pretzels
@@ -22958,7 +22976,7 @@ const IMAGE_MAP = {
   1737: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=800&q=80', // Bread Chips
   1738: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800&q=80', // Hummus with Vegetables
   1739: 'https://images.unsplash.com/photo-1534352956036-cd81e27dd615?auto=format&fit=crop&w=800&q=80', // Guacamole with Chips
-  1740: 'https://images.unsplash.com/photo-1553163147-622ab57be1c7?auto=format&fit=crop&w=800&q=80', // Salsa with Chips
+  1740: 'https://images.unsplash.com/photo-1562565651-7d4948f339eb?auto=format&fit=crop&w=800&q=80', // Salsa with Chips
   1741: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Peanut Butter and Crackers
   1742: 'https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=800&q=80', // Almond Butter and Apple
   1743: 'https://images.unsplash.com/photo-1553530666-ba11a7da3888?auto=format&fit=crop&w=800&q=80', // Yogurt Cup
@@ -22966,18 +22984,18 @@ const IMAGE_MAP = {
   1745: 'https://images.unsplash.com/photo-1498579150354-977475b7ea0b?auto=format&fit=crop&w=800&q=80', // Cottage Cheese
   1746: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=800&q=80', // Cheese Stick
   1747: 'https://images.unsplash.com/photo-1562565651-7d4948f339eb?auto=format&fit=crop&w=800&q=80', // String Cheese
-  1748: 'https://images.unsplash.com/photo-1553163147-622ab57be1c7?auto=format&fit=crop&w=800&q=80', // Apple Slices
+  1748: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Apple Slices
   1749: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Banana
   1750: 'https://images.unsplash.com/photo-1498579150354-977475b7ea0b?auto=format&fit=crop&w=800&q=80', // Orange Slices
   1751: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=800&q=80', // Berries
   1752: 'https://images.unsplash.com/photo-1562565651-7d4948f339eb?auto=format&fit=crop&w=800&q=80', // Grapes
-  1753: 'https://images.unsplash.com/photo-1553163147-622ab57be1c7?auto=format&fit=crop&w=800&q=80', // Nuts
+  1753: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=800&q=80', // Nuts
   1754: 'https://images.unsplash.com/photo-1572453800999-e8d2d1589b7c?auto=format&fit=crop&w=800&q=80', // Almonds
   1755: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Walnuts
   1756: 'https://images.unsplash.com/photo-1498579150354-977475b7ea0b?auto=format&fit=crop&w=800&q=80', // Pecans
   1757: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=800&q=80', // Peanuts
   1758: 'https://images.unsplash.com/photo-1562565651-7d4948f339eb?auto=format&fit=crop&w=800&q=80', // Seeds
-  1759: 'https://images.unsplash.com/photo-1553163147-622ab57be1c7?auto=format&fit=crop&w=800&q=80', // Sunflower Seeds
+  1759: 'https://images.unsplash.com/photo-1498579150354-977475b7ea0b?auto=format&fit=crop&w=800&q=80', // Sunflower Seeds
   1760: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Pumpkin Seeds
   1761: 'https://images.unsplash.com/photo-1590412200988-a436970781fa?auto=format&fit=crop&w=800&q=80', // Chia Seeds
   1762: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=80', // Sesame Seeds
@@ -22985,7 +23003,7 @@ const IMAGE_MAP = {
   1764: 'https://images.unsplash.com/photo-1498579150354-977475b7ea0b?auto=format&fit=crop&w=800&q=80', // Raisins
   1765: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=800&q=80', // Dates
   1766: 'https://images.unsplash.com/photo-1562565651-7d4948f339eb?auto=format&fit=crop&w=800&q=80', // Apricots
-  1767: 'https://images.unsplash.com/photo-1553163147-622ab57be1c7?auto=format&fit=crop&w=800&q=80', // Cranberries
+  1767: 'https://images.unsplash.com/photo-1562565651-7d4948f339eb?auto=format&fit=crop&w=800&q=80', // Cranberries
   1768: 'https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=800&q=80', // Cookies
   1769: 'https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=800&q=80', // Brownies
   1770: 'https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=800&q=80', // Cake
@@ -23000,19 +23018,19 @@ const IMAGE_MAP = {
   1779: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=800&q=80', // Energy Bars
   1780: 'https://images.unsplash.com/photo-1562565651-7d4948f339eb?auto=format&fit=crop&w=800&q=80', // Protein Bars
   1781: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=800&q=80', // Granola Bars
-  1782: 'https://images.unsplash.com/photo-1553163147-622ab57be1c7?auto=format&fit=crop&w=800&q=80', // Cereal Bars
+  1782: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Cereal Bars
   1783: 'https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?auto=format&fit=crop&w=800&q=80', // Vegetable Chips
   1784: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Beet Chips
   1785: 'https://images.unsplash.com/photo-1498579150354-977475b7ea0b?auto=format&fit=crop&w=800&q=80', // Kale Chips
   1786: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=800&q=80', // Carrot Chips
   1787: 'https://images.unsplash.com/photo-1562565651-7d4948f339eb?auto=format&fit=crop&w=800&q=80', // Cucumber Chips
-  1788: 'https://images.unsplash.com/photo-1553163147-622ab57be1c7?auto=format&fit=crop&w=800&q=80', // Dips
+  1788: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=800&q=80', // Dips
   1789: 'https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=800&q=80', // Spinach Dip
   1790: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Onion Dip
   1791: 'https://images.unsplash.com/photo-1498579150354-977475b7ea0b?auto=format&fit=crop&w=800&q=80', // Ranch Dip
   1792: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=800&q=80', // Cream Cheese Dip
   1793: 'https://images.unsplash.com/photo-1562565651-7d4948f339eb?auto=format&fit=crop&w=800&q=80', // Spreads
-  1794: 'https://images.unsplash.com/photo-1553163147-622ab57be1c7?auto=format&fit=crop&w=800&q=80', // Peanut Butter
+  1794: 'https://images.unsplash.com/photo-1498579150354-977475b7ea0b?auto=format&fit=crop&w=800&q=80', // Peanut Butter
   1795: 'https://images.unsplash.com/photo-1572453800999-e8d2d1589b7c?auto=format&fit=crop&w=800&q=80', // Almond Butter
   1796: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Tahini
   1797: 'https://images.unsplash.com/photo-1498579150354-977475b7ea0b?auto=format&fit=crop&w=800&q=80', // Honey
@@ -23087,24 +23105,24 @@ const IMAGE_MAP = {
   1866: 'https://images.unsplash.com/photo-1562376552-0d160a2f238d?auto=format&fit=crop&w=800&q=80', // Fruit Pancakes
   1867: 'https://images.unsplash.com/photo-1494597564530-871f2b93ac55?auto=format&fit=crop&w=800&q=80', // Salad with Dressing
   1868: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=800&q=80', // Sandwich Combo
-  1869: 'https://images.unsplash.com/photo-1626700051175-6818013e1d4f?auto=format&fit=crop&w=800&q=80', // Wrap with Veggies
+  1869: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=800&q=80', // Wrap with Veggies
   1870: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80', // Bowl with Grains
   1871: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80', // Salad Mix
   1872: 'https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=800&q=80', // Pasta Dish
   1873: 'https://images.unsplash.com/photo-1476124369491-e7addf5db371?auto=format&fit=crop&w=800&q=80', // Rice Bowl
   1874: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=800&q=80', // Grain Salad
   1875: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=80', // Vegetable Plate
-  1876: 'https://images.unsplash.com/photo-1553163147-622ab57be1c7?auto=format&fit=crop&w=800&q=80', // Protein Plate
+  1876: 'https://images.unsplash.com/photo-1562565651-7d4948f339eb?auto=format&fit=crop&w=800&q=80', // Protein Plate
   1877: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Mixed Plate
   1878: 'https://images.unsplash.com/photo-1498579150354-977475b7ea0b?auto=format&fit=crop&w=800&q=80', // Combo Plate
   1879: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=800&q=80', // Plate Special
   1880: 'https://images.unsplash.com/photo-1562565651-7d4948f339eb?auto=format&fit=crop&w=800&q=80', // Chef Choice
-  1881: 'https://images.unsplash.com/photo-1553163147-622ab57be1c7?auto=format&fit=crop&w=800&q=80', // House Special
+  1881: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // House Special
   1882: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Lunch Special
   1883: 'https://images.unsplash.com/photo-1498579150354-977475b7ea0b?auto=format&fit=crop&w=800&q=80', // Daily Special
   1884: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=800&q=80', // Meal Deal
   1885: 'https://images.unsplash.com/photo-1562565651-7d4948f339eb?auto=format&fit=crop&w=800&q=80', // Value Meal
-  1886: 'https://images.unsplash.com/photo-1553163147-622ab57be1c7?auto=format&fit=crop&w=800&q=80', // Family Meal
+  1886: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=800&q=80', // Family Meal
   1887: 'https://images.unsplash.com/photo-1607532941433-304659e8198a?auto=format&fit=crop&w=800&q=80', // Side Salad
   1888: 'https://images.unsplash.com/photo-1590301157890-4810ed352733?auto=format&fit=crop&w=800&q=80', // Small Salad
   1889: 'https://images.unsplash.com/photo-1494597564530-871f2b93ac55?auto=format&fit=crop&w=800&q=80', // Large Salad
@@ -23122,12 +23140,12 @@ const IMAGE_MAP = {
   1901: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=800&q=80', // Chicken Plate
   1902: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=800&q=80', // Dinner Plate
   1903: 'https://images.unsplash.com/photo-1562565651-7d4948f339eb?auto=format&fit=crop&w=800&q=80', // Special Plate
-  1904: 'https://images.unsplash.com/photo-1553163147-622ab57be1c7?auto=format&fit=crop&w=800&q=80', // Chef Plate
+  1904: 'https://images.unsplash.com/photo-1498579150354-977475b7ea0b?auto=format&fit=crop&w=800&q=80', // Chef Plate
   1905: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Dinner Special
   1906: 'https://images.unsplash.com/photo-1498579150354-977475b7ea0b?auto=format&fit=crop&w=800&q=80', // Today's Special
   1907: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=800&q=80', // Meal Special
   1908: 'https://images.unsplash.com/photo-1562565651-7d4948f339eb?auto=format&fit=crop&w=800&q=80', // Combo Meal
-  1909: 'https://images.unsplash.com/photo-1553163147-622ab57be1c7?auto=format&fit=crop&w=800&q=80', // Dinner Deal
+  1909: 'https://images.unsplash.com/photo-1562565651-7d4948f339eb?auto=format&fit=crop&w=800&q=80', // Dinner Deal
   1910: 'https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?auto=format&fit=crop&w=800&q=80', // Grilled Plate
   1911: 'https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=800&q=80', // Roasted Plate
   1912: 'https://images.unsplash.com/photo-1572453800999-e8d2d1589b7c?auto=format&fit=crop&w=800&q=80', // Baked Plate
@@ -23143,43 +23161,43 @@ const IMAGE_MAP = {
   1922: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=800&q=80', // With Potatoes
   1923: 'https://images.unsplash.com/photo-1541519227354-08fa5d50c44d?auto=format&fit=crop&w=800&q=80', // With Bread
   1924: 'https://images.unsplash.com/photo-1562565651-7d4948f339eb?auto=format&fit=crop&w=800&q=80', // Served Hot
-  1925: 'https://images.unsplash.com/photo-1553163147-622ab57be1c7?auto=format&fit=crop&w=800&q=80', // Served Fresh
+  1925: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Served Fresh
   1926: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Served Daily
   1927: 'https://images.unsplash.com/photo-1498579150354-977475b7ea0b?auto=format&fit=crop&w=800&q=80', // Seasonal Dish
   1928: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=800&q=80', // Market Special
   1929: 'https://images.unsplash.com/photo-1562565651-7d4948f339eb?auto=format&fit=crop&w=800&q=80', // Family Dinner
-  1930: 'https://images.unsplash.com/photo-1553163147-622ab57be1c7?auto=format&fit=crop&w=800&q=80', // Family Special
+  1930: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=800&q=80', // Family Special
   1931: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Group Meal
   1932: 'https://images.unsplash.com/photo-1498579150354-977475b7ea0b?auto=format&fit=crop&w=800&q=80', // Party Plate
   1933: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=800&q=80', // Celebration Meal
   1934: 'https://images.unsplash.com/photo-1562565651-7d4948f339eb?auto=format&fit=crop&w=800&q=80', // Weekend Special
-  1935: 'https://images.unsplash.com/photo-1553163147-622ab57be1c7?auto=format&fit=crop&w=800&q=80', // Sunday Dinner
+  1935: 'https://images.unsplash.com/photo-1498579150354-977475b7ea0b?auto=format&fit=crop&w=800&q=80', // Sunday Dinner
   1936: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Holiday Meal
   1937: 'https://images.unsplash.com/photo-1498579150354-977475b7ea0b?auto=format&fit=crop&w=800&q=80', // Festive Plate
   1938: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=800&q=80', // Gourmet Plate
   1939: 'https://images.unsplash.com/photo-1562565651-7d4948f339eb?auto=format&fit=crop&w=800&q=80', // Premium Plate
-  1940: 'https://images.unsplash.com/photo-1553163147-622ab57be1c7?auto=format&fit=crop&w=800&q=80', // Deluxe Plate
+  1940: 'https://images.unsplash.com/photo-1562565651-7d4948f339eb?auto=format&fit=crop&w=800&q=80', // Deluxe Plate
   1941: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Supreme Plate
   1942: 'https://images.unsplash.com/photo-1498579150354-977475b7ea0b?auto=format&fit=crop&w=800&q=80', // Ultimate Plate
   1943: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=800&q=80', // Master Plate
   1944: 'https://images.unsplash.com/photo-1562565651-7d4948f339eb?auto=format&fit=crop&w=800&q=80', // Chef Selection
-  1945: 'https://images.unsplash.com/photo-1553163147-622ab57be1c7?auto=format&fit=crop&w=800&q=80', // Chef Recommendation
+  1945: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Chef Recommendation
   1946: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Chef Favorite
   1947: 'https://images.unsplash.com/photo-1498579150354-977475b7ea0b?auto=format&fit=crop&w=800&q=80', // House Favorite
   1948: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=800&q=80', // Customer Favorite
   1949: 'https://images.unsplash.com/photo-1562565651-7d4948f339eb?auto=format&fit=crop&w=800&q=80', // Most Popular
-  1950: 'https://images.unsplash.com/photo-1553163147-622ab57be1c7?auto=format&fit=crop&w=800&q=80', // Best Seller
+  1950: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=800&q=80', // Best Seller
   1951: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Top Rated
   1952: 'https://images.unsplash.com/photo-1498579150354-977475b7ea0b?auto=format&fit=crop&w=800&q=80', // Award Winner
   1953: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=800&q=80', // Award Plate
   1954: 'https://images.unsplash.com/photo-1562565651-7d4948f339eb?auto=format&fit=crop&w=800&q=80', // Seeds Mix
-  1955: 'https://images.unsplash.com/photo-1553163147-622ab57be1c7?auto=format&fit=crop&w=800&q=80', // Cereal Snack
+  1955: 'https://images.unsplash.com/photo-1498579150354-977475b7ea0b?auto=format&fit=crop&w=800&q=80', // Cereal Snack
   1956: 'https://images.unsplash.com/photo-1590412200988-a436970781fa?auto=format&fit=crop&w=800&q=80', // Granola Cup
   1957: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Snack Mix
   1958: 'https://images.unsplash.com/photo-1498579150354-977475b7ea0b?auto=format&fit=crop&w=800&q=80', // Party Mix
   1959: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=800&q=80', // Finger Food
   1960: 'https://images.unsplash.com/photo-1562565651-7d4948f339eb?auto=format&fit=crop&w=800&q=80', // Bite Size
-  1961: 'https://images.unsplash.com/photo-1553163147-622ab57be1c7?auto=format&fit=crop&w=800&q=80', // Quick Snack
+  1961: 'https://images.unsplash.com/photo-1562565651-7d4948f339eb?auto=format&fit=crop&w=800&q=80', // Quick Snack
   1962: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Easy Snack
   1963: 'https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=800&q=80', // Dessert Plate
   1964: 'https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=800&q=80', // Sweet Treat
@@ -24894,15 +24912,16 @@ function ExploreTab({ allRecipes, pantry, saved, toggleSave, onViewRecipe, onSav
   const [activeIdx, setActiveIdx] = useState(0);
   const [mealFilter, setMealFilter] = useState("All");
   const [cuisineFilter, setCuisineFilter] = useState("all");
+  const [dietFilter, setDietFilter] = useState("all");
   const feedRef = useRef(null);
   const [seed] = useState(() => Date.now());
 
   const MEAL_FILTERS = ["All","Breakfast","Lunch","Dinner","Snacks"];
+  const DIET_FILTERS = ["all","Vegetarian","Vegan","Gluten-Free","Kosher","Halal","Dairy-Free"];
 
   // Get recipes with images, shuffled, filtered
   const recipes = React.useMemo(() => {
     const pool = (allRecipes || RECIPES).filter(r => r.image && imgAllowedForRecipe(r.image, r));
-    // Filter by meal and cuisine
     let filtered = pool;
     if (mealFilter !== "All") {
       const mt = mealFilter.toLowerCase().replace("snacks","snack");
@@ -24911,11 +24930,14 @@ function ExploreTab({ allRecipes, pantry, saved, toggleSave, onViewRecipe, onSav
     if (cuisineFilter !== "all") {
       filtered = filtered.filter(r => r.cuisine === cuisineFilter);
     }
+    if (dietFilter !== "all") {
+      filtered = filtered.filter(r => (r.dietary||[]).some(d => d.toUpperCase() === dietFilter.toUpperCase()));
+    }
     // Seeded shuffle
     let s = seed >>> 0;
     const rand = () => { s = (Math.imul(s,1664525)+1013904223)>>>0; return s/0x100000000; };
     return [...filtered].sort(() => rand() - 0.5);
-  }, [allRecipes, mealFilter, cuisineFilter, seed]);
+  }, [allRecipes, mealFilter, cuisineFilter, dietFilter, seed]);
 
   const pantrySet = React.useMemo(() => buildPantrySet(pantry || []), [pantry]);
 
@@ -24958,9 +24980,13 @@ function ExploreTab({ allRecipes, pantry, saved, toggleSave, onViewRecipe, onSav
     <div style={{height:"calc(100vh - 60px)",display:"flex",flexDirection:"column",position:"relative"}}>
       {/* Top filter bar */}
       <div className="explore-filters">
-        <div style={{display:"flex",gap:6,overflowX:"auto",paddingBottom:4}}>
+        <div style={{display:"flex",gap:6,overflowX:"auto",paddingBottom:4,alignItems:"center"}}>
           {MEAL_FILTERS.map(f=>(
             <button key={f} className={`cchip ${mealFilter===f?"ac":""}`} onClick={()=>{setMealFilter(f);setActiveIdx(0);}} style={{fontSize:12,whiteSpace:"nowrap"}}>{f}</button>
+          ))}
+          <span style={{width:1,height:20,background:"var(--bor)",flexShrink:0}}/>
+          {DIET_FILTERS.map(f=>(
+            <button key={f} className={`cchip ${dietFilter===f?"ac":""}`} onClick={()=>{setDietFilter(f);setActiveIdx(0);}} style={{fontSize:11,whiteSpace:"nowrap"}}>{f==="all"?"All diets":f}</button>
           ))}
           <select className="sel" value={cuisineFilter} onChange={e=>{setCuisineFilter(e.target.value);setActiveIdx(0);}} style={{fontSize:12,padding:"6px 10px",height:32,borderRadius:16,minWidth:100}}>
             {cuisines.map(c=><option key={c} value={c}>{c==="all"?"All cuisines":c}</option>)}
@@ -25218,24 +25244,20 @@ function HomeTab({ isGuest, saved, toggleSave, onViewRecipe, pantry, addToList, 
           </select>
           {sortMode==="random"&&<button className="btn btn-gs btn-sm" title="Shuffle again" onClick={()=>setRandomSeed(Date.now())}>🔀 Shuffle</button>}
         </div>
-        {/* Row 2: Meal category chips */}
-        <div style={{display:"flex",gap:6,marginBottom:8,flexWrap:"wrap",alignItems:"center"}}>
+        {/* Row 2: Meal categories + key filters in one row */}
+        <div style={{display:"flex",gap:6,flexWrap:"wrap",alignItems:"center"}}>
           {MEAL_CATS.map(cat=>(
             <button key={cat} className={`cchip ${mealCat===cat?"ac":""}`} onClick={()=>setMealCat(cat)}>{cat}</button>
           ))}
-        </div>
-        {/* Row 3: Style filters + pantry modes */}
-        <div style={{display:"flex",gap:8,flexWrap:"wrap",alignItems:"center"}}>
-          {FILTERS.map(f=><button key={f} className={`cchip ${filter===f?"ac":""}`} onClick={()=>setFilter(f)}>{f}</button>)}
+          <span style={{width:1,height:20,background:"var(--bor)",margin:"0 2px"}}/>
+          {FILTERS.filter(f=>f!=="All").map(f=><button key={f} className={`cchip ${filter===f?"ac":""}`} onClick={()=>setFilter(filter===f?"All":f)}>{f}</button>)}
           <button
             className={`cchip ${cookNow?"ac":""}`}
-            title="Show recipes you can cook with your pantry first."
             onClick={()=>{setCookNow(v=>!v);setPantryPerfect(false);}}
             style={cookNow ? {background:'var(--sageBg)',color:'var(--sageH)',borderColor:'var(--sage)'} : {}}
           >🥗 Cook now</button>
           <button
             className={`cchip ${pantryPerfect?"ac":""}`}
-            title="Show Pantry Perfect first, then near-misses grouped by missing ingredients."
             onClick={()=>{setPantryPerfect(v=>!v);setCookNow(false);}}
             style={pantryPerfect ? {background:'rgba(106,158,114,.18)',color:'var(--sageH)',borderColor:'var(--sage)'} : {}}
           >✅ Pantry Perfect</button>
@@ -25285,7 +25307,7 @@ function HomeTab({ isGuest, saved, toggleSave, onViewRecipe, pantry, addToList, 
                           {group.map(r => {
                             // In "Cook now" section hide missing text; in others use live-computed list
                             const rDisp = {...r, missing: k===0 ? [] : r._mn};
-                            return <RecipeCard key={r.id} r={rDisp} saved={isRecipeSaved?isRecipeSaved(r):saved.has(r.id)} onSave={()=>onSaveFav?onSaveFav(r):toggleSave(r.id)} onView={()=>onViewRecipe(r)} addToList={addToList} pantry={pantry} onAddToWeek={onAddToWeek}/>;
+                            return <RecipeCard key={r.id} r={rDisp} saved={isRecipeSaved?isRecipeSaved(r):saved.has(r.id)} onSave={()=>onSaveFav?onSaveFav(r):toggleSave(r.id)} onView={()=>onViewRecipe(r)} addToList={addToList} pantry={pantry} onAddToWeek={onAddToWeek} showToast={showToast}/>;
                           })}
                         </div>
                       </div>
@@ -25334,7 +25356,7 @@ function HomeTab({ isGuest, saved, toggleSave, onViewRecipe, pantry, addToList, 
                     {group.map(r=>{
                       const rDisp = {...r, missing: k===0?[]:r._mn};
                       const ingMatchLabel = r._ingMatch && searchQ ? <span style={{fontSize:10,color:"var(--clay)",fontWeight:600,display:"block",marginTop:2}}>Includes: {searchQ}</span> : null;
-                      return <RecipeCard key={r.id} r={rDisp} saved={isRecipeSaved?isRecipeSaved(r):saved.has(r.id)} onSave={()=>onSaveFav?onSaveFav(r):toggleSave(r.id)} onView={()=>onViewRecipe(r)} addToList={addToList} pantry={pantry} onAddToWeek={onAddToWeek}/>;
+                      return <RecipeCard key={r.id} r={rDisp} saved={isRecipeSaved?isRecipeSaved(r):saved.has(r.id)} onSave={()=>onSaveFav?onSaveFav(r):toggleSave(r.id)} onView={()=>onViewRecipe(r)} addToList={addToList} pantry={pantry} onAddToWeek={onAddToWeek} showToast={showToast}/>;
                     })}
                   </div>}
                 </div>
@@ -25361,7 +25383,7 @@ function HomeTab({ isGuest, saved, toggleSave, onViewRecipe, pantry, addToList, 
           <div className="rgrid">
             {filtered.length===0?<div className="empty"><div className="eic">🍽️</div><div className="etitle">No recipes found</div><div className="esub">Try a different filter or add more pantry items.</div></div>
               :paginatedRecipes.map(r=>{
-                return <RecipeCard key={r.id} r={r} saved={isRecipeSaved?isRecipeSaved(r):saved.has(r.id)} onSave={()=>onSaveFav?onSaveFav(r):toggleSave(r.id)} onView={()=>onViewRecipe(r)} addToList={addToList} pantrySet={pantrySet} onAddToWeek={onAddToWeek}/>;
+                return <RecipeCard key={r.id} r={r} saved={isRecipeSaved?isRecipeSaved(r):saved.has(r.id)} onSave={()=>onSaveFav?onSaveFav(r):toggleSave(r.id)} onView={()=>onViewRecipe(r)} addToList={addToList} pantrySet={pantrySet} onAddToWeek={onAddToWeek} showToast={showToast}/>;
               })}
           </div>
           {hasMore && (
@@ -26534,6 +26556,7 @@ const PHOTO_CATS = {
 // 68 categories, each with a strict title regex. Order: specific → general.
 function imgAllowedForRecipe(url, recipe) {
   if (!url || !recipe) return false;
+  if (recipe.isPantryGenerated) return true;
   const m = url.match(/photo-(\d+)/);
   if (!m) return false;
   const prefix = m[1];
@@ -26578,8 +26601,8 @@ function imgAllowedForRecipe(url, recipe) {
   if (photoGroup === 'soup') return /soup|stew|nikujaga|chili|chowder|bisque|goulash|gazpacho|harira|borscht|caldo|ribollita|broth|gumbo|jambalaya|feijoada|tagine|lentil|pozole|shorba|pot au feu|bouillabaisse|cassoulet|minestrone|avgolemono|tom kha|clam|bourguignon|coq au vin/.test(t);
   if (photoGroup === 'salad_bowl') return /salad|slaw|bowl|grain|buddha|quinoa|chickpea|nourish|harvest|tabbouleh|fattoush|tofu|tempeh|power bowl|fruit|berry|kushari|koshari|mjaddara|mujaddara|couscous|broccolini|side/.test(t) || ml === 'breakfast';
   if (photoGroup === 'curry') return /curry|masala|tikka|korma|vindaloo|saag|palak|dal[^a-z]|daal|dhal|rajma|chole|dhansak|keema|aloo|baingan|paratha|paneer|tagine|moroccan|ethiopian|fit-fit|misir|wot|fesenjan|ghormeh|khoresh/.test(t) || c === 'indian' || c === 'ethiopian' || c === 'persian';
-  if (photoGroup === 'protein') return /chicken|pollo|salmon|fish|\bcod\b|tuna|steak|beef|bulgogi|lamb|pork|shrimp|prawn|duck|turkey|halibut|trout|sea bass|scallop|lobster|crab|calamari|gosht|tonkatsu|schnitzel|bistecca|saltimbocca|porchetta|stroganoff|clam|ceviche|branzino|sole|meuni[eè]re|pescado|camarones|jackfruit|pigs in/.test(t);
-  if (photoGroup === 'bread') return /sandwich|toast|panini|wrap|burrito|bagel|focaccia|blt|melt|grilled cheese|croque|bánh mì|banh mi|pita|croissant|sub|bruschetta|crostini|bread|scone|muffin|biscuit|quiche|hash|gözleme|gozleme|imam bayildi|bayıldı|pulled/.test(t) || ml === 'breakfast' || ml === 'snack';
+  if (photoGroup === 'protein') return /chicken|pollo|salmon|fish|snapper|\bcod\b|tuna|steak|beef|bulgogi|lamb|pork|shrimp|prawn|duck|turkey|halibut|trout|sea bass|scallop|lobster|crab|calamari|gosht|tonkatsu|schnitzel|bistecca|saltimbocca|porchetta|stroganoff|clam|ceviche|branzino|sole|meuni[eè]re|pescado|camarones|jackfruit|pigs in|meatball/.test(t);
+  if (photoGroup === 'bread') return /sandwich|toast|panini|wrap|burrito|bagel|focaccia|blt|melt|grilled cheese|croque|bánh mì|banh mi|pita|croissant|sub|bruschetta|crostini|bread|scone|muffin|biscuit|quiche|hash|gözleme|gozleme|g.zleme|imam bayildi|bayıldı|pulled/.test(t) || ml === 'breakfast' || ml === 'snack' || c === 'turkish';
   if (photoGroup === 'breakfast') return ml === 'breakfast' || /pancake|waffle|oatmeal|porridge|egg|omelette?|omelet|frittata|shakshuka|menemen|yogurt|parfait|granola|muesli|smoothie|chia|crepe|french toast|quiche|breakfast/.test(t);
   if (photoGroup === 'mexican') return /taco|burrito|quesadilla|enchilada|fajita|tostada|tamale|carnita|mole|chiles|nachos|torta/.test(t) || c === 'mexican';
   if (photoGroup === 'mideast') return /shawarma|falafel|hummus|kebab|skewer|pita|labneh|baba|tzatziki|dukkah|kibbeh|börek|borek|kofta|dip|spread|lamb|satay|harissa/.test(t) || ['middle eastern','lebanese','turkish','israeli','syrian','egyptian','moroccan','persian'].includes(c) || ml === 'snack';
@@ -26587,7 +26610,7 @@ function imgAllowedForRecipe(url, recipe) {
   if (photoGroup === 'dumpling') return /dumpling|gyoza|wonton|spring roll|egg roll|sushi|maki|samosa|pakora|arancini|tempura|fritter|croqueta|onigiri|kati|pierogi/.test(t) || ml === 'snack';
   if (photoGroup === 'veggie') return /ratatouille|stuffed|roasted|grilled|baked|braised|sauteed|vegetable|eggplant|zucchini|cauliflower|mushroom|wellington|stir.?fry|phad see|pad see|pad prik|pad woon|larb|adobo|lomo saltado|wok|beef|chicken|pork|shrimp|tofu|spinach|sesame|shepherd|caponata|pie|lentil|broccolini|broccoli|almond/.test(t);
   if (photoGroup === 'world') return true; // cuisine-based fallback photos always allowed
-  if (photoGroup === 'sweet') return /cake|brownie|cookie|tart|cheesecake|pudding|crumble|dessert|pie|muffin|galette/.test(t) || ml === 'snack';
+  if (photoGroup === 'sweet') return /cake|brownie|cookie|tart|cheesecake|pudding|crumble|dessert|pie|muffin|galette|ice cream|sorbet|flan|custard|fudge|eclair|éclair|donut|doughnut|croissant|danish|cream puff|truffle|blondie|shortbread|bar|sundae|parfait|trifle|split|float|pastry|bark|treat|delight|mousse|brittle|pavlova|lemon pos|boston cream|special/.test(t) || ml === 'snack' || ml === 'dessert';
 
   return true; // fallback: if in PHOTO_CATS, allow
 }
@@ -26714,7 +26737,7 @@ function SkeletonCard() {
   );
 }
 
-const RecipeCard = React.memo(function RecipeCard({ r, saved, onSave, onView, addToList, inFav, pantry, pantrySet: pantrySetProp, onAddToWeek }) {
+const RecipeCard = React.memo(function RecipeCard({ r, saved, onSave, onView, addToList, inFav, pantry, pantrySet: pantrySetProp, onAddToWeek, showToast }) {
   // STEP 4 STABILIZATION: Compute missing ingredients dynamically from pantry.
   // Do NOT use the static r.missing field for display — it is hardcoded and not pantry-aware.
   const dynamicMissing = React.useMemo(() => {
@@ -26731,6 +26754,9 @@ const RecipeCard = React.memo(function RecipeCard({ r, saved, onSave, onView, ad
     : (r.pp || 0);
 
   const handleAddMissing = () => addToList(dynamicMissing);
+
+  // Card flip state
+  const [flipped, setFlipped] = useState(false);
 
   // Confetti burst on save
   const [showConfetti, setShowConfetti] = useState(false);
@@ -26754,41 +26780,45 @@ const RecipeCard = React.memo(function RecipeCard({ r, saved, onSave, onView, ad
 
   return (
     <div className="card">
-      <div className="rimg" onClick={onView}>
-        <RecipeImg recipe={r}/>
-        <div className="rtag">{r.cuisine}</div>
-        {r.worth && <div className="rbadge">⭐ Worth buying</div>}
-        {r.isUserCreated && <div className="rbadge" style={{background:"var(--sage)"}}>My Recipe</div>}
-        {/* ── 3-dot menu ── */}
-        <button
-          className="card-dot-btn"
-          onClick={e=>{e.stopPropagation();setPopOpen(v=>!v);}}
-          aria-label="Recipe options"
-        >⋯</button>
-        {popOpen && (
-          <div className="card-popover" ref={popRef} onClick={e=>e.stopPropagation()}>
-            <button className="card-pop-item" onClick={()=>{setPopOpen(false);onView();}}>
-              <Ic n="list" s={14}/>View recipe
-            </button>
-            {onAddToWeek && (
-              <button className="card-pop-item" onClick={()=>{setPopOpen(false);onAddToWeek(r);}}>
-                <Ic n="cal" s={14}/>Add to week
-              </button>
-            )}
-            <div className="card-pop-divider"/>
-            <button className="card-pop-item" onClick={e=>{e.stopPropagation();setPopOpen(false);onSave(r);}}>
-              <Ic n={saved?"bookmarkOn":"bookmark"} s={14}/>{saved?"Saved ✓":"Save recipe"}
-            </button>
-            {dynamicMissing.length > 0 && (
-              <>
+      <div className="rimg-flip-container" style={{perspective:800}}>
+        <div className={`rimg-flip-inner${flipped?" flipped":""}`} style={{position:"relative",transition:"transform 0.5s",transformStyle:"preserve-3d"}}>
+          {/* Front — image */}
+          <div className="rimg" onClick={()=>setFlipped(true)} style={{backfaceVisibility:"hidden"}}>
+            <RecipeImg recipe={r}/>
+            <div className="rtag">{r.cuisine}</div>
+            {r.worth && <div className="rbadge">⭐ Worth buying</div>}
+            {r.isUserCreated && <div className="rbadge" style={{background:"var(--sage)"}}>My Recipe</div>}
+            <button className="card-dot-btn" onClick={e=>{e.stopPropagation();setPopOpen(v=>!v);}} aria-label="Recipe options">⋯</button>
+            {popOpen && (
+              <div className="card-popover" ref={popRef} onClick={e=>e.stopPropagation()}>
+                <button className="card-pop-item" onClick={()=>{setPopOpen(false);onView();}}><Ic n="list" s={14}/>View recipe</button>
+                {onAddToWeek && <button className="card-pop-item" onClick={()=>{setPopOpen(false);onAddToWeek(r);}}><Ic n="cal" s={14}/>Add to week</button>}
                 <div className="card-pop-divider"/>
-                <button className="card-pop-item" onClick={()=>{setPopOpen(false);handleAddMissing();}}>
-                  <Ic n="cart" s={14}/>Add missing to list
-                </button>
-              </>
+                <button className="card-pop-item" onClick={e=>{e.stopPropagation();setPopOpen(false);onSave(r);}}><Ic n={saved?"bookmarkOn":"bookmark"} s={14}/>{saved?"Saved ✓":"Save recipe"}</button>
+                {dynamicMissing.length > 0 && <><div className="card-pop-divider"/><button className="card-pop-item" onClick={()=>{setPopOpen(false);handleAddMissing();}}><Ic n="cart" s={14}/>Add missing to list</button></>}
+              </div>
             )}
           </div>
-        )}
+          {/* Back — ingredients & info */}
+          <div className="rimg-back" onClick={()=>setFlipped(false)} style={{position:"absolute",top:0,left:0,right:0,bottom:0,backfaceVisibility:"hidden",transform:"rotateY(180deg)",background:"var(--white)",borderRadius:"var(--r) var(--r) 0 0",padding:16,overflow:"auto",cursor:"pointer",display:"flex",flexDirection:"column",gap:6}}>
+            <div style={{fontFamily:"var(--fd)",fontSize:15,fontWeight:700,marginBottom:2}}>{r.emoji} {r.title}</div>
+            <div style={{fontSize:12,color:"var(--mu)",marginBottom:4}}>⏱ {r.time} min · {r.diff} · {r.cuisine}</div>
+            <div style={{fontSize:12,fontWeight:700,color:"var(--sage)",marginBottom:4}}>Ingredients ({(r.ingredients||[]).length})</div>
+            <div style={{display:"flex",flexDirection:"column",gap:2,flex:1,overflow:"auto"}}>
+              {(r.ingredients||[]).slice(0,8).map((ing,i)=>{
+                const inPantry = ingInPantry(ing.n, pantrySetProp || buildPantrySet(pantry||[]));
+                return (
+                  <div key={i} style={{display:"flex",alignItems:"center",justifyContent:"space-between",fontSize:12,padding:"3px 0",borderBottom:"1px solid var(--cream)"}}>
+                    <span style={{color:inPantry?"var(--sageH)":"var(--ch)"}}>{inPantry?"✓ ":"• "}{ing.n}</span>
+                    {!inPantry && <button className="btn-ic" style={{width:22,height:22,fontSize:10}} onClick={e=>{e.stopPropagation();addToList([ing.n]);if(typeof showToast==='function')showToast(`Added ${ing.n} to shopping list`);}} title={`Add ${ing.n} to shopping list`}><Ic n="cart" s={10}/></button>}
+                  </div>
+                );
+              })}
+              {(r.ingredients||[]).length > 8 && <div style={{fontSize:11,color:"var(--mu)",textAlign:"center",padding:4}}>+{(r.ingredients||[]).length-8} more</div>}
+            </div>
+            <div style={{fontSize:11,color:"var(--mu)",textAlign:"center",marginTop:4}}>Tap to flip back</div>
+          </div>
+        </div>
       </div>
       <div className="rbody">
         <div className="rtitle" onClick={onView}>{r.title}</div>
@@ -26804,8 +26834,14 @@ const RecipeCard = React.memo(function RecipeCard({ r, saved, onSave, onView, ad
           </div>
         )}
         {dynamicMissing.length > 0 && (
-          <div style={{fontSize:12,color:"var(--mu)",marginBottom:8}}>
-            Missing: {dynamicMissing.slice(0,3).join(", ")}{dynamicMissing.length > 3 ? ` +${dynamicMissing.length - 3} more` : ""}
+          <div style={{fontSize:12,color:"var(--mu)",marginBottom:8,display:"flex",flexWrap:"wrap",gap:4,alignItems:"center"}}>
+            <span>Missing: </span>
+            {dynamicMissing.slice(0,3).map((name,i)=>(
+              <span key={name} style={{cursor:"pointer",color:"var(--clay)",textDecoration:"underline dotted",textUnderlineOffset:2}} onClick={()=>{addToList([name]);if(showToast)showToast(`Added ${name} to shopping list`);}} title={`Add ${name} to shopping list`}>
+                {name}{i<Math.min(dynamicMissing.length,3)-1?",":""}
+              </span>
+            ))}
+            {dynamicMissing.length > 3 && <span> +{dynamicMissing.length - 3} more</span>}
           </div>
         )}
         <div className="ractions">
@@ -28363,44 +28399,44 @@ function CommunityTab({ mealPlan, setMealPlan, allRecipes, user, isGuest, collec
           ))}
         </div>
 
-        <div className="feed-grid" style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(320px,1fr))",gap:16}}>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(320px,1fr))",gap:20}}>
           {sortedFeed.slice(0,24).map(item=>{
             const r = item.recipe;
             const isLiked = likes[item.id];
             const displayLikes = item.likes + (isLiked?1:0);
             return (
-              <div key={item.id} className="card" style={{overflow:"hidden",animation:"fadeInUp .4s ease both"}}>
+              <div key={item.id} className="comm-card">
                 {r.image && imgAllowedForRecipe(r.image,r) && (
-                  <div style={{height:200,overflow:"hidden",cursor:"pointer",position:"relative"}} onClick={()=>onViewRecipe(r)}>
-                    <img src={r.image} alt={r.title} style={{width:"100%",height:"100%",objectFit:"cover"}} loading="lazy" onError={e=>{e.currentTarget.style.display='none';}}/>
-                    <div style={{position:"absolute",top:10,left:10,display:"flex",gap:6}}>
-                      <span style={{background:"rgba(0,0,0,.5)",color:"#fff",padding:"3px 8px",borderRadius:12,fontSize:11,fontWeight:600}}>{r.cuisine||'Other'}</span>
-                      <span style={{background:"rgba(0,0,0,.5)",color:"#fff",padding:"3px 8px",borderRadius:12,fontSize:11}}>⏱ {r.time}m</span>
+                  <div className="comm-img" onClick={()=>onViewRecipe(r)}>
+                    <img src={r.image} alt={r.title} loading="lazy" onError={e=>{e.currentTarget.style.display='none';}}/>
+                    <div className="comm-overlay">
+                      <span className="comm-pill">{r.cuisine||'Other'}</span>
+                      <span className="comm-pill">⏱ {r.time}m</span>
                     </div>
                   </div>
                 )}
-                <div style={{padding:"14px 16px"}}>
-                  <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:10}}>
-                    <div style={{width:32,height:32,borderRadius:"50%",background:item.author.color,color:"#fff",display:"flex",alignItems:"center",justifyContent:"center",fontSize:14,fontWeight:700,flexShrink:0}}>{item.author.avatar}</div>
+                <div className="comm-body">
+                  <div className="comm-author">
+                    <div className="comm-avatar" style={{background:item.author.color}}>{item.author.avatar}</div>
                     <div style={{flex:1,minWidth:0}}>
-                      <div style={{fontSize:13,fontWeight:700}}>{item.author.name}</div>
+                      <div style={{fontSize:14,fontWeight:700}}>{item.author.name}</div>
                       <div style={{fontSize:11,color:"var(--mu)"}}>{Math.floor((Date.now()-item.sharedAt)/86400000)}d ago</div>
                     </div>
                   </div>
-                  <div style={{fontFamily:"var(--fd)",fontSize:17,fontWeight:700,marginBottom:4,cursor:"pointer"}} onClick={()=>onViewRecipe(r)}>{r.emoji} {r.title}</div>
-                  <div style={{fontSize:13,color:"var(--mu)",marginBottom:12,lineHeight:1.4}}>{item.caption}</div>
-                  <div style={{display:"flex",alignItems:"center",gap:12,paddingTop:10,borderTop:"1px solid var(--bor)"}}>
-                    <button style={{background:"none",border:"none",cursor:"pointer",display:"flex",alignItems:"center",gap:4,fontSize:13,color:isLiked?"#E05C5C":"var(--mu)",fontWeight:isLiked?700:400,transition:"all .2s"}} onClick={()=>toggleLike(item.id)}>
+                  <div style={{fontFamily:"var(--fd)",fontSize:18,fontWeight:700,marginBottom:6,cursor:"pointer"}} onClick={()=>onViewRecipe(r)}>{r.emoji} {r.title}</div>
+                  <div style={{fontSize:13,color:"var(--mu)",marginBottom:14,lineHeight:1.5}}>{item.caption}</div>
+                  <div className="comm-actions">
+                    <button className={`comm-action-btn${isLiked?" liked":""}`} onClick={()=>toggleLike(item.id)}>
                       {isLiked?"❤️":"🤍"} {displayLikes}
                     </button>
-                    <span style={{fontSize:13,color:"var(--mu)",display:"flex",alignItems:"center",gap:4}}>💬 {item.comments}</span>
-                    <span style={{fontSize:13,color:"var(--mu)",display:"flex",alignItems:"center",gap:4}}>📋 {item.copies} copies</span>
+                    <button className="comm-action-btn">💬 {item.comments}</button>
+                    <button className="comm-action-btn">📋 {item.copies}</button>
                     <div style={{flex:1}}/>
-                    <button className="btn btn-sm btn-s" onClick={()=>{if(onSaveFav) onSaveFav(r); if(showToast) showToast("Recipe saved!");}}>
-                      <Ic n="bookmark" s={14}/>
+                    <button className="btn btn-sm btn-s" style={{borderRadius:20}} onClick={()=>{if(onSaveFav) onSaveFav(r); if(showToast) showToast("Recipe saved!");}}>
+                      <Ic n="bookmark" s={14}/>Save
                     </button>
-                    {onAddToWeek && <button className="btn btn-sm btn-p" onClick={()=>onAddToWeek(r)}>
-                      <Ic n="cal" s={14}/> Plan
+                    {onAddToWeek && <button className="btn btn-sm btn-p" style={{borderRadius:20}} onClick={()=>onAddToWeek(r)}>
+                      <Ic n="cal" s={14}/>Plan
                     </button>}
                   </div>
                 </div>
@@ -28824,11 +28860,40 @@ const generatePantrySteps = (t) => {
 // Generate pantry meals from templates — returns recipe-like objects with missingCount=0
 const generatePantryMeals = (pantrySet) => {
   if(!pantrySet || pantrySet.size === 0) return [];
+  // Unsplash images for pantry-generated meals
+  const PANTRY_IMAGES = {
+    'Scrambled Eggs':      'https://images.unsplash.com/photo-1525351484163-7529414344d8?w=600',
+    'Fried Eggs':          'https://images.unsplash.com/photo-1525351484163-7529414344d8?w=600',
+    'Soft-Boiled Eggs':    'https://images.unsplash.com/photo-1482049016688-2d3e1b311543?w=600',
+    'Classic Omelet':      'https://images.unsplash.com/photo-1510693206972-df098062cb71?w=600',
+    'Banana Pancakes':     'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=600',
+    'Porridge / Oatmeal':  'https://images.unsplash.com/photo-1495214783159-3503fd1b572d?w=600',
+    'Avocado Toast':       'https://images.unsplash.com/photo-1541519227354-08fa5d50c44d?w=600',
+    'Peanut Butter Toast': 'https://images.unsplash.com/photo-1484723091739-30a097e8f929?w=600',
+    'Yogurt & Honey':      'https://images.unsplash.com/photo-1488477181946-6428a0291777?w=600',
+    'Pasta Aglio e Olio':  'https://images.unsplash.com/photo-1563379926898-05f4575a45d8?w=600',
+    'Tuna Salad':          'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=600',
+    'Egg Salad Sandwich':  'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=600',
+    'Lentil Soup':         'https://images.unsplash.com/photo-1476718406336-bb5a9690ee2a?w=600',
+    'Rice & Beans':        'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=600',
+    'Chickpea Salad':      'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=600',
+    'Tomato Soup':         'https://images.unsplash.com/photo-1476718406336-bb5a9690ee2a?w=600',
+    'Simple Fried Rice':   'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=600',
+    'Baked Salmon':        'https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=600',
+    'Pan-Seared White Fish':'https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=600',
+    'Garlic Butter Pasta': 'https://images.unsplash.com/photo-1563379926898-05f4575a45d8?w=600',
+    'Pasta with Tomato':   'https://images.unsplash.com/photo-1563379926898-05f4575a45d8?w=600',
+    'Simple Lentil Stew':  'https://images.unsplash.com/photo-1476718406336-bb5a9690ee2a?w=600',
+    'Chickpea Stew':       'https://images.unsplash.com/photo-1476718406336-bb5a9690ee2a?w=600',
+    'Egg Fried Rice':      'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=600',
+    'Stuffed Omelette':    'https://images.unsplash.com/photo-1510693206972-df098062cb71?w=600',
+    'Beans on Toast':      'https://images.unsplash.com/photo-1484723091739-30a097e8f929?w=600',
+    'Potato & Egg Bake':   'https://images.unsplash.com/photo-1482049016688-2d3e1b311543?w=600',
+    'Tuna Pasta':          'https://images.unsplash.com/photo-1563379926898-05f4575a45d8?w=600',
+  };
   return PANTRY_MEAL_TEMPLATES
     .filter(tmpl => tmpl.requires.every(req => ingInPantry(req, pantrySet)))
     .map((tmpl) => ({
-      // Use the template's actual index in PANTRY_MEAL_TEMPLATES (not filtered-list index)
-      // so getPantryRecipeObj can safely look up by name slug rather than position.
       id: `pantry-${PANTRY_MEAL_TEMPLATES.indexOf(tmpl)}-${tmpl.name.replace(/\s+/g,'-').toLowerCase()}`,
       title: tmpl.name,
       emoji: tmpl.emoji,
@@ -28847,6 +28912,7 @@ const generatePantryMeals = (pantrySet) => {
       isPantryGenerated: true,
       pp: 100,
       cuisine: "Pantry",
+      image: PANTRY_IMAGES[tmpl.name] || null,
       steps: generatePantrySteps(tmpl),
     }));
 };
@@ -29626,6 +29692,36 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
       ? PANTRY_MEAL_TEMPLATES.find(tmpl => tmpl.name.replace(/\s+/g, '-').toLowerCase() === slug)
       : null;
     if (!t) return null;
+    const PANTRY_IMAGES = {
+      'Scrambled Eggs':'https://images.unsplash.com/photo-1525351484163-7529414344d8?w=600',
+      'Fried Eggs':'https://images.unsplash.com/photo-1525351484163-7529414344d8?w=600',
+      'Soft-Boiled Eggs':'https://images.unsplash.com/photo-1482049016688-2d3e1b311543?w=600',
+      'Classic Omelet':'https://images.unsplash.com/photo-1510693206972-df098062cb71?w=600',
+      'Banana Pancakes':'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=600',
+      'Porridge / Oatmeal':'https://images.unsplash.com/photo-1495214783159-3503fd1b572d?w=600',
+      'Avocado Toast':'https://images.unsplash.com/photo-1541519227354-08fa5d50c44d?w=600',
+      'Peanut Butter Toast':'https://images.unsplash.com/photo-1484723091739-30a097e8f929?w=600',
+      'Yogurt & Honey':'https://images.unsplash.com/photo-1488477181946-6428a0291777?w=600',
+      'Pasta Aglio e Olio':'https://images.unsplash.com/photo-1563379926898-05f4575a45d8?w=600',
+      'Tuna Salad':'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=600',
+      'Egg Salad Sandwich':'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=600',
+      'Lentil Soup':'https://images.unsplash.com/photo-1476718406336-bb5a9690ee2a?w=600',
+      'Rice & Beans':'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=600',
+      'Chickpea Salad':'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=600',
+      'Tomato Soup':'https://images.unsplash.com/photo-1476718406336-bb5a9690ee2a?w=600',
+      'Simple Fried Rice':'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=600',
+      'Baked Salmon':'https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=600',
+      'Pan-Seared White Fish':'https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=600',
+      'Garlic Butter Pasta':'https://images.unsplash.com/photo-1563379926898-05f4575a45d8?w=600',
+      'Pasta with Tomato':'https://images.unsplash.com/photo-1563379926898-05f4575a45d8?w=600',
+      'Simple Lentil Stew':'https://images.unsplash.com/photo-1476718406336-bb5a9690ee2a?w=600',
+      'Chickpea Stew':'https://images.unsplash.com/photo-1476718406336-bb5a9690ee2a?w=600',
+      'Egg Fried Rice':'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=600',
+      'Stuffed Omelette':'https://images.unsplash.com/photo-1510693206972-df098062cb71?w=600',
+      'Beans on Toast':'https://images.unsplash.com/photo-1484723091739-30a097e8f929?w=600',
+      'Potato & Egg Bake':'https://images.unsplash.com/photo-1482049016688-2d3e1b311543?w=600',
+      'Tuna Pasta':'https://images.unsplash.com/photo-1563379926898-05f4575a45d8?w=600',
+    };
     return {
       id: mealId, title: t.name, emoji: t.emoji, time: t.time, diff: 'Easy',
       cuisine: 'Pantry', dietary: [],
@@ -29633,6 +29729,7 @@ function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, pr
       contains_meat: t.contains_meat||false, contains_fish: t.contains_fish||false,
       contains_shellfish: false, contains_dairy: t.contains_dairy||false,
       isPantryGenerated: true, missingCount: 0,
+      image: PANTRY_IMAGES[t.name] || null,
       steps: generatePantrySteps(t),
     };
   };
