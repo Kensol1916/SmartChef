@@ -104,62 +104,40 @@ const S = `
   --sage:#6A9E72;--sageL:#A8C8AC;--sageBg:rgba(106,158,114,.1);
   --gold:#C9953A;--goldBg:rgba(201,149,58,.1);
   --mu:#8A8178;--bor:#E6E0D8;--borH:#D4CCBF;--err:#C0392B;
-  --sw:240px;--sh:62px;
+  --sw:220px;--sh:56px;
   --sh1:0 2px 16px rgba(26,26,26,.07);--sh2:0 6px 32px rgba(26,26,26,.12);--sh3:0 16px 56px rgba(26,26,26,.18);
   --r:14px;--rs:8px;--t:.18s ease;
   --fd:'Lora',serif;--fb:'Outfit',sans-serif
 }
-html{font-size:15px;scroll-behavior:smooth}body{font-family:var(--fb);background:var(--cream);color:var(--ch);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+html{font-size:15px;scroll-behavior:smooth}
+body{font-family:var(--fb);background:var(--cream);color:var(--ch);-webkit-font-smoothing:antialiased}
 ::selection{background:rgba(192,106,62,.15);color:var(--ch)}
-::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--bor);border-radius:3px}::-webkit-scrollbar-thumb:hover{background:var(--borH)}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--bor);border-radius:3px}
 
 /* layout */
 .shell{display:flex;min-height:100vh}
-.sidebar{width:var(--sw);flex-shrink:0;background:var(--white);border-right:1px solid var(--bor);position:fixed;top:0;left:0;height:100vh;display:flex;flex-direction:column;z-index:200;padding:24px 16px;transition:box-shadow .3s ease}
+.sidebar{width:var(--sw);flex-shrink:0;background:var(--white);border-right:1px solid var(--bor);position:fixed;top:0;left:0;height:100vh;display:flex;flex-direction:column;z-index:200;padding:20px 14px;transition:box-shadow .3s}
 .sidebar:hover{box-shadow:4px 0 20px rgba(0,0,0,.04)}
-.slogo{display:flex;align-items:center;gap:10px;padding:0 8px;margin-bottom:32px;cursor:pointer}
-.slogo-ic{width:36px;height:36px;background:linear-gradient(135deg,var(--clay) 0%,var(--clayH) 100%);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;transition:transform .3s cubic-bezier(.4,0,.2,1)}
+.slogo{display:flex;align-items:center;gap:10px;padding:0 8px;margin-bottom:28px;cursor:pointer}
+.slogo-ic{width:34px;height:34px;background:linear-gradient(135deg,var(--clay),var(--clayH));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;transition:transform .3s}
 .slogo:hover .slogo-ic{transform:rotate(-10deg) scale(1.1)}
-.slogo-tx{font-family:var(--fd);font-size:20px;background:linear-gradient(135deg,var(--ch) 0%,var(--clay) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.slogo-tx{font-family:var(--fd);font-size:19px;background:linear-gradient(135deg,var(--ch),var(--clay));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .snav{flex:1;display:flex;flex-direction:column;gap:2px}
-.ni{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:var(--rs);cursor:pointer;transition:all .25s cubic-bezier(.4,0,.2,1);color:var(--mu);font-size:14px;font-weight:500;border:none;background:none;width:100%;text-align:left;position:relative;overflow:hidden}
-.ni:hover{background:var(--cream);color:var(--ch);transform:translateX(4px)}
-.ni.ac{background:var(--clayBg);color:var(--clay);font-weight:600;box-shadow:0 0 0 1px rgba(192,106,62,.08)}
-.ni.ac::before{content:'';position:absolute;left:0;top:15%;height:70%;width:3px;background:linear-gradient(180deg,var(--clay),var(--clayL));border-radius:0 3px 3px 0;animation:scaleIn .3s cubic-bezier(.175,.885,.32,1.275);box-shadow:2px 0 8px rgba(192,106,62,.2)}
-.ni:active{transform:scale(.97)}
-.sfooter{border-top:1px solid var(--bor);padding-top:16px;animation:fadeIn .5s ease .3s both}
-.main{margin-left:var(--sw);flex:1;display:flex;flex-direction:column;min-height:100vh;background:radial-gradient(ellipse at 20% 0%,rgba(192,106,62,.03) 0%,transparent 50%),radial-gradient(ellipse at 80% 100%,rgba(106,158,114,.03) 0%,transparent 50%)}
-.mhdr{height:var(--sh);background:rgba(253,251,248,.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--bor);display:flex;align-items:center;justify-content:space-between;padding:0 32px;position:sticky;top:0;z-index:100}
-.mhdr-title{font-family:var(--fd);font-size:22px;animation:slideInLeft .3s ease}
-.mcontent{flex:1;padding:32px;max-width:1100px;width:100%;animation:fadeInUp .4s ease}
-
-/* auth */
-.apage{min-height:100vh;display:grid;grid-template-columns:1fr 1fr}
-.apanel{display:flex;flex-direction:column;justify-content:center;padding:60px;animation:fadeInUp .5s ease both}
-.avisual{background:linear-gradient(160deg,#2A1810 0%,#1A1A1A 40%,#0C180D 100%);display:flex;flex-direction:column;justify-content:center;align-items:center;position:relative;overflow:hidden}
-.avisual::before{content:'';position:absolute;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(192,106,62,.15) 0%,transparent 70%);top:20%;left:30%;animation:float 6s ease-in-out infinite}
-.avisual::after{content:'';position:absolute;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(106,158,114,.12) 0%,transparent 70%);bottom:20%;right:20%;animation:float 5s ease-in-out infinite .5s}
-.ablob{position:absolute;border-radius:50%;filter:blur(80px)}
-.avTitle{font-family:var(--fd);font-size:48px;color:#F8F4EF;line-height:1.1;text-align:center;position:relative;z-index:1;animation:fadeInUp .6s ease .3s both}
-.avTitle em{color:var(--clayL);font-style:italic}
-.avSub{color:rgba(248,244,239,.55);text-align:center;margin-top:14px;font-size:16px;position:relative;z-index:1;max-width:340px;line-height:1.6;animation:fadeInUp .6s ease .5s both}
-.aback{display:flex;align-items:center;gap:6px;color:var(--mu);font-size:13px;cursor:pointer;background:none;border:none;font-family:var(--fb);padding:0;margin-bottom:36px;transition:var(--t)}
-.aback:hover{color:var(--ch)}
-.alogo{display:flex;align-items:center;gap:10px;margin-bottom:40px}
-.alogo-ic{width:42px;height:42px;background:linear-gradient(135deg,var(--clay) 0%,var(--clayH) 100%);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;transition:transform .3s ease}
-.alogo:hover .alogo-ic{transform:rotate(-10deg) scale(1.08)}
-.alogo-tx{font-family:var(--fd);font-size:22px}
-.ah{font-family:var(--fd);font-size:34px;margin-bottom:8px}
-.asub{color:var(--mu);font-size:15px;margin-bottom:36px}
+.ni{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:var(--rs);cursor:pointer;transition:all .2s;color:var(--mu);font-size:14px;font-weight:500;border:none;background:none;width:100%;text-align:left;position:relative}
+.ni:hover{background:var(--cream);color:var(--ch)}
+.ni.ac{background:var(--clayBg);color:var(--clay);font-weight:600}
+.ni.ac::before{content:'';position:absolute;left:0;top:15%;height:70%;width:3px;background:var(--clay);border-radius:0 3px 3px 0}
+.sfooter{border-top:1px solid var(--bor);padding-top:14px}
+.main{margin-left:var(--sw);flex:1;display:flex;flex-direction:column;min-height:100vh}
+.mhdr{height:var(--sh);background:rgba(253,251,248,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--bor);display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:100}
+.mhdr-title{font-family:var(--fd);font-size:20px}
+.mcontent{flex:1;padding:28px;max-width:1200px;width:100%}
 
 /* buttons */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:11px 20px;border-radius:var(--rs);font-family:var(--fb);font-size:14px;font-weight:600;cursor:pointer;transition:all .25s cubic-bezier(.4,0,.2,1);border:none;white-space:nowrap;position:relative;overflow:hidden}
-.btn::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at var(--x,50%) var(--y,50%),rgba(255,255,255,.2) 0%,transparent 60%);opacity:0;transition:opacity .3s}
-.btn:hover::after{opacity:1}
-.btn:active{transform:scale(.97)!important;transition-duration:.1s}
-.btn-p{background:var(--clay);color:#fff;box-shadow:0 2px 12px rgba(192,106,62,.35)}
-.btn-p:hover{background:var(--clayH);transform:translateY(-2px);box-shadow:0 4px 20px rgba(192,106,62,.45)}
-.btn-p:active{transform:none}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:10px 18px;border-radius:var(--rs);font-family:var(--fb);font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;border:none;white-space:nowrap}
+.btn:active{transform:scale(.97)}
+.btn-p{background:var(--clay);color:#fff;box-shadow:0 2px 12px rgba(192,106,62,.3)}
+.btn-p:hover{background:var(--clayH);transform:translateY(-1px)}
 .btn-s{background:var(--cream);color:var(--ch);border:1px solid var(--bor)}
 .btn-s:hover{border-color:var(--borH);background:#F0EBE3}
 .btn-g{background:transparent;color:var(--mu)}
@@ -167,589 +145,167 @@ html{font-size:15px;scroll-behavior:smooth}body{font-family:var(--fb);background
 .btn-sage{background:var(--sage);color:#fff}
 .btn-sage:hover{background:#5A8E62}
 .btn-full{width:100%}
-.btn-lg{padding:14px 28px;font-size:15px;border-radius:var(--r)}
+.btn-lg{padding:13px 26px;font-size:15px;border-radius:var(--r)}
 .btn-sm{padding:7px 14px;font-size:13px;border-radius:var(--rs)}
 .btn-xs{padding:4px 10px;font-size:12px;border-radius:6px}
 .btn-ic{width:36px;height:36px;padding:0;border-radius:var(--rs);background:var(--cream);border:1px solid var(--bor);color:var(--mu)}
 .btn-ic:hover{background:var(--bor);color:var(--ch)}
-.btn-cs{background:var(--clayBg);color:var(--clayH)}
-.btn-cs:hover{background:rgba(192,106,62,.18);transform:translateY(-1px)}
-.btn-gs{background:var(--goldBg);color:var(--gold)}
-.btn-gs:hover{background:rgba(201,149,58,.18);transform:translateY(-1px)}
-/* slot drag-drop */
-.mslot{position:relative;transition:var(--t)}
-.mslot.drag-over{outline:2px dashed var(--clay);background:var(--clayBg)!important}
-.mslot.dragging{opacity:.4}
-/* custom meal badge */
-.custom-badge{display:inline-block;background:var(--sageBg);color:var(--sageH);font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;letter-spacing:.3px;text-transform:uppercase;margin-top:2px}
-/* picker modal */
-.picker-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;max-height:400px;overflow-y:auto;padding-right:4px}
-.picker-card{background:var(--white);border:1.5px solid var(--bor);border-radius:var(--r);padding:12px;cursor:pointer;transition:all .25s cubic-bezier(.4,0,.2,1);display:flex;align-items:center;gap:10px}
-.picker-card:hover{border-color:var(--clay);background:var(--clayBg);transform:translateY(-2px);box-shadow:var(--sh1)}
-.picker-card.selected{border-color:var(--sage);background:var(--sageBg)}
-/* section collapse */
-.sec-hdr{display:flex;align-items:center;justify-content:space-between;cursor:pointer;padding:8px 12px;background:var(--white);border:1px solid var(--bor);border-radius:var(--rs);margin-bottom:8px;user-select:none}
-.sec-hdr:hover{background:var(--cream)}
-/* community feed */
-.feed-card{background:var(--white);border:1px solid var(--bor);border-radius:var(--r);padding:20px;transition:all .3s cubic-bezier(.4,0,.2,1);animation:fadeInUp .4s ease both}
-.feed-card:hover{box-shadow:var(--sh2);border-color:var(--borH);transform:translateY(-3px)}
-.feed-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
-.comm-card{background:var(--white);border:1px solid var(--bor);border-radius:16px;overflow:hidden;transition:all .3s ease;animation:fadeInUp .4s ease both}
-.comm-card:hover{box-shadow:0 8px 32px rgba(0,0,0,.08);transform:translateY(-2px)}
-.comm-img{height:220px;overflow:hidden;position:relative;cursor:pointer}
-.comm-img img{width:100%;height:100%;object-fit:cover;transition:transform .4s ease}
-.comm-card:hover .comm-img img{transform:scale(1.03)}
-.comm-overlay{position:absolute;top:10px;left:10px;display:flex;gap:6px}
-.comm-pill{background:rgba(0,0,0,.55);backdrop-filter:blur(4px);color:#fff;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600}
-.comm-body{padding:16px 18px}
-.comm-author{display:flex;align-items:center;gap:10px;margin-bottom:10px}
-.comm-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:15px;flex-shrink:0}
-.comm-actions{display:flex;align-items:center;gap:14px;padding-top:12px;border-top:1px solid var(--bor)}
-.comm-action-btn{background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:5px;font-size:13px;color:var(--mu);transition:all .2s;padding:4px 0}
-.comm-action-btn:hover{color:var(--ch)}
-.comm-action-btn.liked{color:#E05C5C;font-weight:700}
-/* profile tabs */
-.prof-tab{padding:8px 18px;border-radius:var(--rs);font-size:13px;font-weight:600;cursor:pointer;border:none;background:none;color:var(--mu);transition:all .25s ease}
-.prof-tab:hover:not(.ac){color:var(--ch)}
-.prof-tab.ac{background:var(--clayBg);color:var(--clay)}
-.btn-err{color:var(--err)!important;border-color:rgba(192,57,43,.3)!important}
 
 /* forms */
-.fg{margin-bottom:18px}
-.fl{display:block;font-size:11px;font-weight:600;color:var(--mu);margin-bottom:7px;letter-spacing:.3px;text-transform:uppercase}
-.fi{width:100%;padding:11px 14px;background:var(--white);border:1.5px solid var(--bor);border-radius:var(--rs);color:var(--ch);font-family:var(--fb);font-size:14px;transition:all .25s ease;outline:none}
+.fg{margin-bottom:16px}
+.fl{display:block;font-size:11px;font-weight:600;color:var(--mu);margin-bottom:6px;letter-spacing:.3px;text-transform:uppercase}
+.fi{width:100%;padding:10px 14px;background:var(--white);border:1.5px solid var(--bor);border-radius:var(--rs);color:var(--ch);font-family:var(--fb);font-size:14px;transition:all .2s;outline:none}
 .fi:focus{border-color:var(--clay);box-shadow:0 0 0 3px rgba(192,106,62,.12)}
 .fi::placeholder{color:#BEB5A8}
-.ferr{font-size:12px;color:var(--err);margin-top:6px}
-.fhint{font-size:12px;color:var(--mu);margin-top:5px}
-.sel{width:100%;padding:10px 14px;background:var(--white);border:1.5px solid var(--bor);border-radius:var(--rs);font-family:var(--fb);font-size:14px;color:var(--ch);outline:none}
-.sel:focus{border-color:var(--clay)}
 .flink{background:none;border:none;color:var(--clay);font-family:var(--fb);font-size:13px;cursor:pointer;padding:0}
 .flink:hover{text-decoration:underline}
-.ffoot{text-align:center;color:var(--mu);font-size:14px;margin-top:24px}
-.ffoot a{color:var(--clay);cursor:pointer;font-weight:600}
-.ffoot a:hover{text-decoration:underline}
 
 /* cards */
-.card{background:var(--white);border-radius:var(--r);border:1px solid var(--bor)}
-.card-hov{transition:var(--t);cursor:pointer}
-.card-hov:hover{box-shadow:var(--sh2);transform:translateY(-2px);border-color:var(--borH)}
-
-/* recipes */
-.rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
-.card{animation:fadeInUp .5s ease both;transition:transform .3s cubic-bezier(.4,0,.2,1),box-shadow .3s ease}
-.card:hover{transform:translateY(-4px);box-shadow:var(--sh2)}
-.card:nth-child(1){animation-delay:0s}.card:nth-child(2){animation-delay:.05s}.card:nth-child(3){animation-delay:.1s}
-.card:nth-child(4){animation-delay:.15s}.card:nth-child(5){animation-delay:.2s}.card:nth-child(6){animation-delay:.25s}
-.card:nth-child(7){animation-delay:.3s}.card:nth-child(8){animation-delay:.35s}.card:nth-child(9){animation-delay:.4s}
-.rimg-flip-container{perspective:800px}
-.rimg-flip-inner{position:relative;transition:transform .5s ease;transform-style:preserve-3d}
-.rimg-flip-inner.flipped{transform:rotateY(180deg)}
-.rimg{height:200px;background:linear-gradient(135deg,#F0E8DC 0%,#E8D8C4 50%,#E4D4BE 100%);background-size:200% 200%;animation:gradientShift 5s ease infinite;display:flex;align-items:center;justify-content:center;font-size:72px;position:relative;cursor:pointer;overflow:hidden;border-radius:var(--r) var(--r) 0 0;backface-visibility:hidden}
-.rimg-back{backface-visibility:hidden;transform:rotateY(180deg)}
-.rimg::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.08),transparent 40%);pointer-events:none;opacity:0;transition:opacity .3s}
-.card:hover .rimg::after{opacity:1}
-.rimg img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s cubic-bezier(.4,0,.2,1),opacity .4s ease}
-.card:hover .rimg img{transform:scale(1.05)}
-.rtag{position:absolute;top:12px;left:12px;background:rgba(26,26,26,.75);backdrop-filter:blur(8px);color:#fff;padding:4px 10px;border-radius:6px;font-size:12px;font-weight:500;transition:transform .2s ease}
-.card:hover .rtag{transform:translateY(-2px)}
-.rbadge{position:absolute;top:12px;right:12px;background:var(--gold);color:#fff;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:700;letter-spacing:.3px;animation:chipPop .3s ease .1s both}
-.rbody{padding:18px}
-.rtitle{font-family:var(--fd);font-size:18px;margin-bottom:8px;cursor:pointer;transition:color .2s ease}
-.rtitle:hover{color:var(--clay)}
-.rmeta{display:flex;gap:14px;margin-bottom:10px}
-.rmeta-i{font-size:12px;color:var(--mu);display:flex;align-items:center;gap:4px}
-.rtags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px}
-.tag{padding:3px 9px;border-radius:5px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.3px;transition:transform .2s ease}
-.tag:hover{transform:scale(1.05)}
-.td{background:var(--sageBg);color:#2D6B35}
-.tc{background:var(--clayBg);color:var(--clayH)}
-.pbar{margin-bottom:12px}
-.pbar-r{display:flex;justify-content:space-between;font-size:12px;color:var(--mu);margin-bottom:5px}
-.pbar-t{height:5px;background:var(--bor);border-radius:3px;overflow:hidden}
-.pbar-f{height:100%;background:linear-gradient(90deg,var(--sage) 0%,var(--sageL) 100%);border-radius:3px;transition:width .8s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden}
-.pbar-f::after{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);animation:shimmer 2s ease-in-out infinite}
-.ractions{display:flex;gap:8px;flex-wrap:wrap}
-
-/* pantry */
-.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
-.pi{display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;transition:all .25s cubic-bezier(.4,0,.2,1)}
-.pi:hover{border-color:var(--borH);box-shadow:var(--sh1);transform:translateX(4px)}
-.pi-ic{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
-.pname{font-weight:600;font-size:14px}
-.pmeta{font-size:12px;color:var(--mu);margin-top:2px}
-.ep{padding:2px 8px;border-radius:5px;font-size:11px;font-weight:600}
-.ep-w{background:var(--goldBg);color:var(--gold)}
-.ep-ok{background:var(--sageBg);color:var(--sage)}
-.ep-bad{background:rgba(192,57,43,.1);color:var(--err)}
-
-/* drawer */
-.dov{position:fixed;inset:0;background:rgba(26,26,26,.4);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:400;display:flex;justify-content:flex-end;animation:fadeIn .2s ease}
-.drawer{width:400px;max-width:95vw;background:var(--white);height:100vh;overflow-y:auto;box-shadow:var(--sh3);animation:dIn .3s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column}
-@keyframes dIn{from{transform:translateX(100%);opacity:.5}to{transform:translateX(0);opacity:1}}
-.dhdr{padding:24px 24px 16px;border-bottom:1px solid var(--bor);display:flex;align-items:center;justify-content:space-between}
-.dtitle{font-family:var(--fd);font-size:22px}
-.dbody{padding:24px;flex:1}
-.dclose{width:32px;height:32px;border-radius:50%;background:var(--cream);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--mu);transition:all .25s ease}
-.dclose:hover{background:var(--bor);color:var(--ch);transform:rotate(90deg)}
+.card{background:var(--white);border-radius:var(--r);border:1px solid var(--bor);transition:all .2s}
+.card:hover{box-shadow:var(--sh1);border-color:var(--borH)}
 
 /* modal */
-.mov{position:fixed;inset:0;background:rgba(26,26,26,.4);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);z-index:500;display:flex;align-items:center;justify-content:center;padding:20px;animation:fadeIn .2s ease}
-.modal{background:var(--white);border-radius:18px;max-width:520px;width:100%;max-height:90vh;overflow-y:auto;animation:mIn .35s cubic-bezier(.175,.885,.32,1.275);position:relative;box-shadow:0 24px 80px rgba(26,26,26,.2)}
+.mov{position:fixed;inset:0;background:rgba(26,26,26,.4);backdrop-filter:blur(10px);z-index:500;display:flex;align-items:center;justify-content:center;padding:20px;animation:fadeIn .2s}
+.modal{background:var(--white);border-radius:18px;max-width:520px;width:100%;max-height:90vh;overflow-y:auto;animation:mIn .3s cubic-bezier(.175,.885,.32,1.275);box-shadow:0 24px 80px rgba(26,26,26,.2)}
 @keyframes mIn{from{opacity:0;transform:scale(.9) translateY(20px)}to{opacity:1;transform:none}}
-.mhd{padding:24px 24px 16px;border-bottom:1px solid var(--bor);display:flex;align-items:center;justify-content:space-between}
-.mtitle{font-family:var(--fd);font-size:22px}
-.mbody{padding:24px}
-.mclose{width:32px;height:32px;border-radius:50%;background:var(--cream);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--mu);transition:all .25s ease;flex-shrink:0}
+.mhd{padding:20px 24px 14px;border-bottom:1px solid var(--bor);display:flex;align-items:center;justify-content:space-between}
+.mtitle{font-family:var(--fd);font-size:20px}
+.mbody{padding:20px 24px}
+.mclose{width:32px;height:32px;border-radius:50%;background:var(--cream);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--mu);transition:all .2s;flex-shrink:0}
 .mclose:hover{background:var(--bor);color:var(--ch);transform:rotate(90deg)}
 
-/* add-items */
-.aopts{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
-.aocard{display:flex;flex-direction:column;align-items:center;gap:10px;padding:20px 12px;border-radius:var(--r);border:1.5px solid var(--bor);cursor:pointer;transition:all .3s cubic-bezier(.4,0,.2,1);background:var(--white);text-align:center}
-.aocard:hover{border-color:var(--clayL);background:var(--clayBg);transform:translateY(-4px);box-shadow:var(--sh2)}
-.aocard:hover .aoic{animation:softBounce .5s ease}
-.aocard:active{transform:scale(.97)}
-.aoic{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px}
-.aolabel{font-weight:600;font-size:14px}
-.aosub{font-size:12px;color:var(--mu);line-height:1.4}
+/* tags */
+.tag{padding:3px 9px;border-radius:5px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.3px}
+.td{background:var(--sageBg);color:#2D6B35}
+.tc{background:var(--clayBg);color:var(--clayH)}
 
-/* parsed items */
-.pit{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--rs);border:1px solid var(--bor);background:var(--white);margin-bottom:8px}
-.pit-name{flex:1;font-weight:500;font-size:14px}
-.pit-cat{font-size:12px;color:var(--clay);font-weight:600;background:var(--clayBg);padding:2px 8px;border-radius:4px}
-.pit-del{background:none;border:none;color:var(--mu);cursor:pointer;padding:4px;border-radius:4px}
-.pit-del:hover{background:var(--cream);color:var(--err)}
+/* weekly planner grid */
+.plan-grid{display:grid;grid-template-columns:60px repeat(7,1fr);gap:0;border:1px solid var(--bor);border-radius:var(--r);overflow:hidden;background:var(--white)}
+.plan-header{background:var(--cream);font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.5px;color:var(--mu);padding:12px 8px;text-align:center;border-bottom:1px solid var(--bor)}
+.plan-header.today{color:var(--clay);background:var(--clayBg)}
+.plan-label{background:var(--cream);font-weight:600;font-size:11px;color:var(--mu);padding:10px 6px;display:flex;align-items:center;justify-content:center;text-align:center;border-bottom:1px solid var(--bor);border-right:1px solid var(--bor)}
+.plan-cell{min-height:110px;padding:6px;border-bottom:1px solid var(--bor);border-right:1px solid var(--bor);cursor:pointer;transition:background .15s;position:relative}
+.plan-cell:hover{background:rgba(192,106,62,.04)}
+.plan-cell.drag-over{background:var(--clayBg);outline:2px dashed var(--clay)}
+.plan-cell.dragging{opacity:.4}
+.plan-cell-empty{display:flex;align-items:center;justify-content:center;height:100%;color:var(--bor);font-size:28px;font-weight:300}
+.plan-cell-empty:hover{color:var(--clay)}
+.meal-card{border-radius:8px;overflow:hidden;cursor:grab;transition:transform .15s,box-shadow .15s;height:100%}
+.meal-card:hover{transform:scale(1.02);box-shadow:var(--sh1)}
+.meal-card:active{cursor:grabbing}
+.meal-card-img{width:100%;height:60px;object-fit:cover;display:block;background:linear-gradient(135deg,#F0E8DC,#E4D4BE)}
+.meal-card-name{padding:4px 6px;font-size:11px;font-weight:600;line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
 
-/* cat chips */
-.cchips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
-.cchip{padding:7px 14px;border-radius:20px;border:1.5px solid var(--bor);font-size:13px;cursor:pointer;background:var(--white);transition:all .25s cubic-bezier(.4,0,.2,1);font-weight:500}
-.cchip.ac{background:var(--clay);color:#fff;border-color:var(--clay);box-shadow:0 2px 10px rgba(192,106,62,.3);animation:chipPop .3s cubic-bezier(.175,.885,.32,1.275)}
-.cchip:active{transform:scale(.95)}
-.cchip:hover:not(.ac){border-color:var(--clayL);transform:translateY(-1px);box-shadow:0 2px 8px rgba(0,0,0,.06)}
-.pki{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:var(--rs);transition:var(--t);cursor:pointer}
-.pki:hover{background:var(--cream)}
-.pki.sel{background:var(--clayBg)}
-.pkc{width:22px;height:22px;border-radius:6px;border:2px solid var(--bor);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:var(--t)}
-.pkc.on{background:var(--clay);border-color:var(--clay);color:#fff}
+/* quick action panel */
+.qap-overlay{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.3);backdrop-filter:blur(4px)}
+.qap{position:fixed;z-index:301;background:var(--white);border-radius:16px;padding:8px;box-shadow:var(--sh3);min-width:200px;animation:mIn .2s ease}
+.qap-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:8px;cursor:pointer;font-size:14px;font-weight:500;color:var(--ch);border:none;background:none;width:100%;text-align:left;transition:background .15s}
+.qap-item:hover{background:var(--cream)}
+.qap-item-danger{color:var(--err)}
+.qap-item-danger:hover{background:rgba(192,57,43,.06)}
 
-/* ingredient detail */
-.idr{display:flex;align-items:flex-start;gap:12px;padding:14px 0;border-bottom:1px solid var(--bor);animation:fadeInUp .3s ease both;transition:background .2s ease}
-.idr:hover{background:var(--cream);border-radius:var(--rs);margin:0 -8px;padding:14px 8px}
-.idr:last-child{border-bottom:none}
-.idr:nth-child(1){animation-delay:0s}.idr:nth-child(2){animation-delay:.05s}.idr:nth-child(3){animation-delay:.1s}
-.idr:nth-child(4){animation-delay:.15s}.idr:nth-child(5){animation-delay:.2s}.idr:nth-child(6){animation-delay:.25s}
-.idic{font-size:20px;width:32px;flex-shrink:0}
-.idl{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--mu);font-weight:600;margin-bottom:3px}
-.idv{font-size:14px;color:var(--ch);line-height:1.5}
+/* explore feed */
+.explore-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+.explore-card{border-radius:var(--r);overflow:hidden;background:var(--white);border:1px solid var(--bor);transition:all .25s;cursor:pointer}
+.explore-card:hover{transform:translateY(-3px);box-shadow:var(--sh2)}
+.explore-card-img{height:200px;background:linear-gradient(135deg,#F0E8DC,#E4D4BE);position:relative;overflow:hidden}
+.explore-card-img img{width:100%;height:100%;object-fit:cover;transition:transform .4s}
+.explore-card:hover .explore-card-img img{transform:scale(1.05)}
+.explore-card-body{padding:14px}
+.explore-card-title{font-family:var(--fd);font-size:16px;margin-bottom:6px}
+.explore-card-meta{font-size:12px;color:var(--mu);display:flex;gap:12px;margin-bottom:8px}
+.explore-card-actions{display:flex;gap:8px;margin-top:10px}
 
-/* planner */
-.pwrap{overflow-x:auto}
-.pdh{text-align:center;font-size:12px;font-weight:700;color:var(--mu);text-transform:uppercase;padding:8px 4px;background:var(--cream);border-radius:var(--rs)}
-.prl{font-size:12px;font-weight:600;color:var(--mu);display:flex;align-items:center;gap:5px;padding:4px 0}
-.mslot{min-height:80px;background:var(--white);border:1.5px dashed var(--bor);border-radius:var(--rs);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .3s ease;padding:6px}
-.mslot:hover{border-color:var(--clayL);background:var(--clayBg);transform:scale(1.02)}
-.mslot:hover .msadd{color:var(--clay)}
-.mslot.filled{border-style:solid;border-color:var(--bor);align-items:stretch;padding:4px;animation:scaleIn .3s cubic-bezier(.175,.885,.32,1.275)}
-.mslot.filled:hover{transform:scale(1.04);box-shadow:var(--sh1);border-color:var(--clayL)}
-.msi{text-align:center;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.msem{font-size:22px}
-.msn{font-size:10px;font-weight:500;margin-top:3px;line-height:1.2;color:var(--ch)}
-.msadd{font-size:20px;color:var(--bor)}
-.mtoggles{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:16px}
-.mtog{display:flex;align-items:center;gap:8px;cursor:pointer}
-.mtog input{accent-color:var(--clay);width:16px;height:16px;cursor:pointer}
-.mtog-l{font-size:14px;font-weight:500}
-
-/* chat */
-.cwrap{display:flex;flex-direction:column}
-.cmsgs{flex:1;overflow-y:auto;padding:24px;display:flex;flex-direction:column;gap:14px;max-height:480px}
-.mrow{display:flex;gap:10px;max-width:75%}
-.mrow.u{align-self:flex-end;flex-direction:row-reverse}
-.mav{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--clay) 0%,var(--clayH) 100%);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;margin-top:2px}
-.mbub{padding:12px 16px;border-radius:16px;font-size:14px;line-height:1.6;animation:scaleIn .25s cubic-bezier(.175,.885,.32,1.275)}
-.mrow:not(.u) .mbub{background:var(--white);border:1px solid var(--bor);border-top-left-radius:4px}
-.mrow.u .mbub{background:var(--clay);color:#fff;border-top-right-radius:4px}
-.cbot{padding:16px 24px 24px;border-top:1px solid var(--bor);display:flex;gap:10px;align-items:flex-end;background:var(--white)}
-.cta{flex:1;padding:12px 16px;background:var(--cream);border:1.5px solid var(--bor);border-radius:12px;font-family:var(--fb);font-size:14px;resize:none;outline:none;max-height:120px;color:var(--ch);transition:var(--t)}
-.cta:focus{border-color:var(--clay);box-shadow:0 0 0 3px rgba(192,106,62,.1);background:var(--white)}
-.csend{width:44px;height:44px;border-radius:50%;background:var(--clay);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;transition:all .25s ease}
-.csend:hover{background:var(--clayH);transform:scale(1.08);box-shadow:0 4px 16px rgba(192,106,62,.4)}
-.csend:active{transform:scale(.92)}
-.scard{background:var(--white);border:1px solid var(--bor);border-radius:var(--rs);padding:12px;cursor:pointer;transition:all .25s ease;display:flex;align-items:center;gap:10px;margin-top:6px;animation:slideInLeft .3s ease both}
-.scard:hover{border-color:var(--clayL);transform:translateX(5px);box-shadow:var(--sh1)}
-
-/* enhanced confirm items */
-.pit2{display:grid;grid-template-columns:36px 1fr 90px 80px 60px auto;align-items:center;gap:8px;padding:10px 12px;border-radius:var(--rs);border:1px solid var(--bor);background:var(--white);margin-bottom:8px}
-.pit2-ic{font-size:22px;text-align:center}
-.pit2-sel{padding:5px 8px;background:var(--cream);border:1.5px solid var(--bor);border-radius:6px;font-family:var(--fb);font-size:12px;color:var(--ch);outline:none;cursor:pointer}
-.pit2-sel:focus{border-color:var(--clay)}
-.pit2-num{padding:5px 8px;background:var(--cream);border:1.5px solid var(--bor);border-radius:6px;font-family:var(--fb);font-size:13px;color:var(--ch);outline:none;width:100%}
-.pit2-num:focus{border-color:var(--clay)}
-.add-row-btn{display:flex;align-items:center;gap:6px;background:none;border:1.5px dashed var(--bor);border-radius:var(--rs);padding:9px 14px;font-family:var(--fb);font-size:13px;color:var(--mu);cursor:pointer;width:100%;justify-content:center;transition:all .25s ease;margin-bottom:12px}
-.add-row-btn:hover{border-color:var(--clay);color:var(--clay);background:var(--clayBg);border-style:solid;transform:translateY(-1px)}
-
-/* planner chat drawer */
-.pc-drawer{width:420px;max-width:96vw;background:var(--white);height:100vh;overflow:hidden;box-shadow:var(--sh3);animation:dIn .25s ease;display:flex;flex-direction:column}
-.pc-msgs{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:12px}
-.pc-bot{padding:14px 20px 20px;border-top:1px solid var(--bor);display:flex;gap:8px;align-items:flex-end}
-.pc-inp{flex:1;padding:10px 14px;background:var(--cream);border:1.5px solid var(--bor);border-radius:10px;font-family:var(--fb);font-size:14px;resize:none;outline:none;color:var(--ch);transition:var(--t)}
-.pc-inp:focus{border-color:var(--clay)}
-
-/* at a glance */
-.glance-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:24px}
-.glance-card{background:var(--white);border:1px solid var(--bor);border-radius:var(--r);padding:16px 18px;transition:all .3s ease;animation:fadeInUp .4s ease both}
-.glance-card:nth-child(1){animation-delay:0s}.glance-card:nth-child(2){animation-delay:.08s}.glance-card:nth-child(3){animation-delay:.16s}.glance-card:nth-child(4){animation-delay:.24s}
-.glance-card:hover{transform:translateY(-3px);box-shadow:var(--sh1);border-color:var(--clayL)}
-.glance-val{font-family:var(--fd);font-size:32px;color:var(--clay);line-height:1;animation:countUp .5s ease}
-.glance-lbl{font-size:12px;color:var(--mu);margin-top:4px;line-height:1.3}
-
-/* meal prep */
-.prep-setup{display:flex;flex-direction:column;gap:18px}
-.prep-section{background:var(--white);border:1px solid var(--bor);border-radius:var(--r);padding:20px}
-.prep-section-title{font-family:var(--fd);font-size:17px;margin-bottom:12px}
-.prep-result{margin-top:24px}
-.prep-batch{background:var(--white);border:1px solid var(--bor);border-radius:var(--r);padding:18px;margin-bottom:14px}
-.prep-batch-title{font-weight:700;font-size:15px;display:flex;align-items:center;gap:8px;margin-bottom:10px}
-.prep-batch-row{display:flex;gap:8px;align-items:flex-start;padding:6px 0;border-bottom:1px solid var(--bor);font-size:13px}
-.prep-batch-row:last-child{border-bottom:none}
-.prep-batch-lbl{font-weight:600;color:var(--mu);min-width:80px;font-size:11px;text-transform:uppercase;letter-spacing:.3px;padding-top:1px}
-.prep-batch-val{color:var(--ch);line-height:1.5;flex:1}
-.prep-checklist{background:var(--cream);border-radius:var(--rs);padding:14px 16px}
-.prep-check-item{display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid var(--bor);font-size:13px}
-.prep-check-item:last-child{border-bottom:none}
-.prep-step-num{width:22px;height:22px;border-radius:50%;background:var(--clay);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px;transition:transform .2s ease}
-.prep-check-item:hover .prep-step-num{transform:scale(1.15)}
-.remix-tag{display:inline-block;background:var(--sageBg);color:var(--sage);padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;margin:2px 3px 2px 0}
-.planner-tabs{display:flex;gap:4px;margin-bottom:20px;background:var(--cream);border-radius:var(--rs);padding:4px}
-.ptab{flex:1;padding:8px 12px;border-radius:6px;font-family:var(--fb);font-size:13px;font-weight:500;border:none;cursor:pointer;transition:all .25s cubic-bezier(.4,0,.2,1);background:transparent;color:var(--mu)}
-.ptab:hover:not(.ac){color:var(--ch)}
-.ptab.ac{background:var(--white);color:var(--ch);box-shadow:var(--sh1);font-weight:600}
+/* shopping list */
+.shop-section{margin-bottom:20px}
+.shop-section-title{font-size:13px;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.shop-item{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--white);border:1px solid var(--bor);border-radius:var(--rs);margin-bottom:4px;transition:all .2s}
+.shop-item:hover{border-color:var(--borH)}
+.shop-item.owned{opacity:.5;text-decoration:line-through}
+.shop-check{width:20px;height:20px;border-radius:50%;border:2px solid var(--bor);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+.shop-check:hover{border-color:var(--sage)}
+.shop-check.checked{background:var(--sage);border-color:var(--sage);color:#fff}
 
 /* profile */
-.pgr{display:grid;grid-template-columns:280px 1fr;gap:24px;align-items:start}
-.pcard{padding:28px;text-align:center}
-.pav{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--clay) 0%,var(--clayH) 100%);display:flex;align-items:center;justify-content:center;font-size:36px;margin:0 auto 12px;box-shadow:0 0 0 4px var(--white),0 0 0 6px var(--clayL);transition:transform .3s ease}
-.pav:hover{transform:scale(1.08) rotate(5deg)}
-.pname{font-family:var(--fd);font-size:20px}
-.pemail{color:var(--mu);font-size:13px;margin-top:4px}
-.ssec{border-radius:var(--r);border:1px solid var(--bor);overflow:hidden;margin-bottom:16px;background:var(--white)}
-.srow{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--bor);cursor:pointer;transition:all .2s ease}
-.srow:last-child{border-bottom:none}
-.srow:hover{background:var(--cream);padding-left:22px}
-.srl{font-size:14px;font-weight:500}
-.srv{font-size:13px;color:var(--clay);font-weight:600}
-
-/* boosters */
-.bgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
-.bcard{padding:16px;border-radius:var(--r);border:1px solid var(--bor);background:var(--white);transition:all .3s ease;animation:fadeInUp .4s ease both}
-.bcard:hover{box-shadow:var(--sh2);border-color:var(--clayL);transform:translateY(-3px)}
-.bing{font-weight:700;font-size:16px;display:flex;align-items:center;gap:8px;margin-bottom:5px}
-.bwhy{font-size:13px;color:var(--mu);margin-bottom:10px;line-height:1.4}
-.bul{font-size:12px;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px}
-.brec{font-size:13px;color:var(--ch);margin-bottom:12px}
-
-/* multi-select */
-.mopts{display:flex;flex-wrap:wrap;gap:7px}
-.mopt{padding:7px 14px;border-radius:8px;border:1.5px solid var(--bor);font-size:13px;cursor:pointer;background:var(--white);font-family:var(--fb);color:var(--ch);transition:all .25s cubic-bezier(.4,0,.2,1);font-weight:500}
-.mopt.sel{background:var(--clay);color:#fff;border-color:var(--clay);box-shadow:0 2px 10px rgba(192,106,62,.3);transform:scale(1.03)}
-.mopt:hover:not(.sel){border-color:var(--clayL);transform:translateY(-1px)}
-.mopt:active{transform:scale(.96)}
-.togrow{display:flex;align-items:center;justify-content:space-between;padding:6px 0}
-.tog{width:42px;height:23px;border-radius:12px;background:var(--bor);border:none;cursor:pointer;position:relative;transition:background .3s ease;flex-shrink:0}
-.tog.on{background:var(--clay)}
-.tog::after{content:'';position:absolute;width:17px;height:17px;background:#fff;border-radius:50%;top:3px;left:3px;transition:transform .3s cubic-bezier(.68,-.55,.27,1.55);box-shadow:0 1px 4px rgba(0,0,0,.15)}
-.tog.on::after{transform:translateX(19px)}
+.prof-header{text-align:center;padding:40px 20px;background:var(--white);border-radius:var(--r);border:1px solid var(--bor);margin-bottom:24px}
+.prof-avatar{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--clay),var(--clayH));display:flex;align-items:center;justify-content:center;color:#fff;font-size:32px;font-weight:700;margin:0 auto 16px}
+.prof-name{font-family:var(--fd);font-size:24px;margin-bottom:4px}
+.prof-email{font-size:13px;color:var(--mu)}
+.prof-stats{display:flex;justify-content:center;gap:32px;margin-top:20px}
+.prof-stat{text-align:center}
+.prof-stat-num{font-size:22px;font-weight:700;color:var(--clay)}
+.prof-stat-label{font-size:11px;color:var(--mu);text-transform:uppercase;letter-spacing:.5px}
 
 /* onboarding */
-.oboard{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px 20px;background:var(--cream)}
-.obox{max-width:560px;width:100%;text-align:center;animation:fadeInUp .6s ease}
-.otitle{font-family:var(--fd);font-size:36px;margin-bottom:10px;animation:fadeInUp .5s ease .1s both}
-.otitle em{color:var(--clay);font-style:italic}
-.osub{color:var(--mu);font-size:16px;margin-bottom:36px;line-height:1.6;animation:fadeInUp .5s ease .2s both}
-.oopts{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:28px;animation:fadeInUp .5s ease .3s both}
+.onb-page{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--cream);padding:20px}
+.onb-card{max-width:560px;width:100%;text-align:center}
+.onb-title{font-family:var(--fd);font-size:32px;margin-bottom:8px}
+.onb-sub{color:var(--mu);font-size:15px;margin-bottom:32px}
+.onb-chips{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:28px}
+.onb-chip{padding:10px 20px;border-radius:40px;border:1.5px solid var(--bor);background:var(--white);cursor:pointer;font-size:14px;font-weight:500;transition:all .2s}
+.onb-chip:hover{border-color:var(--clayL);background:var(--clayBg)}
+.onb-chip.sel{border-color:var(--clay);background:var(--clayBg);color:var(--clay);font-weight:600}
 
-/* misc */
-.stitle{font-family:var(--fd);font-size:22px;margin-bottom:4px;animation:fadeInUp .4s ease}
-.ssub{color:var(--mu);font-size:14px;margin-bottom:20px;animation:fadeIn .5s ease .1s both}
-.sep{height:1px;background:var(--bor);margin:24px 0}
-.ldots{display:flex;gap:6px;padding:8px 0}
-.dot{width:8px;height:8px;border-radius:50%;background:var(--clay);animation:db 1.1s infinite;box-shadow:0 0 6px rgba(192,106,62,.3)}
-.dot:nth-child(2){animation-delay:.18s}
-.dot:nth-child(3){animation-delay:.36s}
-@keyframes db{0%,100%{transform:translateY(0);opacity:.4}50%{transform:translateY(-5px);opacity:1}}
-.bwrth{background:linear-gradient(135deg,var(--gold) 0%,#E8B84B 100%);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;letter-spacing:.3px;box-shadow:0 1px 6px rgba(201,149,58,.3)}
-.bneeds{background:rgba(192,57,43,.12);color:var(--err);font-size:11px;font-weight:700;padding:3px 8px;border-radius:4px}
-.empty{text-align:center;padding:60px 32px;color:var(--mu);animation:fadeIn .5s ease}
-.eic{font-size:52px;margin-bottom:14px;animation:float 3s ease-in-out infinite}
-.etitle{font-family:var(--fd);font-size:22px;color:var(--ch);margin-bottom:8px}
-.esub{font-size:14px;line-height:1.6;max-width:360px;margin:0 auto}
-.gnotice{background:linear-gradient(135deg,var(--clayBg) 0%,var(--sageBg) 100%);border:1px solid rgba(192,106,62,.2);border-radius:var(--rs);padding:12px 16px;margin-bottom:20px;display:flex;align-items:center;gap:12px;font-size:14px;animation:fadeInUp .4s ease}
-.row{display:flex;gap:12px}
-.half{flex:1}
-.sbar{position:sticky;bottom:0;background:var(--white);border-top:1px solid var(--bor);padding:14px 24px;z-index:10}
-.sw{position:relative}
-.si{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--mu);pointer-events:none}
-.sin{width:100%;padding:9px 12px 9px 36px;background:var(--cream);border:1.5px solid var(--bor);border-radius:var(--rs);font-family:var(--fb);font-size:14px;color:var(--ch);outline:none;transition:all .25s ease}
-.sin:focus{border-color:var(--clay);box-shadow:0 0 0 3px rgba(192,106,62,.1);background:var(--white)}
+/* recipe detail overlay */
+.rd-overlay{position:fixed;inset:0;z-index:400;background:rgba(0,0,0,.5);backdrop-filter:blur(6px);display:flex;justify-content:center;overflow-y:auto;padding:20px}
+.rd-panel{background:var(--white);border-radius:18px;max-width:680px;width:100%;max-height:90vh;overflow-y:auto;animation:mIn .3s ease;margin:auto}
+.rd-hero{height:260px;position:relative;overflow:hidden;border-radius:18px 18px 0 0}
+.rd-hero img{width:100%;height:100%;object-fit:cover}
+.rd-hero-overlay{position:absolute;inset:0;background:linear-gradient(transparent 40%,rgba(0,0,0,.7))}
+.rd-close{position:absolute;top:16px;right:16px;width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,.4);backdrop-filter:blur(4px);border:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;transition:background .2s}
+.rd-close:hover{background:rgba(0,0,0,.6)}
+.rd-body{padding:24px}
+.rd-title{font-family:var(--fd);font-size:26px;margin-bottom:8px}
+.rd-meta{display:flex;gap:14px;color:var(--mu);font-size:13px;margin-bottom:16px}
 
+/* toast */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ch);color:#fff;padding:12px 24px;border-radius:var(--r);font-size:14px;font-weight:500;z-index:9999;animation:fadeInUp .3s ease;box-shadow:var(--sh3)}
+.toast.leaving{animation:fadeOut .3s ease forwards}
+
+/* picker modal for replace */
+.picker-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;max-height:400px;overflow-y:auto}
+.picker-card{display:flex;align-items:center;gap:10px;padding:10px;border:1.5px solid var(--bor);border-radius:var(--rs);cursor:pointer;transition:all .2s;background:var(--white)}
+.picker-card:hover{border-color:var(--clay);background:var(--clayBg)}
+.picker-card img{width:48px;height:48px;border-radius:6px;object-fit:cover}
+
+/* auth pages */
+.apage{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--cream)}
+.acard{max-width:400px;width:100%;padding:40px;background:var(--white);border-radius:18px;border:1px solid var(--bor);box-shadow:var(--sh2)}
+.ah{font-family:var(--fd);font-size:28px;margin-bottom:6px;text-align:center}
+.asub{color:var(--mu);font-size:14px;margin-bottom:28px;text-align:center}
+
+/* add-to-plan modal */
+.atp-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+.atp-day{text-align:center;padding:8px;border-radius:var(--rs);cursor:pointer;border:1.5px solid var(--bor);transition:all .2s;background:var(--white)}
+.atp-day:hover{border-color:var(--clay);background:var(--clayBg)}
+.atp-day.sel{border-color:var(--clay);background:var(--clayBg)}
+.atp-day-name{font-size:11px;font-weight:700;color:var(--mu);text-transform:uppercase}
+.atp-meals{display:flex;flex-direction:column;gap:4px;margin-top:6px}
+.atp-meal{font-size:12px;padding:4px 8px;border-radius:4px;cursor:pointer;transition:background .15s}
+.atp-meal:hover{background:var(--cream)}
+.atp-meal.sel{background:var(--clayBg);color:var(--clay);font-weight:600}
+
+/* responsive */
 @media(max-width:900px){
-  .apage{grid-template-columns:1fr}.avisual{display:none}
-  .sidebar{width:200px}.main{margin-left:200px}
-  .pgr{grid-template-columns:1fr}
+  .sidebar{display:none}
+  .main{margin-left:0}
+  .plan-grid{grid-template-columns:60px repeat(7,1fr);font-size:13px}
+  .mcontent{padding:16px}
 }
-@media(max-width:700px){
-  .sidebar{transform:translateX(-100%)}.main{margin-left:0}
-  .mhdr{display:none}.mmhdr{display:flex!important}
-  .rgrid{grid-template-columns:1fr}.pgrid{grid-template-columns:1fr}
-  .aopts{grid-template-columns:1fr}.bgrid{grid-template-columns:1fr}
-  .oopts{grid-template-columns:1fr}.mcontent{padding:20px 16px}
+@media(max-width:640px){
+  .plan-grid{grid-template-columns:1fr;gap:0}
+  .plan-header{display:none}
+  .explore-grid{grid-template-columns:1fr}
 }
-.mmhdr{display:none;background:rgba(253,251,248,.9);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--bor);padding:14px 20px;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
 
-/* ── SUBSCRIPTION / PREMIUM ── */
-.pro-badge{display:inline-flex;align-items:center;gap:4px;background:linear-gradient(135deg,#C9953A 0%,#E8B84B 50%,#C9953A 100%);background-size:200% auto;color:#fff;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:.4px;animation:gradientShift 3s ease infinite;transition:transform .2s ease,box-shadow .2s ease;cursor:default}
-.pro-badge:hover{transform:scale(1.08);box-shadow:0 2px 10px rgba(201,149,58,.35)}
-.free-badge{display:inline-flex;align-items:center;gap:4px;background:var(--cream);color:var(--mu);padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;border:1px solid var(--bor)}
-.upgrade-btn{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;padding:10px 14px;background:linear-gradient(135deg,#C9953A 0%,#E8B84B 100%);color:#fff;border:none;border-radius:var(--rs);font-family:var(--fb);font-size:13px;font-weight:700;cursor:pointer;transition:all .3s ease;margin-top:10px;letter-spacing:.2px;position:relative;overflow:hidden}
-.upgrade-btn::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.25),transparent);transition:left .5s ease}
-.upgrade-btn:hover::before{left:100%}
-.upgrade-btn:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(201,149,58,.4)}
-.upgrade-btn:active{transform:scale(.97)}
-.paywall-lock{position:relative;overflow:hidden}
-.paywall-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(248,244,239,0) 0%,rgba(248,244,239,.92) 45%,rgba(248,244,239,1) 100%);display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:24px;z-index:10}
-.paywall-cta{background:var(--white);border:1.5px solid var(--bor);border-radius:14px;padding:20px 24px;text-align:center;max-width:340px;box-shadow:var(--sh2)}
-.paywall-cta-title{font-family:var(--fd);font-size:18px;margin-bottom:6px}
-.paywall-cta-sub{font-size:13px;color:var(--mu);margin-bottom:16px;line-height:1.5}
-.umod-icon{width:64px;height:64px;border-radius:18px;background:linear-gradient(135deg,#C9953A 0%,#E8B84B 100%);display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 16px;animation:softBounce .6s ease .2s both;box-shadow:0 8px 24px rgba(201,149,58,.3)}
-.umod-title{font-family:var(--fd);font-size:26px;text-align:center;margin-bottom:8px}
-.umod-sub{color:var(--mu);font-size:14px;text-align:center;line-height:1.6;margin-bottom:24px}
-.umod-features{display:flex;flex-direction:column;gap:10px;margin-bottom:24px}
-.umod-feat{display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--cream);border-radius:var(--rs);font-size:14px;animation:fadeInUp .3s ease both;transition:transform .2s ease}
-.umod-feat:nth-child(1){animation-delay:.1s}.umod-feat:nth-child(2){animation-delay:.2s}.umod-feat:nth-child(3){animation-delay:.3s}.umod-feat:nth-child(4){animation-delay:.4s}
-.umod-feat:hover{transform:translateX(4px)}
-.umod-feat-ic{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--clay) 0%,var(--clayH) 100%);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
-.umod-feat-title{font-weight:600;font-size:13px}
-.umod-feat-sub{font-size:12px;color:var(--mu);margin-top:1px}
-.price-toggle{display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:20px;background:var(--cream);border-radius:var(--rs);padding:4px;border:1px solid var(--bor)}
-.price-tab{flex:1;padding:8px 16px;border-radius:6px;border:none;font-family:var(--fb);font-size:13px;font-weight:500;cursor:pointer;transition:var(--t);background:transparent;color:var(--mu)}
-.price-tab.ac{background:var(--white);color:var(--ch);box-shadow:var(--sh1);font-weight:600}
-.price-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
-.price-card{border:1.5px solid var(--bor);border-radius:var(--r);padding:18px;background:var(--white);cursor:pointer;transition:all .25s ease;text-align:center}
-.price-card:hover{border-color:var(--clay);box-shadow:var(--sh1);transform:translateY(-2px)}
-.price-card.best{border-color:var(--gold);box-shadow:0 0 0 2px rgba(201,149,58,.15)}
-.price-card-label{font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;height:16px}
-.price-card-price{font-family:var(--fd);font-size:28px;color:var(--ch);line-height:1}
-.price-card-period{font-size:12px;color:var(--mu);margin-top:3px}
-.price-card-save{display:inline-block;background:var(--sageBg);color:var(--sage);font-size:11px;font-weight:700;padding:2px 8px;border-radius:4px;margin-top:6px}
-.stripe-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px 20px;background:linear-gradient(135deg,var(--clay) 0%,var(--clayH) 100%);color:#fff;border:none;border-radius:var(--r);font-family:var(--fb);font-size:15px;font-weight:700;cursor:pointer;transition:all .3s cubic-bezier(.4,0,.2,1);box-shadow:0 4px 20px rgba(192,106,62,.35);position:relative;overflow:hidden}
-.stripe-btn::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);transition:left .6s ease}
-.stripe-btn:hover::before{left:100%}
-.stripe-btn:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(192,106,62,.5)}
-.stripe-btn:active{transform:scale(.98)}
-.stripe-secure{text-align:center;font-size:12px;color:var(--mu);margin-top:10px;display:flex;align-items:center;justify-content:center;gap:5px}
-.landing{min-height:100vh;background:var(--cream);font-family:var(--fb)}
-.land-nav{display:flex;align-items:center;justify-content:space-between;padding:18px 48px;background:rgba(253,251,248,.9);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--bor);position:sticky;top:0;z-index:200}
-.land-nav-logo{display:flex;align-items:center;gap:10px}
-.land-hero{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;padding:80px 80px 60px;max-width:1200px;margin:0 auto}
-.land-hero-badge{display:inline-flex;align-items:center;gap:6px;background:var(--clayBg);color:var(--clayH);padding:6px 14px;border-radius:20px;font-size:12px;font-weight:700;margin-bottom:20px;letter-spacing:.3px;animation:chipPop .5s ease .2s both}
-.land-hero-title{font-family:var(--fd);font-size:52px;line-height:1.1;margin-bottom:16px;animation:fadeInUp .6s ease .3s both}
-.land-hero-title em{color:var(--clay);font-style:italic}
-.land-hero-sub{font-size:17px;color:var(--mu);line-height:1.7;margin-bottom:32px;max-width:480px;animation:fadeInUp .6s ease .5s both}
-.land-hero-btns{display:flex;gap:12px;flex-wrap:wrap;animation:fadeInUp .6s ease .7s both}
-.land-features{background:var(--white);padding:80px;border-top:1px solid var(--bor);border-bottom:1px solid var(--bor)}
-.land-features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;max-width:1100px;margin:32px auto 0}
-.land-feat-card{padding:28px;border-radius:var(--r);border:1px solid var(--bor);background:var(--cream);transition:all .3s ease}
-.land-feat-card:hover{transform:translateY(-5px);box-shadow:var(--sh2);border-color:var(--clayL)}
-.land-feat-ic{font-size:36px;margin-bottom:14px;transition:transform .3s ease}
-.land-feat-card:hover .land-feat-ic{transform:scale(1.15) rotate(-5deg)}
-.land-feat-title{font-family:var(--fd);font-size:18px;margin-bottom:8px}
-.land-feat-sub{font-size:14px;color:var(--mu);line-height:1.6}
-.land-pricing{padding:80px;background:var(--cream)}
-.land-pricing-inner{max-width:1100px;margin:0 auto}
-.land-pricing-cards{display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:720px;margin:32px auto 0}
-.land-pcard{background:var(--white);border:1.5px solid var(--bor);border-radius:18px;padding:32px;transition:all .3s ease}
-.land-pcard:hover{transform:translateY(-4px);box-shadow:var(--sh2)}
-.land-pcard.featured{border-color:var(--clay);box-shadow:0 0 0 3px rgba(192,106,62,.1);position:relative;overflow:hidden}
-.land-pcard.featured::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle,rgba(192,106,62,.04) 0%,transparent 70%);animation:gradientShift 6s ease infinite;pointer-events:none}
-.land-pcard.featured:hover{box-shadow:0 0 0 3px rgba(192,106,62,.15),var(--sh2)}
-.land-pcard-badge{display:inline-block;background:var(--clay);color:#fff;font-size:11px;font-weight:700;padding:3px 12px;border-radius:20px;margin-bottom:12px;letter-spacing:.3px}
-.land-pcard-title{font-family:var(--fd);font-size:20px;margin-bottom:6px}
-.land-pcard-price{font-family:var(--fd);font-size:40px;color:var(--ch);line-height:1;margin-bottom:4px}
-.land-pcard-period{font-size:13px;color:var(--mu);margin-bottom:20px}
-.land-pcard-features{margin-bottom:24px}
-.land-pcard-feat{display:flex;align-items:center;gap:9px;font-size:14px;padding:7px 0;border-bottom:1px solid var(--bor)}
-.land-pcard-feat:last-child{border-bottom:none}
-.land-social{background:linear-gradient(135deg,#1A1A1A 0%,#2A1810 100%);padding:80px;text-align:center}
-.land-social-title{font-family:var(--fd);font-size:42px;color:#F8F4EF;margin-bottom:16px;animation:fadeInUp .6s ease}
-.land-social-sub{font-size:16px;color:rgba(248,244,239,.6);margin-bottom:36px;line-height:1.7;max-width:560px;margin-left:auto;margin-right:auto}
-.land-testimonials{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:1100px;margin:40px auto 0}
-.land-tcard{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:var(--r);padding:24px;transition:all .3s ease}
-.land-tcard:hover{background:rgba(255,255,255,.12);transform:translateY(-4px);border-color:rgba(255,255,255,.2)}
-.land-tcard-text{font-size:15px;color:rgba(248,244,239,.85);line-height:1.6;margin-bottom:14px;font-style:italic}
-.land-tcard-name{font-size:13px;color:rgba(248,244,239,.45);font-weight:600}
-.land-stats{display:flex;gap:48px;justify-content:center;margin-bottom:48px}
-.land-stat-val{font-family:var(--fd);font-size:42px;background:linear-gradient(135deg,#F8F4EF,#E8B84B,#F8F4EF);background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:gradientShift 4s ease infinite;line-height:1}
-.land-stat-lbl{font-size:13px;color:rgba(248,244,239,.5);margin-top:4px}
-.land-footer{background:var(--white);border-top:1px solid var(--bor);padding:24px 48px;display:flex;align-items:center;justify-content:space-between;font-size:13px;color:var(--mu)}
-.sub-status-card{background:linear-gradient(135deg,var(--clayBg) 0%,rgba(201,149,58,.08) 100%);border:1.5px solid rgba(192,106,62,.25);border-radius:var(--r);padding:20px 24px;margin-bottom:16px;animation:fadeInUp .4s ease}
-.sub-pro-card{background:linear-gradient(135deg,rgba(201,149,58,.12) 0%,rgba(201,149,58,.06) 100%);border:1.5px solid rgba(201,149,58,.3)}
-
-/* ── FAVORITES ── */
-.fav-folders-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:14px;margin-bottom:28px}
-.fav-folder-card{background:var(--white);border:1.5px solid var(--bor);border-radius:var(--r);padding:22px 16px;cursor:pointer;transition:all .3s cubic-bezier(.4,0,.2,1);text-align:center;position:relative;animation:scaleIn .4s ease both}
-.fav-folder-card:hover{border-color:var(--clayL);box-shadow:var(--sh2);transform:translateY(-4px)}
-.fav-folder-card:hover .fav-folder-ic{animation:wiggle .4s ease}
-.fav-folder-ic{font-size:34px;margin-bottom:10px}
-.fav-folder-name{font-weight:700;font-size:14px;margin-bottom:4px;color:var(--ch)}
-.fav-folder-count{font-size:12px;color:var(--mu)}
-.folder-ctx-wrap{position:absolute;top:8px;right:8px}
-.folder-ctx-btn{background:none;border:none;color:var(--bor);cursor:pointer;padding:4px 6px;border-radius:4px;font-size:17px;line-height:1;transition:var(--t);display:flex;align-items:center;justify-content:center}
-.folder-ctx-btn:hover{color:var(--ch);background:var(--cream)}
-.folder-ctx-dd{position:absolute;right:0;top:100%;margin-top:4px;background:var(--white);border:1px solid var(--bor);border-radius:var(--rs);box-shadow:var(--sh2);min-width:148px;z-index:400;overflow:hidden;animation:slideDown .2s cubic-bezier(.4,0,.2,1)}
-.folder-ctx-item{display:block;width:100%;text-align:left;background:none;border:none;padding:10px 14px;font-size:13px;font-family:var(--fb);cursor:pointer;color:var(--ch);transition:all .2s ease}
-.folder-ctx-item:hover{background:var(--cream);padding-left:18px}
-.folder-ctx-item.danger{color:var(--err)}.folder-ctx-item.danger:hover{background:rgba(192,57,43,.06)}
-.fav-card-footer{display:flex;gap:6px;padding:8px 2px 4px}
-.fav-foot-btn{flex:1;background:var(--white);border:1.5px solid var(--bor);border-radius:var(--rs);padding:8px 6px;font-size:12px;font-family:var(--fb);cursor:pointer;color:var(--mu);transition:var(--t);font-weight:500;text-align:center}
-.fav-foot-btn:hover{border-color:var(--clay);color:var(--clay);background:var(--clayBg)}
-.fav-foot-btn.danger:hover{border-color:var(--err);color:var(--err);background:rgba(192,57,43,.06)}
-.fav-foot-btn.danger.conf{border-color:var(--err);color:var(--err);background:rgba(192,57,43,.09);font-weight:600}
-.fav-sort{display:flex;gap:8px;margin-bottom:18px}
-.fav-sort-btn{padding:5px 14px;border-radius:20px;border:1.5px solid var(--bor);font-size:12px;font-weight:600;cursor:pointer;background:var(--white);color:var(--mu);transition:var(--t);font-family:var(--fb)}
-.fav-sort-btn.ac{background:var(--clay);color:#fff;border-color:var(--clay);box-shadow:0 2px 8px rgba(192,106,62,.3)}
-.sfm-folder{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:var(--rs);border:1.5px solid var(--bor);cursor:pointer;transition:var(--t);background:var(--white);margin-bottom:8px}
-.sfm-folder:hover{border-color:var(--clayL);background:var(--clayBg)}
-.sfm-folder.sel{border-color:var(--clay);background:var(--clayBg)}
-.sfm-folder-ic{font-size:22px;flex-shrink:0;width:30px;text-align:center}
-.sfm-folder-name{font-weight:600;font-size:14px;flex:1}
-.sfm-folder-count{font-size:12px;color:var(--mu)}
-.ar-ing-row{display:grid;grid-template-columns:1fr 110px 36px;gap:8px;align-items:center;margin-bottom:8px}
-.ar-step-row{display:grid;grid-template-columns:28px 1fr 36px;gap:8px;align-items:flex-start;margin-bottom:12px}
-.ar-step-num{width:28px;height:28px;border-radius:50%;background:var(--clay);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;margin-top:8px;box-shadow:0 2px 8px rgba(192,106,62,.3);transition:transform .2s ease}
-.ar-step-row:hover .ar-step-num{transform:scale(1.12)}
-.ar-del-btn{width:36px;height:36px;display:flex;align-items:center;justify-content:center;background:none;border:1.5px solid var(--bor);border-radius:var(--rs);color:var(--mu);cursor:pointer;transition:var(--t);flex-shrink:0}
-.ar-del-btn:hover{border-color:var(--err);color:var(--err);background:rgba(192,57,43,.05)}
-.toast-wrap{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);z-index:9999;pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:8px}
-.toast{background:linear-gradient(135deg,#1A1A1A 0%,#2D2420 100%);color:#fff;padding:12px 22px;border-radius:12px;font-size:14px;font-weight:500;display:flex;align-items:center;gap:9px;box-shadow:0 12px 40px rgba(0,0,0,.3);animation:toastIn .35s cubic-bezier(.175,.885,.32,1.275);white-space:nowrap;border:1px solid rgba(255,255,255,.08)}
-@keyframes toastIn{from{opacity:0;transform:translateY(10px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
-@keyframes toastOut{from{opacity:1;transform:translateY(0) scale(1)}to{opacity:0;transform:translateY(10px) scale(.95)}}
-.toast-out{animation:toastOut .35s ease forwards!important}
-@keyframes fadeInUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+/* animations */
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-@keyframes scaleIn{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:none}}
-@keyframes slideInLeft{from{opacity:0;transform:translateX(-20px)}to{opacity:1;transform:none}}
-@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-@keyframes wiggle{0%,100%{transform:rotate(0)}25%{transform:rotate(-3deg)}75%{transform:rotate(3deg)}}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
-@keyframes heartBeat{0%{transform:scale(1)}15%{transform:scale(1.25)}30%{transform:scale(1)}45%{transform:scale(1.15)}60%{transform:scale(1)}100%{transform:scale(1)}}
-@keyframes ripple{0%{transform:scale(0);opacity:.5}100%{transform:scale(4);opacity:0}}
-@keyframes gradientShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
-@keyframes countUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-@keyframes barFill{from{width:0}to{width:var(--fill)}}
-@keyframes chipPop{0%{transform:scale(.8);opacity:0}60%{transform:scale(1.05)}100%{transform:scale(1);opacity:1}}
-@keyframes softBounce{0%{transform:translateY(0)}40%{transform:translateY(-6px)}60%{transform:translateY(-3px)}80%{transform:translateY(-1px)}100%{transform:translateY(0)}}
-@keyframes slideDown{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:none}}
-@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-@keyframes revealUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
-@keyframes revealScale{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:none}}
-@keyframes typewriter{from{width:0}to{width:100%}}
-@keyframes blink{0%,100%{border-color:var(--clay)}50%{border-color:transparent}}
-@keyframes morphBg{0%{border-radius:60% 40% 30% 70%/60% 30% 70% 40%}50%{border-radius:30% 60% 70% 40%/50% 60% 30% 60%}100%{border-radius:60% 40% 30% 70%/60% 30% 70% 40%}}
-@keyframes confetti1{0%{transform:translate(0,0) rotate(0) scale(1);opacity:1}100%{transform:translate(-15px,-30px) rotate(180deg) scale(0);opacity:0}}
-@keyframes confetti2{0%{transform:translate(0,0) rotate(0) scale(1);opacity:1}100%{transform:translate(12px,-28px) rotate(-150deg) scale(0);opacity:0}}
-@keyframes confetti3{0%{transform:translate(0,0) rotate(0) scale(1);opacity:1}100%{transform:translate(-8px,-35px) rotate(210deg) scale(0);opacity:0}}
-@keyframes confetti4{0%{transform:translate(0,0) rotate(0) scale(1);opacity:1}100%{transform:translate(16px,-22px) rotate(-120deg) scale(0);opacity:0}}
-@keyframes confetti5{0%{transform:translate(0,0) rotate(0) scale(1);opacity:1}100%{transform:translate(0,-36px) rotate(160deg) scale(0);opacity:0}}
-@keyframes confetti6{0%{transform:translate(0,0) scale(1);opacity:1}100%{transform:translate(-18px,-18px) scale(0);opacity:0}}
-.page-transition{will-change:opacity,transform}
-.pt-enter{animation:fadeInUp .3s ease both}
-.pt-exit{opacity:0;transform:translateY(8px);transition:all .15s ease}
-.scroll-reveal{opacity:0;transform:translateY(30px);transition:opacity .6s cubic-bezier(.4,0,.2,1),transform .6s cubic-bezier(.4,0,.2,1)}
-.scroll-reveal.visible{opacity:1;transform:none}
-.scroll-reveal-scale{opacity:0;transform:scale(.9);transition:opacity .5s ease,transform .5s cubic-bezier(.175,.885,.32,1.275)}
-.scroll-reveal-scale.visible{opacity:1;transform:none}
-.stagger-1{transition-delay:.05s}.stagger-2{transition-delay:.1s}.stagger-3{transition-delay:.15s}.stagger-4{transition-delay:.2s}.stagger-5{transition-delay:.25s}.stagger-6{transition-delay:.3s}
-/* ── Skeleton loading ── */
-.skel{border-radius:var(--r);overflow:hidden;background:var(--white);border:1px solid var(--bor)}
-.skel-img{height:200px;background:linear-gradient(90deg,#F0E8DC 0%,#E8DED0 40%,#F0E8DC 80%);background-size:200% 100%;animation:shimmer 1.5s ease-in-out infinite;border-radius:var(--r) var(--r) 0 0}
-.skel-body{padding:18px}
-.skel-line{height:14px;border-radius:7px;background:linear-gradient(90deg,#F0E8DC 0%,#E8DED0 40%,#F0E8DC 80%);background-size:200% 100%;animation:shimmer 1.5s ease-in-out infinite;margin-bottom:10px}
-.skel-line.w60{width:60%}.skel-line.w80{width:80%}.skel-line.w40{width:40%}.skel-line.w100{width:100%}
-.skel-line.h8{height:8px}.skel-line.h20{height:20px}.skel-line.h32{height:32px}
-.skel-row{display:flex;gap:8px;margin-bottom:10px}
-.skel-chip{width:60px;height:22px;border-radius:12px;background:linear-gradient(90deg,#F0E8DC 0%,#E8DED0 40%,#F0E8DC 80%);background-size:200% 100%;animation:shimmer 1.5s ease-in-out infinite}
-.bm-btn{width:34px;height:34px;border-radius:var(--rs);border:1.5px solid var(--bor);background:var(--white);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;transition:all .25s cubic-bezier(.4,0,.2,1);color:var(--mu);flex-shrink:0}
-.bm-btn:hover{border-color:var(--clay);color:var(--clay);background:var(--clayBg);transform:scale(1.1)}
-.bm-btn:active{transform:scale(.9)}
-.bm-btn.on{background:var(--clay);border-color:var(--clay);color:#fff;animation:heartBeat .6s ease}
-
-@media(max-width:900px){
-  .land-hero{grid-template-columns:1fr;padding:48px 32px 36px}.land-hero-title{font-size:36px}
-  .land-features{padding:48px 32px}.land-features-grid{grid-template-columns:1fr}
-  .land-pricing{padding:48px 32px}.land-pricing-cards{grid-template-columns:1fr}
-  .land-social{padding:48px 32px}.land-testimonials{grid-template-columns:1fr;margin-top:24px}
-  .land-nav{padding:14px 20px}.price-cards{grid-template-columns:1fr}
-  .land-stats{gap:24px;flex-wrap:wrap}.land-footer{flex-direction:column;gap:8px;text-align:center}
-}
-/* ── RECIPE CARD POPOVER ── */
-.card{position:relative}
-.card-dot-btn{position:absolute;top:8px;right:8px;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;z-index:10;color:var(--ch);box-shadow:0 2px 8px rgba(0,0,0,.12);transition:all .25s ease;line-height:1;opacity:0;transform:scale(.8)}
-.card:hover .card-dot-btn{opacity:1;transform:scale(1)}
-.card-dot-btn:hover{background:#fff;transform:scale(1.1)!important}
-.card-popover{position:absolute;top:40px;right:8px;background:var(--white);border:1px solid var(--bor);border-radius:var(--r);box-shadow:0 8px 30px rgba(0,0,0,.15);z-index:200;min-width:176px;overflow:hidden;animation:slideDown .2s cubic-bezier(.4,0,.2,1);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
-.card-pop-item{display:flex;align-items:center;gap:10px;padding:10px 14px;font-size:13px;font-weight:500;cursor:pointer;color:var(--ch);border:none;background:none;width:100%;text-align:left;transition:all .2s ease}
-.card-pop-item:hover{background:var(--cream);padding-left:18px}
-.card-pop-divider{height:1px;background:var(--bor)}
-.slot-dot-btn{position:absolute;top:4px;right:4px;width:22px;height:22px;border-radius:5px;background:rgba(255,255,255,.88);border:1px solid rgba(0,0,0,.1);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;line-height:1;z-index:10;color:var(--ch);opacity:0;transition:opacity .15s}
-.mslot.filled:hover .slot-dot-btn{opacity:1}
-.slot-dot-btn:hover{background:#fff}
-.slot-popover{position:absolute;top:26px;right:4px;background:#fff;border:1px solid var(--bor);border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.16);z-index:999;min-width:158px;overflow:hidden;padding:4px 0;animation:slideDown .2s cubic-bezier(.4,0,.2,1)}
-.slot-pop-item{display:flex;align-items:center;gap:8px;width:100%;padding:7px 12px;background:none;border:none;font-size:12px;color:var(--ch);cursor:pointer;text-align:left;white-space:nowrap;transition:all .2s ease}
-.slot-pop-item:hover{background:var(--cream);padding-left:16px}
-.slot-pop-item.danger{color:#c04040}
-.slot-pop-divider{height:1px;background:var(--bor);margin:3px 0}
-/* ── STICKY RECIPE CONTROLS ── */
-.recipe-controls-sticky{position:sticky;top:0;z-index:40;background:var(--cream);padding:12px 0 8px;border-bottom:1px solid var(--bor);margin-bottom:12px;margin-left:-32px;margin-right:-32px;padding-left:32px;padding-right:32px}
-/* ── ADD TO WEEK MODAL ── */
-.atw-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
-.atw-grid{display:grid;grid-template-columns:auto repeat(7,1fr);gap:4px;min-width:500px}
-.atw-day-hdr{font-size:10px;font-weight:700;text-align:center;color:var(--mu);text-transform:uppercase;letter-spacing:.3px;padding:4px 2px}
-.atw-slot{border-radius:6px;border:1.5px solid var(--bor);background:var(--cream);padding:5px 4px;text-align:center;cursor:pointer;transition:all .25s cubic-bezier(.4,0,.2,1);min-height:50px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
-.atw-slot:hover{border-color:var(--clay);background:var(--clayBg);transform:scale(1.04);box-shadow:0 2px 8px rgba(192,106,62,.12)}
-.atw-slot.occupied{background:rgba(106,158,114,.08);border-color:rgba(106,158,114,.3)}
-.atw-slot.occupied:hover{border-color:var(--clay);background:var(--clayBg)}
-.atw-slot.empty-slot{background:var(--white)}
-.atw-slot-em{font-size:13px}
-.atw-slot-nm{font-size:9px;color:var(--mu);line-height:1.2;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;max-width:100%}
-.atw-row-lbl{font-size:10px;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.3px;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;white-space:nowrap}
-/* ── PLAN LIBRARY ── */
-.plan-lib-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;margin-top:16px}
-.plan-card{background:var(--white);border:1px solid var(--bor);border-radius:var(--r);padding:20px;transition:border-color .15s,box-shadow .15s}
-.plan-card:hover{border-color:var(--clay);box-shadow:0 2px 12px rgba(0,0,0,.07)}
-.plan-card-emoji{font-size:32px;margin-bottom:8px}
-.plan-card-name{font-family:var(--fd);font-size:17px;margin-bottom:4px}
-.plan-card-desc{font-size:13px;color:var(--mu);margin-bottom:12px;line-height:1.5}
-.plan-card-stats{display:flex;gap:12px;font-size:12px;color:var(--mu);padding-top:10px;border-top:1px solid var(--bor);flex-wrap:wrap}
-
-/* ── EXPLORE TAB (Instagram-style) ── */
-.explore-filters{padding:12px 16px 8px;display:flex;align-items:center;gap:8px;background:var(--cream);z-index:2;border-bottom:1px solid var(--bor)}
-.explore-feed{flex:1;overflow-y:scroll;scroll-snap-type:y mandatory;-webkit-overflow-scrolling:touch}
-.explore-card{position:relative;height:calc(100vh - 120px);scroll-snap-align:start;overflow:hidden;background:#111}
-.explore-hero{position:absolute;inset:0}
-.explore-hero img{width:100%;height:100%;object-fit:cover}
-.explore-overlay{position:absolute;bottom:0;left:0;right:70px;padding:24px 20px;background:linear-gradient(transparent,rgba(0,0,0,.75));color:#fff}
-.explore-cuisine{font-size:11px;text-transform:uppercase;letter-spacing:1px;opacity:.85;margin-bottom:6px;font-weight:600}
-.explore-title{font-family:var(--fd);font-size:24px;line-height:1.2;margin-bottom:8px;text-shadow:0 2px 8px rgba(0,0,0,.4)}
-.explore-meta{display:flex;gap:14px;font-size:13px;opacity:.9;margin-bottom:8px}
-.explore-tags{display:flex;gap:6px;flex-wrap:wrap}
-.explore-tag{font-size:10px;background:rgba(255,255,255,.2);padding:3px 8px;border-radius:10px;backdrop-filter:blur(4px)}
-.explore-actions{position:absolute;right:12px;bottom:100px;display:flex;flex-direction:column;gap:16px;z-index:3}
-.explore-action-btn{width:48px;height:48px;border-radius:50%;background:rgba(255,255,255,.2);backdrop-filter:blur(8px);border:none;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .15s,background .15s}
-.explore-action-btn:hover{background:rgba(255,255,255,.35);transform:scale(1.1)}
-.explore-action-btn:active{transform:scale(.95)}
-.explore-counter{position:absolute;bottom:12px;right:16px;font-size:12px;color:rgba(255,255,255,.7);background:rgba(0,0,0,.4);padding:4px 10px;border-radius:12px;backdrop-filter:blur(4px);z-index:3}
-
+@keyframes fadeInUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes fadeOut{to{opacity:0;transform:translateY(8px)}}
+@keyframes shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes softBounce{0%{transform:scale(1)}50%{transform:scale(1.15)}100%{transform:scale(1)}}
+@keyframes spin{to{transform:rotate(360deg)}}
 `;
 
 /* ── ICONS ── */
@@ -21234,2015 +20790,9 @@ const RECIPES = [
   {"id": 2001, "meal": "dessert", "emoji": "🍰", "title": "Simple Cake", "cuisine": "American", "time": 40, "diff": "Easy", "dietary": ["Vegetarian"], "pp": 70, "missing": [], "worth": false, "contains_meat": false, "contains_fish": false, "contains_shellfish": false, "contains_dairy": true, "kosher_safe": true, "ingredients": [{"n": "Flour", "a": "250g"}, {"n": "Sugar", "a": "150g"}, {"n": "Butter", "a": "100g"}, {"n": "Eggs", "a": "2"}, {"n": "Baking powder", "a": "2 tsp"}, {"n": "Milk", "a": "100ml"}], "steps": [{"n": 1, "t": "Cream", "d": "Beat butter and sugar."}, {"n": 2, "t": "Eggs", "d": "Add eggs."}, {"n": 3, "t": "Mix", "d": "Alternate flour and milk."}, {"n": 4, "t": "Bake", "d": "Pour into pan. Bake at 180°C for 40 min."}]},
 ];
 
-// ── Recipe Image Map (title-driven) ────────────────────────────────────────
-// 320 title-matched photos · 681 emoji fallbacks
-const IMAGE_MAP = {
-  1: 'https://images.unsplash.com/photo-1481931098730-318b6f776db0?auto=format&fit=crop&w=800&q=80', // Spaghetti Aglio e Olio
-  2: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80', // Mediterranean Chickpea Bowl
-  3: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=800&q=80', // Quick Miso Ramen
-  4: 'https://images.unsplash.com/photo-1594221708779-94832f4320d1?auto=format&fit=crop&w=800&q=80', // Lemon Herb Roast Chicken
-  5: 'https://images.unsplash.com/photo-1590412200988-a436970781fa?auto=format&fit=crop&w=800&q=80', // One-Pan Shakshuka
-  6: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=800&q=80', // Fluffy Buttermilk Pancakes
-  7: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=800&q=80', // Chickpea Curry
-  8: 'https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=800&q=80', // Fish Tacos
-  9: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=800&q=80', // Lentil Soup
-  10: 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=800&q=80', // Margherita Pizza
-  11: 'https://images.unsplash.com/photo-1529006557810-274b9b2fc783?auto=format&fit=crop&w=800&q=80', // Chicken Shawarma Wrap
-  12: 'https://images.unsplash.com/photo-1510693206972-df098062cb71?auto=format&fit=crop&w=800&q=80', // Veggie Frittata
-  13: 'https://images.unsplash.com/photo-1559314809-0d155014e29e?auto=format&fit=crop&w=800&q=80', // Pad Thai
-  14: 'https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=800&q=80', // Beef Stir-Fry
-  15: 'https://images.unsplash.com/photo-1555949258-eb67b1ef0ceb?auto=format&fit=crop&w=800&q=80', // Creamy Mushroom Pasta
-  16: 'https://images.unsplash.com/photo-1529704640551-eef9ba5d774a?auto=format&fit=crop&w=800&q=80', // Burrito Bowl
-  17: 'https://images.unsplash.com/photo-1572453800999-e8d2d1589b7c?auto=format&fit=crop&w=800&q=80', // Ratatouille
-  18: 'https://images.unsplash.com/photo-1548943487-a2e4e43b4853?auto=format&fit=crop&w=800&q=80', // Tom Yum Soup
-  19: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80', // Greek Salad
-  20: 'https://images.unsplash.com/photo-1541519227354-08fa5d50c44d?auto=format&fit=crop&w=800&q=80', // Avocado Toast
-  21: 'https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=800&q=80', // Carbonara
-  22: 'https://images.unsplash.com/photo-1575831967553-771b0db4f7c1?auto=format&fit=crop&w=800&q=80', // Spinach Mushroom Omelette
-  23: 'https://images.unsplash.com/photo-1541519227354-08fa5d50c44d?auto=format&fit=crop&w=800&q=80', // Avocado Toast with Lemon
-  24: 'https://images.unsplash.com/photo-1490474418585-ba9bad8fd0ea?auto=format&fit=crop&w=800&q=80', // Greek Yogurt Honey Bowl
-  25: 'https://images.unsplash.com/photo-1573057377537-dbb3a99ac4b9?auto=format&fit=crop&w=800&q=80', // Banana Oat Pancakes
-  26: 'https://images.unsplash.com/photo-1584776296944-ab6fb57b0bdd?auto=format&fit=crop&w=800&q=80', // Shakshuka
-  27: 'https://images.unsplash.com/photo-1585461276010-aff0f3dcd48f?auto=format&fit=crop&w=800&q=80', // Cottage Cheese Berry Bowl
-  28: 'https://images.unsplash.com/photo-1482049016688-2d3e1b311543?auto=format&fit=crop&w=800&q=80', // Tomato Basil Toast
-  29: 'https://images.unsplash.com/photo-1495214783159-3503fd1b572d?auto=format&fit=crop&w=800&q=80', // Apple Cinnamon Oatmeal
-  30: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?auto=format&fit=crop&w=800&q=80', // Veggie Breakfast Wrap
-  31: 'https://images.unsplash.com/photo-1584278858944-7c34f1d94db0?auto=format&fit=crop&w=800&q=80', // Chia Almond Pudding
-  32: 'https://images.unsplash.com/photo-1584278858944-7c34f1d94db0?auto=format&fit=crop&w=800&q=80', // Zucchini Frittata
-  33: 'https://images.unsplash.com/photo-1567613913497-8f023fc3d343?auto=format&fit=crop&w=800&q=80', // Peanut Butter Banana Toast
-  34: 'https://images.unsplash.com/photo-1618040996337-56904b7850b9?auto=format&fit=crop&w=800&q=80', // Mushroom Spinach Quesadilla
-  35: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=800&q=80', // Ricotta Toast with Honey
-  36: 'https://images.unsplash.com/photo-1597200284813-aeddf0653f54?auto=format&fit=crop&w=800&q=80', // Savory Oatmeal with Egg
-  37: 'https://images.unsplash.com/photo-1610015644714-60076be69b30?auto=format&fit=crop&w=800&q=80', // Apple Yogurt Parfait
-  38: 'https://images.unsplash.com/photo-1626700051175-6818013e1d4f?auto=format&fit=crop&w=800&q=80', // Breakfast Burrito Veggie
-  39: 'https://images.unsplash.com/photo-1530554764233-e79e16c91d08?auto=format&fit=crop&w=800&q=80', // Blueberry Oat Muffins
-  40: 'https://images.unsplash.com/photo-1550304952-9d1e3444f713?auto=format&fit=crop&w=800&q=80', // Tomato Mozzarella Toast
-  41: 'https://images.unsplash.com/photo-1482049016688-2d3e1b311543?auto=format&fit=crop&w=800&q=80', // Date Tahini Toast
-  42: 'https://images.unsplash.com/photo-1528207776546-365bb710ee93?auto=format&fit=crop&w=800&q=80', // Savory Cottage Pancakes
-  43: 'https://images.unsplash.com/photo-1550304952-9d1e3444f713?auto=format&fit=crop&w=800&q=80', // Almond Butter Apple Toast
-  44: 'https://images.unsplash.com/photo-1567234669003-dce7a7a88821?auto=format&fit=crop&w=800&q=80', // Eggplant Breakfast Toast
-  45: 'https://images.unsplash.com/photo-1620280641611-1b444bf9f9b6?auto=format&fit=crop&w=800&q=80', // Mango Yogurt Bowl
-  46: 'https://images.unsplash.com/photo-1606787366850-de6330128bfc?auto=format&fit=crop&w=800&q=80', // Cheese Spinach Croissant
-  47: 'https://images.unsplash.com/photo-1517840901100-8179e982acb7?auto=format&fit=crop&w=800&q=80', // Savory French Toast
-  48: 'https://images.unsplash.com/photo-1627733810457-3c027bbb4dbb?auto=format&fit=crop&w=800&q=80', // Pear Cinnamon Yogurt
-  49: 'https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&w=800&q=80', // Breakfast Pita with Hummus
-  50: 'https://images.unsplash.com/photo-1525184782196-8e2ded604bf7?auto=format&fit=crop&w=800&q=80', // Pumpkin Oat Porridge
-  51: 'https://images.unsplash.com/photo-1584776296944-ab6fb57b0bdd?auto=format&fit=crop&w=800&q=80', // Savory Tomato Egg Skillet
-  52: 'https://images.unsplash.com/photo-1467453678174-768ec283a940?auto=format&fit=crop&w=800&q=80', // Caesar Salad
-  53: 'https://images.unsplash.com/photo-1476718406336-bb5a9690ee2a?auto=format&fit=crop&w=800&q=80', // Lentil Soup
-  54: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=800&q=80', // Margherita Pizza
-  55: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=800&q=80', // Chickpea Curry
-  56: 'https://images.unsplash.com/photo-1529006557810-274b9b2fc783?auto=format&fit=crop&w=800&q=80', // Falafel Wrap
-  57: 'https://images.unsplash.com/photo-1559314809-0d155014e29e?auto=format&fit=crop&w=800&q=80', // Pad Thai
-  58: 'https://images.unsplash.com/photo-1534080564583-6be75777b70a?auto=format&fit=crop&w=800&q=80', // Vegetable Paella
-  59: 'https://images.unsplash.com/photo-1619301920463-a37f1764eb83?auto=format&fit=crop&w=800&q=80', // Black Bean Tacos
-  60: 'https://images.unsplash.com/photo-1608897013039-887f21d8c804?auto=format&fit=crop&w=800&q=80', // Penne Arrabbiata
-  61: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=800&q=80', // Greek Salad
-  62: 'https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=800&q=80', // Minestrone Soup
-  63: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=800&q=80', // Caprese Sandwich
-  64: 'https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?auto=format&fit=crop&w=800&q=80', // Thai Green Curry
-  65: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?auto=format&fit=crop&w=800&q=80', // Veggie Burrito
-  66: 'https://images.unsplash.com/photo-1612874742237-6526221588e3?auto=format&fit=crop&w=800&q=80', // Fettuccine Alfredo
-  67: 'https://images.unsplash.com/photo-1607532941433-304659e8198a?auto=format&fit=crop&w=800&q=80', // Quinoa Salad
-  68: 'https://images.unsplash.com/photo-1613844237701-8f3664fc2eff?auto=format&fit=crop&w=800&q=80', // Tomato Basil Soup
-  69: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?auto=format&fit=crop&w=800&q=80', // Hummus Wrap
-  70: 'https://images.unsplash.com/photo-1473093226795-af9932fe5856?auto=format&fit=crop&w=800&q=80', // Pesto Pasta
-  71: 'https://images.unsplash.com/photo-1464500542410-1396074bf230?auto=format&fit=crop&w=800&q=80', // Ratatouille
-  72: 'https://images.unsplash.com/photo-1476124369491-e7addf5db371?auto=format&fit=crop&w=800&q=80', // Mushroom Risotto
-  73: 'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=800&q=80', // Veggie Tacos
-  74: 'https://images.unsplash.com/photo-1549248220-5811dc32cd5d?auto=format&fit=crop&w=800&q=80', // Spinach Salad
-  75: 'https://images.unsplash.com/photo-1629978444632-9f63ba0eff47?auto=format&fit=crop&w=800&q=80', // Butternut Squash Soup
-  76: 'https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=800&q=80', // Cacio e Pepe
-  77: 'https://images.unsplash.com/photo-1596685212227-d3a0b82d9a6d?auto=format&fit=crop&w=800&q=80', // Breakfast Burrito
-  78: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=80', // Vegetable Stir-Fry
-  79: 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=800&q=80', // Veggie Pizza
-  80: 'https://images.unsplash.com/photo-1570197571499-166b36435e9f?auto=format&fit=crop&w=800&q=80', // Coleslaw
-  81: 'https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?auto=format&fit=crop&w=800&q=80', // Red Curry Tofu
-  82: 'https://images.unsplash.com/photo-1613409385222-3d0decb6742a?auto=format&fit=crop&w=800&q=80', // Breakfast Tacos
-  83: 'https://images.unsplash.com/photo-1652088079703-38f4a8d6b981?auto=format&fit=crop&w=800&q=80', // French Onion Soup
-  84: 'https://images.unsplash.com/photo-1553909489-cd47e0907980?auto=format&fit=crop&w=800&q=80', // Greek Pita
-  85: 'https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?auto=format&fit=crop&w=800&q=80', // Mushroom Pasta
-  86: 'https://images.unsplash.com/photo-1589041611454-fd81bb39c3ba?auto=format&fit=crop&w=800&q=80', // Tabbouleh
-  87: 'https://images.unsplash.com/photo-1574484284002-952d92456975?auto=format&fit=crop&w=800&q=80', // Eggplant Curry
-  88: 'https://images.unsplash.com/photo-1574782256243-69c18023f7b4?auto=format&fit=crop&w=800&q=80', // Grilled Cheese
-  89: 'https://images.unsplash.com/photo-1670518045324-6c1f1942b2b8?auto=format&fit=crop&w=800&q=80', // Split Pea Soup
-  90: 'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=800&q=80', // Sweet Potato Tacos
-  91: 'https://images.unsplash.com/photo-1556761223-4c4282c73f77?auto=format&fit=crop&w=800&q=80', // Lemon Garlic Pasta
-  92: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=800&q=80', // Vegetable Biryani
-  93: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?auto=format&fit=crop&w=800&q=80', // Mediterranean Wrap
-  94: 'https://images.unsplash.com/photo-1476718406336-bb5a9690ee2a?auto=format&fit=crop&w=800&q=80', // Gazpacho
-  95: 'https://images.unsplash.com/photo-1498837167922-ddd27525d352?auto=format&fit=crop&w=800&q=80', // Asian Noodle Salad
-  96: 'https://images.unsplash.com/photo-1574484284002-952d92456975?auto=format&fit=crop&w=800&q=80', // Paneer Tikka Masala
-  97: 'https://images.unsplash.com/photo-1567613913497-8f023fc3d343?auto=format&fit=crop&w=800&q=80', // Veggie Pita Pocket
-  98: 'https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?auto=format&fit=crop&w=800&q=80', // Broccoli Pasta
-  99: 'https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?auto=format&fit=crop&w=800&q=80', // Stuffed Bell Peppers
-  100: 'https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=800&q=80', // Cauliflower Tacos
-  101: 'https://images.unsplash.com/photo-1613844237701-8f3664fc2eff?auto=format&fit=crop&w=800&q=80', // White Bean Soup
-  102: 'https://images.unsplash.com/photo-1572357243457-fc153742e7a5?auto=format&fit=crop&w=800&q=80', // Caprese Salad
-  103: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=800&q=80', // Vegetable Korma
-  104: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?auto=format&fit=crop&w=800&q=80', // BBQ Tofu Wrap
-  105: 'https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=800&q=80', // Sun-Dried Tomato Pasta
-  106: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=800&q=80', // Moroccan Tagine
-  107: 'https://images.unsplash.com/photo-1529704640551-eef9ba5d774a?auto=format&fit=crop&w=800&q=80', // Fish Tacos
-  108: 'https://images.unsplash.com/photo-1559737558-2f5a35f4523b?auto=format&fit=crop&w=800&q=80', // Shrimp Scampi
-  109: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=80', // Chicken Stir-Fry
-  110: 'https://images.unsplash.com/photo-1619301920463-a37f1764eb83?auto=format&fit=crop&w=800&q=80', // Beef Tacos
-  111: 'https://images.unsplash.com/photo-1581875271349-86c5c7dd58af?auto=format&fit=crop&w=800&q=80', // Grilled Chicken Salad
-  112: 'https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=800&q=80', // Salmon Pasta
-  113: 'https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=800&q=80', // BBQ Chicken
-  114: 'https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=800&q=80', // Beef Stir-Fry
-  115: 'https://images.unsplash.com/photo-1618040996337-56904b7850b9?auto=format&fit=crop&w=800&q=80', // Chicken Quesadilla
-  116: 'https://images.unsplash.com/photo-1528467279403-46af96c37ab3?auto=format&fit=crop&w=800&q=80', // Baked Cod
-  117: 'https://images.unsplash.com/photo-1612874742237-6526221588e3?auto=format&fit=crop&w=800&q=80', // Chicken Alfredo
-  118: 'https://images.unsplash.com/photo-1596685212227-d3a0b82d9a6d?auto=format&fit=crop&w=800&q=80', // Beef Burrito Bowl
-  119: 'https://images.unsplash.com/photo-1528467279403-46af96c37ab3?auto=format&fit=crop&w=800&q=80', // Honey Mustard Chicken
-  120: 'https://images.unsplash.com/photo-1546549032-9571cd6b27df?auto=format&fit=crop&w=800&q=80', // Tuna Pasta
-  121: 'https://images.unsplash.com/photo-1558030154-d3605e91d892?auto=format&fit=crop&w=800&q=80', // Teriyaki Chicken
-  122: 'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=800&q=80', // Steak Fajitas
-  123: 'https://images.unsplash.com/photo-1574672281340-6b2d260a4b72?auto=format&fit=crop&w=800&q=80', // Chicken Parmesan
-  124: 'https://images.unsplash.com/photo-1563379926898-05f4575a45d8?auto=format&fit=crop&w=800&q=80', // Meatball Pasta
-  125: 'https://images.unsplash.com/photo-1574672281340-6b2d260a4b72?auto=format&fit=crop&w=800&q=80', // Lemon Garlic Salmon
-  126: 'https://images.unsplash.com/photo-1574484284002-952d92456975?auto=format&fit=crop&w=800&q=80', // Chicken Curry
-  127: 'https://images.unsplash.com/photo-1555949258-eb67b1ef0ceb?auto=format&fit=crop&w=800&q=80', // Beef Stroganoff
-  128: 'https://images.unsplash.com/photo-1613409385222-3d0decb6742a?auto=format&fit=crop&w=800&q=80', // Chicken Fajitas
-  129: 'https://images.unsplash.com/photo-1596449212953-4ca53eca4822?auto=format&fit=crop&w=800&q=80', // Grilled Salmon
-  130: 'https://images.unsplash.com/photo-1629978444632-9f63ba0eff47?auto=format&fit=crop&w=800&q=80', // Chicken Noodle Soup
-  131: 'https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=800&q=80', // Beef and Broccoli
-  132: 'https://images.unsplash.com/photo-1538220856186-0be0e085984d?auto=format&fit=crop&w=800&q=80', // Scrambled Eggs with Chives
-  133: 'https://images.unsplash.com/photo-1585461276010-aff0f3dcd48f?auto=format&fit=crop&w=800&q=80', // Poached Eggs on Sourdough
-  134: 'https://images.unsplash.com/photo-1636743713732-125909a35dcc?auto=format&fit=crop&w=800&q=80', // Baked Eggs in Tomato Sauce
-  135: 'https://images.unsplash.com/photo-1510693206972-df098062cb71?auto=format&fit=crop&w=800&q=80', // Spanish Tortilla
-  136: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=800&q=80', // Huevos Rancheros
-  137: 'https://images.unsplash.com/photo-1550304952-9d1e3444f713?auto=format&fit=crop&w=800&q=80', // Tamagoyaki Japanese Rolled Omelette
-  138: 'https://images.unsplash.com/photo-1584278858944-7c34f1d94db0?auto=format&fit=crop&w=800&q=80', // Turkish Menemen
-  139: 'https://images.unsplash.com/photo-1597200284813-aeddf0653f54?auto=format&fit=crop&w=800&q=80', // Green Shakshuka
-  140: 'https://images.unsplash.com/photo-1620921575116-fb8902865f81?auto=format&fit=crop&w=800&q=80', // Crustless Quiche Lorraine
-  141: 'https://images.unsplash.com/photo-1567234669003-dce7a7a88821?auto=format&fit=crop&w=800&q=80', // Cloud Eggs
-  142: 'https://images.unsplash.com/photo-1584278858944-7c34f1d94db0?auto=format&fit=crop&w=800&q=80', // Egg White Veggie Scramble
-  143: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=800&q=80', // Korean Steamed Egg
-  144: 'https://images.unsplash.com/photo-1610015644714-60076be69b30?auto=format&fit=crop&w=800&q=80', // Baked Egg Avocado Cups
-  145: 'https://images.unsplash.com/photo-1567234669003-dce7a7a88821?auto=format&fit=crop&w=800&q=80', // Migas Tex-Mex
-  146: 'https://images.unsplash.com/photo-1525184782196-8e2ded604bf7?auto=format&fit=crop&w=800&q=80', // Egg Muffin Cups
-  147: 'https://images.unsplash.com/photo-1574782256243-69c18023f7b4?auto=format&fit=crop&w=800&q=80', // Eggs Benedict Florentine
-  148: 'https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=800&q=80', // Smoked Salmon Scramble
-  149: 'https://images.unsplash.com/photo-1620280641611-1b444bf9f9b6?auto=format&fit=crop&w=800&q=80', // Shakshuka with Feta
-  150: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=800&q=80', // Denver Omelette
-  151: 'https://images.unsplash.com/photo-1584278858944-7c34f1d94db0?auto=format&fit=crop&w=800&q=80', // Blueberry Pancakes
-  152: 'https://images.unsplash.com/photo-1550304939-ee0be36f980f?auto=format&fit=crop&w=800&q=80', // Japanese Souffl\u00e9 Pancakes
-  153: 'https://images.unsplash.com/photo-1611601184963-9d1de9b79ff3?auto=format&fit=crop&w=800&q=80', // Lemon Ricotta Pancakes
-  154: 'https://images.unsplash.com/photo-1575831967553-771b0db4f7c1?auto=format&fit=crop&w=800&q=80', // Protein Pancakes
-  155: 'https://images.unsplash.com/photo-1568051243858-533a607809a5?auto=format&fit=crop&w=800&q=80', // Belgian Waffles
-  156: 'https://images.unsplash.com/photo-1611601184963-9d1de9b79ff3?auto=format&fit=crop&w=800&q=80', // Dutch Baby Pancake
-  157: 'https://images.unsplash.com/photo-1584776296944-ab6fb57b0bdd?auto=format&fit=crop&w=800&q=80', // Pumpkin Spice Pancakes
-  158: 'https://images.unsplash.com/photo-1519676867240-f03562e64548?auto=format&fit=crop&w=800&q=80', // Buckwheat Crepes
-  159: 'https://images.unsplash.com/photo-1636743713732-125909a35dcc?auto=format&fit=crop&w=800&q=80', // Vegan Banana Pancakes
-  160: 'https://images.unsplash.com/photo-1627733810457-3c027bbb4dbb?auto=format&fit=crop&w=800&q=80', // Cornmeal Pancakes
-  161: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=800&q=80', // Chocolate Chip Pancakes
-  162: 'https://images.unsplash.com/photo-1528207776546-365bb710ee93?auto=format&fit=crop&w=800&q=80', // Savory Scallion Pancakes
-  163: 'https://images.unsplash.com/photo-1573057377537-dbb3a99ac4b9?auto=format&fit=crop&w=800&q=80', // Swedish Pannkakor
-  164: 'https://images.unsplash.com/photo-1636743713732-125909a35dcc?auto=format&fit=crop&w=800&q=80', // Steel Cut Oatmeal with Berries
-  165: 'https://images.unsplash.com/photo-1600891964099-c3c5bea1c5e0?auto=format&fit=crop&w=800&q=80', // Overnight Oats with Chia
-  166: 'https://images.unsplash.com/photo-1600891964599-f94d5765bae8?auto=format&fit=crop&w=800&q=80', // Bircher Muesli
-  167: 'https://images.unsplash.com/photo-1603189864361-0cc65b5ecd3a?auto=format&fit=crop&w=800&q=80', // Warm Quinoa Breakfast Bowl
-  168: 'https://images.unsplash.com/photo-1495214783159-3503fd1b572d?auto=format&fit=crop&w=800&q=80', // Baked Oatmeal with Apples
-  169: 'https://images.unsplash.com/photo-1584776296944-ab6fb57b0bdd?auto=format&fit=crop&w=800&q=80', // Savory Oatmeal with Egg
-  170: 'https://images.unsplash.com/photo-1559181567-c3190ca9959b?auto=format&fit=crop&w=800&q=80', // Congee Rice Porridge
-  171: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80', // Polenta Breakfast Bowl
-  172: 'https://images.unsplash.com/photo-1600891964599-f94d5765bae8?auto=format&fit=crop&w=800&q=80', // Homemade Granola
-  173: 'https://images.unsplash.com/photo-1543339308091-ef3c048c3ca0?auto=format&fit=crop&w=800&q=80', // Millet Porridge with Dates
-  174: 'https://images.unsplash.com/photo-1543339308091-ef3c048c3ca0?auto=format&fit=crop&w=800&q=80', // Teff Porridge
-  175: 'https://images.unsplash.com/photo-1590301157890-4810ed352733?auto=format&fit=crop&w=800&q=80', // Brown Rice Breakfast Bowl
-  176: 'https://images.unsplash.com/photo-1590301157890-4810ed352733?auto=format&fit=crop&w=800&q=80', // Acai Smoothie Bowl
-  177: 'https://images.unsplash.com/photo-1590301157890-4810ed352733?auto=format&fit=crop&w=800&q=80', // Pitaya Dragon Fruit Bowl
-  178: 'https://images.unsplash.com/photo-1494597564530-871f2b93ac55?auto=format&fit=crop&w=800&q=80', // Mango Turmeric Bowl
-  179: 'https://images.unsplash.com/photo-1590301157890-4810ed352733?auto=format&fit=crop&w=800&q=80', // Green Spirulina Bowl
-  180: 'https://images.unsplash.com/photo-1494597564530-871f2b93ac55?auto=format&fit=crop&w=800&q=80', // Peanut Butter Banana Bowl
-  181: 'https://images.unsplash.com/photo-1590301157890-4810ed352733?auto=format&fit=crop&w=800&q=80', // Wild Blueberry Smoothie Bowl
-  182: 'https://images.unsplash.com/photo-1494597564530-871f2b93ac55?auto=format&fit=crop&w=800&q=80', // Peach Ginger Bowl
-  183: 'https://images.unsplash.com/photo-1590301157890-4810ed352733?auto=format&fit=crop&w=800&q=80', // Watermelon Mint Bowl
-  184: 'https://images.unsplash.com/photo-1530554764233-e79e16c91d08?auto=format&fit=crop&w=800&q=80', // Smoked Salmon Toast
-  185: 'https://images.unsplash.com/photo-1482049016688-2d3e1b311543?auto=format&fit=crop&w=800&q=80', // Ricotta Honey Toast
-  186: 'https://images.unsplash.com/photo-1574782256243-69c18023f7b4?auto=format&fit=crop&w=800&q=80', // Smashed Peas and Feta Toast
-  187: 'https://images.unsplash.com/photo-1550304952-9d1e3444f713?auto=format&fit=crop&w=800&q=80', // Tahini and Banana Toast
-  188: 'https://images.unsplash.com/photo-1482049016688-2d3e1b311543?auto=format&fit=crop&w=800&q=80', // Brie and Fig Toast
-  189: 'https://images.unsplash.com/photo-1473093226795-af9932fe5856?auto=format&fit=crop&w=800&q=80', // Pesto and Cherry Tomato Toast
-  190: 'https://images.unsplash.com/photo-1547058881-aa0edd92aab3?auto=format&fit=crop&w=800&q=80', // Hummus and Roasted Pepper Toast
-  191: 'https://images.unsplash.com/photo-1567613913497-8f023fc3d343?auto=format&fit=crop&w=800&q=80', // Blueberry Muffins
-  192: 'https://images.unsplash.com/photo-1567234669003-dce7a7a88821?auto=format&fit=crop&w=800&q=80', // Banana Walnut Muffins
-  193: 'https://images.unsplash.com/photo-1550304952-9d1e3444f713?auto=format&fit=crop&w=800&q=80', // Lemon Poppy Seed Muffins
-  194: 'https://images.unsplash.com/photo-1482049016688-2d3e1b311543?auto=format&fit=crop&w=800&q=80', // Zucchini Bread
-  195: 'https://images.unsplash.com/photo-1574782256243-69c18023f7b4?auto=format&fit=crop&w=800&q=80', // Carrot Muffins
-  196: 'https://images.unsplash.com/photo-1567234669003-dce7a7a88821?auto=format&fit=crop&w=800&q=80', // Almond Flour Scones
-  197: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=800&q=80', // Cheese and Herb Scones
-  198: 'https://images.unsplash.com/photo-1530554764233-e79e16c91d08?auto=format&fit=crop&w=800&q=80', // Pumpkin Muffins
-  199: 'https://images.unsplash.com/photo-1600891964599-f94d5765bae8?auto=format&fit=crop&w=800&q=80', // Yogurt Parfait with Granola
-  200: 'https://images.unsplash.com/photo-1490474418585-ba9bad8fd0ea?auto=format&fit=crop&w=800&q=80', // Mixed Berry Parfait
-  201: 'https://images.unsplash.com/photo-1585461276010-aff0f3dcd48f?auto=format&fit=crop&w=800&q=80', // Coconut Yogurt Bowl
-  202: 'https://images.unsplash.com/photo-1494597564530-871f2b93ac55?auto=format&fit=crop&w=800&q=80', // Fresh Fruit with Honey and Mint
-  203: 'https://images.unsplash.com/photo-1505576633757-0ac1084af824?auto=format&fit=crop&w=800&q=80', // Nut Butter Power Bowl
-  204: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=800&q=80', // Indian Upma
-  205: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=800&q=80', // Poha Flattened Rice
-  206: 'https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?auto=format&fit=crop&w=800&q=80', // Aloo Paratha
-  207: 'https://images.unsplash.com/photo-1571091655789-405eb7a3a3a8?auto=format&fit=crop&w=800&q=80', // Mexican Chilaquiles
-  208: 'https://images.unsplash.com/photo-1574782256243-69c18023f7b4?auto=format&fit=crop&w=800&q=80', // Spanish Pan con Tomate
-  209: 'https://images.unsplash.com/photo-1558458601-0d69a278b8e6?auto=format&fit=crop&w=800&q=80', // Ful Medames
-  210: 'https://images.unsplash.com/photo-1600803907087-8d180f58d54c?auto=format&fit=crop&w=800&q=80', // Turkish Simit and Cheese
-  211: 'https://images.unsplash.com/photo-1600803907087-8d180f58d54c?auto=format&fit=crop&w=800&q=80', // New York Bagel and Lox
-  212: 'https://images.unsplash.com/photo-1482049016688-2d3e1b311543?auto=format&fit=crop&w=800&q=80', // Southern Biscuits and Gravy
-  213: 'https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?auto=format&fit=crop&w=800&q=80', // Ethiopian Fit-fit
-  214: 'https://images.unsplash.com/photo-1585461276010-aff0f3dcd48f?auto=format&fit=crop&w=800&q=80', // Turkey Sausage Scramble
-  215: 'https://images.unsplash.com/photo-1583182363039-59eac8609ab2?auto=format&fit=crop&w=800&q=80', // Tofu Scramble
-  216: 'https://images.unsplash.com/photo-1626700051175-6818013e1d4f?auto=format&fit=crop&w=800&q=80', // Black Bean Breakfast Burrito
-  217: 'https://images.unsplash.com/photo-1550304952-9d1e3444f713?auto=format&fit=crop&w=800&q=80', // Smoked Salmon Bagel Platter
-  218: 'https://images.unsplash.com/photo-1597200284813-aeddf0653f54?auto=format&fit=crop&w=800&q=80', // Protein Oatmeal with Almond Butter
-  219: 'https://images.unsplash.com/photo-1584278858944-7c34f1d94db0?auto=format&fit=crop&w=800&q=80', // Greek Yogurt Power Bowl
-  220: 'https://images.unsplash.com/photo-1636743713732-125909a35dcc?auto=format&fit=crop&w=800&q=80', // Chickpea Breakfast Scramble
-  221: 'https://images.unsplash.com/photo-1590301157890-4810ed352733?auto=format&fit=crop&w=800&q=80', // Edamame Breakfast Bowl
-  222: 'https://images.unsplash.com/photo-1597200284813-aeddf0653f54?auto=format&fit=crop&w=800&q=80', // Whey Protein Pancakes
-  223: 'https://images.unsplash.com/photo-1620921575116-fb8902865f81?auto=format&fit=crop&w=800&q=80', // Shakshuka with Chickpeas
-  224: 'https://images.unsplash.com/photo-1610015644714-60076be69b30?auto=format&fit=crop&w=800&q=80', // Overnight Oat Parfait
-  225: 'https://images.unsplash.com/photo-1605926637512-c8b131444a3b?auto=format&fit=crop&w=800&q=80', // Veggie Breakfast Hash
-  226: 'https://images.unsplash.com/photo-1517840901100-8179e982acb7?auto=format&fit=crop&w=800&q=80', // Peanut Butter and Jelly French Toast
-  227: 'https://images.unsplash.com/photo-1517840901100-8179e982acb7?auto=format&fit=crop&w=800&q=80', // Banana Bread French Toast
-  228: 'https://images.unsplash.com/photo-1589442305595-62647c1514f9?auto=format&fit=crop&w=800&q=80', // Quinoa Power Bowl
-  229: 'https://images.unsplash.com/photo-1606787366850-de6330128bfc?auto=format&fit=crop&w=800&q=80', // Croissant Egg Sandwich
-  230: 'https://images.unsplash.com/photo-1567234669003-dce7a7a88821?auto=format&fit=crop&w=800&q=80', // Masala Omelette
-  231: 'https://images.unsplash.com/photo-1584278858944-7c34f1d94db0?auto=format&fit=crop&w=800&q=80', // Coconut Flour Pancakes
-  232: 'https://images.unsplash.com/photo-1600891964599-f94d5765bae8?auto=format&fit=crop&w=800&q=80', // A\u00e7a\u00ed and Granola Bowl
-  233: 'https://images.unsplash.com/photo-1559181567-c3190ca9959b?auto=format&fit=crop&w=800&q=80', // Korean Gyeran Bap
-  234: 'https://images.unsplash.com/photo-1494597564530-871f2b93ac55?auto=format&fit=crop&w=800&q=80', // Kefir Berry Smoothie Bowl
-  235: 'https://images.unsplash.com/photo-1583182363039-59eac8609ab2?auto=format&fit=crop&w=800&q=80', // Avocado and Egg Breakfast Salad
-  236: 'https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&w=800&q=80', // Steak and Eggs
-  237: 'https://images.unsplash.com/photo-1525184782196-8e2ded604bf7?auto=format&fit=crop&w=800&q=80', // Fluffy Ricotta Hotcakes
-  238: 'https://images.unsplash.com/photo-1525184782196-8e2ded604bf7?auto=format&fit=crop&w=800&q=80', // Chia Seed Pudding Parfait
-  239: 'https://images.unsplash.com/photo-1600803907087-8d180f58d54c?auto=format&fit=crop&w=800&q=80', // Turkish Simit Breakfast
-  240: 'https://images.unsplash.com/photo-1627733810457-3c027bbb4dbb?auto=format&fit=crop&w=800&q=80', // Overnight Chia Oat Bowl
-  241: 'https://images.unsplash.com/photo-1576511053046-7e445c5b95af?auto=format&fit=crop&w=800&q=80', // Pulled Pork Breakfast Hash
-  242: 'https://images.unsplash.com/photo-1600891964099-c3c5bea1c5e0?auto=format&fit=crop&w=800&q=80', // Blueberry Overnight Oats
-  243: 'https://images.unsplash.com/photo-1636743713732-125909a35dcc?auto=format&fit=crop&w=800&q=80', // Warm Spiced Oatmeal
-  244: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=800&q=80', // Ricotta and Herb Omelette
-  245: 'https://images.unsplash.com/photo-1568051243858-533a607809a5?auto=format&fit=crop&w=800&q=80', // Apple Cinnamon Waffles
-  246: 'https://images.unsplash.com/photo-1490474418585-ba9bad8fd0ea?auto=format&fit=crop&w=800&q=80', // Cottage Cheese and Peach Bowl
-  247: 'https://images.unsplash.com/photo-1600803907087-8d180f58d54c?auto=format&fit=crop&w=800&q=80', // Full English Breakfast
-  248: 'https://images.unsplash.com/photo-1600803907087-8d180f58d54c?auto=format&fit=crop&w=800&q=80', // Bagel with Avocado and Egg
-  249: 'https://images.unsplash.com/photo-1590301157890-4810ed352733?auto=format&fit=crop&w=800&q=80', // Tropical Fruit Bowl
-  250: 'https://images.unsplash.com/photo-1567613913497-8f023fc3d343?auto=format&fit=crop&w=800&q=80', // Mushroom on Toast
-  251: 'https://images.unsplash.com/photo-1495214783159-3503fd1b572d?auto=format&fit=crop&w=800&q=80', // Warm Almond Milk Oatmeal
-  252: 'https://images.unsplash.com/photo-1510693206972-df098062cb71?auto=format&fit=crop&w=800&q=80', // Sweet Potato Egg Bake
-  253: 'https://images.unsplash.com/photo-1584776296944-ab6fb57b0bdd?auto=format&fit=crop&w=800&q=80', // Gingerbread Pancakes
-  254: 'https://images.unsplash.com/photo-1553530666-ba11a7da3888?auto=format&fit=crop&w=800&q=80', // Mango Lassi Smoothie
-  255: 'https://images.unsplash.com/photo-1611601184963-9d1de9b79ff3?auto=format&fit=crop&w=800&q=80', // Baked Apple Oatmeal
-  256: 'https://images.unsplash.com/photo-1575831967553-771b0db4f7c1?auto=format&fit=crop&w=800&q=80', // Egg and Spinach Cups
-  257: 'https://images.unsplash.com/photo-1538220856186-0be0e085984d?auto=format&fit=crop&w=800&q=80', // Banana and Peanut Butter Smoothie
-  258: 'https://images.unsplash.com/photo-1593001867410-22f463e592ed?auto=format&fit=crop&w=800&q=80', // Israeli Breakfast Plate
-  259: 'https://images.unsplash.com/photo-1517840901100-8179e982acb7?auto=format&fit=crop&w=800&q=80', // French Pain Perdu
-  260: 'https://images.unsplash.com/photo-1585461276010-aff0f3dcd48f?auto=format&fit=crop&w=800&q=80', // Matcha Pancakes
-  261: 'https://images.unsplash.com/photo-1494597564530-871f2b93ac55?auto=format&fit=crop&w=800&q=80', // Red Berry Smoothie Bowl
-  262: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?auto=format&fit=crop&w=800&q=80', // Bacon and Egg Wrap
-  263: 'https://images.unsplash.com/photo-1600891964099-c3c5bea1c5e0?auto=format&fit=crop&w=800&q=80', // Mango Coconut Overnight Oats
-  264: 'https://images.unsplash.com/photo-1636743713732-125909a35dcc?auto=format&fit=crop&w=800&q=80', // Shakshuka Verde
-  265: 'https://images.unsplash.com/photo-1574782256243-69c18023f7b4?auto=format&fit=crop&w=800&q=80', // Walnut and Date Toast
-  266: 'https://images.unsplash.com/photo-1590301157890-4810ed352733?auto=format&fit=crop&w=800&q=80', // Protein Smoothie Bowl
-  267: 'https://images.unsplash.com/photo-1584776296944-ab6fb57b0bdd?auto=format&fit=crop&w=800&q=80', // Citrus Chia Bowl
-  268: 'https://images.unsplash.com/photo-1620280641611-1b444bf9f9b6?auto=format&fit=crop&w=800&q=80', // Sweet Potato Pancakes
-  269: 'https://images.unsplash.com/photo-1544943910-4c1dc44aab44?auto=format&fit=crop&w=800&q=80', // Smoked Trout Breakfast Bowl
-  270: 'https://images.unsplash.com/photo-1550304952-9d1e3444f713?auto=format&fit=crop&w=800&q=80', // Corn and Black Bean Scramble
-  271: 'https://images.unsplash.com/photo-1553909489-cd47e0907980?auto=format&fit=crop&w=800&q=80', // Ham and Cheese Croissant
-  272: 'https://images.unsplash.com/photo-1494597564530-871f2b93ac55?auto=format&fit=crop&w=800&q=80', // Peanut Butter Oat Bowl
-  273: 'https://images.unsplash.com/photo-1631167490917-2a22c070573a?auto=format&fit=crop&w=800&q=80', // Waldorf Breakfast Salad
-  274: 'https://images.unsplash.com/photo-1584278858944-7c34f1d94db0?auto=format&fit=crop&w=800&q=80', // Egg and Veggie Galette
-  275: 'https://images.unsplash.com/photo-1596797038530-2c107229654b?auto=format&fit=crop&w=800&q=80', // Warm Turmeric Milk
-  276: 'https://images.unsplash.com/photo-1620921575116-fb8902865f81?auto=format&fit=crop&w=800&q=80', // Blueberry Ricotta Pancakes
-  277: 'https://images.unsplash.com/photo-1584278858944-7c34f1d94db0?auto=format&fit=crop&w=800&q=80', // Mango Chia Pudding
-  278: 'https://images.unsplash.com/photo-1590412200988-a436970781fa?auto=format&fit=crop&w=800&q=80', // Turkish Menemen
-  279: 'https://images.unsplash.com/photo-1600891964099-c3c5bea1c5e0?auto=format&fit=crop&w=800&q=80', // Overnight Oats with Peaches
-  280: 'https://images.unsplash.com/photo-1585461276010-aff0f3dcd48f?auto=format&fit=crop&w=800&q=80', // Israeli Shakshuka Verde
-  281: 'https://images.unsplash.com/photo-1541519227354-08fa5d50c44d?auto=format&fit=crop&w=800&q=80', // Avocado Egg White Toast
-  282: 'https://images.unsplash.com/photo-1590301157890-4810ed352733?auto=format&fit=crop&w=800&q=80', // Acai Smoothie Bowl
-  283: 'https://images.unsplash.com/photo-1567234669003-dce7a7a88821?auto=format&fit=crop&w=800&q=80', // Spinach Feta Croissant
-  284: 'https://images.unsplash.com/photo-1494597564530-871f2b93ac55?auto=format&fit=crop&w=800&q=80', // Khichdi Breakfast Bowl
-  285: 'https://images.unsplash.com/photo-1464500542410-1396074bf230?auto=format&fit=crop&w=800&q=80', // Egg and Chorizo Hash
-  286: 'https://images.unsplash.com/photo-1597200284813-aeddf0653f54?auto=format&fit=crop&w=800&q=80', // Greek Yogurt Parfait
-  287: 'https://images.unsplash.com/photo-1482049016688-2d3e1b311543?auto=format&fit=crop&w=800&q=80', // Deviled Egg Toast
-  288: 'https://images.unsplash.com/photo-1600891964099-c3c5bea1c5e0?auto=format&fit=crop&w=800&q=80', // Banana Almond Overnight Oats
-  289: 'https://images.unsplash.com/photo-1528207776546-365bb710ee93?auto=format&fit=crop&w=800&q=80', // Cottage Cheese Pancakes
-  290: 'https://images.unsplash.com/photo-1600891964099-c3c5bea1c5e0?auto=format&fit=crop&w=800&q=80', // Pistachio Tahini Overnight Oats
-  291: 'https://images.unsplash.com/photo-1530554764233-e79e16c91d08?auto=format&fit=crop&w=800&q=80', // Migas Tex-Mex
-  292: 'https://images.unsplash.com/photo-1610015644714-60076be69b30?auto=format&fit=crop&w=800&q=80', // Multigrain Porridge
-  293: 'https://images.unsplash.com/photo-1562376552-0d160a2f238d?auto=format&fit=crop&w=800&q=80', // Pumpkin Waffles
-  294: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=800&q=80', // Dal Paratha Breakfast
-  295: 'https://images.unsplash.com/photo-1550304939-ee0be36f980f?auto=format&fit=crop&w=800&q=80', // Mango Lassi Smoothie
-  296: 'https://images.unsplash.com/photo-1519676867240-f03562e64548?auto=format&fit=crop&w=800&q=80', // Ham and Cheese Crepes
-  297: 'https://images.unsplash.com/photo-1590301157890-4810ed352733?auto=format&fit=crop&w=800&q=80', // PB&J Overnight Oat Bowl
-  298: 'https://images.unsplash.com/photo-1584278858944-7c34f1d94db0?auto=format&fit=crop&w=800&q=80', // Shakshuka with Merguez
-  299: 'https://images.unsplash.com/photo-1600891964599-f94d5765bae8?auto=format&fit=crop&w=800&q=80', // Coconut Mango Bircher Muesli
-  300: 'https://images.unsplash.com/photo-1559181567-c3190ca9959b?auto=format&fit=crop&w=800&q=80', // Korean Tteok Breakfast
-  301: 'https://images.unsplash.com/photo-1600891964599-f94d5765bae8?auto=format&fit=crop&w=800&q=80', // Hazelnut Chocolate Granola Bowl
-  302: 'https://images.unsplash.com/photo-1611601184963-9d1de9b79ff3?auto=format&fit=crop&w=800&q=80', // Spanish Tortilla Slice
-  303: 'https://images.unsplash.com/photo-1636743713732-125909a35dcc?auto=format&fit=crop&w=800&q=80', // Protein Oat Pancakes
-  304: 'https://images.unsplash.com/photo-1600891964099-c3c5bea1c5e0?auto=format&fit=crop&w=800&q=80', // Matcha Latte Overnight Oats
-  305: 'https://images.unsplash.com/photo-1636743713732-125909a35dcc?auto=format&fit=crop&w=800&q=80', // Warm Semolina Porridge
-  306: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=800&q=80', // Egg Bhurji Indian Scramble
-  307: 'https://images.unsplash.com/photo-1505576633757-0ac1084af824?auto=format&fit=crop&w=800&q=80', // Caesar Salad
-  308: 'https://images.unsplash.com/photo-1505576633757-0ac1084af824?auto=format&fit=crop&w=800&q=80', // Ni\u00e7oise Salad
-  309: 'https://images.unsplash.com/photo-1572357243457-fc153742e7a5?auto=format&fit=crop&w=800&q=80', // Cobb Salad
-  310: 'https://images.unsplash.com/photo-1498837167922-ddd27525d352?auto=format&fit=crop&w=800&q=80', // Caprese Salad
-  311: 'https://images.unsplash.com/photo-1599020792689-9fde458e7e17?auto=format&fit=crop&w=800&q=80', // Thai Beef Salad
-  312: 'https://images.unsplash.com/photo-1581875271349-86c5c7dd58af?auto=format&fit=crop&w=800&q=80', // Vietnamese Noodle Salad
-  313: 'https://images.unsplash.com/photo-1599020792689-9fde458e7e17?auto=format&fit=crop&w=800&q=80', // Warm Roasted Vegetable Salad
-  314: 'https://images.unsplash.com/photo-1589442305595-62647c1514f9?auto=format&fit=crop&w=800&q=80', // Watermelon Feta Salad
-  315: 'https://images.unsplash.com/photo-1627764627459-ba29d6051fe0?auto=format&fit=crop&w=800&q=80', // Roasted Beet and Goat Cheese Salad
-  316: 'https://images.unsplash.com/photo-1627764627459-ba29d6051fe0?auto=format&fit=crop&w=800&q=80', // Lentil and Herb Salad
-  317: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=800&q=80', // Black Bean and Corn Salad
-  318: 'https://images.unsplash.com/photo-1607532941433-304659e8198a?auto=format&fit=crop&w=800&q=80', // Quinoa Tabbouleh
-  319: 'https://images.unsplash.com/photo-1603189864361-0cc65b5ecd3a?auto=format&fit=crop&w=800&q=80', // Fattoush Salad
-  320: 'https://images.unsplash.com/photo-1467453678174-768ec283a940?auto=format&fit=crop&w=800&q=80', // Panzanella Bread Salad
-  321: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=80', // Japanese Sesame Spinach
-  322: 'https://images.unsplash.com/photo-1585032226651-759b368d7246?auto=format&fit=crop&w=800&q=80', // Korean Japchae Salad
-  323: 'https://images.unsplash.com/photo-1511910849309-0dffb8785146?auto=format&fit=crop&w=800&q=80', // Grilled Peach and Arugula
-  324: 'https://images.unsplash.com/photo-1549248220-5811dc32cd5d?auto=format&fit=crop&w=800&q=80', // Apple and Blue Cheese Salad
-  325: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80', // Kale and Tahini Salad
-  326: 'https://images.unsplash.com/photo-1505576633757-0ac1084af824?auto=format&fit=crop&w=800&q=80', // Warm Farro and Mushroom Salad
-  327: 'https://images.unsplash.com/photo-1519624014191-508652cbd7b5?auto=format&fit=crop&w=800&q=80', // Soba Noodle Salad
-  328: 'https://images.unsplash.com/photo-1580959375944-abd7e991f971?auto=format&fit=crop&w=800&q=80', // Spicy Prawn Salad
-  329: 'https://images.unsplash.com/photo-1546549032-9571cd6b27df?auto=format&fit=crop&w=800&q=80', // Tuna and White Bean Salad
-  330: 'https://images.unsplash.com/photo-1570197571499-166b36435e9f?auto=format&fit=crop&w=800&q=80', // Grilled Halloumi Salad
-  331: 'https://images.unsplash.com/photo-1583182363039-59eac8609ab2?auto=format&fit=crop&w=800&q=80', // Roasted Sweet Potato Salad
-  332: 'https://images.unsplash.com/photo-1627764627459-ba29d6051fe0?auto=format&fit=crop&w=800&q=80', // Pomegranate and Walnut Salad
-  333: 'https://images.unsplash.com/photo-1572357243457-fc153742e7a5?auto=format&fit=crop&w=800&q=80', // Avocado and Grapefruit Salad
-  334: 'https://images.unsplash.com/photo-1631167490917-2a22c070573a?auto=format&fit=crop&w=800&q=80', // Waldorf Salad
-  335: 'https://images.unsplash.com/photo-1562565651-7d4948f339eb?auto=format&fit=crop&w=800&q=80', // Gado Gado Indonesian Salad
-  336: 'https://images.unsplash.com/photo-1589041611454-fd81bb39c3ba?auto=format&fit=crop&w=800&q=80', // Warm Duck Salad
-  337: 'https://images.unsplash.com/photo-1563379926898-05f4575a45d8?auto=format&fit=crop&w=800&q=80', // Asparagus and Poached Egg Salad
-  338: 'https://images.unsplash.com/photo-1581875271349-86c5c7dd58af?auto=format&fit=crop&w=800&q=80', // Corn and Roasted Pepper Salad
-  339: 'https://images.unsplash.com/photo-1583182363039-59eac8609ab2?auto=format&fit=crop&w=800&q=80', // Glass Noodle Salad
-  340: 'https://images.unsplash.com/photo-1589442305595-62647c1514f9?auto=format&fit=crop&w=800&q=80', // Charred Broccoli Salad
-  341: 'https://images.unsplash.com/photo-1505576633757-0ac1084af824?auto=format&fit=crop&w=800&q=80', // Roasted Cauliflower Salad
-  342: 'https://images.unsplash.com/photo-1652088079703-38f4a8d6b981?auto=format&fit=crop&w=800&q=80', // Roasted Tomato Soup
-  343: 'https://images.unsplash.com/photo-1670518045324-6c1f1942b2b8?auto=format&fit=crop&w=800&q=80', // French Onion Soup
-  344: 'https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=800&q=80', // Minestrone
-  345: 'https://images.unsplash.com/photo-1476718406336-bb5a9690ee2a?auto=format&fit=crop&w=800&q=80', // Spanish Gazpacho
-  346: 'https://images.unsplash.com/photo-1613844237701-8f3664fc2eff?auto=format&fit=crop&w=800&q=80', // Thai Coconut Soup
-  347: 'https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=800&q=80', // Vietnamese Pho Bo
-  348: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=800&q=80', // Indian Dal Soup
-  349: 'https://images.unsplash.com/photo-1629978444632-9f63ba0eff47?auto=format&fit=crop&w=800&q=80', // Moroccan Harira
-  350: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=800&q=80', // Turkish Red Lentil Soup
-  351: 'https://images.unsplash.com/photo-1652088079703-38f4a8d6b981?auto=format&fit=crop&w=800&q=80', // Roasted Butternut Squash Soup
-  352: 'https://images.unsplash.com/photo-1670518045324-6c1f1942b2b8?auto=format&fit=crop&w=800&q=80', // Cream of Mushroom Soup
-  353: 'https://images.unsplash.com/photo-1476718406336-bb5a9690ee2a?auto=format&fit=crop&w=800&q=80', // Hungarian Goulash Soup
-  354: 'https://images.unsplash.com/photo-1614549150185-8f85229ff291?auto=format&fit=crop&w=800&q=80', // New England Clam Chowder
-  355: 'https://images.unsplash.com/photo-1613844237701-8f3664fc2eff?auto=format&fit=crop&w=800&q=80', // Borscht
-  356: 'https://images.unsplash.com/photo-1629978444632-9f63ba0eff47?auto=format&fit=crop&w=800&q=80', // Portuguese Caldo Verde
-  357: 'https://images.unsplash.com/photo-1511910849309-0dffb8785146?auto=format&fit=crop&w=800&q=80', // Chinese Hot and Sour Soup
-  358: 'https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&w=800&q=80', // Wonton Soup
-  359: 'https://images.unsplash.com/photo-1652088079703-38f4a8d6b981?auto=format&fit=crop&w=800&q=80', // Greek Avgolemono
-  360: 'https://images.unsplash.com/photo-1548943487-a2e4e43b4853?auto=format&fit=crop&w=800&q=80', // Tom Kha Gai
-  361: 'https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=800&q=80', // Pozole Rojo
-  362: 'https://images.unsplash.com/photo-1670518045324-6c1f1942b2b8?auto=format&fit=crop&w=800&q=80', // Split Pea Soup
-  363: 'https://images.unsplash.com/photo-1476718406336-bb5a9690ee2a?auto=format&fit=crop&w=800&q=80', // Scotch Broth
-  364: 'https://images.unsplash.com/photo-1613844237701-8f3664fc2eff?auto=format&fit=crop&w=800&q=80', // Cock-a-Leekie Soup
-  365: 'https://images.unsplash.com/photo-1550304952-9d1e3444f713?auto=format&fit=crop&w=800&q=80', // Club Sandwich
-  366: 'https://images.unsplash.com/photo-1567234669003-dce7a7a88821?auto=format&fit=crop&w=800&q=80', // BLT Sandwich
-  367: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=800&q=80', // Croque Monsieur
-  368: 'https://images.unsplash.com/photo-1562565651-7d4948f339eb?auto=format&fit=crop&w=800&q=80', // Vietnamese B\u00e1nh M\u00ec
-  369: 'https://images.unsplash.com/photo-1529006557810-274b9b2fc783?auto=format&fit=crop&w=800&q=80', // Falafel Pita Wrap
-  370: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?auto=format&fit=crop&w=800&q=80', // Greek Gyro Wrap
-  371: 'https://images.unsplash.com/photo-1553909489-cd47e0907980?auto=format&fit=crop&w=800&q=80', // Cuban Sandwich
-  372: 'https://images.unsplash.com/photo-1502364271109-0a9a75a2a9df?auto=format&fit=crop&w=800&q=80', // Indian Kati Roll
-  373: 'https://images.unsplash.com/photo-1574782256243-69c18023f7b4?auto=format&fit=crop&w=800&q=80', // Tuna Melt Sandwich
-  374: 'https://images.unsplash.com/photo-1567613913497-8f023fc3d343?auto=format&fit=crop&w=800&q=80', // Grilled Cheese Deluxe
-  375: 'https://images.unsplash.com/photo-1606756790138-261d2b21cd75?auto=format&fit=crop&w=800&q=80', // Korean Bulgogi Sandwich
-  376: 'https://images.unsplash.com/photo-1589442305595-62647c1514f9?auto=format&fit=crop&w=800&q=80', // Japanese Egg Salad Sandwich
-  377: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?auto=format&fit=crop&w=800&q=80', // Smoked Turkey Cranberry Wrap
-  378: 'https://images.unsplash.com/photo-1600803907087-8d180f58d54c?auto=format&fit=crop&w=800&q=80', // Veggie Hummus Wrap
-  379: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?auto=format&fit=crop&w=800&q=80', // Lebanese Chicken Wrap
-  380: 'https://images.unsplash.com/photo-1574782256243-69c18023f7b4?auto=format&fit=crop&w=800&q=80', // Pulled Pork Sandwich
-  381: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=800&q=80', // Egg Salad Sandwich
-  382: 'https://images.unsplash.com/photo-1530554764233-e79e16c91d08?auto=format&fit=crop&w=800&q=80', // Italian Sub
-  383: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=800&q=80', // Caprese Panini
-  384: 'https://images.unsplash.com/photo-1553909489-cd47e0907980?auto=format&fit=crop&w=800&q=80', // Reuben Sandwich
-  385: 'https://images.unsplash.com/photo-1528467279403-46af96c37ab3?auto=format&fit=crop&w=800&q=80', // Salmon Poke Bowl
-  386: 'https://images.unsplash.com/photo-1553163147-622ab57be1c7?auto=format&fit=crop&w=800&q=80', // Chicken Bibimbap
-  387: 'https://images.unsplash.com/photo-1529006557810-274b9b2fc783?auto=format&fit=crop&w=800&q=80', // Falafel Grain Bowl
-  388: 'https://images.unsplash.com/photo-1580288020976-854d44d4c54f?auto=format&fit=crop&w=800&q=80', // Teriyaki Chicken Bowl
-  389: 'https://images.unsplash.com/photo-1603189864361-0cc65b5ecd3a?auto=format&fit=crop&w=800&q=80', // Mediterranean Mezze Bowl
-  390: 'https://images.unsplash.com/photo-1585032226651-759b368d7246?auto=format&fit=crop&w=800&q=80', // Thai Peanut Noodle Bowl
-  391: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80', // Miso Glazed Tofu Bowl
-  392: 'https://images.unsplash.com/photo-1505576633757-0ac1084af824?auto=format&fit=crop&w=800&q=80', // Green Goddess Bowl
-  393: 'https://images.unsplash.com/photo-1498837167922-ddd27525d352?auto=format&fit=crop&w=800&q=80', // Sweet Potato Tahini Bowl
-  394: 'https://images.unsplash.com/photo-1599020792689-9fde458e7e17?auto=format&fit=crop&w=800&q=80', // Power Protein Bowl
-  395: 'https://images.unsplash.com/photo-1627764627459-ba29d6051fe0?auto=format&fit=crop&w=800&q=80', // Korean Kimchi Bowl
-  396: 'https://images.unsplash.com/photo-1607532941433-304659e8198a?auto=format&fit=crop&w=800&q=80', // Lebanese Tabbouleh Bowl
-  397: 'https://images.unsplash.com/photo-1570197571499-166b36435e9f?auto=format&fit=crop&w=800&q=80', // Moroccan Couscous Bowl
-  398: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80', // Peruvian Quinoa Bowl
-  399: 'https://images.unsplash.com/photo-1473093226795-af9932fe5856?auto=format&fit=crop&w=800&q=80', // Pesto Pasta Grain Bowl
-  400: 'https://images.unsplash.com/photo-1627764627459-ba29d6051fe0?auto=format&fit=crop&w=800&q=80', // Buddha Bowl
-  401: 'https://images.unsplash.com/photo-1550304952-9d1e3444f713?auto=format&fit=crop&w=800&q=80', // Spinach and Ricotta Quiche
-  402: 'https://images.unsplash.com/photo-1618040996337-56904b7850b9?auto=format&fit=crop&w=800&q=80', // Corn and Cheese Quesadilla
-  403: 'https://images.unsplash.com/photo-1564834724105-918b73d1b9e0?auto=format&fit=crop&w=800&q=80', // Stuffed Bell Peppers
-  404: 'https://images.unsplash.com/photo-1553621042-f6e147245754?auto=format&fit=crop&w=800&q=80', // Rice Paper Spring Rolls
-  405: 'https://images.unsplash.com/photo-1582450871972-ab5ca641643d?auto=format&fit=crop&w=800&q=80', // Steamed Vegetable Dumplings
-  406: 'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=800&q=80', // Corn and Avocado Tostadas
-  407: 'https://images.unsplash.com/photo-1559737558-2f5a35f4523b?auto=format&fit=crop&w=800&q=80', // Ceviche Light
-  408: 'https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?auto=format&fit=crop&w=800&q=80', // Eggplant Rollatini
-  409: 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=800&q=80', // Caramelised Onion Flatbread
-  410: 'https://images.unsplash.com/photo-1567234669003-dce7a7a88821?auto=format&fit=crop&w=800&q=80', // Spanakopita Triangles
-  411: 'https://images.unsplash.com/photo-1631167490917-2a22c070573a?auto=format&fit=crop&w=800&q=80', // Lebanese Fattoush
-  412: 'https://images.unsplash.com/photo-1599020792689-9fde458e7e17?auto=format&fit=crop&w=800&q=80', // Egyptian Kushari
-  413: 'https://images.unsplash.com/photo-1572357243457-fc153742e7a5?auto=format&fit=crop&w=800&q=80', // Syrian Mjaddara
-  414: 'https://images.unsplash.com/photo-1562565651-7d4948f339eb?auto=format&fit=crop&w=800&q=80', // Malaysian Nasi Lemak
-  415: 'https://images.unsplash.com/photo-1596449212953-4ca53eca4822?auto=format&fit=crop&w=800&q=80', // Singapore Chicken Rice
-  416: 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=800&q=80', // Afghan Bolani Flatbread
-  417: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80', // Vietnamese Bun Bowl
-  418: 'https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=800&q=80', // Thai Larb Salad
-  419: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=80', // Filipino Adobo Lunch
-  420: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Greek Gigantes Plaki
-  421: 'https://images.unsplash.com/photo-1597200284813-aeddf0653f54?auto=format&fit=crop&w=800&q=80', // Korean Kimchi Pancake
-  422: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=800&q=80', // Japanese Onigiri
-  423: 'https://images.unsplash.com/photo-1574484284002-952d92456975?auto=format&fit=crop&w=800&q=80', // Pakistani Daal Chana
-  424: 'https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=800&q=80', // Peruvian Lomo Saltado
-  425: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?auto=format&fit=crop&w=800&q=80', // Turkish Lahmacun Wrap
-  426: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=800&q=80', // Uzbek Plov Light
-  427: 'https://images.unsplash.com/photo-1467453678174-768ec283a940?auto=format&fit=crop&w=800&q=80', // Roasted Beet and Goat Cheese Salad
-  428: 'https://images.unsplash.com/photo-1581875271349-86c5c7dd58af?auto=format&fit=crop&w=800&q=80', // Thai Basil Rice Bowl
-  429: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?auto=format&fit=crop&w=800&q=80', // Gyro Pita Wrap
-  430: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=800&q=80', // Vegetable Ramen
-  431: 'https://images.unsplash.com/photo-1627764627459-ba29d6051fe0?auto=format&fit=crop&w=800&q=80', // Ni\u00e7oise Salad
-  432: 'https://images.unsplash.com/photo-1553163147-622ab57be1c7?auto=format&fit=crop&w=800&q=80', // Korean Bibimbap
-  433: 'https://images.unsplash.com/photo-1583182363039-59eac8609ab2?auto=format&fit=crop&w=800&q=80', // Kale Caesar Salad
-  434: 'https://images.unsplash.com/photo-1529006557810-274b9b2fc783?auto=format&fit=crop&w=800&q=80', // Falafel Wrap
-  435: 'https://images.unsplash.com/photo-1548943487-a2e4e43b4853?auto=format&fit=crop&w=800&q=80', // Tom Kha Soup
-  436: 'https://images.unsplash.com/photo-1505576633757-0ac1084af824?auto=format&fit=crop&w=800&q=80', // Watermelon Feta Mint Salad
-  437: 'https://images.unsplash.com/photo-1546964124-0cce460f38ef?auto=format&fit=crop&w=800&q=80', // Vietnamese Lemongrass Pork
-  438: 'https://images.unsplash.com/photo-1589442305595-62647c1514f9?auto=format&fit=crop&w=800&q=80', // Lentil Tabbouleh
-  439: 'https://images.unsplash.com/photo-1609226127613-55143d781e69?auto=format&fit=crop&w=800&q=80', // Chicken Mulligatawny
-  440: 'https://images.unsplash.com/photo-1603189864361-0cc65b5ecd3a?auto=format&fit=crop&w=800&q=80', // Roasted Vegetable Grain Bowl
-  441: 'https://images.unsplash.com/photo-1574782256243-69c18023f7b4?auto=format&fit=crop&w=800&q=80', // Banh Mi Tofu
-  442: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80', // Chinese Mapo Tofu Lunch
-  443: 'https://images.unsplash.com/photo-1549248220-5811dc32cd5d?auto=format&fit=crop&w=800&q=80', // Panzanella Bread Salad
-  444: 'https://images.unsplash.com/photo-1629978444632-9f63ba0eff47?auto=format&fit=crop&w=800&q=80', // Leek and Potato Soup
-  445: 'https://images.unsplash.com/photo-1589041611454-fd81bb39c3ba?auto=format&fit=crop&w=800&q=80', // Thai Mango Salad
-  446: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?auto=format&fit=crop&w=800&q=80', // Mediterranean Grilled Chicken Wrap
-  447: 'https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?auto=format&fit=crop&w=800&q=80', // Ethiopian Misir Wot
-  448: 'https://images.unsplash.com/photo-1498837167922-ddd27525d352?auto=format&fit=crop&w=800&q=80', // Israeli Chopped Salad
-  449: 'https://images.unsplash.com/photo-1652088079703-38f4a8d6b981?auto=format&fit=crop&w=800&q=80', // Tuscan White Bean Soup
-  450: 'https://images.unsplash.com/photo-1505576633757-0ac1084af824?auto=format&fit=crop&w=800&q=80', // Shrimp Avocado Salad
-  451: 'https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=800&q=80', // Moroccan Lemon Chicken
-  452: 'https://images.unsplash.com/photo-1505576633757-0ac1084af824?auto=format&fit=crop&w=800&q=80', // Waldorf Chicken Salad
-  453: 'https://images.unsplash.com/photo-1529704640551-eef9ba5d774a?auto=format&fit=crop&w=800&q=80', // Sopa de Lima
-  454: 'https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=800&q=80', // Broccolini with Almonds
-  455: 'https://images.unsplash.com/photo-1576511053046-7e445c5b95af?auto=format&fit=crop&w=800&q=80', // Schnitzel Sandwich
-  456: 'https://images.unsplash.com/photo-1572357243457-fc153742e7a5?auto=format&fit=crop&w=800&q=80', // Thai Green Papaya Salad
-  457: 'https://images.unsplash.com/photo-1599020792689-9fde458e7e17?auto=format&fit=crop&w=800&q=80', // Roasted Pepper Couscous
-  458: 'https://images.unsplash.com/photo-1670518045324-6c1f1942b2b8?auto=format&fit=crop&w=800&q=80', // Ribollita Tuscan Soup
-  459: 'https://images.unsplash.com/photo-1570197571499-166b36435e9f?auto=format&fit=crop&w=800&q=80', // Thai Cucumber Noodle Salad
-  460: 'https://images.unsplash.com/photo-1550304952-9d1e3444f713?auto=format&fit=crop&w=800&q=80', // Croque Monsieur
-  461: 'https://images.unsplash.com/photo-1627764627459-ba29d6051fe0?auto=format&fit=crop&w=800&q=80', // Freekeh Pomegranate Salad
-  462: 'https://images.unsplash.com/photo-1562565651-7d4948f339eb?auto=format&fit=crop&w=800&q=80', // Malaysian Laksa
-  463: 'https://images.unsplash.com/photo-1581875271349-86c5c7dd58af?auto=format&fit=crop&w=800&q=80', // Caesar Salad with Grilled Salmon
-  464: 'https://images.unsplash.com/photo-1567234669003-dce7a7a88821?auto=format&fit=crop&w=800&q=80', // Muffuletta Sandwich
-  465: 'https://images.unsplash.com/photo-1564834724105-918b73d1b9e0?auto=format&fit=crop&w=800&q=80', // Hot and Sour Soup
-  466: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=800&q=80', // Roasted Carrot and Chickpea Salad
-  467: 'https://images.unsplash.com/photo-1579366948929-444eb79881eb?auto=format&fit=crop&w=800&q=80', // Bulgogi Beef Bowl
-  468: 'https://images.unsplash.com/photo-1607532941433-304659e8198a?auto=format&fit=crop&w=800&q=80', // Raw Zucchini Ribbon Salad
-  469: 'https://images.unsplash.com/photo-1529006557810-274b9b2fc783?auto=format&fit=crop&w=800&q=80', // Shawarma Rice Bowl
-  470: 'https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=800&q=80', // Minestrone Primavera
-  471: 'https://images.unsplash.com/photo-1603189864361-0cc65b5ecd3a?auto=format&fit=crop&w=800&q=80', // Buckwheat Noodle Salad
-  472: 'https://images.unsplash.com/photo-1619301920463-a37f1764eb83?auto=format&fit=crop&w=800&q=80', // Torta Mexicana
-  473: 'https://images.unsplash.com/photo-1583182363039-59eac8609ab2?auto=format&fit=crop&w=800&q=80', // Chinese Salt and Pepper Tofu
-  474: 'https://images.unsplash.com/photo-1498579150354-977475b7ea0b?auto=format&fit=crop&w=800&q=80', // Heirloom Tomato Burrata
-  475: 'https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?auto=format&fit=crop&w=800&q=80', // Khao Soi Thai Curry Noodle
-  476: 'https://images.unsplash.com/photo-1631167490917-2a22c070573a?auto=format&fit=crop&w=800&q=80', // Arugula Prosciutto Fig Salad
-  477: 'https://images.unsplash.com/photo-1553909489-cd47e0907980?auto=format&fit=crop&w=800&q=80', // Sabich Israeli Sandwich
-  478: 'https://images.unsplash.com/photo-1562565651-7d4948f339eb?auto=format&fit=crop&w=800&q=80', // Indonesian Gado Gado
-  479: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=800&q=80', // Caprese Sandwich
-  480: 'https://images.unsplash.com/photo-1476718406336-bb5a9690ee2a?auto=format&fit=crop&w=800&q=80', // Red Bean and Rice Soup
-  481: 'https://images.unsplash.com/photo-1467453678174-768ec283a940?auto=format&fit=crop&w=800&q=80', // Zucchini and Halloumi Salad
-  482: 'https://images.unsplash.com/photo-1567613913497-8f023fc3d343?auto=format&fit=crop&w=800&q=80', // Smoked Salmon Bagel
-  483: 'https://images.unsplash.com/photo-1589442305595-62647c1514f9?auto=format&fit=crop&w=800&q=80', // Chinese Steamed Tofu
-  484: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80', // Roasted Tomato Lentil Salad
-  485: 'https://images.unsplash.com/photo-1550304952-9d1e3444f713?auto=format&fit=crop&w=800&q=80', // Croque Madame
-  486: 'https://images.unsplash.com/photo-1574484284002-952d92456975?auto=format&fit=crop&w=800&q=80', // Bangladeshi Dal Shorba
-  487: 'https://images.unsplash.com/photo-1583182363039-59eac8609ab2?auto=format&fit=crop&w=800&q=80', // Corn and Avocado Salad
-  488: 'https://images.unsplash.com/photo-1580959375944-abd7e991f971?auto=format&fit=crop&w=800&q=80', // Chowder Clam New England
-  489: 'https://images.unsplash.com/photo-1505576633757-0ac1084af824?auto=format&fit=crop&w=800&q=80', // Spinach Strawberry Salad
-  490: 'https://images.unsplash.com/photo-1596685212227-d3a0b82d9a6d?auto=format&fit=crop&w=800&q=80', // Elote Street Corn Taco
-  491: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=800&q=80', // Saag Paneer Lunch
-  492: 'https://images.unsplash.com/photo-1599020792689-9fde458e7e17?auto=format&fit=crop&w=800&q=80', // Chickpea Cucumber Feta Salad
-  493: 'https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=800&q=80', // Pho Chay Vegetarian
-  494: 'https://images.unsplash.com/photo-1589442305595-62647c1514f9?auto=format&fit=crop&w=800&q=80', // Brown Rice Power Bowl
-  495: 'https://images.unsplash.com/photo-1574782256243-69c18023f7b4?auto=format&fit=crop&w=800&q=80', // Tuna Melt Sandwich
-  496: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80', // Japanese Teriyaki Bowl
-  497: 'https://images.unsplash.com/photo-1627764627459-ba29d6051fe0?auto=format&fit=crop&w=800&q=80', // Greek Beet Salad
-  498: 'https://images.unsplash.com/photo-1530554764233-e79e16c91d08?auto=format&fit=crop&w=800&q=80', // Vietnamese Tofu Banh Mi
-  499: 'https://images.unsplash.com/photo-1613409385222-3d0decb6742a?auto=format&fit=crop&w=800&q=80', // Pozole Rojo
-  500: 'https://images.unsplash.com/photo-1501436513145-30f24e19fcc8?auto=format&fit=crop&w=800&q=80', // Mozzarella Peach Prosciutto
-  501: 'https://images.unsplash.com/photo-1552611052-33e04de081de?auto=format&fit=crop&w=800&q=80', // Japchae Korean Glass Noodles
-  502: 'https://images.unsplash.com/photo-1613844237701-8f3664fc2eff?auto=format&fit=crop&w=800&q=80', // Pea and Mint Soup
-  503: 'https://images.unsplash.com/photo-1562565651-7d4948f339eb?auto=format&fit=crop&w=800&q=80', // B\u00e1nh M\u00ec Th\u1ecbt N\u01b0\u1edbng
-  504: 'https://images.unsplash.com/photo-1629978444632-9f63ba0eff47?auto=format&fit=crop&w=800&q=80', // French Onion Soup
-  505: 'https://images.unsplash.com/photo-1572246538688-3f326dca3951?auto=format&fit=crop&w=800&q=80', // Antipasto Plate
-  506: 'https://images.unsplash.com/photo-1529006557810-274b9b2fc783?auto=format&fit=crop&w=800&q=80', // Cauliflower Shawarma Wrap
-  507: 'https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=800&q=80', // Spaghetti Carbonara
-  508: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=800&q=80', // Margherita Pizza
-  509: 'https://images.unsplash.com/photo-1606756790138-261d2b21cd75?auto=format&fit=crop&w=800&q=80', // Osso Buco
-  510: 'https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=800&q=80', // Cacio e Pepe
-  511: 'https://images.unsplash.com/photo-1528467279403-46af96c37ab3?auto=format&fit=crop&w=800&q=80', // Chicken Milanese
-  512: 'https://images.unsplash.com/photo-1473093226795-af9932fe5856?auto=format&fit=crop&w=800&q=80', // Pesto Genovese with Trofie
-  513: 'https://images.unsplash.com/photo-1614549150185-8f85229ff291?auto=format&fit=crop&w=800&q=80', // Shrimp Fra Diavolo
-  514: 'https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=800&q=80', // Amatriciana
-  515: 'https://images.unsplash.com/photo-1572453800999-e8d2d1589b7c?auto=format&fit=crop&w=800&q=80', // Eggplant Parmigiana
-  516: 'https://images.unsplash.com/photo-1603073163308-9654c3fb70b5?auto=format&fit=crop&w=800&q=80', // Bistecca Fiorentina
-  517: 'https://images.unsplash.com/photo-1556761223-4c4282c73f77?auto=format&fit=crop&w=800&q=80', // Seafood Linguine
-  518: 'https://images.unsplash.com/photo-1563379926898-05f4575a45d8?auto=format&fit=crop&w=800&q=80', // Lamb Rag\u00f9 Tagliatelle
-  519: 'https://images.unsplash.com/photo-1476124369491-e7addf5db371?auto=format&fit=crop&w=800&q=80', // Risotto ai Funghi
-  520: 'https://images.unsplash.com/photo-1606756790138-261d2b21cd75?auto=format&fit=crop&w=800&q=80', // Saltimbocca alla Romana
-  521: 'https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?auto=format&fit=crop&w=800&q=80', // Crab Pasta
-  522: 'https://images.unsplash.com/photo-1652088079703-38f4a8d6b981?auto=format&fit=crop&w=800&q=80', // Ribollita
-  523: 'https://images.unsplash.com/photo-1558030154-d3605e91d892?auto=format&fit=crop&w=800&q=80', // Pollo alla Cacciatora
-  524: 'https://images.unsplash.com/photo-1551892374-ecf8754cf8b0?auto=format&fit=crop&w=800&q=80', // Gnocchi Sorrentina
-  525: 'https://images.unsplash.com/photo-1559737558-2f5a35f4523b?auto=format&fit=crop&w=800&q=80', // Grilled Calamari
-  526: 'https://images.unsplash.com/photo-1575980967953-d812d957dca5?auto=format&fit=crop&w=800&q=80', // Tiella di Riso e Patate
-  527: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800&q=80', // Roast Lamb with Rosemary
-  528: 'https://images.unsplash.com/photo-1591454550842-d56fb54f7a52?auto=format&fit=crop&w=800&q=80', // Fagioli all'Uccelletto
-  529: 'https://images.unsplash.com/photo-1606756790138-261d2b21cd75?auto=format&fit=crop&w=800&q=80', // Porchetta
-  530: 'https://images.unsplash.com/photo-1556761223-4c4282c73f77?auto=format&fit=crop&w=800&q=80', // Nduja Pasta
-  531: 'https://images.unsplash.com/photo-1574484284002-952d92456975?auto=format&fit=crop&w=800&q=80', // Butter Chicken
-  532: 'https://images.unsplash.com/photo-1579366948929-444eb79881eb?auto=format&fit=crop&w=800&q=80', // Lamb Rogan Josh
-  533: 'https://images.unsplash.com/photo-1574484284002-952d92456975?auto=format&fit=crop&w=800&q=80', // Dal Makhani
-  534: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=800&q=80', // Chicken Tikka Masala
-  535: 'https://images.unsplash.com/photo-1574484284002-952d92456975?auto=format&fit=crop&w=800&q=80', // Chana Masala
-  536: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=800&q=80', // Prawn Masala
-  537: 'https://images.unsplash.com/photo-1574484284002-952d92456975?auto=format&fit=crop&w=800&q=80', // Saag Gosht
-  538: 'https://images.unsplash.com/photo-1596797038530-2c107229654b?auto=format&fit=crop&w=800&q=80', // Aloo Gobi
-  539: 'https://images.unsplash.com/photo-1574672281340-6b2d260a4b72?auto=format&fit=crop&w=800&q=80', // Fish Curry Goan Style
-  540: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=800&q=80', // Chole Bhature
-  541: 'https://images.unsplash.com/photo-1574484284002-952d92456975?auto=format&fit=crop&w=800&q=80', // Korma Chicken
-  542: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=800&q=80', // Mutton Biryani
-  543: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=800&q=80', // Paneer Tikka Masala
-  544: 'https://images.unsplash.com/photo-1574484284002-952d92456975?auto=format&fit=crop&w=800&q=80', // Vindaloo Pork
-  545: 'https://images.unsplash.com/photo-1596449212953-4ca53eca4822?auto=format&fit=crop&w=800&q=80', // Kerala Fish Molee
-  546: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=800&q=80', // Rajma
-  547: 'https://images.unsplash.com/photo-1574484284002-952d92456975?auto=format&fit=crop&w=800&q=80', // Dhansak
-  548: 'https://images.unsplash.com/photo-1574672281340-6b2d260a4b72?auto=format&fit=crop&w=800&q=80', // Chicken Chettinad
-  549: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800&q=80', // Lamb Seekh Kebab Dinner
-  550: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=800&q=80', // Bhindi Masala
-  551: 'https://images.unsplash.com/photo-1559314809-0d155014e29e?auto=format&fit=crop&w=800&q=80', // Pad Thai
-  552: 'https://images.unsplash.com/photo-1580288020976-854d44d4c54f?auto=format&fit=crop&w=800&q=80', // Peking Duck
-  553: 'https://images.unsplash.com/photo-1596449212953-4ca53eca4822?auto=format&fit=crop&w=800&q=80', // Kung Pao Chicken
-  554: 'https://images.unsplash.com/photo-1609226127613-55143d781e69?auto=format&fit=crop&w=800&q=80', // Japanese Chicken Karaage
-  555: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=800&q=80', // Dan Dan Noodles
-  556: 'https://images.unsplash.com/photo-1559181567-c3190ca9959b?auto=format&fit=crop&w=800&q=80', // Singapore Chili Crab
-  557: 'https://images.unsplash.com/photo-1609658938891-32dd655106af?auto=format&fit=crop&w=800&q=80', // Tonkatsu
-  558: 'https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=800&q=80', // Beef Pho
-  559: 'https://images.unsplash.com/photo-1627764627459-ba29d6051fe0?auto=format&fit=crop&w=800&q=80', // Mapo Tofu
-  560: 'https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=800&q=80', // Chicken Teriyaki
-  561: 'https://images.unsplash.com/photo-1552611052-33e04de081de?auto=format&fit=crop&w=800&q=80', // Char Kway Teow
-  562: 'https://images.unsplash.com/photo-1606756790138-261d2b21cd75?auto=format&fit=crop&w=800&q=80', // Bulgogi Korean BBQ
-  563: 'https://images.unsplash.com/photo-1562565651-7d4948f339eb?auto=format&fit=crop&w=800&q=80', // Laksa Lemak
-  564: 'https://images.unsplash.com/photo-1528467279403-46af96c37ab3?auto=format&fit=crop&w=800&q=80', // Hainanese Chicken Rice
-  565: 'https://images.unsplash.com/photo-1548943487-a2e4e43b4853?auto=format&fit=crop&w=800&q=80', // Tom Yum Soup
-  566: 'https://images.unsplash.com/photo-1603073163308-9654c3fb70b5?auto=format&fit=crop&w=800&q=80', // Braised Pork Belly
-  567: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=800&q=80', // Ramen Tonkotsu
-  568: 'https://images.unsplash.com/photo-1553163147-622ab57be1c7?auto=format&fit=crop&w=800&q=80', // Bibim Guksu
-  569: 'https://images.unsplash.com/photo-1546964124-0cce460f38ef?auto=format&fit=crop&w=800&q=80', // Thai Basil Pork
-  570: 'https://images.unsplash.com/photo-1562565651-7d4948f339eb?auto=format&fit=crop&w=800&q=80', // Laksa Asam
-  571: 'https://images.unsplash.com/photo-1558030154-d3605e91d892?auto=format&fit=crop&w=800&q=80', // Yakitori Chicken
-  572: 'https://images.unsplash.com/photo-1519624014191-508652cbd7b5?auto=format&fit=crop&w=800&q=80', // Soba Noodles with Duck
-  573: 'https://images.unsplash.com/photo-1553163147-622ab57be1c7?auto=format&fit=crop&w=800&q=80', // Korean Sundubu Jjigae
-  574: 'https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&w=800&q=80', // Vietnamese Shaking Beef
-  575: 'https://images.unsplash.com/photo-1607301405418-780ee5e6dd10?auto=format&fit=crop&w=800&q=80', // Wonton Noodle Soup
-  576: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=800&q=80', // Japanese Gyudon
-  577: 'https://images.unsplash.com/photo-1543339308091-ef3c048c3ca0?auto=format&fit=crop&w=800&q=80', // Bo Kho Vietnamese Beef Stew
-  578: 'https://images.unsplash.com/photo-1498837167922-ddd27525d352?auto=format&fit=crop&w=800&q=80', // General Tso's Tofu
-  579: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=800&q=80', // Fried Rice Nasi Goreng
-  580: 'https://images.unsplash.com/photo-1562565651-7d4948f339eb?auto=format&fit=crop&w=800&q=80', // Soto Ayam
-  581: 'https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=800&q=80', // Miso Salmon
-  582: 'https://images.unsplash.com/photo-1576511053046-7e445c5b95af?auto=format&fit=crop&w=800&q=80', // Sweet and Sour Pork
-  583: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=800&q=80', // Beef Bulgogi Ramen
-  584: 'https://images.unsplash.com/photo-1553163147-622ab57be1c7?auto=format&fit=crop&w=800&q=80', // Oyakodon
-  585: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=80', // Phad See Ew
-  586: 'https://images.unsplash.com/photo-1543339308091-ef3c048c3ca0?auto=format&fit=crop&w=800&q=80', // Japanase Nikujaga
-  587: 'https://images.unsplash.com/photo-1576511053046-7e445c5b95af?auto=format&fit=crop&w=800&q=80', // Vietnamese Caramel Pork
-  588: 'https://images.unsplash.com/photo-1574484284002-952d92456975?auto=format&fit=crop&w=800&q=80', // Japanese Curry
-  589: 'https://images.unsplash.com/photo-1553163147-622ab57be1c7?auto=format&fit=crop&w=800&q=80', // Korean Kimchi Jjigae
-  590: 'https://images.unsplash.com/photo-1552611052-33e04de081de?auto=format&fit=crop&w=800&q=80', // Pad Kee Mao Drunken Noodles
-  591: 'https://images.unsplash.com/photo-1579366948929-444eb79881eb?auto=format&fit=crop&w=800&q=80', // Chinese Char Siu Pork
-  592: 'https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?auto=format&fit=crop&w=800&q=80', // Thai Massaman Curry
-  593: 'https://images.unsplash.com/photo-1519624014191-508652cbd7b5?auto=format&fit=crop&w=800&q=80', // Japanese Yakisoba
-  594: 'https://images.unsplash.com/photo-1579366948929-444eb79881eb?auto=format&fit=crop&w=800&q=80', // Rendang Beef
-  595: 'https://images.unsplash.com/photo-1553163147-622ab57be1c7?auto=format&fit=crop&w=800&q=80', // Korean Doenjang Jjigae
-  596: 'https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=800&q=80', // Pad Prik King
-  597: 'https://images.unsplash.com/photo-1552611052-33e04de081de?auto=format&fit=crop&w=800&q=80', // Mee Goreng
-  598: 'https://images.unsplash.com/photo-1603073163308-9654c3fb70b5?auto=format&fit=crop&w=800&q=80', // Twice-Cooked Pork
-  599: 'https://images.unsplash.com/photo-1559181567-c3190ca9959b?auto=format&fit=crop&w=800&q=80', // Sinigang Filipino Sour Soup
-  600: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=800&q=80', // Thai Pineapple Fried Rice
-  601: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=800&q=80', // Black Bean Noodles Jjajangmyeon
-  602: 'https://images.unsplash.com/photo-1552611052-33e04de081de?auto=format&fit=crop&w=800&q=80', // Singapore Noodles
-  603: 'https://images.unsplash.com/photo-1559314809-0d155014e29e?auto=format&fit=crop&w=800&q=80', // Khao Pad Thai Fried Rice
-  604: 'https://images.unsplash.com/photo-1615361200098-9e630ec29b4e?auto=format&fit=crop&w=800&q=80', // Gyoza with Dipping Sauce
-  605: 'https://images.unsplash.com/photo-1553163147-622ab57be1c7?auto=format&fit=crop&w=800&q=80', // Korean Army Stew Budae Jjigae
-  606: 'https://images.unsplash.com/photo-1574672281340-6b2d260a4b72?auto=format&fit=crop&w=800&q=80', // Jerk Chicken
-  607: 'https://images.unsplash.com/photo-1543339308091-ef3c048c3ca0?auto=format&fit=crop&w=800&q=80', // Moqueca Brazilian Fish Stew
-  608: 'https://images.unsplash.com/photo-1603073163308-9654c3fb70b5?auto=format&fit=crop&w=800&q=80', // Churrasco Steak
-  609: 'https://images.unsplash.com/photo-1559181567-c3190ca9959b?auto=format&fit=crop&w=800&q=80', // Feijoada
-  610: 'https://images.unsplash.com/photo-1543339308091-ef3c048c3ca0?auto=format&fit=crop&w=800&q=80', // Jamaican Brown Stew Chicken
-  611: 'https://images.unsplash.com/photo-1609658938891-32dd655106af?auto=format&fit=crop&w=800&q=80', // Pulled Pork
-  612: 'https://images.unsplash.com/photo-1559181567-c3190ca9959b?auto=format&fit=crop&w=800&q=80', // New Orleans Gumbo
-  613: 'https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&w=800&q=80', // Beef Brisket BBQ
-  614: 'https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&w=800&q=80', // Chicken and Dumplings
-  615: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=800&q=80', // Louisiana Red Beans and Rice
-  616: 'https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?auto=format&fit=crop&w=800&q=80', // Lobster Mac and Cheese
-  617: 'https://images.unsplash.com/photo-1546964124-0cce460f38ef?auto=format&fit=crop&w=800&q=80', // Philly Cheesesteak
-  618: 'https://images.unsplash.com/photo-1670518045324-6c1f1942b2b8?auto=format&fit=crop&w=800&q=80', // Clam Chowder
-  619: 'https://images.unsplash.com/photo-1559181567-c3190ca9959b?auto=format&fit=crop&w=800&q=80', // Texas Chili
-  620: 'https://images.unsplash.com/photo-1580959375944-abd7e991f971?auto=format&fit=crop&w=800&q=80', // Shrimp and Grits
-  621: 'https://images.unsplash.com/photo-1570197571499-166b36435e9f?auto=format&fit=crop&w=800&q=80', // Greek Moussaka
-  622: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=800&q=80', // Lemon Herb Roast Chicken
-  623: 'https://images.unsplash.com/photo-1543339308091-ef3c048c3ca0?auto=format&fit=crop&w=800&q=80', // Spanish Oxtail Stew
-  624: 'https://images.unsplash.com/photo-1544943910-4c1dc44aab44?auto=format&fit=crop&w=800&q=80', // Sea Bass with Olives
-  625: 'https://images.unsplash.com/photo-1549248220-5811dc32cd5d?auto=format&fit=crop&w=800&q=80', // Dolmades
-  626: 'https://images.unsplash.com/photo-1576511053046-7e445c5b95af?auto=format&fit=crop&w=800&q=80', // Lamb Kleftiko
-  627: 'https://images.unsplash.com/photo-1589041611454-fd81bb39c3ba?auto=format&fit=crop&w=800&q=80', // Couscous Royale
-  628: 'https://images.unsplash.com/photo-1544943910-4c1dc44aab44?auto=format&fit=crop&w=800&q=80', // Branzino al Forno
-  629: 'https://images.unsplash.com/photo-1534080564583-6be75777b70a?auto=format&fit=crop&w=800&q=80', // Paella Valenciana
-  630: 'https://images.unsplash.com/photo-1534939561126-855b8675edd7?auto=format&fit=crop&w=800&q=80', // Bouillabaisse
-  631: 'https://images.unsplash.com/photo-1534939561126-855b8675edd7?auto=format&fit=crop&w=800&q=80', // Cassoulet
-  632: 'https://images.unsplash.com/photo-1534939561126-855b8675edd7?auto=format&fit=crop&w=800&q=80', // Boeuf Bourguignon
-  633: 'https://images.unsplash.com/photo-1544943910-4c1dc44aab44?auto=format&fit=crop&w=800&q=80', // Sole Meuni\u00e8re
-  634: 'https://images.unsplash.com/photo-1534939561126-855b8675edd7?auto=format&fit=crop&w=800&q=80', // Coq au Vin
-  635: 'https://images.unsplash.com/photo-1576511053046-7e445c5b95af?auto=format&fit=crop&w=800&q=80', // Rack of Lamb with Herb Crust
-  636: 'https://images.unsplash.com/photo-1464500542410-1396074bf230?auto=format&fit=crop&w=800&q=80', // Ratatouille
-  637: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=800&q=80', // Daurade Proven\u00e7ale
-  638: 'https://images.unsplash.com/photo-1534939561126-855b8675edd7?auto=format&fit=crop&w=800&q=80', // Pot au Feu
-  639: 'https://images.unsplash.com/photo-1476718406336-bb5a9690ee2a?auto=format&fit=crop&w=800&q=80', // Gazpacho Andaluz
-  640: 'https://images.unsplash.com/photo-1579366948929-444eb79881eb?auto=format&fit=crop&w=800&q=80', // Spanish Lamb Chops al Ajillo
-  641: 'https://images.unsplash.com/photo-1544943910-4c1dc44aab44?auto=format&fit=crop&w=800&q=80', // Salt Cod Brandade
-  642: 'https://images.unsplash.com/photo-1543339308091-ef3c048c3ca0?auto=format&fit=crop&w=800&q=80', // Tagine of Lamb and Apricots
-  643: 'https://images.unsplash.com/photo-1613844237701-8f3664fc2eff?auto=format&fit=crop&w=800&q=80', // Harira Moroccan Soup
-  644: 'https://images.unsplash.com/photo-1579366948929-444eb79881eb?auto=format&fit=crop&w=800&q=80', // Mechoui Lamb
-  645: 'https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?auto=format&fit=crop&w=800&q=80', // Lebanese Kibbeh Baked
-  646: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=800&q=80', // Persian Fesenjan
-  647: 'https://images.unsplash.com/photo-1544943910-4c1dc44aab44?auto=format&fit=crop&w=800&q=80', // Iraqi Masgouf Fish
-  648: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800&q=80', // Kofta Kebab
-  649: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=800&q=80', // Turkish Imam Bayildi
-  650: 'https://images.unsplash.com/photo-1584776296944-ab6fb57b0bdd?auto=format&fit=crop&w=800&q=80', // Shakshuka Khoresh
-  651: 'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=800&q=80', // Tacos al Pastor
-  652: 'https://images.unsplash.com/photo-1534352956036-cd81e27dd615?auto=format&fit=crop&w=800&q=80', // Enchiladas Rojas
-  653: 'https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=800&q=80', // Mole Negro with Turkey
-  654: 'https://images.unsplash.com/photo-1529704640551-eef9ba5d774a?auto=format&fit=crop&w=800&q=80', // Barbacoa Beef Tacos
-  655: 'https://images.unsplash.com/photo-1619301920463-a37f1764eb83?auto=format&fit=crop&w=800&q=80', // Chiles en Nogada
-  656: 'https://images.unsplash.com/photo-1614549150185-8f85229ff291?auto=format&fit=crop&w=800&q=80', // Pescado Veracruz
-  657: 'https://images.unsplash.com/photo-1596685212227-d3a0b82d9a6d?auto=format&fit=crop&w=800&q=80', // Tamales
-  658: 'https://images.unsplash.com/photo-1613409385222-3d0decb6742a?auto=format&fit=crop&w=800&q=80', // Carnitas
-  659: 'https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=800&q=80', // Pozole Verde
-  660: 'https://images.unsplash.com/photo-1559737558-2f5a35f4523b?auto=format&fit=crop&w=800&q=80', // Camarones al Mojo de Ajo
-  661: 'https://images.unsplash.com/photo-1529704640551-eef9ba5d774a?auto=format&fit=crop&w=800&q=80', // Tinga Tostadas
-  662: 'https://images.unsplash.com/photo-1619301920463-a37f1764eb83?auto=format&fit=crop&w=800&q=80', // Cochinita Pibil
-  663: 'https://images.unsplash.com/photo-1596685212227-d3a0b82d9a6d?auto=format&fit=crop&w=800&q=80', // Sopa Azteca
-  664: 'https://images.unsplash.com/photo-1613409385222-3d0decb6742a?auto=format&fit=crop&w=800&q=80', // Rajas con Crema
-  665: 'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=800&q=80', // Carne Asada Tacos
-  666: 'https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=800&q=80', // Huevos Rancheros
-  667: 'https://images.unsplash.com/photo-1572357243457-fc153742e7a5?auto=format&fit=crop&w=800&q=80', // Moussaka Turkish
-  668: 'https://images.unsplash.com/photo-1603073163308-9654c3fb70b5?auto=format&fit=crop&w=800&q=80', // Mansaf Jordanian Lamb
-  669: 'https://images.unsplash.com/photo-1511910849309-0dffb8785146?auto=format&fit=crop&w=800&q=80', // Lebanese Stuffed Peppers
-  670: 'https://images.unsplash.com/photo-1574484284002-952d92456975?auto=format&fit=crop&w=800&q=80', // Khoresh Ghormeh Sabzi
-  671: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=800&q=80', // Kabsa Rice
-  672: 'https://images.unsplash.com/photo-1580288020976-854d44d4c54f?auto=format&fit=crop&w=800&q=80', // Freekeh Stuffed Chicken
-  673: 'https://images.unsplash.com/photo-1603073163308-9654c3fb70b5?auto=format&fit=crop&w=800&q=80', // Souvlaki Pork
-  674: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800&q=80', // Kubideh Kebab
-  675: 'https://images.unsplash.com/photo-1583182363039-59eac8609ab2?auto=format&fit=crop&w=800&q=80', // Egyptian Koshari
-  676: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=800&q=80', // Makloubeh
-  677: 'https://images.unsplash.com/photo-1502364271109-0a9a75a2a9df?auto=format&fit=crop&w=800&q=80', // Manti Turkish Dumplings
-  678: 'https://images.unsplash.com/photo-1505576633757-0ac1084af824?auto=format&fit=crop&w=800&q=80', // Musakka
-  679: 'https://images.unsplash.com/photo-1596449212953-4ca53eca4822?auto=format&fit=crop&w=800&q=80', // Chicken Muammar Libyan
-  680: 'https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?auto=format&fit=crop&w=800&q=80', // Arayes Stuffed Pita
-  681: 'https://images.unsplash.com/photo-1525184782196-8e2ded604bf7?auto=format&fit=crop&w=800&q=80', // Shakshuka with Lamb
-  682: 'https://images.unsplash.com/photo-1529006557810-274b9b2fc783?auto=format&fit=crop&w=800&q=80', // Chicken Shawarma Plate
-  683: 'https://images.unsplash.com/photo-1609226127613-55143d781e69?auto=format&fit=crop&w=800&q=80', // Musakkhan Palestinian Chicken
-  684: 'https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&w=800&q=80', // Quzi Iraqi Lamb and Rice
-  685: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=800&q=80', // Maqluba
-  686: 'https://images.unsplash.com/photo-1563379926898-05f4575a45d8?auto=format&fit=crop&w=800&q=80', // Vegan Lentil Bolognese
-  687: 'https://images.unsplash.com/photo-1609658938891-32dd655106af?auto=format&fit=crop&w=800&q=80', // Roasted Cauliflower Steak
-  688: 'https://images.unsplash.com/photo-1576511053046-7e445c5b95af?auto=format&fit=crop&w=800&q=80', // Mushroom Bourguignon
-  689: 'https://images.unsplash.com/photo-1529704640551-eef9ba5d774a?auto=format&fit=crop&w=800&q=80', // Jackfruit Tacos
-  690: 'https://images.unsplash.com/photo-1627733810457-3c027bbb4dbb?auto=format&fit=crop&w=800&q=80', // Chickpea Shakshuka
-  691: 'https://images.unsplash.com/photo-1564834724105-918b73d1b9e0?auto=format&fit=crop&w=800&q=80', // Stuffed Bell Peppers Vegan
-  692: 'https://images.unsplash.com/photo-1543339308091-ef3c048c3ca0?auto=format&fit=crop&w=800&q=80', // Sweet Potato and Peanut Stew
-  693: 'https://images.unsplash.com/photo-1559314809-0d155014e29e?auto=format&fit=crop&w=800&q=80', // Vegan Pad Thai
-  694: 'https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?auto=format&fit=crop&w=800&q=80', // Ethiopian Injera and Wots
-  695: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=800&q=80', // Vegan Biryani
-  696: 'https://images.unsplash.com/photo-1534352956036-cd81e27dd615?auto=format&fit=crop&w=800&q=80', // Black Bean Enchiladas
-  697: 'https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?auto=format&fit=crop&w=800&q=80', // Roasted Ratatouille Pasta
-  698: 'https://images.unsplash.com/photo-1559181567-c3190ca9959b?auto=format&fit=crop&w=800&q=80', // Vegan Chili
-  699: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=800&q=80', // Aloo Palak
-  700: 'https://images.unsplash.com/photo-1555949258-eb67b1ef0ceb?auto=format&fit=crop&w=800&q=80', // Vegan Mushroom Stroganoff
-  701: 'https://images.unsplash.com/photo-1636743713732-125909a35dcc?auto=format&fit=crop&w=800&q=80', // Shakshuka Veggie
-  702: 'https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?auto=format&fit=crop&w=800&q=80', // Vegan Thai Green Curry
-  703: 'https://images.unsplash.com/photo-1505576633757-0ac1084af824?auto=format&fit=crop&w=800&q=80', // Mujaddara
-  704: 'https://images.unsplash.com/photo-1629978444632-9f63ba0eff47?auto=format&fit=crop&w=800&q=80', // Roasted Tomato Soup
-  705: 'https://images.unsplash.com/photo-1574484284002-952d92456975?auto=format&fit=crop&w=800&q=80', // Cauliflower Tikka Masala
-  706: 'https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=800&q=80', // Vegan Pho
-  707: 'https://images.unsplash.com/photo-1572453800999-e8d2d1589b7c?auto=format&fit=crop&w=800&q=80', // Quinoa Stuffed Acorn Squash
-  708: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=800&q=80', // Vegan Korma
-  709: 'https://images.unsplash.com/photo-1563379926898-05f4575a45d8?auto=format&fit=crop&w=800&q=80', // Mushroom Walnut Ragu
-  710: 'https://images.unsplash.com/photo-1599020792689-9fde458e7e17?auto=format&fit=crop&w=800&q=80', // Buddha Bowl
-  711: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=800&q=80', // Lentil Soup Lebanese
-  712: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=800&q=80', // Portobello Mushroom Burger
-  713: 'https://images.unsplash.com/photo-1574484284002-952d92456975?auto=format&fit=crop&w=800&q=80', // Saag Tofu
-  714: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=800&q=80', // Vegan BBQ Jackfruit Burger
-  715: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=800&q=80', // Pumpkin Coconut Curry
-  716: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800&q=80', // Tempeh Satay
-  717: 'https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?auto=format&fit=crop&w=800&q=80', // Stuffed Portobello with Quinoa
-  718: 'https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=800&q=80', // One-Pot Minestrone
-  719: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=80', // Miso Glazed Eggplant
-  720: 'https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=800&q=80', // Vegan Carbonara
-  721: 'https://images.unsplash.com/photo-1574484284002-952d92456975?auto=format&fit=crop&w=800&q=80', // Dal Tadka
-  722: 'https://images.unsplash.com/photo-1627764627459-ba29d6051fe0?auto=format&fit=crop&w=800&q=80', // Vegan Moussaka
-  723: 'https://images.unsplash.com/photo-1581875271349-86c5c7dd58af?auto=format&fit=crop&w=800&q=80', // Teriyaki Tofu Bowl
-  724: 'https://images.unsplash.com/photo-1620280641611-1b444bf9f9b6?auto=format&fit=crop&w=800&q=80', // Persian Herb Frittata Kuku
-  725: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=800&q=80', // Chickpea and Spinach Curry
-  726: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=800&q=80', // Vegan Ramen
-  727: 'https://images.unsplash.com/photo-1529006557810-274b9b2fc783?auto=format&fit=crop&w=800&q=80', // Falafel Plate
-  728: 'https://images.unsplash.com/photo-1603189864361-0cc65b5ecd3a?auto=format&fit=crop&w=800&q=80', // Tofu Mapo Style
-  729: 'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=800&q=80', // Vegan Birria Tacos
-  730: 'https://images.unsplash.com/photo-1652088079703-38f4a8d6b981?auto=format&fit=crop&w=800&q=80', // Roasted Red Pepper Soup
-  731: 'https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?auto=format&fit=crop&w=800&q=80', // Vegan Sushi Rolls
-  732: 'https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=800&q=80', // Pad Woon Sen Vegan
-  733: 'https://images.unsplash.com/photo-1464500542410-1396074bf230?auto=format&fit=crop&w=800&q=80', // Lentil Shepherd's Pie
-  734: 'https://images.unsplash.com/photo-1543339308091-ef3c048c3ca0?auto=format&fit=crop&w=800&q=80', // Vegan Tagine
-  735: 'https://images.unsplash.com/photo-1533777857889-4be7c70b33f7?auto=format&fit=crop&w=800&q=80', // Vegan Miso Soup
-  736: 'https://images.unsplash.com/photo-1574894709920-11b28e7367e3?auto=format&fit=crop&w=800&q=80', // Vegan Lasagne
-  737: 'https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=800&q=80', // Vegan Butter Chicken
-  738: 'https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?auto=format&fit=crop&w=800&q=80', // Vegetable Wellington
-  739: 'https://images.unsplash.com/photo-1548943487-a2e4e43b4853?auto=format&fit=crop&w=800&q=80', // Vegan Tom Kha
-  740: 'https://images.unsplash.com/photo-1590412200988-a436970781fa?auto=format&fit=crop&w=800&q=80', // Shakshuka with Chickpeas
-  741: 'https://images.unsplash.com/photo-1543339308091-ef3c048c3ca0?auto=format&fit=crop&w=800&q=80', // Roasted Vegetable Tagine
-  742: 'https://images.unsplash.com/photo-1611601184963-9d1de9b79ff3?auto=format&fit=crop&w=800&q=80', // Green Shakshuka
-  743: 'https://images.unsplash.com/photo-1597200284813-aeddf0653f54?auto=format&fit=crop&w=800&q=80', // Socca Chickpea Pancake
-  744: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80', // Pad Cashew Tofu
-  745: 'https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?auto=format&fit=crop&w=800&q=80', // Ethiopian Yetsom Beyaynetu
-  746: 'https://images.unsplash.com/photo-1572357243457-fc153742e7a5?auto=format&fit=crop&w=800&q=80', // Jackfruit Rogan Josh
-  747: 'https://images.unsplash.com/photo-1534352956036-cd81e27dd615?auto=format&fit=crop&w=800&q=80', // Vegan Mole Enchiladas
-  748: 'https://images.unsplash.com/photo-1519624014191-508652cbd7b5?auto=format&fit=crop&w=800&q=80', // Soba Noodle Bowl
-  749: 'https://images.unsplash.com/photo-1534080564583-6be75777b70a?auto=format&fit=crop&w=800&q=80', // Vegan Paella
-  750: 'https://images.unsplash.com/photo-1543339308091-ef3c048c3ca0?auto=format&fit=crop&w=800&q=80', // Berbere Chickpea Stew
-  751: 'https://images.unsplash.com/photo-1476124369491-e7addf5db371?auto=format&fit=crop&w=800&q=80', // Roasted Butternut Squash Risotto
-  752: 'https://images.unsplash.com/photo-1511910849309-0dffb8785146?auto=format&fit=crop&w=800&q=80', // Freekeh with Roasted Veg
-  753: 'https://images.unsplash.com/photo-1562565651-7d4948f339eb?auto=format&fit=crop&w=800&q=80', // Gado Gado Vegan
-  754: 'https://images.unsplash.com/photo-1553621042-f6e147245754?auto=format&fit=crop&w=800&q=80', // Vegan Gyoza
-  755: 'https://images.unsplash.com/photo-1543339308091-ef3c048c3ca0?auto=format&fit=crop&w=800&q=80', // Persian Aubergine Stew Mirza
-  756: 'https://images.unsplash.com/photo-1583182363039-59eac8609ab2?auto=format&fit=crop&w=800&q=80', // Vegan Korean Bowl
-  757: 'https://images.unsplash.com/photo-1670518045324-6c1f1942b2b8?auto=format&fit=crop&w=800&q=80', // White Bean and Kale Soup
-  758: 'https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?auto=format&fit=crop&w=800&q=80', // Roasted Tomato Chickpea
-  759: 'https://images.unsplash.com/photo-1596797038530-2c107229654b?auto=format&fit=crop&w=800&q=80', // Black Lentil Dahl
-  760: 'https://images.unsplash.com/photo-1608393189287-0bc2191c7e86?auto=format&fit=crop&w=800&q=80', // Vegan Breakfast Hash for Dinner
-  761: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=80', // Vegan Thai Larb
-  762: 'https://images.unsplash.com/photo-1559181567-c3190ca9959b?auto=format&fit=crop&w=800&q=80', // Vegan Jambalaya
-  763: 'https://images.unsplash.com/photo-1476718406336-bb5a9690ee2a?auto=format&fit=crop&w=800&q=80', // Curried Lentil Soup
-  764: 'https://images.unsplash.com/photo-1613844237701-8f3664fc2eff?auto=format&fit=crop&w=800&q=80', // Vegan Goulash
-  765: 'https://images.unsplash.com/photo-1589442305595-62647c1514f9?auto=format&fit=crop&w=800&q=80', // Roasted Beet Walnut Grain Bowl
-  766: 'https://images.unsplash.com/photo-1579366948929-444eb79881eb?auto=format&fit=crop&w=800&q=80', // Mushroom and Chestnut Bourguignon
-  767: 'https://images.unsplash.com/photo-1552611052-33e04de081de?auto=format&fit=crop&w=800&q=80', // Vegan Gyudon
-  768: 'https://images.unsplash.com/photo-1574484284002-952d92456975?auto=format&fit=crop&w=800&q=80', // Vegan Keema
-  769: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=800&q=80', // Cauliflower Aloo Curry
-  770: 'https://images.unsplash.com/photo-1564834724105-918b73d1b9e0?auto=format&fit=crop&w=800&q=80', // Stuffed Grape Leaves Vegan
-  771: 'https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?auto=format&fit=crop&w=800&q=80', // Ethiopian Misir Kik Alicha
-  772: 'https://images.unsplash.com/photo-1473093226795-af9932fe5856?auto=format&fit=crop&w=800&q=80', // Wild Garlic Pesto Pasta
-  773: 'https://images.unsplash.com/photo-1563379926898-05f4575a45d8?auto=format&fit=crop&w=800&q=80', // Roasted Asparagus and Leek Tart
-  774: 'https://images.unsplash.com/photo-1476124369491-e7addf5db371?auto=format&fit=crop&w=800&q=80', // Baked Mushroom Risotto
-  775: 'https://images.unsplash.com/photo-1603073163308-9654c3fb70b5?auto=format&fit=crop&w=800&q=80', // Cheese Souffl\u00e9
-  776: 'https://images.unsplash.com/photo-1567234669003-dce7a7a88821?auto=format&fit=crop&w=800&q=80', // Greek Spanakopita
-  777: 'https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?auto=format&fit=crop&w=800&q=80', // Mushroom Wellington
-  778: 'https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?auto=format&fit=crop&w=800&q=80', // Stuffed Onions
-  779: 'https://images.unsplash.com/photo-1576511053046-7e445c5b95af?auto=format&fit=crop&w=800&q=80', // Celeriac Schnitzel
-  780: 'https://images.unsplash.com/photo-1574484284002-952d92456975?auto=format&fit=crop&w=800&q=80', // Vegan Dal Bati
-  781: 'https://images.unsplash.com/photo-1572453800999-e8d2d1589b7c?auto=format&fit=crop&w=800&q=80', // Caponata Siciliana
-  782: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=800&q=80', // Vegan Nasi Goreng
-  783: 'https://images.unsplash.com/photo-1619301920463-a37f1764eb83?auto=format&fit=crop&w=800&q=80', // Smoky Sweet Potato Black Bean Tacos
-  784: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Vegan Moussaka Lentil
-  785: 'https://images.unsplash.com/photo-1464500542410-1396074bf230?auto=format&fit=crop&w=800&q=80', // Mushroom and Leek Pie
-  786: 'https://images.unsplash.com/photo-1585461276010-aff0f3dcd48f?auto=format&fit=crop&w=800&q=80', // Beetroot and Dill Quiche
-  787: 'https://images.unsplash.com/photo-1562565651-7d4948f339eb?auto=format&fit=crop&w=800&q=80', // Khao Niao Mamuang
-  788: 'https://images.unsplash.com/photo-1553909489-cd47e0907980?auto=format&fit=crop&w=800&q=80', // Vegan Pulled Jackfruit
-  789: 'https://images.unsplash.com/photo-1511910849309-0dffb8785146?auto=format&fit=crop&w=800&q=80', // Vegan Shepherd's Pie
-  790: 'https://images.unsplash.com/photo-1637861004714-49fa0ccbb993?auto=format&fit=crop&w=800&q=80', // Aubergine and Chickpea Bake
-  791: 'https://images.unsplash.com/photo-1550304952-9d1e3444f713?auto=format&fit=crop&w=800&q=80', // Spinach and Feta G\u00f6zleme
-  792: 'https://images.unsplash.com/photo-1582450871972-ab5ca641643d?auto=format&fit=crop&w=800&q=80', // Potato and Mushroom Pierogi
-  793: 'https://images.unsplash.com/photo-1627764627459-ba29d6051fe0?auto=format&fit=crop&w=800&q=80', // Roasted Fennel and Orange Salad
-  794: 'https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&w=800&q=80', // One-Pan Harissa Chickpeas
-  795: 'https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=800&q=80', // Mushroom Larb Vegan
-  796: 'https://images.unsplash.com/photo-1596797038530-2c107229654b?auto=format&fit=crop&w=800&q=80', // Baingan Bharta
-  797: 'https://images.unsplash.com/photo-1529006557810-274b9b2fc783?auto=format&fit=crop&w=800&q=80', // Beet Falafel
-  798: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=800&q=80', // Katsu Curry Vegan
-  799: 'https://images.unsplash.com/photo-1547058881-aa0edd92aab3?auto=format&fit=crop&w=800&q=80', // Fava Bean Ful Medames
-  800: 'https://images.unsplash.com/photo-1596797038530-2c107229654b?auto=format&fit=crop&w=800&q=80', // Aloo Methi
-  801: 'https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?auto=format&fit=crop&w=800&q=80', // Jackfruit Massaman Curry
-  802: 'https://images.unsplash.com/photo-1574782256243-69c18023f7b4?auto=format&fit=crop&w=800&q=80', // Hummus with Pita
-  803: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800&q=80', // Caprese Skewers
-  804: 'https://images.unsplash.com/photo-1558458601-0d69a278b8e6?auto=format&fit=crop&w=800&q=80', // Crudit\u00e9s with Ranch
-  805: 'https://images.unsplash.com/photo-1596685212227-d3a0b82d9a6d?auto=format&fit=crop&w=800&q=80', // Guacamole and Chips
-  806: 'https://images.unsplash.com/photo-1529006557810-274b9b2fc783?auto=format&fit=crop&w=800&q=80', // Falafel Bites with Tahini
-  807: 'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?auto=format&fit=crop&w=800&q=80', // Spinach and Cheese Puffs
-  808: 'https://images.unsplash.com/photo-1540189549519-5a7bb3e29b00?auto=format&fit=crop&w=800&q=80', // Marinated Olives
-  809: 'https://images.unsplash.com/photo-1540189549519-5a7bb3e29b00?auto=format&fit=crop&w=800&q=80', // Cheese Board
-  810: 'https://images.unsplash.com/photo-1600803907087-8d180f58d54c?auto=format&fit=crop&w=800&q=80', // Deviled Eggs
-  811: 'https://images.unsplash.com/photo-1607301405418-780ee5e6dd10?auto=format&fit=crop&w=800&q=80', // Halloumi Fries
-  812: 'https://images.unsplash.com/photo-1593001867410-22f463e592ed?auto=format&fit=crop&w=800&q=80', // Spiced Nuts
-  813: 'https://images.unsplash.com/photo-1637861004714-49fa0ccbb993?auto=format&fit=crop&w=800&q=80', // Baba Ganoush
-  814: 'https://images.unsplash.com/photo-1567613913497-8f023fc3d343?auto=format&fit=crop&w=800&q=80', // Bruschetta al Pomodoro
-  815: 'https://images.unsplash.com/photo-1615361200098-9e630ec29b4e?auto=format&fit=crop&w=800&q=80', // Crispy Wontons
-  816: 'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?auto=format&fit=crop&w=800&q=80', // Goug\u00e8res French Cheese Puffs
-  817: 'https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&w=800&q=80', // Carrot Sticks with Miso Dip
-  818: 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=800&q=80', // Pizza Margherita Bites
-  819: 'https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&w=800&q=80', // Edamame with Sea Salt
-  820: 'https://images.unsplash.com/photo-1502364271109-0a9a75a2a9df?auto=format&fit=crop&w=800&q=80', // Onion Bhaji
-  821: 'https://images.unsplash.com/photo-1605926637512-c8b131444a3b?auto=format&fit=crop&w=800&q=80', // Sweet Potato Chips
-  822: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=800&q=80', // Pita Chips with Tzatziki
-  823: 'https://images.unsplash.com/photo-1636743713732-125909a35dcc?auto=format&fit=crop&w=800&q=80', // Scotch Eggs
-  824: 'https://images.unsplash.com/photo-1553621042-f6e147245754?auto=format&fit=crop&w=800&q=80', // Arancini
-  825: 'https://images.unsplash.com/photo-1582450871972-ab5ca641643d?auto=format&fit=crop&w=800&q=80', // Gyoza Pan-Fried
-  826: 'https://images.unsplash.com/photo-1567234669003-dce7a7a88821?auto=format&fit=crop&w=800&q=80', // Crostini with Ricotta
-  827: 'https://images.unsplash.com/photo-1464500542410-1396074bf230?auto=format&fit=crop&w=800&q=80', // Popcorn with Various Flavors
-  828: 'https://images.unsplash.com/photo-1613409385222-3d0decb6742a?auto=format&fit=crop&w=800&q=80', // Nachos Supreme
-  829: 'https://images.unsplash.com/photo-1574782256243-69c18023f7b4?auto=format&fit=crop&w=800&q=80', // Mini Quiches
-  830: 'https://images.unsplash.com/photo-1600891964599-f94d5765bae8?auto=format&fit=crop&w=800&q=80', // Peanut Butter Energy Balls
-  831: 'https://images.unsplash.com/photo-1547058881-aa0edd92aab3?auto=format&fit=crop&w=800&q=80', // Muhammara Dip
-  832: 'https://images.unsplash.com/photo-1541519227354-08fa5d50c44d?auto=format&fit=crop&w=800&q=80', // Avocado Toast Bites
-  833: 'https://images.unsplash.com/photo-1607301405418-780ee5e6dd10?auto=format&fit=crop&w=800&q=80', // Spring Rolls Crispy
-  834: 'https://images.unsplash.com/photo-1564834724105-918b73d1b9e0?auto=format&fit=crop&w=800&q=80', // Stuffed Mushrooms
-  835: 'https://images.unsplash.com/photo-1615361200098-9e630ec29b4e?auto=format&fit=crop&w=800&q=80', // Jalape\u00f1o Poppers
-  836: 'https://images.unsplash.com/photo-1558458601-0d69a278b8e6?auto=format&fit=crop&w=800&q=80', // Labneh with Olive Oil
-  837: 'https://images.unsplash.com/photo-1482049016688-2d3e1b311543?auto=format&fit=crop&w=800&q=80', // Fried Egg on Toast
-  838: 'https://images.unsplash.com/photo-1593001867410-22f463e592ed?auto=format&fit=crop&w=800&q=80', // Roasted Chickpeas
-  839: 'https://images.unsplash.com/photo-1550304952-9d1e3444f713?auto=format&fit=crop&w=800&q=80', // Garlic Bread
-  840: 'https://images.unsplash.com/photo-1600803907087-8d180f58d54c?auto=format&fit=crop&w=800&q=80', // Roasted Veggie Dip Platter
-  841: 'https://images.unsplash.com/photo-1637861004714-49fa0ccbb993?auto=format&fit=crop&w=800&q=80', // Fromage Fort
-  842: 'https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&w=800&q=80', // Tzatziki Dip
-  843: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=800&q=80', // Flatbread Pizza with Toppings
-  844: 'https://images.unsplash.com/photo-1547058881-aa0edd92aab3?auto=format&fit=crop&w=800&q=80', // Cashew Cheese Dip
-  845: 'https://images.unsplash.com/photo-1580959375944-abd7e991f971?auto=format&fit=crop&w=800&q=80', // Bang Bang Shrimp
-  846: 'https://images.unsplash.com/photo-1558458601-0d69a278b8e6?auto=format&fit=crop&w=800&q=80', // French Onion Dip
-  847: 'https://images.unsplash.com/photo-1593001867410-22f463e592ed?auto=format&fit=crop&w=800&q=80', // Skordalia
-  848: 'https://images.unsplash.com/photo-1553530666-ba11a7da3888?auto=format&fit=crop&w=800&q=80', // Mixed Berry Smoothie
-  849: 'https://images.unsplash.com/photo-1601725245226-25296b49cd17?auto=format&fit=crop&w=800&q=80', // Caprese Stacks
-  850: 'https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&w=800&q=80', // Air Fryer Zucchini Fries
-  851: 'https://images.unsplash.com/photo-1637861004714-49fa0ccbb993?auto=format&fit=crop&w=800&q=80', // White Bean Dip
-  852: 'https://images.unsplash.com/photo-1502364271109-0a9a75a2a9df?auto=format&fit=crop&w=800&q=80', // Samosas
-  853: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800&q=80', // Paneer Tikka Skewers
-  854: 'https://images.unsplash.com/photo-1614549150185-8f85229ff291?auto=format&fit=crop&w=800&q=80', // Calamari Fritti
-  855: 'https://images.unsplash.com/photo-1629978444632-9f63ba0eff47?auto=format&fit=crop&w=800&q=80', // Carrot and Ginger Soup
-  856: 'https://images.unsplash.com/photo-1553621042-f6e147245754?auto=format&fit=crop&w=800&q=80', // Vegetable Pakoras
-  857: 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=800&q=80', // Mini Pepperoni Pizzas
-  858: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800&q=80', // Greek Salad Skewers
-  859: 'https://images.unsplash.com/photo-1600891964099-c3c5bea1c5e0?auto=format&fit=crop&w=800&q=80', // Naan Chips with Mango Salsa
-  860: 'https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=800&q=80', // Almond and Date Bars
-  861: 'https://images.unsplash.com/photo-1528467279403-46af96c37ab3?auto=format&fit=crop&w=800&q=80', // Smoked Salmon Dip
-  862: 'https://images.unsplash.com/photo-1581875271349-86c5c7dd58af?auto=format&fit=crop&w=800&q=80', // Egg Salad on Rye
-  863: 'https://images.unsplash.com/photo-1582450871972-ab5ca641643d?auto=format&fit=crop&w=800&q=80', // Cheese Crisps
-  864: 'https://images.unsplash.com/photo-1600891964099-c3c5bea1c5e0?auto=format&fit=crop&w=800&q=80', // Watermelon Mint Cooler
-  865: 'https://images.unsplash.com/photo-1559737558-2f5a35f4523b?auto=format&fit=crop&w=800&q=80', // Salt and Pepper Prawns
-  866: 'https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&w=800&q=80', // Labneh Balls
-  867: 'https://images.unsplash.com/photo-1607301405418-780ee5e6dd10?auto=format&fit=crop&w=800&q=80', // Vegetable Dim Sum
-  868: 'https://images.unsplash.com/photo-1610657400673-7fc8941f403f?auto=format&fit=crop&w=800&q=80', // Mini Caprese
-  869: 'https://images.unsplash.com/photo-1547058881-aa0edd92aab3?auto=format&fit=crop&w=800&q=80', // Dark Chocolate Hummus
-  870: 'https://images.unsplash.com/photo-1530554764233-e79e16c91d08?auto=format&fit=crop&w=800&q=80', // Bruschetta with Mushrooms
-  871: 'https://images.unsplash.com/photo-1631167490917-2a22c070573a?auto=format&fit=crop&w=800&q=80', // Fattoush with Pita Chips
-  872: 'https://images.unsplash.com/photo-1510693206972-df098062cb71?auto=format&fit=crop&w=800&q=80', // Mini Frittatas
-  873: 'https://images.unsplash.com/photo-1606787366850-de6330128bfc?auto=format&fit=crop&w=800&q=80', // Fondue
-  874: 'https://images.unsplash.com/photo-1615361200098-9e630ec29b4e?auto=format&fit=crop&w=800&q=80', // Vegetable Tempura
-  875: 'https://images.unsplash.com/photo-1603189864361-0cc65b5ecd3a?auto=format&fit=crop&w=800&q=80', // Smashed Cucumber Salad
-  876: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80', // Poke Bowl Snack
-  877: 'https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&w=800&q=80', // Zucchini Fritters
-  878: 'https://images.unsplash.com/photo-1574484284002-952d92456975?auto=format&fit=crop&w=800&q=80', // Mango Lassi
-  879: 'https://images.unsplash.com/photo-1580959375944-abd7e991f971?auto=format&fit=crop&w=800&q=80', // Shrimp Cocktail
-  880: 'https://images.unsplash.com/photo-1558458601-0d69a278b8e6?auto=format&fit=crop&w=800&q=80', // Pimento Cheese Dip
-  881: 'https://images.unsplash.com/photo-1574484284002-952d92456975?auto=format&fit=crop&w=800&q=80', // Taramasalata
-  882: 'https://images.unsplash.com/photo-1593001867410-22f463e592ed?auto=format&fit=crop&w=800&q=80', // Turkish B\u00f6rek
-  883: 'https://images.unsplash.com/photo-1614549150185-8f85229ff291?auto=format&fit=crop&w=800&q=80', // Ceviche
-  884: 'https://images.unsplash.com/photo-1606787366850-de6330128bfc?auto=format&fit=crop&w=800&q=80', // Smoked Gouda Fondue
-  885: 'https://images.unsplash.com/photo-1584278858944-7c34f1d94db0?auto=format&fit=crop&w=800&q=80', // Turkish Menemen Snack
-  886: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=800&q=80', // Crostini with Chicken Liver
-  887: 'https://images.unsplash.com/photo-1637861004714-49fa0ccbb993?auto=format&fit=crop&w=800&q=80', // Beetroot Hummus
-  888: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=800&q=80', // Kimchi Pancake
-  889: 'https://images.unsplash.com/photo-1482049016688-2d3e1b311543?auto=format&fit=crop&w=800&q=80', // Beet and Goat Cheese Crostini
-  890: 'https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&w=800&q=80', // Ajvar Red Pepper Spread
-  891: 'https://images.unsplash.com/photo-1567234669003-dce7a7a88821?auto=format&fit=crop&w=800&q=80', // Prawn Toast
-  892: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=800&q=80', // Seaweed Salad
-  893: 'https://images.unsplash.com/photo-1618040996337-56904b7850b9?auto=format&fit=crop&w=800&q=80', // Cheese Quesadilla
-  894: 'https://images.unsplash.com/photo-1600891964599-f94d5765bae8?auto=format&fit=crop&w=800&q=80', // Granola Bark
-  895: 'https://images.unsplash.com/photo-1544943910-4c1dc44aab44?auto=format&fit=crop&w=800&q=80', // Fish and Chips Mini
-  896: 'https://images.unsplash.com/photo-1607532941433-304659e8198a?auto=format&fit=crop&w=800&q=80', // Papaya Salad
-  897: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=800&q=80', // Corn Bhel
-  898: 'https://images.unsplash.com/photo-1547058881-aa0edd92aab3?auto=format&fit=crop&w=800&q=80', // Artichoke Dip
-  899: 'https://images.unsplash.com/photo-1574782256243-69c18023f7b4?auto=format&fit=crop&w=800&q=80', // Shrimp Avocado Crostini
-  900: 'https://images.unsplash.com/photo-1600803907087-8d180f58d54c?auto=format&fit=crop&w=800&q=80', // Hard-Boiled Eggs with Dukkah
-  901: 'https://images.unsplash.com/photo-1609658938891-32dd655106af?auto=format&fit=crop&w=800&q=80', // Baked Brie with Honey
-  902: 'https://images.unsplash.com/photo-1505576633757-0ac1084af824?auto=format&fit=crop&w=800&q=80', // Crispy Tofu Bites
-  903: 'https://images.unsplash.com/photo-1558458601-0d69a278b8e6?auto=format&fit=crop&w=800&q=80', // Tapenade
-  904: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=800&q=80', // Masala Fries
-  905: 'https://images.unsplash.com/photo-1593001867410-22f463e592ed?auto=format&fit=crop&w=800&q=80', // Cucumber Mint Raita
-  906: 'https://images.unsplash.com/photo-1550304952-9d1e3444f713?auto=format&fit=crop&w=800&q=80', // Cheese and Chive Scones
-  907: 'https://images.unsplash.com/photo-1575831967553-771b0db4f7c1?auto=format&fit=crop&w=800&q=80', // Green Smoothie
-  908: 'https://images.unsplash.com/photo-1559737558-2f5a35f4523b?auto=format&fit=crop&w=800&q=80', // Coconut Shrimp
-  909: 'https://images.unsplash.com/photo-1637861004714-49fa0ccbb993?auto=format&fit=crop&w=800&q=80', // Tzatziki Stuffed Peppers
-  910: 'https://images.unsplash.com/photo-1567234669003-dce7a7a88821?auto=format&fit=crop&w=800&q=80', // Vegetable Croquetas
-  911: 'https://images.unsplash.com/photo-1572453800999-e8d2d1589b7c?auto=format&fit=crop&w=800&q=80', // Roasted Almonds with Herbs
-  912: 'https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&w=800&q=80', // Muhammara Walnut Dip
-  913: 'https://images.unsplash.com/photo-1502364271109-0a9a75a2a9df?auto=format&fit=crop&w=800&q=80', // Rainbow Veggie Rolls
-  914: 'https://images.unsplash.com/photo-1567613913497-8f023fc3d343?auto=format&fit=crop&w=800&q=80', // Loaded Potato Skins
-  915: 'https://images.unsplash.com/photo-1498579150354-977475b7ea0b?auto=format&fit=crop&w=800&q=80', // Panzanella Bites
-  916: 'https://images.unsplash.com/photo-1580959375944-abd7e991f971?auto=format&fit=crop&w=800&q=80', // Tempura Prawn
-  917: 'https://images.unsplash.com/photo-1574782256243-69c18023f7b4?auto=format&fit=crop&w=800&q=80', // Nut Butter Power Toast
-  918: 'https://images.unsplash.com/photo-1547058881-aa0edd92aab3?auto=format&fit=crop&w=800&q=80', // Dukkah
-  919: 'https://images.unsplash.com/photo-1511910849309-0dffb8785146?auto=format&fit=crop&w=800&q=80', // Corn Dogs Mini
-  920: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800&q=80', // Watermelon Feta Skewers
-  921: 'https://images.unsplash.com/photo-1501436513145-30f24e19fcc8?auto=format&fit=crop&w=800&q=80', // Prosciutto Melon
-  922: 'https://images.unsplash.com/photo-1573057377537-dbb3a99ac4b9?auto=format&fit=crop&w=800&q=80', // Protein Smoothie
-  923: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=800&q=80', // Brie and Cranberry Crostini
-  924: 'https://images.unsplash.com/photo-1553621042-f6e147245754?auto=format&fit=crop&w=800&q=80', // Pot Stickers
-  925: 'https://images.unsplash.com/photo-1558458601-0d69a278b8e6?auto=format&fit=crop&w=800&q=80', // Tahin with Grape Molasses
-  926: 'https://images.unsplash.com/photo-1546549032-9571cd6b27df?auto=format&fit=crop&w=800&q=80', // Avocado Boats with Tuna
-  927: 'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=800&q=80', // Fish Tacos Baja Style
-  928: 'https://images.unsplash.com/photo-1564834724105-918b73d1b9e0?auto=format&fit=crop&w=800&q=80', // Crispy Shallots
-  929: 'https://images.unsplash.com/photo-1467453678174-768ec283a940?auto=format&fit=crop&w=800&q=80', // A\u00e7a\u00ed Bowl
-  930: 'https://images.unsplash.com/photo-1593001867410-22f463e592ed?auto=format&fit=crop&w=800&q=80', // Ajvar
-  931: 'https://images.unsplash.com/photo-1540189549519-5a7bb3e29b00?auto=format&fit=crop&w=800&q=80', // Sevillana Olives
-  932: 'https://images.unsplash.com/photo-1482049016688-2d3e1b311543?auto=format&fit=crop&w=800&q=80', // Bruschetta with Cannellini
-  933: 'https://images.unsplash.com/photo-1582450871972-ab5ca641643d?auto=format&fit=crop&w=800&q=80', // Corn Pakora
-  934: 'https://images.unsplash.com/photo-1525184782196-8e2ded604bf7?auto=format&fit=crop&w=800&q=80', // Miso Deviled Eggs
-  935: 'https://images.unsplash.com/photo-1637861004714-49fa0ccbb993?auto=format&fit=crop&w=800&q=80', // Green Goddess Dip
-  936: 'https://images.unsplash.com/photo-1607301405418-780ee5e6dd10?auto=format&fit=crop&w=800&q=80', // Zucchini Fritter Bites
-  937: 'https://images.unsplash.com/photo-1553530666-ba11a7da3888?auto=format&fit=crop&w=800&q=80', // A\u00e7a\u00ed Smoothie
-  938: 'https://images.unsplash.com/photo-1574484284002-952d92456975?auto=format&fit=crop&w=800&q=80', // Paneer Tikka Bites
-  939: 'https://images.unsplash.com/photo-1600891964599-f94d5765bae8?auto=format&fit=crop&w=800&q=80', // Dates Stuffed with Almond
-  940: 'https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&w=800&q=80', // Moutabel
-  941: 'https://images.unsplash.com/photo-1615361200098-9e630ec29b4e?auto=format&fit=crop&w=800&q=80', // Pigs in Blankets
-  942: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=800&q=80', // Cold Sesame Noodles
-  943: 'https://images.unsplash.com/photo-1529006557810-274b9b2fc783?auto=format&fit=crop&w=800&q=80', // Falafel with Harissa
-  944: 'https://images.unsplash.com/photo-1550304952-9d1e3444f713?auto=format&fit=crop&w=800&q=80', // Egg Muffins
-  945: 'https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&w=800&q=80', // Mozzarella Sticks
-  946: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=800&q=80', // Za'atar Flatbread
-  947: 'https://images.unsplash.com/photo-1608393189287-0bc2191c7e86?auto=format&fit=crop&w=800&q=80', // Baked Kale Chips
-  948: 'https://images.unsplash.com/photo-1567234669003-dce7a7a88821?auto=format&fit=crop&w=800&q=80', // Cheese and Herb Scones
-  949: 'https://images.unsplash.com/photo-1547058881-aa0edd92aab3?auto=format&fit=crop&w=800&q=80', // Peanut Sauce with Crudit\u00e9s
-  950: 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=800&q=80', // Margherita Mini Pizzas
-  951: 'https://images.unsplash.com/photo-1620921575116-fb8902865f81?auto=format&fit=crop&w=800&q=80', // Pistachio Yogurt Dip
-  952: 'https://images.unsplash.com/photo-1502364271109-0a9a75a2a9df?auto=format&fit=crop&w=800&q=80', // Crispy Onion Rings
-  953: 'https://images.unsplash.com/photo-1558458601-0d69a278b8e6?auto=format&fit=crop&w=800&q=80', // Roasted Garlic Spread
-  954: 'https://images.unsplash.com/photo-1584278858944-7c34f1d94db0?auto=format&fit=crop&w=800&q=80', // Scotch Quail Eggs
-  955: 'https://images.unsplash.com/photo-1530554764233-e79e16c91d08?auto=format&fit=crop&w=800&q=80', // Trail Mix
-  956: 'https://images.unsplash.com/photo-1574672281340-6b2d260a4b72?auto=format&fit=crop&w=800&q=80', // Smoked Salmon Blinis
-  957: 'https://images.unsplash.com/photo-1606787366850-de6330128bfc?auto=format&fit=crop&w=800&q=80', // Truffle Mac Bites
-  958: 'https://images.unsplash.com/photo-1541519227354-08fa5d50c44d?auto=format&fit=crop&w=800&q=80', // Smashed Avocado Cups
-  959: 'https://images.unsplash.com/photo-1593001867410-22f463e592ed?auto=format&fit=crop&w=800&q=80', // Chermoula Dipping Sauce
-  960: 'https://images.unsplash.com/photo-1553621042-f6e147245754?auto=format&fit=crop&w=800&q=80', // Khinkali Georgian Dumplings
-  961: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800&q=80', // Antipasto Skewers
-  962: 'https://images.unsplash.com/photo-1528467279403-46af96c37ab3?auto=format&fit=crop&w=800&q=80', // Korean Fried Chicken
-  963: 'https://images.unsplash.com/photo-1580959375944-abd7e991f971?auto=format&fit=crop&w=800&q=80', // Camembert en Cro\u00fbte
-  964: 'https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=800&q=80', // Edamame Guacamole
-  965: 'https://images.unsplash.com/photo-1637861004714-49fa0ccbb993?auto=format&fit=crop&w=800&q=80', // Spinach Artichoke Dip
-  966: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=800&q=80', // Flatbread with Hummus and Veg
-  967: 'https://images.unsplash.com/photo-1589442305595-62647c1514f9?auto=format&fit=crop&w=800&q=80', // Pomegranate Walnut Salad
-  968: 'https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&w=800&q=80', // B\u00f6rek Rolls
-  969: 'https://images.unsplash.com/photo-1610015644714-60076be69b30?auto=format&fit=crop&w=800&q=80', // Shakshuka Mini Pots
-  970: 'https://images.unsplash.com/photo-1529704640551-eef9ba5d774a?auto=format&fit=crop&w=800&q=80', // Charred Corn Salsa
-  971: 'https://images.unsplash.com/photo-1570197571499-166b36435e9f?auto=format&fit=crop&w=800&q=80', // Fattoush Snack Plate
-  972: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=800&q=80', // Open Sandwich Sm\u00f8rrebr\u00f8d
-  973: 'https://images.unsplash.com/photo-1582450871972-ab5ca641643d?auto=format&fit=crop&w=800&q=80', // Cauliflower Buffalo Bites
-  974: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?auto=format&fit=crop&w=800&q=80', // Lentil and Herb Crackers
-  975: 'https://images.unsplash.com/photo-1547058881-aa0edd92aab3?auto=format&fit=crop&w=800&q=80', // Garlicky White Bean Spread
-  976: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=800&q=80', // Tahini Brownies
-  977: 'https://images.unsplash.com/photo-1546964124-0cce460f38ef?auto=format&fit=crop&w=800&q=80', // Tarte Flamb\u00e9e
-  978: 'https://images.unsplash.com/photo-1574782256243-69c18023f7b4?auto=format&fit=crop&w=800&q=80', // Ants on a Log
-  979: 'https://images.unsplash.com/photo-1558030154-d3605e91d892?auto=format&fit=crop&w=800&q=80', // Crispy Skin Chicken Wings
-  980: 'https://images.unsplash.com/photo-1600891964599-f94d5765bae8?auto=format&fit=crop&w=800&q=80', // Matcha Energy Balls
-  981: 'https://images.unsplash.com/photo-1558458601-0d69a278b8e6?auto=format&fit=crop&w=800&q=80', // Romesco Dip
-  982: 'https://images.unsplash.com/photo-1550304952-9d1e3444f713?auto=format&fit=crop&w=800&q=80', // Cheese Toast Korean Baked
-  983: 'https://images.unsplash.com/photo-1614549150185-8f85229ff291?auto=format&fit=crop&w=800&q=80', // Celeriac Remoulade
-  984: 'https://images.unsplash.com/photo-1607301405418-780ee5e6dd10?auto=format&fit=crop&w=800&q=80', // Kibbeh Balls
-  985: 'https://images.unsplash.com/photo-1593001867410-22f463e592ed?auto=format&fit=crop&w=800&q=80', // Labneh and Zaatar Plate
-  986: 'https://images.unsplash.com/photo-1615361200098-9e630ec29b4e?auto=format&fit=crop&w=800&q=80', // Battered Halloumi
-  987: 'https://images.unsplash.com/photo-1637861004714-49fa0ccbb993?auto=format&fit=crop&w=800&q=80', // Chipotle Sour Cream Dip
-  988: 'https://images.unsplash.com/photo-1464500542410-1396074bf230?auto=format&fit=crop&w=800&q=80', // Roasted Pumpkin Seed Snack
-  989: 'https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&w=800&q=80', // G\u00f6zleme
-  990: 'https://images.unsplash.com/photo-1605926637512-c8b131444a3b?auto=format&fit=crop&w=800&q=80', // Tomato Galette
-  991: 'https://images.unsplash.com/photo-1627764627459-ba29d6051fe0?auto=format&fit=crop&w=800&q=80', // Japanese Potato Salad
-  992: 'https://images.unsplash.com/photo-1536599524557-5f784dd53282?auto=format&fit=crop&w=800&q=80', // Chai Oat Cookies
-  993: 'https://images.unsplash.com/photo-1589041611454-fd81bb39c3ba?auto=format&fit=crop&w=800&q=80', // Feta-Stuffed Peppadews
-  994: 'https://images.unsplash.com/photo-1600891964099-c3c5bea1c5e0?auto=format&fit=crop&w=800&q=80', // Mango Habanero Salsa
-  995: 'https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&w=800&q=80', // Korean Cucumber Banchan
-  996: 'https://images.unsplash.com/photo-1567234669003-dce7a7a88821?auto=format&fit=crop&w=800&q=80', // Prawn Toasts with Sesame
-  997: 'https://images.unsplash.com/photo-1598412795976-9c195182ee01?auto=format&fit=crop&w=800&q=80', // Coconut Bliss Balls
-  998: 'https://images.unsplash.com/photo-1553909489-cd47e0907980?auto=format&fit=crop&w=800&q=80', // Melted Provolone
-  999: 'https://images.unsplash.com/photo-1473093226795-af9932fe5856?auto=format&fit=crop&w=800&q=80', // Pesto Palmiers
-  1000: 'https://images.unsplash.com/photo-1502364271109-0a9a75a2a9df?auto=format&fit=crop&w=800&q=80', // Loaded Fries
-  1001: 'https://images.unsplash.com/photo-1600891964099-c3c5bea1c5e0?auto=format&fit=crop&w=800&q=80', // Spiced Mango Lassi
-  1002: 'https://images.unsplash.com/photo-1620280641611-1b444bf9f9b6?auto=format&fit=crop&w=800&q=80', // Soft Boiled Eggs with Soldiers
-  1003: 'https://images.unsplash.com/photo-1584776296944-ab6fb57b0bdd?auto=format&fit=crop&w=800&q=80', // Scrambled Eggs with Cheese
-  1004: 'https://images.unsplash.com/photo-1538220856186-0be0e085984d?auto=format&fit=crop&w=800&q=80', // Egg and Avocado Toast
-  1005: 'https://images.unsplash.com/photo-1525184782196-8e2ded604bf7?auto=format&fit=crop&w=800&q=80', // Poached Eggs on Toast
-  1006: 'https://images.unsplash.com/photo-1495214783159-3503fd1b572d?auto=format&fit=crop&w=800&q=80', // Spanish Omelette
-  1007: 'https://images.unsplash.com/photo-1627733810457-3c027bbb4dbb?auto=format&fit=crop&w=800&q=80', // Egg White Omelette with Spinach
-  1008: 'https://images.unsplash.com/photo-1568051243858-533a607809a5?auto=format&fit=crop&w=800&q=80', // Classic Waffles
-  1009: 'https://images.unsplash.com/photo-1519676867240-f03562e64548?auto=format&fit=crop&w=800&q=80', // Blueberry Waffles
-  1010: 'https://images.unsplash.com/photo-1585461276010-aff0f3dcd48f?auto=format&fit=crop&w=800&q=80', // Banana Pancakes
-  1011: 'https://images.unsplash.com/photo-1562376552-0d160a2f238d?auto=format&fit=crop&w=800&q=80', // Ricotta Pancakes
-  1012: 'https://images.unsplash.com/photo-1585461276010-aff0f3dcd48f?auto=format&fit=crop&w=800&q=80', // French Toast with Berries
-  1013: 'https://images.unsplash.com/photo-1584278858944-7c34f1d94db0?auto=format&fit=crop&w=800&q=80', // Cinnamon French Toast
-  1014: 'https://images.unsplash.com/photo-1550304939-ee0be36f980f?auto=format&fit=crop&w=800&q=80', // Banana Oat Smoothie Bowl
-  1015: 'https://images.unsplash.com/photo-1490474418585-ba9bad8fd0ea?auto=format&fit=crop&w=800&q=80', // Coconut Yogurt Parfait
-  1016: 'https://images.unsplash.com/photo-1600891964099-c3c5bea1c5e0?auto=format&fit=crop&w=800&q=80', // Overnight Chia Pudding
-  1017: 'https://images.unsplash.com/photo-1528207776546-365bb710ee93?auto=format&fit=crop&w=800&q=80', // Banana Bread Slice
-  1018: 'https://images.unsplash.com/photo-1568051243858-533a607809a5?auto=format&fit=crop&w=800&q=80', // Butter and Jam Croissant
-  1019: 'https://images.unsplash.com/photo-1519676867240-f03562e64548?auto=format&fit=crop&w=800&q=80', // Steel Cut Oats
-  1020: 'https://images.unsplash.com/photo-1611601184963-9d1de9b79ff3?auto=format&fit=crop&w=800&q=80', // Muesli with Milk
-  1021: 'https://images.unsplash.com/photo-1562376552-0d160a2f238d?auto=format&fit=crop&w=800&q=80', // Quinoa Breakfast Bowl
-  1022: 'https://images.unsplash.com/photo-1636743713732-125909a35dcc?auto=format&fit=crop&w=800&q=80', // Strawberry Smoothie
-  1023: 'https://images.unsplash.com/photo-1584776296944-ab6fb57b0bdd?auto=format&fit=crop&w=800&q=80', // Blueberry Smoothie
-  1024: 'https://images.unsplash.com/photo-1620921575116-fb8902865f81?auto=format&fit=crop&w=800&q=80', // Berry Protein Smoothie
-  1025: 'https://images.unsplash.com/photo-1597200284813-aeddf0653f54?auto=format&fit=crop&w=800&q=80', // Baked Oatmeal
-  1026: 'https://images.unsplash.com/photo-1525184782196-8e2ded604bf7?auto=format&fit=crop&w=800&q=80', // Avocado Toast with Poached Egg
-  1027: 'https://images.unsplash.com/photo-1575831967553-771b0db4f7c1?auto=format&fit=crop&w=800&q=80', // Cheese and Tomato Toast
-  1028: 'https://images.unsplash.com/photo-1568051243858-533a607809a5?auto=format&fit=crop&w=800&q=80', // Rice Porridge (Congee)
-  1029: 'https://images.unsplash.com/photo-1519676867240-f03562e64548?auto=format&fit=crop&w=800&q=80', // Peanut Butter Toast
-  1030: 'https://images.unsplash.com/photo-1553530666-ba11a7da3888?auto=format&fit=crop&w=800&q=80', // Sourdough Pancakes
-  1031: 'https://images.unsplash.com/photo-1562376552-0d160a2f238d?auto=format&fit=crop&w=800&q=80', // Hash Brown with Egg
-  1032: 'https://images.unsplash.com/photo-1590412200988-a436970781fa?auto=format&fit=crop&w=800&q=80', // Polenta Porridge
-  1033: 'https://images.unsplash.com/photo-1620280641611-1b444bf9f9b6?auto=format&fit=crop&w=800&q=80', // Almond Croissant
-  1034: 'https://images.unsplash.com/photo-1636743713732-125909a35dcc?auto=format&fit=crop&w=800&q=80', // Cornmeal Waffles
-  1035: 'https://images.unsplash.com/photo-1584278858944-7c34f1d94db0?auto=format&fit=crop&w=800&q=80', // Turkish Eggs (Cilbir)
-  1036: 'https://images.unsplash.com/photo-1597200284813-aeddf0653f54?auto=format&fit=crop&w=800&q=80', // Semolina Porridge
-  1037: 'https://images.unsplash.com/photo-1610015644714-60076be69b30?auto=format&fit=crop&w=800&q=80', // Smoothie Bowl
-  1038: 'https://images.unsplash.com/photo-1568051243858-533a607809a5?auto=format&fit=crop&w=800&q=80', // Egg and Mushroom Toast
-  1039: 'https://images.unsplash.com/photo-1519676867240-f03562e64548?auto=format&fit=crop&w=800&q=80', // Spiced Banana Oatmeal
-  1040: 'https://images.unsplash.com/photo-1611601184963-9d1de9b79ff3?auto=format&fit=crop&w=800&q=80', // Apple Pie Oatmeal
-  1041: 'https://images.unsplash.com/photo-1562376552-0d160a2f238d?auto=format&fit=crop&w=800&q=80', // Egg and Cheese Muffin
-  1042: 'https://images.unsplash.com/photo-1584776296944-ab6fb57b0bdd?auto=format&fit=crop&w=800&q=80', // Cinnamon Raisin Oatmeal
-  1043: 'https://images.unsplash.com/photo-1627733810457-3c027bbb4dbb?auto=format&fit=crop&w=800&q=80', // Mango Oatmeal
-  1044: 'https://images.unsplash.com/photo-1510693206972-df098062cb71?auto=format&fit=crop&w=800&q=80', // Oat and Apple Pancakes
-  1045: 'https://images.unsplash.com/photo-1573057377537-dbb3a99ac4b9?auto=format&fit=crop&w=800&q=80', // Barley Porridge
-  1046: 'https://images.unsplash.com/photo-1636743713732-125909a35dcc?auto=format&fit=crop&w=800&q=80', // Strawberry Compote on Toast
-  1047: 'https://images.unsplash.com/photo-1585461276010-aff0f3dcd48f?auto=format&fit=crop&w=800&q=80', // Coconut Oatmeal
-  1048: 'https://images.unsplash.com/photo-1568051243858-533a607809a5?auto=format&fit=crop&w=800&q=80', // Egg in a Hole
-  1049: 'https://images.unsplash.com/photo-1519676867240-f03562e64548?auto=format&fit=crop&w=800&q=80', // Creamy Millet Porridge
-  1050: 'https://images.unsplash.com/photo-1525184782196-8e2ded604bf7?auto=format&fit=crop&w=800&q=80', // Chocolate Peanut Butter Oats
-  1051: 'https://images.unsplash.com/photo-1562376552-0d160a2f238d?auto=format&fit=crop&w=800&q=80', // Jam and Butter Toast
-  1052: 'https://images.unsplash.com/photo-1584278858944-7c34f1d94db0?auto=format&fit=crop&w=800&q=80', // Bacon and Egg Muffin
-  1053: 'https://images.unsplash.com/photo-1636743713732-125909a35dcc?auto=format&fit=crop&w=800&q=80', // Spelt Pancakes
-  1054: 'https://images.unsplash.com/photo-1585461276010-aff0f3dcd48f?auto=format&fit=crop&w=800&q=80', // Warm Milk Oats
-  1055: 'https://images.unsplash.com/photo-1611601184963-9d1de9b79ff3?auto=format&fit=crop&w=800&q=80', // Spinach and Feta Pastry
-  1056: 'https://images.unsplash.com/photo-1495214783159-3503fd1b572d?auto=format&fit=crop&w=800&q=80', // Cream of Wheat
-  1057: 'https://images.unsplash.com/photo-1528207776546-365bb710ee93?auto=format&fit=crop&w=800&q=80', // Strawberry French Toast
-  1058: 'https://images.unsplash.com/photo-1568051243858-533a607809a5?auto=format&fit=crop&w=800&q=80', // Egg and Spinach Wrap
-  1059: 'https://images.unsplash.com/photo-1519676867240-f03562e64548?auto=format&fit=crop&w=800&q=80', // Raspberry Overnight Oats
-  1060: 'https://images.unsplash.com/photo-1553530666-ba11a7da3888?auto=format&fit=crop&w=800&q=80', // Asparagus and Egg Toast
-  1061: 'https://images.unsplash.com/photo-1562376552-0d160a2f238d?auto=format&fit=crop&w=800&q=80', // Acai Bowl
-  1062: 'https://images.unsplash.com/photo-1584776296944-ab6fb57b0bdd?auto=format&fit=crop&w=800&q=80', // Peach Yogurt Bowl
-  1063: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=800&q=80', // Stewed Apple on Oats
-  1064: 'https://images.unsplash.com/photo-1584278858944-7c34f1d94db0?auto=format&fit=crop&w=800&q=80', // Cottage Cheese Toast
-  1065: 'https://images.unsplash.com/photo-1620921575116-fb8902865f81?auto=format&fit=crop&w=800&q=80', // Pumpkin Pancakes
-  1066: 'https://images.unsplash.com/photo-1597200284813-aeddf0653f54?auto=format&fit=crop&w=800&q=80', // Baked Egg Cups
-  1067: 'https://images.unsplash.com/photo-1525184782196-8e2ded604bf7?auto=format&fit=crop&w=800&q=80', // 4-Ingredient Oatmeal Cups
-  1068: 'https://images.unsplash.com/photo-1568051243858-533a607809a5?auto=format&fit=crop&w=800&q=80', // Buckwheat Porridge
-  1069: 'https://images.unsplash.com/photo-1519676867240-f03562e64548?auto=format&fit=crop&w=800&q=80', // Banana Nut Muffins
-  1070: 'https://images.unsplash.com/photo-1498837167922-ddd27525d352?auto=format&fit=crop&w=800&q=80', // Classic Caesar Salad
-  1071: 'https://images.unsplash.com/photo-1599020792689-9fde458e7e17?auto=format&fit=crop&w=800&q=80', // Chicken Caesar Salad
-  1072: 'https://images.unsplash.com/photo-1627764627459-ba29d6051fe0?auto=format&fit=crop&w=800&q=80', // Tuna Salad Sandwich
-  1073: 'https://images.unsplash.com/photo-1594221708779-94832f4320d1?auto=format&fit=crop&w=800&q=80', // Grilled Chicken Wrap
-  1074: 'https://images.unsplash.com/photo-1583182363039-59eac8609ab2?auto=format&fit=crop&w=800&q=80', // Nicoise Salad
-  1075: 'https://images.unsplash.com/photo-1534080564583-6be75777b70a?auto=format&fit=crop&w=800&q=80', // Dal and Rice
-  1076: 'https://images.unsplash.com/photo-1481931098730-318b6f776db0?auto=format&fit=crop&w=800&q=80', // Greek Pasta Salad
-  1077: 'https://images.unsplash.com/photo-1541519227354-08fa5d50c44d?auto=format&fit=crop&w=800&q=80', // Ham and Cheese Sandwich
-  1078: 'https://images.unsplash.com/photo-1575831967553-771b0db4f7c1?auto=format&fit=crop&w=800&q=80', // Veggie Quesadilla
-  1079: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=800&q=80', // Potato Leek Soup
-  1080: 'https://images.unsplash.com/photo-1548943487-a2e4e43b4853?auto=format&fit=crop&w=800&q=80', // Carrot Ginger Soup
-  1081: 'https://images.unsplash.com/photo-1590301157890-4810ed352733?auto=format&fit=crop&w=800&q=80', // Roasted Veg Salad
-  1082: 'https://images.unsplash.com/photo-1652088079703-38f4a8d6b981?auto=format&fit=crop&w=800&q=80', // Chicken and Vegetable Soup
-  1083: 'https://images.unsplash.com/photo-1482049016688-2d3e1b311543?auto=format&fit=crop&w=800&q=80', // Flatbread Pizza
-  1084: 'https://images.unsplash.com/photo-1494597564530-871f2b93ac55?auto=format&fit=crop&w=800&q=80', // Couscous Salad
-  1085: 'https://images.unsplash.com/photo-1540189549519-5a7bb3e29b00?auto=format&fit=crop&w=800&q=80', // Panzanella
-  1086: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=800&q=80', // Vegetable Noodle Soup
-  1087: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?auto=format&fit=crop&w=800&q=80', // Roasted Red Pepper Hummus Wrap
-  1088: 'https://images.unsplash.com/photo-1614549150185-8f85229ff291?auto=format&fit=crop&w=800&q=80', // Turkey and Avocado Sandwich
-  1089: 'https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=800&q=80', // Black Bean Soup
-  1090: 'https://images.unsplash.com/photo-1505576633757-0ac1084af824?auto=format&fit=crop&w=800&q=80', // Beetroot and Goat Cheese Salad
-  1091: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=800&q=80', // Hummus and Veggie Wrap
-  1092: 'https://images.unsplash.com/photo-1555949258-eb67b1ef0ceb?auto=format&fit=crop&w=800&q=80', // Pasta Salad with Pesto
-  1093: 'https://images.unsplash.com/photo-1572357243457-fc153742e7a5?auto=format&fit=crop&w=800&q=80', // Smoked Salmon Salad
-  1094: 'https://images.unsplash.com/photo-1534939561126-855b8675edd7?auto=format&fit=crop&w=800&q=80', // Lentil and Roasted Veg Salad
-  1095: 'https://images.unsplash.com/photo-1549248220-5811dc32cd5d?auto=format&fit=crop&w=800&q=80', // Warm Potato Salad
-  1096: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=800&q=80', // Tomato and Bread Soup (Ribollita)
-  1097: 'https://images.unsplash.com/photo-1596449212953-4ca53eca4822?auto=format&fit=crop&w=800&q=80', // Tuna and Sweetcorn Wrap
-  1098: 'https://images.unsplash.com/photo-1505576633757-0ac1084af824?auto=format&fit=crop&w=800&q=80', // Spinach and Strawberry Salad
-  1099: 'https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=800&q=80', // Pasta e Fagioli
-  1100: 'https://images.unsplash.com/photo-1574782256243-69c18023f7b4?auto=format&fit=crop&w=800&q=80', // Cheese and Pickle Sandwich
-  1101: 'https://images.unsplash.com/photo-1548943487-a2e4e43b4853?auto=format&fit=crop&w=800&q=80', // Tuscan Bean Soup
-  1102: 'https://images.unsplash.com/photo-1559314809-0d155014e29e?auto=format&fit=crop&w=800&q=80', // Thai-Style Noodle Salad
-  1103: 'https://images.unsplash.com/photo-1608897013039-887f21d8c804?auto=format&fit=crop&w=800&q=80', // Orzo Salad
-  1104: 'https://images.unsplash.com/photo-1517840901100-8179e982acb7?auto=format&fit=crop&w=800&q=80', // Grilled Cheese Sandwich
-  1105: 'https://images.unsplash.com/photo-1590301157890-4810ed352733?auto=format&fit=crop&w=800&q=80', // Chickpea and Roasted Pepper Salad
-  1106: 'https://images.unsplash.com/photo-1574672281340-6b2d260a4b72?auto=format&fit=crop&w=800&q=80', // Prawn Tacos
-  1107: 'https://images.unsplash.com/photo-1494597564530-871f2b93ac55?auto=format&fit=crop&w=800&q=80', // Chicken Salad Sandwich
-  1108: 'https://images.unsplash.com/photo-1599020792689-9fde458e7e17?auto=format&fit=crop&w=800&q=80', // Couscous with Roasted Vegetables
-  1109: 'https://images.unsplash.com/photo-1546549032-9571cd6b27df?auto=format&fit=crop&w=800&q=80', // Tuna Melt
-  1110: 'https://images.unsplash.com/photo-1581875271349-86c5c7dd58af?auto=format&fit=crop&w=800&q=80', // Avocado and Tomato Salad
-  1111: 'https://images.unsplash.com/photo-1579366948929-444eb79881eb?auto=format&fit=crop&w=800&q=80', // Pulled Chicken Wrap
-  1112: 'https://images.unsplash.com/photo-1589442305595-62647c1514f9?auto=format&fit=crop&w=800&q=80', // Cucumber and Mint Salad
-  1113: 'https://images.unsplash.com/photo-1567613913497-8f023fc3d343?auto=format&fit=crop&w=800&q=80', // Prosciutto and Mozzarella Panini
-  1114: 'https://images.unsplash.com/photo-1583182363039-59eac8609ab2?auto=format&fit=crop&w=800&q=80', // Roasted Beet Salad
-  1115: 'https://images.unsplash.com/photo-1544943910-4c1dc44aab44?auto=format&fit=crop&w=800&q=80', // Salmon Wrap
-  1116: 'https://images.unsplash.com/photo-1590301157890-4810ed352733?auto=format&fit=crop&w=800&q=80', // Fennel and Orange Salad
-  1117: 'https://images.unsplash.com/photo-1541519227354-08fa5d50c44d?auto=format&fit=crop&w=800&q=80', // Feta and Olive Flatbread
-  1118: 'https://images.unsplash.com/photo-1670518045324-6c1f1942b2b8?auto=format&fit=crop&w=800&q=80', // Butter Bean Soup
-  1119: 'https://images.unsplash.com/photo-1494597564530-871f2b93ac55?auto=format&fit=crop&w=800&q=80', // Spelt and Roasted Veg Bowl
-  1120: 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=800&q=80', // Cheese and Onion Pizza
-  1121: 'https://images.unsplash.com/photo-1612874742237-6526221588e3?auto=format&fit=crop&w=800&q=80', // Spaghetti Bolognese
-  1122: 'https://images.unsplash.com/photo-1576511053046-7e445c5b95af?auto=format&fit=crop&w=800&q=80', // Roast Chicken with Vegetables
-  1123: 'https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=800&q=80', // Beef Stew
-  1124: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=800&q=80', // Lamb Chops with Rosemary
-  1125: 'https://images.unsplash.com/photo-1594221708779-94832f4320d1?auto=format&fit=crop&w=800&q=80', // Salmon with Roasted Potatoes
-  1126: 'https://images.unsplash.com/photo-1476124369491-e7addf5db371?auto=format&fit=crop&w=800&q=80', // Chicken and Rice
-  1127: 'https://images.unsplash.com/photo-1559737558-2f5a35f4523b?auto=format&fit=crop&w=800&q=80', // Pork Chops with Apple Sauce
-  1128: 'https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=800&q=80', // Baked Cod with Lemon
-  1129: 'https://images.unsplash.com/photo-1473093226795-af9932fe5856?auto=format&fit=crop&w=800&q=80', // Creamy Pesto Pasta
-  1130: 'https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=800&q=80', // Amatriciana Pasta
-  1131: 'https://images.unsplash.com/photo-1534939561126-855b8675edd7?auto=format&fit=crop&w=800&q=80', // Slow-Cooked Beef Chili
-  1132: 'https://images.unsplash.com/photo-1580288020976-854d44d4c54f?auto=format&fit=crop&w=800&q=80', // Garlic Butter Chicken
-  1133: 'https://images.unsplash.com/photo-1546549032-9571cd6b27df?auto=format&fit=crop&w=800&q=80', // Fish and Chips
-  1134: 'https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?auto=format&fit=crop&w=800&q=80', // Pasta Carbonara
-  1135: 'https://images.unsplash.com/photo-1603073163308-9654c3fb70b5?auto=format&fit=crop&w=800&q=80', // Chicken Marsala
-  1136: 'https://images.unsplash.com/photo-1544943910-4c1dc44aab44?auto=format&fit=crop&w=800&q=80', // Chicken Piccata
-  1137: 'https://images.unsplash.com/photo-1556761223-4c4282c73f77?auto=format&fit=crop&w=800&q=80', // Lasagna
-  1138: 'https://images.unsplash.com/photo-1579366948929-444eb79881eb?auto=format&fit=crop&w=800&q=80', // Chicken Cacciatore
-  1139: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=800&q=80', // Baked Salmon with Honey Glaze
-  1140: 'https://images.unsplash.com/photo-1596449212953-4ca53eca4822?auto=format&fit=crop&w=800&q=80', // Meatballs in Tomato Sauce
-  1141: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=800&q=80', // Vegetable Curry
-  1142: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=800&q=80', // Paella
-  1143: 'https://images.unsplash.com/photo-1464500542410-1396074bf230?auto=format&fit=crop&w=800&q=80', // Shepherd's Pie
-  1144: 'https://images.unsplash.com/photo-1511910849309-0dffb8785146?auto=format&fit=crop&w=800&q=80', // Cottage Pie
-  1145: 'https://images.unsplash.com/photo-1594221708779-94832f4320d1?auto=format&fit=crop&w=800&q=80', // Roast Chicken Thighs
-  1146: 'https://images.unsplash.com/photo-1580959375944-abd7e991f971?auto=format&fit=crop&w=800&q=80', // Pan-Fried Steak
-  1147: 'https://images.unsplash.com/photo-1528467279403-46af96c37ab3?auto=format&fit=crop&w=800&q=80', // Trout with Almonds
-  1148: 'https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?auto=format&fit=crop&w=800&q=80', // Chicken Korma
-  1149: 'https://images.unsplash.com/photo-1609226127613-55143d781e69?auto=format&fit=crop&w=800&q=80', // Pork Tenderloin with Potatoes
-  1150: 'https://images.unsplash.com/photo-1563379926898-05f4575a45d8?auto=format&fit=crop&w=800&q=80', // Pasta with Sun-Dried Tomatoes
-  1151: 'https://images.unsplash.com/photo-1546549032-9571cd6b27df?auto=format&fit=crop&w=800&q=80', // One-Pan Chicken and Veg
-  1152: 'https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&w=800&q=80', // Beef and Vegetable Stir Fry
-  1153: 'https://images.unsplash.com/photo-1544943910-4c1dc44aab44?auto=format&fit=crop&w=800&q=80', // Chicken Stir Fry
-  1154: 'https://images.unsplash.com/photo-1574484284002-952d92456975?auto=format&fit=crop&w=800&q=80', // Lamb Curry
-  1155: 'https://images.unsplash.com/photo-1551892374-ecf8754cf8b0?auto=format&fit=crop&w=800&q=80', // Prawn Pasta
-  1156: 'https://images.unsplash.com/photo-1603073163308-9654c3fb70b5?auto=format&fit=crop&w=800&q=80', // Chicken Marsala with Mushrooms
-  1157: 'https://images.unsplash.com/photo-1585032226651-759b368d7246?auto=format&fit=crop&w=800&q=80', // Beef Ramen
-  1158: 'https://images.unsplash.com/photo-1574894709920-11b28e7367e3?auto=format&fit=crop&w=800&q=80', // Pork Meatball Pasta
-  1159: 'https://images.unsplash.com/photo-1553163147-622ab57be1c7?auto=format&fit=crop&w=800&q=80', // Chicken and Mushroom Risotto
-  1160: 'https://images.unsplash.com/photo-1631167490917-2a22c070573a?auto=format&fit=crop&w=800&q=80', // Bean and Sausage Casserole
-  1161: 'https://images.unsplash.com/photo-1559847844-5315695dadae?auto=format&fit=crop&w=800&q=80', // Pan-Fried Mackerel
-  1162: 'https://images.unsplash.com/photo-1481931098730-318b6f776db0?auto=format&fit=crop&w=800&q=80', // Pasta with Roasted Garlic and Broccoli
-  1163: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=800&q=80', // Pork and Vegetable Casserole
-  1164: 'https://images.unsplash.com/photo-1594221708779-94832f4320d1?auto=format&fit=crop&w=800&q=80', // Chicken Pot Pie
-  1165: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=800&q=80', // Puttanesca
-  1166: 'https://images.unsplash.com/photo-1562376552-0d160a2f238d?auto=format&fit=crop&w=800&q=80', // Shakshuka for Dinner
-  1167: 'https://images.unsplash.com/photo-1614549150185-8f85229ff291?auto=format&fit=crop&w=800&q=80', // Chicken Tray Bake with Potatoes
-  1168: 'https://images.unsplash.com/photo-1574672281340-6b2d260a4b72?auto=format&fit=crop&w=800&q=80', // Lamb Shepherd's Pie
-  1169: 'https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=800&q=80', // Fish Pie
-  1170: 'https://images.unsplash.com/photo-1620280641611-1b444bf9f9b6?auto=format&fit=crop&w=800&q=80', // Ribollita with Poached Egg
-  1171: 'https://images.unsplash.com/photo-1555949258-eb67b1ef0ceb?auto=format&fit=crop&w=800&q=80', // Gnocchi with Pesto
-  1172: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=800&q=80', // Pork and Lentil Stew
-  1173: 'https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=800&q=80', // Tuna Pasta Bake
-  1174: 'https://images.unsplash.com/photo-1546549032-9571cd6b27df?auto=format&fit=crop&w=800&q=80', // Baked Chicken Breast
-  1175: 'https://images.unsplash.com/photo-1576511053046-7e445c5b95af?auto=format&fit=crop&w=800&q=80', // Beef Burger
-  1176: 'https://images.unsplash.com/photo-1544943910-4c1dc44aab44?auto=format&fit=crop&w=800&q=80', // Chicken Gyros
-  1177: 'https://images.unsplash.com/photo-1608897013039-887f21d8c804?auto=format&fit=crop&w=800&q=80', // Pasta with Sausage
-  1178: 'https://images.unsplash.com/photo-1548943487-a2e4e43b4853?auto=format&fit=crop&w=800&q=80', // Vegetable Stew
-  1179: 'https://images.unsplash.com/photo-1519624014191-508652cbd7b5?auto=format&fit=crop&w=800&q=80', // Prawn Stir Fry with Noodles
-  1180: 'https://images.unsplash.com/photo-1543339308091-ef3c048c3ca0?auto=format&fit=crop&w=800&q=80', // Slow-Cooker Beef Stew
-  1181: 'https://images.unsplash.com/photo-1612874742237-6526221588e3?auto=format&fit=crop&w=800&q=80', // Chicken and Spinach Pasta
-  1182: 'https://images.unsplash.com/photo-1473093226795-af9932fe5856?auto=format&fit=crop&w=800&q=80', // Mushroom Stroganoff
-  1183: 'https://images.unsplash.com/photo-1609658938891-32dd655106af?auto=format&fit=crop&w=800&q=80', // Slow-Roasted Lamb Shoulder
-  1184: 'https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=800&q=80', // Gnocchi Bake
-  1185: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=800&q=80', // Honey Garlic Salmon
-  1186: 'https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=800&q=80', // Red Bean Chili
-  1187: 'https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?auto=format&fit=crop&w=800&q=80', // Pasta with Asparagus
-  1188: 'https://images.unsplash.com/photo-1594221708779-94832f4320d1?auto=format&fit=crop&w=800&q=80', // Pork Belly with Apple
-  1189: 'https://images.unsplash.com/photo-1606756790138-261d2b21cd75?auto=format&fit=crop&w=800&q=80', // Toad in the Hole
-  1190: 'https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=800&q=80', // Chicken Laksa
-  1191: 'https://images.unsplash.com/photo-1529006557810-274b9b2fc783?auto=format&fit=crop&w=800&q=80', // Classic Hummus
-  1192: 'https://images.unsplash.com/photo-1627764627459-ba29d6051fe0?auto=format&fit=crop&w=800&q=80', // Cheese and Crackers Platter
-  1193: 'https://images.unsplash.com/photo-1589041611454-fd81bb39c3ba?auto=format&fit=crop&w=800&q=80', // Peanut Butter Banana Snack
-  1194: 'https://images.unsplash.com/photo-1540189549519-5a7bb3e29b00?auto=format&fit=crop&w=800&q=80', // Cheese and Apple Slices
-  1195: 'https://images.unsplash.com/photo-1600615789327-eba9cb100e1d?auto=format&fit=crop&w=800&q=80', // Oat and Raisin Cookies
-  1196: 'https://images.unsplash.com/photo-1576511053046-7e445c5b95af?auto=format&fit=crop&w=800&q=80', // Carrot Sticks with Dip
-  1197: 'https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=800&q=80', // Banana with Almonds
-  1198: 'https://images.unsplash.com/photo-1505576633757-0ac1084af824?auto=format&fit=crop&w=800&q=80', // Greek Yogurt Berry Bowl
-  1199: 'https://images.unsplash.com/photo-1511910849309-0dffb8785146?auto=format&fit=crop&w=800&q=80', // Spiced Almonds
-  1200: 'https://images.unsplash.com/photo-1550304952-9d1e3444f713?auto=format&fit=crop&w=800&q=80', // Cheese Biscuits
-  1201: 'https://images.unsplash.com/photo-1540189549519-5a7bb3e29b00?auto=format&fit=crop&w=800&q=80', // Olive and Feta Bites
-  1202: 'https://images.unsplash.com/photo-1579366948929-444eb79881eb?auto=format&fit=crop&w=800&q=80', // Peanut Butter Energy Bites
-  1203: 'https://images.unsplash.com/photo-1538220856186-0be0e085984d?auto=format&fit=crop&w=800&q=80', // Veggie Spring Rolls
-  1204: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=800&q=80', // Pita with Hummus and Veggies
-  1205: 'https://images.unsplash.com/photo-1611254666354-d75bfe3cadbc?auto=format&fit=crop&w=800&q=80', // Shortbread Cookies
-  1206: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=80', // Honey Roasted Pecans
-  1207: 'https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?auto=format&fit=crop&w=800&q=80', // Spinach and Cheese Pinwheels
-  1208: 'https://images.unsplash.com/photo-1603189864361-0cc65b5ecd3a?auto=format&fit=crop&w=800&q=80', // Frozen Grapes
-  1209: 'https://images.unsplash.com/photo-1567234669003-dce7a7a88821?auto=format&fit=crop&w=800&q=80', // Garlic Breadsticks
-  1210: 'https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=800&q=80', // Spicy Roasted Nuts Mix
-  1211: 'https://images.unsplash.com/photo-1505253599537-305b179737ce?auto=format&fit=crop&w=800&q=80', // Chocolate Granola Bars
-  1212: 'https://images.unsplash.com/photo-1536749605762-e7445a2d43ec?auto=format&fit=crop&w=800&q=80', // Classic Vanilla Cake
-  1213: 'https://images.unsplash.com/photo-1541783245831-57d6fb0926d3?auto=format&fit=crop&w=800&q=80', // Chocolate Brownies
-  1214: 'https://images.unsplash.com/photo-1557310717-d6bea9f36682?auto=format&fit=crop&w=800&q=80', // Chocolate Chip Cookies
-  1215: 'https://images.unsplash.com/photo-1635189461100-216097234630?auto=format&fit=crop&w=800&q=80', // Lemon Tart
-  1216: 'https://images.unsplash.com/photo-1515037893149-de7f840978e2?auto=format&fit=crop&w=800&q=80', // Strawberry Cheesecake
-  1217: 'https://images.unsplash.com/photo-1564355808539-22fda35bed7e?auto=format&fit=crop&w=800&q=80', // Carrot Cake
-  1218: 'https://images.unsplash.com/photo-1589375025852-a66cdd127efb?auto=format&fit=crop&w=800&q=80', // Chocolate Mousse
-  1219: 'https://images.unsplash.com/photo-1590841609987-4ac211afdde1?auto=format&fit=crop&w=800&q=80', // Banana Bread
-  1220: 'https://images.unsplash.com/photo-1604761483402-1e07d167c09b?auto=format&fit=crop&w=800&q=80', // Panna Cotta
-  1221: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=800&q=80', // Apple Pie
-  1222: 'https://images.unsplash.com/photo-1610611424854-5e07032143d8?auto=format&fit=crop&w=800&q=80', // Tiramisu
-  1223: 'https://images.unsplash.com/photo-1600891964599-f94d5765bae8?auto=format&fit=crop&w=800&q=80', // Coconut Energy Balls
-  1224: 'https://images.unsplash.com/photo-1603073163308-9654c3fb70b5?auto=format&fit=crop&w=800&q=80', // Apple Walnut Bites
-  1225: 'https://images.unsplash.com/photo-1564834724105-918b73d1b9e0?auto=format&fit=crop&w=800&q=80', // Pickled Vegetables
-  1226: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=80', // Roasted Corn Kernels
-  1227: 'https://images.unsplash.com/photo-1570197571499-166b36435e9f?auto=format&fit=crop&w=800&q=80', // Dried Fruit Mix
-  1228: 'https://images.unsplash.com/photo-1540189549519-5a7bb3e29b00?auto=format&fit=crop&w=800&q=80', // Parmesan Crisps
-  1229: 'https://images.unsplash.com/photo-1597200284813-aeddf0653f54?auto=format&fit=crop&w=800&q=80', // Yogurt Parfait
-  1230: 'https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?auto=format&fit=crop&w=800&q=80', // Celery with Almond Butter
-  1231: 'https://images.unsplash.com/photo-1611625877932-6155840177a6?auto=format&fit=crop&w=800&q=80', // Peanut Butter Cookies
-  1232: 'https://images.unsplash.com/photo-1572246538688-3f326dca3951?auto=format&fit=crop&w=800&q=80', // Candied Walnuts
-  1233: 'https://images.unsplash.com/photo-1624353365286-3f8d62daad51?auto=format&fit=crop&w=800&q=80', // Chocolate Sponge Cake
-  1234: 'https://images.unsplash.com/photo-1636743715220-d8f8dd900b87?auto=format&fit=crop&w=800&q=80', // Strawberry Jam Tart
-  1235: 'https://images.unsplash.com/photo-1524351199678-941a58a3df50?auto=format&fit=crop&w=800&q=80', // Peach Cobbler
-  1236: 'https://images.unsplash.com/photo-1533134242443-d4fd215305ad?auto=format&fit=crop&w=800&q=80', // Chocolate Fudge
-  1237: 'https://images.unsplash.com/photo-1567171466295-4afa63d45416?auto=format&fit=crop&w=800&q=80', // Vanilla Cupcakes
-  1238: 'https://images.unsplash.com/photo-1578775887804-699de7086ff9?auto=format&fit=crop&w=800&q=80', // Lemon Bars
-  1239: 'https://images.unsplash.com/photo-1621866908241-bc59b9dbfe7c?auto=format&fit=crop&w=800&q=80', // Red Velvet Cake
-  1240: 'https://images.unsplash.com/photo-1506127946181-abb01a32593c?auto=format&fit=crop&w=800&q=80', // Lemon Meringue Pie
-  1241: 'https://images.unsplash.com/photo-1562007908-72e11e85b1cd?auto=format&fit=crop&w=800&q=80', // Ginger Snaps
-  1242: 'https://images.unsplash.com/photo-1568571780765-9276ac8b75a2?auto=format&fit=crop&w=800&q=80', // Caramel Custard
-  1243: 'https://images.unsplash.com/photo-1587248720327-8eb72564be1e?auto=format&fit=crop&w=800&q=80', // Spiced Apple Cake
-  1244: 'https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=800&q=80', // Chocolate Éclairs
-  1245: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=800&q=80', // Raspberry Pavlova
-  1246: 'https://images.unsplash.com/photo-1536599524557-5f784dd53282?auto=format&fit=crop&w=800&q=80', // Peanut Brittle
-  1247: 'https://images.unsplash.com/photo-1598412795976-9c195182ee01?auto=format&fit=crop&w=800&q=80', // Pumpkin Pie
-  1248: 'https://images.unsplash.com/photo-1600615789327-eba9cb100e1d?auto=format&fit=crop&w=800&q=80', // Marble Cake
-  1249: 'https://images.unsplash.com/photo-1611254666354-d75bfe3cadbc?auto=format&fit=crop&w=800&q=80', // Lemon Drizzle Cake
-  1250: 'https://images.unsplash.com/photo-1505253599537-305b179737ce?auto=format&fit=crop&w=800&q=80', // Banana Split Sundae
-  1251: 'https://images.unsplash.com/photo-1536749605762-e7445a2d43ec?auto=format&fit=crop&w=800&q=80', // Oatmeal Cookies
-  1252: 'https://images.unsplash.com/photo-1541783245831-57d6fb0926d3?auto=format&fit=crop&w=800&q=80', // Chocolate Cream Pie
-  1253: 'https://images.unsplash.com/photo-1490474418585-ba9bad8fd0ea?auto=format&fit=crop&w=800&q=80', // Whole Grain Toast with Avocado
-  1254: 'https://images.unsplash.com/photo-1610015644714-60076be69b30?auto=format&fit=crop&w=800&q=80', // Oatmeal with Berries
-  1255: 'https://images.unsplash.com/photo-1550304939-ee0be36f980f?auto=format&fit=crop&w=800&q=80', // Granola Bowl with Yogurt
-  1256: 'https://images.unsplash.com/photo-1568051243858-533a607809a5?auto=format&fit=crop&w=800&q=80', // Cheese and Herbs Omelet
-  1257: 'https://images.unsplash.com/photo-1519676867240-f03562e64548?auto=format&fit=crop&w=800&q=80', // Mushroom and Garlic Omelet
-  1258: 'https://images.unsplash.com/photo-1611601184963-9d1de9b79ff3?auto=format&fit=crop&w=800&q=80', // Croissant with Jam
-  1259: 'https://images.unsplash.com/photo-1562376552-0d160a2f238d?auto=format&fit=crop&w=800&q=80', // Buttermilk Pancakes
-  1260: 'https://images.unsplash.com/photo-1627733810457-3c027bbb4dbb?auto=format&fit=crop&w=800&q=80', // Pain au Chocolat
-  1261: 'https://images.unsplash.com/photo-1584278858944-7c34f1d94db0?auto=format&fit=crop&w=800&q=80', // Waffle with Maple Syrup
-  1262: 'https://images.unsplash.com/photo-1611601184963-9d1de9b79ff3?auto=format&fit=crop&w=800&q=80', // Rye Toast with Cream Cheese
-  1263: 'https://images.unsplash.com/photo-1584776296944-ab6fb57b0bdd?auto=format&fit=crop&w=800&q=80', // Granola Parfait
-  1264: 'https://images.unsplash.com/photo-1636743713732-125909a35dcc?auto=format&fit=crop&w=800&q=80', // Cinnamon Toast
-  1265: 'https://images.unsplash.com/photo-1585461276010-aff0f3dcd48f?auto=format&fit=crop&w=800&q=80', // Green Smoothie Bowl
-  1266: 'https://images.unsplash.com/photo-1568051243858-533a607809a5?auto=format&fit=crop&w=800&q=80', // Strawberry Shortcake Pancakes
-  1267: 'https://images.unsplash.com/photo-1530554764233-e79e16c91d08?auto=format&fit=crop&w=800&q=80', // Classic BLT Sandwich
-  1268: 'https://images.unsplash.com/photo-1559737558-2f5a35f4523b?auto=format&fit=crop&w=800&q=80', // Chicken Wrap
-  1269: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=800&q=80', // Chicken Taco Bowl
-  1270: 'https://images.unsplash.com/photo-1596449212953-4ca53eca4822?auto=format&fit=crop&w=800&q=80', // Beef Taco
-  1271: 'https://images.unsplash.com/photo-1534939561126-855b8675edd7?auto=format&fit=crop&w=800&q=80', // Warm Lentil Salad
-  1272: 'https://images.unsplash.com/photo-1553621042-f6e147245754?auto=format&fit=crop&w=800&q=80', // Sushi Roll
-  1273: 'https://images.unsplash.com/photo-1557310717-d6bea9f36682?auto=format&fit=crop&w=800&q=80', // Apple Pie Bites
-  1274: 'https://images.unsplash.com/photo-1635189461100-216097234630?auto=format&fit=crop&w=800&q=80', // Panda Cookies
-  1275: 'https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=800&q=80', // Almond Butter Energy Balls
-  1276: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Date and Nut Energy Bars
-  1277: 'https://images.unsplash.com/photo-1575980967953-d812d957dca5?auto=format&fit=crop&w=800&q=80', // Cheese Straws
-  1278: 'https://images.unsplash.com/photo-1515037893149-de7f840978e2?auto=format&fit=crop&w=800&q=80', // Matcha Cookies
-  1279: 'https://images.unsplash.com/photo-1572453800999-e8d2d1589b7c?auto=format&fit=crop&w=800&q=80', // Roasted Beet and Walnut Bites
-  1280: 'https://images.unsplash.com/photo-1519676867240-f03562e64548?auto=format&fit=crop&w=800&q=80', // Yogurt and Granola Parfait
-  1281: 'https://images.unsplash.com/photo-1517840901100-8179e982acb7?auto=format&fit=crop&w=800&q=80', // Olive Focaccia
-  1282: 'https://images.unsplash.com/photo-1564355808539-22fda35bed7e?auto=format&fit=crop&w=800&q=80', // Chocolate Pot de Crème
-  1283: 'https://images.unsplash.com/photo-1589375025852-a66cdd127efb?auto=format&fit=crop&w=800&q=80', // Almond Cake
-  1284: 'https://images.unsplash.com/photo-1590841609987-4ac211afdde1?auto=format&fit=crop&w=800&q=80', // Salted Caramel Chocolate Bar
-  1285: 'https://images.unsplash.com/photo-1604761483402-1e07d167c09b?auto=format&fit=crop&w=800&q=80', // Lemon Posset
-  1286: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=800&q=80', // Banoffee Pie
-  1287: 'https://images.unsplash.com/photo-1610611424854-5e07032143d8?auto=format&fit=crop&w=800&q=80', // Coconut Cake
-  1288: 'https://images.unsplash.com/photo-1611625877932-6155840177a6?auto=format&fit=crop&w=800&q=80', // Chocolate Custard
-  1289: 'https://images.unsplash.com/photo-1624353365286-3f8d62daad51?auto=format&fit=crop&w=800&q=80', // Peach Tart
-  1290: 'https://images.unsplash.com/photo-1528467279403-46af96c37ab3?auto=format&fit=crop&w=800&q=80', // Herb-Roasted Chicken
-  1291: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=800&q=80', // Beef Chili
-  1292: 'https://images.unsplash.com/photo-1556761223-4c4282c73f77?auto=format&fit=crop&w=800&q=80', // Seafood Pasta
-  1293: 'https://images.unsplash.com/photo-1627764627459-ba29d6051fe0?auto=format&fit=crop&w=800&q=80', // Quinoa Buddha Bowl
-  1294: 'https://images.unsplash.com/photo-1553909489-cd47e0907980?auto=format&fit=crop&w=800&q=80', // Vegetarian Burrito
-  1295: 'https://images.unsplash.com/photo-1563379926898-05f4575a45d8?auto=format&fit=crop&w=800&q=80', // Bolognese Pasta
-  1296: 'https://images.unsplash.com/photo-1534080564583-6be75777b70a?auto=format&fit=crop&w=800&q=80', // Risotto Milanese
-  1297: 'https://images.unsplash.com/photo-1546549032-9571cd6b27df?auto=format&fit=crop&w=800&q=80', // Baked Salmon with Dill
-  1298: 'https://images.unsplash.com/photo-1579366948929-444eb79881eb?auto=format&fit=crop&w=800&q=80', // Pork Tenderloin
-  1299: 'https://images.unsplash.com/photo-1544943910-4c1dc44aab44?auto=format&fit=crop&w=800&q=80', // Steak with Chimichurri
-  1300: 'https://images.unsplash.com/photo-1619301920463-a37f1764eb83?auto=format&fit=crop&w=800&q=80', // Enchiladas
-  1301: 'https://images.unsplash.com/photo-1546964124-0cce460f38ef?auto=format&fit=crop&w=800&q=80', // Beef Barbecue Ribs
-  1302: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=800&q=80', // Grilled Fish with Vegetables
-  1303: 'https://images.unsplash.com/photo-1551892374-ecf8754cf8b0?auto=format&fit=crop&w=800&q=80', // Mac and Cheese
-  1304: 'https://images.unsplash.com/photo-1609658938891-32dd655106af?auto=format&fit=crop&w=800&q=80', // Carne Asada
-  1305: 'https://images.unsplash.com/photo-1574894709920-11b28e7367e3?auto=format&fit=crop&w=800&q=80', // Carbonara with Guanciale
-  1306: 'https://images.unsplash.com/photo-1553530666-ba11a7da3888?auto=format&fit=crop&w=800&q=80', // Savory Herb Pancakes
-  1307: 'https://images.unsplash.com/photo-1562376552-0d160a2f238d?auto=format&fit=crop&w=800&q=80', // Sourdough Toast with Ricotta
-  1308: 'https://images.unsplash.com/photo-1636743713732-125909a35dcc?auto=format&fit=crop&w=800&q=80', // Açai Bowl
-  1309: 'https://images.unsplash.com/photo-1584776296944-ab6fb57b0bdd?auto=format&fit=crop&w=800&q=80', // Italian Frittata
-  1310: 'https://images.unsplash.com/photo-1620921575116-fb8902865f81?auto=format&fit=crop&w=800&q=80', // Cheese Danish
-  1311: 'https://images.unsplash.com/photo-1481931098730-318b6f776db0?auto=format&fit=crop&w=800&q=80', // Penne alla Vodka
-  1312: 'https://images.unsplash.com/photo-1555949258-eb67b1ef0ceb?auto=format&fit=crop&w=800&q=80', // Mediterranean Orzo Salad
-  1313: 'https://images.unsplash.com/photo-1618040996337-56904b7850b9?auto=format&fit=crop&w=800&q=80', // Soft Tacos
-  1314: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=80', // Baked Apple with Cinnamon
-  1315: 'https://images.unsplash.com/photo-1541519227354-08fa5d50c44d?auto=format&fit=crop&w=800&q=80', // Herb Focaccia Squares
-  1316: 'https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?auto=format&fit=crop&w=800&q=80', // Candied Almonds
-  1317: 'https://images.unsplash.com/photo-1636743715220-d8f8dd900b87?auto=format&fit=crop&w=800&q=80', // Chocolate Banana Pops
-  1318: 'https://images.unsplash.com/photo-1524351199678-941a58a3df50?auto=format&fit=crop&w=800&q=80', // Spiced Carrot Cake Bites
-  1319: 'https://images.unsplash.com/photo-1533134242443-d4fd215305ad?auto=format&fit=crop&w=800&q=80', // Strawberry Shortcake Cups
-  1320: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?auto=format&fit=crop&w=800&q=80', // Herb Crackers
-  1321: 'https://images.unsplash.com/photo-1584278858944-7c34f1d94db0?auto=format&fit=crop&w=800&q=80', // Honey Granola Clusters
-  1322: 'https://images.unsplash.com/photo-1567171466295-4afa63d45416?auto=format&fit=crop&w=800&q=80', // Vanilla Pudding
-  1323: 'https://images.unsplash.com/photo-1578775887804-699de7086ff9?auto=format&fit=crop&w=800&q=80', // Honey Cake
-  1324: 'https://images.unsplash.com/photo-1621866908241-bc59b9dbfe7c?auto=format&fit=crop&w=800&q=80', // Fudgy Brownies
-  1325: 'https://images.unsplash.com/photo-1506127946181-abb01a32593c?auto=format&fit=crop&w=800&q=80', // Biscoff Cheesecake
-  1326: 'https://images.unsplash.com/photo-1562007908-72e11e85b1cd?auto=format&fit=crop&w=800&q=80', // Citrus Posset
-  1327: 'https://images.unsplash.com/photo-1568571780765-9276ac8b75a2?auto=format&fit=crop&w=800&q=80', // Molasses Cookies
-  1328: 'https://images.unsplash.com/photo-1587248720327-8eb72564be1e?auto=format&fit=crop&w=800&q=80', // Crème Brûlée
-  1329: 'https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=800&q=80', // Vanilla Layer Cake
-  1330: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=800&q=80', // Raspberry Jam Tart
-  1331: 'https://images.unsplash.com/photo-1495214783159-3503fd1b572d?auto=format&fit=crop&w=800&q=80', // Vegetable Scramble
-  1332: 'https://images.unsplash.com/photo-1528207776546-365bb710ee93?auto=format&fit=crop&w=800&q=80', // Spinach and Feta Croissant
-  1333: 'https://images.unsplash.com/photo-1568051243858-533a607809a5?auto=format&fit=crop&w=800&q=80', // Whole Wheat Toast with Nut Butter
-  1334: 'https://images.unsplash.com/photo-1519676867240-f03562e64548?auto=format&fit=crop&w=800&q=80', // Prosciutto and Mozzarella Croissant
-  1335: 'https://images.unsplash.com/photo-1585461276010-aff0f3dcd48f?auto=format&fit=crop&w=800&q=80', // Brioche with Jam and Cream
-  1336: 'https://images.unsplash.com/photo-1562376552-0d160a2f238d?auto=format&fit=crop&w=800&q=80', // Yogurt with Honey and Granola
-  1337: 'https://images.unsplash.com/photo-1590412200988-a436970781fa?auto=format&fit=crop&w=800&q=80', // Crepes with Nutella
-  1338: 'https://images.unsplash.com/photo-1620280641611-1b444bf9f9b6?auto=format&fit=crop&w=800&q=80', // Bacon and Egg Sandwich
-  1339: 'https://images.unsplash.com/photo-1636743713732-125909a35dcc?auto=format&fit=crop&w=800&q=80', // Almond Danish with Custard
-  1340: 'https://images.unsplash.com/photo-1590301157890-4810ed352733?auto=format&fit=crop&w=800&q=80', // Arugula and Pomegranate Salad
-  1341: 'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=800&q=80', // Chorizo and Pepper Tacos
-  1342: 'https://images.unsplash.com/photo-1594221708779-94832f4320d1?auto=format&fit=crop&w=800&q=80', // Roast Beef Sandwich
-  1343: 'https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=800&q=80', // Caprese Pasta
-  1344: 'https://images.unsplash.com/photo-1534352956036-cd81e27dd615?auto=format&fit=crop&w=800&q=80', // Black Bean Quesadilla
-  1345: 'https://images.unsplash.com/photo-1608897013039-887f21d8c804?auto=format&fit=crop&w=800&q=80', // Penne with Broccoli
-  1346: 'https://images.unsplash.com/photo-1596685212227-d3a0b82d9a6d?auto=format&fit=crop&w=800&q=80', // Carnitas Tacos
-  1347: 'https://images.unsplash.com/photo-1580959375944-abd7e991f971?auto=format&fit=crop&w=800&q=80', // Cod with Tomato and Olives
-  1348: 'https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=800&q=80', // Pork Chops with Apple
-  1349: 'https://images.unsplash.com/photo-1548943487-a2e4e43b4853?auto=format&fit=crop&w=800&q=80', // Lentil and Vegetable Stew
-  1350: 'https://images.unsplash.com/photo-1558030154-d3605e91d892?auto=format&fit=crop&w=800&q=80', // Chicken Paprikash
-  1351: 'https://images.unsplash.com/photo-1612874742237-6526221588e3?auto=format&fit=crop&w=800&q=80', // Pappardelle with Lamb Ragù
-  1352: 'https://images.unsplash.com/photo-1546549032-9571cd6b27df?auto=format&fit=crop&w=800&q=80', // Halibut en Papillote
-  1353: 'https://images.unsplash.com/photo-1603073163308-9654c3fb70b5?auto=format&fit=crop&w=800&q=80', // Beef Steak Frites
-  1354: 'https://images.unsplash.com/photo-1544943910-4c1dc44aab44?auto=format&fit=crop&w=800&q=80', // Chicken and Mushroom Pie
-  1355: 'https://images.unsplash.com/photo-1597200284813-aeddf0653f54?auto=format&fit=crop&w=800&q=80', // Fig and Honey Croissant
-  1356: 'https://images.unsplash.com/photo-1597200284813-aeddf0653f54?auto=format&fit=crop&w=800&q=80', // Multigrain Toast with Cottage Cheese
-  1357: 'https://images.unsplash.com/photo-1525184782196-8e2ded604bf7?auto=format&fit=crop&w=800&q=80', // Dill and Salmon Eggs
-  1358: 'https://images.unsplash.com/photo-1568051243858-533a607809a5?auto=format&fit=crop&w=800&q=80', // Lemon Poppy Seed Pancakes
-  1359: 'https://images.unsplash.com/photo-1519676867240-f03562e64548?auto=format&fit=crop&w=800&q=80', // Smoked Salmon and Cream Cheese Bagel
-  1360: 'https://images.unsplash.com/photo-1573057377537-dbb3a99ac4b9?auto=format&fit=crop&w=800&q=80', // Cheese Frittata with Herbs
-  1361: 'https://images.unsplash.com/photo-1562376552-0d160a2f238d?auto=format&fit=crop&w=800&q=80', // Berry Compote Waffles
-  1362: 'https://images.unsplash.com/photo-1494597564530-871f2b93ac55?auto=format&fit=crop&w=800&q=80', // Beet and Goat Cheese Salad
-  1363: 'https://images.unsplash.com/photo-1576511053046-7e445c5b95af?auto=format&fit=crop&w=800&q=80', // Turkey Club Sandwich
-  1364: 'https://images.unsplash.com/photo-1473093226795-af9932fe5856?auto=format&fit=crop&w=800&q=80', // Orzo with Mushrooms
-  1365: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80', // Chickpea Salad
-  1366: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80', // Veggie Burrito Bowl
-  1367: 'https://images.unsplash.com/photo-1550304952-9d1e3444f713?auto=format&fit=crop&w=800&q=80', // Veggie Sandwich
-  1368: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=800&q=80', // Chicken with Tarragon
-  1369: 'https://images.unsplash.com/photo-1594221708779-94832f4320d1?auto=format&fit=crop&w=800&q=80', // Lamb Chops with Mint
-  1370: 'https://images.unsplash.com/photo-1614549150185-8f85229ff291?auto=format&fit=crop&w=800&q=80', // Salmon with Cucumber Dill
-  1371: 'https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=800&q=80', // Vegetable Gratin
-  1372: 'https://images.unsplash.com/photo-1476124369491-e7addf5db371?auto=format&fit=crop&w=800&q=80', // Seafood Risotto
-  1373: 'https://images.unsplash.com/photo-1528467279403-46af96c37ab3?auto=format&fit=crop&w=800&q=80', // Chicken Kiev
-  1374: 'https://images.unsplash.com/photo-1574672281340-6b2d260a4b72?auto=format&fit=crop&w=800&q=80', // Pork Schnitzel
-  1375: 'https://images.unsplash.com/photo-1546549032-9571cd6b27df?auto=format&fit=crop&w=800&q=80', // Branzino with Fennel
-  1376: 'https://images.unsplash.com/photo-1574782256243-69c18023f7b4?auto=format&fit=crop&w=800&q=80', // Vanilla Shortbread
-  1377: 'https://images.unsplash.com/photo-1575831967553-771b0db4f7c1?auto=format&fit=crop&w=800&q=80', // Peanut Butter Granola Bars
-  1378: 'https://images.unsplash.com/photo-1600891964099-c3c5bea1c5e0?auto=format&fit=crop&w=800&q=80', // Cinnamon Apple Chips
-  1379: 'https://images.unsplash.com/photo-1536599524557-5f784dd53282?auto=format&fit=crop&w=800&q=80', // Espresso Cake
-  1380: 'https://images.unsplash.com/photo-1598412795976-9c195182ee01?auto=format&fit=crop&w=800&q=80', // Strawberry Trifle
-  1381: 'https://images.unsplash.com/photo-1600615789327-eba9cb100e1d?auto=format&fit=crop&w=800&q=80', // Orange Mousse
-  1382: 'https://images.unsplash.com/photo-1611254666354-d75bfe3cadbc?auto=format&fit=crop&w=800&q=80', // Dark Chocolate Tart
-  1383: 'https://images.unsplash.com/photo-1627733810457-3c027bbb4dbb?auto=format&fit=crop&w=800&q=80', // Vegetable Omelet with Cheese
-  1384: 'https://images.unsplash.com/photo-1510693206972-df098062cb71?auto=format&fit=crop&w=800&q=80', // Apricot Danish
-  1385: 'https://images.unsplash.com/photo-1611601184963-9d1de9b79ff3?auto=format&fit=crop&w=800&q=80', // Raisin and Walnut Toast
-  1386: 'https://images.unsplash.com/photo-1610015644714-60076be69b30?auto=format&fit=crop&w=800&q=80', // Ricotta Blueberry Pancakes
-  1387: 'https://images.unsplash.com/photo-1525184782196-8e2ded604bf7?auto=format&fit=crop&w=800&q=80', // Chocolate Croissant
-  1388: 'https://images.unsplash.com/photo-1568051243858-533a607809a5?auto=format&fit=crop&w=800&q=80', // Bell Pepper and Onion Omelet
-  1389: 'https://images.unsplash.com/photo-1519676867240-f03562e64548?auto=format&fit=crop&w=800&q=80', // Cottage Cheese Pancakes with Jam
-  1390: 'https://images.unsplash.com/photo-1553530666-ba11a7da3888?auto=format&fit=crop&w=800&q=80', // Sourdough with Avocado
-  1391: 'https://images.unsplash.com/photo-1562376552-0d160a2f238d?auto=format&fit=crop&w=800&q=80', // Cherry Pancakes
-  1392: 'https://images.unsplash.com/photo-1618040996337-56904b7850b9?auto=format&fit=crop&w=800&q=80', // Mahi Mahi Tacos
-  1393: 'https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=800&q=80', // Fusilli with Pesto and Chicken
-  1394: 'https://images.unsplash.com/photo-1567234669003-dce7a7a88821?auto=format&fit=crop&w=800&q=80', // Kale Caesar Wrap
-  1395: 'https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&w=800&q=80', // Pork Pulled Sandwiches
-  1396: 'https://images.unsplash.com/photo-1631167490917-2a22c070573a?auto=format&fit=crop&w=800&q=80', // Poke Bowl
-  1397: 'https://images.unsplash.com/photo-1607532941433-304659e8198a?auto=format&fit=crop&w=800&q=80', // Warm Farro Salad
-  1398: 'https://images.unsplash.com/photo-1544943910-4c1dc44aab44?auto=format&fit=crop&w=800&q=80', // Chicken Thighs with Lemon
-  1399: 'https://images.unsplash.com/photo-1467453678174-768ec283a940?auto=format&fit=crop&w=800&q=80', // Tilapia with Tomato Salsa
-  1400: 'https://images.unsplash.com/photo-1543339308091-ef3c048c3ca0?auto=format&fit=crop&w=800&q=80', // Lentil and Potato Stew
-  1401: 'https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?auto=format&fit=crop&w=800&q=80', // Baked Penne
-  1402: 'https://images.unsplash.com/photo-1579366948929-444eb79881eb?auto=format&fit=crop&w=800&q=80', // Chicken Scaloppine
-  1403: 'https://images.unsplash.com/photo-1464500542410-1396074bf230?auto=format&fit=crop&w=800&q=80', // Vegetable Moussaka
-  1404: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=800&q=80', // Flounder Meunière
-  1405: 'https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=800&q=80', // Beef Bourguignon
-  1406: 'https://images.unsplash.com/photo-1591454550842-d56fb54f7a52?auto=format&fit=crop&w=800&q=80', // Coconut Bites
-  1407: 'https://images.unsplash.com/photo-1590301157890-4810ed352733?auto=format&fit=crop&w=800&q=80', // Strawberry Cream Cheese Spread
-  1408: 'https://images.unsplash.com/photo-1574782256243-69c18023f7b4?auto=format&fit=crop&w=800&q=80', // Banana Walnut Bread
-  1409: 'https://images.unsplash.com/photo-1580959375944-abd7e991f971?auto=format&fit=crop&w=800&q=80', // Spiced Pecans
-  1410: 'https://images.unsplash.com/photo-1505253599537-305b179737ce?auto=format&fit=crop&w=800&q=80', // Sticky Toffee Pudding
-  1411: 'https://images.unsplash.com/photo-1536749605762-e7445a2d43ec?auto=format&fit=crop&w=800&q=80', // Vanilla Custard Tart
-  1412: 'https://images.unsplash.com/photo-1541783245831-57d6fb0926d3?auto=format&fit=crop&w=800&q=80', // Victoria Sponge
-  1413: 'https://images.unsplash.com/photo-1557310717-d6bea9f36682?auto=format&fit=crop&w=800&q=80', // Orange Cake
-  1414: 'https://images.unsplash.com/photo-1584278858944-7c34f1d94db0?auto=format&fit=crop&w=800&q=80', // Peach Danish Pastry
-  1415: 'https://images.unsplash.com/photo-1636743713732-125909a35dcc?auto=format&fit=crop&w=800&q=80', // Toasted Granary Bread with Cheese
-  1416: 'https://images.unsplash.com/photo-1538220856186-0be0e085984d?auto=format&fit=crop&w=800&q=80', // Chia Seed Pudding
-  1417: 'https://images.unsplash.com/photo-1585461276010-aff0f3dcd48f?auto=format&fit=crop&w=800&q=80', // Herb Scrambled Eggs
-  1418: 'https://images.unsplash.com/photo-1636743713732-125909a35dcc?auto=format&fit=crop&w=800&q=80', // Chocolate Almond Croissant
-  1419: 'https://images.unsplash.com/photo-1620921575116-fb8902865f81?auto=format&fit=crop&w=800&q=80', // Multigrain Toast with Berries and Yogurt
-  1420: 'https://images.unsplash.com/photo-1568051243858-533a607809a5?auto=format&fit=crop&w=800&q=80', // Banana Split Pancakes
-  1421: 'https://images.unsplash.com/photo-1519676867240-f03562e64548?auto=format&fit=crop&w=800&q=80', // Strawberry Cream Croissant
-  1422: 'https://images.unsplash.com/photo-1584776296944-ab6fb57b0bdd?auto=format&fit=crop&w=800&q=80', // Spelt Bread with Almond Butter
-  1423: 'https://images.unsplash.com/photo-1494597564530-871f2b93ac55?auto=format&fit=crop&w=800&q=80', // Squash and Sage Salad
-  1424: 'https://images.unsplash.com/photo-1594221708779-94832f4320d1?auto=format&fit=crop&w=800&q=80', // Shrimp Tacos with Mango
-  1425: 'https://images.unsplash.com/photo-1517840901100-8179e982acb7?auto=format&fit=crop&w=800&q=80', // Prosciutto and Fig Sandwich
-  1426: 'https://images.unsplash.com/photo-1559737558-2f5a35f4523b?auto=format&fit=crop&w=800&q=80', // Gemelli with Tomato and Tuna
-  1427: 'https://images.unsplash.com/photo-1589442305595-62647c1514f9?auto=format&fit=crop&w=800&q=80', // White Bean and Kale Salad
-  1428: 'https://images.unsplash.com/photo-1574672281340-6b2d260a4b72?auto=format&fit=crop&w=800&q=80', // Fish Ceviche Tostadas
-  1429: 'https://images.unsplash.com/photo-1583182363039-59eac8609ab2?auto=format&fit=crop&w=800&q=80', // Roasted Carrot and Goat Cheese Salad
-  1430: 'https://images.unsplash.com/photo-1580288020976-854d44d4c54f?auto=format&fit=crop&w=800&q=80', // Beef and Vegetable Pie
-  1431: 'https://images.unsplash.com/photo-1546549032-9571cd6b27df?auto=format&fit=crop&w=800&q=80', // Baked Trout with Almonds
-  1432: 'https://images.unsplash.com/photo-1576511053046-7e445c5b95af?auto=format&fit=crop&w=800&q=80', // Pork and Apple Skillet
-  1433: 'https://images.unsplash.com/photo-1556761223-4c4282c73f77?auto=format&fit=crop&w=800&q=80', // Spinach and Ricotta Lasagna
-  1434: 'https://images.unsplash.com/photo-1544943910-4c1dc44aab44?auto=format&fit=crop&w=800&q=80', // Chicken with Mushroom Sauce
-  1435: 'https://images.unsplash.com/photo-1603073163308-9654c3fb70b5?auto=format&fit=crop&w=800&q=80', // Cod with Leek and Cream
-  1436: 'https://images.unsplash.com/photo-1498837167922-ddd27525d352?auto=format&fit=crop&w=800&q=80', // Vegetable Curry with Chickpeas
-  1437: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=800&q=80', // Herb-Crusted Lamb
-  1438: 'https://images.unsplash.com/photo-1567613913497-8f023fc3d343?auto=format&fit=crop&w=800&q=80', // Cheese and Herb Biscuits
-  1439: 'https://images.unsplash.com/photo-1505576633757-0ac1084af824?auto=format&fit=crop&w=800&q=80', // Roasted Chickpea Snack
-  1440: 'https://images.unsplash.com/photo-1600891964599-f94d5765bae8?auto=format&fit=crop&w=800&q=80', // Oat and Apple Energy Bars
-  1441: 'https://images.unsplash.com/photo-1635189461100-216097234630?auto=format&fit=crop&w=800&q=80', // Coffee Cake
-  1442: 'https://images.unsplash.com/photo-1515037893149-de7f840978e2?auto=format&fit=crop&w=800&q=80', // Rice Pudding
-  1443: 'https://images.unsplash.com/photo-1564355808539-22fda35bed7e?auto=format&fit=crop&w=800&q=80', // Flourless Chocolate Torte
-  1444: 'https://images.unsplash.com/photo-1562376552-0d160a2f238d?auto=format&fit=crop&w=800&q=80', // Spinach and Mushroom Omelet
-  1445: 'https://images.unsplash.com/photo-1584776296944-ab6fb57b0bdd?auto=format&fit=crop&w=800&q=80', // Blueberry Cream Cheese Danish
-  1446: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=800&q=80', // Banana Toast with Walnut Butter
-  1447: 'https://images.unsplash.com/photo-1584278858944-7c34f1d94db0?auto=format&fit=crop&w=800&q=80', // Tomato and Basil Omelet
-  1448: 'https://images.unsplash.com/photo-1490474418585-ba9bad8fd0ea?auto=format&fit=crop&w=800&q=80', // Maple Pecan Pancakes
-  1449: 'https://images.unsplash.com/photo-1495214783159-3503fd1b572d?auto=format&fit=crop&w=800&q=80', // Raspberry Jam Croissant
-  1450: 'https://images.unsplash.com/photo-1528207776546-365bb710ee93?auto=format&fit=crop&w=800&q=80', // Pumpernickel with Cottage Cheese
-  1451: 'https://images.unsplash.com/photo-1568051243858-533a607809a5?auto=format&fit=crop&w=800&q=80', // Granola with Nuts and Honey
-  1452: 'https://images.unsplash.com/photo-1519676867240-f03562e64548?auto=format&fit=crop&w=800&q=80', // Asparagus and Cheddar Omelet
-  1453: 'https://images.unsplash.com/photo-1620280641611-1b444bf9f9b6?auto=format&fit=crop&w=800&q=80', // Honey and Walnut Croissant
-  1454: 'https://images.unsplash.com/photo-1562376552-0d160a2f238d?auto=format&fit=crop&w=800&q=80', // Focaccia with Roasted Garlic
-  1455: 'https://images.unsplash.com/photo-1563379926898-05f4575a45d8?auto=format&fit=crop&w=800&q=80', // Shrimp Scampi Pasta
-  1456: 'https://images.unsplash.com/photo-1590301157890-4810ed352733?auto=format&fit=crop&w=800&q=80', // Beet and Walnut Salad
-  1457: 'https://images.unsplash.com/photo-1551892374-ecf8754cf8b0?auto=format&fit=crop&w=800&q=80', // Rigatoni with Arugula
-  1458: 'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=800&q=80', // Grilled Vegetable Tacos
-  1459: 'https://images.unsplash.com/photo-1494597564530-871f2b93ac55?auto=format&fit=crop&w=800&q=80', // Rainbow Salad
-  1460: 'https://images.unsplash.com/photo-1574894709920-11b28e7367e3?auto=format&fit=crop&w=800&q=80', // Spaghetti with Clams
-  1461: 'https://images.unsplash.com/photo-1594221708779-94832f4320d1?auto=format&fit=crop&w=800&q=80', // Smoked Turkey Sandwich
-  1462: 'https://images.unsplash.com/photo-1534939561126-855b8675edd7?auto=format&fit=crop&w=800&q=80', // Lentil Salad with Mint
-  1463: 'https://images.unsplash.com/photo-1580959375944-abd7e991f971?auto=format&fit=crop&w=800&q=80', // Beef and Bean Burrito
-  1464: 'https://images.unsplash.com/photo-1596449212953-4ca53eca4822?auto=format&fit=crop&w=800&q=80', // Chicken with Cream Sauce
-  1465: 'https://images.unsplash.com/photo-1481931098730-318b6f776db0?auto=format&fit=crop&w=800&q=80', // Beef Ragù
-  1466: 'https://images.unsplash.com/photo-1555949258-eb67b1ef0ceb?auto=format&fit=crop&w=800&q=80', // Salmon with Asparagus
-  1467: 'https://images.unsplash.com/photo-1596449212953-4ca53eca4822?auto=format&fit=crop&w=800&q=80', // Lamb Meatballs with Tomato Sauce
-  1468: 'https://images.unsplash.com/photo-1546549032-9571cd6b27df?auto=format&fit=crop&w=800&q=80', // Branzino en Papillote
-  1469: 'https://images.unsplash.com/photo-1579366948929-444eb79881eb?auto=format&fit=crop&w=800&q=80', // Beef Fajitas
-  1470: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=80', // Vegetable Bake
-  1471: 'https://images.unsplash.com/photo-1544943910-4c1dc44aab44?auto=format&fit=crop&w=800&q=80', // Chicken Cordon Bleu
-  1472: 'https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=800&q=80', // Snapper with Lemon Butter
-  1473: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=800&q=80', // Black Bean and Rice Bowl
-  1474: 'https://images.unsplash.com/photo-1589375025852-a66cdd127efb?auto=format&fit=crop&w=800&q=80', // Lemon Shortbread Cookies
-  1475: 'https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?auto=format&fit=crop&w=800&q=80', // Cinnamon Sugar Almonds
-  1476: 'https://images.unsplash.com/photo-1590841609987-4ac211afdde1?auto=format&fit=crop&w=800&q=80', // Apple Pie Bars
-  1477: 'https://images.unsplash.com/photo-1604761483402-1e07d167c09b?auto=format&fit=crop&w=800&q=80', // Coffee Panna Cotta
-  1478: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=800&q=80', // Black Forest Cake
-  1479: 'https://images.unsplash.com/photo-1610611424854-5e07032143d8?auto=format&fit=crop&w=800&q=80', // Strawberry Mousse
-  1480: 'https://images.unsplash.com/photo-1550304939-ee0be36f980f?auto=format&fit=crop&w=800&q=80', // Custard Cream Pastry
-  1481: 'https://images.unsplash.com/photo-1585461276010-aff0f3dcd48f?auto=format&fit=crop&w=800&q=80', // Pepper and Onion Scramble
-  1482: 'https://images.unsplash.com/photo-1597200284813-aeddf0653f54?auto=format&fit=crop&w=800&q=80', // Vanilla Waffle with Strawberries
-  1483: 'https://images.unsplash.com/photo-1597200284813-aeddf0653f54?auto=format&fit=crop&w=800&q=80', // Sourdough with Brie and Honey
-  1484: 'https://images.unsplash.com/photo-1525184782196-8e2ded604bf7?auto=format&fit=crop&w=800&q=80', // Spinach and Cheese Danish
-  1485: 'https://images.unsplash.com/photo-1575831967553-771b0db4f7c1?auto=format&fit=crop&w=800&q=80', // Herb Cheese Scrambled Eggs
-  1486: 'https://images.unsplash.com/photo-1568051243858-533a607809a5?auto=format&fit=crop&w=800&q=80', // Oatmeal Pancakes
-  1487: 'https://images.unsplash.com/photo-1519676867240-f03562e64548?auto=format&fit=crop&w=800&q=80', // Marmalade Croissant
-  1488: 'https://images.unsplash.com/photo-1553530666-ba11a7da3888?auto=format&fit=crop&w=800&q=80', // Toasted Muesli Mix
-  1489: 'https://images.unsplash.com/photo-1562376552-0d160a2f238d?auto=format&fit=crop&w=800&q=80', // Buckwheat Pancakes
-  1490: 'https://images.unsplash.com/photo-1627733810457-3c027bbb4dbb?auto=format&fit=crop&w=800&q=80', // Almond Tea Cake
-  1491: 'https://images.unsplash.com/photo-1584278858944-7c34f1d94db0?auto=format&fit=crop&w=800&q=80', // Smoked Salmon Scrambled Eggs
-  1492: 'https://images.unsplash.com/photo-1611601184963-9d1de9b79ff3?auto=format&fit=crop&w=800&q=80', // Berry Jam Croissant
-  1493: 'https://images.unsplash.com/photo-1584278858944-7c34f1d94db0?auto=format&fit=crop&w=800&q=80', // Seeded Bagel with Schmear
-  1494: 'https://images.unsplash.com/photo-1599020792689-9fde458e7e17?auto=format&fit=crop&w=800&q=80', // Kale Quinoa Salad
-  1495: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=800&q=80', // Angel Hair with Clam Sauce
-  1496: 'https://images.unsplash.com/photo-1609658938891-32dd655106af?auto=format&fit=crop&w=800&q=80', // Pulled Chicken Tacos
-  1497: 'https://images.unsplash.com/photo-1541519227354-08fa5d50c44d?auto=format&fit=crop&w=800&q=80', // Roasted Vegetable Sandwich
-  1498: 'https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=800&q=80', // Rigatoni al Forno
-  1499: 'https://images.unsplash.com/photo-1589442305595-62647c1514f9?auto=format&fit=crop&w=800&q=80', // Chickpea Buddha Bowl
-  1500: 'https://images.unsplash.com/photo-1610015644714-60076be69b30?auto=format&fit=crop&w=800&q=80', // Veggie Black Bean Tacos
-  1501: 'https://images.unsplash.com/photo-1482049016688-2d3e1b311543?auto=format&fit=crop&w=800&q=80', // Mozzarella and Tomato Panini
-  1502: 'https://images.unsplash.com/photo-1608897013039-887f21d8c804?auto=format&fit=crop&w=800&q=80', // Pasta Primavera
-  1503: 'https://images.unsplash.com/photo-1572357243457-fc153742e7a5?auto=format&fit=crop&w=800&q=80', // Fish Tacos with Cabbage Slaw
-  1504: 'https://images.unsplash.com/photo-1505576633757-0ac1084af824?auto=format&fit=crop&w=800&q=80', // Feta Olive Salad
-  1505: 'https://images.unsplash.com/photo-1612874742237-6526221588e3?auto=format&fit=crop&w=800&q=80', // Spaghetti alle Vongole
-  1506: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=800&q=80', // Chicken Thighs with Lemon and Olives
-  1507: 'https://images.unsplash.com/photo-1594221708779-94832f4320d1?auto=format&fit=crop&w=800&q=80', // Beef Meatloaf
-  1508: 'https://images.unsplash.com/photo-1614549150185-8f85229ff291?auto=format&fit=crop&w=800&q=80', // Sole Meunière
-  1509: 'https://images.unsplash.com/photo-1548943487-a2e4e43b4853?auto=format&fit=crop&w=800&q=80', // Vegetable Soup
-  1510: 'https://images.unsplash.com/photo-1528467279403-46af96c37ab3?auto=format&fit=crop&w=800&q=80', // Sea Bass with Herbs
-  1511: 'https://images.unsplash.com/photo-1609226127613-55143d781e69?auto=format&fit=crop&w=800&q=80', // Pork Ribs Dry Rub
-  1512: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?auto=format&fit=crop&w=800&q=80', // Grilled Vegetables Wrap
-  1513: 'https://images.unsplash.com/photo-1546549032-9571cd6b27df?auto=format&fit=crop&w=800&q=80', // Shrimp Tempura Donburi
-  1514: 'https://images.unsplash.com/photo-1590301157890-4810ed352733?auto=format&fit=crop&w=800&q=80', // Roasted Root Vegetable Salad
-  1515: 'https://images.unsplash.com/photo-1603073163308-9654c3fb70b5?auto=format&fit=crop&w=800&q=80', // Braised Beef Short Ribs
-  1516: 'https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?auto=format&fit=crop&w=800&q=80', // Thai Green Curry Chicken
-  1517: 'https://images.unsplash.com/photo-1611625877932-6155840177a6?auto=format&fit=crop&w=800&q=80', // Vanilla Wafer Cookies
-  1518: 'https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=800&q=80', // Roasted Almond Brittle
-  1519: 'https://images.unsplash.com/photo-1534352956036-cd81e27dd615?auto=format&fit=crop&w=800&q=80', // Cinnamon Apple Nachos
-  1520: 'https://images.unsplash.com/photo-1498837167922-ddd27525d352?auto=format&fit=crop&w=800&q=80', // Peanut Butter Banana Energy Bites
-  1521: 'https://images.unsplash.com/photo-1511910849309-0dffb8785146?auto=format&fit=crop&w=800&q=80', // Spiced Pickled Vegetables
-  1522: 'https://images.unsplash.com/photo-1624353365286-3f8d62daad51?auto=format&fit=crop&w=800&q=80', // Marble Pound Cake
-  1523: 'https://images.unsplash.com/photo-1636743715220-d8f8dd900b87?auto=format&fit=crop&w=800&q=80', // Crème Caramel
-  1524: 'https://images.unsplash.com/photo-1524351199678-941a58a3df50?auto=format&fit=crop&w=800&q=80', // Lemon Tart with Berries
-  1525: 'https://images.unsplash.com/photo-1533134242443-d4fd215305ad?auto=format&fit=crop&w=800&q=80', // Chocolate Orange Cake
-  1526: 'https://images.unsplash.com/photo-1611601184963-9d1de9b79ff3?auto=format&fit=crop&w=800&q=80', // French Toast with Maple Syrup
-  1527: 'https://images.unsplash.com/photo-1568051243858-533a607809a5?auto=format&fit=crop&w=800&q=80', // Scrambled Eggs with Toast
-  1528: 'https://images.unsplash.com/photo-1519676867240-f03562e64548?auto=format&fit=crop&w=800&q=80', // Oatmeal with Berries and Honey
-  1529: 'https://images.unsplash.com/photo-1573057377537-dbb3a99ac4b9?auto=format&fit=crop&w=800&q=80', // Pancakes with Syrup
-  1530: 'https://images.unsplash.com/photo-1562376552-0d160a2f238d?auto=format&fit=crop&w=800&q=80', // Waffle with Whipped Cream
-  1531: 'https://images.unsplash.com/photo-1636743713732-125909a35dcc?auto=format&fit=crop&w=800&q=80', // Eggs Benedict
-  1532: 'https://images.unsplash.com/photo-1584776296944-ab6fb57b0bdd?auto=format&fit=crop&w=800&q=80', // Fruit Salad with Yogurt
-  1533: 'https://images.unsplash.com/photo-1585461276010-aff0f3dcd48f?auto=format&fit=crop&w=800&q=80', // Toast with Peanut Butter
-  1534: 'https://images.unsplash.com/photo-1597200284813-aeddf0653f54?auto=format&fit=crop&w=800&q=80', // Bagel with Cream Cheese
-  1535: 'https://images.unsplash.com/photo-1636743713732-125909a35dcc?auto=format&fit=crop&w=800&q=80', // Ricotta Toast with Fruit
-  1536: 'https://images.unsplash.com/photo-1620921575116-fb8902865f81?auto=format&fit=crop&w=800&q=80', // Overnight Oats
-  1537: 'https://images.unsplash.com/photo-1568051243858-533a607809a5?auto=format&fit=crop&w=800&q=80', // Granola Cereal
-  1538: 'https://images.unsplash.com/photo-1519676867240-f03562e64548?auto=format&fit=crop&w=800&q=80', // Cottage Cheese Bowl
-  1539: 'https://images.unsplash.com/photo-1620280641611-1b444bf9f9b6?auto=format&fit=crop&w=800&q=80', // Cheese Omelet
-  1540: 'https://images.unsplash.com/photo-1562376552-0d160a2f238d?auto=format&fit=crop&w=800&q=80', // Ham and Eggs
-  1541: 'https://images.unsplash.com/photo-1590412200988-a436970781fa?auto=format&fit=crop&w=800&q=80', // Sausage and Eggs
-  1542: 'https://images.unsplash.com/photo-1525184782196-8e2ded604bf7?auto=format&fit=crop&w=800&q=80', // Bacon and Eggs
-  1543: 'https://images.unsplash.com/photo-1636743713732-125909a35dcc?auto=format&fit=crop&w=800&q=80', // Turkey Sausage Breakfast
-  1544: 'https://images.unsplash.com/photo-1525184782196-8e2ded604bf7?auto=format&fit=crop&w=800&q=80', // Herbed Omelet
-  1545: 'https://images.unsplash.com/photo-1495214783159-3503fd1b572d?auto=format&fit=crop&w=800&q=80', // Spinach Frittata
-  1546: 'https://images.unsplash.com/photo-1528207776546-365bb710ee93?auto=format&fit=crop&w=800&q=80', // Mushroom Omelet
-  1547: 'https://images.unsplash.com/photo-1568051243858-533a607809a5?auto=format&fit=crop&w=800&q=80', // Tomato Omelet
-  1548: 'https://images.unsplash.com/photo-1519676867240-f03562e64548?auto=format&fit=crop&w=800&q=80', // Pepper Jack Omelet
-  1549: 'https://images.unsplash.com/photo-1553530666-ba11a7da3888?auto=format&fit=crop&w=800&q=80', // Broccoli Omelet
-  1550: 'https://images.unsplash.com/photo-1562376552-0d160a2f238d?auto=format&fit=crop&w=800&q=80', // Asparagus Omelet
-  1551: 'https://images.unsplash.com/photo-1584776296944-ab6fb57b0bdd?auto=format&fit=crop&w=800&q=80', // Leek Omelet
-  1552: 'https://images.unsplash.com/photo-1627733810457-3c027bbb4dbb?auto=format&fit=crop&w=800&q=80', // Onion Frittata
-  1553: 'https://images.unsplash.com/photo-1510693206972-df098062cb71?auto=format&fit=crop&w=800&q=80', // Garlic Toast
-  1554: 'https://images.unsplash.com/photo-1585461276010-aff0f3dcd48f?auto=format&fit=crop&w=800&q=80', // Herb Bread Toast
-  1555: 'https://images.unsplash.com/photo-1585461276010-aff0f3dcd48f?auto=format&fit=crop&w=800&q=80', // Whole Grain Toast with Jam
-  1556: 'https://images.unsplash.com/photo-1597200284813-aeddf0653f54?auto=format&fit=crop&w=800&q=80', // Rye Toast with Cheese
-  1557: 'https://images.unsplash.com/photo-1568051243858-533a607809a5?auto=format&fit=crop&w=800&q=80', // Pumpernickel Toast
-  1558: 'https://images.unsplash.com/photo-1519676867240-f03562e64548?auto=format&fit=crop&w=800&q=80', // Muffin with Berries
-  1559: 'https://images.unsplash.com/photo-1611601184963-9d1de9b79ff3?auto=format&fit=crop&w=800&q=80', // English Muffin
-  1560: 'https://images.unsplash.com/photo-1562376552-0d160a2f238d?auto=format&fit=crop&w=800&q=80', // Crumpet with Jam
-  1561: 'https://images.unsplash.com/photo-1584278858944-7c34f1d94db0?auto=format&fit=crop&w=800&q=80', // Biscuit with Butter
-  1562: 'https://images.unsplash.com/photo-1636743713732-125909a35dcc?auto=format&fit=crop&w=800&q=80', // Scone with Jam
-  1563: 'https://images.unsplash.com/photo-1575831967553-771b0db4f7c1?auto=format&fit=crop&w=800&q=80', // Apple Cinnamon Toast
-  1564: 'https://images.unsplash.com/photo-1490474418585-ba9bad8fd0ea?auto=format&fit=crop&w=800&q=80', // Pear Toast
-  1565: 'https://images.unsplash.com/photo-1610015644714-60076be69b30?auto=format&fit=crop&w=800&q=80', // Banana Toast
-  1566: 'https://images.unsplash.com/photo-1538220856186-0be0e085984d?auto=format&fit=crop&w=800&q=80', // Berry Toast
-  1567: 'https://images.unsplash.com/photo-1568051243858-533a607809a5?auto=format&fit=crop&w=800&q=80', // Orange Toast
-  1568: 'https://images.unsplash.com/photo-1519676867240-f03562e64548?auto=format&fit=crop&w=800&q=80', // Nutella Crepes
-  1569: 'https://images.unsplash.com/photo-1620280641611-1b444bf9f9b6?auto=format&fit=crop&w=800&q=80', // Fruit Crepes
-  1570: 'https://images.unsplash.com/photo-1562376552-0d160a2f238d?auto=format&fit=crop&w=800&q=80', // Chocolate Crepes
-  1571: 'https://images.unsplash.com/photo-1584776296944-ab6fb57b0bdd?auto=format&fit=crop&w=800&q=80', // Jam Crepes
-  1572: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=800&q=80', // Honey Crepes
-  1573: 'https://images.unsplash.com/photo-1584278858944-7c34f1d94db0?auto=format&fit=crop&w=800&q=80', // Waffle with Berries
-  1574: 'https://images.unsplash.com/photo-1550304939-ee0be36f980f?auto=format&fit=crop&w=800&q=80', // Waffle with Chocolate
-  1575: 'https://images.unsplash.com/photo-1636743713732-125909a35dcc?auto=format&fit=crop&w=800&q=80', // Waffle with Nuts
-  1576: 'https://images.unsplash.com/photo-1620921575116-fb8902865f81?auto=format&fit=crop&w=800&q=80', // Waffle Sundae
-  1577: 'https://images.unsplash.com/photo-1568051243858-533a607809a5?auto=format&fit=crop&w=800&q=80', // Waffle Sandwich
-  1578: 'https://images.unsplash.com/photo-1519676867240-f03562e64548?auto=format&fit=crop&w=800&q=80', // Omelet Sandwich
-  1579: 'https://images.unsplash.com/photo-1553530666-ba11a7da3888?auto=format&fit=crop&w=800&q=80', // Breakfast Wrap
-  1580: 'https://images.unsplash.com/photo-1562376552-0d160a2f238d?auto=format&fit=crop&w=800&q=80', // Breakfast Quesadilla
-  1581: 'https://images.unsplash.com/photo-1611601184963-9d1de9b79ff3?auto=format&fit=crop&w=800&q=80', // Breakfast Bowl
-  1582: 'https://images.unsplash.com/photo-1584776296944-ab6fb57b0bdd?auto=format&fit=crop&w=800&q=80', // Cereal with Banana
-  1583: 'https://images.unsplash.com/photo-1597200284813-aeddf0653f54?auto=format&fit=crop&w=800&q=80', // Granola Bar
-  1584: 'https://images.unsplash.com/photo-1584278858944-7c34f1d94db0?auto=format&fit=crop&w=800&q=80', // Fruit Smoothie
-  1585: 'https://images.unsplash.com/photo-1600891964599-f94d5765bae8?auto=format&fit=crop&w=800&q=80', // Açai Smoothie
-  1586: 'https://images.unsplash.com/photo-1528207776546-365bb710ee93?auto=format&fit=crop&w=800&q=80', // Mango Smoothie
-  1587: 'https://images.unsplash.com/photo-1568051243858-533a607809a5?auto=format&fit=crop&w=800&q=80', // Raspberry Smoothie
-  1588: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=800&q=80', // Sandwich with Lettuce
-  1589: 'https://images.unsplash.com/photo-1530554764233-e79e16c91d08?auto=format&fit=crop&w=800&q=80', // Sandwich with Tomato
-  1590: 'https://images.unsplash.com/photo-1517840901100-8179e982acb7?auto=format&fit=crop&w=800&q=80', // Sandwich with Cheese
-  1591: 'https://images.unsplash.com/photo-1494597564530-871f2b93ac55?auto=format&fit=crop&w=800&q=80', // Tuna Salad
-  1592: 'https://images.unsplash.com/photo-1627764627459-ba29d6051fe0?auto=format&fit=crop&w=800&q=80', // Chicken Salad
-  1593: 'https://images.unsplash.com/photo-1599020792689-9fde458e7e17?auto=format&fit=crop&w=800&q=80', // Egg Salad
-  1594: 'https://images.unsplash.com/photo-1473093226795-af9932fe5856?auto=format&fit=crop&w=800&q=80', // Pasta Salad
-  1595: 'https://images.unsplash.com/photo-1553163147-622ab57be1c7?auto=format&fit=crop&w=800&q=80', // Rice Salad
-  1596: 'https://images.unsplash.com/photo-1581875271349-86c5c7dd58af?auto=format&fit=crop&w=800&q=80', // Bean Salad
-  1597: 'https://images.unsplash.com/photo-1572357243457-fc153742e7a5?auto=format&fit=crop&w=800&q=80', // Chef Salad
-  1598: 'https://images.unsplash.com/photo-1590301157890-4810ed352733?auto=format&fit=crop&w=800&q=80', // Wedge Salad
-  1599: 'https://images.unsplash.com/photo-1494597564530-871f2b93ac55?auto=format&fit=crop&w=800&q=80', // Kale Salad
-  1600: 'https://images.unsplash.com/photo-1549248220-5811dc32cd5d?auto=format&fit=crop&w=800&q=80', // Arugula Salad
-  1601: 'https://images.unsplash.com/photo-1627764627459-ba29d6051fe0?auto=format&fit=crop&w=800&q=80', // Mixed Green Salad
-  1602: 'https://images.unsplash.com/photo-1603189864361-0cc65b5ecd3a?auto=format&fit=crop&w=800&q=80', // Garden Salad
-  1603: 'https://images.unsplash.com/photo-1553909489-cd47e0907980?auto=format&fit=crop&w=800&q=80', // Sub Sandwich
-  1604: 'https://images.unsplash.com/photo-1541519227354-08fa5d50c44d?auto=format&fit=crop&w=800&q=80', // Hero Sandwich
-  1605: 'https://images.unsplash.com/photo-1601725245226-25296b49cd17?auto=format&fit=crop&w=800&q=80', // Po Boy
-  1606: 'https://images.unsplash.com/photo-1550304952-9d1e3444f713?auto=format&fit=crop&w=800&q=80', // Panini
-  1607: 'https://images.unsplash.com/photo-1614549150185-8f85229ff291?auto=format&fit=crop&w=800&q=80', // French Dip
-  1608: 'https://images.unsplash.com/photo-1544943910-4c1dc44aab44?auto=format&fit=crop&w=800&q=80', // Cheesesteak
-  1609: 'https://images.unsplash.com/photo-1575523392682-78e4bfb6f6e8?auto=format&fit=crop&w=800&q=80', // Hot Dog
-  1610: 'https://images.unsplash.com/photo-1559181567-c3190ca9959b?auto=format&fit=crop&w=800&q=80', // Chili Dog
-  1611: 'https://images.unsplash.com/photo-1505576633757-0ac1084af824?auto=format&fit=crop&w=800&q=80', // Chicago Hot Dog
-  1612: 'https://images.unsplash.com/photo-1581875271349-86c5c7dd58af?auto=format&fit=crop&w=800&q=80', // Sloppy Joe
-  1613: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=800&q=80', // Meatball Sub
-  1614: 'https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=800&q=80', // Alfredo Pasta
-  1615: 'https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?auto=format&fit=crop&w=800&q=80', // Marinara Pasta
-  1616: 'https://images.unsplash.com/photo-1556761223-4c4282c73f77?auto=format&fit=crop&w=800&q=80', // Baked Ziti
-  1617: 'https://images.unsplash.com/photo-1563379926898-05f4575a45d8?auto=format&fit=crop&w=800&q=80', // Fettuccine
-  1618: 'https://images.unsplash.com/photo-1551892374-ecf8754cf8b0?auto=format&fit=crop&w=800&q=80', // Penne
-  1619: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=80', // Stir Fry
-  1620: 'https://images.unsplash.com/photo-1583182363039-59eac8609ab2?auto=format&fit=crop&w=800&q=80', // Teriyaki Bowl
-  1621: 'https://images.unsplash.com/photo-1590301157890-4810ed352733?auto=format&fit=crop&w=800&q=80', // Grain Bowl
-  1622: 'https://images.unsplash.com/photo-1567234669003-dce7a7a88821?auto=format&fit=crop&w=800&q=80', // Burrito
-  1623: 'https://images.unsplash.com/photo-1613409385222-3d0decb6742a?auto=format&fit=crop&w=800&q=80', // Quesadilla
-  1624: 'https://images.unsplash.com/photo-1610657400673-7fc8941f403f?auto=format&fit=crop&w=800&q=80', // Chimichanga
-  1625: 'https://images.unsplash.com/photo-1618040996337-56904b7850b9?auto=format&fit=crop&w=800&q=80', // Enchilada
-  1626: 'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=800&q=80', // Taco
-  1627: 'https://images.unsplash.com/photo-1534352956036-cd81e27dd615?auto=format&fit=crop&w=800&q=80', // Soft Taco
-  1628: 'https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=800&q=80', // Hard Taco
-  1629: 'https://images.unsplash.com/photo-1546964124-0cce460f38ef?auto=format&fit=crop&w=800&q=80', // Fish Taco
-  1630: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=800&q=80', // Shrimp Taco
-  1631: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=800&q=80', // Pizza Slice
-  1632: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=800&q=80', // Calzone
-  1633: 'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?auto=format&fit=crop&w=800&q=80', // Stromboli
-  1634: 'https://images.unsplash.com/photo-1626700051175-6818013e1d4f?auto=format&fit=crop&w=800&q=80', // Focaccia
-  1635: 'https://images.unsplash.com/photo-1517840901100-8179e982acb7?auto=format&fit=crop&w=800&q=80', // Bruschetta
-  1636: 'https://images.unsplash.com/photo-1494597564530-871f2b93ac55?auto=format&fit=crop&w=800&q=80', // Sushi Bowl
-  1637: 'https://images.unsplash.com/photo-1552611052-33e04de081de?auto=format&fit=crop&w=800&q=80', // Ramen
-  1638: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=800&q=80', // Pho
-  1639: 'https://images.unsplash.com/photo-1574782256243-69c18023f7b4?auto=format&fit=crop&w=800&q=80', // Banh Mi
-  1640: 'https://images.unsplash.com/photo-1570197571499-166b36435e9f?auto=format&fit=crop&w=800&q=80', // Curry Bowl
-  1641: 'https://images.unsplash.com/photo-1534080564583-6be75777b70a?auto=format&fit=crop&w=800&q=80', // Biryani
-  1642: 'https://images.unsplash.com/photo-1596797038530-2c107229654b?auto=format&fit=crop&w=800&q=80', // Tikka Masala
-  1643: 'https://images.unsplash.com/photo-1594221708779-94832f4320d1?auto=format&fit=crop&w=800&q=80', // Tandoori Chicken
-  1644: 'https://images.unsplash.com/photo-1567613913497-8f023fc3d343?auto=format&fit=crop&w=800&q=80', // Naan Bread
-  1645: 'https://images.unsplash.com/photo-1627764627459-ba29d6051fe0?auto=format&fit=crop&w=800&q=80', // Dim Sum
-  1646: 'https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?auto=format&fit=crop&w=800&q=80', // Spring Rolls
-  1647: 'https://images.unsplash.com/photo-1498579150354-977475b7ea0b?auto=format&fit=crop&w=800&q=80', // Summer Rolls
-  1648: 'https://images.unsplash.com/photo-1603189864361-0cc65b5ecd3a?auto=format&fit=crop&w=800&q=80', // Vietnamese Bowl
-  1649: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=800&q=80', // Thai Bowl
-  1650: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?auto=format&fit=crop&w=800&q=80', // Shawarma
-  1651: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800&q=80', // Kebab
-  1652: 'https://images.unsplash.com/photo-1529006557810-274b9b2fc783?auto=format&fit=crop&w=800&q=80', // Kofta
-  1653: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?auto=format&fit=crop&w=800&q=80', // Hummus Plate
-  1654: 'https://images.unsplash.com/photo-1576511053046-7e445c5b95af?auto=format&fit=crop&w=800&q=80', // Bento Box
-  1655: 'https://images.unsplash.com/photo-1533777857889-4be7c70b33f7?auto=format&fit=crop&w=800&q=80', // Onigiri
-  1656: 'https://images.unsplash.com/photo-1579366948929-444eb79881eb?auto=format&fit=crop&w=800&q=80', // Edamame
-  1657: 'https://images.unsplash.com/photo-1559314809-0d155014e29e?auto=format&fit=crop&w=800&q=80', // Miso Soup
-  1658: 'https://images.unsplash.com/photo-1582450871972-ab5ca641643d?auto=format&fit=crop&w=800&q=80', // Tempura
-  1659: 'https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=800&q=80', // Tomato Soup
-  1660: 'https://images.unsplash.com/photo-1559737558-2f5a35f4523b?auto=format&fit=crop&w=800&q=80', // Roasted Chicken
-  1661: 'https://images.unsplash.com/photo-1574672281340-6b2d260a4b72?auto=format&fit=crop&w=800&q=80', // Baked Salmon
-  1662: 'https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=800&q=80', // Grilled Steak
-  1663: 'https://images.unsplash.com/photo-1546549032-9571cd6b27df?auto=format&fit=crop&w=800&q=80', // Beef Meatballs
-  1664: 'https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&w=800&q=80', // Beef Quesadilla
-  1665: 'https://images.unsplash.com/photo-1544943910-4c1dc44aab44?auto=format&fit=crop&w=800&q=80', // Pork Chops
-  1666: 'https://images.unsplash.com/photo-1576511053046-7e445c5b95af?auto=format&fit=crop&w=800&q=80', // Pork Roast
-  1667: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=800&q=80', // Pork Ribs
-  1668: 'https://images.unsplash.com/photo-1594221708779-94832f4320d1?auto=format&fit=crop&w=800&q=80', // Lamb Chops
-  1669: 'https://images.unsplash.com/photo-1534939561126-855b8675edd7?auto=format&fit=crop&w=800&q=80', // Lamb Stew
-  1670: 'https://images.unsplash.com/photo-1580959375944-abd7e991f971?auto=format&fit=crop&w=800&q=80', // Lamb Meatballs
-  1671: 'https://images.unsplash.com/photo-1596449212953-4ca53eca4822?auto=format&fit=crop&w=800&q=80', // Lamb Kofta
-  1672: 'https://images.unsplash.com/photo-1528467279403-46af96c37ab3?auto=format&fit=crop&w=800&q=80', // Chicken Breast
-  1673: 'https://images.unsplash.com/photo-1546549032-9571cd6b27df?auto=format&fit=crop&w=800&q=80', // Chicken Thighs
-  1674: 'https://images.unsplash.com/photo-1576511053046-7e445c5b95af?auto=format&fit=crop&w=800&q=80', // Chicken Drumsticks
-  1675: 'https://images.unsplash.com/photo-1544943910-4c1dc44aab44?auto=format&fit=crop&w=800&q=80', // Whole Chicken
-  1676: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=800&q=80', // Chicken Stew
-  1677: 'https://images.unsplash.com/photo-1548943487-a2e4e43b4853?auto=format&fit=crop&w=800&q=80', // Fish Stew
-  1678: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=800&q=80', // Fish Curry
-  1679: 'https://images.unsplash.com/photo-1579366948929-444eb79881eb?auto=format&fit=crop&w=800&q=80', // Baked Fish
-  1680: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=800&q=80', // Salmon Steaks
-  1681: 'https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?auto=format&fit=crop&w=800&q=80', // Salmon Curry
-  1682: 'https://images.unsplash.com/photo-1594221708779-94832f4320d1?auto=format&fit=crop&w=800&q=80', // Tuna Steak
-  1683: 'https://images.unsplash.com/photo-1574894709920-11b28e7367e3?auto=format&fit=crop&w=800&q=80', // Shrimp Pasta
-  1684: 'https://images.unsplash.com/photo-1574484284002-952d92456975?auto=format&fit=crop&w=800&q=80', // Shrimp Curry
-  1685: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Mussels in Wine
-  1686: 'https://images.unsplash.com/photo-1481931098730-318b6f776db0?auto=format&fit=crop&w=800&q=80', // Clams with Pasta
-  1687: 'https://images.unsplash.com/photo-1501436513145-30f24e19fcc8?auto=format&fit=crop&w=800&q=80', // Oysters
-  1688: 'https://images.unsplash.com/photo-1614549150185-8f85229ff291?auto=format&fit=crop&w=800&q=80', // Crab Cakes
-  1689: 'https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=800&q=80', // Lobster Tail
-  1690: 'https://images.unsplash.com/photo-1618040996337-56904b7850b9?auto=format&fit=crop&w=800&q=80', // Vegetable Fajitas
-  1691: 'https://images.unsplash.com/photo-1558030154-d3605e91d892?auto=format&fit=crop&w=800&q=80', // Shrimp Fajitas
-  1692: 'https://images.unsplash.com/photo-1546549032-9571cd6b27df?auto=format&fit=crop&w=800&q=80', // Beef Burritos
-  1693: 'https://images.unsplash.com/photo-1579366948929-444eb79881eb?auto=format&fit=crop&w=800&q=80', // Chicken Burritos
-  1694: 'https://images.unsplash.com/photo-1541519227354-08fa5d50c44d?auto=format&fit=crop&w=800&q=80', // Bean Burritos
-  1695: 'https://images.unsplash.com/photo-1544943910-4c1dc44aab44?auto=format&fit=crop&w=800&q=80', // Shrimp Burritos
-  1696: 'https://images.unsplash.com/photo-1550304952-9d1e3444f713?auto=format&fit=crop&w=800&q=80', // Veggie Burritos
-  1697: 'https://images.unsplash.com/photo-1603073163308-9654c3fb70b5?auto=format&fit=crop&w=800&q=80', // Beef Enchiladas
-  1698: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=800&q=80', // Chicken Enchiladas
-  1699: 'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=800&q=80', // Cheese Enchiladas
-  1700: 'https://images.unsplash.com/photo-1594221708779-94832f4320d1?auto=format&fit=crop&w=800&q=80', // Shrimp Enchiladas
-  1701: 'https://images.unsplash.com/photo-1519676867240-f03562e64548?auto=format&fit=crop&w=800&q=80', // Veggie Enchiladas
-  1702: 'https://images.unsplash.com/photo-1555949258-eb67b1ef0ceb?auto=format&fit=crop&w=800&q=80', // Rigatoni Marinara
-  1703: 'https://images.unsplash.com/photo-1476124369491-e7addf5db371?auto=format&fit=crop&w=800&q=80', // Risotto with Mushrooms
-  1704: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=800&q=80', // Pilaf
-  1705: 'https://images.unsplash.com/photo-1553163147-622ab57be1c7?auto=format&fit=crop&w=800&q=80', // Fried Rice
-  1706: 'https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?auto=format&fit=crop&w=800&q=80', // Vegetable Stir Fry
-  1707: 'https://images.unsplash.com/photo-1559737558-2f5a35f4523b?auto=format&fit=crop&w=800&q=80', // Beef Stir Fry
-  1708: 'https://images.unsplash.com/photo-1528467279403-46af96c37ab3?auto=format&fit=crop&w=800&q=80', // Shrimp Stir Fry
-  1709: 'https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=800&q=80', // Mushroom Stir Fry
-  1710: 'https://images.unsplash.com/photo-1574672281340-6b2d260a4b72?auto=format&fit=crop&w=800&q=80', // Beef Steak with Vegetables
-  1711: 'https://images.unsplash.com/photo-1546549032-9571cd6b27df?auto=format&fit=crop&w=800&q=80', // Pork Chop with Apple
-  1712: 'https://images.unsplash.com/photo-1603073163308-9654c3fb70b5?auto=format&fit=crop&w=800&q=80', // Chicken with Lemon
-  1713: 'https://images.unsplash.com/photo-1544943910-4c1dc44aab44?auto=format&fit=crop&w=800&q=80', // Fish with Herbs
-  1714: 'https://images.unsplash.com/photo-1609658938891-32dd655106af?auto=format&fit=crop&w=800&q=80', // Lamb with Rosemary
-  1715: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=800&q=80', // Beef Pie
-  1716: 'https://images.unsplash.com/photo-1594221708779-94832f4320d1?auto=format&fit=crop&w=800&q=80', // Chicken Pie
-  1717: 'https://images.unsplash.com/photo-1564834724105-918b73d1b9e0?auto=format&fit=crop&w=800&q=80', // Vegetable Pie
-  1718: 'https://images.unsplash.com/photo-1580959375944-abd7e991f971?auto=format&fit=crop&w=800&q=80', // Beef Roast
-  1719: 'https://images.unsplash.com/photo-1574672281340-6b2d260a4b72?auto=format&fit=crop&w=800&q=80', // Lamb Roast
-  1720: 'https://images.unsplash.com/photo-1580288020976-854d44d4c54f?auto=format&fit=crop&w=800&q=80', // Chicken Roast
-  1721: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=80', // Vegetable Roast
-  1722: 'https://images.unsplash.com/photo-1546549032-9571cd6b27df?auto=format&fit=crop&w=800&q=80', // Beef Braised
-  1723: 'https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&w=800&q=80', // Pork Braised
-  1724: 'https://images.unsplash.com/photo-1544943910-4c1dc44aab44?auto=format&fit=crop&w=800&q=80', // Lamb Braised
-  1725: 'https://images.unsplash.com/photo-1546964124-0cce460f38ef?auto=format&fit=crop&w=800&q=80', // Chicken Braised
-  1726: 'https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?auto=format&fit=crop&w=800&q=80', // Vegetable Braised
-  1727: 'https://images.unsplash.com/photo-1476718406336-bb5a9690ee2a?auto=format&fit=crop&w=800&q=80', // Beef Soup
-  1728: 'https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=800&q=80', // Chicken Soup
-  1729: 'https://images.unsplash.com/photo-1534939561126-855b8675edd7?auto=format&fit=crop&w=800&q=80', // Fish Soup
-  1730: 'https://images.unsplash.com/photo-1603073163308-9654c3fb70b5?auto=format&fit=crop&w=800&q=80', // Cheese and Crackers
-  1731: 'https://images.unsplash.com/photo-1543339308091-ef3c048c3ca0?auto=format&fit=crop&w=800&q=80', // Nuts Mix
-  1732: 'https://images.unsplash.com/photo-1572246538688-3f326dca3951?auto=format&fit=crop&w=800&q=80', // Cereal Bar
-  1733: 'https://images.unsplash.com/photo-1631167490917-2a22c070573a?auto=format&fit=crop&w=800&q=80', // Popcorn
-  1734: 'https://images.unsplash.com/photo-1575980967953-d812d957dca5?auto=format&fit=crop&w=800&q=80', // Chips
-  1735: 'https://images.unsplash.com/photo-1609658938891-32dd655106af?auto=format&fit=crop&w=800&q=80', // Pretzels
-  1736: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?auto=format&fit=crop&w=800&q=80', // Crackers
-  1737: 'https://images.unsplash.com/photo-1567234669003-dce7a7a88821?auto=format&fit=crop&w=800&q=80', // Bread Chips
-  1738: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800&q=80', // Hummus with Vegetables
-  1739: 'https://images.unsplash.com/photo-1534352956036-cd81e27dd615?auto=format&fit=crop&w=800&q=80', // Guacamole with Chips
-  1740: 'https://images.unsplash.com/photo-1571091718767-18b5b1457add?auto=format&fit=crop&w=800&q=80', // Salsa with Chips
-  1741: 'https://images.unsplash.com/photo-1589442305595-62647c1514f9?auto=format&fit=crop&w=800&q=80', // Peanut Butter and Crackers
-  1742: 'https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=800&q=80', // Almond Butter and Apple
-  1743: 'https://images.unsplash.com/photo-1585461276010-aff0f3dcd48f?auto=format&fit=crop&w=800&q=80', // Yogurt Cup
-  1744: 'https://images.unsplash.com/photo-1562376552-0d160a2f238d?auto=format&fit=crop&w=800&q=80', // Greek Yogurt
-  1745: 'https://images.unsplash.com/photo-1591454550842-d56fb54f7a52?auto=format&fit=crop&w=800&q=80', // Cottage Cheese
-  1746: 'https://images.unsplash.com/photo-1580959375944-abd7e991f971?auto=format&fit=crop&w=800&q=80', // Cheese Stick
-  1747: 'https://images.unsplash.com/photo-1540189549519-5a7bb3e29b00?auto=format&fit=crop&w=800&q=80', // String Cheese
-  1748: 'https://images.unsplash.com/photo-1589041611454-fd81bb39c3ba?auto=format&fit=crop&w=800&q=80', // Apple Slices
-  1749: 'https://images.unsplash.com/photo-1505576633757-0ac1084af824?auto=format&fit=crop&w=800&q=80', // Banana
-  1750: 'https://images.unsplash.com/photo-1601725245226-25296b49cd17?auto=format&fit=crop&w=800&q=80', // Orange Slices
-  1751: 'https://images.unsplash.com/photo-1614549150185-8f85229ff291?auto=format&fit=crop&w=800&q=80', // Berries
-  1752: 'https://images.unsplash.com/photo-1600891964099-c3c5bea1c5e0?auto=format&fit=crop&w=800&q=80', // Grapes
-  1753: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=800&q=80', // Nuts
-  1754: 'https://images.unsplash.com/photo-1572453800999-e8d2d1589b7c?auto=format&fit=crop&w=800&q=80', // Almonds
-  1755: 'https://images.unsplash.com/photo-1583182363039-59eac8609ab2?auto=format&fit=crop&w=800&q=80', // Walnuts
-  1756: 'https://images.unsplash.com/photo-1610657400673-7fc8941f403f?auto=format&fit=crop&w=800&q=80', // Pecans
-  1757: 'https://images.unsplash.com/photo-1576511053046-7e445c5b95af?auto=format&fit=crop&w=800&q=80', // Peanuts
-  1758: 'https://images.unsplash.com/photo-1543339308091-ef3c048c3ca0?auto=format&fit=crop&w=800&q=80', // Seeds
-  1759: 'https://images.unsplash.com/photo-1498579150354-977475b7ea0b?auto=format&fit=crop&w=800&q=80', // Sunflower Seeds
-  1760: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Pumpkin Seeds
-  1761: 'https://images.unsplash.com/photo-1627733810457-3c027bbb4dbb?auto=format&fit=crop&w=800&q=80', // Chia Seeds
-  1762: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=80', // Sesame Seeds
-  1763: 'https://images.unsplash.com/photo-1505576633757-0ac1084af824?auto=format&fit=crop&w=800&q=80', // Dried Fruit
-  1764: 'https://images.unsplash.com/photo-1501436513145-30f24e19fcc8?auto=format&fit=crop&w=800&q=80', // Raisins
-  1765: 'https://images.unsplash.com/photo-1579366948929-444eb79881eb?auto=format&fit=crop&w=800&q=80', // Dates
-  1766: 'https://images.unsplash.com/photo-1600891964099-c3c5bea1c5e0?auto=format&fit=crop&w=800&q=80', // Apricots
-  1767: 'https://images.unsplash.com/photo-1600891964099-c3c5bea1c5e0?auto=format&fit=crop&w=800&q=80', // Cranberries
-  1768: 'https://images.unsplash.com/photo-1567171466295-4afa63d45416?auto=format&fit=crop&w=800&q=80', // Cookies
-  1769: 'https://images.unsplash.com/photo-1578775887804-699de7086ff9?auto=format&fit=crop&w=800&q=80', // Brownies
-  1770: 'https://images.unsplash.com/photo-1621866908241-bc59b9dbfe7c?auto=format&fit=crop&w=800&q=80', // Cake
-  1771: 'https://images.unsplash.com/photo-1506127946181-abb01a32593c?auto=format&fit=crop&w=800&q=80', // Muffin
-  1772: 'https://images.unsplash.com/photo-1562007908-72e11e85b1cd?auto=format&fit=crop&w=800&q=80', // Donut
-  1773: 'https://images.unsplash.com/photo-1568571780765-9276ac8b75a2?auto=format&fit=crop&w=800&q=80', // Candy
-  1774: 'https://images.unsplash.com/photo-1587248720327-8eb72564be1e?auto=format&fit=crop&w=800&q=80', // Chocolate
-  1775: 'https://images.unsplash.com/photo-1467453678174-768ec283a940?auto=format&fit=crop&w=800&q=80', // Taffy
-  1776: 'https://images.unsplash.com/photo-1572246538688-3f326dca3951?auto=format&fit=crop&w=800&q=80', // Gummy
-  1777: 'https://images.unsplash.com/photo-1534080564583-6be75777b70a?auto=format&fit=crop&w=800&q=80', // Licorice
-  1778: 'https://images.unsplash.com/photo-1590301157890-4810ed352733?auto=format&fit=crop&w=800&q=80', // Fruit Bars
-  1779: 'https://images.unsplash.com/photo-1603073163308-9654c3fb70b5?auto=format&fit=crop&w=800&q=80', // Energy Bars
-  1780: 'https://images.unsplash.com/photo-1600891964599-f94d5765bae8?auto=format&fit=crop&w=800&q=80', // Protein Bars
-  1781: 'https://images.unsplash.com/photo-1584278858944-7c34f1d94db0?auto=format&fit=crop&w=800&q=80', // Granola Bars
-  1782: 'https://images.unsplash.com/photo-1589442305595-62647c1514f9?auto=format&fit=crop&w=800&q=80', // Cereal Bars
-  1783: 'https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?auto=format&fit=crop&w=800&q=80', // Vegetable Chips
-  1784: 'https://images.unsplash.com/photo-1572357243457-fc153742e7a5?auto=format&fit=crop&w=800&q=80', // Beet Chips
-  1785: 'https://images.unsplash.com/photo-1575980967953-d812d957dca5?auto=format&fit=crop&w=800&q=80', // Kale Chips
-  1786: 'https://images.unsplash.com/photo-1609658938891-32dd655106af?auto=format&fit=crop&w=800&q=80', // Carrot Chips
-  1787: 'https://images.unsplash.com/photo-1540189549519-5a7bb3e29b00?auto=format&fit=crop&w=800&q=80', // Cucumber Chips
-  1788: 'https://images.unsplash.com/photo-1580959375944-abd7e991f971?auto=format&fit=crop&w=800&q=80', // Dips
-  1789: 'https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=800&q=80', // Spinach Dip
-  1790: 'https://images.unsplash.com/photo-1581875271349-86c5c7dd58af?auto=format&fit=crop&w=800&q=80', // Onion Dip
-  1791: 'https://images.unsplash.com/photo-1591454550842-d56fb54f7a52?auto=format&fit=crop&w=800&q=80', // Ranch Dip
-  1792: 'https://images.unsplash.com/photo-1614549150185-8f85229ff291?auto=format&fit=crop&w=800&q=80', // Cream Cheese Dip
-  1793: 'https://images.unsplash.com/photo-1562565651-7d4948f339eb?auto=format&fit=crop&w=800&q=80', // Spreads
-  1794: 'https://images.unsplash.com/photo-1601725245226-25296b49cd17?auto=format&fit=crop&w=800&q=80', // Peanut Butter
-  1795: 'https://images.unsplash.com/photo-1464500542410-1396074bf230?auto=format&fit=crop&w=800&q=80', // Almond Butter
-  1796: 'https://images.unsplash.com/photo-1603189864361-0cc65b5ecd3a?auto=format&fit=crop&w=800&q=80', // Tahini
-  1797: 'https://images.unsplash.com/photo-1610657400673-7fc8941f403f?auto=format&fit=crop&w=800&q=80', // Honey
-  1798: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=800&q=80', // Olive Mix
-  1799: 'https://images.unsplash.com/photo-1562565651-7d4948f339eb?auto=format&fit=crop&w=800&q=80', // Olive Tapenade
-  1800: 'https://images.unsplash.com/photo-1529006557810-274b9b2fc783?auto=format&fit=crop&w=800&q=80', // Hummus
-  1801: 'https://images.unsplash.com/photo-1547058881-aa0edd92aab3?auto=format&fit=crop&w=800&q=80', // Tzatziki
-  1802: 'https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=800&q=80', // Chocolate Cake
-  1803: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=800&q=80', // Vanilla Cake
-  1804: 'https://images.unsplash.com/photo-1536599524557-5f784dd53282?auto=format&fit=crop&w=800&q=80', // Cheesecake
-  1805: 'https://images.unsplash.com/photo-1598412795976-9c195182ee01?auto=format&fit=crop&w=800&q=80', // Fudge
-  1806: 'https://images.unsplash.com/photo-1600615789327-eba9cb100e1d?auto=format&fit=crop&w=800&q=80', // Chocolate Truffles
-  1807: 'https://images.unsplash.com/photo-1611254666354-d75bfe3cadbc?auto=format&fit=crop&w=800&q=80', // Chocolate Bark
-  1808: 'https://images.unsplash.com/photo-1505253599537-305b179737ce?auto=format&fit=crop&w=800&q=80', // Chocolate Pudding
-  1809: 'https://images.unsplash.com/photo-1536749605762-e7445a2d43ec?auto=format&fit=crop&w=800&q=80', // Cherry Pie
-  1810: 'https://images.unsplash.com/photo-1541783245831-57d6fb0926d3?auto=format&fit=crop&w=800&q=80', // Peach Pie
-  1811: 'https://images.unsplash.com/photo-1557310717-d6bea9f36682?auto=format&fit=crop&w=800&q=80', // Lemon Pie
-  1812: 'https://images.unsplash.com/photo-1635189461100-216097234630?auto=format&fit=crop&w=800&q=80', // Tart
-  1813: 'https://images.unsplash.com/photo-1515037893149-de7f840978e2?auto=format&fit=crop&w=800&q=80', // Fruit Tart
-  1814: 'https://images.unsplash.com/photo-1564355808539-22fda35bed7e?auto=format&fit=crop&w=800&q=80', // Chocolate Tart
-  1815: 'https://images.unsplash.com/photo-1589375025852-a66cdd127efb?auto=format&fit=crop&w=800&q=80', // Berry Tart
-  1816: 'https://images.unsplash.com/photo-1590841609987-4ac211afdde1?auto=format&fit=crop&w=800&q=80', // Ice Cream
-  1817: 'https://images.unsplash.com/photo-1604761483402-1e07d167c09b?auto=format&fit=crop&w=800&q=80', // Chocolate Ice Cream
-  1818: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=800&q=80', // Vanilla Ice Cream
-  1819: 'https://images.unsplash.com/photo-1610611424854-5e07032143d8?auto=format&fit=crop&w=800&q=80', // Strawberry Ice Cream
-  1820: 'https://images.unsplash.com/photo-1611625877932-6155840177a6?auto=format&fit=crop&w=800&q=80', // Mint Ice Cream
-  1821: 'https://images.unsplash.com/photo-1624353365286-3f8d62daad51?auto=format&fit=crop&w=800&q=80', // Sorbet
-  1822: 'https://images.unsplash.com/photo-1636743715220-d8f8dd900b87?auto=format&fit=crop&w=800&q=80', // Lemon Sorbet
-  1823: 'https://images.unsplash.com/photo-1524351199678-941a58a3df50?auto=format&fit=crop&w=800&q=80', // Raspberry Sorbet
-  1824: 'https://images.unsplash.com/photo-1533134242443-d4fd215305ad?auto=format&fit=crop&w=800&q=80', // Mango Sorbet
-  1825: 'https://images.unsplash.com/photo-1567171466295-4afa63d45416?auto=format&fit=crop&w=800&q=80', // Pineapple Sorbet
-  1826: 'https://images.unsplash.com/photo-1578775887804-699de7086ff9?auto=format&fit=crop&w=800&q=80', // Pudding
-  1827: 'https://images.unsplash.com/photo-1621866908241-bc59b9dbfe7c?auto=format&fit=crop&w=800&q=80', // Butterscotch Pudding
-  1828: 'https://images.unsplash.com/photo-1506127946181-abb01a32593c?auto=format&fit=crop&w=800&q=80', // Banana Pudding
-  1829: 'https://images.unsplash.com/photo-1562007908-72e11e85b1cd?auto=format&fit=crop&w=800&q=80', // Custard
-  1830: 'https://images.unsplash.com/photo-1568571780765-9276ac8b75a2?auto=format&fit=crop&w=800&q=80', // Flan
-  1831: 'https://images.unsplash.com/photo-1587248720327-8eb72564be1e?auto=format&fit=crop&w=800&q=80', // Shortbread
-  1832: 'https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=800&q=80', // Sugar Cookies
-  1833: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=800&q=80', // Blondies
-  1834: 'https://images.unsplash.com/photo-1536599524557-5f784dd53282?auto=format&fit=crop&w=800&q=80', // Cookie Bars
-  1835: 'https://images.unsplash.com/photo-1598412795976-9c195182ee01?auto=format&fit=crop&w=800&q=80', // Fudge Bars
-  1836: 'https://images.unsplash.com/photo-1600615789327-eba9cb100e1d?auto=format&fit=crop&w=800&q=80', // Pie
-  1837: 'https://images.unsplash.com/photo-1611254666354-d75bfe3cadbc?auto=format&fit=crop&w=800&q=80', // Cream Pie
-  1838: 'https://images.unsplash.com/photo-1505253599537-305b179737ce?auto=format&fit=crop&w=800&q=80', // Fruit Pie
-  1839: 'https://images.unsplash.com/photo-1536749605762-e7445a2d43ec?auto=format&fit=crop&w=800&q=80', // Nut Pie
-  1840: 'https://images.unsplash.com/photo-1541783245831-57d6fb0926d3?auto=format&fit=crop&w=800&q=80', // Custard Pie
-  1841: 'https://images.unsplash.com/photo-1557310717-d6bea9f36682?auto=format&fit=crop&w=800&q=80', // Layer Cake
-  1842: 'https://images.unsplash.com/photo-1635189461100-216097234630?auto=format&fit=crop&w=800&q=80', // Sheet Cake
-  1843: 'https://images.unsplash.com/photo-1515037893149-de7f840978e2?auto=format&fit=crop&w=800&q=80', // Pound Cake
-  1844: 'https://images.unsplash.com/photo-1564355808539-22fda35bed7e?auto=format&fit=crop&w=800&q=80', // Angel Food Cake
-  1845: 'https://images.unsplash.com/photo-1589375025852-a66cdd127efb?auto=format&fit=crop&w=800&q=80', // Pastry
-  1846: 'https://images.unsplash.com/photo-1590841609987-4ac211afdde1?auto=format&fit=crop&w=800&q=80', // Croissant
-  1847: 'https://images.unsplash.com/photo-1604761483402-1e07d167c09b?auto=format&fit=crop&w=800&q=80', // Danish
-  1848: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=800&q=80', // Eclairs
-  1849: 'https://images.unsplash.com/photo-1610611424854-5e07032143d8?auto=format&fit=crop&w=800&q=80', // Cream Puffs
-  1850: 'https://images.unsplash.com/photo-1611625877932-6155840177a6?auto=format&fit=crop&w=800&q=80', // Glazed Donut
-  1851: 'https://images.unsplash.com/photo-1624353365286-3f8d62daad51?auto=format&fit=crop&w=800&q=80', // Chocolate Donut
-  1852: 'https://images.unsplash.com/photo-1636743715220-d8f8dd900b87?auto=format&fit=crop&w=800&q=80', // Jelly Donut
-  1853: 'https://images.unsplash.com/photo-1524351199678-941a58a3df50?auto=format&fit=crop&w=800&q=80', // Boston Cream
-  1854: 'https://images.unsplash.com/photo-1533134242443-d4fd215305ad?auto=format&fit=crop&w=800&q=80', // Trifle
-  1855: 'https://images.unsplash.com/photo-1567171466295-4afa63d45416?auto=format&fit=crop&w=800&q=80', // Parfait
-  1856: 'https://images.unsplash.com/photo-1578775887804-699de7086ff9?auto=format&fit=crop&w=800&q=80', // Sundae
-  1857: 'https://images.unsplash.com/photo-1621866908241-bc59b9dbfe7c?auto=format&fit=crop&w=800&q=80', // Split
-  1858: 'https://images.unsplash.com/photo-1506127946181-abb01a32593c?auto=format&fit=crop&w=800&q=80', // Float
-  1859: 'https://images.unsplash.com/photo-1525184782196-8e2ded604bf7?auto=format&fit=crop&w=800&q=80', // Croissant with Ham
-  1860: 'https://images.unsplash.com/photo-1610015644714-60076be69b30?auto=format&fit=crop&w=800&q=80', // Toast with Apricot Jam
-  1861: 'https://images.unsplash.com/photo-1600891964599-f94d5765bae8?auto=format&fit=crop&w=800&q=80', // Granola with Almonds
-  1862: 'https://images.unsplash.com/photo-1597200284813-aeddf0653f54?auto=format&fit=crop&w=800&q=80', // Honey Butter Croissant
-  1863: 'https://images.unsplash.com/photo-1568051243858-533a607809a5?auto=format&fit=crop&w=800&q=80', // Yogurt with Granola
-  1864: 'https://images.unsplash.com/photo-1519676867240-f03562e64548?auto=format&fit=crop&w=800&q=80', // Eggs and Toast
-  1865: 'https://images.unsplash.com/photo-1620280641611-1b444bf9f9b6?auto=format&fit=crop&w=800&q=80', // Croissant Plain
-  1866: 'https://images.unsplash.com/photo-1562376552-0d160a2f238d?auto=format&fit=crop&w=800&q=80', // Fruit Pancakes
-  1867: 'https://images.unsplash.com/photo-1494597564530-871f2b93ac55?auto=format&fit=crop&w=800&q=80', // Salad with Dressing
-  1868: 'https://images.unsplash.com/photo-1574782256243-69c18023f7b4?auto=format&fit=crop&w=800&q=80', // Sandwich Combo
-  1869: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?auto=format&fit=crop&w=800&q=80', // Wrap with Veggies
-  1870: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80', // Bowl with Grains
-  1871: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80', // Salad Mix
-  1872: 'https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=800&q=80', // Pasta Dish
-  1873: 'https://images.unsplash.com/photo-1476124369491-e7addf5db371?auto=format&fit=crop&w=800&q=80', // Rice Bowl
-  1874: 'https://images.unsplash.com/photo-1599020792689-9fde458e7e17?auto=format&fit=crop&w=800&q=80', // Grain Salad
-  1875: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=80', // Vegetable Plate
-  1876: 'https://images.unsplash.com/photo-1564834724105-918b73d1b9e0?auto=format&fit=crop&w=800&q=80', // Protein Plate
-  1877: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Mixed Plate
-  1878: 'https://images.unsplash.com/photo-1498579150354-977475b7ea0b?auto=format&fit=crop&w=800&q=80', // Combo Plate
-  1879: 'https://images.unsplash.com/photo-1576511053046-7e445c5b95af?auto=format&fit=crop&w=800&q=80', // Plate Special
-  1880: 'https://images.unsplash.com/photo-1608393189287-0bc2191c7e86?auto=format&fit=crop&w=800&q=80', // Chef Choice
-  1881: 'https://images.unsplash.com/photo-1570197571499-166b36435e9f?auto=format&fit=crop&w=800&q=80', // House Special
-  1882: 'https://images.unsplash.com/photo-1627764627459-ba29d6051fe0?auto=format&fit=crop&w=800&q=80', // Lunch Special
-  1883: 'https://images.unsplash.com/photo-1501436513145-30f24e19fcc8?auto=format&fit=crop&w=800&q=80', // Daily Special
-  1884: 'https://images.unsplash.com/photo-1579366948929-444eb79881eb?auto=format&fit=crop&w=800&q=80', // Meal Deal
-  1885: 'https://images.unsplash.com/photo-1605926637512-c8b131444a3b?auto=format&fit=crop&w=800&q=80', // Value Meal
-  1886: 'https://images.unsplash.com/photo-1603073163308-9654c3fb70b5?auto=format&fit=crop&w=800&q=80', // Family Meal
-  1887: 'https://images.unsplash.com/photo-1607532941433-304659e8198a?auto=format&fit=crop&w=800&q=80', // Side Salad
-  1888: 'https://images.unsplash.com/photo-1590301157890-4810ed352733?auto=format&fit=crop&w=800&q=80', // Small Salad
-  1889: 'https://images.unsplash.com/photo-1494597564530-871f2b93ac55?auto=format&fit=crop&w=800&q=80', // Large Salad
-  1890: 'https://images.unsplash.com/photo-1627764627459-ba29d6051fe0?auto=format&fit=crop&w=800&q=80', // Garden Mix
-  1891: 'https://images.unsplash.com/photo-1572246538688-3f326dca3951?auto=format&fit=crop&w=800&q=80', // Spring Mix
-  1892: 'https://images.unsplash.com/photo-1599020792689-9fde458e7e17?auto=format&fit=crop&w=800&q=80', // Seasonal Salad
-  1893: 'https://images.unsplash.com/photo-1631167490917-2a22c070573a?auto=format&fit=crop&w=800&q=80', // Market Salad
-  1894: 'https://images.unsplash.com/photo-1498837167922-ddd27525d352?auto=format&fit=crop&w=800&q=80', // Fresh Salad
-  1895: 'https://images.unsplash.com/photo-1467453678174-768ec283a940?auto=format&fit=crop&w=800&q=80', // Green Bowl
-  1896: 'https://images.unsplash.com/photo-1590301157890-4810ed352733?auto=format&fit=crop&w=800&q=80', // Harvest Bowl
-  1897: 'https://images.unsplash.com/photo-1494597564530-871f2b93ac55?auto=format&fit=crop&w=800&q=80', // Lunch Salad
-  1898: 'https://images.unsplash.com/photo-1549248220-5811dc32cd5d?auto=format&fit=crop&w=800&q=80', // Lunch Bowl
-  1899: 'https://images.unsplash.com/photo-1517840901100-8179e982acb7?auto=format&fit=crop&w=800&q=80', // Lunch Wrap
-  1900: 'https://images.unsplash.com/photo-1530554764233-e79e16c91d08?auto=format&fit=crop&w=800&q=80', // Lunch Sandwich
-  1901: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=800&q=80', // Chicken Plate
-  1902: 'https://images.unsplash.com/photo-1609658938891-32dd655106af?auto=format&fit=crop&w=800&q=80', // Dinner Plate
-  1903: 'https://images.unsplash.com/photo-1464500542410-1396074bf230?auto=format&fit=crop&w=800&q=80', // Special Plate
-  1904: 'https://images.unsplash.com/photo-1575980967953-d812d957dca5?auto=format&fit=crop&w=800&q=80', // Chef Plate
-  1905: 'https://images.unsplash.com/photo-1505576633757-0ac1084af824?auto=format&fit=crop&w=800&q=80', // Dinner Special
-  1906: 'https://images.unsplash.com/photo-1591454550842-d56fb54f7a52?auto=format&fit=crop&w=800&q=80', // Today's Special
-  1907: 'https://images.unsplash.com/photo-1580959375944-abd7e991f971?auto=format&fit=crop&w=800&q=80', // Meal Special
-  1908: 'https://images.unsplash.com/photo-1511910849309-0dffb8785146?auto=format&fit=crop&w=800&q=80', // Combo Meal
-  1909: 'https://images.unsplash.com/photo-1564834724105-918b73d1b9e0?auto=format&fit=crop&w=800&q=80', // Dinner Deal
-  1910: 'https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?auto=format&fit=crop&w=800&q=80', // Grilled Plate
-  1911: 'https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=800&q=80', // Roasted Plate
-  1912: 'https://images.unsplash.com/photo-1511910849309-0dffb8785146?auto=format&fit=crop&w=800&q=80', // Baked Plate
-  1913: 'https://images.unsplash.com/photo-1583182363039-59eac8609ab2?auto=format&fit=crop&w=800&q=80', // Seared Plate
-  1914: 'https://images.unsplash.com/photo-1601725245226-25296b49cd17?auto=format&fit=crop&w=800&q=80', // Broiled Plate
-  1915: 'https://images.unsplash.com/photo-1594221708779-94832f4320d1?auto=format&fit=crop&w=800&q=80', // Beef Plate
-  1916: 'https://images.unsplash.com/photo-1614549150185-8f85229ff291?auto=format&fit=crop&w=800&q=80', // Fish Plate
-  1917: 'https://images.unsplash.com/photo-1596449212953-4ca53eca4822?auto=format&fit=crop&w=800&q=80', // Pork Plate
-  1918: 'https://images.unsplash.com/photo-1596449212953-4ca53eca4822?auto=format&fit=crop&w=800&q=80', // Lamb Plate
-  1919: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=80', // With Vegetables
-  1920: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=800&q=80', // With Rice
-  1921: 'https://images.unsplash.com/photo-1585032226651-759b368d7246?auto=format&fit=crop&w=800&q=80', // With Noodles
-  1922: 'https://images.unsplash.com/photo-1614549150185-8f85229ff291?auto=format&fit=crop&w=800&q=80', // With Potatoes
-  1923: 'https://images.unsplash.com/photo-1541519227354-08fa5d50c44d?auto=format&fit=crop&w=800&q=80', // With Bread
-  1924: 'https://images.unsplash.com/photo-1608393189287-0bc2191c7e86?auto=format&fit=crop&w=800&q=80', // Served Hot
-  1925: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Served Fresh
-  1926: 'https://images.unsplash.com/photo-1583182363039-59eac8609ab2?auto=format&fit=crop&w=800&q=80', // Served Daily
-  1927: 'https://images.unsplash.com/photo-1610657400673-7fc8941f403f?auto=format&fit=crop&w=800&q=80', // Seasonal Dish
-  1928: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=800&q=80', // Market Special
-  1929: 'https://images.unsplash.com/photo-1605926637512-c8b131444a3b?auto=format&fit=crop&w=800&q=80', // Family Dinner
-  1930: 'https://images.unsplash.com/photo-1576511053046-7e445c5b95af?auto=format&fit=crop&w=800&q=80', // Family Special
-  1931: 'https://images.unsplash.com/photo-1589442305595-62647c1514f9?auto=format&fit=crop&w=800&q=80', // Group Meal
-  1932: 'https://images.unsplash.com/photo-1498579150354-977475b7ea0b?auto=format&fit=crop&w=800&q=80', // Party Plate
-  1933: 'https://images.unsplash.com/photo-1579366948929-444eb79881eb?auto=format&fit=crop&w=800&q=80', // Celebration Meal
-  1934: 'https://images.unsplash.com/photo-1464500542410-1396074bf230?auto=format&fit=crop&w=800&q=80', // Weekend Special
-  1935: 'https://images.unsplash.com/photo-1501436513145-30f24e19fcc8?auto=format&fit=crop&w=800&q=80', // Sunday Dinner
-  1936: 'https://images.unsplash.com/photo-1627764627459-ba29d6051fe0?auto=format&fit=crop&w=800&q=80', // Holiday Meal
-  1937: 'https://images.unsplash.com/photo-1572246538688-3f326dca3951?auto=format&fit=crop&w=800&q=80', // Festive Plate
-  1938: 'https://images.unsplash.com/photo-1603073163308-9654c3fb70b5?auto=format&fit=crop&w=800&q=80', // Gourmet Plate
-  1939: 'https://images.unsplash.com/photo-1511910849309-0dffb8785146?auto=format&fit=crop&w=800&q=80', // Premium Plate
-  1940: 'https://images.unsplash.com/photo-1564834724105-918b73d1b9e0?auto=format&fit=crop&w=800&q=80', // Deluxe Plate
-  1941: 'https://images.unsplash.com/photo-1589041611454-fd81bb39c3ba?auto=format&fit=crop&w=800&q=80', // Supreme Plate
-  1942: 'https://images.unsplash.com/photo-1575980967953-d812d957dca5?auto=format&fit=crop&w=800&q=80', // Ultimate Plate
-  1943: 'https://images.unsplash.com/photo-1609658938891-32dd655106af?auto=format&fit=crop&w=800&q=80', // Master Plate
-  1944: 'https://images.unsplash.com/photo-1608393189287-0bc2191c7e86?auto=format&fit=crop&w=800&q=80', // Chef Selection
-  1945: 'https://images.unsplash.com/photo-1505576633757-0ac1084af824?auto=format&fit=crop&w=800&q=80', // Chef Recommendation
-  1946: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80', // Chef Favorite
-  1947: 'https://images.unsplash.com/photo-1591454550842-d56fb54f7a52?auto=format&fit=crop&w=800&q=80', // House Favorite
-  1948: 'https://images.unsplash.com/photo-1580959375944-abd7e991f971?auto=format&fit=crop&w=800&q=80', // Customer Favorite
-  1949: 'https://images.unsplash.com/photo-1605926637512-c8b131444a3b?auto=format&fit=crop&w=800&q=80', // Most Popular
-  1950: 'https://images.unsplash.com/photo-1614549150185-8f85229ff291?auto=format&fit=crop&w=800&q=80', // Best Seller
-  1951: 'https://images.unsplash.com/photo-1570197571499-166b36435e9f?auto=format&fit=crop&w=800&q=80', // Top Rated
-  1952: 'https://images.unsplash.com/photo-1601725245226-25296b49cd17?auto=format&fit=crop&w=800&q=80', // Award Winner
-  1953: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=800&q=80', // Award Plate
-  1954: 'https://images.unsplash.com/photo-1543339308091-ef3c048c3ca0?auto=format&fit=crop&w=800&q=80', // Seeds Mix
-  1955: 'https://images.unsplash.com/photo-1610657400673-7fc8941f403f?auto=format&fit=crop&w=800&q=80', // Cereal Snack
-  1956: 'https://images.unsplash.com/photo-1636743713732-125909a35dcc?auto=format&fit=crop&w=800&q=80', // Granola Cup
-  1957: 'https://images.unsplash.com/photo-1627764627459-ba29d6051fe0?auto=format&fit=crop&w=800&q=80', // Snack Mix
-  1958: 'https://images.unsplash.com/photo-1498579150354-977475b7ea0b?auto=format&fit=crop&w=800&q=80', // Party Mix
-  1959: 'https://images.unsplash.com/photo-1576511053046-7e445c5b95af?auto=format&fit=crop&w=800&q=80', // Finger Food
-  1960: 'https://images.unsplash.com/photo-1464500542410-1396074bf230?auto=format&fit=crop&w=800&q=80', // Bite Size
-  1961: 'https://images.unsplash.com/photo-1511910849309-0dffb8785146?auto=format&fit=crop&w=800&q=80', // Quick Snack
-  1962: 'https://images.unsplash.com/photo-1572357243457-fc153742e7a5?auto=format&fit=crop&w=800&q=80', // Easy Snack
-  1963: 'https://images.unsplash.com/photo-1562007908-72e11e85b1cd?auto=format&fit=crop&w=800&q=80', // Dessert Plate
-  1964: 'https://images.unsplash.com/photo-1568571780765-9276ac8b75a2?auto=format&fit=crop&w=800&q=80', // Sweet Treat
-  1965: 'https://images.unsplash.com/photo-1587248720327-8eb72564be1e?auto=format&fit=crop&w=800&q=80', // Dessert Special
-  1966: 'https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=800&q=80', // Chocolate Delight
-  1967: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=800&q=80', // Sweet Delight
-  1968: 'https://images.unsplash.com/photo-1536599524557-5f784dd53282?auto=format&fit=crop&w=800&q=80', // Dessert Combo
-  1969: 'https://images.unsplash.com/photo-1598412795976-9c195182ee01?auto=format&fit=crop&w=800&q=80', // Dessert Mix
-  1970: 'https://images.unsplash.com/photo-1600615789327-eba9cb100e1d?auto=format&fit=crop&w=800&q=80', // Cake Slice
-  1971: 'https://images.unsplash.com/photo-1611254666354-d75bfe3cadbc?auto=format&fit=crop&w=800&q=80', // Sweet Pastry
-  1972: 'https://images.unsplash.com/photo-1505253599537-305b179737ce?auto=format&fit=crop&w=800&q=80', // Fruit Dessert
-  1973: 'https://images.unsplash.com/photo-1536749605762-e7445a2d43ec?auto=format&fit=crop&w=800&q=80', // Chocolate Dessert
-  1974: 'https://images.unsplash.com/photo-1541783245831-57d6fb0926d3?auto=format&fit=crop&w=800&q=80', // Vanilla Dessert
-  1975: 'https://images.unsplash.com/photo-1557310717-d6bea9f36682?auto=format&fit=crop&w=800&q=80', // Caramel Dessert
-  1976: 'https://images.unsplash.com/photo-1635189461100-216097234630?auto=format&fit=crop&w=800&q=80', // Maple Dessert
-  1977: 'https://images.unsplash.com/photo-1515037893149-de7f840978e2?auto=format&fit=crop&w=800&q=80', // Honey Dessert
-  1978: 'https://images.unsplash.com/photo-1564355808539-22fda35bed7e?auto=format&fit=crop&w=800&q=80', // Sugar Dessert
-  1979: 'https://images.unsplash.com/photo-1589375025852-a66cdd127efb?auto=format&fit=crop&w=800&q=80', // Spiced Dessert
-  1980: 'https://images.unsplash.com/photo-1590841609987-4ac211afdde1?auto=format&fit=crop&w=800&q=80', // Seasonal Dessert
-  1981: 'https://images.unsplash.com/photo-1604761483402-1e07d167c09b?auto=format&fit=crop&w=800&q=80', // Special Treat
-  1982: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=800&q=80', // Favorite Treat
-  1983: 'https://images.unsplash.com/photo-1610611424854-5e07032143d8?auto=format&fit=crop&w=800&q=80', // House Treat
-  1984: 'https://images.unsplash.com/photo-1611625877932-6155840177a6?auto=format&fit=crop&w=800&q=80', // Premium Dessert
-  1985: 'https://images.unsplash.com/photo-1624353365286-3f8d62daad51?auto=format&fit=crop&w=800&q=80', // Homemade Dessert
-  1986: 'https://images.unsplash.com/photo-1636743715220-d8f8dd900b87?auto=format&fit=crop&w=800&q=80', // Fresh Dessert
-  1987: 'https://images.unsplash.com/photo-1573057377537-dbb3a99ac4b9?auto=format&fit=crop&w=800&q=80', // Cream Cheese Croissant
-  1988: 'https://images.unsplash.com/photo-1585461276010-aff0f3dcd48f?auto=format&fit=crop&w=800&q=80', // Whole Wheat Toast with Honey
-  1989: 'https://images.unsplash.com/photo-1525184782196-8e2ded604bf7?auto=format&fit=crop&w=800&q=80', // Mixed Berry Granola
-  1990: 'https://images.unsplash.com/photo-1495214783159-3503fd1b572d?auto=format&fit=crop&w=800&q=80', // Simple Fried Eggs
-  1991: 'https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?auto=format&fit=crop&w=800&q=80', // Roast with Vegetables
-  1992: 'https://images.unsplash.com/photo-1546549032-9571cd6b27df?auto=format&fit=crop&w=800&q=80', // Grilled Fish
-  1993: 'https://images.unsplash.com/photo-1576511053046-7e445c5b95af?auto=format&fit=crop&w=800&q=80', // Roasted Chicken Dinner
-  1994: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=800&q=80', // Beef Stew Dinner
-  1995: 'https://images.unsplash.com/photo-1608897013039-887f21d8c804?auto=format&fit=crop&w=800&q=80', // Pasta Dinner
-  1996: 'https://images.unsplash.com/photo-1501436513145-30f24e19fcc8?auto=format&fit=crop&w=800&q=80', // Apple with Peanut Butter
-  1997: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800&q=80', // Carrot and Hummus
-  1998: 'https://images.unsplash.com/photo-1579366948929-444eb79881eb?auto=format&fit=crop&w=800&q=80', // Banana Chip Snack
-  1999: 'https://images.unsplash.com/photo-1524351199678-941a58a3df50?auto=format&fit=crop&w=800&q=80', // Vanilla Pudding Cup
-  2000: 'https://images.unsplash.com/photo-1533134242443-d4fd215305ad?auto=format&fit=crop&w=800&q=80', // Sugar Cookie
-  2001: 'https://images.unsplash.com/photo-1567171466295-4afa63d45416?auto=format&fit=crop&w=800&q=80', // Simple Cake
-};
 
 
 
-RECIPES.forEach(r => { if (!r.image && IMAGE_MAP[r.id]) r.image = IMAGE_MAP[r.id]; });
 // Populate Kosher/Dairy-Free dietary tags from flags so filters work
 RECIPES.forEach(r => {
   if (!r.dietary) r.dietary = [];
@@ -23985,13 +21535,142 @@ class RecipeErrorBoundary extends React.Component {
   }
 }
 
+// ── Dynamic recipe image ──────────────────────────────────────────────────────
+// Curated Unsplash photo pools by food category. Each recipe gets a deterministic
+// image based on its title hash mod the pool size — no external API calls needed.
+const FOOD_PHOTOS = {
+  pasta: [
+    'photo-1481931098730-318b6f776db0','photo-1621996346565-e3dbc646d9a9','photo-1563379926898-05f4575a45d8',
+    'photo-1622973536968-3ead9e780960','photo-1551892374-ecf8754cf8b0','photo-1608219992759-8d74ed8d76eb',
+    'photo-1555949258-eb67b1ef0ceb','photo-1473093295043-cdd812d0e601','photo-1556761223-4c4282c73f77',
+    'photo-1598866594042-8c11f76ec6de'
+  ],
+  chicken: [
+    'photo-1594221708779-94832f4320d1','photo-1598515214211-89d3c73ae83b','photo-1604908176997-125f25cc6f3d',
+    'photo-1576867757603-05b134ebc379','photo-1632778149955-e80f8ceca2e8','photo-1606728035253-0fcd0e2d8e10'
+  ],
+  beef: [
+    'photo-1546964124-0cce460f38ef','photo-1606756790138-261d2b21cd75','photo-1558030006-450675393462',
+    'photo-1588168333986-5078d3ae3976','photo-1529694157872-4e0c0f3b238b'
+  ],
+  fish: [
+    'photo-1467003909585-2f8a72700288','photo-1559847844934-e3f6e68a585f','photo-1580476262798-bddd9f4b7369',
+    'photo-1519708227418-c8fd9a32b7a0','photo-1535140728325-a4d3707eee61'
+  ],
+  salad: [
+    'photo-1546069901-ba9599a7e63c','photo-1512621776951-a57141f2eefd','photo-1540189549336-e6e99c3679fe',
+    'photo-1607532941433-304659e8198a','photo-1543339308-d595b4f1f3e0','photo-1505253716362-afaea1d3d1af',
+    'photo-1515543237350-b3eea1ec8082'
+  ],
+  soup: [
+    'photo-1547592166-23ac45744acd','photo-1587116861000-8e3e89e3b5a9','photo-1603105037880-880cd4edfb0d',
+    'photo-1588566565463-180a5b2090d2','photo-1534939561126-855b8675edd7'
+  ],
+  curry: [
+    'photo-1455619452474-d2be8b1e70cd','photo-1543339308091-ef4f38df18b7','photo-1565557623262-b51c2513a641',
+    'photo-1585937421612-70a008356fbe','photo-1574653853027-5382a3d23a15'
+  ],
+  rice: [
+    'photo-1559181567000-3b76e7e4c5a4','photo-1603133872878-684f208fb84b','photo-1596560548464-f010549b84d7',
+    'photo-1536304929831-ee1ca9d44906','photo-1604908176997-125f25cc6f3d'
+  ],
+  breakfast: [
+    'photo-1533089860892-a7c6f0a88666','photo-1525351484163-7529414344d8','photo-1590412200988-a436970781fa',
+    'photo-1600803907087-2e3e6fb2c834','photo-1528207776546-365bb710ee93','photo-1484723091739-30a097e8f929',
+    'photo-1495214783159-3503fd1b572d','photo-1517433367423-c7e5b0f35086'
+  ],
+  sandwich: [
+    'photo-1539252554453-80ab65ce3586','photo-1571877227200-a0d98ea607e9','photo-1528735602780-2552fd46c7af',
+    'photo-1509722747041-616f39b57569','photo-1481070555726-e2fe8357b3e3','photo-1575523392682-35fba24bdd3b'
+  ],
+  pizza: [
+    'photo-1565299624946-b28f40a0ae38','photo-1604908176997-125f25cc6f3d','photo-1571091718767-18b5b1457add',
+    'photo-1574071318508-1cdbab80d002','photo-1513104890138-7c749659a591'
+  ],
+  dessert: [
+    'photo-1563729784474-d77dbb933a9e','photo-1567171466295-4afa63d45416','photo-1533134242443-d4fd215305ad',
+    'photo-1488477181946-6428a0291777','photo-1464305795204-6f5bbfc7fb81','photo-1571115177098-24ec42ed204d',
+    'photo-1551024506-0bccd828d307','photo-1486427944544-d2c246c4df14','photo-1587668178277-295251f900ce',
+    'photo-1578985545062-69928b1d9587'
+  ],
+  sushi: [
+    'photo-1579871494447-9811cf80d66c','photo-1533777857889-4be7c70b33f7','photo-1553621042-f6e147245754',
+    'photo-1559410545-0bdcd187e0a6'
+  ],
+  mexican: [
+    'photo-1565299585323-38d6b0865b47','photo-1571091718767-18b5b1457add','photo-1599974579688-8dbdd335c6f7',
+    'photo-1551504734-5ee1c4a1479b','photo-1624300629298-e9209cf8c01b'
+  ],
+  stir_fry: [
+    'photo-1605926637512-c8b131444a3b','photo-1512058564366-18510be2db19','photo-1569718212165-3a8278d5f624',
+    'photo-1585032226651-759b368d7246'
+  ],
+  bowl: [
+    'photo-1546069901-ba9599a7e63c','photo-1590301157890-4810ed352733','photo-1600891964599-f94d4ca1bd76',
+    'photo-1512621776951-a57141f2eefd','photo-1490645935967-10de6ba17061'
+  ],
+  bread: [
+    'photo-1509440159596-0249088772ff','photo-1549931319-a545dcf3bc73','photo-1517433367423-c7e5b0f35086',
+    'photo-1558961363-fa8fdf82db35'
+  ],
+  smoothie: [
+    'photo-1600891964599-f94d4ca1bd76','photo-1505252585461-04db1eb84625','photo-1553530666-ba11a7da3888',
+    'photo-1502741338009-cac2772e18bc'
+  ],
+  snack: [
+    'photo-1555939594-58d7cb561ad1','photo-1501436513145-30f24e19fcc8','photo-1579366948929-444eb79881eb',
+    'photo-1504674900247-0877df9cc836','photo-1484980972926-edee96e0960d'
+  ],
+  general: [
+    'photo-1504674900247-0877df9cc836','photo-1476224203421-9ac39bcb3327','photo-1414235077428-338989a2e8c0',
+    'photo-1498837167922-ddd27525d352','photo-1493770348161-369560ae357d','photo-1555939594-58d7cb561ad1',
+    'photo-1506354666786-959d6d497f1a','photo-1543353071-087092ec393a','photo-1547592180-85f173990554',
+    'photo-1540189549336-e6e99c3679fe'
+  ]
+};
+
+function recipeImage(title, meal) {
+  if (!title) return '';
+  const t = title.toLowerCase();
+  const m = (meal || '').toLowerCase();
+  // Determine category
+  let cat = 'general';
+  if (/pasta|spaghetti|penne|fettuccin|linguine|lasagna|ravioli|gnocchi|macaroni|carbonara|aglio|bolognese|alfredo|ragu|rigatoni|orzo/.test(t)) cat = 'pasta';
+  else if (/chicken|pollo/.test(t)) cat = 'chicken';
+  else if (/beef|steak|bulgogi|burger|meatball|lamb|pork|bacon|sausage/.test(t)) cat = 'beef';
+  else if (/salmon|fish|tuna|cod\b|shrimp|prawn|lobster|crab|scallop|halibut|trout|sea bass|snapper|calamari/.test(t)) cat = 'fish';
+  else if (/salad/.test(t)) cat = 'salad';
+  else if (/soup|stew|chowder|bisque|broth|chili/.test(t)) cat = 'soup';
+  else if (/curry|tikka|masala|dal\b|dhal|korma|vindaloo/.test(t)) cat = 'curry';
+  else if (/rice|risotto|paella|biryani|pilaf|fried rice|congee|bibimbap/.test(t)) cat = 'rice';
+  else if (/sushi|sashimi|maki|temaki|nigiri/.test(t)) cat = 'sushi';
+  else if (/taco|burrito|enchilada|quesadilla|fajita|nachos|tamale|carnita/.test(t)) cat = 'mexican';
+  else if (/pizza|flatbread/.test(t)) cat = 'pizza';
+  else if (/sandwich|toast|panini|wrap|blt|melt|grilled cheese|bagel|bruschetta|sub\b/.test(t)) cat = 'sandwich';
+  else if (/cake|cookie|brownie|pie|tart|pudding|ice cream|sorbet|mousse|cheesecake|crumble|muffin|donut|croissant|pastry|flan|eclair/.test(t)) cat = 'dessert';
+  else if (/smoothie|shake|juice/.test(t)) cat = 'smoothie';
+  else if (/stir.?fry|wok|pad thai|ramen|noodle|pho|udon|lo mein/.test(t)) cat = 'stir_fry';
+  else if (/bowl|buddha|poke|acai/.test(t)) cat = 'bowl';
+  else if (/bread|scone|biscuit|focaccia/.test(t)) cat = 'bread';
+  else if (m === 'breakfast' || /omelette|omelet|pancake|waffle|french toast|granola|oatmeal|egg|shakshuka|frittata|hash/.test(t)) cat = 'breakfast';
+  else if (m === 'snack' || m === 'dessert') cat = 'snack';
+  // Deterministic hash from title
+  let hash = 0;
+  for (let i = 0; i < t.length; i++) hash = ((hash << 5) - hash + t.charCodeAt(i)) | 0;
+  hash = Math.abs(hash);
+  const pool = FOOD_PHOTOS[cat] || FOOD_PHOTOS.general;
+  const photoId = pool[hash % pool.length];
+  return `https://images.unsplash.com/${photoId}?w=400&auto=format&fit=crop&q=60`;
+}
+
+// Apply images to all recipes
+RECIPES.forEach(r => { r.image = recipeImage(r.title, r.meal); });
+
 /* ── MAIN APP ── */
 export default function App() {
-  const [screen, setScreen] = useState("loading"); // loading first to check session
-  const [tab, setTab] = useState("home");
+  const [screen, setScreen] = useState("loading");
+  const [tab, setTab] = useState("planner");
   const [user, setUser] = useState(null);
-  const [isGuest, setIsGuest] = useState(false);
-  const [isDemo,  setIsDemo]  = useState(false);
   const [pantry, setPantry] = useState([]);
   const [shopping, setShopping] = useState([]);
   const [saved, setSaved] = useState(new Set());
@@ -23999,37 +21678,19 @@ export default function App() {
     {day:"Mon",meals:[null,null,null]},{day:"Tue",meals:[null,null,null]},{day:"Wed",meals:[null,null,null]},
     {day:"Thu",meals:[null,null,null]},{day:"Fri",meals:[null,null,null]},{day:"Sat",meals:[null,null,null]},{day:"Sun",meals:[null,null,null]}
   ]);
-  const [prefs, setPrefs] = useState({ dietary:[],cuisines:["Italian","Mediterranean"],health:"Balanced",skill:"Intermediate",maxTime:60,household:2 });
+  const [prefs, setPrefs] = useState({ dietary:[],cuisines:["Italian","Mediterranean"],health:"Balanced",skill:"Intermediate",maxTime:60,household:2,goal:"" });
   const [viewRecipe, setViewRecipe] = useState(null);
-  // Plan Library state lifted to App level so it survives recipe navigation
-  const [libraryPreview, setLibraryPreview] = useState(null);   // { plan, entry }
-  const [libraryDraft, setLibraryDraft]     = useState(null);   // { plan, title }
-  const [libraryDraftTitle, setLibraryDraftTitle] = useState(''); // editable draft name
-  const [libraryShowCreate, setLibraryShowCreate] = useState(false);
-  // 🔧 DEV MODE: isPremium defaults to true for testing — set to false when gating is needed
-  const [subscription, setSubscription] = useState({ isPremium: true, autoplanUsed: 0 });
-  const [showUpgrade, setShowUpgrade] = useState(null); // 'chat'|'autoplan'|'save'|'recipes'|null
-  // Favorites system
-  const [favFolders,  setFavFolders]  = useState(DEFAULT_FOLDERS);
-  const [favItems,    setFavItems]    = useState([]);
+  const [toastMsg, setToastMsg] = useState(null);
   const [userRecipes, setUserRecipes] = useState([]);
-  const [showSaveFav, setShowSaveFav] = useState(null); // recipe object | null
-  const [toastMsg,    setToastMsg]    = useState(null); // {msg, id}
-  const [avoidedIngredients, setAvoidedIngredients] = useState([]); // normalized ingredient names
-  const [publishedMenus, setPublishedMenus] = useState([]); // user's published weekly menus
-  const [collections, setCollections] = useState([{id:"saved",name:"Saved",emoji:"🔖",items:[]}]); // recipe/menu collections
-  // Lifted HomeTab filter state — persists across recipe opens and tab switches
-  const [homeFilter, setHomeFilter] = useState("All");
-  const [homeSearch, setHomeSearch] = useState("");
-  const [homeSortMode, setHomeSortMode] = useState("default");
-  const [homeCuisineFilter, setHomeCuisineFilter] = useState("all");
-  const [homeMealCat, setHomeMealCat] = useState("All"); // Breakfast/Lunch/Dinner/Snacks/All
-  // Add-to-week flow state
-  const [addToWeekRecipe, setAddToWeekRecipe] = useState(null);
+  const [publishedMenus, setPublishedMenus] = useState([]);
+  // Quick action panel
+  const [qap, setQap] = useState(null); // {dayIdx, mealIdx, rect}
+  // Replace picker
+  const [replacePicker, setReplacePicker] = useState(null); // {dayIdx, mealIdx}
+  // Add-to-plan modal
+  const [addToPlanRecipe, setAddToPlanRecipe] = useState(null);
 
-  const isPremium = subscription.isPremium;
-
-  // ─── INJECT CSS ONCE INTO <head> ──────────────────────────────────────────
+  // ── Inject CSS ──
   React.useEffect(() => {
     if (document.getElementById('smartchef-styles')) return;
     const style = document.createElement('style');
@@ -24039,24 +21700,16 @@ export default function App() {
     return () => { const el = document.getElementById('smartchef-styles'); if (el) el.remove(); };
   }, []);
 
-  // ─────────────────────────────────────────────────────────────────────────
-
-  // Restore session on mount
+  // ── Session restore ──
   useEffect(() => {
     const session = localStorage.getItem("sc_session");
-    if(session) {
+    if (session) {
       try {
         const userData = JSON.parse(session);
         setUser(userData);
-        setIsGuest(false);
-        setIsDemo(false);
         loadUserData(userData.email);
-        snapshotToDemo(userData.email); // refresh demo snapshot on auto-login
-        setSubscription(getSubData(userData.email));
         setScreen("main");
-      } catch {
-        setScreen("welcome");
-      }
+      } catch { setScreen("welcome"); }
     } else {
       setScreen("welcome");
     }
@@ -24069,14 +21722,9 @@ export default function App() {
       setShopping(JSON.parse(localStorage.getItem(`sc_${uid}_shopping`) || "[]"));
       setSaved(new Set(JSON.parse(localStorage.getItem(`sc_${uid}_saved`) || "[]")));
       setMealPlan(JSON.parse(localStorage.getItem(`sc_${uid}_mealPlan`) || '[{"day":"Mon","meals":[null,null,null]},{"day":"Tue","meals":[null,null,null]},{"day":"Wed","meals":[null,null,null]},{"day":"Thu","meals":[null,null,null]},{"day":"Fri","meals":[null,null,null]},{"day":"Sat","meals":[null,null,null]},{"day":"Sun","meals":[null,null,null]}]'));
-      setPrefs(JSON.parse(localStorage.getItem(`sc_${uid}_prefs`) || '{"dietary":[],"cuisines":["Italian","Mediterranean"],"health":"Balanced","skill":"Intermediate","maxTime":60,"household":2}'));
-      setAvoidedIngredients(JSON.parse(localStorage.getItem(`sc_${uid}_avoided`) || "[]"));
+      setPrefs(JSON.parse(localStorage.getItem(`sc_${uid}_prefs`) || '{"dietary":[],"cuisines":["Italian","Mediterranean"],"health":"Balanced","skill":"Intermediate","maxTime":60,"household":2,"goal":""}'));
+      setUserRecipes(JSON.parse(localStorage.getItem(`sc_${uid}_user_recipes`) || "[]"));
       setPublishedMenus(JSON.parse(localStorage.getItem(`sc_${uid}_publishedMenus`) || "[]"));
-      setCollections(JSON.parse(localStorage.getItem(`sc_${uid}_collections`) || '[{"id":"saved","name":"Saved","emoji":"🔖","items":[]}]'));
-      const fav = getFavData(email);
-      setFavFolders(fav.folders);
-      setFavItems(fav.items);
-      setUserRecipes(fav.userRecipes);
     } catch {}
   };
 
@@ -24088,46 +21736,12 @@ export default function App() {
       localStorage.setItem(`sc_${uid}_saved`, JSON.stringify([...saved]));
       localStorage.setItem(`sc_${uid}_mealPlan`, JSON.stringify(mealPlan));
       localStorage.setItem(`sc_${uid}_prefs`, JSON.stringify(prefs));
-      localStorage.setItem(`sc_${uid}_avoided`, JSON.stringify(avoidedIngredients));
+      localStorage.setItem(`sc_${uid}_user_recipes`, JSON.stringify(userRecipes));
       localStorage.setItem(`sc_${uid}_publishedMenus`, JSON.stringify(publishedMenus));
-      localStorage.setItem(`sc_${uid}_collections`, JSON.stringify(collections));
     } catch {}
   };
 
-  // Snapshot real-user data into the shared demo slot (pantry + prefs + avoided only).
-  // Called every time the real user logs in so the demo snapshot stays current.
-  const snapshotToDemo = (email) => {
-    const uid = email.toLowerCase();
-    // Never snapshot from the demo slot itself
-    if (uid === '__demo__') return;
-    try {
-      ['pantry','prefs','avoided'].forEach(k => {
-        const v = localStorage.getItem(`sc_${uid}_${k}`);
-        if (v !== null) localStorage.setItem(`sc___demo___${k}`, v);
-      });
-      localStorage.setItem('sc___demo___snapshot_email', email);
-      localStorage.setItem('sc___demo___snapshot_ts', String(Date.now()));
-    } catch {}
-  };
-
-  // Auto-save when data changes; also keep demo snapshot current for real users
-  useEffect(() => {
-    if(user && !isGuest) {
-      saveUserData(user.email);
-      // Keep demo snapshot in sync with pantry/prefs/avoided so "Continue as Demo"
-      // always reflects the latest real-user state. snapshotToDemo guards against
-      // the demo email itself triggering a snapshot.
-      if (!isDemo) snapshotToDemo(user.email);
-    }
-  }, [pantry, shopping, saved, mealPlan, prefs, avoidedIngredients, publishedMenus, collections]);
-  useEffect(() => { if(user && !isGuest) saveSubData(user.email, subscription); }, [subscription]);
-
-  const activatePremium = () => {
-    const newSub = { ...subscription, isPremium: true, activatedAt: Date.now() };
-    setSubscription(newSub);
-    if (user && !isGuest) saveSubData(user.email, newSub);
-    setShowUpgrade(null);
-  };
+  useEffect(() => { if (user) saveUserData(user.email); }, [pantry, shopping, saved, mealPlan, prefs, userRecipes, publishedMenus]);
 
   // ── Toast ──
   const showToast = (msg) => {
@@ -24137,8947 +21751,985 @@ export default function App() {
     setTimeout(() => setToastMsg(t => t?.id === id ? null : t), 3000);
   };
 
-  // ── Favorites helpers ──
-  const isRecipeInFolder = (recipe, folderId) =>
-    favItems.some(it => it.folderId === folderId &&
-      (recipe.isUserCreated ? it.userRecipeId === recipe.id : it.recipeId === recipe.id));
-
-  const isRecipeSaved = (recipe) =>
-    favItems.some(it => recipe.isUserCreated ? it.userRecipeId === recipe.id : it.recipeId === recipe.id);
-
-  const openSaveFav = (recipe) => {
-    if (!isPremium && !isRecipeSaved(recipe) && favItems.filter(it=>it.folderId==="fold_all").length >= FREE_SAVE_LIMIT) {
-      setShowUpgrade("save"); return;
-    }
-    setShowSaveFav(recipe);
-  };
-
-  const saveToFolder = (recipe, folderId, newFoldersList) => {
-    const recipeId     = recipe.isUserCreated ? null : recipe.id;
-    const userRecipeId = recipe.isUserCreated ? recipe.id : null;
-    let newItems = [...favItems];
-    // Add to chosen folder only (no auto-add to other folders)
-    const alreadyInTarget = newItems.some(it => it.folderId === folderId &&
-      (recipeId !== null ? it.recipeId === recipeId : it.userRecipeId === userRecipeId));
-    if (!alreadyInTarget) {
-      newItems.push({ id:`fi_${Date.now()}`, folderId, recipeId, userRecipeId, createdAt: Date.now() });
-    }
-    setFavItems(newItems);
-    if (user && !isGuest) saveFavItems(user.email, newItems);
-    if (!recipe.isUserCreated) setSaved(p => { const n=new Set(p); n.add(recipe.id); return n; });
-    const foldersToUse = newFoldersList || favFolders;
-    const folderName = foldersToUse.find(f => f.id === folderId)?.name || "Favorites";
-    showToast(`✅ Saved to ${folderName}`);
-    setShowSaveFav(null);
-  };
-
-  // Remove a recipe from ALL folders at once (used by the unsave button)
-  const removeFromAllFolders = (recipe) => {
-    const recipeId     = recipe.isUserCreated ? null : recipe.id;
-    const userRecipeId = recipe.isUserCreated ? recipe.id : null;
-    const newItems = favItems.filter(it =>
-      recipeId !== null ? it.recipeId !== recipeId : it.userRecipeId !== userRecipeId);
-    setFavItems(newItems);
-    if (!recipe.isUserCreated) setSaved(p => { const n=new Set(p); n.delete(recipe.id); return n; });
-    if (user && !isGuest) saveFavItems(user.email, newItems);
-    showToast("Removed from favorites");
-  };
-
-  const removeFavItem = (recipe, folderId) => {
-    const recipeId     = recipe.isUserCreated ? null : recipe.id;
-    const userRecipeId = recipe.isUserCreated ? recipe.id : null;
-    const newItems = favItems.filter(it => {
-      if (it.folderId !== folderId) return true;
-      if (recipeId !== null && it.recipeId === recipeId) return false;
-      if (userRecipeId !== null && it.userRecipeId === userRecipeId) return false;
+  // ── Generate plan ──
+  const generateWeek = () => {
+    const pool = RECIPES.filter(r => {
+      if (prefs.dietary.length > 0) {
+        const rd = (r.dietary || []).map(d => d.toLowerCase());
+        if (!prefs.dietary.every(d => rd.includes(d.toLowerCase()))) return false;
+      }
+      if (prefs.maxTime && r.time > prefs.maxTime) return false;
       return true;
     });
-    // If removing from "All Favorites", also remove from every other folder
-    let finalItems = newItems;
-    if (folderId === "fold_all") {
-      finalItems = newItems.filter(it =>
-        recipeId !== null ? it.recipeId !== recipeId : it.userRecipeId !== userRecipeId);
-      if (!recipe.isUserCreated) setSaved(p => { const n=new Set(p); n.delete(recipe.id); return n; });
-    }
-    setFavItems(finalItems);
-    if (user && !isGuest) saveFavItems(user.email, finalItems);
-    showToast("Removed from favorites");
+    const byMeal = { breakfast: [], lunch: [], dinner: [] };
+    pool.forEach(r => {
+      const m = (r.meal || 'dinner').toLowerCase();
+      if (m === 'breakfast') byMeal.breakfast.push(r);
+      else if (m === 'lunch' || m === 'salad') byMeal.lunch.push(r);
+      else if (m === 'snack' || m === 'dessert') byMeal.lunch.push(r);
+      else byMeal.dinner.push(r);
+    });
+    const shuffle = arr => [...arr].sort(() => Math.random() - 0.5);
+    const pick = (arr, n) => { const s = shuffle(arr); return s.slice(0, n); };
+    const breakfasts = pick(byMeal.breakfast.length > 0 ? byMeal.breakfast : pool, 7);
+    const lunches = pick(byMeal.lunch.length > 0 ? byMeal.lunch : pool, 7);
+    const dinners = pick(byMeal.dinner.length > 0 ? byMeal.dinner : pool, 7);
+    const days = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+    const newPlan = days.map((day, i) => ({
+      day,
+      meals: [
+        breakfasts[i] ? { id: breakfasts[i].id, title: breakfasts[i].title, emoji: breakfasts[i].emoji } : null,
+        lunches[i] ? { id: lunches[i].id, title: lunches[i].title, emoji: lunches[i].emoji } : null,
+        dinners[i] ? { id: dinners[i].id, title: dinners[i].title, emoji: dinners[i].emoji } : null,
+      ]
+    }));
+    setMealPlan(newPlan);
+    showToast("Week plan generated!");
   };
 
-  const addUserRecipe = (recipeData) => {
-    const id = `ur_${Date.now()}`;
-    const newRecipe = {
-      ...recipeData, id,
-      isUserCreated: true, pp:0, worth:false, missing:[],
-      contains_meat:false, contains_fish:false, contains_shellfish:false, contains_dairy:false,
-      createdAt: Date.now(), updatedAt: Date.now()
-    };
-    const newList = [...userRecipes, newRecipe];
-    setUserRecipes(newList);
-    if (user && !isGuest) saveUserRecipes(user.email, newList);
-    // Auto-add to "My Recipes" folder
-    const newFavItem = { id:`fi_${Date.now()}`, folderId:"fold_myrecipes", recipeId:null, userRecipeId:id, createdAt:Date.now() };
-    const newItems = [...favItems, newFavItem];
-    setFavItems(newItems);
-    if (user && !isGuest) saveFavItems(user.email, newItems);
-    showToast(`🍽️ "${recipeData.title}" added to My Recipes`);
-  };
-
-  const deleteUserRecipe = (recipeId) => {
-    const newList = userRecipes.filter(r => r.id !== recipeId);
-    setUserRecipes(newList);
-    const newItems = favItems.filter(it => it.userRecipeId !== recipeId);
-    setFavItems(newItems);
-    if (user && !isGuest) { saveUserRecipes(user.email, newList); saveFavItems(user.email, newItems); }
-    showToast("🗑 Recipe deleted");
-  };
-
-  const createFavFolder = (name, emoji="📁") => {
-    const newF = { id:`fold_${Date.now()}`, name, emoji, system:false, createdAt: Date.now() };
-    const newFolders = [...favFolders, newF];
-    setFavFolders(newFolders);
-    if (user && !isGuest) saveFavFolders(user.email, newFolders);
-    return newF;
-  };
-
-  const deleteFavFolder = (folderId) => {
-    const folder = favFolders.find(f => f.id === folderId);
-    if (!folder) return;
-    const newFolders = favFolders.filter(f => f.id !== folderId);
-    const newItems   = favItems.filter(it => it.folderId !== folderId);
-    setFavFolders(newFolders);
-    setFavItems(newItems);
-    if (user && !isGuest) { saveFavFolders(user.email, newFolders); saveFavItems(user.email, newItems); }
-    showToast(`🗑 "${folder.name}" deleted`);
-  };
-
-  // Merge built-in + user recipes into one array for tabs that need all recipes
-  const allRecipes = React.useMemo(() => [...RECIPES, ...userRecipes], [userRecipes]);
-
-
-  const toggleSave = id => {
-    if (!isPremium && !saved.has(id) && saved.size >= FREE_SAVE_LIMIT) {
-      setShowUpgrade("save"); return;
-    }
-    setSaved(p => { const n=new Set(p); n.has(id)?n.delete(id):n.add(id); return n; });
-  };
-  const addToList  = items => setShopping(p => [...p,...items.map((m,i)=>({id:Date.now()+i,name:m,qty:"as needed",checked:false}))]);
-
-  const login = u => {
-    setUser(u);
-    setIsGuest(false);
-    setIsDemo(false);
-    localStorage.setItem("sc_session", JSON.stringify(u));
-    loadUserData(u.email);
-    snapshotToDemo(u.email); // keep demo snapshot current whenever real user logs in
-    setSubscription(getSubData(u.email));
-    setScreen(pantry.length===0?"onboarding":"main");
-  };
-
-  // ── DEMO MODE ─────────────────────────────────────────────────────────────
-  // Clones real user data into an isolated demo slot before launching.
-  // Changes made in demo mode never touch the real user's keys.
-  const DEMO_EMAIL = '__demo__';
-  const enterDemo = () => {
-    // Always refresh the demo snapshot from the real user's data right now,
-    // so the demo session starts with the current pantry + prefs.
-    // Priority: 1) still-stored session email, 2) first registered account.
-    try {
-      const session = localStorage.getItem('sc_session');
-      let targetEmail = session ? (JSON.parse(session)?.email || null) : null;
-      if (!targetEmail) {
-        const accounts = JSON.parse(localStorage.getItem('sc_accounts') || '{}');
-        const emails = Object.keys(accounts);
-        if (emails.length > 0) targetEmail = emails[0];
+  const generateDay = (dayIdx) => {
+    const pool = RECIPES.filter(r => {
+      if (prefs.dietary.length > 0) {
+        const rd = (r.dietary || []).map(d => d.toLowerCase());
+        if (!prefs.dietary.every(d => rd.includes(d.toLowerCase()))) return false;
       }
-      if (targetEmail) snapshotToDemo(targetEmail);
-    } catch {}
-    setUser({ name: 'Demo', email: DEMO_EMAIL });
-    setIsGuest(false);
-    setIsDemo(true);
-    loadUserData(DEMO_EMAIL); // reads sc___demo___pantry / prefs / avoided
-    setSubscription({ isPremium: false, autoplanUsed: 0 });
-    setScreen('main');
+      return true;
+    });
+    const byMeal = { breakfast: [], lunch: [], dinner: [] };
+    pool.forEach(r => {
+      const m = (r.meal || 'dinner').toLowerCase();
+      if (m === 'breakfast') byMeal.breakfast.push(r);
+      else if (m === 'lunch' || m === 'salad' || m === 'snack' || m === 'dessert') byMeal.lunch.push(r);
+      else byMeal.dinner.push(r);
+    });
+    const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+    const b = pick(byMeal.breakfast.length ? byMeal.breakfast : pool);
+    const l = pick(byMeal.lunch.length ? byMeal.lunch : pool);
+    const d = pick(byMeal.dinner.length ? byMeal.dinner : pool);
+    const toSlot = r => r ? { id: r.id, title: r.title, emoji: r.emoji } : null;
+    setMealPlan(prev => {
+      const next = [...prev];
+      next[dayIdx] = { ...next[dayIdx], meals: [toSlot(b), toSlot(l), toSlot(d)] };
+      return next;
+    });
+    showToast(`${mealPlan[dayIdx]?.day || 'Day'} regenerated!`);
   };
 
-  const guest = () => {
-    setUser({name:"Guest",email:""});
-    setIsGuest(true);
-    setPantry([]); setShopping([]); setSaved(new Set());
-    setMealPlan([{day:"Mon",meals:[null,null,null]},{day:"Tue",meals:[null,null,null]},{day:"Wed",meals:[null,null,null]},{day:"Thu",meals:[null,null,null]},{day:"Fri",meals:[null,null,null]},{day:"Sat",meals:[null,null,null]},{day:"Sun",meals:[null,null,null]}]);
-    setPrefs({ dietary:[],cuisines:["Italian","Mediterranean"],health:"Balanced",skill:"Intermediate",maxTime:60,household:2 });
-    setSubscription({ isPremium: false, autoplanUsed: 0 });
-    setFavFolders(DEFAULT_FOLDERS); setFavItems([]); setUserRecipes([]);
+  const regenerateSlot = (dayIdx, mealIdx) => {
+    const mealTypes = ['breakfast', 'lunch', 'dinner'];
+    const targetMeal = mealTypes[mealIdx];
+    const pool = RECIPES.filter(r => {
+      const m = (r.meal || 'dinner').toLowerCase();
+      if (targetMeal === 'breakfast') return m === 'breakfast';
+      if (targetMeal === 'lunch') return ['lunch','salad','snack','dessert'].includes(m);
+      return !['breakfast','lunch','salad','snack','dessert'].includes(m);
+    });
+    if (pool.length === 0) return;
+    const r = pool[Math.floor(Math.random() * pool.length)];
+    setMealPlan(prev => {
+      const next = prev.map(d => ({ ...d, meals: [...d.meals] }));
+      next[dayIdx].meals[mealIdx] = { id: r.id, title: r.title, emoji: r.emoji };
+      return next;
+    });
+    setQap(null);
+    showToast("Recipe swapped!");
+  };
+
+  const removeSlot = (dayIdx, mealIdx) => {
+    setMealPlan(prev => {
+      const next = prev.map(d => ({ ...d, meals: [...d.meals] }));
+      next[dayIdx].meals[mealIdx] = null;
+      return next;
+    });
+    setQap(null);
+    showToast("Meal removed");
+  };
+
+  const setSlotRecipe = (dayIdx, mealIdx, recipe) => {
+    setMealPlan(prev => {
+      const next = prev.map(d => ({ ...d, meals: [...d.meals] }));
+      next[dayIdx].meals[mealIdx] = { id: recipe.id, title: recipe.title, emoji: recipe.emoji };
+      return next;
+    });
+  };
+
+  // ── Shopping list from plan ──
+  const generateShopping = () => {
+    const ingMap = {};
+    mealPlan.forEach(day => {
+      day.meals.forEach(slot => {
+        if (!slot) return;
+        const recipe = RECIPES.find(r => r.id === slot.id);
+        if (!recipe) return;
+        (recipe.ingredients || []).forEach(ing => {
+          const key = (ing.n || '').toLowerCase().trim();
+          if (!key) return;
+          if (!ingMap[key]) ingMap[key] = { name: ing.n, amount: ing.a, owned: false };
+        });
+      });
+    });
+    // Mark owned if in pantry
+    const pantrySet = new Set(pantry.map(p => (typeof p === 'string' ? p : p.name || '').toLowerCase().trim()));
+    Object.keys(ingMap).forEach(k => {
+      if (pantrySet.has(k)) ingMap[k].owned = true;
+    });
+    setShopping(Object.values(ingMap));
+    showToast(`Shopping list generated: ${Object.keys(ingMap).length} items`);
+  };
+
+  // ── Drag & Drop ──
+  const [dragSrc, setDragSrc] = useState(null);
+
+  const handleDragStart = (dayIdx, mealIdx) => {
+    setDragSrc({ dayIdx, mealIdx });
+  };
+
+  const handleDrop = (dayIdx, mealIdx) => {
+    if (!dragSrc) return;
+    setMealPlan(prev => {
+      const next = prev.map(d => ({ ...d, meals: [...d.meals] }));
+      const srcMeal = next[dragSrc.dayIdx].meals[dragSrc.mealIdx];
+      const dstMeal = next[dayIdx].meals[mealIdx];
+      next[dayIdx].meals[mealIdx] = srcMeal;
+      next[dragSrc.dayIdx].meals[dragSrc.mealIdx] = dstMeal;
+      return next;
+    });
+    setDragSrc(null);
+    showToast("Meal moved!");
+  };
+
+  // ── Saved/Likes ──
+  const toggleSave = (recipeId) => {
+    setSaved(prev => {
+      const next = new Set(prev);
+      if (next.has(recipeId)) next.delete(recipeId);
+      else next.add(recipeId);
+      return next;
+    });
+  };
+
+  // ── Add to plan from Explore ──
+  const handleAddToPlan = (recipe) => {
+    setAddToPlanRecipe(recipe);
+  };
+
+  const confirmAddToPlan = (dayIdx, mealIdx) => {
+    if (!addToPlanRecipe) return;
+    setSlotRecipe(dayIdx, mealIdx, addToPlanRecipe);
+    setAddToPlanRecipe(null);
+    showToast(`Added "${addToPlanRecipe.title}" to plan`);
+  };
+
+  // ── Auth ──
+  const handleLogin = (email, name) => {
+    const userData = { email, name: name || email.split('@')[0] };
+    localStorage.setItem("sc_session", JSON.stringify(userData));
+    setUser(userData);
+    loadUserData(email);
+    setScreen("main");
+  };
+
+  const handleSignup = (email, name) => {
+    const userData = { email, name };
+    localStorage.setItem("sc_session", JSON.stringify(userData));
+    setUser(userData);
     setScreen("onboarding");
   };
 
-  const logout = () => {
+  const handleOnboardingDone = () => {
+    generateWeek();
+    setScreen("main");
+    setTab("planner");
+  };
+
+  const handleLogout = () => {
     localStorage.removeItem("sc_session");
-    setUser(null); setIsGuest(false); setIsDemo(false);
-    setPantry([]); setShopping([]); setSaved(new Set());
-    setMealPlan([{day:"Mon",meals:[null,null,null]},{day:"Tue",meals:[null,null,null]},{day:"Wed",meals:[null,null,null]},{day:"Thu",meals:[null,null,null]},{day:"Fri",meals:[null,null,null]},{day:"Sat",meals:[null,null,null]},{day:"Sun",meals:[null,null,null]}]);
-    setPrefs({ dietary:[],cuisines:["Italian","Mediterranean"],health:"Balanced",skill:"Intermediate",maxTime:60,household:2 });
-    setSubscription({ isPremium: false, autoplanUsed: 0 });
-    setFavFolders(DEFAULT_FOLDERS); setFavItems([]); setUserRecipes([]);
+    setUser(null);
     setScreen("welcome");
   };
 
-  if (screen==="loading") return <div style={{minHeight:"100vh",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",background:"var(--cream)",gap:20}}><style>{S}</style><div style={{fontSize:48,animation:"float 2s ease-in-out infinite"}}>🍳</div><div style={{fontFamily:"var(--fd)",fontSize:20,color:"var(--ch)",animation:"fadeIn .8s ease",letterSpacing:1}}>SmartChef</div><div className="ldots"><div className="dot"/><div className="dot"/><div className="dot"/></div></div>;
-  if (screen==="welcome")   return <LandingPage onLogin={()=>setScreen("login")} onSignup={()=>setScreen("signup")} onGuest={guest} />;
-  if (screen==="login")     return <LoginScreen onBack={()=>setScreen("welcome")} onLogin={login} onSignup={()=>setScreen("signup")} onDemo={enterDemo} />;
-  if (screen==="signup")    return <SignupScreen onBack={()=>setScreen("welcome")} onLogin={login} onSwitch={()=>setScreen("login")} />;
-  if (screen==="onboarding") return <Onboarding onDone={items=>{setPantry(items);setScreen("main");}} onSkip={()=>setScreen("main")} prefs={prefs} setPrefs={setPrefs} />;
-
-  if (viewRecipe && viewRecipe.__notFound) return (
-    <div style={{minHeight:"100vh",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",background:"var(--cream)",fontFamily:"var(--fb)"}}>
-            <div style={{textAlign:"center",maxWidth:400,padding:32}}>
-        <div style={{fontSize:48,marginBottom:16}}>🔍</div>
-        <h2 style={{fontFamily:"var(--fd)",fontSize:22,color:"var(--ch)",marginBottom:8}}>Recipe not found</h2>
-        <p style={{color:"var(--mu)",marginBottom:8}}>"{viewRecipe.title}"</p>
-        <p style={{color:"var(--mu)",fontSize:13,marginBottom:24}}>This recipe couldn't be loaded. It may have been removed.</p>
-        <button className="btn btn-p" onClick={()=>setViewRecipe(null)}>← Back</button>
-      </div>
-    </div>
-  );
-  if (viewRecipe) return (
-    <RecipeErrorBoundary onBack={()=>setViewRecipe(null)}>
-      <RecipeDetail
-        recipe={viewRecipe}
-        saved={saved.has(viewRecipe.id)}
-        onSave={()=>toggleSave(viewRecipe.id)}
-        onBack={()=>setViewRecipe(null)}
-        onAddToList={m=>addToList(m)}
-        pantry={pantry||[]}
-        setPantry={setPantry}
-        isRecipeSaved={isRecipeSaved}
-        favFolders={favFolders}
-        favItems={favItems}
-        saveToFolder={saveToFolder}
-        createFavFolder={createFavFolder}
-        removeFromAllFolders={removeFromAllFolders}
-        showToast={showToast}
-        avoidedIngredients={avoidedIngredients}
-        setAvoidedIngredients={setAvoidedIngredients}
-        onAddToWeek={setAddToWeekRecipe}
-        mealPlan={mealPlan}
-        setMealPlan={setMealPlan}
-      />
-      {addToWeekRecipe&&<AddToWeekModal recipe={addToWeekRecipe} mealPlan={mealPlan} setMealPlan={setMealPlan} onClose={()=>setAddToWeekRecipe(null)} showToast={showToast}/>}
-    </RecipeErrorBoundary>
-  );
-
-  const onAddToWeek = (recipe) => setAddToWeekRecipe(recipe);
-
+  // ── Shared props ──
   const tp = {
-    tab,setTab,pantry,setPantry,shopping,setShopping,saved,toggleSave,mealPlan,setMealPlan,
-    prefs,setPrefs,isGuest,isDemo,user,onViewRecipe:setViewRecipe,addToList,onLogout:logout,
-    isPremium,subscription,setSubscription,onUpgrade:(reason)=>setShowUpgrade(reason),
-    // Favorites
-    favFolders, setFavFolders, favItems, setFavItems, userRecipes, allRecipes,
-    onSaveFav:openSaveFav, saveToFolder, removeFavItem, removeFromAllFolders, addUserRecipe, deleteUserRecipe, createFavFolder, deleteFavFolder,
-    isRecipeSaved, showToast,
-    avoidedIngredients, setAvoidedIngredients,
+    user, pantry, setPantry, shopping, setShopping, saved, setSaved, toggleSave,
+    mealPlan, setMealPlan, prefs, setPrefs, viewRecipe, setViewRecipe,
+    showToast, generateWeek, generateDay, regenerateSlot, removeSlot, setSlotRecipe,
+    dragSrc, handleDragStart, handleDrop, qap, setQap, replacePicker, setReplacePicker,
+    handleAddToPlan, generateShopping, userRecipes, setUserRecipes,
     publishedMenus, setPublishedMenus,
-    collections, setCollections,
-    // Lifted HomeTab filter state (persists navigation)
-    homeFilter, setHomeFilter, homeSearch, setHomeSearch,
-    homeSortMode, setHomeSortMode, homeCuisineFilter, setHomeCuisineFilter,
-    homeMealCat, setHomeMealCat,
-    // Add-to-week
-    onAddToWeek,
-    // Plan Library state — lifted so it survives recipe view navigation
-    libraryPreview, setLibraryPreview,
-    libraryDraft, setLibraryDraft,
-    libraryDraftTitle, setLibraryDraftTitle,
-    libraryShowCreate, setLibraryShowCreate,
   };
+
+  // ── Render ──
+  if (screen === "loading") return <div style={{minHeight:'100vh',display:'flex',alignItems:'center',justifyContent:'center',background:'var(--cream)'}}><div style={{fontSize:48,animation:'float 2s ease-in-out infinite'}}>🍳</div></div>;
+  if (screen === "welcome") return <WelcomePage onLogin={() => setScreen("login")} onSignup={() => setScreen("signup")} />;
+  if (screen === "login") return <LoginPage onLogin={handleLogin} onBack={() => setScreen("welcome")} />;
+  if (screen === "signup") return <SignupPage onSignup={handleSignup} onBack={() => setScreen("welcome")} />;
+  if (screen === "onboarding") return <Onboarding prefs={prefs} setPrefs={setPrefs} pantry={pantry} setPantry={setPantry} onDone={handleOnboardingDone} />;
 
   return (
     <div className="shell">
-            <Sidebar {...tp} />
+      <Sidebar tab={tab} setTab={setTab} user={user} onLogout={handleLogout} />
       <div className="main">
-        <div className="mmhdr">
-          <div style={{fontFamily:"var(--fd)",fontSize:18}}>🍳 SmartChef</div>
-          <div style={{display:"flex",alignItems:"center",gap:8}}>
-            {isDemo
-              ? <span style={{background:"rgba(99,102,241,.12)",color:"#6366f1",padding:"2px 9px",borderRadius:4,fontSize:11,fontWeight:700,letterSpacing:.4}}>🧪 DEMO</span>
-              : isPremium ? <span className="pro-badge">⭐ PRO</span> : <span className="free-badge">FREE</span>
-            }
-            <div style={{fontSize:13,color:"var(--mu)"}}>{user?.name}</div>
+        <header className="mhdr">
+          <div className="mhdr-title">
+            {tab === 'planner' && '📅 Weekly Plan'}
+            {tab === 'explore' && '🧭 Explore'}
+            {tab === 'shopping' && '🛒 Shopping List'}
+            {tab === 'profile' && '👤 Profile'}
           </div>
-        </div>
+          {tab === 'planner' && (
+            <div style={{display:'flex',gap:8}}>
+              <button className="btn btn-p btn-sm" onClick={generateWeek}>✨ Generate Week</button>
+              <button className="btn btn-s btn-sm" onClick={generateShopping}>🛒 Shopping List</button>
+            </div>
+          )}
+        </header>
         <div className="mcontent">
-          <PageTransition tabKey={tab}>
-          {tab==="home"      && <HomeTab      {...tp} />}
-          {tab==="explore"   && <ExploreTab   {...tp} />}
-          {tab==="favorites" && <FavoritesTab {...tp} />}
-          {tab==="pantry"    && <PantryTab    {...tp} />}
-          {tab==="shopping"  && <ShoppingListTab {...tp} pantry={pantry} mealPlan={mealPlan} allRecipes={allRecipes} />}
-          {tab==="chat"      && <ChatTab      {...tp} pantry={pantry} prefs={prefs} addToList={addToList} />}
-          {tab==="planner"   && <PlannerTab   {...tp} shopping={shopping} prefs={prefs} setPrefs={setPrefs} pantry={pantry} />}
-          {tab==="plans"     && <PlanLibraryErrorBoundary resetKey={tab}><PlanLibraryTab {...tp} /></PlanLibraryErrorBoundary>}
-          {tab==="profile"   && <ProfileTab   {...tp} />}
-          {tab==="community" && <CommunityTab {...tp} allRecipes={allRecipes} mealPlan={mealPlan} setMealPlan={setMealPlan} />}
-          </PageTransition>
+          {tab === 'planner' && <PlannerHome {...tp} />}
+          {tab === 'explore' && <ExploreTab {...tp} />}
+          {tab === 'shopping' && <ShoppingTab {...tp} />}
+          {tab === 'profile' && <ProfileTab {...tp} />}
         </div>
       </div>
-      {showUpgrade && <UpgradeModal reason={showUpgrade} onClose={()=>setShowUpgrade(null)} onActivate={activatePremium} />}
-      {showSaveFav && <SaveFavModal recipe={showSaveFav} favFolders={favFolders} favItems={favItems} onSave={saveToFolder} onClose={()=>setShowSaveFav(null)} onCreateFolder={createFavFolder}/>}
-      {toastMsg && <div className="toast-wrap"><div className={`toast ${toastMsg.leaving?"toast-out":""}`}>{toastMsg.msg}</div></div>}
-      {addToWeekRecipe && <AddToWeekModal recipe={addToWeekRecipe} mealPlan={mealPlan} setMealPlan={setMealPlan} onClose={()=>setAddToWeekRecipe(null)} showToast={showToast}/>}
+      {viewRecipe && <RecipeDetail recipe={viewRecipe} onClose={() => setViewRecipe(null)} {...tp} />}
+      {addToPlanRecipe && <AddToPlanModal recipe={addToPlanRecipe} mealPlan={mealPlan} onConfirm={confirmAddToPlan} onClose={() => setAddToPlanRecipe(null)} />}
+      {qap && <QuickActionPanel {...tp} />}
+      {replacePicker && <ReplacePicker {...tp} />}
+      {toastMsg && <div className={`toast${toastMsg.leaving ? ' leaving' : ''}`}>{toastMsg.msg}</div>}
     </div>
   );
 }
 
 /* ── SIDEBAR ── */
-function Sidebar({ tab, setTab, user, isGuest, isDemo, onLogout, isPremium, onUpgrade }) {
+function Sidebar({ tab, setTab, user, onLogout }) {
   const NAV = [
-    {id:"home",label:"Recipes",icon:"home"},
-    {id:"explore",label:"Explore",icon:"compass"},
-    {id:"community",label:"Community",icon:"community"},
-    {id:"pantry",label:"Pantry",icon:"pantry"},
-    {id:"shopping",label:"Shopping List",icon:"cart"},
-    {id:"planner",label:"Planner",icon:"cal"},
-    {id:"profile",label:"Profile",icon:"user"}
+    { id: 'planner', label: 'My Week', icon: 'calendar' },
+    { id: 'explore', label: 'Explore', icon: 'compass' },
+    { id: 'shopping', label: 'Shopping', icon: 'shopping-cart' },
+    { id: 'profile', label: 'Profile', icon: 'user' },
   ];
   return (
     <nav className="sidebar">
-      <div className="slogo"><div className="slogo-ic">🍳</div><div className="slogo-tx">SmartChef</div></div>
+      <div className="slogo" onClick={() => setTab('planner')}>
+        <div className="slogo-ic">🍳</div>
+        <div className="slogo-tx">SmartChef</div>
+      </div>
       <div className="snav">
-        {NAV.map(it=>(
-          <button key={it.id} className={`ni ${tab===it.id?"ac":""}`} onClick={()=>setTab(it.id)} style={{position:"relative"}}>
-            <Ic n={it.icon} s={18}/>{it.label}
-            {it.premium && !isPremium && <span style={{marginLeft:"auto",fontSize:10,background:"var(--goldBg)",color:"var(--gold)",padding:"2px 6px",borderRadius:4,fontWeight:700}}>PRO</span>}
+        {NAV.map(n => (
+          <button key={n.id} className={`ni${tab === n.id ? ' ac' : ''}`} onClick={() => setTab(n.id)}>
+            <Ic n={n.icon} s={18} />
+            {n.label}
           </button>
         ))}
       </div>
       <div className="sfooter">
-        {!isPremium && !isGuest && (
-          <button className="upgrade-btn" onClick={()=>onUpgrade("generic")}>
-            ⭐ Go Premium — $4.99/mo
-          </button>
-        )}
-        {isPremium && (
-          <div style={{padding:"8px 12px",marginBottom:4,background:"linear-gradient(135deg,rgba(201,149,58,.12) 0%,rgba(201,149,58,.06) 100%)",borderRadius:8,border:"1px solid rgba(201,149,58,.2)"}}>
-            <div style={{fontSize:11,fontWeight:700,color:"var(--gold)",letterSpacing:.4}}>⭐ PREMIUM ACTIVE</div>
-            <div style={{fontSize:11,color:"var(--mu)",marginTop:2}}>All features unlocked</div>
-          </div>
-        )}
-        <div style={{padding:"10px 12px",fontSize:13,color:"var(--mu)"}}>
-          <div style={{fontWeight:600,color:"var(--ch)",fontSize:14}}>{user?.name||"Guest"}</div>
-          {!isGuest&&!isDemo&&<div style={{marginTop:2,fontSize:12}}>{user?.email}</div>}
-          {isGuest&&<div style={{marginTop:3}}><span style={{background:"var(--clayBg)",color:"var(--clayH)",padding:"2px 8px",borderRadius:4,fontSize:11,fontWeight:700}}>GUEST</span></div>}
-          {isDemo&&<div style={{marginTop:3}}><span style={{background:"rgba(99,102,241,.12)",color:"#6366f1",padding:"2px 8px",borderRadius:4,fontSize:11,fontWeight:700,letterSpacing:.4}}>🧪 DEMO MODE</span></div>}
-        </div>
-        <button className="ni" onClick={onLogout}><Ic n="logout" s={18}/>Sign out</button>
+        <div style={{fontSize:12,color:'var(--mu)',marginBottom:4}}>{user?.name || 'User'}</div>
+        <div style={{fontSize:11,color:'var(--mu)',marginBottom:8}}>{user?.email}</div>
+        <button className="btn btn-g btn-sm" onClick={onLogout}>Sign out</button>
       </div>
     </nav>
   );
 }
 
-/* ── LANDING PAGE ── */
-function LandingPage({ onLogin, onSignup, onGuest }) {
-  const [showPricing, setShowPricing] = useState(false);
-  const [billingPeriod, setBillingPeriod] = useState("yearly");
-
-  const FEATURES = [
-    { icon:"🤖", title:"Chef AI", sub:"Chat with an AI sous-chef trained on thousands of recipes. Ask for ingredient substitutions, cooking tips, and personalized meal ideas." },
-    { icon:"📅", title:"Smart Meal Planner", sub:"Auto-generate a full week of meals in one click, perfectly balanced for your dietary needs and what's already in your fridge." },
-    { icon:"🛒", title:"Pantry-First Recipes", sub:"Every recipe is matched to your pantry. See exactly what you have, what's missing, and add items to your shopping list instantly." },
-    { icon:"⏰", title:"Expiry Tracking", sub:"Never waste food again. SmartChef tracks every item's shelf life and warns you before things go bad." },
-    { icon:"🍽️", title:"131 Curated Recipes", sub:"From quick weeknight dinners to weekend feasts — every recipe is taste-tested and categorized with full nutritional info." },
-    { icon:"🎯", title:"Dietary Modes", sub:"Vegetarian, vegan, kosher, halal, gluten-free, dairy-free — SmartChef filters and respects every dietary need automatically." },
-  ];
-
-  const TESTIMONIALS = [
-    { text:"\"I used to throw out so much food every week. Now SmartChef tells me exactly what to cook based on what's already in my fridge. Game changer.\"", name:"Sarah M., home cook" },
-    { text:"\"The AI chat is unbelievably helpful. I asked it to make a dinner with only what I had left and it nailed it. Couldn't believe it.\"", name:"David K., busy parent" },
-    { text:"\"Setting up the weekly meal plan on Sunday takes me 30 seconds. I used to spend an hour every week just figuring out what to cook.\"", name:"Priya T., meal prepper" },
-  ];
-
+/* ── WELCOME PAGE ── */
+function WelcomePage({ onLogin, onSignup }) {
   return (
-    <div className="landing">      {/* NAV */}
-      <nav className="land-nav">
-        <div className="land-nav-logo">
-          <div style={{width:36,height:36,background:"linear-gradient(135deg,var(--clay) 0%,var(--clayH) 100%)",borderRadius:10,display:"flex",alignItems:"center",justifyContent:"center",fontSize:18}}>🍳</div>
-          <div style={{fontFamily:"var(--fd)",fontSize:20}}>SmartChef</div>
-        </div>
-        <div style={{display:"flex",gap:10,alignItems:"center"}}>
-          <button className="btn btn-g btn-sm" onClick={onGuest} style={{border:"1px solid var(--bor)"}}>Try free</button>
-          <button className="btn btn-s btn-sm" onClick={onLogin}>Log in</button>
-          <button className="btn btn-p btn-sm" onClick={()=>setShowPricing(true)}>⭐ Get Premium</button>
-        </div>
-      </nav>
-
-      {/* HERO */}
-      <div style={{background:"var(--cream)",position:"relative",overflow:"hidden"}}>
-        {/* Morphing background blobs */}
-        <div style={{position:"absolute",width:400,height:400,background:"rgba(192,106,62,.06)",borderRadius:"60% 40% 30% 70%/60% 30% 70% 40%",animation:"morphBg 8s ease-in-out infinite",top:-100,right:"10%",filter:"blur(40px)"}}/>
-        <div style={{position:"absolute",width:300,height:300,background:"rgba(106,158,114,.06)",borderRadius:"40% 60% 70% 30%/50% 60% 30% 60%",animation:"morphBg 10s ease-in-out infinite reverse",bottom:-80,left:"5%",filter:"blur(50px)"}}/>
-        <div className="land-hero">
-          <div>
-            <div className="land-hero-badge">🍳 AI-Powered Cooking Assistant</div>
-            <h1 className="land-hero-title">Cook <em>smarter</em> with<br/>what you have.</h1>
-            <p className="land-hero-sub">SmartChef suggests recipes based on your pantry, plans your whole week in one click, and helps you waste less food — powered by AI.</p>
-            <div className="land-hero-btns">
-              <button className="btn btn-p btn-lg" onClick={onSignup} style={{paddingLeft:28,paddingRight:28}}>Start free →</button>
-              <button className="btn btn-s btn-lg" onClick={()=>setShowPricing(true)}>See pricing</button>
-            </div>
-            <div style={{display:"flex",gap:20,marginTop:24,flexWrap:"wrap"}}>
-              {["🔒 No credit card needed","✅ 131 recipes free to browse","🤖 AI chat included in Premium"].map((t,i)=>(
-                <div key={t} style={{display:"flex",alignItems:"center",gap:6,fontSize:13,color:"var(--mu)",animation:`fadeInUp .5s ease ${.9+i*.12}s both`}}>{t}</div>
-              ))}
-            </div>
-          </div>
-          <div style={{background:"linear-gradient(160deg,#2A1810 0%,#1A1A1A 40%,#0C180D 100%)",borderRadius:24,padding:"40px 36px",minHeight:360,display:"flex",flexDirection:"column",justifyContent:"space-between",position:"relative",overflow:"hidden"}}>
-            <div style={{position:"absolute",width:300,height:300,background:"rgba(192,106,62,.18)",borderRadius:"50%",filter:"blur(80px)",top:-100,right:-100}}/>
-            <div style={{position:"absolute",width:200,height:200,background:"rgba(106,158,114,.15)",borderRadius:"50%",filter:"blur(60px)",bottom:-50,left:-50}}/>
-            <div style={{position:"relative",zIndex:1}}>
-              <div style={{color:"rgba(248,244,239,.5)",fontSize:12,fontWeight:600,textTransform:"uppercase",letterSpacing:.5,marginBottom:16}}>This week's plan</div>
-              {[{day:"Mon",meal:"🍝 Spaghetti Aglio e Olio",tag:"High pantry"},
-                {day:"Tue",meal:"🥗 Greek Quinoa Bowl",tag:"Vegetarian"},
-                {day:"Wed",meal:"🍛 Lemon Herb Salmon",tag:"High protein"},
-                {day:"Thu",meal:"🫕 Shakshuka",tag:"Quick · 20min"},
-              ].map((r,i)=>(
-                <div key={r.day} style={{display:"flex",alignItems:"center",gap:12,padding:"10px 14px",background:"rgba(255,255,255,.07)",borderRadius:10,marginBottom:8,border:"1px solid rgba(255,255,255,.08)",animation:`fadeInUp .5s ease ${.8+i*.15}s both`,transition:"all .2s ease"}}>
-                  <div style={{fontSize:11,fontWeight:700,color:"rgba(248,244,239,.4)",width:28}}>{r.day}</div>
-                  <div style={{flex:1,fontSize:13,color:"rgba(248,244,239,.9)",fontWeight:500}}>{r.meal}</div>
-                  <div style={{fontSize:11,color:"rgba(192,106,62,.8)",fontWeight:600,background:"rgba(192,106,62,.1)",padding:"2px 8px",borderRadius:4}}>{r.tag}</div>
-                </div>
-              ))}
-              <div style={{marginTop:14,background:"linear-gradient(135deg,rgba(192,106,62,.25) 0%,rgba(192,106,62,.1) 100%)",border:"1px solid rgba(192,106,62,.3)",borderRadius:10,padding:"12px 16px",display:"flex",alignItems:"center",gap:10}}>
-                <div style={{fontSize:20}}>🤖</div>
-                <div>
-                  <div style={{fontSize:12,fontWeight:600,color:"rgba(248,244,239,.8)"}}>Chef AI suggestion</div>
-                  <div style={{fontSize:12,color:"rgba(248,244,239,.5)",marginTop:2}}>"You have garlic & lemon expiring soon — I've added a pasta for Monday."</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+    <div className="apage">
+      <div style={{maxWidth:440,margin:'auto',textAlign:'center',padding:40}}>
+        <div style={{fontSize:56,marginBottom:16}}>🍳</div>
+        <h1 style={{fontFamily:'var(--fd)',fontSize:38,marginBottom:12}}>SmartChef</h1>
+        <p style={{color:'var(--mu)',fontSize:17,lineHeight:1.6,marginBottom:8}}>Plan your week in 60 seconds.</p>
+        <p style={{color:'var(--mu)',fontSize:14,lineHeight:1.6,marginBottom:36}}>Generate a full weekly meal plan, edit it instantly, know exactly what to cook and buy.</p>
+        <button className="btn btn-p btn-lg btn-full" style={{marginBottom:12}} onClick={onSignup}>Get Started Free</button>
+        <button className="btn btn-s btn-lg btn-full" onClick={onLogin}>Log In</button>
       </div>
-
-      {/* FEATURES */}
-      <ScrollRevealSection className="land-features">
-        <div style={{maxWidth:1100,margin:"0 auto"}}>
-          <div style={{textAlign:"center",marginBottom:8}}><span className="land-hero-badge">Everything you need</span></div>
-          <h2 style={{fontFamily:"var(--fd)",fontSize:36,textAlign:"center",marginBottom:4}}>Your kitchen, <em style={{color:"var(--clay)",fontStyle:"italic"}}>upgraded.</em></h2>
-          <p style={{textAlign:"center",color:"var(--mu)",fontSize:16,marginBottom:0}}>Built for home cooks who want to eat well without the stress.</p>
-        </div>
-        <div className="land-features-grid">
-          {FEATURES.map((f,i)=>(
-            <ScrollRevealSection key={f.title} className="land-feat-card" delay={i*80}>
-              <div className="land-feat-ic">{f.icon}</div>
-              <div className="land-feat-title">{f.title}</div>
-              <div className="land-feat-sub">{f.sub}</div>
-            </ScrollRevealSection>
-          ))}
-        </div>
-      </ScrollRevealSection>
-
-      {/* PRICING */}
-      <ScrollRevealSection className="land-pricing">
-        <div className="land-pricing-inner">
-          <div style={{textAlign:"center",marginBottom:8}}><span className="land-hero-badge">Simple pricing</span></div>
-          <h2 style={{fontFamily:"var(--fd)",fontSize:36,textAlign:"center",marginBottom:8}}>Start free. <em style={{color:"var(--clay)",fontStyle:"italic"}}>Cook better.</em></h2>
-          <p style={{textAlign:"center",color:"var(--mu)",fontSize:16,marginBottom:0}}>No credit card needed. Upgrade when you're ready.</p>
-          <div style={{display:"flex",alignItems:"center",justifyContent:"center",gap:0,margin:"24px auto 0",width:"fit-content",background:"var(--white)",borderRadius:10,padding:4,border:"1px solid var(--bor)"}}>
-            <button className={`price-tab ${billingPeriod==="monthly"?"ac":""}`} style={{minWidth:100}} onClick={()=>setBillingPeriod("monthly")}>Monthly</button>
-            <button className={`price-tab ${billingPeriod==="yearly"?"ac":""}`} style={{minWidth:130}} onClick={()=>setBillingPeriod("yearly")}>Yearly <span style={{background:"var(--sageBg)",color:"var(--sage)",fontSize:10,fontWeight:700,padding:"1px 6px",borderRadius:4,marginLeft:4}}>SAVE 35%</span></button>
-          </div>
-          <div className="land-pricing-cards">
-            {/* FREE */}
-            <div className="land-pcard">
-              <div style={{marginBottom:6,height:24}}/>
-              <div className="land-pcard-title">Free</div>
-              <div className="land-pcard-price">$0</div>
-              <div className="land-pcard-period">forever</div>
-              <div className="land-pcard-features">
-                {[["✅","Browse 20 recipes"],["✅","Pantry management"],["✅","Shopping list"],["✅","1 free auto-plan"],["✅","Save up to 5 recipes"],["❌","Chef AI chat"],["❌","All 131 recipes"],["❌","Unlimited auto-planning"]].map(([ic,f])=>(
-                  <div key={f} className="land-pcard-feat"><span style={{opacity:ic==="❌"?.4:1}}>{ic}</span><span style={{color:ic==="❌"?"var(--mu)":"var(--ch)"}}>{f}</span></div>
-                ))}
-              </div>
-              <button className="btn btn-s btn-full btn-lg" onClick={onSignup}>Get started free</button>
-            </div>
-            {/* PREMIUM */}
-            <div className="land-pcard featured">
-              <div style={{marginBottom:6}}><span className="land-pcard-badge">Most popular</span></div>
-              <div className="land-pcard-title">Premium</div>
-              <div className="land-pcard-price">{billingPeriod==="yearly"?"$3.25":"$4.99"}</div>
-              <div className="land-pcard-period">{billingPeriod==="yearly"?"per month, billed $39/year":"per month"}</div>
-              <div className="land-pcard-features">
-                {[["✅","All 131 recipes"],["✅","Unlimited pantry & shopping"],["✅","Unlimited auto-planning"],["✅","Unlimited saved recipes"],["✅","Chef AI chat"],["✅","New recipes monthly"],["✅","Priority support"],["✅","Cancel anytime"]].map(([ic,f])=>(
-                  <div key={f} className="land-pcard-feat"><span>{ic}</span><span style={{fontWeight:500}}>{f}</span></div>
-                ))}
-              </div>
-              <button className="stripe-btn" onClick={()=>window.open(billingPeriod==="yearly"?STRIPE_YEARLY_URL:STRIPE_MONTHLY_URL,"_blank")}>
-                <Ic n="zap" s={16}/>Start Premium{billingPeriod==="yearly"?" — $39/year":" — $4.99/mo"}
-              </button>
-              <div style={{textAlign:"center",fontSize:12,color:"var(--mu)",marginTop:8}}>🔒 Secure payment · Cancel anytime</div>
-            </div>
-          </div>
-        </div>
-      </ScrollRevealSection>
-
-      {/* SOCIAL PROOF */}
-      <ScrollRevealSection className="land-social">
-        <div className="land-stats">
-          {[{val:"131",lbl:"Curated Recipes"},{"val":"3 sec",lbl:"To plan a full week"},{val:"AI",lbl:"Chef assistant"},{val:"$0",lbl:"To get started"}].map(s=>(
-            <AnimatedStat key={s.lbl} val={s.val} lbl={s.lbl} />
-          ))}
-        </div>
-        <h2 className="land-social-title">Home cooks <em style={{color:"var(--clayL)",fontStyle:"italic"}}>love</em> SmartChef</h2>
-        <p className="land-social-sub">Join thousands of people who've taken the stress out of dinner planning.</p>
-        <div className="land-testimonials">
-          {TESTIMONIALS.map((t,i)=>(
-            <ScrollRevealSection key={t.name} className="land-tcard" delay={i*120}>
-              <div className="land-tcard-text">{t.text}</div>
-              <div className="land-tcard-name">— {t.name}</div>
-            </ScrollRevealSection>
-          ))}
-        </div>
-        <div style={{marginTop:48,display:"flex",gap:14,justifyContent:"center",flexWrap:"wrap"}}>
-          <button className="btn btn-p btn-lg" onClick={onSignup} style={{background:"var(--clay)"}}>Create free account →</button>
-          <button className="btn btn-s btn-lg" onClick={onGuest} style={{background:"rgba(255,255,255,.1)",color:"rgba(248,244,239,.8)",border:"1px solid rgba(255,255,255,.2)"}}>Try as guest</button>
-        </div>
-      </ScrollRevealSection>
-
-      {/* FOOTER */}
-      <div className="land-footer">
-        <div style={{display:"flex",alignItems:"center",gap:8}}>
-          <div style={{width:26,height:26,background:"linear-gradient(135deg,var(--clay) 0%,var(--clayH) 100%)",borderRadius:7,display:"flex",alignItems:"center",justifyContent:"center",fontSize:13}}>🍳</div>
-          <span style={{fontFamily:"var(--fd)",fontSize:16,color:"var(--ch)"}}>SmartChef</span>
-        </div>
-        <div>© {new Date().getFullYear()} SmartChef · <a onClick={()=>setShowPricing(true)} style={{color:"var(--clay)",cursor:"pointer"}}>Pricing</a> · <a onClick={onLogin} style={{color:"var(--clay)",cursor:"pointer"}}>Log in</a></div>
-      </div>
-
-      {showPricing && <UpgradeModal reason="generic" onClose={()=>setShowPricing(false)} onActivate={null} />}
     </div>
   );
 }
 
 /* ── LOGIN ── */
-function LoginScreen({ onBack, onLogin, onSignup, onDemo }) {
-  const [email,setEmail]=useState(""); const [pw,setPw]=useState(""); const [err,setErr]=useState(""); const [loading,setLoading]=useState(false);
-  // Check whether a demo snapshot exists so we can show richer label
-  const demoTs = localStorage.getItem('sc___demo___snapshot_ts');
-  const demoLabel = demoTs
-    ? `Quick demo access · snapshot ${new Date(Number(demoTs)).toLocaleDateString()}`
-    : 'Quick demo access (no snapshot yet — log in first)';
-  const go=()=>{
-    if(!email||!pw){setErr("Fill in all fields.");return;}
-    setLoading(true);
-    setTimeout(()=>{
-      // Check if account exists in localStorage
-      const accounts = JSON.parse(localStorage.getItem("sc_accounts") || "{}");
-      const account = accounts[email.toLowerCase()];
-      if(!account) {
-        setErr("No account found with this email.");
-        setLoading(false);
-        return;
-      }
-      if(account.password !== pw) {
-        setErr("Incorrect password.");
-        setLoading(false);
-        return;
-      }
-      setLoading(false);
-      onLogin({name:account.name,email:account.email});
-    },700);
-  };
+function LoginPage({ onLogin, onBack }) {
+  const [email, setEmail] = useState('');
+  const [pass, setPass] = useState('');
   return (
-    <div style={{fontFamily:"var(--fb)"}}>      <div className="apage">
-        <div className="apanel">
-          <button className="aback" onClick={onBack}><Ic n="back" s={14}/>Back</button>
-          <div className="alogo"><div className="alogo-ic">🍳</div><div className="alogo-tx">SmartChef</div></div>
-          <h1 className="ah">Welcome back</h1><p className="asub">Sign in to your account</p>
-          <div className="fg"><label className="fl">Email</label><input className="fi" type="email" placeholder="you@example.com" value={email} onChange={e=>setEmail(e.target.value)}/></div>
-          <div className="fg"><label className="fl">Password</label><input className="fi" type="password" placeholder="••••••••" value={pw} onChange={e=>setPw(e.target.value)}/><button className="flink" style={{display:"block",textAlign:"right",marginTop:6}} onClick={()=>alert("Reset email sent!")}>Forgot password?</button></div>
-          {err&&<p className="ferr">{err}</p>}
-          <button className="btn btn-p btn-full btn-lg" onClick={go} disabled={loading} style={{marginTop:8}}>{loading?"Signing in…":"Sign In"}</button>
-          <p className="ffoot">No account? <a onClick={onSignup}>Sign up</a></p>
-          {/* ── DEMO ACCESS ─────────────────────────────────────── */}
-          <div style={{marginTop:20,paddingTop:16,borderTop:"1px solid var(--bor)"}}>
-            <button
-              className="btn btn-g btn-full"
-              onClick={onDemo}
-              style={{display:"flex",alignItems:"center",justifyContent:"center",gap:8,fontSize:13,color:"var(--mu)",border:"1px dashed var(--bor)",background:"transparent"}}
-            >
-              <span style={{fontSize:16}}>🧪</span>
-              <span><strong style={{color:"var(--ch)"}}>Continue as demo</strong><br/><span style={{fontSize:11}}>{demoLabel}</span></span>
-            </button>
-          </div>
-        </div>
-        <div className="avisual"><div className="ablob" style={{width:500,height:500,background:"rgba(192,106,62,.18)",top:-150,left:-150}}/><div className="avTitle">Taste-tested <em>recipes,</em><br/>every night.</div><div className="avSub">Using only what's already in your kitchen.</div></div>
+    <div className="apage">
+      <div className="acard">
+        <button className="flink" onClick={onBack} style={{marginBottom:20}}>← Back</button>
+        <h2 className="ah">Welcome back</h2>
+        <p className="asub">Log in to your meal plans</p>
+        <div className="fg"><label className="fl">Email</label><input className="fi" type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="you@email.com" /></div>
+        <div className="fg"><label className="fl">Password</label><input className="fi" type="password" value={pass} onChange={e=>setPass(e.target.value)} placeholder="••••••••" /></div>
+        <button className="btn btn-p btn-full btn-lg" onClick={() => onLogin(email || 'demo@smartchef.app', '')}>Log In</button>
       </div>
     </div>
   );
 }
 
 /* ── SIGNUP ── */
-function SignupScreen({ onBack, onLogin, onSwitch }) {
-  const [f,setF]=useState({name:"",email:"",pw:"",confirm:""}); const [err,setErr]=useState(""); const [loading,setLoading]=useState(false);
-  const set=k=>e=>setF(p=>({...p,[k]:e.target.value}));
-  const go=()=>{
-    if(!f.name||!f.email||!f.pw){setErr("Fill in all fields.");return;}
-    if(f.pw!==f.confirm){setErr("Passwords don't match.");return;}
-    if(f.pw.length<8){setErr("Password must be at least 8 characters.");return;}
-    setLoading(true);
-    setTimeout(()=>{
-      // Store account in localStorage
-      const accounts = JSON.parse(localStorage.getItem("sc_accounts") || "{}");
-      const emailLower = f.email.toLowerCase();
-      if(accounts[emailLower]) {
-        setErr("Account with this email already exists.");
-        setLoading(false);
-        return;
-      }
-      accounts[emailLower] = {name:f.name, email:f.email, password:f.pw, created:Date.now()};
-      localStorage.setItem("sc_accounts", JSON.stringify(accounts));
-      setLoading(false);
-      onLogin({name:f.name,email:f.email});
-    },700);
+function SignupPage({ onSignup, onBack }) {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  return (
+    <div className="apage">
+      <div className="acard">
+        <button className="flink" onClick={onBack} style={{marginBottom:20}}>← Back</button>
+        <h2 className="ah">Create account</h2>
+        <p className="asub">Plan your week in 60 seconds</p>
+        <div className="fg"><label className="fl">Name</label><input className="fi" value={name} onChange={e=>setName(e.target.value)} placeholder="Your name" /></div>
+        <div className="fg"><label className="fl">Email</label><input className="fi" type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="you@email.com" /></div>
+        <div className="fg"><label className="fl">Password</label><input className="fi" type="password" placeholder="••••••••" /></div>
+        <button className="btn btn-p btn-full btn-lg" onClick={() => onSignup(email || 'demo@smartchef.app', name || 'Chef')}>Create Account</button>
+      </div>
+    </div>
+  );
+}
+
+/* ── ONBOARDING (3 steps) ── */
+function Onboarding({ prefs, setPrefs, pantry, setPantry, onDone }) {
+  const [step, setStep] = useState(0);
+  const GOALS = ["Eat healthy","Lose weight","Save time","Save money","Try new cuisines","Meal prep"];
+  const DIETS = ["Vegetarian","Vegan","Gluten-Free","Dairy-Free","Kosher","Halal","Low-Carb","Nut-Free"];
+  const CUISINES = ["Italian","Mexican","Japanese","Indian","Mediterranean","French","Chinese","Thai","American","Korean","Middle Eastern","Greek","Turkish","Vietnamese","Spanish","Brazilian"];
+  const COMMON_PANTRY = ["Salt","Pepper","Olive oil","Garlic","Onion","Butter","Eggs","Flour","Sugar","Rice","Pasta","Milk","Soy sauce","Tomatoes","Chicken breast","Bread"];
+
+  const toggleInSet = (field, val) => {
+    setPrefs(p => {
+      const arr = p[field] || [];
+      return { ...p, [field]: arr.includes(val) ? arr.filter(v => v !== val) : [...arr, val] };
+    });
   };
-  return (
-    <div style={{fontFamily:"var(--fb)"}}>      <div className="apage">
-        <div className="apanel">
-          <button className="aback" onClick={onBack}><Ic n="back" s={14}/>Back</button>
-          <div className="alogo"><div className="alogo-ic">🍳</div><div className="alogo-tx">SmartChef</div></div>
-          <h1 className="ah">Create account</h1><p className="asub">Start cooking smarter today</p>
-          <div className="fg"><label className="fl">Full Name</label><input className="fi" placeholder="Jane Smith" value={f.name} onChange={set("name")}/></div>
-          <div className="fg"><label className="fl">Email</label><input className="fi" type="email" placeholder="you@example.com" value={f.email} onChange={set("email")}/></div>
-          <div className="row">
-            <div className="half"><div className="fg"><label className="fl">Password</label><input className="fi" type="password" placeholder="••••••" value={f.pw} onChange={set("pw")}/></div></div>
-            <div className="half"><div className="fg"><label className="fl">Confirm</label><input className="fi" type="password" placeholder="••••••" value={f.confirm} onChange={set("confirm")}/></div></div>
-          </div>
-          {err&&<p className="ferr">{err}</p>}
-          <button className="btn btn-p btn-full btn-lg" onClick={go} disabled={loading} style={{marginTop:8}}>{loading?"Creating…":"Create Account"}</button>
-          <p className="ffoot">Have an account? <a onClick={onSwitch}>Sign in</a></p>
+
+  if (step === 0) return (
+    <div className="onb-page">
+      <div className="onb-card">
+        <div style={{fontSize:48,marginBottom:16}}>🎯</div>
+        <h1 className="onb-title">What's your goal?</h1>
+        <p className="onb-sub">Pick one or more (optional)</p>
+        <div className="onb-chips">
+          {GOALS.map(g => <button key={g} className={`onb-chip${prefs.goal === g ? ' sel' : ''}`} onClick={() => setPrefs(p => ({...p, goal: p.goal === g ? '' : g}))}>{g}</button>)}
         </div>
-        <div className="avisual"><div className="ablob" style={{width:400,height:400,background:"rgba(106,158,114,.2)",top:-100,right:-100}}/><div className="avTitle">Less waste,<br/><em>more flavour.</em></div><div className="avSub">Join thousands of home cooks who cook smarter.</div></div>
-      </div>
-    </div>
-  );
-}
-
-/* ── ONBOARDING ── */
-function Onboarding({ onDone, onSkip, prefs, setPrefs }) {
-  const [step,setStep]=useState("dietary"); // dietary → cuisines → choose (pantry)
-  const [pasteText,setPasteText]=useState("");
-  const [parsed,setParsed]=useState([]);
-  const [selCat,setSelCat]=useState("Vegetables");
-  const [picks,setPicks]=useState(new Set());
-  const [dietaryPicks,setDietaryPicks]=useState(new Set(prefs?.dietary||[]));
-  const [cuisinePicks,setCuisinePicks]=useState(new Set(prefs?.cuisines||[]));
-
-  const DIETARY_OPTIONS = [
-    {key:"Vegetarian",icon:"🥬",desc:"No meat or fish"},
-    {key:"Vegan",icon:"🌱",desc:"No animal products"},
-    {key:"Gluten-free",icon:"🌾",desc:"No wheat or gluten"},
-    {key:"Dairy-free",icon:"🥛",desc:"No dairy products"},
-    {key:"Halal",icon:"☪️",desc:"Halal certified"},
-    {key:"Kosher",icon:"✡️",desc:"Kosher certified"},
-    {key:"Low-carb",icon:"🥩",desc:"Reduced carbohydrates"},
-    {key:"Nut-free",icon:"🥜",desc:"No tree nuts or peanuts"}
-  ];
-  const CUISINE_OPTIONS = [
-    {key:"Italian",icon:"🇮🇹"},{key:"Mexican",icon:"🇲🇽"},{key:"Japanese",icon:"🇯🇵"},
-    {key:"Indian",icon:"🇮🇳"},{key:"Mediterranean",icon:"🫒"},{key:"French",icon:"🇫🇷"},
-    {key:"Chinese",icon:"🇨🇳"},{key:"Thai",icon:"🇹🇭"},{key:"American",icon:"🇺🇸"},
-    {key:"Korean",icon:"🇰🇷"},{key:"Middle Eastern",icon:"🧆"},{key:"Greek",icon:"🇬🇷"},
-    {key:"Spanish",icon:"🇪🇸"},{key:"British",icon:"🇬🇧"},{key:"Vietnamese",icon:"🇻🇳"},
-    {key:"Ethiopian",icon:"🇪🇹"},{key:"Turkish",icon:"🇹🇷"},{key:"Brazilian",icon:"🇧🇷"}
-  ];
-
-  const toggleDietary=k=>setDietaryPicks(p=>{const n=new Set(p);n.has(k)?n.delete(k):n.add(k);return n;});
-  const toggleCuisine=k=>setCuisinePicks(p=>{const n=new Set(p);n.has(k)?n.delete(k):n.add(k);return n;});
-  const saveDietary=()=>{if(setPrefs) setPrefs(p=>({...p,dietary:Array.from(dietaryPicks)}));setStep("cuisines");};
-  const saveCuisines=()=>{if(setPrefs) setPrefs(p=>({...p,cuisines:Array.from(cuisinePicks)}));setStep("choose");};
-
-  const parseList=()=>{const items=smartParseList(pasteText).map(it=>({...it,emoji:getIcon(it.name,it.category)}));setParsed(items);setStep("parsed");};
-  const confirmParsed=()=>onDone(parsed);
-  const togglePick=name=>setPicks(p=>{const n=new Set(p);n.has(name)?n.delete(name):n.add(name);return n;});
-  const confirmPicks=()=>{const cmap={Vegetables:"Produce",Fruits:"Produce",Proteins:"Protein",Dairy:"Dairy",Pantry:"Pantry",Frozen:"Frozen",Spices:"Spices",Sauces:"Sauces"};const items=Array.from(picks).map((name,i)=>{const cat=Object.entries(PICK).find(([,v])=>v.includes(name))?.[0]||"Pantry";const c=cmap[cat]||"Pantry";return{id:Date.now()+i,name,category:c,quantity:1,unit:"pcs",emoji:CE[c]||"📦"};});onDone(items);};
-
-  const progressDots = (
-    <div style={{display:"flex",gap:8,justifyContent:"center",marginBottom:28}}>
-      {["dietary","cuisines","choose"].map((s,i)=>(
-        <div key={s} style={{width:step===s?24:8,height:8,borderRadius:4,background:step===s?"var(--sage)":["dietary","cuisines","choose"].indexOf(step)>i?"var(--sage)":"var(--bor)",transition:"all .3s ease"}}/>
-      ))}
-    </div>
-  );
-
-  return (
-    <div style={{fontFamily:"var(--fb)",minHeight:"100vh",background:"var(--cream)"}}>
-
-    {/* ── Step 1: Dietary Preferences ── */}
-    {step==="dietary"&&<div className="oboard"><div className="obox" style={{maxWidth:560}}>
-      {progressDots}
-      <div style={{fontSize:48,marginBottom:16}}>🥗</div>
-      <h1 className="otitle">Dietary <em>preferences</em></h1>
-      <p className="osub">Select any that apply. We'll personalize your recipe recommendations.</p>
-      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:24,marginTop:20}}>
-        {DIETARY_OPTIONS.map(d=>(
-          <div key={d.key} onClick={()=>toggleDietary(d.key)} style={{
-            display:"flex",alignItems:"center",gap:12,padding:"14px 16px",borderRadius:12,cursor:"pointer",
-            border:dietaryPicks.has(d.key)?"2px solid var(--sage)":"2px solid var(--bor)",
-            background:dietaryPicks.has(d.key)?"var(--sageBg)":"var(--white)",transition:"all .2s ease"
-          }}>
-            <span style={{fontSize:24}}>{d.icon}</span>
-            <div><div style={{fontWeight:600,fontSize:14}}>{d.key}</div><div style={{fontSize:12,color:"var(--mu)"}}>{d.desc}</div></div>
-          </div>
-        ))}
-      </div>
-      <button className="btn btn-p btn-full btn-lg" onClick={saveDietary}>
-        {dietaryPicks.size>0?`Continue with ${dietaryPicks.size} preference${dietaryPicks.size>1?"s":""}  \u2192`:"No restrictions \u2014 Continue \u2192"}
-      </button>
-      <button className="btn btn-g" onClick={onSkip} style={{fontSize:13,color:"var(--mu)",marginTop:12}}>Skip setup entirely</button>
-    </div></div>}
-
-    {/* ── Step 2: Cuisine Preferences ── */}
-    {step==="cuisines"&&<div className="oboard"><div className="obox" style={{maxWidth:560}}>
-      {progressDots}
-      <div style={{fontSize:48,marginBottom:16}}>🌍</div>
-      <h1 className="otitle">Favorite <em>cuisines</em></h1>
-      <p className="osub">Pick the cuisines you love. We'll show you more of these.</p>
-      <div style={{display:"grid",gridTemplateColumns:"repeat(3, 1fr)",gap:10,marginBottom:24,marginTop:20}}>
-        {CUISINE_OPTIONS.map(c=>(
-          <div key={c.key} onClick={()=>toggleCuisine(c.key)} style={{
-            display:"flex",flexDirection:"column",alignItems:"center",gap:6,padding:"16px 8px",borderRadius:12,cursor:"pointer",
-            border:cuisinePicks.has(c.key)?"2px solid var(--sage)":"2px solid var(--bor)",
-            background:cuisinePicks.has(c.key)?"var(--sageBg)":"var(--white)",transition:"all .2s ease"
-          }}>
-            <span style={{fontSize:28}}>{c.icon}</span>
-            <span style={{fontSize:13,fontWeight:600}}>{c.key}</span>
-          </div>
-        ))}
-      </div>
-      <button className="btn btn-p btn-full btn-lg" onClick={saveCuisines}>
-        {cuisinePicks.size>0?`Continue with ${cuisinePicks.size} cuisine${cuisinePicks.size>1?"s":""}  \u2192`:"All cuisines \u2014 Continue \u2192"}
-      </button>
-      <button className="aback" onClick={()=>setStep("dietary")} style={{justifyContent:"center",marginTop:12}}><Ic n="back" s={14}/>Back</button>
-    </div></div>}
-
-    {/* ── Step 3: Pantry Setup ── */}
-    {step==="choose"&&<div className="oboard"><div className="obox">
-      {progressDots}
-      <div style={{fontSize:56,marginBottom:20}}>🍳</div>
-      <h1 className="otitle">Set up your <em>pantry</em></h1>
-      <p className="osub">Tell us what you have and we'll suggest recipes tailored to your kitchen.</p>
-      <div className="oopts">
-        {[{key:"paste",icon:"📝",bg:"var(--clayBg)",label:"Paste a list",sub:"Type or paste comma-separated items"},{key:"pick",icon:"📋",bg:"var(--sageBg)",label:"Pick from list",sub:"Browse by category and select"},{key:"camera",icon:"📷",bg:"var(--goldBg)",label:"Scan with camera",sub:"Take a photo of your pantry"}].map(o=><div key={o.key} className="aocard" onClick={()=>setStep(o.key)}><div className="aoic" style={{background:o.bg}}>{o.icon}</div><div className="aolabel">{o.label}</div><div className="aosub">{o.sub}</div></div>)}
-      </div>
-      <button className="btn btn-g" onClick={()=>onDone([])} style={{fontSize:13,color:"var(--mu)"}}>Skip — I'll add items later</button>
-      <button className="aback" onClick={()=>setStep("cuisines")} style={{justifyContent:"center",marginTop:8}}><Ic n="back" s={14}/>Back</button>
-    </div></div>}
-
-    {step==="paste"&&<div className="oboard"><div className="obox" style={{maxWidth:520}}>
-      <button className="aback" onClick={()=>setStep("choose")} style={{justifyContent:"center",marginBottom:24}}><Ic n="back" s={14}/>Back</button>
-      <h1 className="otitle" style={{fontSize:30}}>Paste your list</h1>
-      <p className="osub" style={{marginBottom:20}}>Type items separated by commas or new lines</p>
-      <textarea className="fi" placeholder={"tomatoes, pasta, eggs, yogurt, garlic, olive oil…"} value={pasteText} onChange={e=>setPasteText(e.target.value)} style={{minHeight:120,resize:"vertical",marginBottom:16}}/>
-      <button className="btn btn-p btn-full btn-lg" onClick={parseList} disabled={!pasteText.trim()}>Parse & Preview →</button>
-    </div></div>}
-
-    {step==="parsed"&&<div style={{maxWidth:700,margin:"0 auto",padding:"40px 24px"}}>
-      <button className="aback" onClick={()=>setStep("paste")} style={{marginBottom:20}}><Ic n="back" s={14}/>Back</button>
-      <h2 style={{fontFamily:"var(--fd)",fontSize:26,marginBottom:6}}>Confirm items</h2>
-      <p style={{color:"var(--mu)",marginBottom:16,fontSize:14}}>We auto-detected categories. Edit names, quantities, or categories before saving.</p>
-      <ConfirmItemsTable items={parsed} setItems={setParsed}/>
-      <button className="btn btn-p btn-full btn-lg" onClick={confirmParsed} style={{marginTop:4}}>Add {parsed.length} items to pantry →</button>
-    </div>}
-
-    {step==="pick"&&<div style={{maxWidth:700,margin:"0 auto",padding:"40px 24px"}}>
-      <button className="aback" onClick={()=>setStep("choose")} style={{marginBottom:20}}><Ic n="back" s={14}/>Back</button>
-      <h2 style={{fontFamily:"var(--fd)",fontSize:26,marginBottom:6}}>Pick your pantry</h2>
-      <p style={{color:"var(--mu)",marginBottom:20,fontSize:14}}>Select everything you currently have at home</p>
-      <div className="cchips">{Object.keys(PICK).map(c=><button key={c} className={`cchip ${selCat===c?"ac":""}`} onClick={()=>setSelCat(c)}>{c}</button>)}</div>
-      <div style={{background:"var(--white)",border:"1px solid var(--bor)",borderRadius:"var(--r)",marginBottom:16}}>
-        {PICK[selCat].map(item=><div key={item} className={`pki ${picks.has(item)?"sel":""}`} onClick={()=>togglePick(item)}><span style={{fontSize:14,fontWeight:500}}>{item}</span><div className={`pkc ${picks.has(item)?"on":""}`}>{picks.has(item)&&<Ic n="check" s={12}/>}</div></div>)}
-      </div>
-      <button className="btn btn-p btn-full" onClick={confirmPicks} disabled={picks.size===0}>Add selected ({picks.size}) to pantry →</button>
-    </div>}
-
-    {step==="camera"&&<div className="oboard"><div className="obox" style={{maxWidth:480}}>
-      <button className="aback" onClick={()=>setStep("choose")} style={{justifyContent:"center",marginBottom:24}}><Ic n="back" s={14}/>Back</button>
-      <div style={{fontSize:64,marginBottom:16}}>📷</div>
-      <h2 style={{fontFamily:"var(--fd)",fontSize:28,marginBottom:10}}>Camera scan</h2>
-      <p style={{color:"var(--mu)",marginBottom:24,lineHeight:1.6}}>Take a photo of your fridge or pantry. We'll detect items for your review before adding anything.</p>
-      <div style={{background:"var(--white)",border:"2px dashed var(--bor)",borderRadius:"var(--r)",padding:"40px 20px",textAlign:"center",cursor:"pointer",marginBottom:20}} onClick={()=>{setParsed([{id:1,name:"Tomatoes",category:"Produce",quantity:3,unit:"pcs",emoji:"🥦"},{id:2,name:"Yogurt",category:"Dairy",quantity:1,unit:"pcs",emoji:"🧀"},{id:3,name:"Garlic",category:"Produce",quantity:1,unit:"head",emoji:"🥦"}]);setStep("parsed");}}>
-        <div style={{fontSize:32,marginBottom:8}}>📁</div>
-        <div style={{fontWeight:600,fontSize:14}}>Upload or take photo</div>
-        <div style={{fontSize:13,color:"var(--mu)",marginTop:4}}>JPG, PNG · Max 10MB · Click to demo</div>
-      </div>
-    </div></div>}
-    </div>
-  );
-}
-
-/* ── EXPLORE TAB (Instagram-style) ── */
-function ExploreTab({ allRecipes, pantry, saved, toggleSave, onViewRecipe, onSaveFav, isRecipeSaved, addToList, onAddToWeek, prefs, showToast }) {
-  const [activeIdx, setActiveIdx] = useState(0);
-  const [mealFilter, setMealFilter] = useState("All");
-  const [cuisineFilter, setCuisineFilter] = useState("all");
-  const [dietFilters, setDietFilters] = useState(new Set());
-  const [flippedCard, setFlippedCard] = useState(null);
-  const feedRef = useRef(null);
-  const [seed] = useState(() => Date.now());
-
-  const MEAL_FILTERS = ["All","Breakfast","Lunch","Dinner","Snacks"];
-  const DIET_FILTERS = ["Vegetarian","Vegan","Gluten-Free","Kosher","Halal","Dairy-Free"];
-
-  const toggleDiet = (d) => { setDietFilters(prev => { const next = new Set(prev); if (next.has(d)) next.delete(d); else next.add(d); return next; }); setActiveIdx(0); };
-
-  // Get recipes with images, shuffled, filtered
-  const recipes = React.useMemo(() => {
-    const pool = (allRecipes || RECIPES).filter(r => r.image && imgAllowedForRecipe(r.image, r));
-    let filtered = pool;
-    if (mealFilter !== "All") {
-      const mt = mealFilter.toLowerCase().replace("snacks","snack");
-      filtered = filtered.filter(r => getMealType(r) === mt);
-    }
-    if (cuisineFilter !== "all") {
-      filtered = filtered.filter(r => r.cuisine === cuisineFilter);
-    }
-    if (dietFilters.size > 0) {
-      filtered = filtered.filter(r => {
-        const rd = (r.dietary||[]).map(d=>d.toUpperCase());
-        return [...dietFilters].every(f => rd.includes(f.toUpperCase()));
-      });
-    }
-    // Seeded shuffle
-    let s = seed >>> 0;
-    const rand = () => { s = (Math.imul(s,1664525)+1013904223)>>>0; return s/0x100000000; };
-    return [...filtered].sort(() => rand() - 0.5);
-  }, [allRecipes, mealFilter, cuisineFilter, dietFilters, seed]);
-
-  const pantrySet = React.useMemo(() => buildPantrySet(pantry || []), [pantry]);
-
-  // Scroll snap handler
-  const handleScroll = useCallback(() => {
-    const el = feedRef.current;
-    if (!el) return;
-    const cardH = el.querySelector('.explore-card')?.offsetHeight || el.clientHeight;
-    const idx = Math.round(el.scrollTop / cardH);
-    setActiveIdx(idx);
-    setFlippedCard(null);
-  }, []);
-
-  const r = recipes[activeIdx];
-  const missingCount = r ? (r.ingredients || []).filter(i => !ingInPantry(i.n, pantrySet)).length : 0;
-  const matchPct = r && r.ingredients?.length ? Math.round(((r.ingredients.length - missingCount) / r.ingredients.length) * 100) : 0;
-
-  // Unique cuisines
-  const cuisines = React.useMemo(() => {
-    const set = new Set();
-    (allRecipes || RECIPES).forEach(r => { if (r.cuisine) set.add(r.cuisine); });
-    return ["all", ...Array.from(set).sort()];
-  }, [allRecipes]);
-
-  const clearAllFilters = () => { setMealFilter("All"); setCuisineFilter("all"); setDietFilters(new Set()); setActiveIdx(0); };
-
-  const filterBar = (
-    <div className="explore-filters">
-      <div style={{display:"flex",gap:6,overflowX:"auto",paddingBottom:4,alignItems:"center"}}>
-        {MEAL_FILTERS.map(f=>(
-          <button key={f} className={`cchip ${mealFilter===f?"ac":""}`} onClick={()=>{setMealFilter(f);setActiveIdx(0);}} style={{fontSize:12,whiteSpace:"nowrap"}}>{f}</button>
-        ))}
-        <span style={{width:1,height:20,background:"var(--bor)",flexShrink:0}}/>
-        {DIET_FILTERS.map(f=>(
-          <button key={f} className={`cchip ${dietFilters.has(f)?"ac":""}`} onClick={()=>toggleDiet(f)} style={{fontSize:11,whiteSpace:"nowrap"}}>{f}</button>
-        ))}
-        {dietFilters.size > 0 && <button style={{fontSize:11,background:"none",border:"none",color:"var(--err)",cursor:"pointer",whiteSpace:"nowrap",fontWeight:600}} onClick={()=>{setDietFilters(new Set());setActiveIdx(0);}}>✕ Clear</button>}
-        <select className="sel" value={cuisineFilter} onChange={e=>{setCuisineFilter(e.target.value);setActiveIdx(0);}} style={{fontSize:12,padding:"6px 10px",height:32,borderRadius:16,minWidth:100}}>
-          {cuisines.map(c=><option key={c} value={c}>{c==="all"?"All cuisines":c}</option>)}
-        </select>
+        <button className="btn btn-p btn-lg" onClick={() => setStep(1)}>Next →</button>
       </div>
     </div>
   );
 
-  if (recipes.length === 0) return (
-    <div style={{height:"calc(100vh - 60px)",display:"flex",flexDirection:"column",position:"relative"}}>
-      {filterBar}
-      <div style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",flex:1,gap:16}}>
-        <div style={{fontSize:48}}>🔍</div>
-        <div style={{fontFamily:"var(--fd)",fontSize:20}}>No recipes found</div>
-        <div style={{color:"var(--mu)",fontSize:14,textAlign:"center"}}>No recipes match these filters.<br/>Try removing some filters.</div>
-        <button className="btn btn-p" onClick={clearAllFilters} style={{marginTop:8}}>Clear all filters</button>
+  if (step === 1) return (
+    <div className="onb-page">
+      <div className="onb-card">
+        <div style={{fontSize:48,marginBottom:16}}>🥗</div>
+        <h1 className="onb-title">Dietary preferences</h1>
+        <p className="onb-sub">Select any that apply</p>
+        <div className="onb-chips">
+          {DIETS.map(d => <button key={d} className={`onb-chip${(prefs.dietary||[]).includes(d) ? ' sel' : ''}`} onClick={() => toggleInSet('dietary', d)}>{d}</button>)}
+        </div>
+        <h2 style={{fontFamily:'var(--fd)',fontSize:22,margin:'24px 0 8px'}}>Favorite cuisines</h2>
+        <p className="onb-sub">We'll prioritize recipes from these</p>
+        <div className="onb-chips">
+          {CUISINES.map(c => <button key={c} className={`onb-chip${(prefs.cuisines||[]).includes(c) ? ' sel' : ''}`} onClick={() => toggleInSet('cuisines', c)}>{c}</button>)}
+        </div>
+        <div style={{display:'flex',gap:12,justifyContent:'center',marginTop:8}}>
+          <button className="btn btn-s btn-lg" onClick={() => setStep(0)}>← Back</button>
+          <button className="btn btn-p btn-lg" onClick={() => setStep(2)}>Next →</button>
+        </div>
       </div>
     </div>
   );
 
   return (
-    <div style={{height:"calc(100vh - 60px)",display:"flex",flexDirection:"column",position:"relative"}}>
-      {filterBar}
-
-      {/* Snap-scroll feed */}
-      <div className="explore-feed" ref={feedRef} onScroll={handleScroll}>
-        {recipes.map((recipe, idx) => {
-          const isFlipped = flippedCard === recipe.id;
-          const ings = recipe.ingredients || [];
-          return (
-          <div key={recipe.id} className="explore-card">
-            {/* Flip container */}
-            <div style={{position:"absolute",inset:0,perspective:1200}}>
-              <div style={{width:"100%",height:"100%",position:"relative",transformStyle:"preserve-3d",transition:"transform 0.5s ease",transform:isFlipped?"rotateY(180deg)":"none"}}>
-                {/* Front: Hero image */}
-                <div style={{position:"absolute",inset:0,backfaceVisibility:"hidden",cursor:"pointer"}} onClick={()=>setFlippedCard(recipe.id)}>
-                  <img src={recipe.image} alt={recipe.title} loading={idx < 3 ? "eager" : "lazy"} style={{width:"100%",height:"100%",objectFit:"cover"}}/>
-                </div>
-                {/* Back: Ingredients with individual add buttons */}
-                <div style={{position:"absolute",inset:0,backfaceVisibility:"hidden",transform:"rotateY(180deg)",background:"var(--cream)",overflowY:"auto",padding:"24px 20px"}} onClick={(e)=>{if(e.target.tagName!=='BUTTON')setFlippedCard(null);}}>
-                  <div style={{fontSize:12,color:"var(--mu)",textTransform:"uppercase",letterSpacing:1,marginBottom:6}}>{recipe.cuisine}</div>
-                  <div style={{fontFamily:"var(--fd)",fontSize:22,fontWeight:700,marginBottom:4}}>{recipe.emoji} {recipe.title}</div>
-                  <div style={{display:"flex",gap:12,fontSize:13,color:"var(--mu)",marginBottom:16}}>
-                    <span>⏱ {recipe.time} min</span><span>📊 {recipe.diff}</span><span>🥘 {matchPct}% match</span>
-                  </div>
-                  <div style={{fontSize:14,fontWeight:700,color:"var(--sage)",marginBottom:10}}>Ingredients ({ings.length})</div>
-                  <div style={{display:"flex",flexDirection:"column",gap:6}}>
-                    {ings.map((ing,i)=>{
-                      const inPantry = ingInPantry(ing.n, pantrySet);
-                      return (
-                        <div key={i} style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"8px 12px",background:inPantry?"var(--sageBg)":"var(--white)",borderRadius:10,border:"1px solid var(--bor)"}}>
-                          <span style={{fontSize:14}}>{inPantry?"✅":"🛒"} {ing.n} {ing.a?<span style={{color:"var(--mu)",fontSize:12}}>({ing.a})</span>:null}</span>
-                          {!inPantry && <button style={{background:"var(--clay)",color:"#fff",border:"none",borderRadius:8,padding:"4px 10px",fontSize:11,fontWeight:600,cursor:"pointer"}} onClick={(e)=>{e.stopPropagation();addToList([ing.n]);showToast(`Added ${ing.n} to list`);}}>+ Add</button>}
-                        </div>
-                      );
-                    })}
-                  </div>
-                  <div style={{display:"flex",gap:8,marginTop:16}}>
-                    <button className="btn btn-p btn-sm" style={{flex:1}} onClick={(e)=>{e.stopPropagation();const missing=ings.filter(i=>!ingInPantry(i.n,pantrySet)).map(i=>i.n);if(missing.length>0){addToList(missing);showToast(`Added ${missing.length} items`);}else showToast("You have everything!");}}>Add all missing</button>
-                    <button className="btn btn-s btn-sm" style={{flex:1}} onClick={(e)=>{e.stopPropagation();onViewRecipe(recipe);}}>View full recipe</button>
-                  </div>
-                  <div style={{textAlign:"center",marginTop:12,fontSize:12,color:"var(--mu)"}}>Tap to flip back</div>
-                </div>
-              </div>
-            </div>
-
-            {/* Bottom gradient overlay (only when not flipped) */}
-            {!isFlipped && <div className="explore-overlay">
-              <div className="explore-cuisine">{recipe.cuisine}</div>
-              <div className="explore-title">{recipe.title}</div>
-              <div className="explore-meta">
-                <span>⏱ {recipe.time} min</span>
-                <span>📊 {recipe.diff}</span>
-                {idx === activeIdx && <span style={{color:"#8fbc8f",fontWeight:600}}>🥘 {matchPct}% match</span>}
-              </div>
-              <div className="explore-tags">
-                {(recipe.dietary||[]).slice(0,3).map(d=><span key={d} className="explore-tag">{d}</span>)}
-              </div>
-            </div>}
-
-            {/* Right-side actions */}
-            {!isFlipped && <div className="explore-actions">
-              <button className="explore-action-btn" onClick={(e)=>{e.stopPropagation();onSaveFav?onSaveFav(recipe):toggleSave(recipe.id);}} title="Save">
-                <Ic n={isRecipeSaved?isRecipeSaved(recipe)?"bookmarkOn":"bookmark":saved?.has(recipe.id)?"bookmarkOn":"bookmark"} s={22}/>
-              </button>
-              <button className="explore-action-btn" onClick={(e)=>{e.stopPropagation();onAddToWeek(recipe);}} title="Add to plan">
-                <Ic n="cal" s={22}/>
-              </button>
-              <button className="explore-action-btn" onClick={(e)=>{e.stopPropagation();setFlippedCard(recipe.id);}} title="Ingredients">
-                <Ic n="cart" s={22}/>
-              </button>
-              <button className="explore-action-btn" onClick={(e)=>{e.stopPropagation();onViewRecipe(recipe);}} title="View recipe">
-                <Ic n="expand" s={22}/>
-              </button>
-            </div>}
-          </div>
-          );
-        })}
+    <div className="onb-page">
+      <div className="onb-card">
+        <div style={{fontSize:48,marginBottom:16}}>🧊</div>
+        <h1 className="onb-title">What's in your kitchen?</h1>
+        <p className="onb-sub">Quick-add common items (optional — skip to generate your plan)</p>
+        <div className="onb-chips">
+          {COMMON_PANTRY.map(item => (
+            <button key={item} className={`onb-chip${pantry.includes(item) ? ' sel' : ''}`}
+              onClick={() => setPantry(p => p.includes(item) ? p.filter(i => i !== item) : [...p, item])}>
+              {item}
+            </button>
+          ))}
+        </div>
+        <div style={{display:'flex',gap:12,justifyContent:'center',marginTop:8}}>
+          <button className="btn btn-s btn-lg" onClick={() => setStep(1)}>← Back</button>
+          <button className="btn btn-p btn-lg" onClick={onDone}>✨ Generate My Week</button>
+        </div>
       </div>
-
-      {/* Card counter */}
-      <div className="explore-counter">{activeIdx + 1} / {recipes.length}</div>
     </div>
   );
 }
 
-/* ── HOME TAB ── */
-function HomeTab({ isGuest, saved, toggleSave, onViewRecipe, pantry, addToList, isPremium, onUpgrade, onSaveFav, isRecipeSaved, allRecipes, avoidedIngredients,
-  homeFilter, setHomeFilter, homeSearch, setHomeSearch, homeSortMode, setHomeSortMode,
-  homeCuisineFilter, setHomeCuisineFilter, homeMealCat, setHomeMealCat, onAddToWeek,
-  // Favorites / Collections (forwarded from tp)
-  favFolders=[], setFavFolders, favItems=[], setFavItems, userRecipes=[], removeFavItem, removeFromAllFolders,
-  addUserRecipe, deleteUserRecipe, createFavFolder, deleteFavFolder, showToast, saveToFolder,
-  collections=[], setCollections, setAvoidedIngredients }) {
-  const [recipeView, setRecipeView] = useState('all'); // 'all' | 'favorites'
-  const [showSkeleton, setShowSkeleton] = useState(true);
-  useEffect(() => { const t = setTimeout(() => setShowSkeleton(false), 400); return () => clearTimeout(t); }, []);
-  // Lifted state from App — persists across recipe navigation
-  const [filter, setFilter_] = [homeFilter || "All", setHomeFilter || (()=>{})];
-  const setFilter = setHomeFilter || (()=>{});
-  const [search, setSearch_] = [homeSearch || "", setHomeSearch || (()=>{})];
-  const setSearch = setHomeSearch || (()=>{});
-  const [sortMode, setSortMode_] = [homeSortMode || "default", setHomeSortMode || (()=>{})];
-  const setSortMode = setHomeSortMode || (()=>{});
-  const [cuisineFilter, setCuisineFilter_] = [homeCuisineFilter || "all", setHomeCuisineFilter || (()=>{})];
-  const setCuisineFilter = setHomeCuisineFilter || (()=>{});
-  const [mealCat, setMealCat_] = [homeMealCat || "All", setHomeMealCat || (()=>{})];
-  const setMealCat = setHomeMealCat || (()=>{});
-  const [showRandom,setShowRandom]=useState(false);
-  const [cookNow,setCookNow]=useState(false);
-  const [pantryPerfect,setPantryPerfect]=useState(false);
-  const [ppCollapsed,setPpCollapsed]=useState({1:false,2:false,3:false});
-  const [randomSeed,setRandomSeed]=useState(()=>Date.now());
-  // Pagination: load-more for recipe list
-  const [visibleCount, setVisibleCount] = useState(24);
-  const LOAD_BATCH = 24;
-  // Meal category filter chips
-  const MEAL_CATS = ["All","Breakfast","Lunch","Dinner","Snacks"];
-  const FILTERS=["All","Quick","Vegetarian","Vegan","High Pantry","My Recipes"];
+/* ── PLANNER HOME (main screen) ── */
+function PlannerHome({ mealPlan, setMealPlan, generateWeek, generateDay, regenerateSlot, removeSlot, setSlotRecipe, dragSrc, handleDragStart, handleDrop, qap, setQap, setViewRecipe, setReplacePicker, showToast }) {
+  const MEALS = ['Breakfast', 'Lunch', 'Dinner'];
+  const [dragOverCell, setDragOverCell] = useState(null);
 
-  // Debounce search for performance
-  const debouncedSearch = useDebouncedValue(search, 250);
+  const filledCount = mealPlan.reduce((c, d) => c + d.meals.filter(Boolean).length, 0);
+  const isEmpty = filledCount === 0;
 
-  // Detect if search looks like an ingredient query (not just recipe title)
-  const searchQ = debouncedSearch.trim().toLowerCase();
-  const isIngSearch = searchQ.length >= 2 && (allRecipes||RECIPES).some(r =>
-    !(r.title||"").toLowerCase().includes(searchQ) &&
-    (r.ingredients||[]).some(i => normalizeIng(i.n).includes(searchQ))
-  );
-
-  // Unique cuisines from recipe pool
-  const allCuisines = React.useMemo(() => {
-    const pool = allRecipes || RECIPES;
-    const set = new Set();
-    pool.forEach(r => { if(r.cuisine) set.add(r.cuisine); });
-    return ["all", ...Array.from(set).sort()];
-  }, [allRecipes]);
-
-  // Built-in + user recipes merged — memoized to avoid re-filtering on every render
-  const recipePool = allRecipes || RECIPES;
-  const { filtered, visibleRecipes: _visRecipes, lockedCount } = React.useMemo(() => {
-    const filt = recipePool.filter(r=>{
-      if(filter==="My Recipes") return !!r.isUserCreated;
-      if(r.isUserCreated) {
-        if(searchQ&&!r.title.toLowerCase().includes(searchQ))return false;
-        return filter==="All";
-      }
-      if(filter==="Quick"&&r.time>25)return false;
-      if(filter==="Vegetarian"&&!r.dietary.includes("Vegetarian"))return false;
-      if(filter==="Vegan"&&!r.dietary.includes("Vegan"))return false;
-      if(filter==="High Pantry"&&r.pp<80)return false;
-      if(mealCat==="Breakfast"&&getMealType(r)!=="breakfast")return false;
-      if(mealCat==="Lunch"&&getMealType(r)!=="lunch")return false;
-      if(mealCat==="Dinner"&&getMealType(r)!=="dinner")return false;
-      if(mealCat==="Snacks"&&getMealType(r)!=="snack")return false;
-      if(cuisineFilter!=="all"&&r.cuisine!==cuisineFilter)return false;
-      if(searchQ) {
-        const titleMatch = r.title.toLowerCase().includes(searchQ);
-        const ingMatch = (r.ingredients||[]).some(i => normalizeIng(i.n).includes(searchQ));
-        if(!titleMatch && !ingMatch) return false;
-      }
-      return true;
-    }).map(r => {
-      if(isIngSearch && searchQ) {
-        const ingMatch = (r.ingredients||[]).some(i => normalizeIng(i.n).includes(searchQ));
-        return { ...r, _ingMatch: ingMatch };
-      }
-      return r;
-    });
-    const builtIn = filt.filter(r=>!r.isUserCreated);
-    const vis = isPremium ? filt : [...builtIn.slice(0, FREE_RECIPE_LIMIT), ...filt.filter(r=>r.isUserCreated)];
-    const locked = builtIn.length - Math.min(builtIn.length, isPremium ? builtIn.length : FREE_RECIPE_LIMIT);
-    return { filtered: filt, visibleRecipes: vis, lockedCount: locked };
-  }, [recipePool, filter, searchQ, isIngSearch, mealCat, cuisineFilter, isPremium]);
-  let visibleRecipes = _visRecipes;
-
-  // ── Sort modes ──────────────────────────────────────────────────────
-  const pantrySet = React.useMemo(() => buildPantrySet(pantry), [pantry]);
-  if(sortMode === "pantry") {
-    visibleRecipes = [...visibleRecipes].map(r => {
-      const mc = (r.ingredients||[]).filter(i => !ingInPantry(i.n, pantrySet)).length;
-      return { ...r, _sortMc: mc };
-    }).sort((a,b) => a._sortMc - b._sortMc);
-  } else if(sortMode === "quick") {
-    visibleRecipes = [...visibleRecipes].sort((a,b) => (a.time||30) - (b.time||30));
-  } else if(sortMode === "random") {
-    // Seeded shuffle based on randomSeed
-    let s = randomSeed >>> 0;
-    const rand = () => { s = (Math.imul(s,1664525)+1013904223)>>>0; return s/0x100000000; };
-    visibleRecipes = [...visibleRecipes].sort(() => rand() - 0.5);
-  }
-
-  // ── Pagination: only render a subset of recipes ──
-  const totalRecipes = visibleRecipes.length;
-  const paginatedRecipes = visibleRecipes.slice(0, visibleCount);
-  const hasMore = visibleCount < totalRecipes;
-
-  // Reset pagination when filters/search/sort change
-  React.useEffect(() => { setVisibleCount(24); }, [filter, debouncedSearch, cuisineFilter, mealCat, sortMode]);
-
-  // ── Cook Now / Pantry Perfect: live pantry-miss grouping ──
-  const avoidSet  = React.useMemo(() => new Set(avoidedIngredients || []), [avoidedIngredients]);
-
-  // ── Pantry Perfect groups (0,1,2,3 missing, collapsible) ──
-  const pantryPerfectGroups = React.useMemo(() => {
-    if(!pantryPerfect) return null;
-    const base = avoidSet.size > 0
-      ? visibleRecipes.filter(r => !(r.ingredients||[]).some(i => avoidSet.has(normalizeIng(i.n))))
-      : visibleRecipes;
-    const withMc = base.map(r => {
-      const mn = (r.ingredients||[]).filter(i => !ingInPantry(i.n, pantrySet)).map(i => i.n);
-      return { ...r, _mc: mn.length, _mn: mn };
-    }).sort((a,b) => a._mc - b._mc);
-    const g = {0:[],1:[],2:[],3:[]};
-    withMc.forEach(r => { const k = Math.min(r._mc, 3); g[k].push(r); });
-    return g;
-  }, [pantryPerfect, visibleRecipes, pantrySet, avoidSet]);
-  const cookNowGroups = React.useMemo(() => {
-    if(!cookNow) return null;
-    // Step A: exclude avoided ingredients
-    const base = avoidSet.size > 0
-      ? visibleRecipes.filter(r => !(r.ingredients||[]).some(i => avoidSet.has(normalizeIng(i.n))))
-      : visibleRecipes;
-    // Step B: compute live missingCount using shared ingInPantry engine
-    const withMissing = base.map(r => {
-      const mn = (r.ingredients||[]).filter(i => !ingInPantry(i.n, pantrySet)).map(i => i.n);
-      return { ...r, _mc: mn.length, _mn: mn };
-    });
-    // Step C: sort ascending by missing count
-    withMissing.sort((a,b) => a._mc - b._mc);
-    // Step D: group into buckets 0,1,2,3,4,5,6+
-    const groups = {};
-    withMissing.forEach(r => {
-      const k = Math.min(r._mc, 6);
-      (groups[k] = groups[k] || []).push(r);
-    });
-    return groups;
-  }, [cookNow, visibleRecipes, pantrySet, avoidSet]);
   return (
     <div>
-      {/* ── Recipes sub-tabs ── */}
-      <div style={{display:'flex',gap:0,marginBottom:20,borderBottom:'1px solid var(--bor)'}}>
-        {[['all','🍽 All Recipes'],['favorites','🔖 Favorites']].map(([v,label])=>(
-          <button key={v} onClick={()=>setRecipeView(v)} style={{padding:'10px 18px',fontSize:13,fontWeight:recipeView===v?700:500,color:recipeView===v?'var(--clay)':'var(--mu)',background:'none',border:'none',borderBottom:recipeView===v?'2px solid var(--clay)':'2px solid transparent',cursor:'pointer',transition:'all .15s'}}>
-            {label}
+      {/* Stats bar */}
+      <div style={{display:'flex',gap:20,marginBottom:20,flexWrap:'wrap',alignItems:'center'}}>
+        <div style={{fontSize:13,color:'var(--mu)'}}>
+          {filledCount} / 21 meals planned
+        </div>
+        {mealPlan.map((day, di) => (
+          <button key={di} className="btn btn-xs btn-g" onClick={() => generateDay(di)} title={`Regenerate ${day.day}`}>
+            🔄 {day.day}
           </button>
         ))}
       </div>
-      {/* ── Favorites sub-view ── */}
-      {recipeView==='favorites' && (
-        <FavoritesTab
-          favFolders={favFolders} setFavFolders={setFavFolders}
-          favItems={favItems} setFavItems={setFavItems}
-          userRecipes={userRecipes} allRecipes={allRecipes}
-          onViewRecipe={onViewRecipe} onSaveFav={onSaveFav} saveToFolder={saveToFolder}
-          removeFavItem={removeFavItem} removeFromAllFolders={removeFromAllFolders}
-          addUserRecipe={addUserRecipe} deleteUserRecipe={deleteUserRecipe}
-          createFavFolder={createFavFolder} deleteFavFolder={deleteFavFolder}
-          isRecipeSaved={isRecipeSaved} showToast={showToast} pantry={pantry}
-        />
-      )}
-      {/* ── All Recipes sub-view ── */}
-      {recipeView==='all' && <>
-      {isGuest&&<div className="gnotice"><span>👋</span><span><strong>Guest mode:</strong> Browse freely. Create an account to save recipes and plan meals.</span></div>}
-      {!isPremium&&!isGuest&&<div style={{background:"linear-gradient(135deg,var(--clayBg) 0%,rgba(201,149,58,.06) 100%)",border:"1px solid rgba(192,106,62,.2)",borderRadius:10,padding:"12px 16px",marginBottom:20,display:"flex",alignItems:"center",justifyContent:"space-between",gap:12,flexWrap:"wrap"}}>
-        <div style={{display:"flex",alignItems:"center",gap:10}}><span style={{fontSize:20}}>🍽️</span><div><div style={{fontWeight:600,fontSize:14}}>Free plan: {FREE_RECIPE_LIMIT} of {RECIPES.length} recipes</div><div style={{fontSize:12,color:"var(--mu)",marginTop:1}}>Upgrade to unlock all {RECIPES.length} recipes + AI chef + unlimited planning</div></div></div>
-        <button className="btn btn-p btn-sm" onClick={()=>onUpgrade("recipes")}>⭐ Upgrade — $4.99/mo</button>
-      </div>}
-      <div style={{display:"flex",alignItems:"flex-start",justifyContent:"space-between",marginBottom:24,gap:16,flexWrap:"wrap"}}>
-        <div><h1 className="stitle">Recipe Feed</h1><p className="ssub">Matched to your pantry · {isPremium?RECIPES.length:FREE_RECIPE_LIMIT} of {RECIPES.length} recipes available{!isPremium&&<span style={{color:"var(--clay)",fontWeight:600,marginLeft:6,cursor:"pointer"}} onClick={()=>onUpgrade("recipes")}>Unlock all →</span>}</p></div>
-        <button className="btn btn-gs" onClick={()=>setShowRandom(true)} style={{flexShrink:0}}><Ic n="shuffle" s={16}/>Random Plate</button>
-      </div>
-      {/* ── STICKY CONTROLS WRAPPER ── */}
-      <div className="recipe-controls-sticky">
-        {/* Row 1: Search + Cuisine + Sort */}
-        <div style={{display:"flex",gap:10,marginBottom:10,flexWrap:"wrap"}}>
-          <div className="sw" style={{flex:1,minWidth:180}}><div className="si"><Ic n="list" s={16}/></div><input className="sin" placeholder="Search recipes or ingredients…" value={search} onChange={e=>setSearch(e.target.value)}/></div>
-          <select className="sel" value={cuisineFilter} onChange={e=>setCuisineFilter(e.target.value)} style={{width:"auto",padding:"8px 12px",fontSize:13,height:40,borderRadius:"var(--rs)"}}>
-            {allCuisines.map(c=><option key={c} value={c}>{c==="all"?"All cuisines":c}</option>)}
-          </select>
-          <select className="sel" value={sortMode} onChange={e=>{setSortMode(e.target.value);if(e.target.value==="random")setRandomSeed(Date.now());}} style={{width:"auto",padding:"8px 12px",fontSize:13,height:40,borderRadius:"var(--rs)"}}>
-            <option value="default">Default order</option>
-            <option value="pantry">Best pantry match</option>
-            <option value="quick">Quickest first</option>
-            <option value="random">Random shuffle</option>
-          </select>
-          {sortMode==="random"&&<button className="btn btn-gs btn-sm" title="Shuffle again" onClick={()=>setRandomSeed(Date.now())}>🔀 Shuffle</button>}
-        </div>
-        {/* Row 2: Meal categories + key filters in one row */}
-        <div style={{display:"flex",gap:6,flexWrap:"wrap",alignItems:"center"}}>
-          {MEAL_CATS.map(cat=>(
-            <button key={cat} className={`cchip ${mealCat===cat?"ac":""}`} onClick={()=>setMealCat(cat)}>{cat}</button>
-          ))}
-          <span style={{width:1,height:20,background:"var(--bor)",margin:"0 2px"}}/>
-          {FILTERS.filter(f=>f!=="All").map(f=><button key={f} className={`cchip ${filter===f?"ac":""}`} onClick={()=>setFilter(filter===f?"All":f)}>{f}</button>)}
-          <button
-            className={`cchip ${cookNow?"ac":""}`}
-            onClick={()=>{setCookNow(v=>!v);setPantryPerfect(false);}}
-            style={cookNow ? {background:'var(--sageBg)',color:'var(--sageH)',borderColor:'var(--sage)'} : {}}
-          >🥗 Cook now</button>
-          <button
-            className={`cchip ${pantryPerfect?"ac":""}`}
-            onClick={()=>{setPantryPerfect(v=>!v);setCookNow(false);}}
-            style={pantryPerfect ? {background:'rgba(106,158,114,.18)',color:'var(--sageH)',borderColor:'var(--sage)'} : {}}
-          >✅ Pantry Perfect</button>
-        </div>
-      </div>
-      {/* ── Ingredient search label + suggestion chips ── */}
-      {isIngSearch && searchQ && (
-        <div style={{marginBottom:12,display:"flex",alignItems:"center",gap:8,flexWrap:"wrap"}}>
-          <span style={{fontSize:12,color:"var(--mu)"}}>Showing recipes that include: <strong style={{color:"var(--clay)"}}>{searchQ}</strong></span>
-          <button className="cchip" style={{fontSize:11}} onClick={()=>setPantryPerfect(true)}>Show 0-missing only</button>
-          <button className="cchip" style={{fontSize:11}} onClick={()=>setFilter("Breakfast")}>Breakfast only</button>
-          <button className="cchip" style={{fontSize:11}} onClick={()=>setFilter("Quick")}>Quick only</button>
-        </div>
-      )}
-      {/* ── Cook Now grouped view ── */}
-      {cookNow && cookNowGroups ? (
-        <div className={lockedCount>0?"paywall-lock":""} style={{minHeight:lockedCount>0?420:undefined}}>
-          {Object.keys(cookNowGroups).length === 0
-            ? <div className="empty"><div className="eic">🍽️</div><div className="etitle">No recipes found</div><div className="esub">Try a different filter or add more pantry items.</div></div>
-            : (()=>{
-                const SECTION_META = {
-                  0: { label:'✅ Cook now',          color:'var(--sageH)',  dim:'var(--sageBg)'  },
-                  1: { label:'Missing 1 ingredient',  color:'var(--goldH)',  dim:'var(--goldBg)'  },
-                  2: { label:'Missing 2 ingredients', color:'var(--goldH)',  dim:'var(--goldBg)'  },
-                  3: { label:'Missing 3 ingredients', color:'var(--mu)',     dim:'var(--cream)'   },
-                  4: { label:'Missing 4 ingredients', color:'var(--mu)',     dim:'var(--cream)'   },
-                  5: { label:'Missing 5 ingredients', color:'var(--mu)',     dim:'var(--cream)'   },
-                  6: { label:'Missing 6+ ingredients',color:'var(--mu)',     dim:'var(--cream)'   },
-                };
-                const keys = Object.keys(cookNowGroups).map(Number).sort((a,b)=>a-b);
-                // Show "no 0-missing" hint when pantry doesn't cover any recipe fully
-                const hasZero = cookNowGroups[0]?.length > 0;
-                return (<>
-                  {!hasZero && <div style={{padding:'10px 14px',background:'rgba(201,149,58,.07)',border:'1px solid rgba(201,149,58,.25)',borderRadius:8,marginBottom:16,fontSize:13,color:'var(--goldH)',fontWeight:600}}>
-                    No recipes match your pantry exactly yet. Add more items to your pantry to unlock cook-now recipes.
-                  </div>}
-                  {keys.map(k=>{
-                    const { label, color, dim } = SECTION_META[k] || SECTION_META[6];
-                    const group = cookNowGroups[k];
-                    return (
-                      <div key={k} style={{marginBottom:28}}>
-                        <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:10}}>
-                          <span style={{fontWeight:700,fontSize:13,color}}>{label}</span>
-                          <span style={{fontSize:11,color:'var(--mu)',background:dim,padding:'1px 7px',borderRadius:10,fontWeight:600}}>{group.length}</span>
-                        </div>
-                        <div className="rgrid">
-                          {group.map(r => {
-                            // In "Cook now" section hide missing text; in others use live-computed list
-                            const rDisp = {...r, missing: k===0 ? [] : r._mn};
-                            return <RecipeCard key={r.id} r={rDisp} saved={isRecipeSaved?isRecipeSaved(r):saved.has(r.id)} onSave={()=>onSaveFav?onSaveFav(r):toggleSave(r.id)} onView={()=>onViewRecipe(r)} addToList={addToList} pantry={pantry} onAddToWeek={onAddToWeek} showToast={showToast}/>;
-                          })}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </>);
-              })()
-          }
-          {lockedCount>0&&(
-            <div className="paywall-overlay">
-              <div className="paywall-cta">
-                <div style={{fontSize:32,marginBottom:8}}>🔒</div>
-                <div className="paywall-cta-title">{lockedCount} more recipes locked</div>
-                <div className="paywall-cta-sub">Upgrade to Premium to unlock all {RECIPES.length} recipes including lunches, dinners, and seasonal specials.</div>
-                <button className="btn btn-p btn-full" onClick={()=>onUpgrade("recipes")}>⭐ Unlock all recipes</button>
-              </div>
-            </div>
-          )}
-        </div>
-      ) : pantryPerfect && pantryPerfectGroups ? (
-        /* ── Pantry Perfect grouped view ── */
-        <div className={lockedCount>0?"paywall-lock":""} style={{minHeight:lockedCount>0?420:undefined}}>
-          {(()=>{
-            const PP_META = {
-              0:{ label:"✅ Pantry Perfect — Cook now!",    color:"var(--sageH)", dim:"var(--sageBg)",  body:true },
-              1:{ label:"Missing 1 ingredient",              color:"var(--goldH)", dim:"var(--goldBg)",  body:false },
-              2:{ label:"Missing 2 ingredients",             color:"var(--goldH)", dim:"var(--goldBg)",  body:false },
-              3:{ label:"Missing 3+ ingredients",            color:"var(--mu)",    dim:"var(--cream)",   body:false },
-            };
-            const keys = [0,1,2,3].filter(k => pantryPerfectGroups[k]?.length > 0);
-            if(keys.length===0) return <div className="empty"><div className="eic">🥗</div><div className="etitle">No recipes found</div><div className="esub">Try adjusting your filters or adding more pantry items.</div></div>;
-            return keys.map(k => {
-              const { label, color, dim } = PP_META[k];
-              const group = pantryPerfectGroups[k];
-              const isOpen = k===0 || !ppCollapsed[k];
-              return (
-                <div key={k} style={{marginBottom:20}}>
-                  <div className="sec-hdr" onClick={()=>k!==0&&setPpCollapsed(p=>({...p,[k]:!p[k]}))}>
-                    <div style={{display:"flex",alignItems:"center",gap:8}}>
-                      <span style={{fontWeight:700,fontSize:13,color}}>{label}</span>
-                      <span style={{fontSize:11,background:dim,color,padding:"1px 8px",borderRadius:10,fontWeight:600}}>{group.length}</span>
-                    </div>
-                    {k!==0&&<span style={{fontSize:12,color:"var(--mu)"}}>{isOpen?"▲ collapse":"▼ expand"}</span>}
-                  </div>
-                  {isOpen&&<div className="rgrid" style={{marginTop:8}}>
-                    {group.map(r=>{
-                      const rDisp = {...r, missing: k===0?[]:r._mn};
-                      const ingMatchLabel = r._ingMatch && searchQ ? <span style={{fontSize:10,color:"var(--clay)",fontWeight:600,display:"block",marginTop:2}}>Includes: {searchQ}</span> : null;
-                      return <RecipeCard key={r.id} r={rDisp} saved={isRecipeSaved?isRecipeSaved(r):saved.has(r.id)} onSave={()=>onSaveFav?onSaveFav(r):toggleSave(r.id)} onView={()=>onViewRecipe(r)} addToList={addToList} pantry={pantry} onAddToWeek={onAddToWeek} showToast={showToast}/>;
-                    })}
-                  </div>}
-                </div>
-              );
-            });
-          })()}
-          {lockedCount>0&&(
-            <div className="paywall-overlay">
-              <div className="paywall-cta">
-                <div style={{fontSize:32,marginBottom:8}}>🔒</div>
-                <div className="paywall-cta-title">{lockedCount} more recipes locked</div>
-                <div className="paywall-cta-sub">Upgrade to Premium to unlock all {RECIPES.length} recipes.</div>
-                <button className="btn btn-p btn-full" onClick={()=>onUpgrade("recipes")}>⭐ Unlock all recipes</button>
-              </div>
-            </div>
-          )}
+
+      {isEmpty ? (
+        <div style={{textAlign:'center',padding:'80px 20px'}}>
+          <div style={{fontSize:64,marginBottom:16}}>📅</div>
+          <h2 style={{fontFamily:'var(--fd)',fontSize:28,marginBottom:8}}>Your week is empty</h2>
+          <p style={{color:'var(--mu)',marginBottom:24,fontSize:15}}>Generate a full meal plan in one click</p>
+          <button className="btn btn-p btn-lg" onClick={generateWeek}>✨ Generate Week</button>
         </div>
       ) : (
-        /* ── Normal (unordered) view ── */
-        <div className={lockedCount>0?"paywall-lock":""} style={{minHeight:lockedCount>0?420:undefined}}>
-          {showSkeleton ? (
-            <div className="rgrid">{[1,2,3,4,5,6].map(i=><SkeletonCard key={i}/>)}</div>
-          ) : (<>
-          <div className="rgrid">
-            {filtered.length===0?<div className="empty"><div className="eic">🍽️</div><div className="etitle">No recipes found</div><div className="esub">Try a different filter or add more pantry items.</div></div>
-              :paginatedRecipes.map(r=>{
-                return <RecipeCard key={r.id} r={r} saved={isRecipeSaved?isRecipeSaved(r):saved.has(r.id)} onSave={()=>onSaveFav?onSaveFav(r):toggleSave(r.id)} onView={()=>onViewRecipe(r)} addToList={addToList} pantrySet={pantrySet} onAddToWeek={onAddToWeek} showToast={showToast}/>;
-              })}
-          </div>
-          {hasMore && (
-            <div style={{textAlign:"center",padding:"20px 0"}}>
-              <button className="btn btn-gs" onClick={()=>setVisibleCount(c=>c+LOAD_BATCH)} style={{minWidth:200}}>
-                Load more ({totalRecipes - visibleCount} remaining)
-              </button>
-            </div>
-          )}
-          </>)}
-          {lockedCount>0&&(
-            <div className="paywall-overlay">
-              <div className="paywall-cta">
-                <div style={{fontSize:32,marginBottom:8}}>🔒</div>
-                <div className="paywall-cta-title">{lockedCount} more recipes locked</div>
-                <div className="paywall-cta-sub">Upgrade to Premium to unlock all {RECIPES.length} recipes including lunches, dinners, and seasonal specials.</div>
-                <button className="btn btn-p btn-full" onClick={()=>onUpgrade("recipes")}>⭐ Unlock all recipes</button>
-              </div>
-            </div>
-          )}
-        </div>
-      )}
-      {!isPremium&&saved.size>=FREE_SAVE_LIMIT&&<div style={{background:"var(--goldBg)",border:"1px solid rgba(201,149,58,.3)",borderRadius:10,padding:"12px 16px",marginTop:16,display:"flex",alignItems:"center",gap:10}}>
-        <span style={{fontSize:20}}>❤️</span>
-        <div style={{flex:1}}><div style={{fontWeight:600,fontSize:14}}>You've saved {saved.size} recipes (free limit)</div><div style={{fontSize:12,color:"var(--mu)"}}>Upgrade to save unlimited recipes to your personal cookbook.</div></div>
-        <button className="btn btn-p btn-sm" onClick={()=>onUpgrade("save")}>Upgrade</button>
-      </div>}
-      <div className="sep"/>
-      <div>
-        <div style={{display:"flex",alignItems:"baseline",gap:10,marginBottom:4}}>
-          <h2 className="stitle">Suggested items to buy</h2>
-          <span style={{fontSize:14,color:"var(--mu)"}}>— unlock more recipes</span>
-        </div>
-        <p className="ssub">Based on your pantry and cuisines, these ingredients open the most new recipes.</p>
-        <div className="bgrid">
-          {BOOSTERS.map(b=><div key={b.name} className="bcard"><div className="bing"><span style={{fontSize:20}}>{b.emoji}</span>{b.name}</div><div className="bwhy">{b.why}</div><div className="bul">Unlocks</div><div className="brec">{b.unlocks.join(" · ")}</div><button className="btn btn-sm btn-cs btn-full" onClick={()=>addToList([b.name])}><Ic n="cart" s={14}/>Add to shopping list</button></div>)}
-        </div>
-      </div>
-      {showRandom&&<RandomModal onClose={()=>setShowRandom(false)} onView={r=>{setShowRandom(false);onViewRecipe(r);}} addToList={addToList}/>}
-    </>}
-    </div>
-  );
-}
-
-
-// ══════════════════════════════════════════════════════════════════════
-// ADD TO WEEK MODAL — Pick day + meal slot to add a recipe to planner
-// ══════════════════════════════════════════════════════════════════════
-function AddToWeekModal({ recipe, mealPlan, setMealPlan, onClose, showToast }) {
-  const DAYS = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
-  const MEALS = [
-    { label:"Breakfast", emoji:"☀️", idx:0 },
-    { label:"Lunch",     emoji:"🌤️", idx:1 },
-    { label:"Dinner",    emoji:"🌙", idx:2 },
-  ];
-  const [confirmSlot, setConfirmSlot] = useState(null); // {dayIdx,mealIdx,existing}
-
-  const handleSlotClick = (dayIdx, mealIdx) => {
-    const existing = mealPlan[dayIdx]?.meals[mealIdx];
-    if (existing) {
-      setConfirmSlot({ dayIdx, mealIdx, existing });
-    } else {
-      applyToSlot(dayIdx, mealIdx);
-    }
-  };
-
-  const applyToSlot = (dayIdx, mealIdx) => {
-    setMealPlan(prev => {
-      const next = prev.map(d => ({ ...d, meals: [...d.meals] }));
-      next[dayIdx].meals[mealIdx] = { kind:"recipe", emoji: recipe.emoji, name: recipe.title, id: recipe.id };
-      return next;
-    });
-    if (showToast) showToast(`✅ ${recipe.emoji} ${recipe.title} added to ${DAYS[dayIdx]} ${MEALS[mealIdx].label}`);
-    onClose();
-  };
-
-  return (
-    <div className="modal-overlay" onClick={e=>e.target===e.currentTarget&&onClose()}>
-      <div className="modal-box" onClick={e=>e.stopPropagation()} style={{maxWidth:600,width:"95vw"}}>
-        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:16}}>
-          <div>
-            <div style={{fontWeight:700,fontSize:15}}>📅 Add to Week</div>
-            <div style={{fontSize:12,color:"var(--mu)",marginTop:2}}>{recipe.emoji} {recipe.title} — pick a slot</div>
-          </div>
-          <button className="btn btn-xs btn-g" onClick={onClose}>✕</button>
-        </div>
-        {/* Confirm replace prompt */}
-        {confirmSlot && (
-          <div style={{marginBottom:14,padding:"12px 14px",background:"rgba(201,149,58,.08)",border:"1px solid rgba(201,149,58,.3)",borderRadius:8}}>
-            <div style={{fontSize:13,fontWeight:600,marginBottom:8}}>
-              🔄 Replace "{confirmSlot.existing?.name || confirmSlot.existing?.title}" with "{recipe.title}"?
-            </div>
-            <div style={{display:"flex",gap:8}}>
-              <button className="btn btn-p btn-sm" onClick={()=>{applyToSlot(confirmSlot.dayIdx,confirmSlot.mealIdx);setConfirmSlot(null);}}>Replace</button>
-              <button className="btn btn-s btn-sm" onClick={()=>setConfirmSlot(null)}>Cancel</button>
-            </div>
-          </div>
-        )}
-        <div className="atw-scroll">
-          <div className="atw-grid">
-            {/* Header row */}
-            <div/>
-            {DAYS.map(d=><div key={d} className="atw-day-hdr">{d}</div>)}
-            {/* Meal rows */}
-            {MEALS.map(meal=>(
-              <React.Fragment key={meal.idx}>
-                <div className="atw-row-lbl">{meal.emoji} {meal.label}</div>
-                {mealPlan.map((day, dayIdx) => {
-                  const slot = day.meals[meal.idx];
-                  const isOccupied = !!slot;
-                  return (
-                    <div
-                      key={dayIdx}
-                      className={`atw-slot ${isOccupied ? "occupied" : "empty-slot"}`}
-                      onClick={()=>handleSlotClick(dayIdx, meal.idx)}
-                    >
-                      {isOccupied ? (
-                        <>
-                          <div className="atw-slot-em">{slot.emoji||"📝"}</div>
-                          <div className="atw-slot-nm">{slot.name||slot.title}</div>
-                        </>
-                      ) : (
-                        <div style={{fontSize:18,color:"var(--bor)"}}>+</div>
-                      )}
-                    </div>
-                  );
-                })}
-              </React.Fragment>
-            ))}
-          </div>
-        </div>
-        <div style={{marginTop:12,fontSize:11,color:"var(--mu)"}}>
-          Green slots are already filled — click to replace. White slots are empty.
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// ══════════════════════════════════════════════════════════════════════
-// PLAN LIBRARY TAB — Pre-made weekly menus from SmartChef
-// ══════════════════════════════════════════════════════════════════════
-const PLAN_LIBRARY = [
-  {
-    id:"quick-week",
-    emoji:"⚡",
-    name:"30-Min Meals Week",
-    desc:"Every meal under 30 minutes — zero stress, full flavour",
-    filter: r => r.time <= 30,
-    color:"rgba(201,149,58,.08)",
-    border:"rgba(201,149,58,.3)",
-  },
-  {
-    id:"protein-week",
-    emoji:"💪",
-    name:"High-Protein Week",
-    desc:"Lean proteins and muscle-building meals for an active week",
-    filter: r => r.contains_meat || r.contains_fish ||
-      (r.ingredients||[]).some(i=>['egg','chicken','tuna','salmon','tofu','lentil','chickpea'].some(p=>i.n.toLowerCase().includes(p))),
-    color:"rgba(192,106,62,.07)",
-    border:"rgba(192,106,62,.25)",
-  },
-  {
-    id:"veg-week",
-    emoji:"🌱",
-    name:"Vegetarian Week",
-    desc:"A full week of satisfying meat-free meals",
-    filter: r => r.dietary && r.dietary.includes("Vegetarian"),
-    color:"rgba(106,158,114,.08)",
-    border:"rgba(106,158,114,.3)",
-  },
-  {
-    id:"budget-week",
-    emoji:"💰",
-    name:"Budget Week",
-    desc:"Hearty meals with ≤6 ingredients, ready in under 35 minutes",
-    filter: r => (r.ingredients||[]).length <= 6 && r.time <= 35,
-    color:"rgba(106,158,114,.06)",
-    border:"rgba(106,158,114,.2)",
-  },
-  {
-    id:"med-week",
-    emoji:"🫒",
-    name:"Mediterranean Week",
-    desc:"Sun-kissed flavours from Italy, Greece, and beyond",
-    filter: r => ["Mediterranean","Italian","Greek","Turkish","Spanish","Lebanese","Moroccan"].includes(r.cuisine),
-    color:"rgba(100,140,200,.07)",
-    border:"rgba(100,140,200,.25)",
-  },
-  {
-    id:"comfort-week",
-    emoji:"🍲",
-    name:"Comfort Food Week",
-    desc:"Warm, hearty meals for cozy evenings",
-    filter: r => r.time >= 30 && !r.dietary?.includes("Vegan"),
-    color:"rgba(180,100,80,.07)",
-    border:"rgba(180,100,80,.22)",
-  },
-];
-
-function buildWeekFromFilter(filterFn, allRecipes, prefs) {
-  // Build a 7-day plan using recipes matching the filter
-  // One breakfast, lunch, dinner per day, no repeats
-  const wantHealthy = (prefs?.dietary || []).includes('Healthy');
-  const allowed = (allRecipes || RECIPES).filter(r => filterFn(r));
-  // Sort by health score when Healthy preference is active
-  const sortPool = (pool) => {
-    if (!wantHealthy) return pool;
-    return [...pool].sort((a,b) => getHealthScore(b) - getHealthScore(a));
-  };
-  const breakfasts = sortPool(allowed.filter(r => getMealType(r) === "breakfast"));
-  const lunches    = sortPool(allowed.filter(r => getMealType(r) === "lunch"));
-  const dinners    = sortPool(allowed.filter(r => getMealType(r) === "dinner"));
-  const pick = (pool, i) => pool[i % Math.max(pool.length, 1)];
-  const DAYS = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
-  return DAYS.map((day, i) => ({
-    day,
-    meals: [
-      breakfasts[i % Math.max(breakfasts.length,1)] ? { kind:"recipe", emoji:pick(breakfasts,i).emoji, name:pick(breakfasts,i).title, id:pick(breakfasts,i).id } : null,
-      lunches[i % Math.max(lunches.length,1)]       ? { kind:"recipe", emoji:pick(lunches,i).emoji,    name:pick(lunches,i).title,    id:pick(lunches,i).id }    : null,
-      dinners[i % Math.max(dinners.length,1)]       ? { kind:"recipe", emoji:pick(dinners,i).emoji,    name:pick(dinners,i).title,    id:pick(dinners,i).id }    : null,
-    ],
-  }));
-}
-
-class PlanLibraryErrorBoundary extends React.Component {
-  constructor(props) { super(props); this.state = { hasError: false, error: null }; }
-  static getDerivedStateFromError(e) { return { hasError: true, error: e }; }
-  componentDidCatch(e, info) { console.error('[SmartChef] PlanLibrary crash:', e, info); }
-  componentDidUpdate(pp) { if (pp.resetKey !== this.props.resetKey) this.setState({ hasError: false, error: null }); }
-  render() {
-    if (this.state.hasError) {
-      return (
-        <div style={{padding:24,textAlign:'center'}}>
-          <div style={{fontSize:32,marginBottom:12}}>📋</div>
-          <div style={{fontWeight:600,fontSize:15,color:'var(--ch)',marginBottom:6}}>Something went wrong in Plan Library</div>
-          <div style={{fontSize:12,color:'var(--mu)',marginBottom:16}}>{String(this.state.error)}</div>
-          <button className="btn btn-p btn-sm" onClick={()=>this.setState({hasError:false,error:null})}>Try again</button>
-        </div>
-      );
-    }
-    return this.props.children;
-  }
-}
-
-function PlanLibraryTab({ allRecipes, mealPlan, setMealPlan, pantry, showToast, onViewRecipe, user, prefs,
-  libraryPreview: preview, setLibraryPreview: setPreview,
-  libraryDraft: draftPlan, setLibraryDraft: setDraftPlan,
-  libraryDraftTitle: draftTitle, setLibraryDraftTitle: setDraftTitle,
-  libraryShowCreate: showCreatePlan, setLibraryShowCreate: setShowCreatePlan,
-}) {
-  const [showCopySafety, setShowCopySafety] = useState(null); // { plan }
-  const [showShoppingList, setShowShoppingList] = useState(null); // { plan, entry }
-  const [previewSlotPicker, setPreviewSlotPicker] = useState(null); // {dayIdx, mealIdx, mealType}
-  const [renamingId, setRenamingId] = useState(null); // sp.id being renamed
-  const [renameInput, setRenameInput] = useState('');
-  const [savedPlans, setSavedPlans] = useState(() => {
-    if (!user?.id) return [];
-    try { return JSON.parse(localStorage.getItem(`sc_${user.id}_savedPlans`) || '[]'); } catch { return []; }
-  });
-  const recipePool = allRecipes || RECIPES;
-  const pantrySet = React.useMemo(() => buildPantrySet(pantry || []), [pantry]);
-  // Sync draftTitle when draftPlan changes — MUST be here (top-level, before all early returns)
-  React.useEffect(() => { if (draftPlan) setDraftTitle(draftPlan.title || ''); }, [draftPlan?.title]); // eslint-disable-line
-
-  const saveMyPlan = (plan, title) => {
-    const entry = { id: Date.now(), title: title || 'My Plan', emoji: '📋', plan, createdAt: new Date().toISOString() };
-    const updated = [entry, ...savedPlans];
-    setSavedPlans(updated);
-    if (user?.id) localStorage.setItem(`sc_${user.id}_savedPlans`, JSON.stringify(updated));
-    showToast?.('💾 Plan saved to My Plans!');
-  };
-  const deleteMyPlan = (id) => {
-    const updated = savedPlans.filter(p => p.id !== id);
-    setSavedPlans(updated);
-    if (user?.id) localStorage.setItem(`sc_${user.id}_savedPlans`, JSON.stringify(updated));
-    showToast?.('🗑 Plan removed');
-  };
-  const renameMyPlan = (id, newTitle) => {
-    const trimmed = newTitle.trim();
-    if (!trimmed) return;
-    const updated = savedPlans.map(p => p.id === id ? {...p, title: trimmed} : p);
-    setSavedPlans(updated);
-    if (user?.id) localStorage.setItem(`sc_${user.id}_savedPlans`, JSON.stringify(updated));
-    setRenamingId(null);
-    showToast?.('✏️ Plan renamed');
-  };
-  const duplicateMyPlan = (sp) => {
-    const entry = { id: Date.now(), title: `Copy of ${sp.title}`, emoji: sp.emoji || '📋', plan: sp.plan, createdAt: new Date().toISOString() };
-    const updated = [entry, ...savedPlans];
-    setSavedPlans(updated);
-    if (user?.id) localStorage.setItem(`sc_${user.id}_savedPlans`, JSON.stringify(updated));
-    showToast?.('📋 Plan duplicated');
-  };
-
-  const getPlanStats = (plan) => {
-    const meals = plan.flatMap(d => d.meals).filter(Boolean);
-    const allIngs = new Set();
-    const missingIngs = new Set();
-    meals.forEach(m => {
-      const r = recipePool.find(x => x.id === m.id);
-      if (!r?.ingredients) return;
-      r.ingredients.forEach(i => {
-        allIngs.add(i.n);
-        if (!ingInPantry(i.n, pantrySet)) missingIngs.add(i.n);
-      });
-    });
-    const pp = allIngs.size > 0 ? Math.round(((allIngs.size - missingIngs.size) / allIngs.size) * 100) : 0;
-    return { mealCount: meals.length, missingCount: missingIngs.size, pp };
-  };
-
-  // ── Shopping List Modal ─────────────────────────────────────────────────────
-  const ShoppingListModal = ({ plan, entry, onClose }) => {
-    const ps = buildPantrySet(pantry || []);
-    const ingMap = {};
-
-    // Helper: parse a quantity string into { value: number, unit: string }
-    const parseQty = (amt) => {
-      if (!amt) return null;
-      const s = String(amt).trim();
-      // e.g. "400g", "1.5 kg", "2 tbsp", "3", "1/2 cup"
-      const m = s.match(/^([\d./\s]+)\s*([a-zA-Z]*)/);
-      if (!m) return null;
-      let num = m[1].trim();
-      // Handle fractions like "1/2"
-      if (num.includes('/')) {
-        const [a,b] = num.split('/');
-        num = parseFloat(a) / parseFloat(b);
-      } else {
-        num = parseFloat(num);
-      }
-      const unit = m[2].toLowerCase().trim();
-      return isNaN(num) ? null : { value: num, unit };
-    };
-
-    plan.flatMap(d => d.meals).filter(Boolean).forEach(m => {
-      const r = recipePool.find(x => x.id === m.id);
-      if (!r?.ingredients) return;
-      r.ingredients.forEach(i => {
-        if (!ingInPantry(i.n, ps)) {
-          const key = normalizeIng(i.n);
-          if (!ingMap[key]) ingMap[key] = { name: i.n, amounts: [], recipes: [] };
-          if (i.amount) ingMap[key].amounts.push(i.amount);
-          if (!ingMap[key].recipes.includes(m.name)) ingMap[key].recipes.push(m.name);
-        }
-      });
-    });
-
-    // Aggregate quantities: sum same unit, list different units separately
-    const aggregateAmounts = (amounts) => {
-      if (!amounts.length) return '';
-      const byUnit = {};
-      let raw = [];
-      amounts.forEach(a => {
-        const q = parseQty(a);
-        if (q) {
-          byUnit[q.unit || '_'] = (byUnit[q.unit || '_'] || 0) + q.value;
-        } else {
-          raw.push(a);
-        }
-      });
-      const parts = [];
-      Object.entries(byUnit).forEach(([unit, val]) => {
-        const rounded = Math.round(val * 100) / 100;
-        parts.push(unit && unit !== '_' ? `${rounded} ${unit}` : String(rounded));
-      });
-      return [...parts, ...raw].join(' + ');
-    };
-
-    const items = Object.values(ingMap).map(i => ({...i, totalAmount: aggregateAmounts(i.amounts)}));
-
-    const exportCSV = () => {
-      const rows = [['Ingredient','Total Amount','Used In'],...items.map(i=>[i.name,i.totalAmount,i.recipes.join('; ')])];
-      const csv = rows.map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
-      const blob = new Blob([csv],{type:'text/csv'});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href=url; a.download=`${(entry?.name||'plan').replace(/\s+/g,'-').toLowerCase()}-shopping-list.csv`;
-      document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
-    };
-    return (
-      <div className="modal-overlay" onClick={onClose}>
-        <div className="modal-box" onClick={e=>e.stopPropagation()} style={{maxWidth:480,maxHeight:'85vh',display:'flex',flexDirection:'column'}}>
-          <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:16}}>
-            <div style={{fontWeight:700,fontSize:15}}>🛒 Shopping List{entry?' — '+entry.name:''}</div>
-            <button className="btn btn-xs btn-g" onClick={onClose}>✕</button>
-          </div>
-          {items.length === 0
-            ? <div style={{textAlign:'center',padding:'32px 0',color:'var(--sageH)',fontWeight:600}}>✅ Everything is in your pantry!</div>
-            : <div style={{overflowY:'auto',flex:1,marginBottom:12}}>
-                {items.map(i=>(
-                  <div key={i.name} style={{display:'flex',alignItems:'flex-start',justifyContent:'space-between',padding:'8px 0',borderBottom:'1px solid var(--bor)',gap:8}}>
-                    <div style={{flex:1,minWidth:0}}>
-                      <div style={{fontWeight:600,fontSize:13}}>{i.name}</div>
-                      <div style={{fontSize:11,color:'var(--mu)'}}>Used in: {i.recipes.join(', ')}</div>
-                    </div>
-                    {i.totalAmount && <span style={{fontSize:12,color:'var(--ch)',fontWeight:600,whiteSpace:'nowrap',marginLeft:4,background:'rgba(0,0,0,.04)',padding:'2px 6px',borderRadius:4}}>{i.totalAmount}</span>}
-                  </div>
-                ))}
-              </div>
-          }
-          <div style={{display:'flex',gap:8,flexWrap:'wrap',marginTop:4}}>
-            <button className="btn btn-p btn-sm" onClick={exportCSV} disabled={items.length===0}>📥 Export CSV</button>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  // ── Copy Safety Modal ───────────────────────────────────────────────────────
-  const CopySafetyModal = ({ plan, onClose }) => {
-    const doReplace = () => { setMealPlan(plan); showToast?.("📅 Plan copied to your week!"); onClose(); setPreview(null); setPreviewSlotPicker(null); };
-    const doMerge  = () => {
-      setMealPlan(prev => prev.map((day, di) => ({
-        ...day,
-        meals: day.meals.map((m, mi) => m ? m : (plan[di]?.meals[mi] || null))
-      })));
-      showToast?.("📅 Plan merged into empty slots!");
-      onClose(); setPreview(null);
-    };
-    return (
-      <div className="modal-overlay" onClick={onClose}>
-        <div className="modal-box" onClick={e=>e.stopPropagation()} style={{maxWidth:400}}>
-          <div style={{fontWeight:700,fontSize:15,marginBottom:8}}>Copy plan to your week</div>
-          <p style={{fontSize:13,color:'var(--mu)',marginBottom:18,lineHeight:1.5}}>Your planner already has some meals. How would you like to copy?</p>
-          <div style={{display:'flex',flexDirection:'column',gap:10}}>
-            <button style={{textAlign:'left',padding:'12px 14px',borderRadius:'var(--r)',border:'1px solid var(--bor)',background:'var(--white)',cursor:'pointer'}} onClick={doMerge}>
-              <div style={{fontWeight:600,fontSize:13,color:'var(--ch)'}}>📋 Fill empty slots only <span style={{fontSize:11,background:'var(--sageBg)',color:'var(--sageH)',padding:'1px 6px',borderRadius:3,marginLeft:6,fontWeight:700}}>Recommended</span></div>
-              <div style={{fontSize:11,color:'var(--mu)',marginTop:3}}>Keep your existing meals — add plan only to empty slots</div>
-            </button>
-            <button style={{textAlign:'left',padding:'12px 14px',borderRadius:'var(--r)',border:'1px solid rgba(192,106,62,.3)',background:'var(--clayBg)',cursor:'pointer'}} onClick={doReplace}>
-              <div style={{fontWeight:600,fontSize:13,color:'var(--ch)'}}>🔄 Replace all</div>
-              <div style={{fontSize:11,color:'var(--mu)',marginTop:3}}>Overwrite your entire week with this plan</div>
-            </button>
-            <button className="btn btn-g btn-sm" onClick={onClose} style={{alignSelf:'flex-start',marginTop:2}}>Cancel</button>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  // ── Shared plan grid renderer (must be defined BEFORE PlanCreatorView) ───────
-  const renderPlanGrid = (plan, onSlotSwap) => (
-    <div className="pwrap" style={{marginBottom:18}}>
-      <div style={{display:"grid",gridTemplateColumns:"60px repeat(7,1fr)",gap:6,minWidth:580}}>
-        <div/>
-        {plan.map(d=><div key={d.day} className="pdh">{d.day}</div>)}
-        {[["☀️","Breakfast",0],["🌤️","Lunch",1],["🌙","Dinner",2]].map(([icon,label,mi])=>[
-          <div key={label} style={{display:"flex",alignItems:"center",justifyContent:"flex-end",paddingRight:6}}>
-            <div className="prl" style={{fontSize:10,gap:3}}>{icon}<span style={{display:"none"}}>{label}</span></div>
-          </div>,
-          ...plan.map((day,dayIdx)=>{
-            const meal=day.meals[mi];
-            const mealType=label;
-            const recipeObj=meal?recipePool.find(r=>r.id===meal.id):null;
-            return (
-              <div
-                key={`${day.day}${label}`}
-                className={`mslot ${meal?"filled":""}`}
-                style={{cursor:meal&&recipeObj?"pointer":"default",position:"relative",minHeight:70}}
-                onClick={()=>meal&&recipeObj&&onViewRecipe(recipeObj)}
-                title={meal?`${meal.name} — click to view, ↔ to swap`:"Empty slot"}
-              >
-                {meal
-                  ? <div className="msi" style={{width:'100%'}}>
-                      <PlannerThumb recipe={recipeObj} mealName={meal.name} emoji={meal.emoji}/>
-                      {onSlotSwap && meal && <button
-                        style={{position:"absolute",top:3,right:3,fontSize:10,padding:"1px 5px",borderRadius:3,border:"1px solid var(--bor)",background:"rgba(255,255,255,.92)",cursor:"pointer",lineHeight:1.5,color:"var(--mu)",zIndex:5,fontWeight:600}}
-                        onClick={e=>{e.stopPropagation();onSlotSwap({dayIdx,mealIdx:mi,mealType});}}
-                        title="Replace this meal"
-                        aria-label="Replace meal"
-                      >↔</button>}
-                    </div>
-                  : <div className="msadd" style={{fontSize:16}}>+</div>
-                }
-              </div>
-            );
-          })
-        ])}
-      </div>
-    </div>
-  );
-
-  // ── Plan Creator View (full-page split layout: chat + plan preview) ───────────
-  const PlanCreatorView = ({ onClose, onDraft }) => {
-    const [chatMessages, setChatMessages] = React.useState([]); // {role:'user'|'bot', text, id}
-    const [chatInput, setChatInput] = React.useState('');
-    const [filters, setFilters] = React.useState({ cuisines:[], dietary:[], maxTime:120, dinnerThemes:[] });
-    const [creatorPlan, setCreatorPlan] = React.useState(null); // generated plan
-    const [isGenerating, setIsGenerating] = React.useState(false);
-    const [generateError, setGenerateError] = React.useState(null);
-    const [creatorSlotPicker, setCreatorSlotPicker] = React.useState(null);
-    const chatEndRef = React.useRef(null);
-
-    const CUISINES = ['Italian','Japanese','Mediterranean','Mexican','Indian','French','Greek','Thai','Chinese','Middle Eastern'];
-    const DIETARY_OPTS = [
-      {id:'Omnivore',icon:'🍖',label:'Omnivore',desc:'No restrictions'},
-      {id:'Pescatarian',icon:'🐟',label:'Pescatarian',desc:'Fish ok, no land meat'},
-      {id:'Vegetarian',icon:'🥦',label:'Vegetarian',desc:'No meat or fish'},
-      {id:'Vegan',icon:'🌱',label:'Vegan',desc:'No animal products'},
-      {id:'Kosher',icon:'🕎',label:'Kosher',desc:'Stackable'},
-      {id:'Healthy',icon:'💚',label:'Healthy',desc:'Less sugar/fried, more whole foods'},
-    ];
-
-    React.useEffect(() => { chatEndRef.current?.scrollIntoView({behavior:'smooth'}); }, [chatMessages]);
-
-    const addMsg = (role, text) => setChatMessages(p => [...p, {role, text, id: Date.now() + Math.random()}]);
-
-    // Multi-select dietary with conflict resolution
-    const toggleDiet = (id) => setFilters(f => {
-      const cur = f.dietary || [];
-      if (id === 'Omnivore') return {...f, dietary: []};
-      const isOn = cur.includes(id);
-      if (isOn) return {...f, dietary: cur.filter(x => x !== id)};
-      let next = [...cur, id];
-      if (id === 'Pescatarian') next = next.filter(x => x !== 'Vegetarian' && x !== 'Vegan');
-      if (id === 'Vegetarian')  next = next.filter(x => x !== 'Pescatarian' && x !== 'Vegan');
-      if (id === 'Vegan')       next = next.filter(x => x !== 'Pescatarian' && x !== 'Vegetarian');
-      return {...f, dietary: next};
-    });
-
-    // Parse natural language into filter updates
-    const parseMsg = (text) => {
-      const t = text.toLowerCase();
-      const updates = {};
-      // Dietary
-      const dietary = [];
-      if(/pescatarian|fish only/.test(t)) dietary.push('Pescatarian');
-      if(/\bvegan\b/.test(t)) dietary.push('Vegan');
-      else if(/vegetarian|veggie/.test(t)) dietary.push('Vegetarian');
-      if(/kosher/.test(t)) dietary.push('Kosher');
-      if(/\bhealthy\b|whole food|less sugar|less fried|light meals|clean eating|nutritious/.test(t)) dietary.push('Healthy');
-      if(dietary.length) updates.dietary = dietary;
-      // Time
-      const tm = t.match(/(\d+)\s*min/);
-      if(tm) updates.maxTime = Math.max(10, Math.min(120, parseInt(tm[1])));
-      // Cuisines
-      const CK = {mediterranean:'Mediterranean',italian:'Italian',japanese:'Japanese',mexican:'Mexican',indian:'Indian',french:'French',greek:'Greek',thai:'Thai',chinese:'Chinese','middle eastern':'Middle Eastern',moroccan:'Moroccan',spanish:'Spanish',turkish:'Turkish'};
-      const cuisines = Object.entries(CK).filter(([kw])=>t.includes(kw)).map(([,v])=>v);
-      if(cuisines.length) updates.cuisines = cuisines;
-      // Dinner themes
-      const DTHEMES = [
-        {kw:/\bfish\b|salmon|tuna|cod|halibut|white fish|seafood/,theme:'fish'},
-        {kw:/pasta|noodle|spaghetti|linguine|penne|fettuccine/,theme:'pasta'},
-        {kw:/soup|stew|ramen|chowder|bisque|broth/,theme:'soup'},
-        {kw:/quick|fast/,theme:'quick'},
-        {kw:/spicy|hot chili/,theme:'spicy'},
-      ];
-      const dinnerThemes = DTHEMES.filter(({kw})=>kw.test(t)).map(({theme})=>theme);
-      if(dinnerThemes.length) updates.dinnerThemes = dinnerThemes;
-      return updates;
-    };
-
-    // Core generation engine (dinner-theme aware)
-    const runGenerate = (currentFilters) => {
-      const f = currentFilters;
-      let pool = recipePool;
-      const syntheticPrefs = { dietary: f.dietary || [] };
-      pool = pool.filter(r => isRecipeAllowedForUser(r, syntheticPrefs));
-      if(f.cuisines?.length) pool = pool.filter(r => f.cuisines.includes(r.cuisine));
-      if(f.maxTime < 120) pool = pool.filter(r => r.time <= f.maxTime);
-      if(pool.length < 5) return null; // too few matches
-
-      const dinnerThemes = f.dinnerThemes || [];
-      const THEME_PATS = {
-        fish:  /fish|salmon|tuna|cod|halibut|seafood|tilapia|trout/i,
-        pasta: /pasta|noodle|spaghetti|linguine|penne|fettuccine|rigatoni/i,
-        soup:  /soup|stew|ramen|chowder|bisque|broth|chili|curry/i,
-        quick: /quick|fast/i,
-        spicy: /spicy|hot|chili|jalape/i,
-      };
-      const matchesTheme = (r) => dinnerThemes.length && dinnerThemes.some(th => {
-        const pat = THEME_PATS[th];
-        return pat && (pat.test(r.title) || (r.ingredients||[]).some(i=>pat.test(i.n)));
-      });
-
-      const wantHealthy = (f.dietary||[]).includes('Healthy');
-      // Sort pool by health score descending if Healthy is active (then shuffle within tiers)
-      const healthSort = (arr) => {
-        if (!wantHealthy) return [...arr].sort(()=>Math.random()-.5);
-        return [...arr].sort((a,b) => {
-          const diff = getHealthScore(b) - getHealthScore(a);
-          if (diff !== 0) return diff;
-          return Math.random() - 0.5; // shuffle within same score tier
-        });
-      };
-      const shuffle = arr => healthSort(arr);
-      const dinnerPool   = shuffle(pool.filter(r => getMealType(r) === 'dinner'));
-      const lunchPool    = shuffle(pool.filter(r => getMealType(r) === 'lunch'));
-      const bfastPool    = shuffle(pool.filter(r => getMealType(r) === 'breakfast'));
-      // Define fallback pools FIRST (dFallback must exist before orderedDinner uses it)
-      const bFallback = bfastPool.length >= 3 ? bfastPool : shuffle(pool.filter(r=>['breakfast','lunch'].includes(getMealType(r))).concat(pool)).slice(0,21);
-      const lFallback = lunchPool.length >= 3 ? lunchPool : shuffle(pool.filter(r=>['lunch','breakfast'].includes(getMealType(r))).concat(pool)).slice(0,21);
-      const dFallback = dinnerPool.length >= 3 ? dinnerPool : shuffle(pool.filter(r=>['dinner','lunch'].includes(getMealType(r))).concat(pool)).slice(0,21);
-      const dinnerThemed = dinnerPool.filter(matchesTheme);
-      const dinnerOther  = dinnerPool.filter(r => !matchesTheme(r));
-      const orderedDinner = dinnerThemes.length ? [...dinnerThemed, ...dinnerOther] : dFallback;
-
-      const usedIds = new Set();
-      const pick = arr => {
-        const r = arr.find(x => !usedIds.has(x.id)) || arr[0];
-        if(r) usedIds.add(r.id);
-        return r ? {emoji:r.emoji, name:r.title, id:r.id} : null;
-      };
-      const rawPlan = mealPlan.map(d => ({...d, meals:[pick(bFallback), pick(lFallback), pick(orderedDinner)]}));
-      // Verify plan has at least some meals (safety net)
-      const totalFilled = rawPlan.reduce((n, d) => n + d.meals.filter(Boolean).length, 0);
-      if (totalFilled === 0) return null;
-      return rawPlan;
-    };
-
-    const handleSend = () => {
-      const text = chatInput.trim();
-      if(!text) return;
-      setChatInput('');
-      addMsg('user', text);
-      setIsGenerating(true);
-      setGenerateError(null);
-      // Parse message and merge with existing filters
-      const updates = parseMsg(text);
-      const newFilters = {...filters, ...updates};
-      setFilters(newFilters);
-      setTimeout(() => {
-        let plan = null;
-        try {
-          plan = runGenerate(newFilters);
-        } catch(e) {
-          console.error('[SmartChef] Plan Creator runGenerate error:', e);
-          setGenerateError('Generation failed: ' + e.message);
-          setIsGenerating(false);
-          return;
-        }
-        if(!plan) {
-          addMsg('bot', '⚠️ Too few recipes match those filters. Try loosening the dietary or cuisine restrictions.');
-        } else {
-          setCreatorPlan(plan);
-          const parts = [];
-          if(updates.dietary?.length) parts.push(updates.dietary.join(' + '));
-          if(updates.cuisines?.length) parts.push(updates.cuisines.join(', '));
-          if(updates.dinnerThemes?.length) parts.push(`dinners: ${updates.dinnerThemes.join(', ')}`);
-          if(updates.maxTime) parts.push(`max ${updates.maxTime} min`);
-          const summary = parts.length ? `(${parts.join(' · ')})` : '';
-          addMsg('bot', `✨ Plan updated! ${summary} Tap a slot's ↔ button to swap any meal. When ready, hit Confirm.`);
-        }
-        setIsGenerating(false);
-      }, 300);
-    };
-
-    // Slot picker for creator plan
-    if(creatorSlotPicker) {
-      return (
-        <RecipePickerModal
-          mealType={creatorSlotPicker.mealType}
-          pantry={pantry}
-          allRecipes={allRecipes}
-          prefs={{}}
-          avoidedIngredients={[]}
-          onClose={()=>setCreatorSlotPicker(null)}
-          onSelect={r=>{
-            setCreatorPlan(prev=>{
-              const np = prev.map(d=>({...d,meals:[...d.meals]}));
-              np[creatorSlotPicker.dayIdx].meals[creatorSlotPicker.mealIdx] = {kind:'recipe',emoji:r.emoji,name:r.title,id:r.id};
-              return np;
-            });
-            setCreatorSlotPicker(null);
-          }}
-        />
-      );
-    }
-
-    return (
-      <div style={{display:'flex',flexDirection:'column',gap:0}}>
-        {/* Header */}
-        <div style={{display:'flex',alignItems:'center',gap:12,marginBottom:16,flexWrap:'wrap'}}>
-          <button className="btn btn-s btn-sm" onClick={onClose}>← Back to library</button>
-          <h2 style={{fontFamily:'var(--fd)',fontSize:18,flex:1,margin:0}}>✨ Plan Creator <span style={{fontSize:11,fontWeight:400,color:'var(--mu)',marginLeft:4}}>AI beta — rule-based</span></h2>
-          {creatorPlan && <>
-            <button className="btn btn-p btn-sm" onClick={()=>{
-              const dietLabel = (filters.dietary||[]).length ? filters.dietary.join('+') : 'Omnivore';
-              onDraft({plan:creatorPlan, title: chatMessages.find(m=>m.role==='user')?.text?.slice(0,40) || `AI Plan (${dietLabel})`});
-              onClose();
-            }}>💾 Confirm &amp; save draft</button>
-            <button className="btn btn-s btn-sm" onClick={()=>handleCopyRequest(creatorPlan)}>📋 Copy to week</button>
-          </>}
-        </div>
-
-        {/* Split layout */}
-        <div style={{display:'flex',gap:16,alignItems:'flex-start',flexWrap:'wrap'}}>
-          {/* Left: Chat panel */}
-          <div style={{width:300,minWidth:260,flexShrink:0,display:'flex',flexDirection:'column',gap:0}}>
-            {/* Filter chips */}
-            <div style={{background:'rgba(106,158,114,.06)',border:'1px solid rgba(106,158,114,.2)',borderRadius:'var(--r)',padding:12,marginBottom:10}}>
-              <div style={{fontSize:11,fontWeight:700,color:'var(--sageH)',marginBottom:8,textTransform:'uppercase',letterSpacing:.4}}>Filters</div>
-              {/* Dietary */}
-              <div style={{marginBottom:8}}>
-                <div style={{fontSize:11,color:'var(--mu)',marginBottom:4}}>Diet (Kosher stacks)</div>
-                <div style={{display:'flex',flexWrap:'wrap',gap:4}}>
-                  {DIETARY_OPTS.map(o=>{
-                    const isActive = o.id==='Omnivore' ? (filters.dietary||[]).length===0 : (filters.dietary||[]).includes(o.id);
-                    return <button key={o.id} title={o.desc}
-                      style={{padding:'3px 8px',borderRadius:4,border:`1px solid ${isActive?'var(--clay)':'var(--bor)'}`,background:isActive?'var(--clayBg)':'var(--white)',cursor:'pointer',fontSize:11,fontWeight:isActive?700:400,color:isActive?'var(--clay)':'var(--ch)'}}
-                      onClick={()=>toggleDiet(o.id)}>{o.icon} {o.label}</button>;
-                  })}
-                </div>
-              </div>
-              {/* Cuisines */}
-              <div style={{marginBottom:8}}>
-                <div style={{fontSize:11,color:'var(--mu)',marginBottom:4}}>Cuisines</div>
-                <div style={{display:'flex',flexWrap:'wrap',gap:3}}>
-                  {CUISINES.map(c=><button key={c}
-                    style={{padding:'2px 7px',borderRadius:4,border:`1px solid ${filters.cuisines?.includes(c)?'var(--clay)':'var(--bor)'}`,background:filters.cuisines?.includes(c)?'var(--clayBg)':'var(--white)',cursor:'pointer',fontSize:10,color:filters.cuisines?.includes(c)?'var(--clay)':'var(--ch)'}}
-                    onClick={()=>setFilters(f=>({...f,cuisines:f.cuisines?.includes(c)?f.cuisines.filter(x=>x!==c):[...(f.cuisines||[]),c]}))}>
-                    {c}
-                  </button>)}
-                </div>
-              </div>
-              {/* Max time */}
-              <div>
-                <div style={{fontSize:11,color:'var(--mu)',marginBottom:3}}>Max cook time: <b>{filters.maxTime} min</b></div>
-                <input type="range" min={15} max={120} step={5} value={filters.maxTime}
-                  onChange={e=>setFilters(f=>({...f,maxTime:+e.target.value}))}
-                  style={{width:'100%',accentColor:'var(--clay)'}}/>
-              </div>
-              {filters.dinnerThemes?.length>0 && <div style={{marginTop:6,fontSize:11,color:'var(--sageH)'}}>🎯 Dinner themes: {filters.dinnerThemes.join(', ')}</div>}
-            </div>
-
-            {/* Chat history */}
-            <div style={{flex:1,minHeight:200,maxHeight:340,overflowY:'auto',display:'flex',flexDirection:'column',gap:8,marginBottom:8,padding:4}}>
-              {chatMessages.length===0 && <div style={{color:'var(--mu)',fontSize:12,textAlign:'center',padding:16,lineHeight:1.6}}>
-                Describe what you want:<br/>
-                <span style={{opacity:.8}}>"Fish, pasta and soups for dinner"</span><br/>
-                <span style={{opacity:.8}}>"Vegetarian Mediterranean, 30 min"</span><br/>
-                <span style={{opacity:.8}}>"More quick meals this week"</span>
-              </div>}
-              {chatMessages.map(m=>(
-                <div key={m.id} style={{
-                  alignSelf: m.role==='user' ? 'flex-end' : 'flex-start',
-                  background: m.role==='user' ? 'var(--clay)' : 'var(--cream)',
-                  color: m.role==='user' ? '#fff' : 'var(--ch)',
-                  border: m.role==='bot' ? '1px solid var(--bor)' : 'none',
-                  borderRadius: m.role==='user' ? '12px 12px 2px 12px' : '12px 12px 12px 2px',
-                  padding:'8px 12px', maxWidth:'85%', fontSize:12, lineHeight:1.5,
-                }}>
-                  {m.text}
-                </div>
-              ))}
-              {isGenerating && <div style={{alignSelf:'flex-start',background:'var(--cream)',border:'1px solid var(--bor)',borderRadius:'12px 12px 12px 2px',padding:'8px 12px',fontSize:12,color:'var(--mu)'}}>✨ Generating...</div>}
-              <div ref={chatEndRef}/>
-            </div>
-
-            {/* Input */}
-            <div style={{display:'flex',gap:6}}>
-              <input
-                style={{flex:1,padding:'8px 10px',borderRadius:8,border:'1px solid var(--bor)',fontSize:12,fontFamily:'inherit',outline:'none'}}
-                placeholder="Describe changes or diet…"
-                value={chatInput}
-                onChange={e=>setChatInput(e.target.value)}
-                onKeyDown={e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();handleSend();}}}
-              />
-              <button className="btn btn-p btn-sm" onClick={handleSend} disabled={!chatInput.trim()||isGenerating}>
-                {isGenerating?'…':'Send'}
-              </button>
-            </div>
-            {!creatorPlan && <button className="btn btn-s btn-sm" style={{marginTop:6}} onClick={()=>{
-              setIsGenerating(true);
-              setGenerateError(null);
-              setTimeout(()=>{
-                let _gp = null;
-                try { _gp = runGenerate(filters); } catch(e) {
-                  console.error('[SmartChef] Plan Creator error:', e);
-                  setGenerateError('Couldn\'t generate — ' + e.message);
-                  setIsGenerating(false);
-                  return;
-                }
-                if(_gp){setCreatorPlan(_gp);addMsg('bot','✨ Here\'s your plan! Chat to refine, or hit Confirm.');}
-                else{addMsg('bot','⚠️ Too few matches — adjust filters above.');}
-                setIsGenerating(false);
-              },300);
-            }}>✨ Generate plan</button>}
-            {generateError && (
-              <div style={{marginTop:6,padding:'8px 10px',background:'rgba(224,92,92,.1)',border:'1px solid rgba(224,92,92,.3)',borderRadius:6,fontSize:11,color:'#c04040'}}>
-                ⚠️ {generateError}
-                <button style={{marginLeft:8,fontSize:11,color:'var(--clay)',background:'none',border:'none',cursor:'pointer',fontWeight:600}} onClick={()=>setGenerateError(null)}>Dismiss</button>
-              </div>
-            )}
-          </div>
-
-          {/* Right: Plan grid or placeholder */}
-          <div style={{flex:1,minWidth:300}}>
-            {!creatorPlan
-              ? <div style={{border:`2px dashed ${generateError?'rgba(224,92,92,.4)':'var(--bor)'}`,borderRadius:'var(--r)',padding:40,textAlign:'center',color:'var(--mu)',fontSize:14}}>
-                  <div style={{fontSize:40,marginBottom:12}}>{generateError?'⚠️':'✨'}</div>
-                  <div style={{fontWeight:600,marginBottom:6}}>{generateError?'Generation failed':'Your plan will appear here'}</div>
-                  <div style={{fontSize:12}}>{generateError?generateError:'Type in the chat or click "Generate plan"'}</div>
-                  {generateError&&<button className="btn btn-s btn-sm" style={{marginTop:12}} onClick={()=>{setGenerateError(null);}}>Try again</button>}
-                </div>
-              : <>
-                  {renderPlanGrid(creatorPlan, ({dayIdx,mealIdx,mealType})=>setCreatorSlotPicker({dayIdx,mealIdx,mealType}))}
-                  <div style={{display:'flex',gap:8,flexWrap:'wrap',marginTop:4}}>
-                    <button className="btn btn-s btn-sm" onClick={()=>setShowShoppingList({plan:creatorPlan,entry:{name:'AI Plan',emoji:'✨'}})}>🛒 Shopping list</button>
-                  </div>
-                </>
-            }
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  // (CreatePlanModal kept as alias for backward compat)
-  const CreatePlanModal = PlanCreatorView
-
-  // ── Copy request handler ────────────────────────────────────────────────────
-  const handleCopyRequest = (plan) => {
-    const hasExisting = mealPlan.some(d => d.meals.some(Boolean));
-    if (hasExisting) {
-      setShowCopySafety({ plan });
-    } else {
-      setMealPlan(plan);
-      showToast?.("📅 Plan copied to your week! Check the Planner tab.");
-      setPreview(null);
-    }
-  };
-
-  // ── Plan Creator view (full-page, replaces library list) ───────────────────
-  if (showCreatePlan) {
-    return (
-      <div>
-        {showShoppingList && <ShoppingListModal plan={showShoppingList.plan} entry={showShoppingList.entry} onClose={()=>setShowShoppingList(null)}/>}
-        {showCopySafety && <CopySafetyModal plan={showCopySafety.plan} onClose={()=>setShowCopySafety(null)}/>}
-        <PlanCreatorView
-          onClose={()=>setShowCreatePlan(false)}
-          onDraft={(d)=>{setDraftPlan(d);setShowCreatePlan(false);}}
-        />
-      </div>
-    );
-  }
-
-  // ── Preview slot picker (replace recipe in preview) ────────────────────────
-  if (previewSlotPicker && (preview || draftPlan)) {
-    return (
-      <RecipePickerModal
-        mealType={previewSlotPicker.mealType}
-        pantry={pantry}
-        allRecipes={allRecipes}
-        prefs={prefs || {}}
-        avoidedIngredients={[]}
-        onClose={()=>setPreviewSlotPicker(null)}
-        onSelect={r=>{
-          if (!r || !r.id) { showToast?.('⚠️ Recipe not found — try another.'); setPreviewSlotPicker(null); return; }
-          const slot = {kind:"recipe",emoji:r.emoji||'🍽️',name:r.title||'Meal',id:r.id};
-          if (previewSlotPicker.isDraft && draftPlan) {
-            setDraftPlan(prev=>{
-              if (!prev?.plan) return prev;
-              const newPlan = prev.plan.map(d=>({...d,meals:[...d.meals]}));
-              if (newPlan[previewSlotPicker.dayIdx]) {
-                newPlan[previewSlotPicker.dayIdx].meals[previewSlotPicker.mealIdx] = slot;
-              }
-              return {...prev, plan:newPlan};
-            });
-          } else {
-            setPreview(prev=>{
-              if (!prev?.plan) return prev;
-              const newPlan = prev.plan.map(d=>({...d,meals:[...d.meals]}));
-              if (newPlan[previewSlotPicker.dayIdx]) {
-                newPlan[previewSlotPicker.dayIdx].meals[previewSlotPicker.mealIdx] = slot;
-              }
-              return {...prev, plan:newPlan};
-            });
-          }
-          setPreviewSlotPicker(null);
-          showToast?.('↔ Meal replaced!');
-        }}
-      />
-    );
-  }
-
-
-
-  // ── Draft plan view (AI-generated or blank, pending save/copy) ───────────────
-  if (draftPlan) {
-    const { plan } = draftPlan;
-    if (!plan || !Array.isArray(plan) || plan.length === 0) {
-      // Invalid draft — silently clear it
-      setDraftPlan(null);
-      return null;
-    }
-    const stats = getPlanStats(plan);
-    const draftEntry = { name: draftTitle, emoji: '✨' };
-    return (
-      <div>
-        {showShoppingList && <ShoppingListModal plan={plan} entry={draftEntry} onClose={()=>setShowShoppingList(null)}/>}
-        {showCopySafety && <CopySafetyModal plan={showCopySafety.plan} onClose={()=>setShowCopySafety(null)}/>}
-        <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:16,flexWrap:"wrap"}}>
-          <button className="btn btn-s btn-sm" onClick={()=>{setDraftPlan(null);setPreviewSlotPicker(null);}}>← Back to library</button>
-          <div style={{flex:1,minWidth:0,display:'flex',alignItems:'center',gap:8}}>
-            <span style={{fontSize:18,fontFamily:"var(--fd)"}}>✨</span>
-            <input
-              value={draftTitle}
-              onChange={e=>setDraftTitle(e.target.value)}
-              style={{flex:1,fontSize:17,fontWeight:700,fontFamily:"var(--fd)",border:'none',outline:'none',background:'transparent',color:'var(--ch)'}}
-              placeholder="Plan name…"
-            />
-          </div>
-          <span style={{fontSize:11,background:'rgba(192,106,62,.12)',color:'var(--clay)',padding:'3px 8px',borderRadius:4,fontWeight:700}}>DRAFT</span>
-        </div>
-        <div style={{display:"flex",gap:12,marginBottom:14,flexWrap:"wrap",alignItems:"center"}}>
-          <span style={{fontSize:13,color:"var(--sageH)",fontWeight:600}}>✅ {stats.pp}% pantry match</span>
-          <span style={{fontSize:13,color:"var(--mu)"}}>{stats.missingCount} to buy</span>
-          <span style={{fontSize:13,color:"var(--mu)"}}>{stats.mealCount} meals</span>
-          <span style={{fontSize:12,color:"var(--mu)",marginLeft:"auto"}}>Click meal to view · ↔ to swap</span>
-        </div>
-        {renderPlanGrid(plan, ({dayIdx,mealIdx,mealType})=>setPreviewSlotPicker({dayIdx,mealIdx,mealType,isDraft:true}))}
-        <div style={{display:"flex",gap:10,flexWrap:"wrap",marginTop:4}}>
-          <button className="btn btn-p" onClick={()=>{saveMyPlan(plan,draftTitle);setDraftPlan(null);}}>💾 Save to My Plans</button>
-          <button className="btn btn-s" onClick={()=>handleCopyRequest(plan)}>📋 Copy to my week</button>
-          <button className="btn btn-s" onClick={()=>setShowShoppingList({plan,entry:draftEntry})}>🛒 Shopping list</button>
-          <button className="btn btn-g btn-sm" style={{marginLeft:'auto'}} onClick={()=>{setDraftPlan(null);setShowCreatePlan(true);}}>🔄 Regenerate in Creator</button>
-        </div>
-      </div>
-    );
-  }
-
-  // ── Preview view (library plan) ──────────────────────────────────────────────
-  if (preview) {
-    const { plan, entry } = preview;
-    const stats = getPlanStats(plan);
-    return (
-      <div>
-        {showShoppingList && <ShoppingListModal plan={plan} entry={entry} onClose={()=>setShowShoppingList(null)}/>}
-        {showCopySafety && <CopySafetyModal plan={showCopySafety.plan} onClose={()=>setShowCopySafety(null)}/>}
-        <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:16,flexWrap:"wrap"}}>
-          <button className="btn btn-s btn-sm" onClick={()=>{setPreview(null);setPreviewSlotPicker(null);}}>← Back to library</button>
-          <h2 style={{fontFamily:"var(--fd)",fontSize:20,flex:1,minWidth:0}}>{entry.emoji} {entry.name}</h2>
-        </div>
-        <div style={{display:"flex",gap:12,marginBottom:14,flexWrap:"wrap",alignItems:"center"}}>
-          <span style={{fontSize:13,color:"var(--sageH)",fontWeight:600}}>✅ {stats.pp}% pantry match</span>
-          <span style={{fontSize:13,color:"var(--mu)"}}>{stats.missingCount} to buy</span>
-          <span style={{fontSize:13,color:"var(--mu)"}}>{stats.mealCount} meals</span>
-          <span style={{fontSize:12,color:"var(--mu)",marginLeft:"auto"}}>Click meal to view · ↔ to swap</span>
-        </div>
-        {renderPlanGrid(plan, ({dayIdx,mealIdx,mealType})=>setPreviewSlotPicker({dayIdx,mealIdx,mealType}))}
-        <div style={{display:"flex",gap:10,flexWrap:"wrap"}}>
-          <button className="btn btn-p" onClick={()=>handleCopyRequest(plan)}>📋 Copy to my week</button>
-          <button className="btn btn-s" onClick={()=>setShowShoppingList({plan,entry})}>🛒 Shopping list</button>
-          <button className="btn btn-s" onClick={()=>{saveMyPlan(plan,entry.name);setPreview(null);}}>💾 Save to My Plans</button>
-        </div>
-      </div>
-    );
-  }
-
-  // ── Main library list ───────────────────────────────────────────────────────
-  return (
-    <div>
-      {showShoppingList && <ShoppingListModal plan={showShoppingList.plan} entry={showShoppingList.entry} onClose={()=>setShowShoppingList(null)}/>}
-      {showCopySafety && <CopySafetyModal plan={showCopySafety.plan} onClose={()=>setShowCopySafety(null)}/>}
-      <div style={{display:"flex",alignItems:"flex-start",justifyContent:"space-between",marginBottom:20,flexWrap:"wrap",gap:12}}>
-        <div>
-          <h1 className="stitle">Plan Library</h1>
-          <p className="ssub">Pre-made weekly menus — preview, edit slots, then copy to your week</p>
-        </div>
-        <button className="btn btn-p btn-sm" onClick={()=>setShowCreatePlan(true)}>✨ Create new plan</button>
-      </div>
-
-      {/* ── My Plans section ─────────────────────────────────────────── */}
-      {savedPlans.length > 0 && (
-        <div style={{marginBottom:28}}>
-          <div style={{fontFamily:"var(--fd)",fontSize:16,fontWeight:700,marginBottom:12,color:"var(--ch)"}}>💾 My Plans</div>
-          <div className="plan-lib-grid">
-            {savedPlans.map(sp => {
-              const stats = getPlanStats(sp.plan);
-              return (
-                <div key={sp.id} className="plan-card" style={{background:'rgba(192,106,62,.04)',border:'1px solid rgba(192,106,62,.2)'}}>
-                  {(()=>{
-                    const planImgs=(sp.plan||[]).flatMap(d=>d.meals).filter(Boolean).slice(0,4).map(m=>{const r=recipePool.find(x=>x.id===m.id);return r&&imgAllowedForRecipe(r.image,r)?r.image:null;}).filter(Boolean);
-                    return <PlanMosaicPreview images={planImgs} fallbackEmoji={sp.emoji||'\ud83d\udccb'}/>;
-                  })()}
-                  {renamingId === sp.id
-                    ? <div style={{display:'flex',gap:4,marginBottom:6}}>
-                        <input
-                          autoFocus
-                          value={renameInput}
-                          onChange={e=>setRenameInput(e.target.value)}
-                          onKeyDown={e=>{if(e.key==='Enter')renameMyPlan(sp.id,renameInput);if(e.key==='Escape')setRenamingId(null);}}
-                          style={{flex:1,padding:'4px 8px',fontSize:12,borderRadius:4,border:'1px solid var(--clay)',outline:'none',fontFamily:'var(--fd)',fontWeight:700}}
-                        />
-                        <button className="btn btn-p btn-xs" onClick={()=>renameMyPlan(sp.id,renameInput)}>✓</button>
-                        <button className="btn btn-g btn-xs" onClick={()=>setRenamingId(null)}>✕</button>
-                      </div>
-                    : <div className="plan-card-name">{sp.title}</div>
-                  }
-                  <div className="plan-card-desc" style={{fontSize:11,color:'var(--mu)'}}>{new Date(sp.createdAt).toLocaleDateString()}</div>
-                  <div className="plan-card-stats">
-                    <span>✅ {stats.pp}% pantry</span>
-                    <span>🍽️ {stats.mealCount} meals</span>
-                  </div>
-                  <div style={{display:"flex",gap:6,marginTop:12,flexWrap:"wrap"}}>
-                    <button className="btn btn-s btn-sm" onClick={()=>setPreview({plan:sp.plan,entry:{emoji:sp.emoji||'📋',name:sp.title}})}>Preview</button>
-                    <button className="btn btn-p btn-sm" onClick={()=>handleCopyRequest(sp.plan)}>Copy to week</button>
-                    <button className="btn btn-g btn-sm" title="Shopping list" onClick={()=>setShowShoppingList({plan:sp.plan,entry:sp})}>🛒</button>
-                    <button className="btn btn-g btn-sm" title="Rename plan" onClick={()=>{setRenamingId(sp.id);setRenameInput(sp.title);}}>✏️</button>
-                    <button className="btn btn-g btn-sm" title="Duplicate plan" onClick={()=>duplicateMyPlan(sp)}>⧉</button>
-                    <button className="btn btn-g btn-sm" style={{color:'var(--clay)',marginLeft:'auto'}} title="Delete plan" onClick={()=>{if(confirm(`Delete "${sp.title}"?`))deleteMyPlan(sp.id);}}>🗑</button>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-          <div style={{borderTop:'1px solid var(--bor)',marginTop:20,marginBottom:20}}/>
-        </div>
-      )}
-
-      {/* ── Pre-made library ─────────────────────────────────────────── */}
-      <div style={{fontFamily:"var(--fd)",fontSize:16,fontWeight:700,marginBottom:12,color:"var(--ch)"}}>📚 Pre-made Plans</div>
-      <div className="plan-lib-grid">
-        {PLAN_LIBRARY.map(entry => {
-          const week = buildWeekFromFilter(entry.filter, recipePool, prefs);
-          const stats = getPlanStats(week);
-          return (
-            <div key={entry.id} className="plan-card" style={{background:entry.color,border:`1px solid ${entry.border}`}}>
-              {(()=>{
-                const planImgs=week.flatMap(d=>d.meals).filter(Boolean).slice(0,4).map(m=>{const r=recipePool.find(x=>x.id===m.id);return r&&imgAllowedForRecipe(r.image,r)?r.image:null;}).filter(Boolean);
-                return <PlanMosaicPreview images={planImgs} fallbackEmoji={entry.emoji}/>;
-              })()}
-              <div className="plan-card-name">{entry.name}</div>
-              <div className="plan-card-desc">{entry.desc}</div>
-              <div className="plan-card-stats">
-                <span>✅ {stats.pp}% pantry match</span>
-                <span>🛒 {stats.missingCount} missing</span>
-                <span>🍽️ {stats.mealCount} meals</span>
-              </div>
-              <div style={{display:"flex",gap:6,marginTop:12,flexWrap:"wrap"}}>
-                <button className="btn btn-s btn-sm" onClick={()=>setPreview({plan:week,entry})}>Preview & edit</button>
-                <button className="btn btn-p btn-sm" onClick={()=>handleCopyRequest(week)}>Copy to week</button>
-                <button className="btn btn-g btn-sm" title="Shopping list" onClick={()=>setShowShoppingList({plan:week,entry})}>🛒</button>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
-
-// ── Recipe Image / Placeholder ────────────────────────────────────────────────
-// Renders the recipe image when available; falls back to the emoji placeholder.
-// All image surfaces (card, detail, planner) route through this so the aspect
-// ratio and fallback behaviour are identical everywhere.
-//
-// TODO [IMAGE-GEN]: Wire recipe.image to an AI image-generation endpoint
-//   (e.g. DALL-E, Stable Diffusion) keyed on recipe.id.  Call once, cache the
-//   URL in the recipe object / a separate image-map store.
-// TODO [IMAGE-UPLOAD]: Let users replace the placeholder from RecipeDetail by
-//   clicking the image area — open a file picker, upload to cloud storage, and
-//   persist the URL in recipe.image.
-// ── Photo category tags ────────────────────────────────────────────────────────
-// Maps Unsplash photo ID prefix → visual category. Used by imgAllowedForRecipe()
-// to reject photos that don't match the recipe's dish type.
-const PHOTO_CATS = {
-  '1414235077428': 'french_dish',
-  '1455619452474': 'thai_curry',
-  '1467003909585': 'salmon',
-  '1481931098730': 'spaghetti',
-  '1473093226795': 'pesto_pasta',
-  '1473093295043': 'carbonara',
-  '1476124369491': 'risotto',
-  '1476718406336': 'soup',
-  '1482049016688': 'toast',
-  '1484723091739': 'oatmeal',
-  '1488477181723': 'yogurt',
-  '1488477181946': 'yogurt',
-  '1490474418585': 'chia_pudding',
-  '1494597564530': 'smoothie_bowl',
-  '1495214783159': 'oatmeal',
-  '1496116218417': 'dumplings',
-  '1498579150354': 'italian_dish',
-  '1504674900247': 'greek_dish',
-  '1510693206972': 'eggs',
-  '1512058564366': 'stir_fry',
-  '1512621776951': 'salad',
-  '1517673400267': 'oatmeal',
-  '1517840901100': 'french_toast',
-  '1519624014191': 'soba',
-  '1519676867240': 'crepe',
-  '1519708227418': 'salmon',
-  '1525351484163': 'toast',
-  '1528207776546': 'pancakes',
-  '1528735602780': 'sandwich',
-  '1529006557810': 'shawarma',
-  '1532550907401': 'chicken',
-  '1534080564583': 'paella',
-  '1534352956036': 'enchilada',
-  '1534939561126': 'french_stew',
-  '1540189549519': 'salad',
-  '1540420773420': 'salad',
-  '1541014741': 'hummus',
-  '1541519227354': 'avocado_toast',
-  '1543352634': 'burrito_bowl',
-  '1544943910': 'fish',
-  '1546069901': 'tofu',
-  '1546549032': 'tuna',
-  '1546833999': 'chicken',
-  '1546964124': 'steak',
-  '1547592166': 'soup',
-  '1547592180': 'minestrone',
-  '1548507045': 'spring_rolls',
-  '1548943487': 'tom_yum',
-  '1551024601': 'dessert',
-  '1551183053': 'spaghetti',
-  '1551504734': 'tacos',
-  '1551892374': 'gnocchi',
-  '1552611052': 'noodles',
-  '1553163147': 'bibimbap',
-  '1553530666': 'smoothie',
-  '1553909489': 'sandwich',
-  '1555939594': 'kebab',
-  '1555949258': 'mushroom_pasta',
-  '1556761223': 'pasta_generic',
-  '1558030006': 'steak',
-  '1559314809': 'pad_thai',
-  '1559737558': 'seafood',
-  '1561651823': 'wrap',
-  '1562376552': 'waffles',
-  '1562565651': 'southeast_asian',
-  '1563379091339': 'biryani',
-  '1563379926898': 'bolognese',
-  '1565299585323': 'tacos',
-  '1565299624946': 'pizza',
-  '1565680532': 'shrimp',
-  '1565680532505': 'shrimp',
-  '1567188040759': 'indian_dish',
-  '1567306226416': 'ratatouille',
-  '1567620905732': 'pancakes',
-  '1568051243858': 'waffles',
-  '1568901346375': 'burger',
-  '1569718212165': 'ramen',
-  '1572453800999': 'ratatouille',
-  '1574071318508': 'pizza',
-  '1574484284002': 'curry',
-  '1574894709920': 'lasagna',
-  '1577805947697': 'hummus',
-  '1577805947829': 'hummus',
-  '1579584425555': 'sushi',
-  '1582878826629': 'pho',
-  '1583224871284': 'korean_dish',
-  '1585032226651': 'lo_mein',
-  '1585937421612': 'curry',
-  '1588566565463': 'avocado_toast',
-  '1590301157890': 'smoothie_bowl',
-  '1590412200988': 'shakshuka',
-  '1593001874117': 'falafel',
-  '1594221708779': 'chicken',
-  '1596797038530': 'indian_dish',
-  '1598103442097': 'pizza',
-  '1598515213496': 'chicken',
-  '1603105029': 'fried_rice',
-  '1603105029258': 'fried_rice',
-  '1603133872878': 'stir_fry',
-  '1607532941433': 'salad',
-  '1608897013039': 'penne',
-  '1612874742237': 'fettuccine',
-  '1618040996337': 'quesadilla',
-  '1621996346565': 'pasta_generic',
-  '1625167174228': 'mexican_dish',
-  '1626700051175': 'breakfast_burrito',
-  '1546069901888': 'tofu',
-  '1606787366850': 'pasta_generic',
-  '1605926637512': 'stir_fry',
-  '1604908176997': 'pizza',
-  '1571091718767': 'tacos',
-  '1600891964599': 'smoothie_bowl',
-  '1543339308091': 'curry',
-  '1600803907087': 'pancakes',
-  '1533777857889': 'sushi',
-  '1559181567000': 'rice',
-  '1575523392682': 'burger',
-  '1571877227200': 'wrap',
-  '1587116861000': 'soup',
-  '1606756790138': 'steak',
-  '1559847844000': 'shrimp',
-  '1576867757603': 'chicken',
-  '1571091655789': 'enchilada',
-  '1600891964099': 'smoothie',
-  // ── New dessert/sweet photos ──
-  '1578985545062': 'dessert',
-  '1536599524557': 'dessert',
-  '1598412795976': 'dessert',
-  '1600615789327': 'dessert',
-  '1611254666354': 'dessert',
-  '1505253599537': 'dessert',
-  '1536749605762': 'dessert',
-  '1541783245831': 'dessert',
-  '1557310717': 'dessert',
-  '1635189461100': 'dessert',
-  '1515037893149': 'dessert',
-  '1564355808539': 'dessert',
-  '1589375025852': 'dessert',
-  '1590841609987': 'dessert',
-  '1604761483402': 'dessert',
-  '1606313564200': 'dessert',
-  '1610611424854': 'dessert',
-  '1611625877932': 'dessert',
-  '1624353365286': 'dessert',
-  '1636743715220': 'dessert',
-  '1524351199678': 'dessert',
-  '1533134242443': 'dessert',
-  '1567171466295': 'dessert',
-  '1578775887804': 'dessert',
-  '1621866908241': 'dessert',
-  '1506127946181': 'dessert',
-  '1562007908': 'dessert',
-  '1568571780765': 'dessert',
-  '1587248720327': 'dessert',
-  // ── New pasta photos ──
-  '1501436513145': 'pasta_generic',
-  '1572246538688': 'pasta_generic',
-  '1575980967953': 'pasta_generic',
-  '1591454550842': 'spaghetti',
-  '1601725245226': 'penne',
-  '1610657400673': 'carbonara',
-  '1619175378342': 'pasta_generic',
-  '1630563775062': 'fettuccine',
-  '1645070363162': 'pasta_generic',
-  '1659604695521': 'pasta_generic',
-  // ── New chicken/protein photos ──
-  '1528467279403': 'grilled_chicken',
-  '1558030154': 'chicken',
-  '1574672281340': 'chicken',
-  '1580288020976': 'chicken',
-  '1596449212953': 'chicken',
-  '1609226127613': 'chicken',
-  '1620138379239': 'chicken',
-  '1625943553852': 'chicken',
-  '1634033138359': 'chicken',
-  '1638370714752': 'chicken',
-  // ── New steak/beef photos ──
-  '1576511053046': 'steak',
-  '1579366948929': 'steak',
-  '1603073163308': 'steak',
-  '1609658938891': 'steak',
-  // ── New salmon/fish photos ──
-  '1580959375944': 'salmon',
-  '1614549150185': 'salmon',
-  // ── New soup photos ──
-  '1613844237701': 'soup',
-  '1629978444632': 'soup',
-  '1652088079703': 'soup',
-  '1670518045324': 'soup',
-  // ── New curry photos ──
-  '1565557623262': 'curry',
-  '1588166524941': 'curry',
-  '1606471191009': 'curry',
-  '1618449840665': 'curry',
-  '1627366422957': 'curry',
-  // ── New pizza photos ──
-  '1513104890138': 'pizza',
-  '1571066811602': 'pizza',
-  '1593504049359': 'pizza',
-  '1593560708920': 'pizza',
-  '1604382354936': 'pizza',
-  '1611915365928': 'pizza',
-  // ── New tacos/Mexican photos ──
-  '1529704640551': 'tacos',
-  '1619301920463': 'tacos',
-  '1596685212227': 'tacos',
-  '1613409385222': 'tacos',
-  // ── New ramen/noodle photos ──
-  '1526318896980': 'ramen',
-  '1591814468924': 'ramen',
-  '1635379511574': 'ramen',
-  '1627900440398': 'noodles',
-  '1653697469188': 'noodles',
-  // ── New sandwich/bread photos ──
-  '1567613913497': 'sandwich',
-  '1530554764233': 'burger',
-  '1549611016': 'burger',
-  '1550547660': 'burger',
-  '1551782450': 'burger',
-  '1572802419224': 'burger',
-  '1586190848861': 'burger',
-  // ── New salad/bowl photos ──
-  '1467453678174': 'salad',
-  '1498837167922': 'salad',
-  '1572357243457': 'salad',
-  '1581875271349': 'salad',
-  '1603189864361': 'salad',
-  // ── New breakfast photos ──
-  '1575831967553': 'pancakes',
-  '1584278858944': 'waffles',
-  '1610015644714': 'pancakes',
-  '1620280641611': 'waffles',
-  '1627733810457': 'pancakes',
-  '1636743713732': 'eggs',
-  // ── New Middle Eastern photos ──
-  '1547058881': 'falafel',
-  '1558458601': 'falafel',
-  '1593001867410': 'falafel',
-  '1637861004714': 'kebab',
-  // ── New stir-fry photos ──
-  '1464500542410': 'stir_fry',
-  '1511910849309': 'stir_fry',
-  '1564834724105': 'stir_fry',
-  '1608393189287': 'stir_fry',
-  // ── New sushi/dumpling photos ──
-  '1502364271109': 'sushi',
-  '1553621042': 'sushi',
-  '1582450871972': 'sushi',
-  '1607301405418': 'sushi',
-  '1615361200098': 'sushi',
-  // ── New fried rice photos ──
-  '1512058533999': 'fried_rice',
-  '1512058556646': 'fried_rice',
-  '1551326844': 'fried_rice',
-  '1584269600464': 'fried_rice',
-  '1540100716001': 'fried_rice',
-  '1578160112054': 'fried_rice',
-  '1596560548464': 'fried_rice',
-  // ── New cheesecake photos ──
-  '1621955511667': 'dessert',
-  '1635327173758': 'dessert',
-  '1676300185983': 'dessert',
-  '1695088957420': 'dessert',
-  // ── Additional breakfast photos ──
-  '1573057377537': 'french_toast',
-  '1584776296944': 'pancakes',
-  '1585461276010': 'french_toast',
-  '1597200284813': 'eggs',
-  '1620921575116': 'waffles',
-  // ── Additional salad photos ──
-  '1549248220': 'salad',
-  '1570197571499': 'salad',
-  '1589041611454': 'grain_bowl',
-  '1631167490917': 'salad',
-  // ── Additional sandwich/burger photos ──
-  '1550304952': 'sandwich',
-  '1567234669003': 'sandwich',
-  '1574782256243': 'sandwich',
-  // ── Additional bowl/salad photos ──
-  '1505576633757': 'grain_bowl',
-  '1583182363039': 'salad',
-  '1589442305595': 'grain_bowl',
-  '1599020792689': 'grain_bowl',
-  '1627764627459': 'salad',
-  // ── Additional breakfast photos ──
-  '1525184782196': 'breakfast_plate',
-  '1538220856186': 'omelette',
-  '1550304939': 'eggs',
-  '1611601184963': 'breakfast_plate',
-};
-
-// Title-driven filter: only show the photo if the recipe title clearly matches
-// the photo's visual category. Every ambiguous case falls back to emoji.
-// 68 categories, each with a strict title regex. Order: specific → general.
-function imgAllowedForRecipe(url, recipe) {
-  if (!url || !recipe) return false;
-  if (recipe.isPantryGenerated) return true;
-  const m = url.match(/photo-(\d+)/);
-  if (!m) return false;
-  const prefix = m[1];
-  const cat = PHOTO_CATS[prefix];
-  if (!cat) return false;
-  const t = (recipe.title || '').toLowerCase();
-  const ml = (recipe.meal  || '').toLowerCase();
-  const c = (recipe.cuisine || '').toLowerCase();
-
-  // Visual groups: photo categories that look similar enough to share
-  const GROUPS = {
-    pasta: ['spaghetti','carbonara','bolognese','penne','fettuccine','lasagna','gnocchi','pesto_pasta','mushroom_pasta','pasta_generic'],
-    noodle: ['ramen','pad_thai','pho','soba','lo_mein','noodles'],
-    rice: ['fried_rice','biryani','paella','risotto','bibimbap'],
-    soup: ['soup','lentil_soup','minestrone','tom_yum','french_stew'],
-    salad_bowl: ['salad','grain_bowl','tofu','smoothie_bowl'],
-    curry: ['curry','thai_curry','indian_dish'],
-    protein: ['chicken','grilled_chicken','steak','salmon','fish','shrimp','tuna','seafood'],
-    bread: ['sandwich','toast','wrap','avocado_toast','french_toast'],
-    breakfast: ['pancakes','waffles','oatmeal','eggs','shakshuka','frittata','omelette','yogurt','chia_pudding','crepe','smoothie','breakfast_plate'],
-    mexican: ['tacos','burrito_bowl','quesadilla','enchilada','breakfast_burrito','mexican_dish','latin_american'],
-    mideast: ['shawarma','falafel','hummus','kebab','middle_eastern','turkish_dish'],
-    pizza: ['pizza','burger'],
-    dumpling: ['dumplings','spring_rolls','sushi','appetizer'],
-    veggie: ['ratatouille','stir_fry'],
-    world: ['korean_dish','french_dish','italian_dish','greek_dish','ethiopian_dish','british_dish','southeast_asian','snack_plate'],
-    sweet: ['dessert']
-  };
-
-  // Find which group the photo's category belongs to
-  let photoGroup = null;
-  for (const [group, cats] of Object.entries(GROUPS)) {
-    if (cats.includes(cat)) { photoGroup = group; break; }
-  }
-  if (!photoGroup) return true; // unknown category but in PHOTO_CATS → allow
-
-  // Now check if the recipe's dish type matches the photo's group
-  // Pasta group
-  if (photoGroup === 'pasta') return /pasta|spaghetti|linguine|penne|fettuccine|rigatoni|lasagn|gnocchi|carbonara|bolognese|alfredo|pesto|primavera|mac |orzo|tortellini|ravioli|ziti|fusilli|farfalle|cavatappi|amatriciana|arrabbiata|cacio|aglio|ragù|ragu|stroganoff|tagliatelle|mushroom.*pasta|creamy.*pasta/.test(t);
-  if (photoGroup === 'noodle') return /ramen|noodle|pho|soba|lo mein|pad thai|udon|miso|laksa|char kway|mee goreng|japchae|chow|bibim/.test(t);
-  if (photoGroup === 'rice') return /rice|biryani|paella|risotto|pilaf|bibimbap|plov|nasi|makloub|fried rice|upma|oyakodon|jjigae|doenjang|kimchi|guksu|onigiri|maqluba/.test(t);
-  if (photoGroup === 'soup') return /soup|stew|nikujaga|chili|chowder|bisque|goulash|gazpacho|harira|borscht|caldo|ribollita|broth|gumbo|jambalaya|feijoada|tagine|lentil|pozole|shorba|pot au feu|bouillabaisse|cassoulet|minestrone|avgolemono|tom kha|clam|bourguignon|coq au vin/.test(t);
-  if (photoGroup === 'salad_bowl') return /salad|slaw|bowl|grain|buddha|quinoa|chickpea|nourish|harvest|tabbouleh|fattoush|tofu|tempeh|power bowl|fruit|berry|kushari|koshari|mjaddara|mujaddara|couscous|broccolini|side/.test(t) || ml === 'breakfast';
-  if (photoGroup === 'curry') return /curry|masala|tikka|korma|vindaloo|saag|palak|dal[^a-z]|daal|dhal|rajma|chole|dhansak|keema|aloo|baingan|paratha|paneer|tagine|moroccan|ethiopian|fit-fit|misir|wot|fesenjan|ghormeh|khoresh/.test(t) || c === 'indian' || c === 'ethiopian' || c === 'persian';
-  if (photoGroup === 'protein') return /chicken|pollo|salmon|fish|snapper|\bcod\b|tuna|steak|beef|bulgogi|lamb|pork|shrimp|prawn|duck|turkey|halibut|trout|sea bass|scallop|lobster|crab|calamari|gosht|tonkatsu|schnitzel|bistecca|saltimbocca|porchetta|stroganoff|clam|ceviche|branzino|sole|meuni[eè]re|pescado|camarones|jackfruit|pigs in|meatball/.test(t);
-  if (photoGroup === 'bread') return /sandwich|toast|panini|wrap|burrito|bagel|focaccia|blt|melt|grilled cheese|croque|bánh mì|banh mi|pita|croissant|sub|bruschetta|crostini|bread|scone|muffin|biscuit|quiche|hash|gözleme|gozleme|g.zleme|imam bayildi|bayıldı|pulled/.test(t) || ml === 'breakfast' || ml === 'snack' || c === 'turkish';
-  if (photoGroup === 'breakfast') return ml === 'breakfast' || /pancake|waffle|oatmeal|porridge|egg|omelette?|omelet|frittata|shakshuka|menemen|yogurt|parfait|granola|muesli|smoothie|chia|crepe|french toast|quiche|breakfast/.test(t);
-  if (photoGroup === 'mexican') return /taco|burrito|quesadilla|enchilada|fajita|tostada|tamale|carnita|mole|chiles|nachos|torta/.test(t) || c === 'mexican';
-  if (photoGroup === 'mideast') return /shawarma|falafel|hummus|kebab|skewer|pita|labneh|baba|tzatziki|dukkah|kibbeh|börek|borek|kofta|dip|spread|lamb|satay|harissa/.test(t) || ['middle eastern','lebanese','turkish','israeli','syrian','egyptian','moroccan','persian'].includes(c) || ml === 'snack';
-  if (photoGroup === 'pizza') return /pizza|flatbread|burger|slider/.test(t);
-  if (photoGroup === 'dumpling') return /dumpling|gyoza|wonton|spring roll|egg roll|sushi|maki|samosa|pakora|arancini|tempura|fritter|croqueta|onigiri|kati|pierogi/.test(t) || ml === 'snack';
-  if (photoGroup === 'veggie') return /ratatouille|stuffed|roasted|grilled|baked|braised|sauteed|vegetable|eggplant|zucchini|cauliflower|mushroom|wellington|stir.?fry|phad see|pad see|pad prik|pad woon|larb|adobo|lomo saltado|wok|beef|chicken|pork|shrimp|tofu|spinach|sesame|shepherd|caponata|pie|lentil|broccolini|broccoli|almond/.test(t);
-  if (photoGroup === 'world') return true; // cuisine-based fallback photos always allowed
-  if (photoGroup === 'sweet') return /cake|brownie|cookie|tart|cheesecake|pudding|crumble|dessert|pie|muffin|galette|ice cream|sorbet|flan|custard|fudge|eclair|éclair|donut|doughnut|croissant|danish|cream puff|truffle|blondie|shortbread|bar|sundae|parfait|trifle|split|float|pastry|bark|treat|delight|mousse|brittle|pavlova|lemon pos|boston cream|special/.test(t) || ml === 'snack' || ml === 'dessert';
-
-  return true; // fallback: if in PHOTO_CATS, allow
-}
-
-// ── PlannerThumb ──────────────────────────────────────────────────────────────
-// Full-width image filling the meal slot, with the meal name as a bottom
-// gradient overlay. Falls back to emoji+name if image is absent or fails.
-function PlannerThumb({ recipe, mealName, emoji, showShopping }) {
-  const [failed, setFailed] = React.useState(false);
-  const imgSrc = recipe?.image;
-  const show = imgSrc && !failed && imgAllowedForRecipe(imgSrc, recipe);
-  if (show) {
-    return (
-      <div style={{width:'100%',position:'relative',borderRadius:6,overflow:'hidden',height:72,flexShrink:0}}>
-        <img
-          src={imgSrc}
-          alt={mealName}
-          style={{position:'absolute',inset:0,width:'100%',height:'100%',objectFit:'cover',display:'block'}}
-          onError={()=>setFailed(true)}
-        />
-        <div style={{position:'absolute',inset:0,background:'linear-gradient(transparent 30%,rgba(0,0,0,0.72) 100%)',pointerEvents:'none'}} />
-        <div style={{position:'absolute',bottom:0,left:0,right:0,padding:'0 5px 5px',textAlign:'center'}}>
-          <div style={{fontSize:11,fontWeight:700,color:'#fff',lineHeight:1.25,textShadow:'0 1px 4px rgba(0,0,0,0.95)',overflow:'hidden',display:'-webkit-box',WebkitLineClamp:2,WebkitBoxOrient:'vertical'}}>{mealName}</div>
-          {showShopping && <div style={{fontSize:9,color:'#FFD86B',fontWeight:700,marginTop:1,textShadow:'0 1px 3px rgba(0,0,0,0.9)'}}>🛒</div>}
-        </div>
-      </div>
-    );
-  }
-  return (
-    <>
-      <div className="msem">{emoji || recipe?.emoji || '🍽️'}</div>
-      <div className="msn">{mealName}</div>
-      {showShopping && <div style={{fontSize:10,color:'var(--gold)',fontWeight:600,marginTop:2}}>🛒 Needs shopping</div>}
-    </>
-  );
-}
-
-// ── PlanMosaicPreview ─────────────────────────────────────────────────────────
-// 2×2 image grid for plan cards. Tracks per-tile load errors via React state;
-// shows emoji fallback when fewer than 2 tiles load successfully.
-function PlanMosaicPreview({ images, fallbackEmoji }) {
-  const [errors, setErrors] = React.useState({});
-  const markError = React.useCallback(i => setErrors(v => ({...v,[i]:true})), []);
-  const goodCount = images.filter((_,i) => !errors[i]).length;
-  if (goodCount < 2) {
-    return <div className="plan-card-emoji">{fallbackEmoji || '\ud83d\udccb'}</div>;
-  }
-  return (
-    <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:2,width:52,height:52,borderRadius:8,overflow:'hidden',marginBottom:8}}>
-      {images.slice(0,4).map((img,i) => errors[i] ? null : (
-        <img key={i} src={img} alt=""
-          style={{width:'100%',height:'100%',objectFit:'cover',display:'block'}}
-          onError={()=>markError(i)}
-        />
-      ))}
-    </div>
-  );
-}
-
-// ── RecipeImg ─────────────────────────────────────────────────────────────────
-// Used by RecipeCard (.rimg container) and RecipeDetail hero.
-// React state tracks load failure so emoji renders correctly — no empty boxes.
-const RecipeImg = React.memo(function RecipeImg({ recipe, style, emojiSize }) {
-  const [failed, setFailed] = React.useState(false);
-  const [loaded, setLoaded] = React.useState(false);
-  const img = recipe?.image;
-  if (img && !failed && imgAllowedForRecipe(img, recipe)) {
-    return (
-      <img
-        src={img}
-        alt={recipe?.title || ''}
-        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', opacity: loaded ? 1 : 0, transition: 'opacity .4s ease, transform .5s ease', ...style }}
-        onLoad={() => setLoaded(true)}
-        onError={() => setFailed(true)}
-        loading="lazy"
-      />
-    );
-  }
-  // Emoji placeholder — renders when no image, when quality filter rejects it,
-  // or when the image fails to load from the CDN.
-  return (
-    <span style={{ fontSize: emojiSize || 72, lineHeight: 1, animation: 'float 3s ease-in-out infinite' }}>
-      {recipe?.emoji || '\ud83c\udf7d\ufe0f'}
-    </span>
-  );
-});
-
-/* ── Animated percentage display ── */
-function AnimatedPercent({ value }) {
-  const [display, setDisplay] = useState(0);
-  const prev = useRef(0);
-  useEffect(() => {
-    const start = prev.current;
-    const diff = value - start;
-    if (diff === 0) return;
-    let frame = 0;
-    const totalFrames = 20;
-    const step = () => {
-      frame++;
-      const progress = frame / totalFrames;
-      const eased = 1 - Math.pow(1 - progress, 3);
-      setDisplay(Math.round(start + diff * eased));
-      if (frame < totalFrames) requestAnimationFrame(step);
-      else prev.current = value;
-    };
-    requestAnimationFrame(step);
-  }, [value]);
-  return React.createElement('span', { style: { color: 'var(--sage)', fontWeight: 600, fontVariantNumeric: 'tabular-nums' } }, display + '%');
-}
-
-function SkeletonCard() {
-  return (
-    <div className="skel">
-      <div className="skel-img"/>
-      <div className="skel-body">
-        <div className="skel-line w80 h20" style={{marginBottom:12}}/>
-        <div className="skel-row"><div className="skel-line w40 h8"/><div className="skel-line w40 h8"/></div>
-        <div className="skel-row"><div className="skel-chip"/><div className="skel-chip" style={{width:70}}/></div>
-        <div className="skel-line w100 h8"/>
-        <div className="skel-line w60 h8"/>
-        <div className="skel-row" style={{marginTop:12}}><div className="skel-line h32" style={{width:70,borderRadius:8}}/><div className="skel-line h32" style={{width:32,borderRadius:8}}/></div>
-      </div>
-    </div>
-  );
-}
-
-const RecipeCard = React.memo(function RecipeCard({ r, saved, onSave, onView, addToList, inFav, pantry, pantrySet: pantrySetProp, onAddToWeek, showToast }) {
-  // STEP 4 STABILIZATION: Compute missing ingredients dynamically from pantry.
-  // Do NOT use the static r.missing field for display — it is hardcoded and not pantry-aware.
-  const dynamicMissing = React.useMemo(() => {
-    if (r.isUserCreated || !r.ingredients?.length) return [];
-    const ps = pantrySetProp || buildPantrySet(pantry || []);
-    return r.ingredients
-      .filter(i => !ingInPantry(i.n, ps))
-      .map(i => i.n);
-  }, [r.id, r.ingredients, pantrySetProp, pantry]);
-
-  // Pantry match % (dynamic, replaces static r.pp)
-  const dynamicPP = r.ingredients?.length
-    ? Math.round(((r.ingredients.length - dynamicMissing.length) / r.ingredients.length) * 100)
-    : (r.pp || 0);
-
-  const handleAddMissing = () => addToList(dynamicMissing);
-
-  // Card flip state
-  const [flipped, setFlipped] = useState(false);
-
-  // Confetti burst on save
-  const [showConfetti, setShowConfetti] = useState(false);
-  const handleSaveWithConfetti = (e) => {
-    e.stopPropagation();
-    if (!saved) { setShowConfetti(true); setTimeout(() => setShowConfetti(false), 600); }
-    onSave(r);
-  };
-
-  // 3-dot popover state
-  const [popOpen, setPopOpen] = useState(false);
-  const popRef = useRef(null);
-  useEffect(() => {
-    if (!popOpen) return;
-    const handler = (e) => {
-      if (popRef.current && !popRef.current.contains(e.target)) setPopOpen(false);
-    };
-    document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
-  }, [popOpen]);
-
-  return (
-    <div className="card">
-      <div className="rimg-flip-container" style={{perspective:800}}>
-        <div className={`rimg-flip-inner${flipped?" flipped":""}`} style={{position:"relative",transition:"transform 0.5s",transformStyle:"preserve-3d"}}>
-          {/* Front — image */}
-          <div className="rimg" onClick={()=>setFlipped(true)} style={{backfaceVisibility:"hidden"}}>
-            <RecipeImg recipe={r}/>
-            <div className="rtag">{r.cuisine}</div>
-            {r.worth && <div className="rbadge">⭐ Worth buying</div>}
-            {r.isUserCreated && <div className="rbadge" style={{background:"var(--sage)"}}>My Recipe</div>}
-            <button className="card-dot-btn" onClick={e=>{e.stopPropagation();setPopOpen(v=>!v);}} aria-label="Recipe options">⋯</button>
-            {popOpen && (
-              <div className="card-popover" ref={popRef} onClick={e=>e.stopPropagation()}>
-                <button className="card-pop-item" onClick={()=>{setPopOpen(false);onView();}}><Ic n="list" s={14}/>View recipe</button>
-                {onAddToWeek && <button className="card-pop-item" onClick={()=>{setPopOpen(false);onAddToWeek(r);}}><Ic n="cal" s={14}/>Add to week</button>}
-                <div className="card-pop-divider"/>
-                <button className="card-pop-item" onClick={e=>{e.stopPropagation();setPopOpen(false);onSave(r);}}><Ic n={saved?"bookmarkOn":"bookmark"} s={14}/>{saved?"Saved ✓":"Save recipe"}</button>
-                {dynamicMissing.length > 0 && <><div className="card-pop-divider"/><button className="card-pop-item" onClick={()=>{setPopOpen(false);handleAddMissing();}}><Ic n="cart" s={14}/>Add missing to list</button></>}
-              </div>
-            )}
-          </div>
-          {/* Back — ingredients & info */}
-          <div className="rimg-back" onClick={()=>setFlipped(false)} style={{position:"absolute",top:0,left:0,right:0,bottom:0,backfaceVisibility:"hidden",transform:"rotateY(180deg)",background:"var(--white)",borderRadius:"var(--r) var(--r) 0 0",padding:16,overflow:"auto",cursor:"pointer",display:"flex",flexDirection:"column",gap:6}}>
-            <div style={{fontFamily:"var(--fd)",fontSize:15,fontWeight:700,marginBottom:2}}>{r.emoji} {r.title}</div>
-            <div style={{fontSize:12,color:"var(--mu)",marginBottom:4}}>⏱ {r.time} min · {r.diff} · {r.cuisine}</div>
-            <div style={{fontSize:12,fontWeight:700,color:"var(--sage)",marginBottom:4}}>Ingredients ({(r.ingredients||[]).length})</div>
-            <div style={{display:"flex",flexDirection:"column",gap:2,flex:1,overflow:"auto"}}>
-              {(r.ingredients||[]).slice(0,8).map((ing,i)=>{
-                const inPantry = ingInPantry(ing.n, pantrySetProp || buildPantrySet(pantry||[]));
-                return (
-                  <div key={i} style={{display:"flex",alignItems:"center",justifyContent:"space-between",fontSize:12,padding:"3px 0",borderBottom:"1px solid var(--cream)"}}>
-                    <span style={{color:inPantry?"var(--sageH)":"var(--ch)"}}>{inPantry?"✓ ":"• "}{ing.n}</span>
-                    {!inPantry && <button className="btn-ic" style={{width:22,height:22,fontSize:10}} onClick={e=>{e.stopPropagation();addToList([ing.n]);if(typeof showToast==='function')showToast(`Added ${ing.n} to shopping list`);}} title={`Add ${ing.n} to shopping list`}><Ic n="cart" s={10}/></button>}
-                  </div>
-                );
-              })}
-              {(r.ingredients||[]).length > 8 && <div style={{fontSize:11,color:"var(--mu)",textAlign:"center",padding:4}}>+{(r.ingredients||[]).length-8} more</div>}
-            </div>
-            <div style={{fontSize:11,color:"var(--mu)",textAlign:"center",marginTop:4}}>Tap to flip back</div>
-          </div>
-        </div>
-      </div>
-      <div className="rbody">
-        <div className="rtitle" onClick={onView}>{r.title}</div>
-        <div className="rmeta"><span className="rmeta-i">⏱ {r.time} min</span><span className="rmeta-i">📊 {r.diff}</span></div>
-        <div className="rtags">{r.dietary.map(d=><span key={d} className="tag td">{d}</span>)}</div>
-        {!r.isUserCreated && (
-          <div className="pbar">
-            <div className="pbar-r">
-              <span>Pantry match</span>
-              <AnimatedPercent value={dynamicPP}/>
-            </div>
-            <div className="pbar-t"><div className="pbar-f" style={{width:`${dynamicPP}%`}}/></div>
-          </div>
-        )}
-        {dynamicMissing.length > 0 && (
-          <div style={{fontSize:12,color:"var(--mu)",marginBottom:8,display:"flex",flexWrap:"wrap",gap:4,alignItems:"center"}}>
-            <span>Missing: </span>
-            {dynamicMissing.slice(0,3).map((name,i)=>(
-              <span key={name} style={{cursor:"pointer",color:"var(--clay)",textDecoration:"underline dotted",textUnderlineOffset:2}} onClick={()=>{addToList([name]);if(showToast)showToast(`Added ${name} to shopping list`);}} title={`Add ${name} to shopping list`}>
-                {name}{i<Math.min(dynamicMissing.length,3)-1?",":""}
-              </span>
-            ))}
-            {dynamicMissing.length > 3 && <span> +{dynamicMissing.length - 3} more</span>}
-          </div>
-        )}
-        <div className="ractions">
-          <button className="btn btn-sm btn-cs" onClick={onView}>View</button>
-          {onAddToWeek && (
-            <button className="btn btn-sm btn-s" onClick={()=>onAddToWeek(r)} title="Add to week">
-              <Ic n="cal" s={13}/>
-            </button>
-          )}
-          <button
-            className={`bm-btn ${saved?"on":""}`}
-            onClick={handleSaveWithConfetti}
-            title={inFav?"Remove from favorites":"Save to favorites"}
-            style={{position:"relative",overflow:"visible"}}
-          >
-            <Ic n={saved?"bookmarkOn":"bookmark"} s={15}/>
-            {showConfetti && <>
-              <span style={{position:"absolute",width:5,height:5,borderRadius:"50%",background:"var(--clay)",top:"50%",left:"50%",animation:"confetti1 .6s ease forwards",pointerEvents:"none"}}/>
-              <span style={{position:"absolute",width:4,height:4,borderRadius:"50%",background:"var(--sage)",top:"50%",left:"50%",animation:"confetti2 .6s ease forwards",pointerEvents:"none"}}/>
-              <span style={{position:"absolute",width:5,height:5,borderRadius:"50%",background:"var(--gold)",top:"50%",left:"50%",animation:"confetti3 .6s ease .05s forwards",pointerEvents:"none"}}/>
-              <span style={{position:"absolute",width:4,height:4,borderRadius:"50%",background:"var(--clayL)",top:"50%",left:"50%",animation:"confetti4 .6s ease .05s forwards",pointerEvents:"none"}}/>
-              <span style={{position:"absolute",width:3,height:3,borderRadius:"50%",background:"var(--sageL)",top:"50%",left:"50%",animation:"confetti5 .6s ease .1s forwards",pointerEvents:"none"}}/>
-              <span style={{position:"absolute",width:4,height:4,borderRadius:"50%",background:"var(--clay)",top:"50%",left:"50%",animation:"confetti6 .6s ease forwards",pointerEvents:"none"}}/>
-            </>}
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-});
-
-/* ── RANDOM MODAL ── */
-function RandomModal({ onClose, onView, addToList }) {
-  const [step,setStep]=useState("filters");
-  const [result,setResult]=useState(null);
-  const [f,setF]=useState({cuisine:"Any",style:"Any",maxTime:60});
-  const STYLES=["Any","Quick","Romantic","Comfort","Healthy","High protein","Vegetarian","Vegan"];
-  const CUIS=["Any","Italian","Japanese","Mediterranean","Mexican","Indian","French","Middle Eastern"];
-  const generate=()=>{const pool=RECIPES.filter(r=>{if(f.cuisine!=="Any"&&r.cuisine!==f.cuisine)return false;if(r.time>f.maxTime)return false;if(f.style==="Vegetarian"&&!r.dietary.includes("Vegetarian"))return false;if(f.style==="Vegan"&&!r.dietary.includes("Vegan"))return false;return true;});setResult(pool.length>0?pool[Math.floor(Math.random()*pool.length)]:RECIPES[Math.floor(Math.random()*RECIPES.length)]);setStep("result");};
-  return (
-    <div className="mov" onClick={e=>e.target===e.currentTarget&&onClose()}>
-      <div className="modal">
-        <div className="mhd"><div className="mtitle">{step==="filters"?"🎲 Random Plate":"Here's your plate!"}</div><button className="mclose" onClick={onClose}><Ic n="x" s={16}/></button></div>
-        {step==="filters"&&<div className="mbody" style={{display:"flex",flexDirection:"column",gap:16}}>
-          <div><label className="fl">Cuisine</label><select className="sel" value={f.cuisine} onChange={e=>setF(p=>({...p,cuisine:e.target.value}))}>{CUIS.map(c=><option key={c}>{c}</option>)}</select></div>
-          <div><label className="fl">Style</label><div className="mopts">{STYLES.map(s=><button key={s} className={`mopt ${f.style===s?"sel":""}`} onClick={()=>setF(p=>({...p,style:s}))}>{s}</button>)}</div></div>
-          <div><label className="fl">Max cook time: {f.maxTime} min</label><input type="range" min={10} max={120} step={5} value={f.maxTime} onChange={e=>setF(p=>({...p,maxTime:+e.target.value}))} style={{width:"100%",accentColor:"var(--clay)"}}/></div>
-          <button className="btn btn-p btn-full btn-lg" onClick={generate}><Ic n="shuffle" s={18}/>Surprise me!</button>
-        </div>}
-        {step==="result"&&result&&<div>
-          <div style={{textAlign:"center",padding:"28px 20px"}}>
-            <div style={{fontSize:72,marginBottom:8}}>{result.emoji}</div>
-            <div style={{fontFamily:"var(--fd)",fontSize:26,marginBottom:6}}>{result.title}</div>
-            <div style={{color:"var(--mu)",fontSize:14,marginBottom:16}}>{result.cuisine} · {result.time} min · {result.diff}</div>
-            <div style={{display:"flex",flexWrap:"wrap",gap:6,justifyContent:"center",marginBottom:16}}>{result.dietary.map(d=><span key={d} className="tag td">{d}</span>)}</div>
-            <div className="pbar" style={{textAlign:"left"}}><div className="pbar-r"><span>Pantry match</span><span style={{color:"var(--sage)",fontWeight:600}}>{result.pp}%</span></div><div className="pbar-t"><div className="pbar-f" style={{width:`${result.pp}%`}}/></div></div>
-          </div>
-          <div style={{padding:"0 24px 24px",display:"flex",flexDirection:"column",gap:10}}>
-            <button className="btn btn-p btn-full" onClick={()=>onView(result)}>View full recipe →</button>
-            <button className="btn btn-s btn-full" onClick={generate}><Ic n="shuffle" s={16}/>Generate another</button>
-            {/* Missing ingredients for random recipes computed dynamically in RecipeDetail when opened */}
-          </div>
-        </div>}
-      </div>
-    </div>
-  );
-}
-
-
-// ╔══════════════════════════════════════════════════════════════════════════════╗
-// ║                    SMARTCHEF FEATURE ROADMAP — TODO LIST                   ║
-// ║              DO NOT IMPLEMENT — planning markers only (Jun 2026)           ║
-// ╚══════════════════════════════════════════════════════════════════════════════╝
-//
-// TODO [ROADMAP-01]: Plan Library
-//   Pre-made weekly menus curated by SmartChef team (e.g. "Keto Week", "Budget Week").
-//   User picks a template and it fills the planner grid. Store in a separate PLAN_LIBRARY array.
-//
-// TODO [ROADMAP-02]: Multiple Saved Weekly Plans
-//   Let users save and name multiple weekly plans (e.g. "Summer Rotation", "Work Week").
-//   Switching between plans replaces the mealPlan state. Store in localStorage keyed by user.
-//
-// TODO [ROADMAP-03]: Add Recipe Directly to Specific Day/Slot from Recipe Page
-//   "Add to plan" button on RecipeDetail/RecipeCard. Opens a slot-picker (day + meal type).
-//   Sets the slot without navigating to Planner tab.
-//
-// TODO [ROADMAP-04]: Ingredient Avoid List + Substitution Engine
-//   Extend avoidedIngredients with substitution suggestions (e.g. avoid "dairy" → suggest almond milk).
-//   Use AVOID_REPLACEABLE_MAP (already exists) as foundation.
-//   Surface substitutions in RecipeDetail for avoided ingredients.
-//
-// TODO [ROADMAP-05]: Animated Cooking Steps
-//   Each step in RecipeDetail plays a short icon animation (stir, chop, heat, etc.).
-//   Map step keywords (boil, fry, bake, mix...) to animation classes in CSS.
-//   Steps auto-advance on a timer if user enables "guided mode".
-//
-// TODO [ROADMAP-06]: Advanced Pantry Coverage Insights (Pantry Strength Meter)
-//   Dashboard panel showing: pantry strength score, top 5 ingredients to unlock most recipes,
-//   ingredient categories coverage, and waste-minimizer suggestions.
-//   Extend greedyCoverageExpansion() + computeIngredientImpact() already in codebase.
-//
-// TODO [ROADMAP-07]: Social Layer (Profiles, Published Menus, Copy Menus)
-//   Full social feed. Community tab already stubbed. Requires backend/auth.
-//   CommunityTab and PublishMenuModal code retained as stubs.
-//   publishMenu() and publishedMenus state already in App — wire up when ready.
-//
-// TODO [ROADMAP-08]: Most Liked / Trending Recipes
-//   Like/heart counter per recipe. Aggregate across users (needs backend).
-//   Sort option "Most liked" in HomeTab already has placeholder in sortMode state.
-//
-// TODO [ROADMAP-09]: Ingredient Unlock Ranking System
-//   Show a ranked list of "buy X to unlock N recipes". Already partially implemented
-//   in greedyCoverageExpansion(). Expose as a dedicated "What to buy next?" panel.
-//
-// TODO [ROADMAP-10]: Waste Minimizer Suggestions
-//   Surface recipes that use expiring pantry items first.
-//   Cross-reference pantry item expiry dates (already tracked) with recipe ingredients.
-//   Highlight these recipes with an "⏰ Use soon" badge.
-//
-// ─────────────────────────────────────────────────────────────────────────────
-
-/* ── RECIPE DETAIL ── */
-// ── AVOID INGREDIENTS HEURISTICS ─────────────────────────────────────────────
-const AVOID_OPTIONAL_INGS = new Set([
-  'parsley','cilantro','basil','chili flakes','red chili flakes','chilli flakes',
-  'sesame seeds','sesame seed','lemon zest','green onion','green onions','scallion','scallions',
-]);
-const AVOID_REPLACEABLE_MAP = {
-  'milk':             'any plant milk or dairy alternative',
-  'whole milk':       'any milk',
-  'butter':           'oil or vegan butter',
-  'unsalted butter':  'oil or vegan butter',
-  'parmesan':         'any hard cheese or nutritional yeast',
-  'parmesan cheese':  'any hard cheese or nutritional yeast',
-  'yogurt':           'any yogurt or sour cream',
-  'greek yogurt':     'any yogurt or sour cream',
-  'honey':            'sugar or maple syrup',
-};
-const getAvoidVerdict = ingName => {
-  const norm = normalizeIng(ingName);
-  if (AVOID_OPTIONAL_INGS.has(norm))    return { verdict:'Optional',    icon:'✅', color:'var(--sageH)',  suggest:null };
-  const rep = AVOID_REPLACEABLE_MAP[norm];
-  if (rep)                               return { verdict:'Replaceable',  icon:'🔁', color:'var(--goldH)',  suggest:rep  };
-  return                                        { verdict:'Required',     icon:'❌', color:'#e05c5c',       suggest:null };
-};
-// ─────────────────────────────────────────────────────────────────────────────
-
-function RecipeDetail({ recipe, saved, onSave, onBack, onAddToList, pantry, setPantry,
-  isRecipeSaved, favFolders, favItems, saveToFolder, createFavFolder, removeFromAllFolders, showToast,
-  avoidedIngredients, setAvoidedIngredients, onAddToWeek, mealPlan, setMealPlan }) {
-  const [markedHave,     setMarkedHave]     = useState({});
-  const [showLocalFavModal, setShowLocalFavModal] = useState(false);
-  
-  // Guard: if recipe is null/undefined, render safe fallback
-  if (!recipe) {
-    return (
-      <div style={{minHeight:'100vh',background:'var(--cream)',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:16,padding:32,fontFamily:'var(--fb)'}}>
-                <div style={{fontSize:48}}>🍳</div>
-        <div style={{fontSize:20,fontWeight:700}}>Recipe not found</div>
-        <div style={{fontSize:14,color:'var(--mu)'}}>This recipe couldn't be loaded.</div>
-        <button className="btn btn-p" onClick={onBack}>← Go back</button>
-      </div>
-    );
-  }
-  // ── Normalize steps: support `instructions` field + auto-generate if empty ──
-  const getDisplaySteps = (r) => {
-    // 1. Already has valid steps array
-    if (Array.isArray(r.steps) && r.steps.length > 0) return { steps: r.steps, isAutoGenerated: false };
-    // 2. Has `instructions` string/array (alternative field name)
-    if (r.instructions) {
-      if (Array.isArray(r.instructions)) {
-        const mapped = r.instructions.map((s, i) => typeof s === 'string'
-          ? { n: i + 1, t: `Step ${i + 1}`, d: s }
-          : { n: i + 1, t: s.title || s.t || `Step ${i + 1}`, d: s.description || s.d || String(s) });
-        if (mapped.length > 0) return { steps: mapped, isAutoGenerated: false };
-      }
-      if (typeof r.instructions === 'string' && r.instructions.trim()) {
-        const parts = r.instructions.split(/\n|;/).map(s => s.trim()).filter(Boolean);
-        const mapped = parts.map((d, i) => ({ n: i + 1, t: `Step ${i + 1}`, d }));
-        return { steps: mapped, isAutoGenerated: false };
-      }
-    }
-    // 3. Auto-generate a minimal fallback from ingredients + title
-    const ings = (r.ingredients || []).map(i => i.n).filter(Boolean);
-    const auto = [
-      { n: 1, t: 'Gather ingredients', d: ings.length > 0 ? `You'll need: ${ings.slice(0, 5).join(', ')}${ings.length > 5 ? ', and more.' : '.'}` : 'Gather all ingredients before starting.' },
-      { n: 2, t: 'Prepare', d: `Prepare and portion all ingredients. Wash vegetables. Preheat oven/pan as needed for "${r.title}".` },
-      { n: 3, t: 'Cook', d: `Cook following your preferred method. This dish typically takes ${r.time || 15} minutes.` },
-      { n: 4, t: 'Season & serve', d: 'Season to taste with salt and pepper. Plate and serve hot.' },
-    ];
-    return { steps: auto, isAutoGenerated: true };
-  };
-  const { steps: displaySteps, isAutoGenerated: stepsAutoGenerated } = getDisplaySteps(recipe);
-
-  // ── DEV audit: log any recipe missing steps ────────────────────────────────
-  if (process.env.NODE_ENV !== 'production' && typeof __DEV__ !== 'undefined' && __DEV__) {
-    if (!(recipe.steps?.length) && !(recipe.instructions)) {
-      console.warn(`[SmartChef] Recipe "${recipe.title}" (id:${recipe.id}) is missing steps`);
-    }
-  }
-
-  // Use the shared matching engine (normalizeIng / ingInPantry / buildPantrySet)
-  const pantrySet = buildPantrySet(pantry || []);
-
-  // Check if ingredient is in pantry (uses shared family matching)
-  const isInPantry = (ingName) => ingInPantry(ingName, pantrySet);
-
-  // Mark ingredient as "I have this" — adds to pantry with animation
-  const markAsHave = (ingName) => {
-    // Step 1: Show "Added ✓" immediately
-    setMarkedHave(prev => ({...prev, [ingName]: "added"}));
-
-    // Step 2: Add to pantry if not already there
-    const alreadyInPantry = ingInPantry(ingName, pantrySet);
-    if(!alreadyInPantry && setPantry) {
-      const detectedCat = autoDetect(ingName);
-      const shelfDays = getShelfLifeDays(ingName);
-      const expiry = new Date();
-      expiry.setDate(expiry.getDate() + shelfDays);
-      setPantry(p => [...p, {
-        id: Date.now(),
-        name: ingName,
-        emoji: getIcon(ingName, detectedCat),
-        category: detectedCat,
-        quantity: 1,
-        unit: "pcs",
-        expiry: expiry.toISOString().split('T')[0],
-      }]);
-    }
-    
-    // Step 3: Transition to "removing" then clean up
-    setTimeout(() => {
-      setMarkedHave(prev => ({...prev, [ingName]: "removing"}));
-      setTimeout(() => {
-        setMarkedHave(prev => {
-          const next = {...prev};
-          delete next[ingName];
-          return next;
-        });
-      }, 300);
-    }, 800);
-  };
-  
-  // Get list of missing ingredients (live — updates as user marks items)
-  // Excludes optional ingredients — they never count as "missing"
-  const missingIngredients = (recipe.ingredients || [])
-    .filter(ing => !isInPantry(ing.n) && !ing.optional && !isOptionalIng(ing.n))
-    .map(ing => ing.n);
-  
-  return (
-    <div style={{fontFamily:"var(--fb)",background:"var(--cream)",minHeight:"100vh"}}>      <div style={{background:"var(--white)",borderBottom:"1px solid var(--bor)",padding:"14px 32px",display:"flex",alignItems:"center",gap:16,position:"sticky",top:0,zIndex:100}}>
-        <button className="btn btn-s btn-sm" onClick={onBack}><Ic n="back" s={15}/>Back</button>
-        <div style={{flex:1,fontFamily:"var(--fd)",fontSize:20}}>{recipe.title}</div>
-        {recipe.isUserCreated && <span style={{fontSize:11,background:"var(--sageBg)",color:"var(--sage)",padding:"3px 10px",borderRadius:6,fontWeight:700}}>My Recipe</span>}
-        {(()=>{
-          const isSaved = isRecipeSaved ? isRecipeSaved(recipe) : saved;
-          return (
-            <button
-              className="btn btn-sm"
-              style={{
-                background: isSaved ? "var(--clay)" : "var(--cream)",
-                color: isSaved ? "#fff" : "var(--ch)",
-                border: `1.5px solid ${isSaved ? "var(--clay)" : "var(--bor)"}`,
-                display:"flex", alignItems:"center", gap:6, flexShrink:0,
-              }}
-              onClick={()=>{
-                if (isSaved) {
-                  removeFromAllFolders ? removeFromAllFolders(recipe) : onSave();
-                } else {
-                  setShowLocalFavModal(true);
-                }
-              }}
-            >
-              <Ic n={isSaved ? "bookmarkOn" : "bookmark"} s={14}/>
-              {isSaved ? "Saved ✓" : "Save recipe"}
-            </button>
-          );
-        })()}
-        {missingIngredients.length>0 && (
-          <button className="btn btn-sm btn-cs" onClick={()=>{
-            onAddToList(missingIngredients);
-            if(showToast) showToast(`🛒 ${missingIngredients.length} item${missingIngredients.length>1?'s':''} added to list`);
-            else alert(`Added ${missingIngredients.length} missing item${missingIngredients.length>1?'s':''} to shopping list`);
-          }}>
-            <Ic n="cart" s={14}/>Add missing ({missingIngredients.length})
-          </button>
-        )}
-        {(recipe.ingredients||[]).length>0 && (
-          <button className="btn btn-sm btn-s" onClick={()=>{
-            const allIngs = (recipe.ingredients||[]).map(i=>i.n);
-            onAddToList(allIngs);
-            if(showToast) showToast(`🛒 ${allIngs.length} ingredient${allIngs.length>1?'s':''} added to list`);
-          }}>
-            <Ic n="cart" s={14}/>Add all ingredients
-          </button>
-        )}
-        {missingIngredients.length===0 && (recipe.ingredients||[]).length>0 && (
-          <span style={{fontSize:12,color:"var(--sageH)",fontWeight:600,display:"flex",alignItems:"center",gap:4}}>
-            <Ic n="check" s={13}/>All in pantry
-          </span>
-        )}
-        {onAddToWeek && (
-          <button className="btn btn-sm btn-s" onClick={()=>onAddToWeek(recipe)}>
-            <Ic n="cal" s={14}/>Add to week
-          </button>
-        )}
-        {/* TODO [ROADMAP-AI]: Recipe AI button — needs Anthropic API key on backend.
-            When ready: open a mini drawer pre-loaded with this recipe context.
-            Example prompts: "Make it quicker", "Substitute dairy", "Healthier version", "Explain steps". */}
-      </div>
-      <div style={{maxWidth:860,margin:"0 auto",padding:"40px 32px"}}>
-        <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:12,animation:"fadeInUp .4s ease both"}}>{(recipe.dietary||[]).map(d=><span key={d} className="tag td">{d}</span>)}<span className="tag tc">{recipe.cuisine||'Other'}</span></div>
-        <h1 style={{fontFamily:"var(--fd)",fontSize:38,marginBottom:10,lineHeight:1.1,animation:"fadeInUp .5s ease .1s both"}}>{recipe.emoji} {recipe.title}</h1>
-        <div style={{display:"flex",gap:20,color:"var(--mu)",fontSize:14,marginBottom:(recipe.image&&imgAllowedForRecipe(recipe.image,recipe))?20:32,animation:"fadeInUp .5s ease .2s both"}}><span>⏱ {recipe.time} min</span><span>📊 {recipe.diff}</span><span>👥 2 servings</span></div>
-        {/* Recipe hero image — only shown when image passes quality filter */}
-        {recipe.image && imgAllowedForRecipe(recipe.image, recipe) && (
-          <div style={{borderRadius:12,overflow:'hidden',marginBottom:32,height:280,background:'linear-gradient(135deg,#F0E8DC,#E4D4BE)',flexShrink:0,animation:"scaleIn .6s cubic-bezier(.175,.885,.32,1.275) .3s both"}}>
-            <img
-              src={recipe.image}
-              alt={recipe.title}
-              style={{width:'100%',height:'100%',objectFit:'cover',display:'block',transition:'transform .5s ease'}}
-              onError={e=>{e.currentTarget.parentElement.style.display='none';}}
-            />
-          </div>
-        )}
-        <div style={{display:"grid",gridTemplateColumns:"1fr 1.5fr",gap:40}}>
-          <div style={{animation:"fadeInUp .5s ease .35s both"}}>
-            <h2 style={{fontFamily:"var(--fd)",fontSize:20,marginBottom:12}}>Ingredients</h2>
-            {/* Avoided ingredients warning */}
-            {avoidedIngredients && (()=>{
-              const avoidedInThis = (recipe.ingredients||[])
-                .map(i=>({ingName:i.n,norm:normalizeIng(i.n)}))
-                .filter(i=>avoidedIngredients.includes(i.norm));
-              if(!avoidedInThis.length) return null;
-              return (
-                <div style={{marginBottom:12,padding:'10px 14px',background:'rgba(224,92,92,.07)',border:'1px solid rgba(224,92,92,.25)',borderRadius:8}}>
-                  {avoidedInThis.map(({ingName,norm})=>{
-                    const v = getAvoidVerdict(ingName);
-                    return (
-                      <div key={norm} style={{display:'flex',alignItems:'center',gap:8,marginBottom:4,flexWrap:'wrap'}}>
-                        <span style={{fontSize:12,fontWeight:700,color:'#c04040'}}>⚠️ Contains avoided: <em style={{fontStyle:'normal'}}>{ingName}</em></span>
-                        <span style={{fontSize:11,fontWeight:700,color:v.color}}>{v.icon} {v.verdict}</span>
-                        {v.suggest && <span style={{fontSize:11,color:'var(--mu)'}}>→ try {v.suggest}</span>}
-                      </div>
-                    );
-                  })}
-                </div>
-              );
-            })()}
-            <div className="card" style={{padding:"4px 16px"}}>
-              {(recipe.ingredients||[]).length===0&&<div style={{padding:'16px 0',color:'var(--mu)',fontSize:13}}>No ingredient details available.</div>}
-              {(recipe.ingredients||[]).map((ing,i)=>{
-                const inPantry = isInPantry(ing.n);
-                const isOptional = ing.optional || isOptionalIng(ing.n);
-                const markState = markedHave[ing.n]; // "added" | "removing" | undefined
-                return(
-                  <div key={i} style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"11px 0",borderBottom:i<(recipe.ingredients||[]).length-1?"1px solid var(--bor)":"none",gap:8}}>
-                    <div style={{display:"flex",alignItems:"baseline",gap:8,flex:1,minWidth:0}}>
-                      <span style={{fontSize:14,fontWeight:500}}>{ing.n}</span>
-                      {ing.a && <span style={{fontSize:12,color:"var(--mu)",whiteSpace:"nowrap"}}>— {ing.a}</span>}
-                    </div>
-                    <div style={{display:"flex",alignItems:"center",gap:6,flexShrink:0}}>
-                      {inPantry || markState ? (
-                        <span style={{
-                          fontSize:10,fontWeight:700,color:"var(--sage)",background:"var(--sageBg)",
-                          padding:"2px 8px",borderRadius:4,whiteSpace:"nowrap",
-                          transition:"all 0.3s ease",
-                          opacity: markState === "removing" ? 0 : 1,
-                          transform: markState === "removing" ? "scale(0.8)" : "scale(1)",
-                        }}>
-                          {markState === "added" ? "Added ✓" : "Have"}
-                        </span>
-                      ) : isOptional ? (
-                        <span style={{fontSize:10,fontWeight:600,color:"var(--mu)",background:"var(--cream)",border:"1px solid var(--bor)",padding:"2px 8px",borderRadius:4,whiteSpace:"nowrap"}}>Optional</span>
-                      ) : (
-                        <div style={{display:"flex",alignItems:"center",gap:4}}>
-                          <span style={{fontSize:10,fontWeight:700,color:"var(--gold)",background:"var(--goldBg)",padding:"2px 8px",borderRadius:4,whiteSpace:"nowrap"}}>Missing</span>
-                          {setPantry && (
-                            <button
-                              onClick={(e) => { e.stopPropagation(); markAsHave(ing.n); }}
-                              style={{
-                                fontSize:10,fontWeight:600,color:"var(--clay)",background:"var(--clayBg)",
-                                padding:"2px 8px",borderRadius:4,whiteSpace:"nowrap",
-                                border:"none",cursor:"pointer",transition:"all 0.15s ease",
-                              }}
-                              onMouseEnter={e=>{e.currentTarget.style.background="rgba(192,106,62,.18)";}}
-                              onMouseLeave={e=>{e.currentTarget.style.background="var(--clayBg)";}}
-                            >
-                              I have this
-                            </button>
-                          )}
-                        </div>
-                      )}
-                      {/* Avoid toggle */}
-                      {setAvoidedIngredients && (()=>{
-                        const norm = normalizeIng(ing.n);
-                        const isAvoided = avoidedIngredients?.includes(norm);
-                        return isAvoided ? (
-                          <button
-                            style={{fontSize:10,fontWeight:600,color:'#c04040',background:'rgba(224,92,92,.1)',border:'1px solid rgba(224,92,92,.25)',padding:'2px 7px',borderRadius:4,cursor:'pointer',whiteSpace:'nowrap'}}
-                            onClick={e=>{e.stopPropagation();setAvoidedIngredients(a=>a.filter(x=>x!==norm));}}
-                          >Avoided ✕</button>
-                        ) : (
-                          <button
-                            style={{fontSize:10,fontWeight:500,color:'var(--mu)',background:'var(--cream)',border:'1px solid var(--bor)',padding:'2px 7px',borderRadius:4,cursor:'pointer',whiteSpace:'nowrap'}}
-                            onClick={e=>{e.stopPropagation();setAvoidedIngredients(a=>[...new Set([...a,norm])]);}}
-                          >Avoid</button>
-                        );
-                      })()}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-          <div style={{animation:"fadeInUp .5s ease .45s both"}}>
-            <h2 style={{fontFamily:"var(--fd)",fontSize:20,marginBottom:16}}>Instructions</h2>
-            {stepsAutoGenerated && <div style={{fontSize:11,color:'var(--gold)',background:'rgba(212,173,65,.1)',border:'1px solid rgba(212,173,65,.25)',borderRadius:4,padding:'4px 10px',marginBottom:12,display:'inline-block'}}>⚡ Auto-generated steps</div>}
-            {displaySteps.map((s,idx)=><div key={s.n} style={{display:"flex",gap:16,marginBottom:20,animation:`fadeInUp .4s ease ${.5+idx*.08}s both`}}><div style={{width:30,height:30,borderRadius:"50%",background:"var(--clay)",color:"#fff",display:"flex",alignItems:"center",justifyContent:"center",fontSize:13,fontWeight:700,flexShrink:0,marginTop:2,transition:"transform .2s ease"}}>{s.n}</div><div><div style={{fontWeight:600,fontSize:14,marginBottom:4}}>{s.t}</div><div style={{fontSize:14,color:"var(--mu)",lineHeight:1.7}}>{s.d}</div></div></div>)}
-          </div>
-        </div>
-      </div>
-      {showLocalFavModal && favFolders && (
-        <SaveFavModal
-          recipe={recipe}
-          favFolders={favFolders}
-          favItems={favItems || []}
-          onSave={(r, folderId) => { saveToFolder(r, folderId); setShowLocalFavModal(false); }}
-          onClose={()=>setShowLocalFavModal(false)}
-          onCreateFolder={createFavFolder}
-        />
-      )}
-    </div>
-  );
-}
-
-/* ── PANTRY TAB ── */
-
-// ═══════════════════════════════════════════════════════════════════════
-// FEATURE 9 — PANTRY STRENGTH METER
-// ═══════════════════════════════════════════════════════════════════════
-function PantryStrengthMeter({ coverage }) {
-  if (!coverage || !coverage.total.all) return null;
-  const meals = [
-    { key:'breakfast', label:'Breakfast', emoji:'☀️' },
-    { key:'lunch',     label:'Lunch',     emoji:'🌤️' },
-    { key:'dinner',    label:'Dinner',    emoji:'🌙' },
-    { key:'snack',     label:'Snack',     emoji:'🍎' },
-  ];
-  const overall = coverage.total.all > 0
-    ? Math.round((coverage.complete.all / coverage.total.all) * 100) : 0;
-  const strength = overall >= 50 ? 'Strong' : overall >= 25 ? 'Moderate' : 'Weak';
-  const strengthColor = overall >= 50 ? 'var(--sageH)' : overall >= 25 ? 'var(--goldH)' : '#e05c5c';
-  return (
-    <div style={{background:'var(--cardBg)',border:'1px solid var(--border)',borderRadius:'var(--r)',padding:'18px 20px',marginBottom:20}}>
-      <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:14}}>
-        <div>
-          <div style={{fontWeight:700,fontSize:15}}>🧠 Pantry Strength</div>
-          <div style={{fontSize:12,color:'var(--mu)',marginTop:2}}>{coverage.complete.all} of {coverage.total.all} recipes fully covered</div>
-        </div>
-        <span style={{fontWeight:700,fontSize:14,color:strengthColor,background:`${strengthColor}18`,padding:'4px 12px',borderRadius:20}}>{strength}</span>
-      </div>
-      <div style={{display:'grid',gridTemplateColumns:'repeat(2,1fr)',gap:10}}>
-        {meals.map(({key,label,emoji}) => {
-          const total = coverage.total[key] || 1;
-          const done  = coverage.complete[key] || 0;
-          const pct   = Math.round((done / total) * 100);
-          const col   = pct >= 50 ? 'var(--sage)' : pct >= 25 ? 'var(--gold)' : '#e05c5c';
-          return (
-            <div key={key}>
-              <div style={{display:'flex',justifyContent:'space-between',fontSize:12,marginBottom:4}}>
-                <span>{emoji} {label}</span>
-                <span style={{fontWeight:600,color:col}}>{done}/{total} ({pct}%)</span>
-              </div>
-              <div style={{height:6,borderRadius:3,background:'var(--border)',overflow:'hidden'}}>
-                <div style={{height:'100%',borderRadius:3,background:col,width:`${pct}%`,transition:'width .4s ease'}}/>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
-
-// ═══════════════════════════════════════════════════════════════════════
-// FEATURE 1 — PANTRY COVERAGE SIMULATOR
-// ═══════════════════════════════════════════════════════════════════════
-function PantryCoverageSimulator({ coverage, allRecipes, pantry, setPantry }) {
-  const [target, setTarget]     = React.useState(21);
-  const [expanded, setExpanded] = React.useState(false);
-  if (!coverage || !coverage.total.all) return null;
-
-  const zeroAll = coverage.complete.all;
-  const needMore = Math.max(0, target - zeroAll);
-  const suggestions = React.useMemo(
-    () => needMore > 0 ? greedyCoverageExpansion(
-      allRecipes.map(r => ({
-        ...r,
-        missingCount: r.missingIngredients ? r.missingIngredients.length : 0,
-        missingIngredients: r.missingIngredients || [],
-        pantryComplete: r.pantryComplete || false,
-      })),
-      pantry, 12
-    ) : [],
-    [allRecipes, pantry, needMore]
-  );
-
-  const mealRows = [
-    { key:'breakfast', label:'Breakfast', emoji:'☀️' },
-    { key:'lunch',     label:'Lunch',     emoji:'🌤️' },
-    { key:'dinner',    label:'Dinner',    emoji:'🌙' },
-    { key:'snack',     label:'Snack',     emoji:'🍎' },
-  ];
-
-  return (
-    <div style={{border:'1px solid var(--border)',borderRadius:'var(--r)',marginBottom:20,overflow:'hidden'}}>
-      <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'14px 18px',cursor:'pointer',background:'var(--cardBg)'}} onClick={()=>setExpanded(e=>!e)}>
-        <div style={{display:'flex',alignItems:'center',gap:10}}>
-          <span style={{fontSize:18}}>📊</span>
-          <div>
-            <div style={{fontWeight:700,fontSize:14}}>Pantry Coverage Simulator</div>
-            <div style={{fontSize:12,color:'var(--mu)'}}>{zeroAll} recipes ready to cook right now · tap to explore</div>
-          </div>
-        </div>
-        <span style={{fontSize:16,color:'var(--mu)'}}>{expanded ? '▲' : '▼'}</span>
-      </div>
-      {expanded && (
-        <div style={{padding:'16px 18px',borderTop:'1px solid var(--border)'}}>
-          {/* Target selector */}
-          <div style={{display:'flex',gap:8,marginBottom:16}}>
-            {[7,14,21].map(n => (
-              <button key={n} onClick={()=>setTarget(n)}
-                className={`cchip${target===n?' ac':''}`}
-                style={{fontSize:13,padding:'6px 16px',fontWeight:600}}>
-                {n} meals
-              </button>
-            ))}
-          </div>
-
-          {/* Coverage grid */}
-          <div style={{display:'grid',gridTemplateColumns:'repeat(2,1fr)',gap:10,marginBottom:16}}>
-            {mealRows.map(({key,label,emoji}) => {
-              const tot = coverage.total[key] || 0;
-              const done = coverage.complete[key] || 0;
-              return (
-                <div key={key} style={{background:'var(--bg)',borderRadius:8,padding:'10px 14px'}}>
-                  <div style={{fontSize:13,fontWeight:600,marginBottom:4}}>{emoji} {label}</div>
-                  <div style={{fontSize:22,fontWeight:800,color:'var(--clay)'}}>{done}</div>
-                  <div style={{fontSize:11,color:'var(--mu)'}}>of {tot} total · 0 missing</div>
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Status */}
-          {zeroAll >= target ? (
-            <div style={{background:'rgba(106,158,114,.1)',border:'1px solid rgba(106,158,114,.3)',borderRadius:8,padding:'12px 14px',fontSize:13,color:'var(--sageH)',fontWeight:600}}>
-              ✅ Your pantry covers {target} meals with 0 missing ingredients!
-            </div>
-          ) : (
-            <>
-              <div style={{fontSize:13,color:'var(--ch)',marginBottom:12}}>
-                You need <strong>{needMore} more recipes</strong> with 0 missing to hit {target} meals.
-                Add these ingredients to unlock them:
-              </div>
-              {suggestions.slice(0,8).map((s,i) => (
-                <div key={s.name} style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'8px 12px',borderRadius:8,background:'var(--bg)',marginBottom:6}}>
-                  <div style={{display:'flex',alignItems:'center',gap:10}}>
-                    <span style={{fontWeight:700,fontSize:13,color:'var(--clay)',minWidth:18}}>{i+1}</span>
-                    <div>
-                      <div style={{fontWeight:600,fontSize:13}}>{s.name}</div>
-                      <div style={{fontSize:11,color:'var(--mu)'}}>
-                        {['breakfast','lunch','dinner','snack'].filter(m=>s.byMeal[m]>0).map(m=>`${s.byMeal[m]} ${m}`).join(' · ')}
-                      </div>
-                    </div>
-                  </div>
-                  <div style={{textAlign:'right'}}>
-                    <div style={{fontSize:13,fontWeight:700,color:'var(--sageH)'}}>+{s.unlocks}</div>
-                    <div style={{fontSize:10,color:'var(--mu)'}}>meals</div>
-                  </div>
-                </div>
-              ))}
-            </>
-          )}
-        </div>
-      )}
-    </div>
-  );
-}
-
-// ═══════════════════════════════════════════════════════════════════════
-// FEATURE 2 — PANTRY TEMPLATES
-// ═══════════════════════════════════════════════════════════════════════
-function PantryTemplatesSection({ allRecipes, pantry, setPantry }) {
-  const [expanded, setExpanded]     = React.useState(false);
-  const [preview,  setPreview]      = React.useState(null); // template id being previewed
-  const [prevCov,  setPrevCov]      = React.useState(null); // coverage for preview template
-
-  const openPreview = (tpl) => {
-    const fakePantry = tpl.ingredients.map((name,i) => ({ id:`tpl_${i}`, name, category:'Pantry', quantity:1, unit:'pcs', emoji:'🥄' }));
-    const cov = computeAllCoverage(allRecipes, fakePantry);
-    const stats = summarizeCoverage(cov);
-    setPrevCov(stats);
-    setPreview(tpl.id);
-  };
-
-  const replacePantry = (tpl) => {
-    const items = tpl.ingredients.map((name,i) => ({ id:`tpl_${Date.now()}_${i}`, name, category:'Pantry', quantity:1, unit:'pcs', emoji:'🥄' }));
-    setPantry(items);
-    setPreview(null);
-  };
-
-  const mergePantry = (tpl) => {
-    const existing = new Set(pantry.map(p => normalizeIng(p.name)));
-    const newItems = tpl.ingredients
-      .filter(name => !existing.has(normalizeIng(name)))
-      .map((name,i) => ({ id:`tpl_merge_${Date.now()}_${i}`, name, category:'Pantry', quantity:1, unit:'pcs', emoji:'🥄' }));
-    setPantry(p => [...p, ...newItems]);
-    setPreview(null);
-  };
-
-  const previewTpl = PANTRY_TEMPLATES.find(t => t.id === preview);
-
-  return (
-    <div style={{border:'1px solid var(--border)',borderRadius:'var(--r)',marginBottom:20,overflow:'hidden'}}>
-      <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'14px 18px',cursor:'pointer',background:'var(--cardBg)'}} onClick={()=>setExpanded(e=>!e)}>
-        <div style={{display:'flex',alignItems:'center',gap:10}}>
-          <span style={{fontSize:18}}>📦</span>
-          <div>
-            <div style={{fontWeight:700,fontSize:14}}>Pantry Templates</div>
-            <div style={{fontSize:12,color:'var(--mu)'}}>Load a pre-built starter pantry in one click</div>
-          </div>
-        </div>
-        <span style={{fontSize:16,color:'var(--mu)'}}>{expanded ? '▲' : '▼'}</span>
-      </div>
-      {expanded && (
-        <div style={{padding:'16px 18px',borderTop:'1px solid var(--border)'}}>
-          <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(240px,1fr))',gap:12}}>
-            {PANTRY_TEMPLATES.map(tpl => (
-              <div key={tpl.id} style={{background:'var(--bg)',border:'1px solid var(--border)',borderRadius:10,padding:'14px 16px'}}>
-                <div style={{fontSize:22,marginBottom:6}}>{tpl.emoji}</div>
-                <div style={{fontWeight:700,fontSize:13,marginBottom:4}}>{tpl.name}</div>
-                <div style={{fontSize:12,color:'var(--mu)',marginBottom:10,lineHeight:1.4}}>{tpl.desc}</div>
-                <div style={{fontSize:11,color:'var(--mu)',marginBottom:12}}>{tpl.ingredients.length} ingredients</div>
-                <div style={{display:'flex',gap:6}}>
-                  <button className="btn btn-xs btn-s" onClick={()=>openPreview(tpl)} style={{fontSize:11,padding:'4px 10px'}}>Preview</button>
-                  <button className="btn btn-xs btn-p" onClick={()=>replacePantry(tpl)} style={{fontSize:11,padding:'4px 10px'}}>Replace</button>
-                  <button className="btn btn-xs" onClick={()=>mergePantry(tpl)} style={{fontSize:11,padding:'4px 10px',background:'var(--border)',color:'var(--ch)'}}>Merge</button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-      {/* Preview modal */}
-      {preview && previewTpl && prevCov && (
-        <div className="modal-overlay" onClick={()=>setPreview(null)}>
-          <div className="modal-box" onClick={e=>e.stopPropagation()} style={{maxWidth:480}}>
-            <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:16}}>
-              <div style={{fontWeight:700,fontSize:16}}>{previewTpl.emoji} {previewTpl.name}</div>
-              <button className="btn btn-xs btn-g" onClick={()=>setPreview(null)}>✕</button>
-            </div>
-            <div style={{fontSize:13,color:'var(--mu)',marginBottom:16}}>{previewTpl.desc}</div>
-            <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:8,marginBottom:16}}>
-              {[{k:'breakfast',e:'☀️'},{k:'lunch',e:'🌤️'},{k:'dinner',e:'🌙'},{k:'snack',e:'🍎'}].map(({k,e})=>(
-                <div key={k} style={{textAlign:'center',background:'var(--bg)',borderRadius:8,padding:'10px 6px'}}>
-                  <div style={{fontSize:18}}>{e}</div>
-                  <div style={{fontWeight:700,fontSize:18,color:'var(--clay)'}}>{prevCov.complete[k]}</div>
-                  <div style={{fontSize:10,color:'var(--mu)'}}>0-missing</div>
-                </div>
-              ))}
-            </div>
-            <div style={{fontSize:13,color:'var(--ch)',marginBottom:6,fontWeight:600}}>Ingredients ({previewTpl.ingredients.length}):</div>
-            <div style={{display:'flex',flexWrap:'wrap',gap:6,marginBottom:20}}>
-              {previewTpl.ingredients.map(ing=>(
-                <span key={ing} style={{background:'var(--sageBg)',color:'var(--sageH)',padding:'3px 10px',borderRadius:20,fontSize:12}}>{ing}</span>
-              ))}
-            </div>
-            <div style={{display:'flex',gap:10}}>
-              <button className="btn btn-p" style={{flex:1}} onClick={()=>replacePantry(previewTpl)}>Replace My Pantry</button>
-              <button className="btn btn-s" style={{flex:1}} onClick={()=>mergePantry(previewTpl)}>Merge with Pantry</button>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
-
-function PantryTab({ pantry, setPantry, addToList, allRecipes: allRecipesProp, avoidedIngredients, setAvoidedIngredients }) {
-  const allRecipes = React.useMemo(() => allRecipesProp || RECIPES, [allRecipesProp]);
-  const [showAdd,setShowAdd]=useState(false);
-  const [filterCat,setFilterCat]=useState("All");
-  const [search,setSearch]=useState("");
-  const [selIng,setSelIng]=useState(null);
-  // Coverage computed once from live pantry — reused by all sub-features (Feature 1, 6, 9)
-  const coveredRecipes = React.useMemo(() => computeAllCoverage(allRecipes, pantry), [allRecipes, pantry]);
-  const coverage       = React.useMemo(() => summarizeCoverage(coveredRecipes),     [coveredRecipes]);
-  // Per-ingredient unlock counts for Feature 6
-  const ingImpactMap   = React.useMemo(() => {
-    const map = {};
-    // For each pantry item, count how many 0-missing recipes it contributes to
-    const pantrySet = buildPantrySet(pantry);
-    allRecipes.forEach(r => {
-      if (!r.ingredients) return;
-      const matchedIngs = r.ingredients.filter(i => ingInPantry(i.n, pantrySet)).map(i => normalizeIng(i.n));
-      const isComplete = r.ingredients.every(i => ingInPantry(i.n, pantrySet));
-      if (isComplete) {
-        matchedIngs.forEach(norm => {
-          if (!map[norm]) map[norm] = 0;
-          map[norm]++;
-        });
-      }
-    });
-    return map;
-  }, [allRecipes, pantry]);
-  const CATS=["All","Produce","Protein","Dairy","Pantry","Spices","Sauces","Frozen","Other"];
-  const today=new Date();
-  const getExp=exp=>{if(!exp)return null;const d=new Date(exp);const diff=Math.round((d-today)/86400000);if(diff<0)return{label:"Expired",cls:"ep-bad"};if(diff<=3)return{label:`${diff}d left`,cls:"ep-w"};if(diff<=7)return{label:`${diff}d left`,cls:"ep-ok"};return null;};
-  const expiring=pantry.filter(i=>{if(!i.expiry)return false;const d=new Date(i.expiry);return(d-today)/86400000<=5;});
-  const filtered=pantry.filter(i=>(filterCat==="All"||i.category===filterCat)&&(!search||i.name.toLowerCase().includes(search.toLowerCase())));
-  return (
-    <div>
-      <div style={{display:"flex",alignItems:"flex-start",justifyContent:"space-between",marginBottom:24,gap:12,flexWrap:"wrap",animation:"fadeInUp .4s ease both"}}>
-        <div><h1 className="stitle">Pantry</h1><p className="ssub">{pantry.length} items tracked</p></div>
-        <button className="btn btn-p" onClick={()=>setShowAdd(true)}><Ic n="plus" s={16}/>Add Items</button>
-      </div>
-      {pantry.length===0&&<div className="empty" style={{animation:"scaleIn .5s ease .2s both"}}><div className="eic">🫙</div><div className="etitle">Your pantry is empty</div><div className="esub">Add your first ingredients to get personalized recipe suggestions.</div><button className="btn btn-p" style={{marginTop:20}} onClick={()=>setShowAdd(true)}><Ic n="plus" s={16}/>Add Items</button></div>}
-      {expiring.length>0&&<div style={{background:"rgba(201,149,58,.08)",border:"1px solid rgba(201,149,58,.25)",borderRadius:12,padding:"14px 16px",marginBottom:20}}><div style={{fontWeight:700,fontSize:13,marginBottom:8}}>⚠️ Expiring soon — use these first</div><div style={{display:"flex",flexWrap:"wrap",gap:8}}>{expiring.map(i=><span key={i.id} style={{background:"var(--goldBg)",color:"var(--gold)",padding:"3px 10px",borderRadius:6,fontSize:12,fontWeight:600}}>{i.emoji} {i.name}</span>)}</div></div>}
-      {pantry.length>0&&<>
-        <div style={{display:"flex",gap:12,marginBottom:16,flexWrap:"wrap"}}>
-          <div className="sw" style={{flex:1,minWidth:180}}><div className="si"><Ic n="list" s={16}/></div><input className="sin" placeholder="Search ingredients…" value={search} onChange={e=>setSearch(e.target.value)}/></div>
-          <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>{CATS.map(c=><button key={c} className={`cchip ${filterCat===c?"ac":""}`} onClick={()=>setFilterCat(c)} style={{fontSize:12,padding:"5px 11px"}}>{c}</button>)}</div>
-        </div>
-        <div className="pgrid">
-          {filtered.map(item=>{const exp=getExp(item.expiry);return(
-            <div key={item.id} className="card pi" onClick={()=>setSelIng(item)}>
-              <div className="pi-ic" style={{background:`${CC[item.category]||"#888"}18`}}>{item.emoji}</div>
-              <div style={{flex:1}}>
-                <div className="pname">{item.name}</div>
-                <div className="pmeta">{item.quantity} {item.unit} · {item.category}</div>
-              </div>
-              <div style={{display:'flex',flexDirection:'column',alignItems:'flex-end',gap:4}}>
-                {exp&&<span className={`ep ${exp.cls}`}>{exp.label}</span>}
-                {(()=>{const n=ingImpactMap[normalizeIng(item.name)]||0;return n>0?<span style={{fontSize:10,fontWeight:700,color:'var(--sageH)',background:'var(--sageBg)',padding:'2px 7px',borderRadius:10,whiteSpace:'nowrap'}}>🔓 {n} recipes</span>:null;})()}
-              </div>
-            </div>
-          );})}
-        </div>
-      </>}
-      {showAdd&&<AddItemsModal onClose={()=>setShowAdd(false)} onAdd={items=>{
-        // Normalize items to canonical form
-        const normalized = items.map(item => {
-          const canonical = getCanonical(item.name);
-          const variant = canonical.toLowerCase() !== item.name.toLowerCase() ? item.name : null;
-          return {...item, name: canonical, variant, display_name: canonical};
-        });
-        // Merge with existing pantry (combine quantities if same canonical item)
-        setPantry(p => {
-          const combined = [...p];
-          normalized.forEach(newItem => {
-            const existing = combined.find(i => i.name.toLowerCase() === newItem.name.toLowerCase());
-            if(existing) {
-              // Merge quantities if units match, otherwise add as separate line
-              if(existing.unit === newItem.unit) {
-                existing.quantity = (parseFloat(existing.quantity) || 0) + (parseFloat(newItem.quantity) || 0);
-                if(newItem.variant && !existing.variants) existing.variants = [];
-                if(newItem.variant && !existing.variants?.includes(newItem.variant)) existing.variants?.push(newItem.variant);
-              } else {
-                combined.push(newItem);
-              }
-            } else {
-              combined.push({...newItem, variants: newItem.variant ? [newItem.variant] : []});
-            }
-          });
-          return combined;
-        });
-        setShowAdd(false);
-      }}/>}
-      {selIng&&<IngDrawer item={selIng} onClose={()=>setSelIng(null)} onAddToList={()=>{addToList([selIng.name]);setSelIng(null);}} onDelete={()=>{setPantry(p=>p.filter(i=>i.id!==selIng.id));setSelIng(null);}}/>}
-      {/* ── AVOIDED INGREDIENTS ── */}
-      {avoidedIngredients !== undefined && (
-        <div style={{marginTop:24,background:'var(--white)',border:'1px solid var(--bor)',borderRadius:'var(--r)',padding:'16px 20px'}}>
-          <div style={{fontWeight:700,fontSize:14,marginBottom:4}}>🚫 Avoided Ingredients</div>
-          <div style={{fontSize:12,color:'var(--mu)',marginBottom:avoidedIngredients.length>0?12:0}}>
-            {avoidedIngredients.length===0
-              ? 'None yet — open any recipe and click "Avoid" next to an ingredient you dislike or are allergic to.'
-              : 'Auto-plan skips recipes containing these. Click × to remove.'}
-          </div>
-          {avoidedIngredients.length>0&&<div style={{display:'flex',flexWrap:'wrap',gap:8}}>
-            {avoidedIngredients.map(norm=>(
-              <span key={norm} style={{display:'flex',alignItems:'center',gap:6,background:'rgba(224,92,92,.08)',border:'1px solid rgba(224,92,92,.25)',borderRadius:20,padding:'4px 12px',fontSize:12,fontWeight:600,color:'#c04040'}}>
-                {norm}
-                <button onClick={()=>setAvoidedIngredients(a=>a.filter(x=>x!==norm))} style={{background:'none',border:'none',cursor:'pointer',color:'#c04040',fontWeight:700,fontSize:15,lineHeight:1,padding:0}}>×</button>
-              </span>
-            ))}
-          </div>}
-        </div>
-      )}
-      {/* ── PANTRY INTELLIGENCE FEATURES ─────────────────────────── */}
-      {pantry.length > 0 && <>
-        <PantryStrengthMeter coverage={coverage} />
-        <PantryCoverageSimulator coverage={coverage} coveredRecipes={coveredRecipes} allRecipes={allRecipes} pantry={pantry} setPantry={setPantry} />
-        <PantryTemplatesSection allRecipes={allRecipes} pantry={pantry} setPantry={setPantry} />
-      </>}
-    </div>
-  );
-}
-
-/* ── ADD ITEMS MODAL ── */
-function AddItemsModal({ onClose, onAdd }) {
-  const [step,setStep]=useState("choose");
-  const [text,setText]=useState("");
-  const [parsed,setParsed]=useState([]);
-  const [selCat,setSelCat]=useState("Vegetables");
-  const [picks,setPicks]=useState(new Set());
-  const [search,setSearch]=useState("");
-  const [sortBy,setSortBy]=useState("default"); // default | az | za
-  const [voiceListening, setVoiceListening] = useState(false);
-  const [voiceError, setVoiceError] = useState('');
-  const SpeechRecognition = typeof window !== 'undefined' && (window.SpeechRecognition || window.webkitSpeechRecognition);
-  const startPantryVoice = () => {
-    if (!SpeechRecognition) { setVoiceError("Speech recognition is not supported in your browser. Try Chrome or Edge."); return; }
-    setVoiceError('');
-    const rec = new SpeechRecognition();
-    rec.continuous = false;
-    rec.interimResults = false;
-    rec.lang = 'en-US';
-    setVoiceListening(true);
-    rec.onresult = (e) => { const t = e.results[0][0].transcript; setText(prev => prev ? prev + ', ' + t : t); setVoiceListening(false); setStep('manual'); };
-    rec.onerror = (e) => { setVoiceListening(false); setVoiceError(e.error === 'not-allowed' ? 'Microphone access denied. Please allow microphone in your browser settings.' : 'Voice recognition failed. Please try again.'); };
-    rec.onend = () => setVoiceListening(false);
-    rec.start();
-  };
-  const parseList=()=>{const items=smartParseList(text).map(it=>({...it,emoji:getIcon(it.name,it.category)}));setParsed(items);setStep("parsed");};
-  const confirmParsed=()=>onAdd(parsed);
-  const tp=name=>setPicks(p=>{const n=new Set(p);n.has(name)?n.delete(name):n.add(name);return n;});
-  const confirmPicks=()=>{const cmap={Vegetables:"Produce",Fruits:"Produce",Proteins:"Protein",Dairy:"Dairy",Pantry:"Pantry",Frozen:"Frozen",Spices:"Spices",Sauces:"Sauces"};const items=Array.from(picks).map((name,i)=>{const cat=Object.entries(PICK).find(([,v])=>v.includes(name))?.[0]||"Pantry";const c=cmap[cat]||"Pantry";const shelfDays=getShelfLifeDays(name);const exp=new Date();exp.setDate(exp.getDate()+shelfDays);return{id:Date.now()+i,name,category:c,quantity:1,unit:"pcs",emoji:getIcon(name,c),expiry:exp.toISOString().split('T')[0]};});onAdd(items);};
-  // Smart search: if search active, search across ALL categories; otherwise filter current category
-  let fp=search
-    ? Object.values(PICK).flat().filter(i=>i.toLowerCase().includes(search.toLowerCase()))
-    : PICK[selCat];
-  // Apply sorting
-  if(sortBy==="az") fp = [...fp].sort((a,b)=>a.localeCompare(b));
-  else if(sortBy==="za") fp = [...fp].sort((a,b)=>b.localeCompare(a));
-  const hasExactMatch = fp.some(i=>i.toLowerCase()===search.toLowerCase());
-  const canAddCustom = search.trim().length >= 2 && !hasExactMatch;
-  return (
-    <div className="mov" onClick={e=>e.target===e.currentTarget&&onClose()}>
-      <div className="modal">
-        <div className="mhd">
-          <div><div className="mtitle">Add items to pantry</div>{step!=="choose"&&<button className="aback" onClick={()=>setStep("choose")} style={{marginTop:4,fontSize:12,padding:0}}><Ic n="back" s={12}/>Back to options</button>}</div>
-          <button className="mclose" onClick={onClose}><Ic n="x" s={16}/></button>
-        </div>
-        {step==="choose"&&<div className="mbody"><div className="aopts">
-          {[{key:"manual",icon:"📝",bg:"var(--clayBg)",label:"Manual",sub:"Type or paste a list"},{key:"pick",icon:"📋",bg:"var(--sageBg)",label:"Pick from list",sub:"Browse by category"},{key:"camera",icon:"📷",bg:"var(--goldBg)",label:"Camera scan",sub:"Photo of your fridge"},{key:"voice",icon:"🎤",bg:"var(--lavBg,#eeeeff)",label:"Speak pantry",sub:"Say items out loud"}].map(o=><div key={o.key} className="aocard" onClick={()=>setStep(o.key)}><div className="aoic" style={{background:o.bg}}>{o.icon}</div><div className="aolabel">{o.label}</div><div className="aosub">{o.sub}</div></div>)}
-        </div></div>}
-        {step==="manual"&&<div className="mbody" style={{display:"flex",flexDirection:"column",gap:14}}>
-          <div><label className="fl">Type items or paste a list</label><textarea className="fi" placeholder={"tomatoes, pasta, eggs, yogurt…"} value={text} onChange={e=>setText(e.target.value)} style={{minHeight:100,resize:"vertical"}}/><div className="fhint">Separate items with commas or new lines.</div></div>
-          <button className="btn btn-p btn-full" onClick={parseList} disabled={!text.trim()}>Parse & Preview →</button>
-        </div>}
-        {step==="parsed"&&<div className="mbody">
-          <p style={{fontSize:13,color:"var(--mu)",marginBottom:12}}>Edit names, quantities and categories before saving.</p>
-          <div style={{maxHeight:380,overflowY:"auto"}}>
-            <ConfirmItemsTable items={parsed} setItems={setParsed}/>
-          </div>
-          <button className="btn btn-p btn-full" onClick={confirmParsed} style={{marginTop:12}}>Add {parsed.length} items to pantry</button>
-        </div>}
-        {step==="pick"&&<div className="mbody">
-          <div style={{position:"sticky",top:0,background:"var(--white)",zIndex:10,paddingBottom:12,marginBottom:0}}>
-            <div className="cchips" style={{marginBottom:8}}>{Object.keys(PICK).map(c=><button key={c} className={`cchip ${selCat===c?"ac":""}`} onClick={()=>setSelCat(c)} style={{fontSize:12,padding:"5px 11px"}}>{c}</button>)}</div>
-            <div style={{display:"flex",gap:8}}>
-              <div className="sw" style={{flex:1}}><div className="si"><Ic n="list" s={15}/></div><input className="sin" placeholder="Search across all categories…" value={search} onChange={e=>setSearch(e.target.value)}/></div>
-              <select className="sel" value={sortBy} onChange={e=>setSortBy(e.target.value)} style={{width:100,padding:"9px 12px",fontSize:13}}>
-                <option value="default">Default</option>
-                <option value="az">A → Z</option>
-                <option value="za">Z → A</option>
-              </select>
-            </div>
-          </div>
-          <div style={{maxHeight:280,overflowY:"auto",border:"1px solid var(--bor)",borderRadius:"var(--rs)",marginTop:12}}>
-            {canAddCustom&&<div className="pki" style={{background:"var(--clayBg)",borderBottom:"2px solid var(--clay)"}} onClick={()=>{tp(search.trim());setSearch("");}}>
-              <span style={{fontSize:14,fontWeight:600,color:"var(--clayH)"}}>+ Add "{search.trim()}" as custom item</span>
-              <div className="pkc"><Ic n="plus" s={12}/></div>
-            </div>}
-            {fp.length===0&&!canAddCustom&&<div style={{padding:32,textAlign:"center",color:"var(--mu)",fontSize:13}}>No items found</div>}
-            {fp.map(item=><div key={item} className={`pki ${picks.has(item)?"sel":""}`} onClick={()=>tp(item)}><span style={{fontSize:14,fontWeight:500}}>{item}</span><div className={`pkc ${picks.has(item)?"on":""}`}>{picks.has(item)&&<Ic n="check" s={12}/>}</div></div>)}
-          </div>
-          <div style={{marginTop:14}}><button className="btn btn-p btn-full" onClick={confirmPicks} disabled={picks.size===0}>Add selected ({picks.size})</button></div>
-        </div>}
-        {step==="camera"&&<div className="mbody">
-          <div style={{background:"var(--cream)",border:"2px dashed var(--bor)",borderRadius:"var(--r)",padding:"40px 20px",textAlign:"center",cursor:"pointer",marginBottom:16}} onClick={()=>{setParsed([{id:1,name:"Yogurt (detected)",category:"Dairy",quantity:1,unit:"pcs",emoji:"🧀"},{id:2,name:"Tomatoes (detected)",category:"Produce",quantity:3,unit:"pcs",emoji:"🥦"},{id:3,name:"Canned beans",category:"Pantry",quantity:2,unit:"can",emoji:"🫘"}]);setStep("cam-review");}}>
-            <div style={{fontSize:40,marginBottom:10}}>📷</div>
-            <div style={{fontWeight:600,fontSize:14,marginBottom:4}}>Click to upload a photo</div>
-            <div style={{fontSize:13,color:"var(--mu)"}}>JPG, PNG · Click to demo scan</div>
-          </div>
-          <div style={{fontSize:13,color:"var(--mu)",lineHeight:1.6}}>ℹ️ Low-confidence items are always flagged for review before being added.</div>
-        </div>}
-        {step==="cam-review"&&<div className="mbody">
-          <p style={{fontSize:13,color:"var(--mu)",marginBottom:12}}>Review detected items. Items flagged <span className="bneeds">Needs confirmation</span> require your approval.</p>
-          <div style={{maxHeight:360,overflowY:"auto"}}>
-            {parsed.map((item,idx)=>{const needs=idx===2;return(<div key={item.id} className="pit"><span style={{fontSize:18}}>{item.emoji}</span><input className="fi" style={{flex:1,padding:"6px 10px",fontSize:13}} value={item.name.replace(" (detected)","")} onChange={e=>setParsed(p=>p.map((it,i)=>i===idx?{...it,name:e.target.value}:it))}/>{needs?<span className="bneeds">Needs confirmation</span>:<span style={{fontSize:11,color:"var(--sage)",fontWeight:600}}>✓ Detected</span>}<button className="pit-del" onClick={()=>setParsed(p=>p.filter((_,i)=>i!==idx))}><Ic n="x" s={14}/></button></div>);})}
-          </div>
-          <button className="btn btn-p btn-full" onClick={confirmParsed} style={{marginTop:16}}>Add confirmed items ({parsed.length})</button>
-        </div>}
-        {step==="voice"&&<div className="mbody" style={{display:"flex",flexDirection:"column",gap:14,alignItems:"center",textAlign:"center"}}>
-          {!SpeechRecognition
-            ? <div style={{padding:24}}>
-                <div style={{fontSize:36,marginBottom:12}}>🎤</div>
-                <div style={{fontWeight:600,marginBottom:8}}>Voice input not supported</div>
-                <div style={{fontSize:13,color:"var(--mu)",marginBottom:16}}>Your browser doesn’t support speech recognition. Try Chrome or Edge on desktop.</div>
-                <button className="btn btn-g btn-sm" onClick={()=>setStep("manual")}>Type instead</button>
-              </div>
-            : <>
-                <div style={{fontSize:13,color:"var(--mu)",marginBottom:4}}>Say your pantry items — e.g. <em>"eggs, milk, tomatoes, olive oil"</em></div>
-                <button
-                  onClick={startPantryVoice}
-                  disabled={voiceListening}
-                  style={{width:80,height:80,borderRadius:"50%",border:"none",background:voiceListening?"#e05c5c":"var(--clay)",color:"#fff",fontSize:32,cursor:voiceListening?"default":"pointer",boxShadow:voiceListening?"0 0 0 8px rgba(224,92,92,0.25)":"none",transition:"all .2s"}}
-                >
-                  {voiceListening ? "…" : "🎤"}
-                </button>
-                <div style={{fontSize:13,color:voiceListening?"var(--clay)":"var(--mu)",fontWeight:voiceListening?600:400}}>
-                  {voiceListening ? "Listening… speak now" : "Tap to start"}
-                </div>
-                {voiceError&&<div style={{fontSize:13,color:"#e05c5c",marginTop:4}}>{voiceError}</div>}
-                {text&&!voiceListening&&<div style={{width:"100%",textAlign:"left"}}>
-                  <label className="fl">Transcript — review before adding:</label>
-                  <textarea className="fi" value={text} onChange={e=>setText(e.target.value)} style={{minHeight:80,resize:"vertical"}}/>
-                  <div style={{display:"flex",gap:8,marginTop:8}}>
-                    <button className="btn btn-p btn-full" onClick={parseList}>Parse & Preview →</button>
-                    <button className="btn btn-g btn-sm" onClick={()=>{setText("");setVoiceError("");}}>Clear</button>
-                  </div>
-                </div>}
-              </>
-          }
-        </div>}
-      </div>
-    </div>
-  );
-}
-
-/* ── INGREDIENT DRAWER ── */
-function IngDrawer({ item, onClose, onAddToList, onDelete }) {
-  // Fuzzy lookup: try exact, then case-insensitive, then partial match
-  const findIngInfo = (name) => {
-    if(INGKNOW[name]) return INGKNOW[name];
-    const lower = name.toLowerCase().trim();
-    for(const [key, val] of Object.entries(INGKNOW)) {
-      if(key.toLowerCase() === lower) return val;
-    }
-    for(const [key, val] of Object.entries(INGKNOW)) {
-      if(lower.includes(key.toLowerCase()) || key.toLowerCase().includes(lower)) return val;
-    }
-    return DEFKNOW;
-  };
-  const info = findIngInfo(item.name);
-  return (
-    <div className="dov" onClick={e=>e.target===e.currentTarget&&onClose()}>
-      <div className="drawer">
-        <div className="dhdr"><div><div style={{fontSize:32,marginBottom:4}}>{item.emoji}</div><div className="dtitle">{item.name}</div></div><button className="dclose" onClick={onClose}><Ic n="x" s={16}/></button></div>
-        <div className="dbody">
-          <div style={{display:"flex",gap:10,marginBottom:20,flexWrap:"wrap"}}><span style={{background:"var(--clayBg)",color:"var(--clayH)",padding:"4px 12px",borderRadius:6,fontSize:13,fontWeight:600}}>{item.category}</span><span style={{background:"var(--sageBg)",color:"var(--sage)",padding:"4px 12px",borderRadius:6,fontSize:13,fontWeight:600}}>{item.quantity} {item.unit}</span></div>
-          <div className="idr"><div className="idic">⏳</div><div><div className="idl">Typical shelf life</div><div className="idv">{info.life}</div></div></div>
-          <div className="idr"><div className="idic">🏠</div><div><div className="idl">Storage guidance</div><div className="idv">{info.stor}</div></div></div>
-          <div className="idr"><div className="idic">🍽️</div><div><div className="idl">Best used for</div><div className="idv">{info.best}</div></div></div>
-          <div style={{marginTop:24,display:"flex",flexDirection:"column",gap:10}}>
-            <button className="btn btn-p btn-full" onClick={onAddToList}><Ic n="cart" s={16}/>Add to shopping list</button>
-            <button className="btn btn-s btn-full btn-err" onClick={onDelete}><Ic n="trash" s={15}/>Remove from pantry</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/* ── CHAT TAB ── */
-function ChatTab({ onViewRecipe, pantry, prefs, addToList, isPremium, onUpgrade }) {
-  if (!isPremium) return (
-    <div>
-      <div style={{marginBottom:24}}><h1 className="stitle">Chef AI</h1><p className="ssub">Your AI-powered cooking assistant</p></div>
-      <div style={{maxWidth:520,margin:"40px auto",textAlign:"center",animation:"fadeInUp .5s ease both"}}>
-        <div style={{fontSize:64,marginBottom:20,animation:"float 3s ease-in-out infinite"}}>🤖</div>
-        <h2 style={{fontFamily:"var(--fd)",fontSize:28,marginBottom:10}}>Meet your AI Chef</h2>
-        <p style={{color:"var(--mu)",fontSize:15,lineHeight:1.7,marginBottom:28}}>Ask for recipe ideas based on your pantry, get ingredient substitutions, plan meals around your mood, and get cooking tips — all powered by AI.</p>
-        <div style={{display:"flex",flexDirection:"column",gap:10,marginBottom:28}}>
-          {["🍕 \"What can I make with tomatoes and pasta?\"","⚡ \"Give me a quick dinner for 2 under 30 minutes\"","🔄 \"What can I substitute for buttermilk?\"","🌱 \"Plan me a healthy vegetarian week\""].map((ex,i)=>(
-            <div key={ex} style={{background:"var(--white)",border:"1px solid var(--bor)",borderRadius:10,padding:"12px 16px",fontSize:14,color:"var(--mu)",textAlign:"left",animation:`slideInLeft .4s ease ${.3+i*.1}s both`,transition:"all .2s ease"}}>{ex}</div>
-          ))}
-        </div>
-        <button className="btn btn-p btn-lg btn-full" onClick={()=>onUpgrade("chat")} style={{marginBottom:12}}>⭐ Unlock Chef AI — $4.99/mo</button>
-        <div style={{fontSize:13,color:"var(--mu)"}}>Or $39/year (save 35%) · Cancel anytime</div>
-      </div>
-    </div>
-  );
-  const [msgs,setMsgs]=useState([{role:"ai",text:"Hi! I'm your SmartChef AI 👨‍🍳\n\nTell me how you're feeling or what you're craving and I'll suggest perfect recipes.\n\nTry: \"Something quick\" or \"Snack ideas\"",suggestions:null}]);
-  const [input,setInput]=useState("");
-  const [loading,setLoading]=useState(false);
-  const [recentSuggestions,setRecentSuggestions]=useState([]); // Track last 6 suggested recipe IDs
-  const endRef=useRef(null);
-  const MOODS=["🍕 Comfort food","⚡ Quick & easy","💪 High protein","🌱 Something light","💑 Romantic dinner","🌶️ Spicy","🍿 Snack ideas"];
-  
-  const call=async userMsg=>{
-    setLoading(true);
-    // Add user message to chat (append-only)
-    setMsgs(p=>[...p,{role:"user",text:userMsg}]);
-    setInput("");
-    
-    // Build conversation history for context
-    const history = msgs.slice(-3).map(m=>({role:m.role==="ai"?"assistant":"user",content:m.text}));
-    
-    // Detect intent from user message
-    const detectIntent = (msg, prevIntent) => {
-      const m = msg.toLowerCase();
-      const intent = {
-        request_type: prevIntent?.request_type || "meal",
-        time_limit: prevIntent?.time_limit || null,
-        sweet_or_salty: prevIntent?.sweet_or_salty || null,
-        pantry_first: true,
-        exclude_recent: true,
-      };
-      
-      // Short correction message (e.g. "Sweet!") - preserve request_type but update flavor
-      if(m.length < 15 && (m.includes("sweet")||m.includes("salty")||m.includes("savory"))) {
-        if(m.includes("sweet")) intent.sweet_or_salty = "sweet";
-        if(m.includes("salty")||m.includes("savory")) intent.sweet_or_salty = "salty";
-        return intent; // Keep previous request_type
-      }
-      
-      // Full intent detection
-      // Snack detection (PRIORITY)
-      if(m.includes("snack")||m.includes("munch")||m.includes("bite")||m.includes("nibble")||m.includes("quick bite")) {
-        intent.request_type = "snack";
-        intent.time_limit = 10;
-      }
-      // Meal type
-      if(m.includes("breakfast")) intent.request_type = "breakfast";
-      if(m.includes("lunch")) intent.request_type = "lunch";
-      if(m.includes("dinner")) intent.request_type = "dinner";
-      if(m.includes("dessert")) intent.request_type = "dessert";
-      
-      // Time constraints
-      if(m.includes("quick")||m.includes("fast")||m.includes("easy")||m.includes("simple")) {
-        if(!intent.time_limit) intent.time_limit = 25;
-      }
-      
-      // Sweet/salty
-      if(m.includes("sweet")) intent.sweet_or_salty = "sweet";
-      if(m.includes("salty")||m.includes("savory")) intent.sweet_or_salty = "salty";
-      
-      return intent;
-    };
-    
-    const prevMsg = msgs[msgs.length-1];
-    const prevIntent = prevMsg?.intent;
-    const intent = detectIntent(userMsg, prevIntent);
-    const pantryList = pantry.map(i=>i.name).join(", ") || "garlic, olive oil, eggs, pasta, rice";
-    const dietary = prefs.dietary.length > 0 ? prefs.dietary.join(", ") : "none";
-    const excludeIds = recentSuggestions.slice(-6).join(",");
-    
-    // Build system prompt with strict constraints
-    let systemPrompt = `You are SmartChef AI, a warm professional chef. The user has these pantry items: ${pantryList}. Dietary restrictions: ${dietary}.
-
-CRITICAL RULES:
-1. Request type is: ${intent.request_type}
-${intent.request_type==="snack"?`
-   SNACK RULES (ABSOLUTELY ENFORCE - NO EXCEPTIONS):
-   - Max 10 minutes total time (prep + cook)
-   - Small portions (NOT full meals, NOT dinner plates)
-   - Minimal cooking (prefer raw, assembled, toasted, or 1-step microwave)
-   - Examples: avocado toast, fruit + yogurt, cheese + crackers, hummus + veggies, energy balls, smoothie
-   - NEVER NEVER suggest: shakshuka, stir-fry, pasta dishes, ramen, curry, full breakfast plates
-   - If user asks for SWEET snacks: fruit-based, yogurt parfaits, energy balls, smoothies, toast with honey/jam
-   - If user asks for SALTY snacks: cheese, crackers, hummus, nuts, veggie sticks, popcorn
-`:""}
-${intent.sweet_or_salty?`2. FLAVOR CONSTRAINT (MANDATORY): User wants ${intent.sweet_or_salty.toUpperCase()} options ONLY. Do not suggest ${intent.sweet_or_salty==="sweet"?"salty/savory":"sweet"} items.`:""}
-${intent.time_limit?`3. Time limit: ${intent.time_limit} minutes max`:""}
-4. PANTRY-FIRST: Strongly prefer recipes using items from the pantry. If missing ingredients needed, keep to 1-2 items max and they should be common/affordable.
-5. EXCLUDE these recipe IDs from previous suggestions: ${excludeIds}
-6. Dietary compliance: ${dietary}
-
-Respond in JSON: {"reply":"1-2 sentence acknowledgment","recipes":[{"id":"unique_id","emoji":"🥗","title":"Name","time":15,"difficulty":"Easy","pantry_used":["item1","item2"],"missing":["item3"],"reason":"why it matches (1 line)"},...]}
-
-Provide 4-6 options. Each must be genuinely different from recent suggestions.`;
-
-    try{
-      const res=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({
-        model:"claude-sonnet-4-20250514",
-        max_tokens:1500,
-        system:systemPrompt,
-        messages:[...history,{role:"user",content:userMsg}]
-      })});
-      const data=await res.json();
-      const clean=data.content[0].text.replace(/```json|```/g,"").trim();
-      const parsed=JSON.parse(clean);
-      
-      // Store suggested IDs to prevent repeats
-      const newIds = parsed.recipes.map(r=>r.id||r.title);
-      setRecentSuggestions(prev=>[...prev,...newIds].slice(-12));
-      
-      // Add AI response with embedded suggestions (persistent) + intent for context
-      setMsgs(p=>[...p,{role:"ai",text:parsed.reply,suggestions:parsed.recipes,intent}]);
-    }catch(err){
-      console.error("Chef AI error:",err);
-      // Fallback suggestions - APPLY DIETARY FILTER
-      const baseFallback = intent.request_type === "snack" 
-        ? [{id:"av-toast",emoji:"🥑",title:"Avocado Toast",time:5,difficulty:"Easy",pantry_used:["bread","avocado"],missing:[],reason:"Quick, fresh, filling snack",ingredients:[{n:"avocado"}]},{id:"hum-veg",emoji:"🥕",title:"Hummus & Veggie Sticks",time:3,difficulty:"Easy",pantry_used:["chickpeas","olive oil"],missing:["carrots"],reason:"Healthy crunchy snack",ingredients:[{n:"chickpeas"}]},{id:"chz-crack",emoji:"🧀",title:"Cheese & Crackers",time:2,difficulty:"Easy",pantry_used:["cheese"],missing:["crackers"],reason:"Classic simple snack",ingredients:[{n:"cheese"}]}]
-        : RECIPES.slice(0,3).map(r=>({id:r.id,emoji:r.emoji,title:r.title,time:r.time,difficulty:r.diff,pantry_used:[],missing:r.missing||[],reason:"Based on your pantry",ingredients:r.ingredients}));
-      
-      // Filter by dietary preferences
-      const filteredFallback = baseFallback.filter(s => isRecipeAllowedForUser(s, prefs));
-      
-      setMsgs(p=>[...p,{role:"ai",text:filteredFallback.length>0?"Here are some great options based on your pantry!":"No recipes found matching your dietary preferences. Try relaxing restrictions.",suggestions:filteredFallback.length>0?filteredFallback:null,intent}]);
-    }
-    setLoading(false);
-  };
-  
-  useEffect(()=>{endRef.current?.scrollIntoView({behavior:"smooth"});},[msgs,loading]);
-  
-  return (
-    <div>
-      <div style={{marginBottom:20}}><h1 className="stitle">Chef AI</h1><p className="ssub">Mood-based recipe suggestions powered by AI</p></div>
-      <div style={{display:"flex",flexWrap:"wrap",gap:8,marginBottom:20}}>{MOODS.map((m,i)=><button key={m} className="cchip" style={{animation:`chipPop .3s ease ${i*.06}s both`}} onClick={()=>call(m.replace(/^.+? /,""))}>{m}</button>)}</div>
-      <div className="card cwrap">
-        <div className="cmsgs">
-          {msgs.map((msg,i)=>(
-            <div key={i}>
-              <div className={`mrow ${msg.role==="user"?"u":""}`}>
-                {msg.role==="ai"&&<div className="mav">🍳</div>}
-                <div className="mbub" style={{whiteSpace:"pre-wrap"}}>{msg.text}</div>
-              </div>
-              {msg.suggestions&&<div style={{maxWidth:"85%",marginTop:8,marginLeft:msg.role==="ai"?44:0}}>
-                {msg.suggestions.map((s,si)=>{
-                  const matchedRecipe = RECIPES.find(r=>r.title.toLowerCase().includes(s.title.toLowerCase().split(" ")[0]));
-                  return(
-                    <div key={si} className="card" style={{padding:12,marginBottom:8,cursor:"pointer",transition:"var(--t)",border:"1px solid var(--bor)"}} onClick={()=>matchedRecipe&&onViewRecipe(matchedRecipe)} onMouseEnter={e=>e.currentTarget.style.boxShadow="var(--sh1)"} onMouseLeave={e=>e.currentTarget.style.boxShadow="none"}>
-                      <div style={{display:"flex",alignItems:"flex-start",gap:10}}>
-                        <span style={{fontSize:32,flexShrink:0}}>{s.emoji}</span>
-                        <div style={{flex:1}}>
-                          <div style={{fontWeight:700,fontSize:14,marginBottom:3}}>{s.title}</div>
-                          <div style={{fontSize:12,color:"var(--mu)",marginBottom:4}}>{s.time} min · {s.difficulty}</div>
-                          {s.reason&&<div style={{fontSize:13,color:"var(--ch)",marginBottom:6,lineHeight:1.4}}>{s.reason}</div>}
-                          {s.pantry_used&&s.pantry_used.length>0&&<div style={{fontSize:11,color:"var(--sage)",marginBottom:3}}>✓ Uses: {s.pantry_used.join(", ")}</div>}
-                          {s.missing&&s.missing.length>0&&<div style={{fontSize:11,color:"var(--err)",marginBottom:6}}>Missing: {s.missing.join(", ")}</div>}
-                          <div style={{display:"flex",gap:6,marginTop:8}}>
-                            {matchedRecipe&&<button className="btn btn-xs btn-p" onClick={(e)=>{e.stopPropagation();onViewRecipe(matchedRecipe);}}>View recipe</button>}
-                            {s.missing&&s.missing.length>0&&<button className="btn btn-xs btn-s" onClick={(e)=>{e.stopPropagation();addToList(s.missing);}}>Add missing to list</button>}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>}
-            </div>
-          ))}
-          {loading&&<div className="mrow"><div className="mav">🍳</div><div className="mbub"><div className="ldots"><div className="dot"/><div className="dot"/><div className="dot"/></div></div></div>}
-          <div ref={endRef}/>
-        </div>
-        <div className="cbot">
-          <textarea className="cta" rows={1} placeholder="How are you feeling? What do you crave?" value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();if(input.trim())call(input.trim());}}}/>
-          <button className="csend" onClick={()=>{if(input.trim())call(input.trim());}}><Ic n="send" s={18}/></button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/* ── CONFIRM ITEMS TABLE (shared by Onboarding + AddItemsModal) ── */
-function ConfirmItemsTable({ items, setItems }) {
-  const CATS = ["Produce","Protein","Dairy","Pantry","Frozen","Spices","Sauces","Other"];
-  const UNITS = ["pcs","g","kg","ml","L","cup","tbsp","tsp","can","bunch","head","pack","jar","bottle","bag"];
-  const update = (idx, field, val) => setItems(p => p.map((it,i) => i===idx ? {...it,[field]:val, emoji: field==="category" ? getIcon(it.name, val) : it.emoji} : it));
-  const remove = idx => setItems(p => p.filter((_,i) => i!==idx));
-  const addBlank = () => setItems(p => [...p, {id:Date.now()+Math.random(),name:"",category:"Pantry",quantity:1,unit:"pcs",emoji:"📦"}]);
-  return (
-    <div>
-      {/* Header row */}
-      <div style={{display:"grid",gridTemplateColumns:"36px 1fr 90px 70px 50px 28px",gap:8,padding:"6px 12px",fontSize:10,fontWeight:700,color:"var(--mu)",textTransform:"uppercase",letterSpacing:.5,marginBottom:4}}>
-        <div/>
-        <div>Item name</div><div>Category</div><div>Qty</div><div>Unit</div><div/>
-      </div>
-      {items.map((item,idx)=>(
-        <div key={item.id} className="pit2">
-          <div className="pit2-ic">{item.emoji}</div>
-          <input className="fi" style={{padding:"6px 10px",fontSize:13}} value={item.name} onChange={e=>{const n=e.target.value;const c=n?autoDetect(n):item.category;update(idx,"name",n);update(idx,"category",c);update(idx,"emoji",getIcon(n,c));}} placeholder="Item name"/>
-          <select className="pit2-sel" value={item.category} onChange={e=>update(idx,"category",e.target.value)}>
-            {CATS.map(c=><option key={c}>{c}</option>)}
-          </select>
-          <input className="pit2-num" type="number" min="1" placeholder="1" value={item.quantity} onChange={e=>update(idx,"quantity",Math.max(1, parseInt(e.target.value)||1))}/>
-          <select className="pit2-sel" value={item.unit} onChange={e=>update(idx,"unit",e.target.value)}>
-            {UNITS.map(u=><option key={u}>{u}</option>)}
-          </select>
-          <button className="pit-del" onClick={()=>remove(idx)} style={{display:"flex",alignItems:"center",justifyContent:"center"}}><Ic n="x" s={14}/></button>
-        </div>
-      ))}
-      <button className="add-row-btn" onClick={addBlank}><Ic n="plus" s={14}/>Add another item</button>
-    </div>
-  );
-}
-
-/* ── PLANNER TAB ── */
-
-/* ═══════════════════════════════════════════════════════════════════════
-   SLOT ACTIONS MODAL — click a planner slot to get options
-   ═══════════════════════════════════════════════════════════════════════ */
-function SlotActionsModal({ slot, meal, mealType, dayLabel, onRemove, onReplace, onSwapStart, onAddCustom, onViewRecipe, onClose, allRecipes }) {
-  const recipe = meal?.kind === "recipe" && meal.id ? allRecipes.find(r => r.id === meal.id) : null;
-  const isCustom = meal?.kind === "custom";
-  return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-box" onClick={e => e.stopPropagation()} style={{maxWidth:360,padding:24}}>
-        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:16}}>
-          <div>
-            <div style={{fontWeight:700,fontSize:15}}>{dayLabel} · {mealType}</div>
-            {meal && <div style={{fontSize:12,color:"var(--mu)",marginTop:2}}>{isCustom ? `📝 ${meal.title}` : `${meal.emoji||"🍽"} ${meal.name||"Unknown"}`}</div>}
-          </div>
-          <button className="btn btn-xs btn-g" onClick={onClose}>✕</button>
-        </div>
-        <div style={{display:"flex",flexDirection:"column",gap:8}}>
-          {meal && (recipe || isCustom) && (
-            <button className="btn btn-s" style={{justifyContent:"flex-start",gap:10}} onClick={()=>{onViewRecipe&&!isCustom&&onViewRecipe(recipe);onClose();}}>
-              👁 View {isCustom?"custom meal":"recipe"}
-            </button>
-          )}
-          <button className="btn btn-s" style={{justifyContent:"flex-start",gap:10}} onClick={()=>{onReplace();onClose();}}>
-            🔄 Replace meal
-          </button>
-          <button className="btn btn-s" style={{justifyContent:"flex-start",gap:10}} onClick={()=>{onSwapStart();onClose();}}>
-            ↔ Swap with another slot
-          </button>
-          <button className="btn btn-s" style={{justifyContent:"flex-start",gap:10}} onClick={()=>{onAddCustom();onClose();}}>
-            ✏️ Add / edit custom meal
-          </button>
-          {meal && (
-            <button className="btn btn-s btn-err" style={{justifyContent:"flex-start",gap:10}} onClick={()=>{onRemove();onClose();}}>
-              🗑 Remove meal
-            </button>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/* ═══════════════════════════════════════════════════════════════════════
-   RECIPE PICKER MODAL — search/filter to pick a recipe for a slot
-   ═══════════════════════════════════════════════════════════════════════ */
-function RecipePickerModal({ mealType, pantry, allRecipes, prefs, avoidedIngredients = [], onSelect, onClose }) {
-  const [search, setSearch] = React.useState("");
-  const [filterDiet, setFilterDiet] = React.useState("all");
-  const [filterTime, setFilterTime] = React.useState("all");
-  const [sortBy, setSortBy] = React.useState("pantry");
-
-  const pantrySet = React.useMemo(() => buildPantrySet(pantry), [pantry]);
-  const avoidSet = React.useMemo(() => new Set(avoidedIngredients), [avoidedIngredients]);
-
-  const filtered = React.useMemo(() => {
-    let pool = allRecipes.filter(r => {
-      const mt = getMealType(r);
-      if (mealType === "Breakfast" && mt !== "breakfast") return false;
-      if (mealType === "Lunch"     && mt !== "lunch")     return false;
-      if (mealType === "Dinner"    && mt !== "dinner")    return false;
-      return true;
-    });
-    if (!isRecipeAllowedForUser) return pool;
-    pool = pool.filter(r => isRecipeAllowedForUser(r, prefs));
-    if (avoidSet.size > 0) pool = pool.filter(r => !(r.ingredients||[]).some(i => avoidSet.has(normalizeIng(i.n))));
-    if (search.trim()) {
-      const q = search.trim().toLowerCase();
-      pool = pool.filter(r => r.title.toLowerCase().includes(q) || (r.ingredients||[]).some(i => normalizeIng(i.n).includes(q)));
-    }
-    if (filterDiet === "vegetarian") pool = pool.filter(r => r.tags?.includes("vegetarian") || r.dietary?.includes("vegetarian"));
-    if (filterDiet === "vegan")      pool = pool.filter(r => r.tags?.includes("vegan") || r.dietary?.includes("vegan"));
-    if (filterTime === "quick")      pool = pool.filter(r => (r.time||30) <= 30);
-    pool = pool.map(r => {
-      const mc = (r.ingredients||[]).filter(i => !ingInPantry(i.n, pantrySet)).length;
-      return { ...r, _mc: mc };
-    });
-    if (sortBy === "pantry") pool.sort((a,b) => a._mc - b._mc);
-    else if (sortBy === "quick") pool.sort((a,b) => (a.time||30) - (b.time||30));
-    return pool.slice(0, 80);
-  }, [allRecipes, mealType, prefs, search, filterDiet, filterTime, sortBy, pantrySet, avoidSet]);
-
-  return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-box" onClick={e => e.stopPropagation()} style={{maxWidth:680,maxHeight:"90vh",display:"flex",flexDirection:"column",padding:24,gap:14}}>
-        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}>
-          <div style={{fontWeight:700,fontSize:16}}>Pick a {mealType} recipe</div>
-          <button className="btn btn-xs btn-g" onClick={onClose}>✕</button>
-        </div>
-        <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
-          <input className="fi" placeholder="Search recipes or ingredients…" value={search} onChange={e=>setSearch(e.target.value)} style={{flex:"1 1 200px",padding:"8px 12px",fontSize:13}}/>
-          <select className="sel" value={filterDiet} onChange={e=>setFilterDiet(e.target.value)} style={{width:"auto",padding:"8px 12px",fontSize:13}}>
-            <option value="all">Any diet</option>
-            <option value="vegetarian">Vegetarian</option>
-            <option value="vegan">Vegan</option>
-          </select>
-          <select className="sel" value={filterTime} onChange={e=>setFilterTime(e.target.value)} style={{width:"auto",padding:"8px 12px",fontSize:13}}>
-            <option value="all">Any time</option>
-            <option value="quick">≤ 30 min</option>
-          </select>
-          <select className="sel" value={sortBy} onChange={e=>setSortBy(e.target.value)} style={{width:"auto",padding:"8px 12px",fontSize:13}}>
-            <option value="pantry">Best pantry match</option>
-            <option value="quick">Quickest first</option>
-          </select>
-        </div>
-        <div style={{fontSize:12,color:"var(--mu)"}}>Showing {filtered.length} recipes · {mealType} only</div>
-        <div className="picker-grid" style={{overflowY:"auto",flex:1}}>
-          {filtered.length === 0
-            ? <div style={{gridColumn:"1/-1",textAlign:"center",padding:"32px 0",color:"var(--mu)"}}>No recipes found. Try a different search.</div>
-            : filtered.map(r => (
-                <div key={r.id} className="picker-card" onClick={()=>onSelect(r)}>
-                  <div style={{fontSize:32,lineHeight:1}}>{r.emoji||"🍽"}</div>
-                  <div style={{flex:1,minWidth:0}}>
-                    <div style={{fontWeight:600,fontSize:13,marginBottom:2,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{r.title}</div>
-                    <div style={{fontSize:11,color:r._mc===0?"var(--sageH)":"var(--mu)"}}>
-                      {r._mc===0 ? "✅ Cookable now" : `Missing ${r._mc} ingredient${r._mc!==1?"s":""}`}
-                      {r.time ? ` · ${r.time}m` : ""}
-                    </div>
-                  </div>
-                </div>
-              ))
-          }
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/* ═══════════════════════════════════════════════════════════════════════
-   CUSTOM MEAL MODAL — enter a custom meal (no recipeId)
-   ═══════════════════════════════════════════════════════════════════════ */
-function CustomMealModal({ existing, dayLabel, mealType, onSave, onClose }) {
-  const [title, setTitle] = React.useState(existing?.kind === "custom" ? existing.title : "");
-  const [notes, setNotes] = React.useState(existing?.kind === "custom" ? (existing.notes||"") : "");
-  const valid = title.trim().length > 0;
-  return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-box" onClick={e=>e.stopPropagation()} style={{maxWidth:420,padding:24}}>
-        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:16}}>
-          <div style={{fontWeight:700,fontSize:15}}>✏️ Custom Meal — {dayLabel} {mealType}</div>
-          <button className="btn btn-xs btn-g" onClick={onClose}>✕</button>
-        </div>
-        <div className="fg">
-          <label className="fl">Meal title *</label>
-          <input className="fi" placeholder="e.g. Grandma's pasta, leftovers…" value={title} onChange={e=>setTitle(e.target.value)} autoFocus/>
-        </div>
-        <div className="fg">
-          <label className="fl">Notes (optional)</label>
-          <input className="fi" placeholder="e.g. Make double batch" value={notes} onChange={e=>setNotes(e.target.value)}/>
-        </div>
-        <div style={{display:"flex",gap:8,justifyContent:"flex-end",marginTop:8}}>
-          <button className="btn btn-s btn-sm" onClick={onClose}>Cancel</button>
-          <button className="btn btn-p btn-sm" disabled={!valid} onClick={()=>{if(valid)onSave({kind:"custom",title:title.trim(),notes:notes.trim()||undefined});}}>Save</button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/* ═══════════════════════════════════════════════════════════════════════
-   PUBLISH MENU MODAL — publish current weekly plan publicly
-   ═══════════════════════════════════════════════════════════════════════ */
-function PublishMenuModal({ mealPlan, user, allRecipes, onPublish, onClose }) {
-  const [title, setTitle] = React.useState("My Week Menu");
-  const [visibility, setVisibility] = React.useState("public");
-  const [published, setPublished] = React.useState(false);
-  const [menuId, setMenuId] = React.useState(null);
-
-  const plannedCount = mealPlan.flatMap(d=>d.meals).filter(Boolean).length;
-
-  const handlePublish = () => {
-    const id = `menu_${Date.now()}_${Math.random().toString(36).slice(2,8)}`;
-    const menu = {
-      id,
-      title,
-      authorUserId: user?.email?.toLowerCase() || "guest",
-      authorName: user?.name || "Anonymous",
-      weekStartDate: new Date().toISOString().slice(0,10),
-      slots: mealPlan.flatMap((day, di) =>
-        day.meals.map((meal, mi) => meal ? {
-          day: day.day,
-          mealType: ["Breakfast","Lunch","Dinner"][mi],
-          item: meal
-        } : null).filter(Boolean)
-      ),
-      mealCount: plannedCount,
-      createdAt: Date.now(),
-      visibility
-    };
-    const feed = JSON.parse(localStorage.getItem("sc_community_feed") || "[]");
-    localStorage.setItem("sc_community_feed", JSON.stringify([menu, ...feed].slice(0, 200)));
-    onPublish(menu);
-    setMenuId(id);
-    setPublished(true);
-  };
-
-  if (published) return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-box" onClick={e=>e.stopPropagation()} style={{maxWidth:400,padding:28,textAlign:"center"}}>
-        <div style={{fontSize:48,marginBottom:12}}>🎉</div>
-        <div style={{fontWeight:700,fontSize:18,marginBottom:8}}>Menu published!</div>
-        <div style={{fontSize:13,color:"var(--mu)",marginBottom:20}}>Your weekly menu is now visible in the Community feed.</div>
-        <button className="btn btn-p" onClick={onClose}>Done</button>
-      </div>
-    </div>
-  );
-
-  return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-box" onClick={e=>e.stopPropagation()} style={{maxWidth:440,padding:24}}>
-        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:16}}>
-          <div style={{fontWeight:700,fontSize:15}}>🌐 Publish Weekly Menu</div>
-          <button className="btn btn-xs btn-g" onClick={onClose}>✕</button>
-        </div>
-        {plannedCount === 0 && <div style={{color:"var(--err)",fontSize:13,marginBottom:12}}>⚠️ Your plan is empty. Add some meals first.</div>}
-        <div className="fg">
-          <label className="fl">Menu title</label>
-          <input className="fi" value={title} onChange={e=>setTitle(e.target.value)}/>
-        </div>
-        <div className="fg">
-          <label className="fl">Visibility</label>
-          <select className="sel" value={visibility} onChange={e=>setVisibility(e.target.value)}>
-            <option value="public">Public — visible in community</option>
-            <option value="private">Private — only you can see it</option>
-          </select>
-        </div>
-        <div style={{background:"var(--cream)",borderRadius:8,padding:"10px 14px",marginBottom:16,fontSize:13,color:"var(--mu)"}}>
-          {plannedCount} meal{plannedCount!==1?"s":""} will be shared.
-        </div>
-        <div style={{display:"flex",gap:8,justifyContent:"flex-end"}}>
-          <button className="btn btn-s btn-sm" onClick={onClose}>Cancel</button>
-          <button className="btn btn-p btn-sm" disabled={plannedCount===0} onClick={handlePublish}>Publish</button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/* ═══════════════════════════════════════════════════════════════════════
-   COMMUNITY TAB — social feed of published menus + recipes
-   ═══════════════════════════════════════════════════════════════════════ */
-function CommunityTab({ mealPlan, setMealPlan, allRecipes, user, isGuest, collections, setCollections, showToast, isPremium, onViewRecipe, onSaveFav, isRecipeSaved, onAddToWeek }) {
-  const [feedTab, setFeedTab] = React.useState("recipes");
-  const [likes, setLikes] = React.useState(()=>{
-    try { return JSON.parse(localStorage.getItem("sc_community_likes")||"{}"); } catch { return {}; }
-  });
-  const [filter, setFilter] = React.useState("trending");
-  const [publishedMenus, setPublishedMenus] = React.useState(()=>{
-    try { return JSON.parse(localStorage.getItem("sc_community_feed")||"[]"); } catch { return []; }
-  });
-
-  // Sample community authors for social feel
-  const COMMUNITY_AUTHORS = [
-    {name:"Chef Maria",avatar:"M",color:"#E8B84B"},
-    {name:"Alex K.",avatar:"A",color:"#7BA67B"},
-    {name:"Sarah Chen",avatar:"S",color:"#C47F5A"},
-    {name:"Raj Patel",avatar:"R",color:"#6B8DAD"},
-    {name:"Emma W.",avatar:"E",color:"#D4836D"},
-    {name:"Marco R.",avatar:"M",color:"#9B7EBD"},
-    {name:"Yuki T.",avatar:"Y",color:"#74A892"},
-    {name:"Olivia P.",avatar:"O",color:"#C9953A"},
-  ];
-
-  // Generate sample shared recipes from real recipes
-  const sharedRecipes = React.useMemo(()=>{
-    const pool = allRecipes.filter(r => r.image && imgAllowedForRecipe(r.image, r));
-    const seeded = (s)=>{ let h=s>>>0; return ()=>{ h=(Math.imul(h,1664525)+1013904223)>>>0; return h/0x100000000; }; };
-    const rng = seeded(42);
-    const shuffled = [...pool].sort(()=>rng()-0.5).slice(0,40);
-    return shuffled.map((r,i)=>{
-      const author = COMMUNITY_AUTHORS[i % COMMUNITY_AUTHORS.length];
-      const baseLikes = Math.floor(rng()*180)+5;
-      const daysAgo = Math.floor(rng()*14);
-      return {
-        id: `shared_${r.id}`,
-        recipeId: r.id,
-        recipe: r,
-        author,
-        likes: baseLikes,
-        comments: Math.floor(rng()*15),
-        copies: Math.floor(rng()*25),
-        sharedAt: Date.now() - daysAgo*86400000,
-        caption: [
-          `Just made this ${r.title} and it was incredible!`,
-          `Weekend cooking vibes with this ${r.cuisine||''} dish`,
-          `My favorite ${(r.meal||r.mealType||'').toLowerCase()} recipe right now`,
-          `${r.time} minutes and absolutely delicious`,
-          `Trying something new today! Highly recommend`,
-          `Family favorite — we make this every week`,
-          `Perfect for meal prep`,
-          `Can't stop making this one`,
-        ][Math.floor(rng()*8)],
-      };
-    });
-  },[allRecipes]);
-
-  // Sort feed based on filter
-  const sortedFeed = React.useMemo(()=>{
-    const items = [...sharedRecipes];
-    if(filter==="trending") items.sort((a,b)=>(b.likes+b.copies*3)-(a.likes+a.copies*3));
-    else if(filter==="recent") items.sort((a,b)=>b.sharedAt-a.sharedAt);
-    else if(filter==="popular") items.sort((a,b)=>b.likes-a.likes);
-    return items;
-  },[sharedRecipes, filter]);
-
-  const toggleLike = (id)=>{
-    setLikes(prev=>{
-      const next = {...prev};
-      next[id] = !next[id];
-      localStorage.setItem("sc_community_likes", JSON.stringify(next));
-      return next;
-    });
-  };
-
-  const copyToPlanner = (menu)=>{
-    if(isGuest){alert("Create an account to copy menus.");return;}
-    const newPlan = mealPlan.map(d=>({...d,meals:[...d.meals]}));
-    const DAYS=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
-    const MT=["Breakfast","Lunch","Dinner"];
-    menu.slots.forEach(sl=>{
-      const di=DAYS.indexOf(sl.day);const mi=MT.indexOf(sl.mealType);
-      if(di>=0&&mi>=0) newPlan[di].meals[mi]=sl.item;
-    });
-    setMealPlan(newPlan);
-    if(showToast) showToast("Copied to your planner!");
-  };
-
-  const getMealDisplay = (item)=>{
-    if(!item) return null;
-    if(item.kind==="custom") return {emoji:"📝",name:item.title};
-    const r=allRecipes.find(x=>x.id===item.id);
-    return r?{emoji:r.emoji||"🍽",name:r.title}:{emoji:item.emoji||"🍽",name:item.name||"Unknown"};
-  };
-
-  const menus = publishedMenus.filter(item=>item.slots);
-
-  return (
-    <div style={{maxWidth:680,margin:"0 auto"}}>
-      {/* Modern header */}
-      <div style={{textAlign:"center",marginBottom:28,animation:"fadeInUp .4s ease both"}}>
-        <h1 style={{fontFamily:"var(--fd)",fontSize:28,fontWeight:800,color:"var(--ch)",marginBottom:4}}>Community Feed</h1>
-        <p style={{color:"var(--mu)",fontSize:14}}>Discover what others are cooking</p>
-      </div>
-
-      {/* Tabs */}
-      <div style={{display:"flex",gap:0,marginBottom:24,borderBottom:"2px solid var(--bor)"}}>
-        <button style={{flex:1,padding:"12px 0",fontWeight:feedTab==="recipes"?700:500,fontSize:14,border:"none",background:"none",cursor:"pointer",color:feedTab==="recipes"?"var(--clay)":"var(--mu)",borderBottom:feedTab==="recipes"?"2px solid var(--clay)":"2px solid transparent",marginBottom:-2,transition:"all .2s"}} onClick={()=>setFeedTab("recipes")}>Shared Recipes</button>
-        <button style={{flex:1,padding:"12px 0",fontWeight:feedTab==="menus"?700:500,fontSize:14,border:"none",background:"none",cursor:"pointer",color:feedTab==="menus"?"var(--clay)":"var(--mu)",borderBottom:feedTab==="menus"?"2px solid var(--clay)":"2px solid transparent",marginBottom:-2,transition:"all .2s"}} onClick={()=>setFeedTab("menus")}>Meal Plans ({menus.length})</button>
-      </div>
-
-      {feedTab==="recipes" && <>
-        {/* Sort pills */}
-        <div style={{display:"flex",gap:8,marginBottom:20,justifyContent:"center"}}>
-          {["trending","recent","popular"].map(f=>(
-            <button key={f} className={`cchip ${filter===f?"ac":""}`} onClick={()=>setFilter(f)} style={{fontSize:12}}>{f==="trending"?"Trending":f==="recent"?"Recent":"Most Liked"}</button>
-          ))}
-        </div>
-
-        {/* Instagram-style feed */}
-        <div style={{display:"flex",flexDirection:"column",gap:24}}>
-          {sortedFeed.slice(0,24).map(item=>{
-            const r = item.recipe;
-            const isLiked = likes[item.id];
-            const displayLikes = item.likes + (isLiked?1:0);
-            const daysAgo = Math.floor((Date.now()-item.sharedAt)/86400000);
-            return (
-              <div key={item.id} style={{background:"var(--white)",borderRadius:16,border:"1px solid var(--bor)",overflow:"hidden",animation:"fadeInUp .4s ease both"}}>
-                {/* Author row (top, like Instagram) */}
-                <div style={{display:"flex",alignItems:"center",gap:10,padding:"12px 16px"}}>
-                  <div style={{width:40,height:40,borderRadius:"50%",background:item.author.color,display:"flex",alignItems:"center",justifyContent:"center",color:"#fff",fontWeight:700,fontSize:16,flexShrink:0}}>{item.author.avatar}</div>
-                  <div style={{flex:1,minWidth:0}}>
-                    <div style={{fontSize:14,fontWeight:700}}>{item.author.name}</div>
-                    <div style={{fontSize:11,color:"var(--mu)"}}>{daysAgo === 0 ? "Today" : daysAgo === 1 ? "Yesterday" : `${daysAgo} days ago`}</div>
-                  </div>
-                  <div style={{background:"var(--clayBg)",padding:"4px 10px",borderRadius:12,fontSize:11,fontWeight:600,color:"var(--clay)"}}>{r.cuisine||'Other'}</div>
-                </div>
-                {/* Image */}
-                {r.image && imgAllowedForRecipe(r.image,r) && (
-                  <div style={{position:"relative",cursor:"pointer",aspectRatio:"4/3",overflow:"hidden"}} onClick={()=>onViewRecipe(r)}>
-                    <img src={r.image} alt={r.title} loading="lazy" style={{width:"100%",height:"100%",objectFit:"cover",transition:"transform .3s"}} onError={e=>{e.currentTarget.style.display='none';}}/>
-                    <div style={{position:"absolute",bottom:0,left:0,right:0,padding:"40px 16px 12px",background:"linear-gradient(transparent,rgba(0,0,0,.5))",color:"#fff"}}>
-                      <div style={{fontFamily:"var(--fd)",fontSize:20,fontWeight:700,textShadow:"0 1px 4px rgba(0,0,0,.4)"}}>{r.title}</div>
-                      <div style={{fontSize:12,opacity:.9,marginTop:2}}>⏱ {r.time} min · {r.diff}</div>
-                    </div>
-                  </div>
-                )}
-                {/* Actions row */}
-                <div style={{display:"flex",alignItems:"center",gap:16,padding:"10px 16px",borderTop:"1px solid var(--bor)"}}>
-                  <button style={{background:"none",border:"none",cursor:"pointer",display:"flex",alignItems:"center",gap:4,fontSize:14,color:isLiked?"#E05C5C":"var(--mu)",fontWeight:isLiked?700:400,transition:"all .2s"}} onClick={()=>toggleLike(item.id)}>
-                    {isLiked?"❤️":"🤍"} <span style={{fontSize:13}}>{displayLikes}</span>
-                  </button>
-                  <button style={{background:"none",border:"none",cursor:"pointer",display:"flex",alignItems:"center",gap:4,fontSize:14,color:"var(--mu)"}}>
-                    💬 <span style={{fontSize:13}}>{item.comments}</span>
-                  </button>
-                  <div style={{flex:1}}/>
-                  <button style={{background:"var(--sageBg)",border:"none",borderRadius:10,padding:"6px 14px",fontSize:12,fontWeight:600,color:"var(--sageH)",cursor:"pointer"}} onClick={()=>{if(onSaveFav) onSaveFav(r); if(showToast) showToast("Recipe saved!");}}>
-                    <Ic n="bookmark" s={13}/> Save
-                  </button>
-                  {onAddToWeek && <button style={{background:"var(--clay)",border:"none",borderRadius:10,padding:"6px 14px",fontSize:12,fontWeight:600,color:"#fff",cursor:"pointer"}} onClick={()=>onAddToWeek(r)}>
-                    <Ic n="cal" s={13}/> Plan
-                  </button>}
-                </div>
-                {/* Caption */}
-                <div style={{padding:"0 16px 14px",fontSize:13,color:"var(--mu)",lineHeight:1.5}}>
-                  <span style={{fontWeight:700,color:"var(--ch)",marginRight:6}}>{item.author.name}</span>{item.caption}
-                </div>
-              </div>
-            );
+        <div className="plan-grid">
+          {/* Header row */}
+          <div className="plan-header" />
+          {mealPlan.map((day, i) => {
+            const today = new Date().toLocaleDateString('en-US', { weekday: 'short' }).substring(0, 3);
+            return <div key={i} className={`plan-header${day.day === today ? ' today' : ''}`}>{day.day}</div>;
           })}
-        </div>
-      </>}
 
-      {feedTab==="menus" && (
-        menus.length===0 ? (
-          <div style={{textAlign:"center",padding:"60px 0",color:"var(--mu)"}}>
-            <div style={{fontSize:48,marginBottom:12}}>📅</div>
-            <div style={{fontWeight:700,fontSize:18,marginBottom:8}}>No shared meal plans yet</div>
-            <div style={{fontSize:14}}>Go to the Planner tab and publish your weekly menu to share it!</div>
-          </div>
-        ) : (
-          <div className="feed-grid" style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(320px,1fr))",gap:16}}>
-            {menus.map(menu=>{
-              const days=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
-              const MTs=["Breakfast","Lunch","Dinner"];
-              return (
-                <div key={menu.id} className="card" style={{padding:16}}>
-                  <div style={{display:"flex",alignItems:"flex-start",justifyContent:"space-between",marginBottom:12}}>
-                    <div>
-                      <div style={{fontWeight:700,fontSize:15,marginBottom:2}}>{menu.title}</div>
-                      <div style={{fontSize:12,color:"var(--mu)"}}>By {menu.authorName} · {menu.mealCount} meals</div>
-                      <div style={{fontSize:11,color:"var(--mu)",marginTop:2}}>{new Date(menu.createdAt).toLocaleDateString()}</div>
-                    </div>
-                    <span style={{fontSize:11,background:"var(--sageBg)",color:"var(--sageH)",padding:"3px 8px",borderRadius:6,fontWeight:600}}>Public</span>
-                  </div>
-                  <div style={{display:"grid",gridTemplateColumns:"repeat(7,1fr)",gap:4,marginBottom:12}}>
-                    {days.map(day=>{
-                      const slots=MTs.map(mt=>{const s=menu.slots.find(sl=>sl.day===day&&sl.mealType===mt);return s?getMealDisplay(s.item):null;}).filter(Boolean);
-                      return (
-                        <div key={day} style={{textAlign:"center"}}>
-                          <div style={{fontSize:9,color:"var(--mu)",fontWeight:700,marginBottom:4}}>{day}</div>
-                          <div style={{display:"flex",flexDirection:"column",gap:2}}>
-                            {slots.slice(0,3).map((m,i)=>m&&<div key={i} title={m.name} style={{fontSize:16,lineHeight:1.2}}>{m.emoji}</div>)}
-                            {slots.length===0&&<div style={{fontSize:11,color:"var(--bor)"}}>—</div>}
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                  <div style={{display:"flex",gap:8}}>
-                    <button className="btn btn-p btn-sm" style={{flex:1}} onClick={()=>copyToPlanner(menu)}>📅 Copy to Planner</button>
-                    <button className="btn btn-s btn-sm" onClick={()=>{if(showToast) showToast("Menu saved!");}}>🔖 Save</button>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        )
-      )}
-    </div>
-  );
-}
-
-// ══════════════════════════════════════════════════════════════════════════════
-// PANTRY-FIRST ENGINE — simple meals generated directly from pantry contents
-// Priority: these beat all complex recipes because missingCount = 0 and they
-// use ONLY what the user already has. This is the core of "What can I cook now?"
-// ══════════════════════════════════════════════════════════════════════════════
-const PANTRY_MEAL_TEMPLATES = [
-  // ── Breakfast ──────────────────────────────────────────────────────────────
-  { name:"Scrambled Eggs",       emoji:"🍳", meal:"breakfast", time:5,  requires:["eggs"],              optionals:["butter","milk","salt","cheese"],        contains_meat:false, contains_fish:false, contains_dairy:false },
-  { name:"Fried Eggs",           emoji:"🍳", meal:"breakfast", time:5,  requires:["eggs","oil"],        optionals:["salt","pepper"],                        contains_meat:false, contains_fish:false, contains_dairy:false },
-  { name:"Soft-Boiled Eggs",     emoji:"🥚", meal:"breakfast", time:8,  requires:["eggs"],              optionals:["salt"],                                 contains_meat:false, contains_fish:false, contains_dairy:false },
-  { name:"Classic Omelet",       emoji:"🥚", meal:"breakfast", time:8,  requires:["eggs","butter"],     optionals:["cheese","onion","salt","pepper"],        contains_meat:false, contains_fish:false, contains_dairy:true  },
-  { name:"Banana Pancakes",      emoji:"🥞", meal:"breakfast", time:12, requires:["banana","eggs"],     optionals:["flour","milk","butter","honey"],         contains_meat:false, contains_fish:false, contains_dairy:false },
-  { name:"Porridge / Oatmeal",   emoji:"🥣", meal:"breakfast", time:8,  requires:["oats"],              optionals:["milk","banana","honey","cinnamon"],      contains_meat:false, contains_fish:false, contains_dairy:false },
-  { name:"Avocado Toast",        emoji:"🥑", meal:"breakfast", time:5,  requires:["bread","avocado"],   optionals:["salt","pepper","lemon","chili flakes"],  contains_meat:false, contains_fish:false, contains_dairy:false },
-  { name:"Peanut Butter Toast",  emoji:"🍞", meal:"breakfast", time:3,  requires:["bread","peanut butter"], optionals:["banana","honey"],                   contains_meat:false, contains_fish:false, contains_dairy:false },
-  { name:"Yogurt & Honey",       emoji:"🍯", meal:"breakfast", time:2,  requires:["yogurt","honey"],    optionals:["banana","granola","berries"],            contains_meat:false, contains_fish:false, contains_dairy:true  },
-  // ── Lunch ──────────────────────────────────────────────────────────────────
-  { name:"Pasta Aglio e Olio",   emoji:"🍝", meal:"lunch",     time:15, requires:["pasta","garlic","olive oil"], optionals:["chili flakes","parsley","parmesan"], contains_meat:false, contains_fish:false, contains_dairy:false },
-  { name:"Tuna Salad",           emoji:"🥗", meal:"lunch",     time:5,  requires:["tuna"],              optionals:["mayo","lemon","onion","salt","pepper"],  contains_meat:false, contains_fish:true,  contains_dairy:false },
-  { name:"Egg Salad Sandwich",   emoji:"🥪", meal:"lunch",     time:10, requires:["eggs","bread"],      optionals:["mayo","mustard","salt","pepper"],        contains_meat:false, contains_fish:false, contains_dairy:false },
-  { name:"Lentil Soup",          emoji:"🍲", meal:"lunch",     time:30, requires:["lentils"],           optionals:["onion","garlic","cumin","tomato","salt"], contains_meat:false, contains_fish:false, contains_dairy:false },
-  { name:"Rice & Beans",         emoji:"🍚", meal:"lunch",     time:20, requires:["rice","beans"],      optionals:["garlic","onion","cumin","salt"],         contains_meat:false, contains_fish:false, contains_dairy:false },
-  { name:"Chickpea Salad",       emoji:"🥗", meal:"lunch",     time:5,  requires:["chickpeas"],         optionals:["lemon","olive oil","garlic","parsley","onion"], contains_meat:false, contains_fish:false, contains_dairy:false },
-  { name:"Tomato Soup",          emoji:"🍅", meal:"lunch",     time:20, requires:["tomato","onion"],    optionals:["garlic","olive oil","basil","salt"],     contains_meat:false, contains_fish:false, contains_dairy:false },
-  { name:"Simple Fried Rice",    emoji:"🍳", meal:"lunch",     time:12, requires:["rice","eggs"],       optionals:["soy sauce","garlic","sesame oil","spring onion"], contains_meat:false, contains_fish:false, contains_dairy:false },
-  // ── Dinner ─────────────────────────────────────────────────────────────────
-  { name:"Baked Salmon",         emoji:"🐟", meal:"dinner",    time:20, requires:["salmon"],            optionals:["lemon","garlic","olive oil","salt","pepper","dill"], contains_meat:false, contains_fish:true,  contains_dairy:false },
-  { name:"Pan-Seared White Fish",emoji:"🐠", meal:"dinner",    time:15, requires:["white fish"],        optionals:["garlic","butter","lemon","salt","parsley"], contains_meat:false, contains_fish:true,  contains_dairy:true  },
-  { name:"Garlic Butter Pasta",  emoji:"🍝", meal:"dinner",    time:12, requires:["pasta","butter","garlic"], optionals:["parmesan","parsley","chili","lemon"], contains_meat:false, contains_fish:false, contains_dairy:true  },
-  { name:"Pasta with Tomato",    emoji:"🍝", meal:"dinner",    time:20, requires:["pasta","tomato"],    optionals:["garlic","olive oil","basil","onion"],    contains_meat:false, contains_fish:false, contains_dairy:false },
-  { name:"Simple Lentil Stew",   emoji:"🥘", meal:"dinner",    time:35, requires:["lentils","onion"],   optionals:["tomato","garlic","cumin","olive oil"],   contains_meat:false, contains_fish:false, contains_dairy:false },
-  { name:"Chickpea Stew",        emoji:"🥘", meal:"dinner",    time:25, requires:["chickpeas"],         optionals:["onion","garlic","tomato","cumin","olive oil"], contains_meat:false, contains_fish:false, contains_dairy:false },
-  { name:"Egg Fried Rice",       emoji:"🍚", meal:"dinner",    time:15, requires:["rice","eggs"],       optionals:["soy sauce","sesame oil","garlic","spring onion","peas"], contains_meat:false, contains_fish:false, contains_dairy:false },
-  { name:"Stuffed Omelette",     emoji:"🥚", meal:"dinner",    time:12, requires:["eggs","onion"],      optionals:["tomato","cheese","pepper","salt","oil"], contains_meat:false, contains_fish:false, contains_dairy:false },
-  { name:"Beans on Toast",       emoji:"🍞", meal:"dinner",    time:8,  requires:["beans","bread"],     optionals:["butter","salt","pepper","cheese"],       contains_meat:false, contains_fish:false, contains_dairy:false },
-  { name:"Potato & Egg Bake",    emoji:"🥔", meal:"dinner",    time:30, requires:["potato","eggs"],     optionals:["onion","olive oil","salt","pepper","paprika"], contains_meat:false, contains_fish:false, contains_dairy:false },
-  { name:"Tuna Pasta",           emoji:"🍝", meal:"dinner",    time:15, requires:["pasta","tuna"],      optionals:["olive oil","garlic","lemon","capers"],   contains_meat:false, contains_fish:true,  contains_dairy:false },
-];
-
-// Generate detailed, ingredient-aware cooking steps from a pantry meal template
-const generatePantrySteps = (t) => {
-  const nameLC = (t.name || '').toLowerCase();
-  const reqs   = (t.requires  || []);
-  const opts   = (t.optionals || []);
-
-  // ── Exact name matches — specific, ingredient-aware steps ──────────────────
-
-  // SCRAMBLED EGGS
-  if (nameLC === 'scrambled eggs') return [
-    {n:1, t:'Crack & beat eggs',  d:'Crack 2–3 eggs into a bowl. Add a splash of milk if available. Season with a pinch of salt and beat with a fork until yolks and whites are fully combined.'},
-    {n:2, t:'Heat pan',           d:'Place a non-stick pan over low-medium heat. Add 1 tsp butter and let it melt gently — do not let it brown or sizzle.'},
-    {n:3, t:'Add eggs',           d:'Pour the beaten eggs into the pan. Let them sit undisturbed for 10–15 seconds until the edges just begin to set.'},
-    {n:4, t:'Fold slowly',        d:'Using a spatula, push the eggs from the edges to the centre in slow, wide folds every 15–20 seconds. Keep the heat low.'},
-    {n:5, t:'Finish & serve',     d:'Remove from heat while still slightly glossy and soft — they finish cooking from residual heat. Add shredded cheese if using. Season with black pepper and serve immediately.'},
-  ];
-
-  // FRIED EGGS
-  if (nameLC === 'fried eggs') return [
-    {n:1, t:'Heat pan',           d:'Pour a thin layer of oil into a non-stick pan. Heat over medium heat until the oil shimmers but is not smoking.'},
-    {n:2, t:'Crack eggs',         d:'Crack each egg one at a time into a small cup first, then slide gently into the hot oil — this prevents broken yolks.'},
-    {n:3, t:'Cook whites',        d:'Cook undisturbed for 2–3 minutes until the whites are fully set and the edges are lightly golden. Season with salt and pepper.'},
-    {n:4, t:'Serve',              d:'For sunny-side up, slide straight onto the plate. For over-easy, flip gently and cook 30 more seconds, then serve immediately.'},
-  ];
-
-  // SOFT-BOILED EGGS
-  if (nameLC === 'soft-boiled eggs') return [
-    {n:1, t:'Bring water to boil', d:'Fill a small saucepan with enough water to fully submerge the eggs. Bring to a rolling boil over high heat.'},
-    {n:2, t:'Lower eggs in',       d:'Using a slotted spoon, gently lower eggs into the boiling water. Set a timer immediately.'},
-    {n:3, t:'Boil to preference',  d:'Boil for exactly 6 minutes for a runny yolk, 7 minutes for jammy, or 9 minutes for fully set. Do not lift the lid.'},
-    {n:4, t:'Ice bath',            d:'Transfer eggs straight into a bowl of cold water (with ice if available) for 2 minutes to stop cooking.'},
-    {n:5, t:'Peel & serve',        d:'Tap each egg gently on the counter and peel under cold running water. Halve and season with a pinch of salt. Serve on toast or with soldiers.'},
-  ];
-
-  // CLASSIC OMELET
-  if (nameLC === 'classic omelet') return [
-    {n:1, t:'Beat eggs',          d:'Crack 2–3 eggs into a bowl. Add a pinch of salt and beat vigorously with a fork until fully combined and slightly foamy — about 30 seconds.'},
-    {n:2, t:'Prep filling',       d:'Dice or grate any fillings (cheese, onion) into small pieces. Have everything ready before the eggs go in — the omelet cooks fast.'},
-    {n:3, t:'Heat pan',           d:'Melt 1 tsp butter in a non-stick pan over medium-high heat. Swirl to coat. Heat until the foam subsides and butter just begins to colour.'},
-    {n:4, t:'Cook eggs',          d:'Pour in beaten eggs. Shake the pan and stir the centre with a spatula for 20–30 seconds until nearly set but the top is still slightly wet.'},
-    {n:5, t:'Add filling & fold', d:'Scatter cheese or other fillings over one half. Fold the other half over the filling and slide immediately onto a warm plate.'},
-    {n:6, t:'Serve',              d:'Season with black pepper. A properly made omelet should be pale yellow, not browned. Serve at once.'},
-  ];
-
-  // BANANA PANCAKES
-  if (nameLC === 'banana pancakes') return [
-    {n:1, t:'Mash banana',        d:'Peel one very ripe banana and mash thoroughly with a fork in a mixing bowl until smooth with no large lumps.'},
-    {n:2, t:'Mix batter',         d:'Add 2 eggs to the mashed banana and stir until combined. If using flour, add 2 tbsp and mix. Add a splash of milk to thin the batter slightly if needed.'},
-    {n:3, t:'Heat pan',           d:'Heat a non-stick pan over medium-low heat. Add a small amount of butter and swirl to coat. The pan is ready when a drop of batter sizzles gently.'},
-    {n:4, t:'Cook pancakes',      d:'Drop spoonfuls of batter into the pan (about 7–8cm wide). Cook for 2–3 minutes until bubbles form on the surface and the edges look set and dry.'},
-    {n:5, t:'Flip',               d:'Flip each pancake carefully — they are delicate — and cook for 1–2 more minutes until lightly golden on the second side.'},
-    {n:6, t:'Serve',              d:'Stack on a warm plate and drizzle with honey. Serve immediately while warm.'},
-  ];
-
-  // PORRIDGE / OATMEAL
-  if (/porridge|oatmeal/.test(nameLC)) return [
-    {n:1, t:'Measure oats',       d:'Add ½ cup (45g) of rolled oats to a small saucepan. For a creamier result, use a mix of milk and water rather than water alone.'},
-    {n:2, t:'Add liquid & heat',  d:'Pour in 1 cup (240ml) of water, milk, or a mix of both. Stir to combine and place over medium heat.'},
-    {n:3, t:'Cook & stir',        d:'Bring to a gentle boil, stirring frequently. Reduce to low and simmer for 4–5 minutes, stirring constantly, until the oats are thick and creamy.'},
-    {n:4, t:'Add toppings',       d:'Remove from heat. Slice in banana, stir in a drizzle of honey, or sprinkle with cinnamon. Stir gently.'},
-    {n:5, t:'Serve',              d:'Pour into a bowl and serve immediately. The porridge will thicken as it cools — add a splash of milk to loosen if needed.'},
-  ];
-
-  // AVOCADO TOAST
-  if (nameLC === 'avocado toast') return [
-    {n:1, t:'Toast bread',        d:'Toast 1–2 slices of bread until golden and crisp — use a toaster, or a dry pan over medium heat for 2 minutes per side.'},
-    {n:2, t:'Prep avocado',       d:'Halve the avocado and remove the pit. Scoop the flesh into a bowl and mash with a fork until mostly smooth. Add a squeeze of lemon juice, salt, and black pepper.'},
-    {n:3, t:'Spread & season',    d:'Spoon the mashed avocado onto the warm toast and spread evenly to the edges. Sprinkle with chili flakes if using.'},
-    {n:4, t:'Serve',              d:'Serve immediately — avocado browns quickly once mashed.'},
-  ];
-
-  // PEANUT BUTTER TOAST
-  if (nameLC === 'peanut butter toast') return [
-    {n:1, t:'Toast bread',        d:'Toast 1–2 slices of bread to your preferred doneness — lightly golden for soft, darker for crisp.'},
-    {n:2, t:'Spread peanut butter',d:'Spread a generous layer of peanut butter across each slice while still hot from the toaster so it softens and melts slightly into the bread.'},
-    {n:3, t:'Add toppings',       d:'Peel and slice one banana into thin rounds and arrange on top. Drizzle lightly with honey if using.'},
-    {n:4, t:'Serve',              d:'Serve immediately while the toast is still warm.'},
-  ];
-
-  // YOGURT & HONEY
-  if (/yogurt.*honey|honey.*yogurt/.test(nameLC)) return [
-    {n:1, t:'Spoon yogurt',       d:'Scoop 150–200g of yogurt into a bowl. Greek yogurt works best for a thick, creamy base.'},
-    {n:2, t:'Add fruit',          d:'Peel and slice one banana into rounds and layer over the yogurt. Add berries if using.'},
-    {n:3, t:'Add crunch',         d:'Sprinkle a handful of granola over the fruit for texture if you have it.'},
-    {n:4, t:'Drizzle honey',      d:'Drizzle 1–2 tsp of honey in a zigzag over everything. Do not stir — serve as is so the layers stay distinct.'},
-  ];
-
-  // PASTA AGLIO E OLIO
-  if (/pasta aglio/.test(nameLC)) return [
-    {n:1, t:'Boil pasta',         d:'Bring a large pot of well-salted water to a rolling boil (1 tsp salt per litre). Add pasta and cook until al dente per packet. Reserve 1 cup of pasta water before draining.'},
-    {n:2, t:'Slice garlic',       d:'Peel and thinly slice 4–6 garlic cloves. The thinner they are, the faster they will crisp — aim for 1–2mm slices.'},
-    {n:3, t:'Toast garlic',       d:'Warm 4 tbsp olive oil in a large pan over medium-low heat. Add the garlic slices and cook gently for 3–4 minutes, stirring often, until golden but not browned.'},
-    {n:4, t:'Add chili',          d:'Add a generous pinch of chili flakes and stir for 30 seconds. Remove pan from heat immediately to stop the garlic cooking further.'},
-    {n:5, t:'Toss pasta',         d:'Add the drained pasta to the pan. Return to low heat. Toss energetically to coat, adding reserved pasta water 2 tbsp at a time until the sauce is glossy and just coats the pasta.'},
-    {n:6, t:'Finish & serve',     d:'Remove from heat. Scatter chopped parsley and freshly grated parmesan over the top. Serve immediately in warmed bowls.'},
-  ];
-
-  // TUNA SALAD
-  if (nameLC === 'tuna salad') return [
-    {n:1, t:'Drain tuna',         d:'Open the tuna can and drain thoroughly, pressing the lid against the contents to squeeze out all excess liquid. Flake into a bowl with a fork.'},
-    {n:2, t:'Make dressing',      d:'Add 1–2 tbsp mayonnaise and a squeeze of lemon juice. Stir gently to combine — do not over-mix or the tuna will turn mushy.'},
-    {n:3, t:'Add aromatics',      d:'Finely dice the onion (use as little or as much as you like) and stir into the tuna. Season generously with salt and black pepper.'},
-    {n:4, t:'Serve',              d:'Serve on toast, in a sandwich, or on a bed of greens. Best eaten immediately but keeps refrigerated for up to 2 days.'},
-  ];
-
-  // EGG SALAD SANDWICH
-  if (/egg salad/.test(nameLC)) return [
-    {n:1, t:'Boil eggs',          d:'Place eggs in a saucepan, cover with cold water, and bring to a boil. Reduce to a gentle simmer and cook for 10 minutes. Transfer to cold water for 5 minutes, then peel and chop into small pieces.'},
-    {n:2, t:'Make filling',       d:'In a bowl, mash the chopped eggs with 1–2 tbsp mayonnaise and ½ tsp mustard. Season with salt and black pepper. Keep it slightly chunky for texture.'},
-    {n:3, t:'Toast bread',        d:'Toast both slices of bread to your liking. Toasting prevents the filling from making the sandwich soggy.'},
-    {n:4, t:'Assemble',           d:'Spread the egg salad generously on one slice. Add any extras you have (sliced cucumber, lettuce), then top with the second slice.'},
-    {n:5, t:'Serve',              d:'Cut diagonally and serve immediately.'},
-  ];
-
-  // LENTIL SOUP
-  if (nameLC === 'lentil soup') return [
-    {n:1, t:'Rinse lentils',      d:'Place lentils in a fine sieve and rinse under cold running water for 30 seconds until the water runs clear. No pre-soaking needed for red or green lentils.'},
-    {n:2, t:'Sauté aromatics',    d:'Heat 1 tbsp olive oil in a medium pot over medium heat. Finely dice the onion and cook for 5–6 minutes, stirring often, until soft and lightly golden.'},
-    {n:3, t:'Add garlic & spice', d:'Add 2 minced garlic cloves and 1 tsp cumin. Stir for 60 seconds until fragrant. Add diced tomato if using and cook for 2 more minutes.'},
-    {n:4, t:'Add lentils & water',d:'Add the rinsed lentils and 750ml (3 cups) water or stock. Stir well. Bring to a full boil over high heat.'},
-    {n:5, t:'Simmer 20–25 min',   d:'Reduce to a steady simmer. Cook uncovered for 20–25 minutes, stirring occasionally, until lentils are completely soft and beginning to break down into the broth.'},
-    {n:6, t:'Season & serve',     d:'Season with 1 tsp salt. Taste and adjust — add more cumin or a squeeze of lemon if available. Serve hot with flatbread or crusty bread.'},
-  ];
-
-  // RICE & BEANS
-  if (/rice.*beans|beans.*rice/.test(nameLC) && !nameLC.includes('fried')) return [
-    {n:1, t:'Cook rice',          d:'Rinse the rice in a sieve until the water runs clear. Add to a pot with 1.5× its volume in cold water. Bring to a boil, cover tightly, reduce to the lowest heat, and cook for 15 minutes. Remove from heat and steam with the lid on for 5 more minutes.'},
-    {n:2, t:'Sauté aromatics',    d:'In a separate pan, heat 1 tbsp oil over medium heat. Finely dice the onion and cook for 5 minutes until translucent. Add minced garlic and stir for 1 more minute.'},
-    {n:3, t:'Season beans',       d:'Drain and rinse the beans, then add to the pan. Stir in ½ tsp cumin and a good pinch of salt. Cook for 3–4 minutes, stirring, until the beans are heated through and coated in flavour.'},
-    {n:4, t:'Combine & serve',    d:'Fluff the cooked rice with a fork. Spoon the seasoned beans over the rice or mix together. Taste and adjust salt.'},
-  ];
-
-  // CHICKPEA SALAD
-  if (nameLC === 'chickpea salad') return [
-    {n:1, t:'Drain chickpeas',    d:'Drain and rinse the chickpeas thoroughly in a sieve under cold water. Shake well and pat dry with a paper towel — drier chickpeas absorb the dressing better.'},
-    {n:2, t:'Chop aromatics',     d:'Finely dice the onion. Mince the garlic very finely. Roughly chop any parsley, using both leaves and tender stems.'},
-    {n:3, t:'Make dressing',      d:'In a large bowl, whisk together 2 tbsp olive oil and the juice of half a lemon. Season with salt and black pepper.'},
-    {n:4, t:'Toss & rest',        d:'Add chickpeas, onion, garlic, and parsley to the dressing. Toss well. Let rest for 5 minutes so the chickpeas soak up the flavour.'},
-    {n:5, t:'Serve',              d:'Taste and adjust seasoning with more salt, lemon, or olive oil. Serve at room temperature or lightly chilled.'},
-  ];
-
-  // TOMATO SOUP
-  if (nameLC === 'tomato soup') return [
-    {n:1, t:'Chop tomatoes',      d:'Roughly chop the tomatoes into large pieces — no need to peel. Dice the onion into 1–2cm chunks.'},
-    {n:2, t:'Sauté base',         d:'Heat 1 tbsp olive oil in a medium pot over medium heat. Add the onion and cook for 6–7 minutes, stirring, until soft and beginning to turn golden.'},
-    {n:3, t:'Add garlic & tomato',d:'Add 2 minced garlic cloves and cook for 1 minute until fragrant. Add all the chopped tomatoes and stir well to combine.'},
-    {n:4, t:'Simmer',             d:'Add 300ml water or stock. Season with 1 tsp salt and a small pinch of sugar to balance acidity. Bring to a boil, then simmer for 15 minutes until tomatoes are completely soft and collapsing.'},
-    {n:5, t:'Blend',              d:'Use a hand blender to blend until completely smooth. Alternatively, mash roughly with a potato masher for a chunky texture. Stir in torn basil leaves if available.'},
-    {n:6, t:'Serve',              d:'Taste and adjust seasoning. Ladle into bowls and add a swirl of olive oil on top. Serve with crusty bread.'},
-  ];
-
-  // SIMPLE FRIED RICE (lunch)
-  if (nameLC === 'simple fried rice') return [
-    {n:1, t:'Prep cold rice',     d:'Day-old cold rice is ideal — fresh rice is too moist and turns gluey. If using fresh, spread it on a plate and refrigerate for 30 minutes. Break up all clumps before cooking.'},
-    {n:2, t:'Beat eggs',          d:'Beat 2 eggs in a small bowl with a pinch of salt. Set aside.'},
-    {n:3, t:'Fry aromatics',      d:'Heat 1 tbsp oil in a wok or large frying pan over high heat until almost smoking. Add minced garlic if using and stir-fry for 20 seconds.'},
-    {n:4, t:'Fry rice',           d:'Add the rice all at once. Press flat against the hot pan and leave undisturbed for 1–2 minutes to develop a light crust. Then stir-fry constantly for 2 more minutes.'},
-    {n:5, t:'Add eggs',           d:'Push the rice to one side of the pan. Pour the beaten eggs into the empty space. Scramble for 30 seconds until just set, then fold through the rice.'},
-    {n:6, t:'Season & serve',     d:'Drizzle 1–2 tbsp soy sauce and a few drops of sesame oil if available over the rice. Toss well for 30 more seconds. Scatter sliced spring onion on top and serve immediately.'},
-  ];
-
-  // BAKED SALMON
-  if (nameLC === 'baked salmon') return [
-    {n:1, t:'Preheat oven',       d:'Preheat oven to 200°C (400°F / Gas 6). Line a baking tray with foil or baking paper.'},
-    {n:2, t:'Prepare salmon',     d:'Pat the salmon fillet(s) dry with a paper towel — removing surface moisture helps the fish roast rather than steam. Place skin-side down on the lined tray.'},
-    {n:3, t:'Season',             d:'Rub the surface with 1 tsp olive oil. Season generously with salt and black pepper. Lay thin lemon slices over the top, add minced garlic and a sprinkle of dill if using.'},
-    {n:4, t:'Bake 12–15 minutes', d:'Bake in the hot oven for 12–15 minutes depending on the thickness of the fillet. The salmon is done when it flakes easily when pressed gently with a fork and the flesh is opaque throughout.'},
-    {n:5, t:'Rest & serve',       d:'Remove from the oven and rest on the tray for 2 minutes. Squeeze extra lemon juice over the top and serve immediately.'},
-  ];
-
-  // PAN-SEARED WHITE FISH
-  if (/pan.?sear|white fish/.test(nameLC)) return [
-    {n:1, t:'Pat fish dry',       d:'Pat the fish fillet completely dry on both sides with paper towel. This is the single most important step for a good sear — any moisture causes steaming instead of browning.'},
-    {n:2, t:'Season',             d:'Season both sides generously with salt and black pepper immediately before cooking. Do not season early as salt draws out moisture.'},
-    {n:3, t:'Heat pan',           d:'Heat a stainless steel or non-stick pan over medium-high heat until very hot — about 2 minutes. Add 1 tbsp oil and let it shimmer.'},
-    {n:4, t:'Sear',               d:'Place fish presentation-side down (non-skin side). Press gently with a spatula for 10 seconds. Cook undisturbed for 3–4 minutes until golden and the fish releases naturally from the pan without sticking.'},
-    {n:5, t:'Flip & baste',       d:'Flip the fillet carefully. Add a knob of butter and minced garlic to the pan. Tilt the pan and spoon the foaming butter repeatedly over the fish for 1–2 minutes until cooked through.'},
-    {n:6, t:'Serve',              d:'Transfer to a warm plate. Squeeze lemon juice over the top and scatter chopped parsley. Serve at once — fish cools quickly.'},
-  ];
-
-  // GARLIC BUTTER PASTA
-  if (nameLC === 'garlic butter pasta') return [
-    {n:1, t:'Boil pasta',         d:'Bring a large pot of well-salted water (tastes like mild seawater) to a rolling boil. Cook pasta until al dente per packet. Reserve 1 cup of the starchy cooking water before draining.'},
-    {n:2, t:'Toast garlic',       d:'Mince 3–4 garlic cloves. Melt 2 tbsp butter in a large pan over medium-low heat. Add garlic and cook gently for 2 minutes, stirring, until fragrant and lightly golden — not browned.'},
-    {n:3, t:'Add flavour',        d:'Add a pinch of chili flakes and a squeeze of lemon juice if available. Stir for 30 seconds, then remove from heat to stop the garlic cooking.'},
-    {n:4, t:'Toss pasta',         d:'Add the drained pasta to the butter pan. Return to low heat. Toss vigorously to coat, adding pasta water 2 tbsp at a time until you have a silky, glossy sauce that clings to the pasta.'},
-    {n:5, t:'Finish & serve',     d:'Remove from heat. Grate parmesan over the top and add chopped parsley if using. Grind black pepper generously. Serve in warm bowls immediately.'},
-  ];
-
-  // PASTA WITH TOMATO
-  if (/pasta.*tomato|tomato.*pasta/.test(nameLC)) return [
-    {n:1, t:'Boil pasta',         d:'Bring a large pot of salted water to a rolling boil. Cook pasta until al dente per packet. Reserve ½ cup pasta water before draining.'},
-    {n:2, t:'Sauté base',         d:'Heat 2 tbsp olive oil in a wide pan over medium heat. Finely dice the onion and cook for 5–6 minutes until soft. Add minced garlic and stir for 1 more minute.'},
-    {n:3, t:'Make tomato sauce',  d:'Add chopped tomatoes (fresh or tinned). Season with 1 tsp salt and a pinch of sugar. Simmer over medium heat for 12–15 minutes, stirring occasionally, until the sauce thickens and the raw tomato taste is gone.'},
-    {n:4, t:'Toss pasta',         d:'Add the drained pasta directly to the sauce. Toss well over low heat to coat, adding a splash of reserved pasta water if the sauce is too thick.'},
-    {n:5, t:'Finish & serve',     d:'Remove from heat. Add torn basil leaves if available and a drizzle of olive oil. Serve at once.'},
-  ];
-
-  // SIMPLE LENTIL STEW
-  if (nameLC === 'simple lentil stew') return [
-    {n:1, t:'Rinse lentils',      d:'Rinse the lentils in a sieve under cold water until the water runs completely clear. Set aside.'},
-    {n:2, t:'Caramelise onion',   d:'Heat 2 tbsp olive oil in a heavy-bottomed pot over medium heat. Finely dice the onion and cook for 7–8 minutes, stirring often, until deep golden — this sweetness is the base of the stew.'},
-    {n:3, t:'Add garlic & spice', d:'Add 2 minced garlic cloves and 1 tsp cumin. Stir for 60 seconds. Add diced tomato if using and cook for 2 minutes until it breaks down slightly.'},
-    {n:4, t:'Add lentils & water',d:'Add the rinsed lentils and 800ml (3½ cups) water. Stir well and bring to a full boil.'},
-    {n:5, t:'Simmer 25–30 min',   d:'Reduce to a low simmer. Cook uncovered for 25–30 minutes, stirring every 10 minutes. The stew is ready when lentils are completely tender. Add water if it gets too thick.'},
-    {n:6, t:'Season & serve',     d:'Season generously with salt. Taste and adjust spices. Serve hot in deep bowls with crusty bread or over rice.'},
-  ];
-
-  // CHICKPEA STEW
-  if (nameLC === 'chickpea stew') return [
-    {n:1, t:'Prep chickpeas',     d:'Drain and rinse tinned chickpeas in a sieve under cold water. Shake off excess water and set aside.'},
-    {n:2, t:'Sauté aromatics',    d:'Heat 2 tbsp olive oil in a wide pan or pot over medium heat. Finely dice the onion and cook for 6 minutes until soft. Add minced garlic and stir for 1 minute more.'},
-    {n:3, t:'Add tomato & spice', d:'Add diced tomato and ½ tsp cumin. Stir and cook for 3–4 minutes, pressing the tomato with the back of the spoon until it breaks down into a rough sauce.'},
-    {n:4, t:'Add chickpeas',      d:'Add the drained chickpeas and 200ml water. Stir to combine. Season with 1 tsp salt.'},
-    {n:5, t:'Simmer 15 minutes',  d:'Simmer over medium-low heat for 15 minutes, stirring occasionally, until the sauce has thickened and the chickpeas are fully flavoured all the way through.'},
-    {n:6, t:'Serve',              d:'Taste and adjust seasoning. Serve over rice, with flatbread, or as a standalone stew.'},
-  ];
-
-  // EGG FRIED RICE (dinner)
-  if (nameLC === 'egg fried rice') return [
-    {n:1, t:'Prep cold rice',     d:'Use cooked, cold rice (day-old is ideal). Break up all clumps with clean hands before it goes in the pan — cold separated rice fries properly; warm clumped rice steams.'},
-    {n:2, t:'Beat eggs',          d:'Beat 2–3 eggs in a bowl with a pinch of salt. Set aside.'},
-    {n:3, t:'Heat wok',           d:'Heat a wok or large frying pan over the highest heat your hob allows. Add 2 tbsp oil. Wait until the oil is very hot — almost smoking.'},
-    {n:4, t:'Fry rice',           d:'Add minced garlic if using and stir-fry for 15 seconds. Add all the cold rice. Press flat against the hot wok and leave for 1 minute to crisp, then stir-fry continuously for 2 minutes.'},
-    {n:5, t:'Add eggs',           d:'Push the rice to one side. Pour the beaten eggs into the empty space and scramble for 30 seconds until just set. Immediately fold through the rice.'},
-    {n:6, t:'Season & serve',     d:'Add 2 tbsp soy sauce, a few drops of sesame oil, and frozen peas if using. Toss everything together for 1 final minute. Scatter sliced spring onion on top and serve piping hot.'},
-  ];
-
-  // STUFFED OMELETTE
-  if (/stuffed omelet|stuffed omelette/.test(nameLC)) return [
-    {n:1, t:'Prep filling',       d:'Finely dice the onion into 5mm pieces. Dice any tomato small and pat dry with paper towel to remove excess moisture. Grate cheese if using.'},
-    {n:2, t:'Cook filling',       d:'Heat a small amount of oil in a pan over medium heat. Cook the onion for 3–4 minutes until softened and lightly golden. Add tomato and cook 1 more minute. Slide onto a plate and set aside.'},
-    {n:3, t:'Beat eggs',          d:'Crack 3 eggs into a bowl. Season with salt and pepper and beat until well combined.'},
-    {n:4, t:'Cook egg base',      d:'Wipe the pan clean and return to medium heat. Add a thin layer of oil. Pour in the eggs and tilt the pan immediately to spread evenly. Cook for 1–2 minutes until the edges are set but the centre is still slightly soft.'},
-    {n:5, t:'Fill & fold',        d:'Spoon the filling onto one half of the omelette. Add grated cheese on top if using. Fold the bare half over the filling and press gently with the spatula.'},
-    {n:6, t:'Serve',              d:'Slide immediately onto a plate. A good stuffed omelette should be golden outside and just moist inside. Serve at once.'},
-  ];
-
-  // BEANS ON TOAST
-  if (/beans on toast/.test(nameLC)) return [
-    {n:1, t:'Heat beans',         d:'Tip the tinned beans into a small saucepan. Heat over medium heat, stirring occasionally, for 4–5 minutes until piping hot throughout. Season with salt and black pepper.'},
-    {n:2, t:'Toast bread',        d:'Toast the bread to your liking while the beans heat. For extra richness, spread butter on the toast as soon as it comes out, while it is still hot.'},
-    {n:3, t:'Plate',              d:'Place the toast on a plate and spoon the hot beans generously over the top, letting them pool slightly.'},
-    {n:4, t:'Finish & serve',     d:'Grate or crumble cheese over the beans if using — the heat of the beans will melt it slightly. Serve immediately.'},
-  ];
-
-  // POTATO & EGG BAKE
-  if (/potato.*egg bake|potato.*egg/.test(nameLC)) return [
-    {n:1, t:'Preheat oven',       d:'Preheat oven to 200°C (400°F / Gas 6). Lightly grease a baking dish or oven-safe pan with olive oil.'},
-    {n:2, t:'Prep potatoes',      d:'Wash the potatoes thoroughly. Slice into 5mm-thick rounds — no need to peel. Toss in a bowl with 2 tbsp olive oil, ½ tsp salt, black pepper, and paprika if using.'},
-    {n:3, t:'Par-bake potatoes',  d:'Spread potato slices in a single overlapping layer in the baking dish. Bake at 200°C for 20 minutes until starting to turn golden and tender when poked with a knife.'},
-    {n:4, t:'Add onion',          d:'If using onion, peel and slice into thin rings. Scatter over the potatoes after the first 10 minutes of their baking time so the onion softens without burning.'},
-    {n:5, t:'Add eggs',           d:'Remove the dish from the oven. Use the back of a spoon to create small shallow wells in the potatoes. Crack one egg into each well, being careful not to break the yolk.'},
-    {n:6, t:'Bake 8–10 minutes',  d:'Return to the oven and bake for 8–10 more minutes until the egg whites are completely set and opaque. For runny yolks, check at 8 minutes; for set yolks, give it 12.'},
-    {n:7, t:'Serve',              d:'Bring the dish straight to the table. Season eggs with salt, pepper, and a pinch of paprika. Serve with crusty bread to scoop up the yolk.'},
-  ];
-
-  // TUNA PASTA
-  if (/tuna pasta/.test(nameLC)) return [
-    {n:1, t:'Boil pasta',         d:'Bring a large pot of well-salted water to a rolling boil. Cook pasta until al dente per packet. Reserve ½ cup of the starchy pasta water before draining.'},
-    {n:2, t:'Drain & flake tuna', d:'While the pasta cooks, drain the tuna can thoroughly and flake the fish with a fork into rough chunks. Mince the garlic if using.'},
-    {n:3, t:'Sauté garlic',       d:'Heat 2 tbsp olive oil in a wide pan over medium heat. Add minced garlic and cook for 1–2 minutes, stirring, until fragrant and lightly golden — do not burn it.'},
-    {n:4, t:'Add tuna',           d:'Add the flaked tuna to the pan. Stir gently to coat in the garlicky oil. Squeeze in lemon juice and add capers if using. Cook for 1–2 minutes to warm through.'},
-    {n:5, t:'Toss pasta',         d:'Add the drained pasta directly to the pan. Toss well to combine, adding pasta water 2 tbsp at a time to loosen into a light, saucy consistency.'},
-    {n:6, t:'Season & serve',     d:'Taste and season with salt and black pepper. No parmesan needed — the tuna adds the savoury depth. Serve immediately in warm bowls.'},
-  ];
-
-  // ── Type-based fallbacks for any future unmatched recipes ──────────────────
-  const isEgg    = reqs.some(r => r.includes('egg'));
-  const isPasta  = reqs.some(r => r.includes('pasta'));
-  const isSoup   = /soup|stew|broth/.test(nameLC);
-  const isBaked  = /bake|baked|roast/.test(nameLC);
-  const isSalad  = /salad|bowl/.test(nameLC);
-  const isToast  = /toast|bread/.test(nameLC);
-  const all      = [...reqs, ...opts];
-
-  if (isToast) return [
-    {n:1, t:'Toast bread',        d:`Toast the bread until golden and crisp, about 2 minutes per side in a dry pan or using a toaster.`},
-    {n:2, t:'Prepare topping',    d:`Prepare your topping: ${reqs.filter(r=>!r.includes('bread')).join(', ') || 'spread of choice'}. Keep preparation simple and focused.`},
-    {n:3, t:'Assemble',           d:`Spread or layer the topping on the hot toast. Add salt, pepper, or any optional extras to taste.`},
-    {n:4, t:'Serve',              d:`Serve immediately while the toast is still warm and crisp.`},
-  ];
-  if (isSalad) return [
-    {n:1, t:'Rinse & prep',       d:`Drain and rinse any tinned ingredients. Wash and chop fresh produce: ${all.slice(0,4).join(', ')}.`},
-    {n:2, t:'Make dressing',      d:`Whisk together 2 tbsp olive oil and 1 tbsp lemon juice or vinegar in the serving bowl. Season with salt and black pepper.`},
-    {n:3, t:'Toss',               d:`Add all ingredients to the bowl. Toss thoroughly so every piece is coated in the dressing.`},
-    {n:4, t:'Rest & serve',       d:`Let sit for 3–5 minutes so the flavours meld. Taste, adjust seasoning, and serve.`},
-  ];
-  if (isBaked) return [
-    {n:1, t:'Preheat oven',       d:`Preheat oven to 200°C (400°F). Lightly grease a baking dish with oil.`},
-    {n:2, t:'Prep ingredients',   d:`Slice or dice the main ingredients: ${reqs.join(', ')}. Season with salt, pepper, and olive oil and toss to coat.`},
-    {n:3, t:'Bake',               d:`Spread in a single layer in the baking dish. Bake for ${t.time || 20} minutes, checking halfway and turning if the edges are browning too fast.`},
-    {n:4, t:'Serve',              d:`Remove from oven when golden and cooked through. Rest for 2 minutes before serving.`},
-  ];
-  if (isSoup) return [
-    {n:1, t:'Chop vegetables',    d:`Dice the main vegetables into even pieces — onion into 1cm chunks, root vegetables into 2cm cubes.`},
-    {n:2, t:'Sauté base',         d:`Heat 1 tbsp oil in a pot over medium heat. Cook onion and garlic for 5–6 minutes until soft and fragrant.`},
-    {n:3, t:'Add main ingredients',d:`Add ${reqs.join(', ')} and enough water or stock to cover by 5cm. Bring to a boil.`},
-    {n:4, t:'Simmer',             d:`Reduce to a steady simmer and cook for ${t.time || 20} minutes until everything is tender.`},
-    {n:5, t:'Season & serve',     d:`Taste and season generously with salt and pepper. Serve hot with crusty bread.`},
-  ];
-  if (isPasta) return [
-    {n:1, t:'Boil pasta',         d:`Bring a large pot of well-salted water to a rolling boil. Cook pasta until al dente per packet. Reserve ½ cup pasta water before draining.`},
-    {n:2, t:'Make sauce',         d:`Heat 2 tbsp olive oil in a pan. Cook any aromatics (garlic, onion) for 2–3 minutes, then add the remaining sauce ingredients.`},
-    {n:3, t:'Combine',            d:`Add the drained pasta to the sauce. Toss over low heat, adding pasta water a little at a time to reach a silky consistency.`},
-    {n:4, t:'Season & serve',     d:`Season with salt and black pepper. Serve immediately in warmed bowls.`},
-  ];
-  if (isEgg) return [
-    {n:1, t:'Beat eggs',          d:`Crack the eggs into a bowl. Season with salt and pepper and beat well with a fork. Stir in any mix-ins: ${opts.slice(0,3).join(', ') || 'none'}.`},
-    {n:2, t:'Heat pan',           d:`Heat a non-stick pan over medium heat. Add a small knob of butter or a splash of oil and let it melt.`},
-    {n:3, t:'Cook eggs',          d:`Pour in the egg mixture. Stir gently for scrambled, or leave to set for an omelette, cooking for about ${t.time || 5} minutes.`},
-    {n:4, t:'Plate & serve',      d:`Slide onto a warm plate. Season with black pepper and serve at once.`},
-  ];
-  // Generic fallback
-  return [
-    {n:1, t:'Gather ingredients', d:`Measure out all ingredients: ${reqs.join(', ')}.${opts.length ? ' Optional extras: '+opts.slice(0,3).join(', ')+'.' : ''}`},
-    {n:2, t:'Prep',               d:`Peel, chop, or rinse ingredients as needed. Cut vegetables into even-sized pieces for uniform cooking.`},
-    {n:3, t:'Cook',               d:`Heat a pan or pot over medium heat with a little oil. Add ingredients in order of longest cooking time first. Cook for approximately ${t.time || 15} minutes total.`},
-    {n:4, t:'Season & serve',     d:`Taste and season with salt and black pepper. Plate immediately and serve hot.`},
-  ];
-};
-
-// Generate pantry meals from templates — returns recipe-like objects with missingCount=0
-const generatePantryMeals = (pantrySet) => {
-  if(!pantrySet || pantrySet.size === 0) return [];
-  // Unsplash images for pantry-generated meals
-  const PANTRY_IMAGES = {
-    'Scrambled Eggs':      'https://images.unsplash.com/photo-1525351484163-7529414344d8?w=600',
-    'Fried Eggs':          'https://images.unsplash.com/photo-1510693206972-df098062cb71?w=600',
-    'Soft-Boiled Eggs':    'https://images.unsplash.com/photo-1482049016688-2d3e1b311543?w=600',
-    'Classic Omelet':      'https://images.unsplash.com/photo-1590412200988-a436970781fa?w=600',
-    'Banana Pancakes':     'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=600',
-    'Porridge / Oatmeal':  'https://images.unsplash.com/photo-1495214783159-3503fd1b572d?w=600',
-    'Avocado Toast':       'https://images.unsplash.com/photo-1541519227354-08fa5d50c44d?w=600',
-    'Peanut Butter Toast': 'https://images.unsplash.com/photo-1484723091739-30a097e8f929?w=600',
-    'Yogurt & Honey':      'https://images.unsplash.com/photo-1488477181946-6428a0291777?w=600',
-    'Pasta Aglio e Olio':  'https://images.unsplash.com/photo-1563379926898-05f4575a45d8?w=600',
-    'Tuna Salad':          'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=600',
-    'Egg Salad Sandwich':  'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=600',
-    'Lentil Soup':         'https://images.unsplash.com/photo-1476718406336-bb5a9690ee2a?w=600',
-    'Rice & Beans':        'https://images.unsplash.com/photo-1559181567-c3190ca9959b?w=600',
-    'Chickpea Salad':      'https://images.unsplash.com/photo-1540189549519-5a7bb3e29b00?w=600',
-    'Tomato Soup':         'https://images.unsplash.com/photo-1587116861000-5e1a3817a5e5?w=600',
-    'Simple Fried Rice':   'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=600',
-    'Baked Salmon':        'https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=600',
-    'Pan-Seared White Fish':'https://images.unsplash.com/photo-1559847844-5315695dadae?w=600',
-    'Garlic Butter Pasta': 'https://images.unsplash.com/photo-1606787366850-de6330128bfc?w=600',
-    'Pasta with Tomato':   'https://images.unsplash.com/photo-1563379926898-05f4575a45d8?w=600',
-    'Simple Lentil Stew':  'https://images.unsplash.com/photo-1543339308091-ef3c048c3ca0?w=600',
-    'Chickpea Stew':       'https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=600',
-    'Egg Fried Rice':      'https://images.unsplash.com/photo-1603105029258-9e5b3a4b4b0a?w=600',
-    'Stuffed Omelette':    'https://images.unsplash.com/photo-1510693206972-df098062cb71?w=600',
-    'Beans on Toast':      'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=600',
-    'Potato & Egg Bake':   'https://images.unsplash.com/photo-1600803907087-8d180f58d54c?w=600',
-    'Tuna Pasta':          'https://images.unsplash.com/photo-1556761223-4c4282c73f77?w=600',
-  };
-  return PANTRY_MEAL_TEMPLATES
-    .filter(tmpl => tmpl.requires.every(req => ingInPantry(req, pantrySet)))
-    .map((tmpl) => ({
-      id: `pantry-${PANTRY_MEAL_TEMPLATES.indexOf(tmpl)}-${tmpl.name.replace(/\s+/g,'-').toLowerCase()}`,
-      title: tmpl.name,
-      emoji: tmpl.emoji,
-      meal: tmpl.meal,
-      time: tmpl.time,
-      diff: "Easy",
-      dietary: [],
-      ingredients: tmpl.requires.map(r => ({ n: r })),
-      contains_meat: tmpl.contains_meat,
-      contains_fish: tmpl.contains_fish,
-      contains_shellfish: false,
-      contains_dairy: tmpl.contains_dairy,
-      kosher_safe: !tmpl.contains_shellfish && !tmpl.contains_dairy,
-      missingCount: 0,
-      coreDishKey: `pantry-${tmpl.name}`,
-      isPantryGenerated: true,
-      pp: 100,
-      cuisine: "Pantry",
-      image: PANTRY_IMAGES[tmpl.name] || null,
-      steps: generatePantrySteps(tmpl),
-    }));
-};
-
-
-// ── BuildMyWeekTab ───────────────────────────────────────────────────────────────────────────
-// Reel-style (one recipe at a time, vertical scroll) guided week builder.
-function BuildMyWeekTab({ mealPlan, setMealPlan, prefs, pantry, allRecipes, avoidedIngredients, showToast, onViewRecipe, collections, setCollections }) {
-  const DAYS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-  const MEALS = ['Breakfast','Lunch','Dinner'];
-  const MEAL_EMOJI = {Breakfast:'☀️', Lunch:'🌤️', Dinner:'🌙'};
-  const TOTAL = 21;
-  const CUISINE_OPTS = ['Italian','Mexican','Asian','Mediterranean','American','Indian','Middle Eastern','French','Greek','Japanese','Chinese','Thai','Spanish','British','Moroccan'];
-  const DIET_OPTS = ['Vegetarian','Vegan','Pescatarian','Kosher','Gluten-free'];
-
-  const firstEmpty = (plan) => {
-    for (let i = 0; i < TOTAL; i++) {
-      const di = Math.floor(i/3), mi = i%3;
-      if (!plan[di]?.meals[mi]) return i;
-    }
-    return 0;
-  };
-
-  const [activeIdx, setActiveIdx] = React.useState(() => firstEmpty(mealPlan));
-  const [showGrid, setShowGrid] = React.useState(false);
-  const [showFilterPanel, setShowFilterPanel] = React.useState(false);
-  const [cuisineFilter, setCuisineFilter] = React.useState('');
-  const [dietFilter, setDietFilter] = React.useState('');
-  const [quickOnly, setQuickOnly] = React.useState(false);
-  const [pantryBoost, setPantryBoost] = React.useState(false);
-  const [savedIds, setSavedIds] = React.useState(() => new Set());
-
-  const activeDay = Math.floor(activeIdx / 3);
-  const activeMealIdx = activeIdx % 3;
-  const activeMeal = MEALS[activeMealIdx];
-  const activeDayLabel = DAYS[activeDay];
-  const pantrySet = React.useMemo(() => buildPantrySet(pantry), [pantry]);
-  const filledCount = mealPlan.flatMap(d => d.meals).filter(Boolean).length;
-  const currentSlotFilled = Boolean(mealPlan[activeDay]?.meals[activeMealIdx]);
-  const hasActiveFilters = !!(cuisineFilter || dietFilter || quickOnly || pantryBoost);
-
-  const recipePool = React.useMemo(() => {
-    const mealType = activeMeal.toLowerCase();
-    const usedIds = new Set(mealPlan.flatMap(d => d.meals).filter(Boolean).map(m => m.id));
-    const avoidSet = new Set(avoidedIngredients || []);
-    const effectivePrefs = { ...prefs, dietary: dietFilter ? [dietFilter] : (prefs.dietary || []) };
-
-    let pool = allRecipes
-      .filter(r => r.meal === mealType)
-      .filter(r => isRecipeAllowedForUser(r, effectivePrefs))
-      .filter(r => !usedIds.has(r.id))
-      .filter(r => avoidSet.size === 0 || !(r.ingredients||[]).some(i => avoidSet.has(normalizeIng(i.n))));
-
-    if (cuisineFilter) pool = pool.filter(r => (r.cuisine||'').toLowerCase() === cuisineFilter.toLowerCase());
-    if (quickOnly) pool = pool.filter(r => (r.time||99) <= 30);
-
-    pool = pool.map(r => {
-      const ings = r.ingredients || [];
-      const req = ings.filter(i => !i.optional && !isOptionalIng(i.n));
-      const missing = req.filter(i => !ingInPantry(i.n, pantrySet)).length;
-      const pct = req.length > 0 ? (req.length - missing) / req.length : 0.5;
-      return { ...r, _missing: missing, _pantryPct: pct };
-    });
-
-    if (pantryBoost) pool = pool.filter(r => r._pantryPct >= 0.6);
-
-    pool.sort((a,b) => {
-      const diff = b._pantryPct - a._pantryPct;
-      if (Math.abs(diff) > 0.15) return diff;
-      return (getCommonScore(b)||0) - (getCommonScore(a)||0);
-    });
-    return pool;
-  }, [allRecipes, activeMeal, cuisineFilter, dietFilter, quickOnly, pantryBoost, pantry, mealPlan, prefs, avoidedIngredients]);
-
-  const selectRecipe = React.useCallback((recipe) => {
-    const updated = mealPlan.map((dayObj, di) => {
-      if (di !== activeDay) return dayObj;
-      const nm = [...dayObj.meals];
-      nm[activeMealIdx] = { id: recipe.id, name: recipe.title, emoji: recipe.emoji };
-      return { ...dayObj, meals: nm };
-    });
-    setMealPlan(updated);
-    showToast?.(`${recipe.emoji||'🍽️'} ${recipe.title} → ${activeDayLabel} ${activeMeal}`);
-    for (let i = activeIdx + 1; i < TOTAL; i++) {
-      const di = Math.floor(i/3), mi = i%3;
-      if (!updated[di]?.meals[mi]) { setActiveIdx(i); return; }
-    }
-    if (activeIdx < TOTAL - 1) setActiveIdx(activeIdx + 1);
-  }, [mealPlan, activeDay, activeMealIdx, activeIdx, activeDayLabel, activeMeal, setMealPlan, showToast]);
-
-  const clearSlotAt = (di, mi) => {
-    setMealPlan(mealPlan.map((d, i) => {
-      if (i !== di) return d;
-      const nm = [...d.meals]; nm[mi] = null;
-      return { ...d, meals: nm };
-    }));
-  };
-
-  const toggleSave = React.useCallback((recipe) => {
-    setSavedIds(prev => {
-      const next = new Set(prev);
-      if (next.has(recipe.id)) { next.delete(recipe.id); showToast?.('Removed from saved'); }
-      else { next.add(recipe.id); showToast?.(`${recipe.emoji||'🍽️'} Saved`); }
-      return next;
-    });
-  }, [showToast]);
-
-  return (
-    <div style={{display:'flex',flexDirection:'column',height:'calc(100vh - 240px)',minHeight:520}}>
-
-      {/* ── Slot banner ── */}
-      <div style={{
-        background:'var(--white)',
-        border:'1px solid var(--bor)',
-        borderRadius:14,padding:'12px 16px',marginBottom:8,flexShrink:0,
-        boxShadow:'0 1px 6px rgba(0,0,0,.06)',
-      }}>
-        <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',gap:8,flexWrap:'wrap'}}>
-          <div style={{minWidth:0,flex:1}}>
-            <div style={{fontSize:9,fontWeight:700,color:'var(--clay)',letterSpacing:'1px',marginBottom:2,textTransform:'uppercase'}}>
-              Now Choosing · Slot {activeIdx+1} of {TOTAL}
-            </div>
-            <div style={{fontSize:21,fontWeight:800,lineHeight:1.2,color:'var(--ch)'}}>
-              {MEAL_EMOJI[activeMeal]} {activeDayLabel} {activeMeal}
-            </div>
-            <div style={{fontSize:11,color:'var(--mu)',marginTop:2}}>
-              {recipePool.length} recipe{recipePool.length!==1?'s':''} available · {filledCount}/21 slots filled
-            </div>
-          </div>
-          <div style={{display:'flex',gap:5,alignItems:'center',flexShrink:0,flexWrap:'wrap'}}>
-            {currentSlotFilled && (
-              <button onClick={()=>clearSlotAt(activeDay,activeMealIdx)} title='Clear slot'
-                style={{width:32,height:32,borderRadius:8,background:'var(--cream)',border:'1px solid var(--bor)',color:'var(--mu)',cursor:'pointer',fontSize:13,display:'flex',alignItems:'center',justifyContent:'center'}}>
-                🗑
-              </button>
-            )}
-            <button onClick={()=>setActiveIdx(i=>Math.max(0,i-1))} disabled={activeIdx===0}
-              style={{padding:'6px 12px',borderRadius:8,background:'var(--cream)',border:'1px solid var(--bor)',color:'var(--ch)',cursor:activeIdx===0?'not-allowed':'pointer',fontSize:12,fontWeight:700,opacity:activeIdx===0?.35:1}}>
-              ← Back
-            </button>
-            <button onClick={()=>setActiveIdx(i=>Math.min(TOTAL-1,i+1))} disabled={activeIdx===TOTAL-1}
-              style={{padding:'6px 12px',borderRadius:8,background:'var(--cream)',border:'1px solid var(--bor)',color:'var(--ch)',cursor:activeIdx===TOTAL-1?'not-allowed':'pointer',fontSize:12,fontWeight:700,opacity:activeIdx===TOTAL-1?.35:1}}>
-              Skip →
-            </button>
-            <button onClick={()=>setShowGrid(f=>!f)}
-              style={{padding:'6px 10px',borderRadius:8,background:showGrid?'var(--clayBg)':'var(--cream)',border:`1px solid ${showGrid?'var(--clay)':'var(--bor)'}`,color:showGrid?'var(--clay)':'var(--ch)',cursor:'pointer',fontSize:11,fontWeight:700}}>
-              {showGrid?'✕ Grid':'📅 Grid'}
-            </button>
-          </div>
-        </div>
-        {/* Progress bar */}
-        <div style={{height:4,background:'var(--bor)',borderRadius:3,marginTop:10,overflow:'hidden'}}>
-          <div style={{height:'100%',width:`${filledCount/21*100}%`,background:'var(--clay)',borderRadius:3,transition:'width .4s ease'}}/>
-        </div>
-      </div>
-
-      {/* ── Compact week grid (collapsible) ── */}
-      {showGrid && (
-        <div style={{background:'var(--white)',border:'1px solid var(--bor)',borderRadius:12,padding:'11px 13px',marginBottom:8,flexShrink:0}}>
-          <div style={{display:'grid',gridTemplateColumns:'42px repeat(7,1fr)',gap:3,marginBottom:5}}>
-            <div/>
-            {DAYS.map(d=>(
-              <div key={d} style={{textAlign:'center',fontSize:9,fontWeight:700,color:'var(--mu)',letterSpacing:'.5px'}}>{d}</div>
-            ))}
-          </div>
-          {MEALS.map((meal,mi)=>(
-            <div key={meal} style={{display:'grid',gridTemplateColumns:'42px repeat(7,1fr)',gap:3,marginBottom:3}}>
-              <div style={{display:'flex',alignItems:'center',gap:3,fontSize:9,color:'var(--mu)',fontWeight:600}}>
-                <span style={{fontSize:11}}>{MEAL_EMOJI[meal]}</span>
-                <span>{meal.slice(0,3)}</span>
-              </div>
-              {DAYS.map((day,di)=>{
-                const sIdx=di*3+mi;
-                const filled=mealPlan[di]?.meals[mi];
-                const isActive=sIdx===activeIdx;
+          {/* Meal rows */}
+          {MEALS.map((meal, mi) => (
+            <React.Fragment key={meal}>
+              <div className="plan-label">{meal === 'Breakfast' ? '🌅' : meal === 'Lunch' ? '☀️' : '🌙'}<br/>{meal}</div>
+              {mealPlan.map((day, di) => {
+                const slot = day.meals[mi];
+                const recipe = slot ? RECIPES.find(r => r.id === slot.id) : null;
+                const isDragOver = dragOverCell?.dayIdx === di && dragOverCell?.mealIdx === mi;
                 return (
-                  <div key={di} onClick={()=>{setActiveIdx(sIdx);setShowGrid(false);}}
-                    title={filled?filled.name:`${meal} · ${day}`}
-                    style={{
-                      borderRadius:5,cursor:'pointer',minHeight:30,
-                      border:`2px solid ${isActive?'var(--clay)':filled?'rgba(201,149,58,.3)':'var(--bor)'}`,
-                      background:isActive?'var(--clayBg)':filled?'var(--cream)':'var(--bg)',
-                      display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',
-                      transition:'all .12s',
-                      boxShadow:isActive?'0 0 0 2px rgba(201,149,58,.22)':'none',
-                    }}>
-                    {filled?(
-                      <>
-                        <div style={{fontSize:11}}>{filled.emoji||'🍽️'}</div>
-                        <div style={{fontSize:7,color:'var(--mu)',overflow:'hidden',whiteSpace:'nowrap',maxWidth:'100%',textOverflow:'ellipsis',textAlign:'center',padding:'0 2px'}}>
-                          {(filled.name||'').split(' ').slice(0,2).join(' ')}
-                        </div>
-                      </>
-                    ):(
-                      <div style={{fontSize:isActive?12:10,color:isActive?'var(--clay)':'var(--bor)',fontWeight:700}}>
-                        {isActive?'●':'+'}
+                  <div
+                    key={di}
+                    className={`plan-cell${isDragOver ? ' drag-over' : ''}${dragSrc?.dayIdx === di && dragSrc?.mealIdx === mi ? ' dragging' : ''}`}
+                    onDragOver={e => { e.preventDefault(); setDragOverCell({ dayIdx: di, mealIdx: mi }); }}
+                    onDragLeave={() => setDragOverCell(null)}
+                    onDrop={e => { e.preventDefault(); setDragOverCell(null); handleDrop(di, mi); }}
+                    onClick={e => {
+                      if (!slot) {
+                        // Empty cell → open quick action to add
+                        setQap({ dayIdx: di, mealIdx: mi, rect: e.currentTarget.getBoundingClientRect() });
+                      }
+                    }}
+                  >
+                    {slot ? (
+                      <div
+                        className="meal-card"
+                        draggable
+                        onDragStart={() => handleDragStart(di, mi)}
+                        onClick={e => {
+                          e.stopPropagation();
+                          setQap({ dayIdx: di, mealIdx: mi, rect: e.currentTarget.getBoundingClientRect() });
+                        }}
+                      >
+                        <img
+                          className="meal-card-img"
+                          src={recipe?.image || recipeImage(slot.title)}
+                          alt={slot.title}
+                          onError={e => { e.target.style.display = 'none'; }}
+                          loading="lazy"
+                        />
+                        <div className="meal-card-name">{slot.title}</div>
                       </div>
+                    ) : (
+                      <div className="plan-cell-empty">+</div>
                     )}
                   </div>
                 );
               })}
-            </div>
+            </React.Fragment>
           ))}
         </div>
       )}
+    </div>
+  );
+}
 
-      {/* ── Filter bar ── */}
-      <div style={{flexShrink:0,marginBottom:8}}>
-        <div style={{display:'flex',gap:5,overflowX:'auto',paddingBottom:3,alignItems:'center',scrollbarWidth:'none',msOverflowStyle:'none'}}>
-          <button onClick={()=>setShowFilterPanel(f=>!f)}
-            style={{padding:'5px 11px',borderRadius:20,flexShrink:0,
-              border:`1px solid ${showFilterPanel||hasActiveFilters?'var(--clay)':'var(--bor)'}`,
-              fontSize:12,fontWeight:700,cursor:'pointer',
-              background:showFilterPanel||hasActiveFilters?'var(--clayBg)':'var(--white)',
-              color:showFilterPanel||hasActiveFilters?'var(--clay)':'var(--mu)'}}>
-            {hasActiveFilters?'⚙️ Filters ●':'⚙️ Filters'}
-          </button>
-          {DIET_OPTS.map(d=>(
-            <button key={d} onClick={()=>setDietFilter(f=>f===d?'':d)}
-              style={{padding:'5px 11px',borderRadius:20,flexShrink:0,
-                border:`1px solid ${dietFilter===d?'var(--clay)':'var(--bor)'}`,
-                fontSize:12,fontWeight:600,cursor:'pointer',
-                background:dietFilter===d?'var(--clayBg)':'var(--white)',
-                color:dietFilter===d?'var(--clay)':'var(--mu)',transition:'all .1s'}}>
-              {d}
-            </button>
-          ))}
-          <button onClick={()=>setQuickOnly(f=>!f)}
-            style={{padding:'5px 11px',borderRadius:20,flexShrink:0,
-              border:`1px solid ${quickOnly?'var(--sage)':'var(--bor)'}`,
-              fontSize:12,fontWeight:600,cursor:'pointer',
-              background:quickOnly?'var(--sageBg)':'var(--white)',
-              color:quickOnly?'var(--sage)':'var(--mu)',transition:'all .1s'}}>
-            ⚡ Quick
-          </button>
-          <button onClick={()=>setPantryBoost(f=>!f)}
-            style={{padding:'5px 11px',borderRadius:20,flexShrink:0,
-              border:`1px solid ${pantryBoost?'#6366f1':'var(--bor)'}`,
-              fontSize:12,fontWeight:600,cursor:'pointer',
-              background:pantryBoost?'rgba(99,102,241,.08)':'var(--white)',
-              color:pantryBoost?'#6366f1':'var(--mu)',transition:'all .1s'}}>
-            🧫 Pantry
-          </button>
-          {hasActiveFilters&&(
-            <button onClick={()=>{setCuisineFilter('');setDietFilter('');setQuickOnly(false);setPantryBoost(false);}}
-              style={{padding:'5px 11px',borderRadius:20,flexShrink:0,
-                border:'1px solid var(--bor)',fontSize:12,cursor:'pointer',
-                color:'var(--mu)',background:'var(--white)'}}>
-              ✕ Clear
-            </button>
-          )}
-        </div>
-        {showFilterPanel&&(
-          <div style={{display:'flex',gap:5,flexWrap:'wrap',padding:'10px',background:'var(--cream)',borderRadius:10,border:'1px solid var(--bor)',marginTop:6}}>
-            <span style={{fontSize:11,fontWeight:700,color:'var(--mu)',width:'100%',marginBottom:2}}>Cuisine</span>
-            {CUISINE_OPTS.map(c=>(
-              <button key={c} onClick={()=>{setCuisineFilter(f=>f===c?'':c);setShowFilterPanel(false);}}
-                style={{padding:'4px 11px',borderRadius:20,
-                  border:`1px solid ${cuisineFilter===c?'var(--clay)':'var(--bor)'}`,
-                  fontSize:12,fontWeight:600,cursor:'pointer',
-                  background:cuisineFilter===c?'var(--clayBg)':'var(--white)',
-                  color:cuisineFilter===c?'var(--clay)':'var(--mu)'}}>
-                {c}
-              </button>
-            ))}
-          </div>
+/* ── QUICK ACTION PANEL ── */
+function QuickActionPanel({ qap, setQap, regenerateSlot, removeSlot, setReplacePicker, setViewRecipe, mealPlan }) {
+  if (!qap) return null;
+  const slot = mealPlan[qap.dayIdx]?.meals[qap.mealIdx];
+  const hasSlot = !!slot;
+  const recipe = hasSlot ? RECIPES.find(r => r.id === slot.id) : null;
+
+  return (
+    <>
+      <div className="qap-overlay" onClick={() => setQap(null)} />
+      <div className="qap" style={{ top: Math.min(qap.rect.bottom + 4, window.innerHeight - 280), left: Math.min(qap.rect.left, window.innerWidth - 220) }}>
+        {hasSlot && (
+          <div style={{padding:'10px 14px',borderBottom:'1px solid var(--bor)',fontSize:13,fontWeight:600,color:'var(--ch)'}}>{slot.title}</div>
+        )}
+        {hasSlot && recipe && (
+          <button className="qap-item" onClick={() => { setViewRecipe(recipe); setQap(null); }}>👁 View Recipe</button>
+        )}
+        <button className="qap-item" onClick={() => regenerateSlot(qap.dayIdx, qap.mealIdx)}>🔄 {hasSlot ? 'Regenerate' : 'Random recipe'}</button>
+        <button className="qap-item" onClick={() => { setReplacePicker({ dayIdx: qap.dayIdx, mealIdx: qap.mealIdx }); setQap(null); }}>🔍 {hasSlot ? 'Replace' : 'Browse & pick'}</button>
+        {hasSlot && (
+          <button className="qap-item qap-item-danger" onClick={() => removeSlot(qap.dayIdx, qap.mealIdx)}>✕ Remove</button>
         )}
       </div>
+    </>
+  );
+}
 
-      {/* ── Reel container ── */}
-      {recipePool.length===0?(
-        <div style={{flex:1,display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',
-          background:'var(--cream)',borderRadius:14,border:'1px solid var(--bor)'}}>
-          <div style={{fontSize:40,marginBottom:10}}>🔍</div>
-          <div style={{fontSize:15,fontWeight:700,color:'var(--ch)',marginBottom:6}}>No recipes match</div>
-          <div style={{fontSize:13,color:'var(--mu)',marginBottom:16}}>Try removing some filters</div>
-          <button onClick={()=>{setCuisineFilter('');setDietFilter('');setQuickOnly(false);setPantryBoost(false);}}
-            style={{padding:'8px 20px',background:'var(--clay)',color:'#fff',border:'none',borderRadius:8,fontWeight:700,cursor:'pointer',fontSize:13}}>
-            Clear all filters
-          </button>
+/* ── REPLACE PICKER ── */
+function ReplacePicker({ replacePicker, setReplacePicker, setSlotRecipe, showToast }) {
+  const [search, setSearch] = useState('');
+  const [mealFilter, setMealFilter] = useState('all');
+  if (!replacePicker) return null;
+
+  const MEAL_LABELS = ['Breakfast', 'Lunch', 'Dinner'];
+  const targetMeal = MEAL_LABELS[replacePicker.mealIdx]?.toLowerCase() || '';
+
+  let pool = RECIPES;
+  if (mealFilter !== 'all') {
+    pool = pool.filter(r => {
+      const m = (r.meal || '').toLowerCase();
+      if (mealFilter === 'breakfast') return m === 'breakfast';
+      if (mealFilter === 'lunch') return ['lunch','salad','snack'].includes(m);
+      return !['breakfast','lunch','salad','snack','dessert'].includes(m);
+    });
+  } else if (targetMeal) {
+    // Auto-filter by meal slot
+    pool = pool.filter(r => {
+      const m = (r.meal || '').toLowerCase();
+      if (targetMeal === 'breakfast') return m === 'breakfast';
+      if (targetMeal === 'lunch') return ['lunch','salad','snack'].includes(m);
+      return !['breakfast','lunch','salad','snack','dessert'].includes(m);
+    });
+  }
+  if (search) {
+    const s = search.toLowerCase();
+    pool = pool.filter(r => r.title.toLowerCase().includes(s) || (r.cuisine || '').toLowerCase().includes(s));
+  }
+  pool = pool.slice(0, 50);
+
+  return (
+    <div className="mov" onClick={() => setReplacePicker(null)}>
+      <div className="modal" style={{maxWidth:640}} onClick={e => e.stopPropagation()}>
+        <div className="mhd">
+          <div className="mtitle">Pick a recipe</div>
+          <button className="mclose" onClick={() => setReplacePicker(null)}>✕</button>
         </div>
-      ):(
-        <div style={{flex:1,borderRadius:16,overflow:'hidden',minHeight:0,boxShadow:'0 4px 32px rgba(0,0,0,.18)'}}>
-          <div style={{height:'100%',overflowY:'scroll',scrollSnapType:'y mandatory',WebkitOverflowScrolling:'touch'}}>
-            {recipePool.slice(0,40).map(recipe=>(
-              <BuildReelCard
-                key={recipe.id}
-                recipe={recipe}
-                dayLabel={activeDayLabel}
-                mealLabel={activeMeal}
-                pantrySet={pantrySet}
-                isCurrentSlotFilled={currentSlotFilled}
-                onSelect={()=>selectRecipe(recipe)}
-                onView={()=>onViewRecipe?.(recipe)}
-                onSave={()=>toggleSave(recipe)}
-                isSaved={savedIds.has(recipe.id)}
-              />
+        <div className="mbody">
+          <div style={{display:'flex',gap:8,marginBottom:12}}>
+            <input className="fi" placeholder="Search recipes..." value={search} onChange={e => setSearch(e.target.value)} style={{flex:1}} />
+            <select className="fi" style={{width:120}} value={mealFilter} onChange={e => setMealFilter(e.target.value)}>
+              <option value="all">All meals</option>
+              <option value="breakfast">Breakfast</option>
+              <option value="lunch">Lunch</option>
+              <option value="dinner">Dinner</option>
+            </select>
+          </div>
+          <div className="picker-grid">
+            {pool.map(r => (
+              <div key={r.id} className="picker-card" onClick={() => {
+                setSlotRecipe(replacePicker.dayIdx, replacePicker.mealIdx, r);
+                setReplacePicker(null);
+                showToast(`Replaced with "${r.title}"`);
+              }}>
+                <img src={r.image || recipeImage(r.title)} alt="" onError={e => { e.target.style.display = 'none'; }} />
+                <div>
+                  <div style={{fontWeight:600,fontSize:13}}>{r.title}</div>
+                  <div style={{fontSize:11,color:'var(--mu)'}}>{r.cuisine} · {r.time}min</div>
+                </div>
+              </div>
             ))}
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }
 
-// ── getReelImage ───────────────────────────────────────────────────────────────────────────
-// Returns the validated recipe image, or null when no trusted photo is assigned.
-// Only static images.unsplash.com URLs that pass imgAllowedForRecipe are used —
-// this prevents wrong/repeated images from appearing in the reel.
-// Cards with no image fall back to the emoji placeholder (honest, not misleading).
-function getReelImage(recipe) {
-  if (recipe.image && imgAllowedForRecipe(recipe.image, recipe)) return recipe.image;
-  return null; // no verified photo → emoji fallback shown instead
-}
-
-// ── BuildReelCard ───────────────────────────────────────────────────────────────────────────
-// Full-height reel card with CSS 3D flip.
-//   Front  — full-bleed food photo + overlay (tap anywhere on front to flip)
-//   Back   — light cream panel: ingredients, stats, action buttons
-//            (tap ✕ or tap any empty area of back to flip to front)
-function BuildReelCard({ recipe, dayLabel, mealLabel, pantrySet, isCurrentSlotFilled, onSelect, onView, onSave, isSaved }) {
-  const [imgSrc, setImgSrc] = React.useState(() => getReelImage(recipe));
-  const [imgFailed, setImgFailed] = React.useState(false);
-  const [flipped, setFlipped] = React.useState(false);
-
-  const ings = recipe.ingredients || [];
-  const req  = ings.filter(i => !i.optional && !isOptionalIng(i.n));
-  const missingIngs = req.filter(i => !ingInPantry(i.n, pantrySet));
-  const haveIngs    = req.filter(i =>  ingInPantry(i.n, pantrySet));
-  const pantryPct   = req.length > 0 ? Math.round(haveIngs.length / req.length * 100) : 100;
-  const diffDot     = recipe.diff==='Easy'?'🟢':recipe.diff==='Hard'?'🔴':'🟡';
-
-  const handleImgError = () => {
-    setImgFailed(true); // static image failed to load → show emoji placeholder
-  };
-
-  // Tapping anywhere on the FRONT flips to back.
-  // On the back, the scrollable content area stops propagation so scroll
-  // gestures don't accidentally flip back.  Only the ✕ button flips to front.
-  const flipToBack  = () => setFlipped(true);
-  const flipToFront = () => setFlipped(false);
-
+/* ── ADD TO PLAN MODAL ── */
+function AddToPlanModal({ recipe, mealPlan, onConfirm, onClose }) {
+  const [sel, setSel] = useState(null); // {dayIdx, mealIdx}
+  const MEALS = ['Breakfast', 'Lunch', 'Dinner'];
   return (
-    <div
-      style={{
-        height:'100%',
-        scrollSnapAlign:'start',
-        scrollSnapStop:'always',
-        flexShrink:0,
-        position:'relative',
-        overflow:'hidden',
-        perspective:'1200px',
-        background:'#0a0a0a',
-        cursor: flipped ? 'default' : 'pointer',
-      }}
-      onClick={!flipped ? flipToBack : undefined}
-    >
-
-      {/* 3-D flip container */}
-      <div style={{
-        position:'absolute', inset:0,
-        transformStyle:'preserve-3d',
-        transition:'transform 0.52s cubic-bezier(0.4,0,0.2,1)',
-        transform: flipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
-      }}>
-
-        {/* ═══════════════════════════ FRONT ═══════════════════════════ */}
-        <div style={{
-          position:'absolute', inset:0,
-          backfaceVisibility:'hidden',
-          WebkitBackfaceVisibility:'hidden',
-          overflow:'hidden',
-        }}>
-
-          {/* Food photo — fills card */}
-          {!imgFailed ? (
-            <img src={imgSrc} alt={recipe.title} onError={handleImgError}
-              style={{position:'absolute',inset:0,width:'100%',height:'100%',objectFit:'cover',display:'block'}}
-            />
-          ) : (
-            <div style={{
-              position:'absolute',inset:0,
-              background:'linear-gradient(160deg,#292524 0%,#1c1917 100%)',
-              display:'flex',alignItems:'center',justifyContent:'center',flexDirection:'column',gap:14,
-            }}>
-              <span style={{fontSize:96,filter:'drop-shadow(0 6px 24px rgba(0,0,0,.7))'}}>{recipe.emoji||'🍽️'}</span>
-              <span style={{color:'rgba(255,255,255,.3)',fontSize:13,letterSpacing:'.5px'}}>{recipe.cuisine||recipe.meal||''}</span>
-            </div>
-          )}
-
-          {/* Gradient: clear top, dark bottom for text */}
-          <div style={{
-            position:'absolute',inset:0,pointerEvents:'none',
-            background:'linear-gradient(to bottom,rgba(0,0,0,0) 0%,rgba(0,0,0,0) 35%,rgba(0,0,0,0.58) 65%,rgba(0,0,0,0.93) 100%)',
-          }}/>
-
-          {/* Top-right: save + view (stopPropagation so they don’t flip) */}
-          <div style={{position:'absolute',top:16,right:16,display:'flex',flexDirection:'column',gap:10,zIndex:3}}>
-            <button onClick={e=>{e.stopPropagation();onSave();}}
-              style={{
-                width:44,height:44,borderRadius:22,
-                background:isSaved?'rgba(239,68,68,.92)':'rgba(0,0,0,.5)',
-                border:'1.5px solid rgba(255,255,255,.32)',backdropFilter:'blur(12px)',
-                color:'#fff',fontSize:19,cursor:'pointer',
-                display:'flex',alignItems:'center',justifyContent:'center',
-                boxShadow:'0 2px 10px rgba(0,0,0,.5)',transition:'background .15s',
-              }}>
-              {isSaved?'❤️':'🤍'}
-            </button>
-            <button onClick={e=>{e.stopPropagation();onView();}}
-              style={{
-                width:44,height:44,borderRadius:22,
-                background:'rgba(0,0,0,.5)',border:'1.5px solid rgba(255,255,255,.32)',
-                backdropFilter:'blur(12px)',
-                color:'#fff',fontSize:17,cursor:'pointer',
-                display:'flex',alignItems:'center',justifyContent:'center',
-                boxShadow:'0 2px 10px rgba(0,0,0,.5)',
-              }}>
-              📋
-            </button>
-          </div>
-
-          {/* Top-left: pantry badge */}
-          {pantryPct >= 70 && (
-            <div style={{
-              position:'absolute',top:16,left:16,zIndex:3,
-              background:pantryPct===100?'rgba(22,163,74,.9)':'rgba(0,0,0,.52)',
-              color:'#fff',padding:'5px 13px',borderRadius:20,
-              fontSize:11,fontWeight:700,backdropFilter:'blur(10px)',
-              border:pantryPct===100?'none':'1px solid rgba(255,255,255,.22)',
-              boxShadow:'0 2px 8px rgba(0,0,0,.3)',
-            }}>
-              {pantryPct===100?'✓ All in pantry':`🧫 ${pantryPct}% match`}
-            </div>
-          )}
-
-          {/* Bottom overlay: tags + title + stats + tap-hint */}
-          <div style={{position:'absolute',bottom:0,left:0,right:0,padding:'0 18px 18px',zIndex:2}}>
-
-            {((recipe.dietary||[]).length>0||recipe.cuisine) && (
-              <div style={{display:'flex',gap:5,flexWrap:'wrap',marginBottom:10}}>
-                {(recipe.dietary||[]).slice(0,3).map(d=>(
-                  <span key={d} style={{
-                    padding:'3px 10px',borderRadius:20,
-                    background:'rgba(255,255,255,.15)',backdropFilter:'blur(8px)',
-                    fontSize:10,fontWeight:700,border:'1px solid rgba(255,255,255,.22)',color:'#fff',
-                  }}>{d}</span>
-                ))}
-                {recipe.cuisine && (
-                  <span style={{
-                    padding:'3px 10px',borderRadius:20,
-                    background:'rgba(255,255,255,.09)',backdropFilter:'blur(8px)',
-                    fontSize:10,fontWeight:600,border:'1px solid rgba(255,255,255,.16)',
-                    color:'rgba(255,255,255,.82)',
-                  }}>{recipe.cuisine}</span>
-                )}
-              </div>
-            )}
-
-            <div style={{
-              fontSize:25,fontWeight:800,lineHeight:1.15,color:'#fff',
-              textShadow:'0 2px 12px rgba(0,0,0,.85)',marginBottom:8,
-            }}>
-              {recipe.title}
-            </div>
-
-            <div style={{display:'flex',gap:14,alignItems:'center',marginBottom:13,flexWrap:'wrap'}}>
-              <span style={{fontSize:13,color:'rgba(255,255,255,.9)'}}>⏱ {recipe.time||'?'} min</span>
-              <span style={{fontSize:13,color:'rgba(255,255,255,.9)'}}>{diffDot} {recipe.diff||'Med'}</span>
-              {missingIngs.length===0 ? (
-                <span style={{fontSize:12,fontWeight:700,color:'#4ade80'}}>✓ Ready to cook</span>
-              ) : (
-                <span style={{fontSize:12,fontWeight:600,color:missingIngs.length<=2?'#fbbf24':'#fb923c'}}>
-                  Need {missingIngs.length} ingredient{missingIngs.length>1?'s':''}
-                </span>
-              )}
-            </div>
-
-            {/* Tap-anywhere hint bar — not a button, just a visual affordance */}
-            <div style={{
-              display:'flex',alignItems:'center',justifyContent:'center',gap:7,
-              background:'rgba(255,255,255,.11)',backdropFilter:'blur(10px)',
-              border:'1px solid rgba(255,255,255,.2)',
-              borderRadius:10,padding:'10px 16px',
-              color:'rgba(255,255,255,.9)',fontSize:12,fontWeight:600,
-            }}>
-              <span style={{fontSize:14}}>📋</span>
-              Tap card for ingredients &amp; add to planner
-            </div>
-
-            <div style={{textAlign:'center',marginTop:8,fontSize:10,opacity:.28,letterSpacing:'.8px',color:'#fff'}}>
-              scroll down for next recipe
-            </div>
-          </div>
+    <div className="mov" onClick={onClose}>
+      <div className="modal" onClick={e => e.stopPropagation()}>
+        <div className="mhd">
+          <div className="mtitle">Add to plan</div>
+          <button className="mclose" onClick={onClose}>✕</button>
         </div>
-
-        {/* ═══════════════════════════ BACK ════════════════════════════ */}
-        <div style={{
-          position:'absolute', inset:0,
-          backfaceVisibility:'hidden',
-          WebkitBackfaceVisibility:'hidden',
-          transform:'rotateY(180deg)',
-          overflow:'hidden',
-          background:'#faf8f5',
-        }}>
-          {/* Scrollable content — stopPropagation prevents accidental flip-back on scroll */}
-          <div
-            onClick={e => e.stopPropagation()}
-            style={{
-              position:'absolute', inset:0,
-              overflowY:'auto',
-              padding:'18px 18px 22px',
-              display:'flex', flexDirection:'column',
-            }}
-          >
-            {/* Back header */}
-            <div style={{display:'flex',alignItems:'flex-start',justifyContent:'space-between',marginBottom:14,gap:8}}>
-              <div style={{flex:1,minWidth:0}}>
-                <div style={{fontSize:10,fontWeight:700,color:'var(--clay)',letterSpacing:'.8px',marginBottom:3,textTransform:'uppercase'}}>
-                  {recipe.cuisine||recipe.meal||'Recipe'}
-                </div>
-                <div style={{fontSize:17,fontWeight:800,color:'var(--ch)',lineHeight:1.25}}>
-                  {recipe.title}
+        <div className="mbody">
+          <div style={{marginBottom:16,fontWeight:600}}>{recipe.emoji} {recipe.title}</div>
+          <div className="atp-grid">
+            {mealPlan.map((day, di) => (
+              <div key={di} className="atp-day">
+                <div className="atp-day-name">{day.day}</div>
+                <div className="atp-meals">
+                  {MEALS.map((m, mi) => (
+                    <button key={mi} className={`atp-meal${sel?.dayIdx === di && sel?.mealIdx === mi ? ' sel' : ''}`}
+                      onClick={() => setSel({ dayIdx: di, mealIdx: mi })}>
+                      {day.meals[mi] ? `${day.meals[mi].emoji || '🍽'} ${m}` : `+ ${m}`}
+                    </button>
+                  ))}
                 </div>
               </div>
-              <button
-                onClick={e=>{e.stopPropagation();flipToFront();}}
-                style={{
-                  width:32,height:32,borderRadius:16,flexShrink:0,
-                  background:'var(--cream)',border:'1px solid var(--bor)',
-                  color:'var(--mu)',fontSize:13,cursor:'pointer',
-                  display:'flex',alignItems:'center',justifyContent:'center',
-                  fontWeight:700,
-                }}>
-                ✕
-              </button>
-            </div>
-
-            {/* Stats strip */}
-            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:8,marginBottom:14}}>
-              {[
-                {label:'TIME',       value:`${recipe.time||'?'} min`,  color:'var(--ch)'},
-                {label:'DIFFICULTY', value:recipe.diff||'Med',         color:'var(--ch)'},
-                {label:'PANTRY',     value:`${pantryPct}%`,            color:pantryPct===100?'#16a34a':pantryPct>=60?'#d97706':'#dc2626'},
-              ].map(s=>(
-                <div key={s.label} style={{
-                  background:'var(--cream)',borderRadius:10,padding:'9px 10px',
-                  border:'1px solid var(--bor)',textAlign:'center',
-                }}>
-                  <div style={{fontSize:9,fontWeight:700,color:'var(--mu)',letterSpacing:'.7px',marginBottom:3}}>{s.label}</div>
-                  <div style={{fontSize:13,fontWeight:800,color:s.color}}>{s.value}</div>
-                </div>
-              ))}
-            </div>
-
-            {/* Ingredients */}
-            <div style={{marginBottom:12}}>
-              <div style={{fontSize:11,fontWeight:700,color:'var(--mu)',letterSpacing:'.7px',marginBottom:8,textTransform:'uppercase'}}>
-                Ingredients — {haveIngs.length}/{req.length} in pantry
-              </div>
-              <div style={{display:'flex',flexDirection:'column',gap:3}}>
-                {req.slice(0,10).map((ing,i)=>{
-                  const has = ingInPantry(ing.n, pantrySet);
-                  return (
-                    <div key={i} style={{
-                      display:'flex',alignItems:'center',gap:8,
-                      padding:'6px 10px',borderRadius:8,
-                      background:has?'rgba(22,163,74,.06)':'rgba(220,38,38,.04)',
-                      border:`1px solid ${has?'rgba(22,163,74,.14)':'rgba(220,38,38,.10)'}`,
-                    }}>
-                      <span style={{fontSize:12,flexShrink:0,opacity:.85}}>{has?'✅':'🛒'}</span>
-                      <span style={{fontSize:13,color:has?'var(--ch)':'#6b7280',flex:1,lineHeight:1.3}}>{ing.n}</span>
-                      {ing.a && <span style={{fontSize:11,color:'var(--mu)',flexShrink:0}}>{ing.a}</span>}
-                    </div>
-                  );
-                })}
-                {req.length>10 && (
-                  <div style={{fontSize:12,color:'var(--mu)',textAlign:'center',padding:'3px 0'}}>+{req.length-10} more</div>
-                )}
-              </div>
-            </div>
-
-            {/* Missing ingredients summary */}
-            {missingIngs.length>0 && (
-              <div style={{
-                background:'rgba(251,146,60,.07)',border:'1px solid rgba(251,146,60,.2)',
-                borderRadius:10,padding:'10px 12px',marginBottom:12,
-              }}>
-                <div style={{fontSize:10,fontWeight:700,color:'#b45309',marginBottom:3,letterSpacing:'.5px'}}>NEED TO BUY</div>
-                <div style={{fontSize:12,color:'var(--ch)',lineHeight:1.65}}>
-                  {missingIngs.slice(0,6).map(i=>i.n).join(' · ')}{missingIngs.length>6?` +${missingIngs.length-6} more`:''}
-                </div>
-              </div>
-            )}
-
-            <div style={{flex:1,minHeight:8}}/>
-
-            {/* Action buttons */}
-            <div style={{display:'flex',flexDirection:'column',gap:8}}>
-              <button
-                onClick={e=>{e.stopPropagation();onSelect();}}
-                style={{
-                  width:'100%',
-                  background:'linear-gradient(135deg,#c9953a,#e8a94e)',
-                  color:'#fff',border:'none',borderRadius:12,
-                  padding:'14px 20px',fontSize:14,fontWeight:800,cursor:'pointer',
-                  boxShadow:'0 4px 16px rgba(201,149,58,.38)',
-                  textShadow:'0 1px 3px rgba(0,0,0,.25)',
-                }}>
-                {isCurrentSlotFilled
-                  ? `↺ Replace ${dayLabel} ${mealLabel}`
-                  : `+ Add for ${dayLabel} ${mealLabel}`}
-              </button>
-              <div style={{display:'flex',gap:8}}>
-                <button
-                  onClick={e=>{e.stopPropagation();onSave();}}
-                  style={{
-                    flex:1,
-                    background:isSaved?'rgba(239,68,68,.08)':'var(--cream)',
-                    color:isSaved?'#dc2626':'var(--ch)',
-                    border:`1px solid ${isSaved?'rgba(239,68,68,.2)':'var(--bor)'}`,
-                    borderRadius:10,padding:'11px 10px',fontSize:13,fontWeight:600,cursor:'pointer',
-                  }}>
-                  {isSaved?'❤️ Saved':'🤍 Save'}
-                </button>
-                <button
-                  onClick={e=>{e.stopPropagation();onView();}}
-                  style={{
-                    flex:1,
-                    background:'var(--cream)',color:'var(--ch)',
-                    border:'1px solid var(--bor)',borderRadius:10,
-                    padding:'11px 10px',fontSize:13,fontWeight:600,cursor:'pointer',
-                  }}>
-                  📋 View
-                </button>
-              </div>
-            </div>
+            ))}
           </div>
+          {sel && (
+            <button className="btn btn-p btn-full" style={{marginTop:16}} onClick={() => onConfirm(sel.dayIdx, sel.mealIdx)}>
+              Add to {mealPlan[sel.dayIdx].day} {MEALS[sel.mealIdx]}
+            </button>
+          )}
         </div>
-
-      </div>{/* end flip container */}
+      </div>
     </div>
   );
 }
 
-
-
-
-function PlannerTab({ mealPlan, setMealPlan, isGuest, onViewRecipe, shopping, prefs, setPrefs, pantry, setPantry, setShopping, isPremium, subscription, setSubscription, onUpgrade, allRecipes: allRecipesProp, userRecipes, avoidedIngredients = [], user, publishedMenus, setPublishedMenus, showToast, collections, setCollections,
-  // Plan Library state (lifted from App, forwarded via tp)
-  libraryPreview, setLibraryPreview, libraryDraft, setLibraryDraft,
-  libraryDraftTitle, setLibraryDraftTitle, libraryShowCreate, setLibraryShowCreate }) {
-  const [plannerView, setPlannerView] = useState('week'); // 'week' | 'build' | 'library'
-  // Use allRecipes from props (built-in + user-created), fallback to RECIPES if not provided
-  const allRecipes = allRecipesProp || RECIPES;
-  const [slots,setSlots]=useState({Breakfast:true,Lunch:true,Dinner:true});
-  // Slot interaction state
-  const [slotPopover, setSlotPopover] = useState(null); // {dayIdx,mealIdx,mealType,key,dayLabel}
-  const [replacePicker, setReplacePicker] = useState(null);
-  const [customMealModal, setCustomMealModal] = useState(null);
-  const [swapSource, setSwapSource] = useState(null);
-  const [dragSource, setDragSource] = useState(null);
-  const [showPublishModal, setShowPublishModal] = useState(false);
-  const [planning,setPlanning]=useState(false);
-  const [showMissingModal,setShowMissingModal]=useState(false);
-  const [tooRestrictive,setTooRestrictive]=useState(false);       // avoid filter blocked all slots
-  const [allowAvoidedLastResort,setAllowAvoidedLastResort]=useState(false); // override toggle
-  // Missing panel + Planner Chat
-  const [showMissingPanel, setShowMissingPanel] = useState(true);
-  const [chatOpen, setChatOpen] = useState(false);
-  const [aiChatOpen, setAiChatOpen] = useState(false);
-  const [chatMessages, setChatMessages] = useState([{role:'bot',text:'Hi! I\'m your cooking assistant. I can edit your plan, answer questions, and give cooking advice.\n\nTry:\n• "What should I cook tonight?"\n• "No pasta for lunch"\n• "Which meals need ingredients?"\n• "Suggest a quick healthy dinner"\n• "How long do I cook salmon?"\n• "What can I substitute for butter?"'}]);
-  const [chatInput, setChatInput] = useState('');
-  const [chatListening, setChatListening] = useState(false);
-  // Pending two-step confirmation (e.g. clear plan)
-  const [chatPendingAction, setChatPendingAction] = useState(null);
-  const [chatConstraintMemory, setChatConstraintMemory] = useState({
-    goals: { whole_week: [], breakfast: [], lunch: [], dinner: [] },
-    pantryThreshold: null, maxTime: null, dietary: [], foodFocus: null,
-    exclusions: { whole_week: [], breakfast: [], lunch: [], dinner: [] },
-  });
-  const [showPlannerPrefs, setShowPlannerPrefs] = useState(false);
-  const [showClearConfirm, setShowClearConfirm] = useState(false);
-  const [showPrefsModal, setShowPrefsModal] = useState(false);
-  const ME={Breakfast:"☀️",Lunch:"🌤️",Dinner:"🌙"};
-  
-  // SHARED HELPER: Check if recipe has missing ingredients (needs shopping)
-  // Uses shared ingInPantry / buildPantrySet engine
-  const recipeNeedsShopping = (meal) => {
-    if (!meal) return false;
-    if (meal.kind === "custom") return false;
-    const recipeId = meal.id;
-    const ps = buildPantrySet(pantry);
-    // Pantry-generated meals: look up via slug — optionals already tagged with .optional:true
-    if (String(recipeId).startsWith('pantry-')) {
-      const pantryRecipe = getPantryRecipeObj(recipeId);
-      if (!pantryRecipe?.ingredients) return false;
-      return pantryRecipe.ingredients.some(ing => !ing.optional && !isOptionalIng(ing.n) && !ingInPantry(ing.n, ps));
-    }
-    const recipe = allRecipes.find(r => r.id === recipeId);
-    if(!recipe || !recipe.ingredients) return false;
-    return recipe.ingredients.some(ing => !ing.optional && !isOptionalIng(ing.n) && !ingInPantry(ing.n, ps));
-  };
-
-  // SHARED HELPER: Compute missing ingredients from current plan + pantry
-  // Handles both regular recipes and pantry-generated meals.
-  // Excludes optional ingredients (garnishes / finishing touches).
-  const computeMissingIngredients = () => {
-    const ps = buildPantrySet(pantry);
-    const ingredientMap = {}; // {normalized: {name, recipesNeedingIt: [...], count}}
-
-    mealPlan.forEach(day => {
-      day.meals.forEach(meal => {
-        if (!meal || meal.kind === 'custom') return;
-        // Look up recipe — handle both regular and pantry-generated meals
-        let recipe = null;
-        let recipeTitle = meal.name || '';
-        if (String(meal.id).startsWith('pantry-')) {
-          recipe = getPantryRecipeObj(meal.id);
-          if (recipe) recipeTitle = recipe.title;
-        } else {
-          recipe = allRecipes.find(r => r.id === meal.id);
-          if (recipe) recipeTitle = recipe.title;
-        }
-        if (!recipe?.ingredients) return;
-
-        recipe.ingredients.forEach(ing => {
-          // Skip optional ingredients — they never count as missing
-          if (ing.optional || isOptionalIng(ing.n)) return;
-          const normalized = normalizeIng(ing.n);
-          if (!normalized || ingInPantry(ing.n, ps)) return;
-          if (!ingredientMap[normalized]) {
-            ingredientMap[normalized] = { name: ing.n, normalized, recipesNeedingIt: [], count: 0 };
-          }
-          if (!ingredientMap[normalized].recipesNeedingIt.includes(recipeTitle)) {
-            ingredientMap[normalized].recipesNeedingIt.push(recipeTitle);
-            ingredientMap[normalized].count++;
-          }
-        });
-      });
-    });
-
-    return Object.values(ingredientMap);
-  };
-  
-
-  
-
-
-  const setSlotMeal = (dayIdx, mealIdx, meal) => {
-    setMealPlan(prev => {
-      const next = prev.map(d => ({ ...d, meals: [...d.meals] }));
-      next[dayIdx].meals[mealIdx] = meal;
-      return next;
-    });
-  };
-
-  const swapSlots = (a, b) => {
-    setMealPlan(prev => {
-      const next = prev.map(d => ({ ...d, meals: [...d.meals] }));
-      const tmp = next[a.dayIdx].meals[a.mealIdx];
-      next[a.dayIdx].meals[a.mealIdx] = next[b.dayIdx].meals[b.mealIdx];
-      next[b.dayIdx].meals[b.mealIdx] = tmp;
-      return next;
-    });
-  };
-
-  // Helper: build a recipe-like object from a pantry-generated meal slot
-  const getPantryRecipeObj = (mealId) => {
-    // The numeric index in the ID is relative to the FILTERED pantry list, NOT to
-    // PANTRY_MEAL_TEMPLATES directly. Using it as PANTRY_MEAL_TEMPLATES[idx] causes
-    // wrong-recipe lookup (e.g., "Pasta Aglio e Olio" opens "Peanut Butter Toast").
-    // Fix: use the name-slug in the ID to find the correct template by name.
-    const m = String(mealId).match(/^pantry-\d+-(.+)$/);
-    const slug = m ? m[1] : null;
-    const t = slug
-      ? PANTRY_MEAL_TEMPLATES.find(tmpl => tmpl.name.replace(/\s+/g, '-').toLowerCase() === slug)
-      : null;
-    if (!t) return null;
-    const PANTRY_IMAGES = {
-      'Scrambled Eggs':'https://images.unsplash.com/photo-1525351484163-7529414344d8?w=600',
-      'Fried Eggs':'https://images.unsplash.com/photo-1510693206972-df098062cb71?w=600',
-      'Soft-Boiled Eggs':'https://images.unsplash.com/photo-1482049016688-2d3e1b311543?w=600',
-      'Classic Omelet':'https://images.unsplash.com/photo-1590412200988-a436970781fa?w=600',
-      'Banana Pancakes':'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=600',
-      'Porridge / Oatmeal':'https://images.unsplash.com/photo-1495214783159-3503fd1b572d?w=600',
-      'Avocado Toast':'https://images.unsplash.com/photo-1541519227354-08fa5d50c44d?w=600',
-      'Peanut Butter Toast':'https://images.unsplash.com/photo-1484723091739-30a097e8f929?w=600',
-      'Yogurt & Honey':'https://images.unsplash.com/photo-1488477181946-6428a0291777?w=600',
-      'Pasta Aglio e Olio':'https://images.unsplash.com/photo-1563379926898-05f4575a45d8?w=600',
-      'Tuna Salad':'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=600',
-      'Egg Salad Sandwich':'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=600',
-      'Lentil Soup':'https://images.unsplash.com/photo-1476718406336-bb5a9690ee2a?w=600',
-      'Rice & Beans':'https://images.unsplash.com/photo-1559181567-c3190ca9959b?w=600',
-      'Chickpea Salad':'https://images.unsplash.com/photo-1540189549519-5a7bb3e29b00?w=600',
-      'Tomato Soup':'https://images.unsplash.com/photo-1587116861000-5e1a3817a5e5?w=600',
-      'Simple Fried Rice':'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=600',
-      'Baked Salmon':'https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=600',
-      'Pan-Seared White Fish':'https://images.unsplash.com/photo-1559847844-5315695dadae?w=600',
-      'Garlic Butter Pasta':'https://images.unsplash.com/photo-1606787366850-de6330128bfc?w=600',
-      'Pasta with Tomato':'https://images.unsplash.com/photo-1563379926898-05f4575a45d8?w=600',
-      'Simple Lentil Stew':'https://images.unsplash.com/photo-1543339308091-ef3c048c3ca0?w=600',
-      'Chickpea Stew':'https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=600',
-      'Egg Fried Rice':'https://images.unsplash.com/photo-1603105029258-9e5b3a4b4b0a?w=600',
-      'Stuffed Omelette':'https://images.unsplash.com/photo-1510693206972-df098062cb71?w=600',
-      'Beans on Toast':'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=600',
-      'Potato & Egg Bake':'https://images.unsplash.com/photo-1600803907087-8d180f58d54c?w=600',
-      'Tuna Pasta':'https://images.unsplash.com/photo-1556761223-4c4282c73f77?w=600',
-    };
-    return {
-      id: mealId, title: t.name, emoji: t.emoji, time: t.time, diff: 'Easy',
-      cuisine: 'Pantry', dietary: [],
-      ingredients: [...(t.requires||[]).map(n=>({n})), ...(t.optionals||[]).map(n=>({n, optional:true}))],
-      contains_meat: t.contains_meat||false, contains_fish: t.contains_fish||false,
-      contains_shellfish: false, contains_dairy: t.contains_dairy||false,
-      isPantryGenerated: true, missingCount: 0,
-      image: PANTRY_IMAGES[t.name] || null,
-      steps: generatePantrySteps(t),
-    };
-  };
-
-  const handleSlotClick = (dayIdx, mealIdx, mealType) => {
-    // Re-read meal directly from current mealPlan state using canonical indices.
-    // This eliminates any stale-closure risk — the recipeId is always sourced
-    // from mealPlan[dayIdx].meals[mealIdx], never from a closure-captured object.
-    const meal = mealPlan[dayIdx]?.meals[mealIdx] ?? null;
-    // Close any open popover first
-    setSlotPopover(null);
-    if (swapSource) {
-      if (swapSource.mealType !== mealType) {
-        if (showToast) showToast("⚠️ Can only swap within the same meal type (Breakfast↔Breakfast, etc.)");
-        setSwapSource(null);
-        return;
-      }
-      swapSlots(swapSource, { dayIdx, mealIdx, mealType });
-      if (showToast) showToast("↔ Meals swapped!");
-      setSwapSource(null);
-      return;
-    }
-    if (meal) {
-      if (meal.kind === "custom") {
-        // Custom meals: open the custom meal editor
-        setCustomMealModal({ dayIdx, mealIdx, dayLabel: mealPlan[dayIdx]?.day, mealType, existing: meal });
-      } else {
-        // Recipe meals: look up by recipeId as the single source of truth.
-        // Never use array position or card index for lookup.
-        const recipeId = meal.id;
-        let recipeObj = null;
-        if (recipeId && String(recipeId).startsWith('pantry-')) {
-          recipeObj = getPantryRecipeObj(recipeId);
-        } else {
-          recipeObj = recipeId != null ? (allRecipes.find(r => r.id === recipeId) ?? null) : null;
-        }
-        if (recipeObj) {
-          onViewRecipe(recipeObj);
-        } else if (recipeId != null) {
-          // ID present but recipe not found — show a safe not-found page
-          onViewRecipe({ __notFound: true, id: recipeId, title: meal.name || meal.title || 'Unknown Recipe' });
-        }
-      }
-    } else {
-      // Empty slot: open recipe picker
-      setReplacePicker({ dayIdx, mealIdx, mealType });
-    }
-  };
-
-  const publishMenu = (menu) => {
-    const updated = [menu, ...(publishedMenus||[])];
-    if (setPublishedMenus) setPublishedMenus(updated);
-    if (showToast) showToast("🌐 Weekly menu published to Community!");
-  };
-
-  const autoplan = async () => {
-    if(isGuest){alert("Create an account to use the Planner!");return;}
-    setPlanning(true);
-    await new Promise(r => setTimeout(r, 400));
-
-    // ── Snapshot inputs ────────────────────────────────────────────────
-    const pantrySet = buildPantrySet(pantry);
-    const seed = Date.now(); // Unique seed per run → different results every time
-
-    // ── 1. Dietary filter ─────────────────────────────────────────────
-    const pantryOnlyMode = (prefs.dietary||[]).includes('PantryOnly');
-    const effectivePrefs = pantryOnlyMode ? {...prefs, dietary:(prefs.dietary||[]).filter(x=>x!=='PantryOnly')} : prefs;
-    const dietaryAllowed = allRecipes.filter(r => isRecipeAllowedForUser(r, effectivePrefs));
-
-    if(dietaryAllowed.length < 3) {
-      alert(`Only ${dietaryAllowed.length} recipes match your dietary preferences. Add more pantry items or relax filters.`);
-      setPlanning(false);
-      return;
-    }
-
-    // ── 1b. Avoid-ingredients filter ──────────────────────────────────
-    const avoidSet = new Set(avoidedIngredients || []);
-    let allowedRecipes = dietaryAllowed;
-    if(avoidSet.size > 0 && !allowAvoidedLastResort) {
-      const filtered = dietaryAllowed.filter(r =>
-        !(r.ingredients || []).some(i => avoidSet.has(normalizeIng(i.n)))
-      );
-      const minNeeded = (slots.Breakfast?7:0)+(slots.Lunch?7:0)+(slots.Dinner?7:0);
-      if(filtered.length < minNeeded) {
-        setTooRestrictive(true);
-        setPlanning(false);
-        return;
-      }
-      setTooRestrictive(false);
-      allowedRecipes = filtered;
-    } else {
-      setTooRestrictive(false);
-    }
-
-    // ── 2a. Generate pantry-first meals (0-missing, ultra-simple) ─────
-    // These ALWAYS beat complex recipes because the user already has everything.
-    const rawPantryMeals = generatePantryMeals(pantrySet);
-    const pantryMeals = rawPantryMeals.filter(r => isRecipeAllowedForUser(r, prefs));
-    const bPantry = pantryMeals.filter(r => r.meal === 'breakfast');
-    const lPantry = pantryMeals.filter(r => r.meal === 'lunch');
-    const dPantry = pantryMeals.filter(r => r.meal === 'dinner');
-    console.log('🥘 Pantry-generated meals available:',
-      `B:${bPantry.length} L:${lPantry.length} D:${dPantry.length}`,
-      pantryMeals.map(r=>r.title).join(', ') || '(none)');
-
-    // ── 2b. Score every recipe (missing count) ─────────────────────────
-    const scored = allowedRecipes.map(r => {
-      const ings = r.ingredients || [];
-      const missingCount = ings.filter(i => !ingInPantry(i.n, pantrySet)).length;
-      return { ...r, missingCount, coreDishKey: computeCoreDishKey(r), commonScore: getCommonScore(r) };
-    });
-
-    // ── 3. Seeded shuffle + high-value pantry term detection ─────────────────
-    const seededRand = (() => {
-      let s = seed >>> 0;
-      return () => { s = (Math.imul(s, 1664525) + 1013904223) >>> 0; return s / 0x100000000; };
-    })();
-    const shuffleArr = arr => {
-      const a = [...arr];
-      for(let i = a.length - 1; i > 0; i--) {
-        const j = Math.floor(seededRand() * (i + 1));
-        [a[i], a[j]] = [a[j], a[i]];
-      }
-      return a;
-    };
-    // High-value pantry ingredients (fish, seafood, meat) — prefer these when in pantry
-    const HIGH_VALUE_TERMS = ['salmon','cod','tuna','trout','mackerel','haddock','tilapia','halibut',
-      'sea bass','white fish','fish fillet','chicken','beef','pork','lamb','shrimp','prawn','crab','scallop'];
-    const pantryHighValueNorms = new Set(
-      HIGH_VALUE_TERMS.filter(t => ingInPantry(t, pantrySet)).map(t => normalizeIng(t))
-    );
-    // Get pantry ingredient normalized names used by a recipe
-    const getPantryIngsOf = r => (r.ingredients||[])
-      .filter(i => ingInPantry(i.n, pantrySet))
-      .map(i => normalizeIng(i.n));
-
-    // Build shuffled-within-groups pool (0-missing first for variety baseline)
-    const buildSortedPool = pool => {
-      const groups = {};
-      pool.forEach(r => { const k = Math.min(r.missingCount, 9); (groups[k] = groups[k] || []).push(r); });
-      const result = [];
-      for(let k = 0; k <= 9; k++) {
-        if(groups[k]) {
-          // Within each missing-count group: shuffle first (for variety), then stable-sort
-          // by commonScore so familiar meals drift toward the front
-          const shuffled = shuffleArr(groups[k]);
-          shuffled.sort((a, b) => (b.commonScore || 0) - (a.commonScore || 0));
-          result.push(...shuffled);
-        }
-      }
-      return result;
-    };
-
-    const bAll = scored.filter(r => getMealType(r) === 'breakfast');
-    const lAll = scored.filter(r => getMealType(r) === 'lunch');
-    const dAll = scored.filter(r => getMealType(r) === 'dinner');
-
-    // Pantry-generated meals always go first (missingCount=0, isPantryGenerated=true)
-    // They get a big noveltyScore bonus in pickFrom, ensuring they beat complex 0-missing recipes
-    const bPool = [...shuffleArr(bPantry), ...buildSortedPool(bAll.length >= 3 ? bAll : scored)];
-    const lPool = [...shuffleArr(lPantry), ...buildSortedPool(lAll.length >= 3 ? lAll : scored)];
-    const dPool = [...shuffleArr(dPantry), ...buildSortedPool(dAll.length >= 3 ? dAll : scored)];
-
-    // Fish/seafood pantry detection for dev log
-    const FISH_TERMS = ['salmon','cod','tuna','trout','mackerel','haddock','tilapia','halibut','sea bass','white fish','fish fillet'];
-    const fishInPantry = FISH_TERMS.filter(t => ingInPantry(t, pantrySet));
-    const fishInZeroMissingDinner = fishInPantry.length > 0
-      ? dAll.filter(r => r.missingCount === 0 && (r.ingredients||[]).some(i => fishInPantry.some(f => normalizeIng(i.n).includes(normalizeIng(f)))))
-      : [];
-
-    // ── 4. Enhanced debug logging ──────────────────────────────────────
-    console.group('🍽️  AUTO-PLAN DEBUG — run seed: ' + seed);
-    console.log('totalRecipes (allRecipes):', allRecipes.length);
-    console.log('totalRecipes (RECIPES built-in):', RECIPES.length);
-    console.log('dietaryAllowed:', allowedRecipes.length);
-    console.log('breakfastCandidates:', bAll.length,
-      '| zeroMissing:', bAll.filter(r => r.missingCount === 0).length,
-      '| uniqueKeys:', new Set(bAll.map(r => r.coreDishKey)).size);
-    console.log('lunchCandidates:', lAll.length,
-      '| zeroMissing:', lAll.filter(r => r.missingCount === 0).length,
-      '| uniqueKeys:', new Set(lAll.map(r => r.coreDishKey)).size);
-    console.log('dinnerCandidates:', dAll.length,
-      '| zeroMissing:', dAll.filter(r => r.missingCount === 0).length,
-      '| uniqueKeys:', new Set(dAll.map(r => r.coreDishKey)).size);
-    console.log('pantryItems:', pantry.length, '| pantrySetSize:', pantrySet.size);
-    console.log('highValueInPantry:', [...pantryHighValueNorms].join(', ') || '(none)');
-    if(fishInPantry.length) {
-      console.log('🐟 Fish/seafood in pantry:', fishInPantry.join(', '));
-      console.log('   → 0-missing dinner options with fish:', fishInZeroMissingDinner.map(r=>r.title).join(', ') || '(none found)');
-    } else {
-      console.log('🐟 No fish/seafood detected in pantry');
-    }
-    // Top pantry ingredients used across all candidates
-    const ingUsage = {};
-    scored.forEach(r => getPantryIngsOf(r).forEach(n => { ingUsage[n] = (ingUsage[n]||0)+1; }));
-    const topIngs = Object.entries(ingUsage).sort((a,b)=>b[1]-a[1]).slice(0,8).map(([n,c])=>`${n}(${c})`);
-    console.log('topPantryIngsAcrossAll:', topIngs.join(', '));
-    console.groupEnd();
-
-    // ── 5. Dynamic pick with pantry diversity + high-value scoring ─────
-    const usedIds  = new Set();
-    const usedKeys = new Set();
-    const usedPantryIngs = new Set(); // pantry ings already used this week
-
-    // Dynamic novelty score: higher = more new pantry diversity + high-value items
-    // isPantryGenerated gets a large bonus to ensure they always beat complex 0-missing recipes
-    const prefCuisines = new Set((prefs.cuisines||[]).map(c=>c.toLowerCase()));
-    const noveltyScore = r => {
-      const ings = getPantryIngsOf(r);
-      const novelBonus    = ings.filter(n => !usedPantryIngs.has(n)).length * 10;
-      const highValBonus  = ings.filter(n => [...pantryHighValueNorms].some(hv => n.includes(hv) || hv.includes(n))).length * 15;
-      const pantryBonus   = r.isPantryGenerated ? 200 : 0;
-      const healthBonus   = (prefs.dietary||[]).includes('Healthy') ? getHealthScore(r) * 8 : 0;
-      const commonBonus   = (r.commonScore || 0) * 5;
-      const cuisineBonus  = prefCuisines.size > 0 && prefCuisines.has((r.cuisine||'').toLowerCase()) ? 25 : 0;
-      return novelBonus + highValBonus + pantryBonus + healthBonus + commonBonus + cuisineBonus;
-    };
-
-    const pickFrom = pool => {
-      // Pass 1: unique ID + unique core-dish key, sort by [missingCount ASC, noveltyScore DESC]
-      const c1 = pool.filter(r => !usedIds.has(r.id) && !usedKeys.has(r.coreDishKey));
-      if (c1.length) {
-        c1.sort((a, b) => a.missingCount !== b.missingCount
-          ? a.missingCount - b.missingCount
-          : noveltyScore(b) - noveltyScore(a));
-        const r = c1[0];
-        usedIds.add(r.id); usedKeys.add(r.coreDishKey);
-        getPantryIngsOf(r).forEach(n => usedPantryIngs.add(n));
-        return { emoji: r.emoji, name: r.title, id: r.id };
-      }
-      // Pass 2: unique ID only (core-dish repeat allowed when pool thin)
-      const c2 = pool.filter(r => !usedIds.has(r.id));
-      if (c2.length) {
-        const r = c2[0];
-        usedIds.add(r.id);
-        getPantryIngsOf(r).forEach(n => usedPantryIngs.add(n));
-        return { emoji: r.emoji, name: r.title, id: r.id };
-      }
-      // Pass 3: emergency (full repeat — extremely rare)
-      const r = pool[0];
-      return r ? { emoji: r.emoji, name: r.title, id: r.id } : null;
-    };
-
-    const newPlan = mealPlan.map(d => ({
-      ...d,
-      meals: [
-        slots.Breakfast ? pickFrom(bPool) : null,
-        slots.Lunch     ? pickFrom(lPool) : null,
-        slots.Dinner    ? pickFrom(dPool) : null,
-      ]
-    }));
-
-    // Dev log: what pantry ings ended up being used
-    console.group('🍽️  AUTO-PLAN RESULT — pantry diversity');
-    console.log('usedPantryIngs across week:', [...usedPantryIngs].join(', ') || '(none)');
-    const fishUsed = [...usedPantryIngs].filter(n => FISH_TERMS.some(f => n.includes(normalizeIng(f)) || normalizeIng(f).includes(n)));
-    console.log('fish/seafood used in plan:', fishUsed.join(', ') || '(none)');
-    console.groupEnd();
-
-    setMealPlan(newPlan);
-    setPlanning(false);
-  };
-
-  // ═══════════════════════════════════════════════════════════════════════════
-  // PLANNER CHAT AGENT v2 — Persistent Constraint Memory
-  // ═══════════════════════════════════════════════════════════════════════════
-  //
-  // Goals ACCUMULATE across turns.  Each message adds to / refines / removes
-  // from the active constraint set — it never silently resets it.
-  //
-  // Per-turn flow:
-  //   [1] extractDelta(msg)              parse what THIS message changes
-  //   [2] mergeMemory(memory, delta)     fold delta into chatConstraintMemory
-  //   [3] setChatConstraintMemory(…)     persist updated memory
-  //   [4] executePlanEditsFromMemory(…)  apply ALL active goals to the plan
-  //   [5] buildAgentResponseV2(…)        reply listing every active constraint
-  //
-  // chatConstraintMemory shape — the accumulated state of the conversation:
-  // {
-  //   goals: {
-  //     whole_week: string[],   e.g. ['reduce_missing', 'pantry_only']
-  //     breakfast:  string[],   e.g. ['healthier']
-  //     lunch:      string[],
-  //     dinner:     string[],
-  //   },
-  //   pantryThreshold: number | null,   min pantry match %
-  //   maxTime:         number | null,   max cook time in minutes
-  //   dietary:         string[],        extra dietary filters
-  //   foodFocus:       string | null,   ingredient keyword to feature
-  // }
-  //
-  // Delta shape — output of extractDelta(), input to mergeMemory():
-  // {
-  //   add:    { whole_week, breakfast, lunch, dinner }   goals to add
-  //   remove: { whole_week, breakfast, lunch, dinner }   goals to remove
-  //   pantryThreshold: number | 'clear' | null
-  //   maxTime:         number | 'clear' | null
-  //   dietary:         string[]
-  //   foodFocus:       string | 'clear' | null
-  //   clearAll:        boolean
-  //   action:          string | null   non-replace actions (deduplicate etc.)
-  //   day:             number | null   day index 0-6
-  //   scope:           string | null   message-level scope
-  //   singleTarget:    meal | null     specific plan meal to replace
-  // }
-  //
-  // LLM integration path: replace extractDelta() with an API call returning
-  // the same delta shape.  mergeMemory + engine + response stay unchanged.
-  // ═══════════════════════════════════════════════════════════════════════════
-
-  // ── [1] Delta Extractor ───────────────────────────────────────────────────
-  // Parses a single message into a Delta — what THIS message wants to change.
-  // Handles: goal preservation ("stay healthy"), forgetting, scoped requests.
-  const extractDelta = (msg, currentPlan) => {
-    const t = msg.toLowerCase().trim();
-    const DAYS = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday'];
-
-    const delta = {
-      add:     { whole_week: [], breakfast: [], lunch: [], dinner: [] },
-      remove:  { whole_week: [], breakfast: [], lunch: [], dinner: [] },
-      exclude: { whole_week: [], breakfast: [], lunch: [], dinner: [] },
-      pantryThreshold: null,
-      maxTime:         null,
-      dietary:         [],
-      foodFocus:       null,
-      clearAll:        false,
-      action:          null,
-      day:             null,
-      scope:           null,
-      singleTarget:    null,
-    };
-
-    // ── Memory management commands ─────────────────────────────────────────
-    if (/start.?over|reset.?all|forget.?everything|clear.?goals|reset.?goals|clear.?constraints/.test(t)) {
-      delta.clearAll = true;
-      return delta;
-    }
-    // "forget the healthy part" → remove healthier from all scopes
-    if (/forget.*(health|healthi)/.test(t)) {
-      delta.remove.whole_week.push('healthier');
-      delta.remove.breakfast.push('healthier');
-      delta.remove.lunch.push('healthier');
-      delta.remove.dinner.push('healthier');
-      return delta;
-    }
-    // "forget the pantry / missing" goals
-    if (/forget.*(pantry|missing|shop)/.test(t)) {
-      delta.remove.whole_week.push('pantry_only', 'reduce_missing');
-      delta.pantryThreshold = 'clear';
-      return delta;
-    }
-    // "forget the interesting / complex" goal
-    if (/forget.*(interest|complex|boring)/.test(t)) {
-      delta.remove.whole_week.push('more_interesting');
-      delta.remove.breakfast.push('more_interesting');
-      delta.remove.lunch.push('more_interesting');
-      delta.remove.dinner.push('more_interesting');
-      return delta;
-    }
-    // "forget the quick / simple" goal
-    if (/forget.*(simpl|quick|fast)/.test(t)) {
-      delta.remove.whole_week.push('simpler');
-      delta.remove.breakfast.push('simpler');
-      delta.remove.lunch.push('simpler');
-      delta.remove.dinner.push('simpler');
-      delta.maxTime = 'clear';
-      return delta;
-    }
-
-    // ── Non-replace action commands ────────────────────────────────────────
-    if (/\b(delete|clear|empty|erase|blank|wipe|remove|reset)\b.*\b(plan|week|meal|all|everything|schedule)\b|\bremove all\b|\bstart from scratch\b|\bblank the plan\b|\bempty the week\b|\bclear the week\b|\bdelete the plan\b/.test(t)) {
-      delta.action = 'clear';
-      return delta;
-    }
-    if (/new week|redo.*(all|week)|regenerate.*(all|week|whole)|fresh.*plan/.test(t)) {
-      delta.action = 'regenerate';
-      return delta;
-    }
-    if (/no.?duplic|remove.?duplic|\bdedup\b|stop.*repeat|no.*repeat|all different|unique meals/.test(t)) {
-      delta.action = 'deduplicate';
-      return delta;
-    }
-    // Hard-remove only (no replacement) when no replacement goal present
-    const hasReplacementGoal = /healthi|more.?health|nutritious|more.*interest|less.*boring|\bupgrade\b|\bsimpl|\bquicker\b|\bfaster\b|quick.?meal|use.*pantry|from.*pantry/.test(t);
-    if (!hasReplacementGoal && /remove.*miss|clear.*miss|delete.*miss/.test(t)) {
-      delta.action = 'remove_missing';
-      return delta;
-    }
-
-    // ── Scope detection ────────────────────────────────────────────────────
-    const dayIdx = DAYS.findIndex(d => t.includes(d));
-    if (dayIdx >= 0) delta.day = dayIdx;
-
-    // Primary scope of this message (handle plurals: lunches, breakfasts, dinners)
-    let msgScope = 'whole_week';
-    if      (/\bbreakfasts?\b/.test(t))  msgScope = 'breakfast';
-    else if (/\blunch(?:es)?\b/.test(t)) msgScope = 'lunch';
-    else if (/\bdinners?\b/.test(t))     msgScope = 'dinner';
-    delta.scope = msgScope;
-
-    // "Only change lunch" / "Don't change breakfast" guards — applied at end
-    const lockBreakfast = /don.t.*change.*breakfast|leave.*breakfast.*alone|breakfast.*unchanged|keep.*breakfast.*same|not.*breakfast/.test(t);
-    const lockLunch     = /don.t.*change.*lunch|leave.*lunch.*alone|lunch.*unchanged|keep.*lunch.*same|not.*lunch/.test(t);
-    const lockDinner    = /don.t.*change.*dinner|leave.*dinner.*alone|dinner.*unchanged|keep.*dinner.*same|not.*dinner/.test(t);
-
-    // ── Natural language single-target ("Banana pancakes is not healthy") ──
-    if (/not.?health|unhealthy|isn.{0,4}health|is.*not.*good|too.*sweet|too.*heavy|too.*rich/.test(t)) {
-      const planMeals = currentPlan.flatMap(d => d.meals).filter(Boolean);
-      for (const m of planMeals) {
-        const words = (m.name || '').toLowerCase().split(/\s+/).filter(w => w.length > 3);
-        if (words.length && words.every(w => t.includes(w))) {
-          delta.singleTarget = m;
-          delta.scope = 'specific_slot';
-          break;
-        }
-      }
-      // Recipe not in plan — infer scope from recipe catalogue
-      if (!delta.singleTarget && msgScope === 'whole_week') {
-        for (const r of allRecipes) {
-          const words = (r.title || '').toLowerCase().split(/\s+/).filter(w => w.length > 3);
-          if (words.length >= 2 && words.every(w => t.includes(w))) {
-            const mt = getMealType(r);
-            if (mt === 'breakfast') delta.scope = 'breakfast';
-            else if (mt === 'lunch') delta.scope = 'lunch';
-            else if (mt === 'dinner') delta.scope = 'dinner';
-            break;
-          }
-        }
-      }
-    }
-
-    // ── Pantry threshold: "80% from my pantry", "most from pantry" ─────────
-    const pctMatch = t.match(/(\d+)\s*%/);
-    if (pctMatch) {
-      delta.pantryThreshold = parseInt(pctMatch[1]);
-    } else if (/mostly.*pantry|largely.*pantry|mainly.*pantry|most.*from.*pantry|most.*ingredients.*pantry|pantry.*most|most.*pantry/.test(t)) {
-      delta.pantryThreshold = 80;
-    }
-
-    // ── Extract ALL goals simultaneously ───────────────────────────────────
-    //
-    // "stay/keep/remain/still + goal" = explicit preservation = same as adding.
-    // This means "But breakfast should stay healthy" correctly adds 'healthier'
-    // to the breakfast scope even though no pantry words appear.
-
-    // Healthier
-    const wantsHealthy = /healthi|more.?health|nutritious|better.?for|less.?junk|not.?health|unhealthy|isn.{0,4}health|less.*sugar|improve.*health|health.*week/.test(t) ||
-                         /stay.{0,25}health|keep.{0,25}health|remain.{0,25}health|still.{0,25}health|should.*health|must.*health/.test(t);
-    if (wantsHealthy) {
-      // Scope to meal type if one is explicitly named; otherwise whole_week
-      const goalScope = (msgScope !== 'whole_week') ? msgScope : 'whole_week';
-      delta.add[goalScope].push('healthier');
-    }
-
-    // Pantry-only (hard: no shopping)
-    if (/\bpantry.?only\b|\bno.?shop(?:ping)?\b|use.*(?:what|what's|what i).*have\b|avoid.*shop(?:ping)?/.test(t) && !delta.pantryThreshold) {
-      delta.add.whole_week.push('pantry_only');
-    }
-
-    // Reduce missing / pantry-friendly (soft preference)
-    const wantsReduceMissing =
-      delta.pantryThreshold ||
-      /reduce.*miss|fewer.*miss|less.*miss|don.{0,5}many.*miss|so many miss|too many miss|don.{0,5}want.*miss|missing.*ingredient|pantry.?friendly/.test(t) ||
-      /from my pantry|from the pantry|use.*pantry|ingredients.*pantry|pantry.*ingredients|make.*pantry|use.*what.*have|have.*pantry/.test(t);
-    if (wantsReduceMissing) {
-      if (!delta.add.whole_week.includes('pantry_only') && !delta.add.whole_week.includes('reduce_missing')) {
-        delta.add.whole_week.push('reduce_missing');
-      }
-    }
-
-    // More interesting / complex
-    const wantsInteresting = /too.*(simple|easy|plain|basic|boring)|\bboring\b|more.*interest|less.*boring|\bupgrade\b|more.*complex|more.*excit|more.*vari/.test(t) ||
-                             /stay.{0,25}interest|keep.{0,25}interest|still.{0,25}interest/.test(t);
-    if (wantsInteresting) {
-      const goalScope = (msgScope !== 'whole_week') ? msgScope : 'whole_week';
-      delta.add[goalScope].push('more_interesting');
-    }
-
-    // Simpler / quicker (only when not also requesting interesting)
-    const alreadyInteresting = delta.add.whole_week.includes('more_interesting') ||
-                               delta.add.breakfast.includes('more_interesting') ||
-                               delta.add.lunch.includes('more_interesting') ||
-                               delta.add.dinner.includes('more_interesting');
-    const wantsSimpler = (/\bsimpl|\beasier\b|\bquicker\b|\bfaster\b|quick.?meal|fast.?meal|low.*effort|less.*complex/.test(t) ||
-                          /stay.{0,25}simpl|keep.{0,25}simpl|still.{0,25}simpl/.test(t)) && !alreadyInteresting;
-    if (wantsSimpler) {
-      const goalScope = (msgScope !== 'whole_week') ? msgScope : 'whole_week';
-      delta.add[goalScope].push('simpler');
-    }
-
-    // Max cook time
-    const timeMatch = t.match(/(\d+)\s*min/);
-    if (timeMatch) {
-      delta.maxTime = parseInt(timeMatch[1]);
-      if (!alreadyInteresting && !delta.add.whole_week.includes('simpler')) delta.add.whole_week.push('simpler');
-    } else if (wantsSimpler && !delta.maxTime) {
-      delta.maxTime = 20;
-    }
-
-    // Dietary constraints
-    const dietMatch = t.match(/\b(vegetarian|vegan|pescatarian|meatless|gluten.?free|dairy.?free)\b/);
-    if (dietMatch) {
-      const dm = dietMatch[1];
-      delta.dietary.push(dm === 'meatless' ? 'Vegetarian' : dm.charAt(0).toUpperCase() + dm.slice(1).replace(/-/g,''));
-    }
-
-    // Food focus: "more fish", "use salmon", "still use pasta"
-    const FOOD_KW = ['fish','salmon','tuna','chicken','beef','pasta','noodle','rice','soup','stew','salad','egg','bean','lentil','vegetable','veg','seafood','shrimp','pork','tofu','mushroom','curry','wrap','bowl'];
-    const foodMatch = t.match(new RegExp('\\b(' + FOOD_KW.join('|') + ')\\b'));
-    if (foodMatch && /more|use|add|want|feature|still|prefer|with/.test(t)) {
-      delta.foodFocus = foodMatch[1];
-      delta.add.whole_week.push('food_focus');
-    }
-
-
-    // ── Cuisine / category exclusion intent ──────────────────────────────
-    // Detects: "no X", "remove X", "don't want X", "avoid X", "without X"
-    // followed by a cuisine or food category.  Does NOT fire on duplicate/
-    // missing-ingredient commands (those are handled earlier).
-    const isExclusionIntent =
-      /\bno\b|\bremove\b|\bdon.t\b|\bdont\b|\bwithout\b|\bavoid\b|\bexclude\b/.test(t) &&
-      !/no.?duplic|no.*repeat|remove.*duplic|remove.*miss/.test(t);
-    if (isExclusionIntent) {
-      const CUISINE_DETECT = {
-        asian:         /\basian\b|\bchinese\b|\bjapanese\b|\bthai\b|\bkorean\b|\bvietnamese\b|\bsushi\b|\bramen\b|\bwok\b/,
-        mediterranean: /\bmediterranean\b|\bgreek\b|\blebanese\b|\bmoroc/,
-        italian:       /\bitalian\b/,
-        mexican:       /\bmexican\b/,
-        indian:        /\bindian\b/,
-        soup:          /\bsoups?\b/,
-        pasta:         /\bpastas?\b/,
-        fish:          /\bfish\b|\bseafood\b/,
-        meat:          /\bmeat\b|\bmeaty\b/,
-        spicy:         /\bspicy\b/,
-      };
-      for (const [cuisineKey, rx] of Object.entries(CUISINE_DETECT)) {
-        if (rx.test(t)) {
-          const exScope = (msgScope !== 'whole_week') ? msgScope : 'whole_week';
-          if (!delta.exclude[exScope].includes(cuisineKey)) {
-            delta.exclude[exScope].push(cuisineKey);
-          }
-        }
-      }
-    }
-
-    // ── Ingredient-level exclusions: "avoid chickpeas", "no garlic", "remove lentils" ──
-    // Catches specific ingredients not covered by cuisine/category patterns above.
-    // Only fires when there's an exclusion intent word but no cuisine/category matched.
-    const noCuisineMatched = delta.exclude.whole_week.length === 0 && delta.exclude.breakfast.length === 0 &&
-      delta.exclude.lunch.length === 0 && delta.exclude.dinner.length === 0;
-    if (isExclusionIntent && noCuisineMatched) {
-      // Known ingredient keywords that aren't cuisines
-      const ING_DETECT = [
-        'chickpea','lentil','tofu','mushroom','onion','garlic','potato','broccoli',
-        'spinach','pepper','tomato','eggplant','zucchini','corn','pea','bean',
-        'cauliflower','carrot','celery','cream','dairy','milk','cheese','butter',
-        'shrimp','prawn','crab','lobster','scallop','anchovy','sardine',
-        'lamb','pork','bacon','ham','sausage','mince',
-        'ginger','cilantro','coriander','cumin','chili','jalapen',
-        'coconut','avocado','olive','lemon','lime','orange',
-        'nuts','almond','walnut','cashew','peanut','sesame',
-        'egg','gluten','wheat','barley','oat',
-      ];
-      const ingScope = msgScope !== 'whole_week' ? msgScope : 'whole_week';
-      for (const ing of ING_DETECT) {
-        if (t.includes(ing)) {
-          if (!delta.exclude[ingScope].includes(ing)) delta.exclude[ingScope].push(ing);
-        }
-      }
-    }
-
-    // ── Apply "Don't change X" locks (clear goals added for locked scope) ──
-    if (lockBreakfast) { delta.add.breakfast = []; delta.remove.breakfast = []; }
-    if (lockLunch)     { delta.add.lunch     = []; delta.remove.lunch     = []; }
-    if (lockDinner)    { delta.add.dinner    = []; delta.remove.dinner    = []; }
-
-    return delta;
-  };
-
-  // ── [2] Memory Merge ───────────────────────────────────────────────────────
-  // Folds a delta into the existing constraint memory.
-  // Goals use set semantics — they accumulate until explicitly removed.
-  const mergeMemory = (existing, delta) => {
-    if (delta.clearAll) {
-      return {
-        goals:     { whole_week: [], breakfast: [], lunch: [], dinner: [] },
-        pantryThreshold: null,
-        maxTime:         null,
-        dietary:         [],
-        foodFocus:       null,
-        exclusions: { whole_week: [], breakfast: [], lunch: [], dinner: [] },
-      };
-    }
-
-    const mem = {
-      goals: {
-        whole_week: [...existing.goals.whole_week],
-        breakfast:  [...existing.goals.breakfast],
-        lunch:      [...existing.goals.lunch],
-        dinner:     [...existing.goals.dinner],
-      },
-      pantryThreshold: existing.pantryThreshold,
-      maxTime:         existing.maxTime,
-      dietary:         [...existing.dietary],
-      foodFocus:       existing.foodFocus,
-      exclusions: {
-        whole_week: [...(existing.exclusions?.whole_week || [])],
-        breakfast:  [...(existing.exclusions?.breakfast  || [])],
-        lunch:      [...(existing.exclusions?.lunch      || [])],
-        dinner:     [...(existing.exclusions?.dinner     || [])],
-      },
-    };
-
-    // Add goals (set semantics)
-    for (const s of ['whole_week','breakfast','lunch','dinner']) {
-      for (const g of (delta.add[s] || [])) {
-        if (!mem.goals[s].includes(g)) mem.goals[s].push(g);
-      }
-    }
-
-    // Remove goals (explicit forget commands)
-    for (const s of ['whole_week','breakfast','lunch','dinner']) {
-      for (const g of (delta.remove[s] || [])) {
-        mem.goals[s] = mem.goals[s].filter(x => x !== g);
-      }
-    }
-
-    // Accumulate exclusions (set semantics)
-    for (const s of ['whole_week','breakfast','lunch','dinner']) {
-      for (const ex of (delta.exclude?.[s] || [])) {
-        if (!mem.exclusions[s].includes(ex)) mem.exclusions[s].push(ex);
-      }
-    }
-
-    // Update scalar fields
-    if (delta.pantryThreshold === 'clear')  mem.pantryThreshold = null;
-    else if (delta.pantryThreshold !== null) mem.pantryThreshold = delta.pantryThreshold;
-
-    if (delta.maxTime === 'clear')           mem.maxTime = null;
-    else if (delta.maxTime !== null)         mem.maxTime = delta.maxTime;
-
-    if (delta.dietary.length)               mem.dietary = [...new Set([...mem.dietary, ...delta.dietary])];
-
-    if (delta.foodFocus === 'clear')         mem.foodFocus = null;
-    else if (delta.foodFocus !== null)       mem.foodFocus = delta.foodFocus;
-
-    return mem;
-  };
-
-  // ── [3] Plan Editing Engine (memory-aware) ────────────────────────────────
-  // Applies ALL active goals from memory to the plan.
-  // Per-scope goals: whole_week goals + meal-type-specific goals are combined
-  // when scoring recipes for each meal slot.
-  const executePlanEditsFromMemory = (memory, { action, day, scope, singleTarget }, ctx) => {
-    const { plan, ps, preferences, avoidedIngredients: avoidList } = ctx;
-    const avoidNorms = (avoidList || []).map(x => normalizeIng(x));
-    const MEAL_TYPES = ['breakfast', 'lunch', 'dinner'];
-    const scopeMealIdx = { breakfast: 0, lunch: 1, dinner: 2 };
-
-    const isAllowed = r => {
-      if (!isRecipeAllowedForUser(r, preferences)) return false;
-      if (memory.dietary.length) {
-        const extPrefs = { ...preferences, dietary: [...(preferences.dietary || []), ...memory.dietary] };
-        if (!isRecipeAllowedForUser(r, extPrefs)) return false;
-      }
-      if (avoidNorms.length && (r.ingredients || []).some(i =>
-        avoidNorms.some(av => normalizeIng(i.n || '').includes(av) || av.includes(normalizeIng(i.n || ''))))) return false;
-      return true;
-    };
-
-    const pantryMeals = generatePantryMeals(ps).filter(isAllowed);
-    const allAvail    = [...pantryMeals, ...allRecipes.filter(isAllowed)];
-
-    const pantryMatchPct = r => {
-      const ings = (r.ingredients || []).filter(i => !i.optional && !isOptionalIng(i.n));
-      if (!ings.length) return 100;
-      const have = ings.filter(i => ingInPantry(i.n, ps)).length;
-      return Math.round((have / ings.length) * 100);
-    };
-
-    // Cuisine/category pattern matcher — checks recipe title + ingredient text
-    const CUISINE_PATTERNS = {
-      asian:         { title: /stir.?fry|fried.?rice|ramen|sushi|pad.?thai|teriyaki|dumpling|spring.?roll|lo.?mein|chow.?mein|kung.?pao|miso|tempura|bibimbap|pho|banh.?mi|dim.?sum|nasi|satay|kimchi|udon|soba|gyoza|wonton|szechuan|yakitori|edamame|laksa|rendang/, ingredients: /soy.?sauce|sesame.?oil|fish.?sauce|rice.?noodle|oyster.?sauce|hoisin|wasabi|miso|dashi|rice.?vinegar|gochujang|\btamari\b|nori/ },
-      mediterranean: { title: /mediterranean|greek|hummus|falafel|tzatziki|pita|dolma|tabbouleh|shakshuka|moussaka|spanakopita|gyro|kebab|baklava|couscous|fattoush/, ingredients: /tahini|feta|kalamata|harissa|za.?atar|sumac/ },
-      italian:       { title: /italian|pasta|pizza|risotto|carbonara|bolognese|lasagna|gnocchi|bruschetta|caprese|minestrone|ossobuco/, ingredients: /parmesan|pecorino|pancetta|prosciutto|mozzarella|ricotta/ },
-      mexican:       { title: /mexican|taco|burrito|enchilada|quesadilla|fajita|guacamole|tamale|nachos|torta|pozole|chilaquiles|tex.?mex/, ingredients: /jalape|chipotle|tomatillo|queso|cotija|corn.?tortilla|flour.?tortilla/ },
-      indian:        { title: /indian|curry|masala|tikka|biryani|korma|vindaloo|saag|palak|paneer|chana|dal|butter.?chicken|tandoor/, ingredients: /garam.?masala|turmeric|cardamom|fenugreek|ghee|naan|chapati/ },
-      soup:          { title: /\bsoup\b|\bstew\b|\bchowder\b|\bbisque\b|\bgazpacho\b|\bborscht\b|\bgumbo\b/, ingredients: null },
-      pasta:         { title: /\bpasta\b|\bspaghetti\b|\bpenne\b|\bfettuccine\b|\blinguine\b|\bmacaroni\b|\brigatoni\b|\bfarfalle\b|\borzo\b|\bnoodle\b/, ingredients: null },
-      fish:          { title: /\bfish\b|\bsalmon\b|\btuna\b|\bcod\b|\btilapia\b|\bseafood\b|\bshrimp\b|\bprawn\b|\blocster\b|\bcrab\b|\bscallop\b/, ingredients: /\bsalmon\b|\btuna\b|\bcod\b|\btilapia\b|\bshrimp\b|\bprawn\b|\bcrab\b|\bscallop\b/ },
-      meat:          { title: /\bbeef\b|\bsteak\b|\bpork\b|\blamb\b|\bbacon\b|\bsausage\b|\bmeatball\b|\bburger\b|\brib\b|\bbrisket\b|\bveal\b|\bpulled.?pork\b/, ingredients: /\bbeef\b|\bsteak\b|\bpork\b|\blamb\b|\bbacon\b|\bsausage\b/ },
-      spicy:         { title: /\bspicy\b/, ingredients: /chili.?flake|\bjalape|\bchipotle|\bsriracha|\bhabanero|\bcayenne|\bred.?pepper.?flake/ },
-    };
-    // Map from recipe.cuisine field values to CUISINE_PATTERNS keys
-    const CUISINE_FIELD_MAP = {
-      'chinese': 'asian', 'japanese': 'asian', 'thai': 'asian', 'korean': 'asian',
-      'vietnamese': 'asian', 'asian': 'asian', 'southeast asian': 'asian',
-      'indian': 'indian', 'south asian': 'indian',
-      'mediterranean': 'mediterranean', 'greek': 'mediterranean',
-      'lebanese': 'mediterranean', 'north african': 'mediterranean',
-      'moroccan': 'mediterranean', 'middle eastern': 'mediterranean',
-      'italian': 'italian', 'french': null,
-      'mexican': 'mexican', 'tex-mex': 'mexican', 'latin american': 'mexican',
-    };
-    const recipeMatchesCuisine = (r, cuisineKey) => {
-      const pat = CUISINE_PATTERNS[cuisineKey];
-      if (!pat) return false;
-      // Primary: check recipe.cuisine metadata field (most reliable)
-      const cuisineField = (r.cuisine || '').toLowerCase();
-      const mappedKey = CUISINE_FIELD_MAP[cuisineField];
-      if (mappedKey && mappedKey === cuisineKey) return true;
-      // Secondary: check recipe title + ingredients text patterns
-      const title = (r.title || '').toLowerCase();
-      const ingsT = (r.ingredients || []).map(i => (i.n || '').toLowerCase()).join(' ');
-      return (pat.title && pat.title.test(title)) || (pat.ingredients && pat.ingredients.test(ingsT));
-    };
-
-    // Active exclusions for a meal type = whole_week + meal-type exclusions
-    const exclusionsFor = mealType => [
-      ...(memory.exclusions?.whole_week || []),
-      ...(memory.exclusions?.[mealType] || []),
-    ];
-
-    // Effective goals for a meal type = whole_week goals + meal-type goals
-    const goalsFor = mealType => [
-      ...memory.goals.whole_week,
-      ...(memory.goals[mealType] || []),
-    ];
-
-    // Combined recipe scorer: all active goals contribute simultaneously
-    const scoreRecipe = (r, mealType) => {
-      let score = 0;
-      const goals = goalsFor(mealType);
-      const pct   = pantryMatchPct(r);
-
-      if (memory.pantryThreshold) {
-        score += pct >= memory.pantryThreshold ? 200 : pct;
-      } else if (goals.includes('pantry_only')) {
-        score += pct >= 100 ? 200 : pct * 0.5;
-      } else if (goals.includes('reduce_missing')) {
-        score += pct;
-      }
-
-      if (goals.includes('healthier')) {
-        let hs = getHealthScore(r) * 10;
-        if (mealType === 'breakfast') {
-          const ttl  = (r.title || '').toLowerCase();
-          const ingsL = (r.ingredients || []).map(i => (i.n || '').toLowerCase()).join(' ');
-          if (/pancake|waffle|french.?toast|sweet.*(bread|roll)|sugary/.test(ttl))  hs -= 30;
-          if (/syrup|maple.?syrup|condensed.?milk|caramel/.test(ingsL))             hs -= 20;
-          if (/\b(egg|oatmeal|porridge|yogurt|avocado|oats)\b/.test(ttl))           hs += 20;
-        }
-        score += hs;
-      }
-
-      if (goals.includes('more_interesting')) {
-        score += ((r.ingredients || []).length >= 5 ? 20 : 0) + ((r.time || 30) >= 30 ? 10 : 0);
-      }
-
-      if (goals.includes('simpler')) {
-        const lim = memory.maxTime || 20;
-        score += (r.time || 30) <= lim ? 50 : Math.max(0, lim - (r.time || 30)) * 2;
-      }
-
-      if (goals.includes('food_focus') && memory.foodFocus) {
-        const fk = memory.foodFocus;
-        if ((r.title || '').toLowerCase().includes(fk) ||
-            (r.ingredients || []).some(i => (i.n || '').toLowerCase().includes(fk))) score += 60;
-      }
-
-      return score;
-    };
-
-    // Build scored, filtered candidate pool for a meal type
-    const buildPool = mealType => {
-      const goals = goalsFor(mealType);
-      let pool = allAvail.filter(r => getMealType(r) === mealType);
-
-      // Pantry-only hard filter
-      if (!memory.pantryThreshold && goals.includes('pantry_only')) {
-        const pOnlyF = pool.filter(r => pantryMatchPct(r) === 100);
-        if (pOnlyF.length) pool = pOnlyF;
-      }
-
-      // Max time hard filter
-      if (memory.maxTime && !goals.includes('simpler')) {
-        const tmF = pool.filter(r => (r.time || 30) <= memory.maxTime);
-        if (tmF.length) pool = tmF;
-      }
-
-      // Food focus hard filter (relaxed if it would empty the pool)
-      if (goals.includes('food_focus') && memory.foodFocus) {
-        const fk = memory.foodFocus;
-        const fkF = pool.filter(r =>
-          (r.title || '').toLowerCase().includes(fk) ||
-          (r.ingredients || []).some(i => (i.n || '').toLowerCase().includes(fk)));
-        if (fkF.length) pool = fkF;
-      }
-
-      // Cuisine/category exclusion hard filter
-      const activeExclusions = exclusionsFor(mealType);
-      if (activeExclusions.length) {
-        const excFiltered = pool.filter(r => !activeExclusions.some(ex => recipeMatchesCuisine(r, ex)));
-        if (excFiltered.length) pool = excFiltered;
-      }
-
-      pool = pool.map(r => ({ ...r, _score: scoreRecipe(r, mealType), _pct: pantryMatchPct(r) }));
-      pool.sort((a, b) => b._score - a._score);
-      return pool;
-    };
-
-    // Duplicate-safe top-pick
-    const planMeals   = plan.flatMap(d => d.meals).filter(Boolean);
-    const existingIds  = new Set(planMeals.map(m => m.id));
-    const existingKeys = new Set(planMeals.map(m => {
-      const rx = String(m.id).startsWith('pantry-') ? getPantryRecipeObj(m.id) : allRecipes.find(x => x.id === m.id);
-      return rx ? computeCoreDishKey(rx) : null;
-    }).filter(Boolean));
-    const pickedInRun = new Set();
-    const pickedKeys  = new Set();
-    let   forcedRepeat = false;
-    const keyOf = r => r.coreDishKey || computeCoreDishKey(r);
-    const pickFrom = pool => {
-      if (!pool.length) return null;
-      let cands = pool.filter(r => !existingIds.has(r.id) && !pickedInRun.has(r.id) && !existingKeys.has(keyOf(r)) && !pickedKeys.has(keyOf(r)));
-      if (!cands.length) cands = pool.filter(r => !existingIds.has(r.id) && !pickedInRun.has(r.id));
-      if (!cands.length) cands = pool.filter(r => !pickedInRun.has(r.id));
-      if (!cands.length) { forcedRepeat = true; cands = pool; }
-      const r = cands[0]; // pool is pre-sorted best-first
-      if (r) { pickedInRun.add(r.id); pickedKeys.add(keyOf(r)); }
-      return r || null;
-    };
-
-    const toSlot = r => r ? { kind: 'recipe', emoji: r.emoji, name: r.title, id: r.id } : null;
-    const editLog = {
-      replaced: 0, removed: 0, pickedPcts: [],
-      pantryMismatch: false, forcedRepeat: false, poolEmpty: false,
-    };
-
-    // ── deduplicate ────────────────────────────────────────────────────────
-    if (action === 'deduplicate') {
-      const seenIds = new Set(); const seenKeys = new Set();
-      const newPlan = plan.map(day => ({
-        ...day, meals: day.meals.map((meal, mi) => {
-          if (!meal || meal.kind === 'custom') return meal;
-          const k = keyOf(meal);
-          if (seenIds.has(meal.id) || seenKeys.has(k)) {
-            existingIds.delete(meal.id); if (k) existingKeys.delete(k);
-            const pool = allAvail.filter(r => getMealType(r) === MEAL_TYPES[mi]).map(r => ({ ...r, _score: 0 }));
-            const rep = pickFrom(pool);
-            if (rep) { editLog.replaced++; return toSlot(rep); }
-          }
-          seenIds.add(meal.id); if (k) seenKeys.add(k);
-          pickedInRun.add(meal.id); pickedKeys.add(k);
-          return meal;
-        })
-      }));
-      editLog.forcedRepeat = forcedRepeat;
-      return { newPlan, editLog, action: 'deduplicate' };
-    }
-
-    // ── remove_missing ─────────────────────────────────────────────────────
-    if (action === 'remove_missing') {
-      const newPlan = plan.map(day => ({
-        ...day, meals: day.meals.map(meal => {
-          if (meal && recipeNeedsShopping(meal)) { editLog.removed++; return null; }
-          return meal;
-        })
-      }));
-      return { newPlan, editLog, action: 'remove_missing' };
-    }
-
-    // ── regenerate ─────────────────────────────────────────────────────────
-    if (action === 'regenerate') {
-      autoplan();
-      return { newPlan: null, editLog, action: 'regenerate' };
-    }
-
-    // ── single recipe target ────────────────────────────────────────────────
-    if (singleTarget) {
-      const targetId = singleTarget.id;
-      let targetMT = null;
-      plan.forEach(day => day.meals.forEach((meal, mi) => {
-        if (meal && meal.id === targetId) targetMT = MEAL_TYPES[mi];
-      }));
-      if (targetMT) {
-        const pool = buildPool(targetMT);
-        existingIds.delete(targetId);
-        const rx2 = String(targetId).startsWith('pantry-') ? getPantryRecipeObj(targetId) : allRecipes.find(x => x.id === targetId);
-        if (rx2) existingKeys.delete(computeCoreDishKey(rx2));
-        const newPlan = plan.map(day => ({
-          ...day, meals: day.meals.map(meal => {
-            if (!meal || meal.id !== targetId) return meal;
-            const picked = pickFrom(pool);
-            if (picked) { editLog.replaced++; editLog.pickedPcts.push(picked._pct || 100); return toSlot(picked); }
-            return meal;
-          })
-        }));
-        return { newPlan, editLog, action: 'single_replace' };
-      }
-    }
-
-    // ── specific day + specific meal type ──────────────────────────────────
-    if (day !== null && ['breakfast','lunch','dinner'].includes(scope)) {
-      const mti  = scopeMealIdx[scope];
-      const pool = buildPool(scope);
-      if (!pool.length) { editLog.poolEmpty = true; return { newPlan: plan, editLog, action: 'replace' }; }
-      plan[day]?.meals.forEach(m => {
-        if (!m) return;
-        existingIds.delete(m.id);
-        const rx2 = String(m.id).startsWith('pantry-') ? getPantryRecipeObj(m.id) : allRecipes.find(x => x.id === m.id);
-        if (rx2) existingKeys.delete(computeCoreDishKey(rx2));
-      });
-      const picked = pickFrom(pool);
-      if (picked) {
-        editLog.replaced++;
-        editLog.pickedPcts.push(picked._pct || 100);
-        if (memory.pantryThreshold && (picked._pct || 0) < memory.pantryThreshold) editLog.pantryMismatch = true;
-        const newPlan = plan.map((dayObj, idx) =>
-          idx === day ? { ...dayObj, meals: dayObj.meals.map((m, mi) => mi === mti ? toSlot(picked) : m) } : dayObj
-        );
-        return { newPlan, editLog, action: 'replace' };
-      }
-    }
-
-    // ── specific day only (replace all 3 meals for that day) ───────────────
-    if (day !== null && (!scope || scope === 'whole_week' || !['breakfast','lunch','dinner'].includes(scope))) {
-      const DAY_LBL = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
-      plan[day]?.meals.forEach(m => {
-        if (!m) return;
-        existingIds.delete(m.id);
-        const rx2 = String(m.id).startsWith('pantry-') ? getPantryRecipeObj(m.id) : allRecipes.find(x => x.id === m.id);
-        if (rx2) existingKeys.delete(computeCoreDishKey(rx2));
-      });
-      const newDayMeals = MEAL_TYPES.map(mt => {
-        const pool = buildPool(mt);
-        const picked = pickFrom(pool);
-        if (picked) { editLog.replaced++; editLog.pickedPcts.push(picked._pct || 100); return toSlot(picked); }
-        editLog.poolEmpty = true;
-        return null;
-      });
-      const newPlan = plan.map((dayObj, idx) => idx === day ? { ...dayObj, meals: newDayMeals } : dayObj);
-      editLog.forcedRepeat = forcedRepeat;
-      return { newPlan, editLog, action: 'replace_day' };
-    }
-
-    // ── whole week or single meal-type scope ───────────────────────────────
-    // Check if positive goals (healthier, pantry, etc.) exist for a meal type
-    const hasPositiveGoals = mt => {
-      const goals = goalsFor(mt);
-      return goals.length > 0 || memory.pantryThreshold || memory.dietary.length || memory.foodFocus;
-    };
-
-    // Check whether a current plan meal violates an active exclusion
-    const mealViolatesExclusion = (meal, mt) => {
-      const excs = exclusionsFor(mt);
-      if (!excs.length || !meal || meal.kind === 'custom') return false;
-      const r = String(meal.id).startsWith('pantry-')
-        ? getPantryRecipeObj(meal.id)
-        : allRecipes.find(x => x.id === meal.id);
-      return r ? excs.some(ex => recipeMatchesCuisine(r, ex)) : false;
-    };
-
-    const effectiveScope = scope || 'whole_week';
-    const newPlan = plan.map(day => ({
-      ...day, meals: day.meals.map((meal, mi) => {
-        if (!meal) return null;
-        const mt = MEAL_TYPES[mi];
-        if (effectiveScope !== 'whole_week' && mt !== effectiveScope) return meal;
-
-        const hasPositive  = hasPositiveGoals(mt);
-        const hasExclusion = exclusionsFor(mt).length > 0;
-        const violates     = hasExclusion && mealViolatesExclusion(meal, mt);
-        // Exclusion-only: replace only meals that violate; with goals: replace all
-        if (!violates && !hasPositive) return meal;
-
-        const pool = buildPool(mt);
-        if (!pool.length) { editLog.poolEmpty = true; return meal; }
-        const picked = pickFrom(pool);
-        if (!picked) { editLog.poolEmpty = true; return meal; }
-        editLog.replaced++;
-        editLog.pickedPcts.push(picked._pct || 100);
-        if (memory.pantryThreshold && (picked._pct || 0) < memory.pantryThreshold) editLog.pantryMismatch = true;
-        return toSlot(picked);
-      })
-    }));
-    editLog.forcedRepeat = forcedRepeat;
-    return { newPlan, editLog, action: 'replace' };
-  };
-
-  // ── [4] Active Constraint Summarizer ─────────────────────────────────────
-  // Returns a human-readable bullet list of all currently active constraints.
-  const summarizeActiveConstraints = memory => {
-    const lines = [];
-
-    // Per-scope healthier
-    if (memory.goals.breakfast.includes('healthier'))
-      lines.push('breakfast stays healthy (eggs, oats, yogurt — no sugary items)');
-    if (memory.goals.lunch.includes('healthier'))
-      lines.push('lunch stays healthy');
-    if (memory.goals.dinner.includes('healthier'))
-      lines.push('dinner stays healthy');
-    if (memory.goals.whole_week.includes('healthier'))
-      lines.push('all meals stay healthy');
-
-    // Pantry
-    if (memory.pantryThreshold)
-      lines.push(`at least ${memory.pantryThreshold}% of ingredients from your pantry`);
-    else if (memory.goals.whole_week.includes('pantry_only'))
-      lines.push('pantry-only meals (no shopping needed)');
-    else if (memory.goals.whole_week.includes('reduce_missing'))
-      lines.push('use pantry ingredients as much as possible (reduce missing items)');
-
-    // Interesting / simple (per any scope)
-    const anyGoal = (goal) =>
-      memory.goals.whole_week.includes(goal) ||
-      memory.goals.breakfast.includes(goal) ||
-      memory.goals.lunch.includes(goal) ||
-      memory.goals.dinner.includes(goal);
-
-    if (anyGoal('more_interesting')) lines.push('more interesting, complex recipes');
-    if (anyGoal('simpler'))          lines.push(`quick meals (under ${memory.maxTime || 20} min)`);
-
-    // Dietary
-    if (memory.dietary.length)
-      lines.push(memory.dietary.join(' + ').toLowerCase() + ' diet');
-
-    // Food focus
-    if (memory.foodFocus)
-      lines.push(`featuring ${memory.foodFocus}`);
-
-    // Active exclusions
-    const excSummary = [];
-    for (const [scope2, items] of Object.entries(memory.exclusions || {})) {
-      for (const item of items) {
-        const lbl = scope2 === 'whole_week' ? `no ${item}` : `no ${item} ${scope2}s`;
-        if (!excSummary.includes(lbl)) excSummary.push(lbl);
-      }
-    }
-    for (const lbl of excSummary) lines.push(lbl);
-
-    // Profile defaults always active
-    lines.push('your dietary profile and avoided ingredients (always applied)');
-
-    return lines;
-  };
-
-  // ── [5] Response Generator ────────────────────────────────────────────────
-  // Generates a natural reply showing what changed AND what's currently active.
-  // Always shows the full active constraint state so the user knows what's kept.
-  const buildAgentResponseV2 = (memory, result, delta) => {
-    const { editLog, action } = result;
-    const DAY_LABELS = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
-
-    if (action === 'regenerate') return 'Regenerating the whole week with fresh meals…';
-
-    if (action === 'deduplicate') {
-      if (editLog.replaced === 0) return "Your plan already has no duplicates — nothing to change.";
-      const sfx = editLog.forcedRepeat ? '\n(Some near-duplicates may remain — limited recipe pool with current filters.)' : '';
-      return `Replaced ${editLog.replaced} duplicate meal${editLog.replaced > 1 ? 's' : ''} with unique options.${sfx}`;
-    }
-
-    if (action === 'remove_missing') {
-      return editLog.removed > 0
-        ? `Removed ${editLog.removed} meal${editLog.removed > 1 ? 's' : ''} that needed missing ingredients. Those slots are now empty.`
-        : "No meals with missing ingredients found — your plan already looks pantry-friendly.";
-    }
-
-    if (delta.clearAll) {
-      return "I've reset all active planning goals. Start fresh — what would you like to do?";
-    }
-
-    const activeLines = summarizeActiveConstraints(memory);
-    const activeSummary = `\nCurrently keeping these goals active:\n${activeLines.map(l => `• ${l}`).join('\n')}`;
-
-    if (editLog.poolEmpty && editLog.replaced === 0) {
-      return `I understood your goals but couldn't find recipes matching all constraints for the affected meal types. Try relaxing one, or say "start over" to clear all goals.${activeSummary}`;
-    }
-
-    if (editLog.replaced === 0) {
-      return `No meals needed updating — the plan already matches your goals, or those slots are empty.${activeSummary}`;
-    }
-
-    // Build scope description for the reply
-    const scopeLabel =
-      action === 'single_replace' ? `"${delta.singleTarget?.name}"` :
-      action === 'replace_day' && delta.day !== null ? `meals for ${DAY_LABELS[delta.day]}` :
-      delta.scope && delta.scope !== 'whole_week' ? `${delta.scope}s` :
-      'meals across the week';
-
-    // Exclusion-driven: mention what was excluded in the first line
-    const excludedItems = Object.entries(delta.exclude || {})
-      .flatMap(([sc, items]) => items.map(item => (sc === 'whole_week' ? item : `${item} ${sc}`)));
-    let reply;
-    if (excludedItems.length && editLog.replaced > 0) {
-      const excDesc = excludedItems.join(' / ');
-      reply = `Replaced ${editLog.replaced} ${excDesc} meal${editLog.replaced > 1 ? 's' : ''} with non-${excludedItems.map(e => e.split(' ')[0]).join('/')} alternatives.${activeSummary}`;
-    } else {
-      reply = `Updated ${editLog.replaced} ${scopeLabel}.${activeSummary}`;
-    }
-
-    // Honest caveats below the summary
-    if (editLog.pantryMismatch && memory.pantryThreshold) {
-      const avg = editLog.pickedPcts.length
-        ? Math.round(editLog.pickedPcts.reduce((a, b) => a + b, 0) / editLog.pickedPcts.length)
-        : 0;
-      reply += `\n\nNote: I couldn't find enough recipes at ${memory.pantryThreshold}% pantry coverage. I used the closest available options (averaging ${avg}% pantry match). You may still need a few extra items.`;
-    }
-    if (editLog.poolEmpty)    reply += '\n\nSome slots couldn\'t be updated — no recipes matched all constraints for that meal type.';
-    if (editLog.forcedRepeat) reply += '\n\nSome meals were repeated — the recipe pool is limited with your current filters.';
-
-    return reply;
-  };
-
-  // ── Main Agent Entry Point ────────────────────────────────────────────────
-  //
-  // planChatAgent({ userMessage, currentPlan })
-  //
-  // Each call:
-  //   1. Extracts a DELTA from the new message (not a full constraint set)
-  //   2. Merges the delta into chatConstraintMemory (goals accumulate)
-  //   3. Applies the FULL merged memory to the plan
-  //   4. Replies with what changed + all currently active goals
-  //
-  // To connect a real LLM later:
-  //   Replace extractDelta() with an API call returning the same delta shape.
-  //   mergeMemory, executePlanEditsFromMemory, buildAgentResponseV2 stay as-is.
-  //
-  
-// ═══════════════════════════════════════════════════════════════
-// ASSISTANT BRAIN — NLP + INTENT + KNOWLEDGE BASE
-// ═══════════════════════════════════════════════════════════════
-
-// Food category recognition maps user words to recipe properties
-const FOOD_CATS = {
-  pasta: {
-    words: ['pasta','spaghetti','penne','linguine','fettuccine','tagliatelle','rigatoni','noodle','lasagna','ravioli','gnocchi','macaroni','mac and cheese'],
-    titleRx: /pasta|spaghetti|penne|linguine|fettuccine|tagliatelle|rigatoni|noodle|lasagna|ravioli|gnocchi|macaroni|mac.and.cheese/i,
-    ingRx: /pasta|spaghetti|penne|linguine|fettuccine|tagliatelle|noodle/i,
-  },
-  soup: {
-    words: ['soup','stew','broth','chowder','bisque','chili','ramen','pho','minestrone','goulash'],
-    titleRx: /soup|stew|chowder|bisque|ramen|pho|minestrone|goulash/i,
-    ingRx: /\bbroth\b|\bstock\b/i,
-  },
-  fish: {
-    words: ['fish','salmon','tuna','cod','halibut','tilapia','sea bass','trout','mackerel','sardine','anchovy','snapper','haddock'],
-    titleRx: /\bfish\b|salmon|tuna|\bcod\b|halibut|tilapia|sea bass|trout|mackerel|sardine|anchovy|snapper|haddock/i,
-    check: r => r.contains_fish,
-  },
-  chicken: {
-    words: ['chicken','poultry'],
-    titleRx: /chicken|poultry/i,
-    ingRx: /chicken/i,
-  },
-  beef: {
-    words: ['beef','steak','burger','mince','ground beef','meatball'],
-    titleRx: /beef|steak|burger|mince|meatball/i,
-    ingRx: /beef|steak|mince/i,
-  },
-  pork: {
-    words: ['pork','bacon','ham','sausage'],
-    titleRx: /pork|bacon|\bham\b|sausage/i,
-    ingRx: /pork|bacon|\bham\b|sausage/i,
-  },
-  vegetarian: {
-    words: ['vegetarian','veggie','meatless'],
-    check: r => (r.dietary||[]).some(d => /vegetarian/i.test(d)),
-  },
-  vegan: {
-    words: ['vegan','plant.based','plant based'],
-    check: r => (r.dietary||[]).some(d => /vegan/i.test(d)),
-  },
-  salad: {
-    words: ['salad','greens'],
-    titleRx: /salad/i,
-  },
-  rice: {
-    words: ['rice','pilaf','risotto','fried rice'],
-    titleRx: /\brice\b|pilaf|risotto/i,
-    ingRx: /\brice\b/i,
-  },
-  egg: {
-    words: ['egg','eggs','omelette','omelet','frittata','scrambled','poached'],
-    titleRx: /\begg|omelette|omelet|frittata|scramble/i,
-    ingRx: /\begg/i,
-  },
-  curry: {
-    words: ['curry','dal','korma','tikka','masala'],
-    titleRx: /curry|dal|korma|tikka|masala/i,
-  },
-  sandwich: {
-    words: ['sandwich','wrap','burrito','toast'],
-    titleRx: /sandwich|wrap|burrito|toast/i,
-  },
-  pizza: {
-    words: ['pizza','flatbread','focaccia'],
-    titleRx: /pizza|flatbread|focaccia/i,
-  },
-};
-
-const detectFoodCats = (lo) => {
-  const found = [];
-  for (const [cat, def] of Object.entries(FOOD_CATS)) {
-    if (def.words && def.words.some(w => lo.includes(w))) found.push(cat);
-  }
-  return found;
-};
-
-const recipeMatchesCat = (recipe, cat) => {
-  const def = FOOD_CATS[cat];
-  if (!def) return false;
-  const title = recipe.title || '';
-  const ings = (recipe.ingredients || []).map(i => i.n || '').join(' ');
-  if (def.check && def.check(recipe)) return true;
-  if (def.titleRx && def.titleRx.test(title)) return true;
-  if (def.ingRx && def.ingRx.test(ings)) return true;
-  if (def.cuisineRx && def.cuisineRx.test(recipe.cuisine || '')) return true;
-  return false;
-};
-
-// Intent scoring
-const _QUERY_RX = [
-  /^(what|which|who|how many|how much|when|where|can you|could you|do you|tell me|show me|list|give me a list|what are|what is)/i,
-  /\?$/,
-  /\b(tonight|today|this week|fastest|quickest|healthiest|highest protein|most|missing|need to shop|what.s on)\b/i,
-];
-const _MODIFY_RX = [
-  /^(no |not |without |skip |avoid |remove |replace |change |add |use |make |swap |prefer |set )/i,
-  /\b(no |avoid |exclude |remove |replace |swap |change |make |add |use |include |prefer |set )\b/i,
-  /\b(healthier|lighter|simpler|more interesting|more variety|pantry|pescatarian|vegetarian|vegan|kosher|gluten.?free)\b/i,
-  /\b(all|every|whole week|monday|tuesday|wednesday|thursday|friday|saturday|sunday)\b/i,
-];
-const _COOK_RX = [
-  /\b(how do i|how long|how to cook|how to make|substitute for|instead of|can i replace|what.s a substitute|alternative to|what temperature|internal temp)\b/i,
-  /\b(can i use .+ instead|can i use .+ for|what if i (don.t|dont) have)\b/i,
-];
-const _SUGGEST_RX = [
-  /\b(suggest|recommend|give me (an? |some |a few )?idea|what.?s a good|what should i (cook|make|eat)|any ideas|some options|some ideas)\b/i,
-  /\b(quick (breakfast|lunch|dinner|snack|dessert)|healthy (breakfast|lunch|dinner)|easy (meal|recipe|dish))\b/i,
-];
-
-const detectIntent = (msg) => {
-  const lo = msg.toLowerCase().trim();
-  let q = 0, m = 0, c = 0, s = 0;
-  _COOK_RX.forEach(rx => { if(rx.test(lo)) c += 3; });
-  _QUERY_RX.forEach(rx => { if(rx.test(lo)) q += 2; });
-  _MODIFY_RX.forEach(rx => { if(rx.test(lo)) m += 2; });
-  _SUGGEST_RX.forEach(rx => { if(rx.test(lo)) s += 2; });
-  if (c > 2) return 'cooking_help';
-  if (s > m && s > q) return 'suggest';
-  if (q > 0 && m > 0) return (lo.endsWith('?') || _QUERY_RX[0].test(lo)) ? 'query' : 'modify';
-  if (q >= m && q > 0) return 'query';
-  if (m > 0) return 'modify';
-  if (s > 0) return 'suggest';
-  return 'query';
-};
-
-// Query handler — answers questions about the plan
-const _handlePlanQuery = (msg, plan) => {
-  const lo = msg.toLowerCase();
-  const DAY_FULL = {Mon:'Monday',Tue:'Tuesday',Wed:'Wednesday',Thu:'Thursday',Fri:'Friday',Sat:'Saturday',Sun:'Sunday'};
-  const SLOT_NAMES = ['breakfast','lunch','dinner'];
-  const DAY_ORDER  = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-
-  // Build flat list of {day, slot, slotIdx, recipe} — recipe is the full object from allRecipes
-  const allPlanMeals = [];
-  if (plan && Array.isArray(plan)) {
-    plan.forEach(dayObj => {
-      if (!dayObj || !dayObj.meals) return;
-      dayObj.meals.forEach((slot, si) => {
-        if (!slot || !slot.id) return;
-        const recipe = allRecipes.find(r => r.id === slot.id);
-        if (recipe) allPlanMeals.push({ day: dayObj.day, slot: SLOT_NAMES[si], slotIdx: si, recipe, slotObj: slot });
-      });
-    });
-  }
-
-  const fmt = (r, day, slot) => `• ${r.emoji||'🍽️'} **${r.title}** (${slot}, ${DAY_FULL[day]||day})`;
-
-  // ── Tonight / today ─────────────────────────────────────────────────────
-  if (/\b(tonight|today|this evening|for dinner tonight)\b/.test(lo)) {
-    const todayIdx = new Date().getDay(); // 0=Sun
-    const dayMap = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-    const todayKey = dayMap[todayIdx];
-    const todayMeals = allPlanMeals.filter(m => m.day === todayKey);
-    if (todayMeals.length === 0) return "Nothing planned for today yet. Want me to suggest something?";
-    const items = todayMeals.map(m => `• ${m.slot}: ${m.recipe.emoji||'🍽️'} ${m.recipe.title}`);
-    const fastest = todayMeals.slice().sort((a,b) => (a.recipe.time||99) - (b.recipe.time||99))[0];
-    return `Today you have:\n\n${items.join('\n')}\n\n${fastest ? `The **${fastest.recipe.title}** is the quickest at ${fastest.recipe.time} min. ` : ''}Would you like the recipe for any of these?`;
-  }
-
-  // ── Missing ingredients ──────────────────────────────────────────────────
-  if ((/\b(missing|need to (buy|shop|get)|grocery|shopping list)\b/.test(lo) || /\bneed.*ingredient|\bwhat.*need|\bingredients.*need/.test(lo)) && !/substitute|replace/.test(lo)) {
-    const withMissing = allPlanMeals.filter(m => m.recipe.missing && m.recipe.missing.length > 0);
-    if (withMissing.length === 0) return "Great news — all your planned meals can be made with what you have! 🎉";
-    const lines = withMissing.map(m => {
-      const miss = m.recipe.missing.slice(0,3).join(', ');
-      return `• **${DAY_FULL[m.day]||m.day} ${m.slot}**: ${m.recipe.title} — needs: ${miss}${m.recipe.missing.length>3?'…':''}`;
-    });
-    return `These meals need ingredients you may not have:\n\n${lines.join('\n')}\n\nWould you like me to swap them for pantry-friendly options?`;
-  }
-
-  // ── Fastest / quickest ───────────────────────────────────────────────────
-  if (/\b(fastest|quickest|quick(est)?|least time|shortest)\b/.test(lo)) {
-    const mf = /\bdinner/.test(lo)?'dinner':/\blunch/.test(lo)?'lunch':/\bbreakfast/.test(lo)?'breakfast':null;
-    let cands = allPlanMeals.filter(m => m.recipe.time);
-    if (mf) cands = cands.filter(m => m.slot === mf);
-    cands.sort((a,b) => a.recipe.time - b.recipe.time);
-    const top = cands.slice(0,5);
-    if (top.length === 0) return "No meals with timing info in your current plan.";
-    const lines = top.map(m => `• ${m.recipe.emoji||'🍽️'} **${m.recipe.title}** (${m.slot}, ${DAY_FULL[m.day]||m.day}) — ${m.recipe.time} min`);
-    return `Your quickest${mf?' '+mf:''} meals:\n\n${lines.join('\n')}`;
-  }
-
-  // ── Pantry meals ─────────────────────────────────────────────────────────
-  if (/\b(pantry|cook with what i have|use what i have|use what i.?ve got)\b/.test(lo)) {
-    const pm = allPlanMeals.filter(m => !m.recipe.missing || m.recipe.missing.length === 0);
-    if (pm.length === 0) return "None of your current meals are fully covered by your pantry. Want me to swap to pantry-friendly options?";
-    const lines = pm.slice(0,7).map(m => fmt(m.recipe, m.day, m.slot));
-    return `Meals you can make from your pantry right now:\n\n${lines.join('\n')}${pm.length>7?`\n\n…and ${pm.length-7} more.`:''}`;
-  }
-
-  // ── High protein ─────────────────────────────────────────────────────────
-  if (/\b(protein|high.?protein|protein.?rich|protein.?packed)\b/.test(lo)) {
-    const pm = allPlanMeals.filter(m => {
-      const r = m.recipe;
-      return r.contains_meat || r.contains_fish || (r.ingredients||[]).some(i => /\b(egg|lentil|chickpea|bean|tofu|greek yogurt|quinoa)\b/i.test(i.n||''));
-    });
-    if (pm.length === 0) return "I don't see many high-protein meals in your plan. Want me to add some?";
-    const lines = pm.slice(0,6).map(m => fmt(m.recipe, m.day, m.slot));
-    return `High-protein meals in your plan:\n\n${lines.join('\n')}`;
-  }
-
-  // ── Fish / seafood ───────────────────────────────────────────────────────
-  if (/\b(fish|seafood|salmon|tuna|\bcod\b|shrimp|prawn)\b/.test(lo) && /\b(meal|recipe|dish|have|using|use|planned)\b/.test(lo)) {
-    const fm = allPlanMeals.filter(m => m.recipe.contains_fish || m.recipe.contains_shellfish);
-    if (fm.length === 0) return "No fish or seafood meals in your current plan. Want me to add some?";
-    const lines = fm.map(m => fmt(m.recipe, m.day, m.slot));
-    return `Fish & seafood meals in your plan:\n\n${lines.join('\n')}`;
-  }
-
-  // ── Show full week ───────────────────────────────────────────────────────
-  if (/\b(what.?s planned|show.*week|show.*plan|what.?s on|what do i have|this week.?s meals|full (week|plan)|entire (week|plan))\b/.test(lo)) {
-    const linesByDay = [];
-    DAY_ORDER.forEach(d => {
-      const dayMeals = allPlanMeals.filter(m => m.day === d);
-      if (dayMeals.length === 0) return;
-      const items = dayMeals.map(m => `  ${m.slot}: ${m.recipe.emoji||''} ${m.recipe.title}`);
-      linesByDay.push(`**${DAY_FULL[d]}**\n${items.join('\n')}`);
-    });
-    if (linesByDay.length === 0) return "Your plan looks empty. Say \"fill my week\" and I'll set it up!";
-    return `Here's your week:\n\n${linesByDay.join('\n\n')}`;
-  }
-
-  // ── Healthiest meals ─────────────────────────────────────────────────────
-  if (/\b(healthiest|most healthy|healthier meals|low.?cal|lightest|best for (me|my health|my diet))\b/.test(lo)) {
-    const scored = allPlanMeals.map(m => ({...m, hs: getHealthScore(m.recipe)})).sort((a,b) => b.hs - a.hs);
-    const top = scored.slice(0,5);
-    if (top.length === 0) return "No meals in your plan yet.";
-    const lines = top.map(m => fmt(m.recipe, m.day, m.slot));
-    return `Your healthiest planned meals:\n\n${lines.join('\n')}`;
-  }
-
-  // ── Household size ───────────────────────────────────────────────────────
-  if (/\b(how many (people|servings|portions)|serves|household)\b/.test(lo)) {
-    const size = prefs?.household || prefs?.houseSize || 2;
-    return `Your plan is set for **${size} people**. You can change this in Settings → Household size.`;
-  }
-
-  // ── Food category queries ("do I have pasta?", "which meals use chicken?") ──
-  const cats = detectFoodCats(lo);
-  if (cats.length > 0) {
-    const matched = allPlanMeals.filter(m => cats.some(cat => recipeMatchesCat(m.recipe, cat)));
-    const catNames = cats.map(c => c.charAt(0).toUpperCase()+c.slice(1)).join('/');
-    if (matched.length === 0) return `No ${catNames} meals in your current plan. Would you like me to add some?`;
-    const lines = matched.map(m => fmt(m.recipe, m.day, m.slot));
-    return `${catNames} meals in your plan:\n\n${lines.join('\n')}`;
-  }
-
-  return null;
-};
-// Cooking knowledge base
-const _SUBSTITUTES = {
-  'butter': ['olive oil (equal amount)', 'coconut oil', 'vegetable oil', 'yogurt (in baking)'],
-  'olive oil': ['vegetable oil', 'butter (in cooking)', 'coconut oil'],
-  'garlic': ['garlic powder (¼ tsp per clove)', 'garlic paste', 'shallots'],
-  'onion': ['shallots', 'leek (white part)', 'onion powder (1 tsp per medium onion)'],
-  'milk': ['plant milk (oat, almond, soy)', 'coconut milk (richer)', 'half cream + half water'],
-  'cream': ['coconut cream', 'evaporated milk', 'Greek yogurt (for cold dishes)'],
-  'egg': ['1 flax egg (1 tbsp flax + 3 tbsp water, rest 5 min)', 'mashed banana (in baking)', '3 tbsp aquafaba (chickpea liquid)'],
-  'eggs': ['1 flax egg (1 tbsp flax + 3 tbsp water, rest 5 min)', 'mashed banana (in baking)', '3 tbsp aquafaba (chickpea liquid)'],
-  'flour': ['almond flour', 'oat flour (blended oats)', 'rice flour (1:1 for most recipes)'],
-  'sugar': ['honey (¾ cup per 1 cup sugar, reduce liquid by 3 tbsp)', 'maple syrup', 'coconut sugar (1:1)'],
-  'breadcrumbs': ['crushed crackers', 'rolled oats', 'almond flour', 'panko (crunchier)'],
-  'vinegar': ['lemon juice', 'lime juice', 'white wine (in cooking)'],
-  'soy sauce': ['tamari (gluten-free, 1:1)', 'coconut aminos (slightly sweeter)', 'salt + worcestershire'],
-  'lemon juice': ['lime juice', 'orange zest + a dash of vinegar', 'white wine vinegar'],
-  'wine': ['broth + 1 tsp vinegar', 'grape juice + 1 tsp vinegar (in cooking)', 'pomegranate juice'],
-  'pasta': ['zucchini noodles (zoodles)', 'rice', 'couscous', 'quinoa'],
-  'rice': ['quinoa', 'couscous', 'cauliflower rice (low-carb)', 'bulgur wheat'],
-  'chicken breast': ['chicken thighs (richer, juicier)', 'turkey breast', 'firm tofu (for texture)'],
-  'beef': ['turkey mince (leaner)', 'lentils (for bolognese)', 'mushrooms + walnuts (vegetarian)'],
-  'yogurt': ['sour cream', 'crème fraîche', 'buttermilk (in baking, dilute slightly)'],
-  'honey': ['maple syrup', 'agave nectar', 'golden syrup'],
-  'panko': ['regular breadcrumbs', 'crushed crackers', 'almond flour', 'oats (blended)'],
-  'heavy cream': ['coconut cream', 'evaporated milk', 'milk + butter (¾ cup milk + ¼ cup melted butter)'],
-  'buttermilk': ['milk + 1 tbsp lemon juice or vinegar (let sit 5 min)', 'yogurt thinned with milk'],
-  'parmesan': ['pecorino romano (sharper)', 'nutritional yeast (vegan)', 'grana padano'],
-  'stock': ['bouillon cube + water', 'vegetable broth', 'water + extra seasoning'],
-  'broth': ['bouillon cube + water', 'stock', 'water + extra herbs and salt'],
-  'tomato paste': ['tomato sauce reduced down', 'ketchup (in small amounts)', 'sun-dried tomatoes blended'],
-  'canned tomatoes': ['fresh tomatoes, diced', 'tomato passata', 'tomato juice (reduced)'],
-  'dijon mustard': ['yellow mustard + a bit of vinegar', 'whole grain mustard', 'horseradish (small amount)'],
-};
-
-const _COOK_TIMES = {
-  'chicken breast': { time: '18–22 min in oven at 200°C / stovetop 6–8 min per side', tip: 'Rest 5 min before slicing' },
-  'chicken thigh': { time: '25–30 min in oven at 200°C / stovetop 8–10 min per side', tip: 'Skin-side down first for crispiness' },
-  'chicken thighs': { time: '25–30 min in oven at 200°C / stovetop 8–10 min per side', tip: 'Skin-side down first for crispiness' },
-  'lentils': { time: 'Red lentils: 15–20 min | Green/brown: 25–35 min (no soaking needed)', tip: 'Add salt only after they\'re cooked' },
-  'red lentils': { time: '15–20 min in simmering water or broth', tip: 'They disintegrate — great for soups and dals' },
-  'pasta': { time: '8–12 min in boiling salted water (check package)', tip: 'Taste 2 min before the suggested time for al dente' },
-  'rice': { time: 'White rice: 15–18 min | Brown rice: 35–45 min | Let rest covered 5 min after', tip: '1 cup rice to 2 cups water ratio' },
-  'salmon': { time: '10–15 min in oven at 180°C / stovetop 4–5 min per side', tip: 'Done when it flakes easily with a fork' },
-  'steak': { time: 'Rare: 2 min/side | Medium-rare: 3 min/side | Medium: 4 min/side | Well done: 5–6 min/side', tip: 'Rest 5 min before cutting — very important!' },
-  'eggs': { time: 'Soft boiled: 6 min | Medium: 8 min | Hard boiled: 11 min (from cold water start)', tip: 'Ice bath immediately stops cooking' },
-  'boiled eggs': { time: 'Soft: 6 min | Medium: 8 min | Hard: 11 min (from cold water)', tip: 'Ice bath immediately to stop cooking and easy peeling' },
-  'potatoes': { time: 'Boiled: 15–20 min | Roasted: 35–45 min at 200°C | Baked whole: 50–60 min at 200°C', tip: 'Pierce baked potatoes with a fork before cooking' },
-  'onions': { time: 'Softened: 5–7 min on medium heat | Caramelized: 30–45 min on medium-low heat', tip: 'Don\'t rush caramelizing — low and slow is the key' },
-  'garlic': { time: 'Sautéed: 30–60 seconds on medium heat | Roasted whole: 40–45 min at 180°C', tip: 'Watch carefully — garlic burns very quickly' },
-  'broccoli': { time: 'Steamed: 5–7 min | Roasted: 20–25 min at 200°C | Blanched: 2–3 min', tip: 'High heat for roasting = crispy caramelized edges' },
-  'beans': { time: 'Canned: just heat through 2–3 min | Dried: soak overnight, boil 45–90 min', tip: 'Add salt only after dried beans are cooked' },
-  'chickpeas': { time: 'Canned: heat 3–5 min | Roasted: 25–35 min at 200°C after drying', tip: 'Pat very dry before roasting for maximum crispiness' },
-  'fish fillet': { time: '8–12 min in oven at 180°C / stovetop 3–4 min per side (per cm thickness)', tip: 'Opaque throughout and flakes easily = done' },
-  'pork tenderloin': { time: '20–25 min in oven at 200°C', tip: 'Internal temp 63°C/145°F. Rest 5 min before slicing.' },
-  'shrimp': { time: '2–3 min per side on medium-high heat, or 3–4 min total in sauce', tip: 'C-shape = cooked, O-shape = overcooked and rubbery' },
-  'prawns': { time: '2–3 min per side on medium-high heat', tip: 'Pink and curled = done. Don\'t overcook.' },
-  'tofu': { time: 'Pan-fried: 4–5 min per side on high heat | Baked: 25–30 min at 200°C', tip: 'Press extra-firm tofu 30 min before cooking for crispy texture' },
-  'carrots': { time: 'Roasted: 25–30 min at 200°C | Steamed: 8–10 min | Glazed on stovetop: 10–15 min', tip: 'Cut uniform sizes for even cooking' },
-  'mushrooms': { time: 'Sautéed: 5–8 min on medium-high heat', tip: 'Don\'t crowd the pan — they steam instead of browning' },
-  'asparagus': { time: 'Roasted: 10–15 min at 220°C | Steamed: 4–6 min | Pan-fried: 5–7 min', tip: 'Snap the woody end off where it naturally breaks' },
-  'cauliflower': { time: 'Roasted: 25–35 min at 200°C | Steamed: 8–12 min | Riced in pan: 5–7 min', tip: 'Roast at high heat for caramelized, nutty flavor' },
-};
-
-const _handleCookHelp = (msg) => {
-  const lo = msg.toLowerCase();
-  // Substitution queries
-  let foundSub = null;
-  for (const item of Object.keys(_SUBSTITUTES)) {
-    const pattern = new RegExp(`\\b${item.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}\\b`, 'i');
-    if (pattern.test(lo) && (/substitute|instead|replace|alternative|don.?t have|out of|can i use/.test(lo))) {
-      foundSub = item; break;
-    }
-  }
-  if (foundSub) {
-    const subs = _SUBSTITUTES[foundSub];
-    return `Good substitutes for **${foundSub}**:\n\n${subs.map(s=>`• ${s}`).join('\n')}\n\nThe best choice depends on the recipe — what are you making?`;
-  }
-
-  // Cooking time queries
-  let foundTime = null;
-  for (const item of Object.keys(_COOK_TIMES)) {
-    if (lo.includes(item)) { foundTime = item; break; }
-  }
-  if (foundTime) {
-    const info = _COOK_TIMES[foundTime];
-    return `**Cooking ${foundTime}:**\n\n⏱ ${info.time}\n\n💡 Tip: ${info.tip}`;
-  }
-
-  // General how-to
-  if (/how (do i|to) (make|cook|prepare) .+/.test(lo)) {
-    // Try to extract what they're cooking
-    const match = lo.match(/how (?:do i|to) (?:make|cook|prepare) (.+?)(?:\?|$)/);
-    const item = match ? match[1].trim() : null;
-    if (item) return `To cook **${item}**, the general approach is:\n\n1. Prep your ingredients\n2. Heat your pan or oven\n3. Cook using your preferred method\n\nDo you want a specific recipe? Say "suggest a ${item} recipe" and I'll find one!`;
-  }
-
-  // Temperature questions
-  if (/\b(temperature|degrees|how hot|preheat|oven temp)\b/.test(lo)) {
-    return `Common oven temperatures:\n\n• **Low/Slow**: 150°C / 300°F — braises, long roasts\n• **Medium**: 180°C / 350°F — cakes, fish, casseroles\n• **Hot**: 200°C / 400°F — roast veg, chicken, potatoes\n• **Very hot**: 220°C / 425°F — pizza, crispy skin\n• **Broil/Grill**: 250°C+ / 480°F+ — finishing, browning\n\nAlways preheat for at least 15 minutes!`;
-  }
-
-  return null;
-};
-
-// Recipe suggestion handler
-const _handleSuggest = (msg) => {
-  const lo = msg.toLowerCase();
-  const mealFilter = /\bbreakfast\b/.test(lo)?'breakfast':/\blunch\b/.test(lo)?'lunch':/\bdinner\b/.test(lo)?'dinner':/\bsnack\b/.test(lo)?'snack':/\bdessert\b/.test(lo)?'dessert':null;
-  let pool = (RECIPES || []).filter(r => !mealFilter || r.meal === mealFilter);
-  const isQuick = /\b(quick|fast|under 30|under 20|simple|easy)\b/.test(lo);
-  const isHealthy = /\b(health|light|low.?cal|nutritious|lean|wholesome)\b/.test(lo);
-  const isVeg = /\bvegetarian\b/.test(lo);
-  const isVegan = /\bvegan\b/.test(lo);
-  const cats = detectFoodCats(lo);
-  if (isQuick) pool = pool.filter(r => (r.time || 999) <= 30);
-  if (isHealthy) pool = pool.filter(r => getHealthScore(r) >= 3);
-  if (isVegan) pool = pool.filter(r => (r.dietary||[]).some(d=>/vegan/i.test(d)));
-  else if (isVeg) pool = pool.filter(r => (r.dietary||[]).some(d=>/vegetarian/i.test(d)));
-  if (cats.length > 0) pool = pool.filter(r => cats.some(cat => recipeMatchesCat(r, cat)));
-  if (prefs?.diets?.includes('vegetarian')) pool = pool.filter(r => !r.contains_meat && !r.contains_fish);
-  if (prefs?.diets?.includes('vegan')) pool = pool.filter(r => !r.contains_meat && !r.contains_fish && !r.contains_dairy);
-  if (pool.length === 0) return `I couldn't find any matching recipes. Try relaxing the filters — for example, drop the time limit or dietary requirement.`;
-  pool.sort((a,b) => (b.commonScore||getCommonScore(b)) - (a.commonScore||getCommonScore(a)));
-  const picks = []; const seen = new Set();
-  for (const r of pool) {
-    if (picks.length >= 5) break;
-    if (!seen.has(r.title)) { picks.push(r); seen.add(r.title); }
-  }
-  const label = [isQuick?'quick':'', isHealthy?'healthy':'', isVegan?'vegan':isVeg?'vegetarian':'', cats.join('/'), mealFilter||'meal'].filter(Boolean).join(' ');
-  const lines = picks.map(r => `• ${r.emoji||'🍽️'} **${r.title}** (${r.time||'?'} min) — ${r.cuisine||''}`);
-  return `Here are some ${label} ideas:\n\n${lines.join('\n')}\n\nWant me to add any of these to your plan?`;
-};
-
-// Clarification when intent is ambiguous
-const _askClarification = (msg) => {
-  const lo = msg.toLowerCase();
-  if (/\b(healthier|healthy|lighter|light)\b/.test(lo)) {
-    return `When you say healthier, do you mean:\n\n• **Lower calorie** meals\n• **More vegetables** in the plan\n• **Higher protein**\n• **Quicker, lighter** cooking\n\nOr a mix? Tell me and I'll adjust!`;
-  }
-  if (/\b(interesting|variety|different|change|mix.?up)\b/.test(lo)) {
-    return `Would you like:\n\n• **Different cuisines** (Asian, Mediterranean, Mexican...)\n• **Different cooking styles** (more grilled, more one-pot...)\n• **New ingredients** you haven't used this week?`;
-  }
-  if (/\b(simple|easy|simpler|easier)\b/.test(lo)) {
-    return `Do you mean:\n\n• **Fewer ingredients** per meal\n• **Under 30 minutes** to cook\n• **Fewer steps** in the recipe?`;
-  }
-  return `I want to help! Could you be more specific? For example:\n\n• *"No pasta for lunch"* — to avoid a specific food\n• *"Make dinners healthier"* — to change a category\n• *"What can I cook tonight?"* — to ask a question\n• *"Suggest quick breakfasts"* — for recipe ideas\n• *"How long do I cook chicken?"* — cooking advice`;
-};
-
-  // Renders bot message text — supports **bold**, *italic*, and \n line breaks
-  const renderChatText = (text) => {
-    if (!text) return null;
-    return text.split('\n').map((line, li) => {
-      // Parse **bold** and *italic* inline
-      const parts = [];
-      let remaining = line;
-      let key = 0;
-      while (remaining.length > 0) {
-        const boldMatch = remaining.match(/\*\*(.+?)\*\*/);
-        const italicMatch = remaining.match(/\*(.+?)\*/);
-        const firstBold = boldMatch ? remaining.indexOf(boldMatch[0]) : Infinity;
-        const firstItalic = italicMatch ? remaining.indexOf(italicMatch[0]) : Infinity;
-        if (boldMatch && firstBold <= firstItalic) {
-          if (firstBold > 0) parts.push(<span key={key++}>{remaining.slice(0, firstBold)}</span>);
-          parts.push(<strong key={key++}>{boldMatch[1]}</strong>);
-          remaining = remaining.slice(firstBold + boldMatch[0].length);
-        } else if (italicMatch && firstItalic < Infinity) {
-          if (firstItalic > 0) parts.push(<span key={key++}>{remaining.slice(0, firstItalic)}</span>);
-          parts.push(<em key={key++}>{italicMatch[1]}</em>);
-          remaining = remaining.slice(firstItalic + italicMatch[0].length);
-        } else {
-          parts.push(<span key={key++}>{remaining}</span>);
-          break;
-        }
-      }
-      return <React.Fragment key={li}>{parts}{li < text.split('\n').length - 1 && <br/>}</React.Fragment>;
-    });
-  };
-
-  const planChatAgent = ({ userMessage, currentPlan }) => {
-    try {
-      return _planChatAgentInner({ userMessage, currentPlan });
-    } catch(err) {
-      console.error('[planChatAgent] error:', err);
-      return "Sorry, I ran into a problem processing that. Try rephrasing, or say \"start over\" to reset.";
-    }
-  };
-  const _planChatAgentInner = ({ userMessage, currentPlan }) => {    const msg = userMessage.trim();
-    const lo = msg.toLowerCase();
-
-    // ── 0. Two-step confirmation ──────────────────────────────────
-    if (chatPendingAction === 'clearPlan') {
-      if (/^(yes|yeah|yep|sure|ok|confirm|do it|go ahead|clear it)/i.test(lo)) {
-        setChatPendingAction(null);
-        setMealPlan({});
-        return "Plan cleared! Starting fresh. Tell me what kind of week you'd like, or say \"fill my week\" to auto-plan.";
-      } else if (/^(no|nope|cancel|don.?t|stop)/i.test(lo)) {
-        setChatPendingAction(null);
-        return "OK, keeping your current plan as-is.";
-      }
-      return "Just to confirm — clear the entire week? Say **yes** to confirm or **no** to cancel.";
-    }
-
-    // ── 1. Memory reset commands ──────────────────────────────────
-    if (/\b(start over|reset all|forget everything|clear memory|fresh start|reset constraints|clear constraints)\b/i.test(lo)) {
-      setChatConstraintMemory({
-        goals:{whole_week:[],breakfast:[],lunch:[],dinner:[]},
-        pantryThreshold:null, maxTime:null, dietary:[], foodFocus:null,
-        exclusions:{whole_week:[],breakfast:[],lunch:[],dinner:[]},
-      });
-      return "Memory cleared! I've forgotten all previous constraints. What would you like to do with your plan?";
-    }
-
-    if (/\b(clear plan|new week|empty the plan|start fresh)\b/i.test(lo) && !/clear memory|clear constraints/.test(lo)) {
-      setChatPendingAction('clearPlan');
-      return "Are you sure you want to clear the whole week's plan? Say **yes** to confirm.";
-    }
-
-    // ── 2. Detect intent ──────────────────────────────────────────
-    const intent = detectIntent(msg);
-
-    // ── 3. Cooking help ───────────────────────────────────────────
-    if (intent === 'cooking_help') {
-      const helpReply = _handleCookHelp(msg);
-      if (helpReply) return helpReply;
-      // fall through if cooking help didn't match specifics
-    }
-
-    // ── 4. Questions about the plan ───────────────────────────────
-    if (intent === 'query') {
-      const queryReply = _handlePlanQuery(msg, currentPlan);
-      if (queryReply) return queryReply;
-      // fall through if query didn't match
-    }
-
-    // ── 5. Recipe suggestions ─────────────────────────────────────
-    if (intent === 'suggest') {
-      const suggestReply = _handleSuggest(msg);
-      if (suggestReply) return suggestReply;
-    }
-
-    // ── 6. Plan modification pipeline ────────────────────────────
-    const delta = extractDelta(lo, currentPlan);
-    const newMem = mergeMemory(chatConstraintMemory, delta);
-    setChatConstraintMemory(newMem);
-
-    const hasGoals = newMem.goals.whole_week.length > 0 || newMem.goals.breakfast.length > 0 ||
-      newMem.goals.lunch.length > 0 || newMem.goals.dinner.length > 0 ||
-      newMem.exclusions.whole_week.length > 0 || newMem.exclusions.breakfast.length > 0 ||
-      newMem.exclusions.lunch.length > 0 || newMem.exclusions.dinner.length > 0 ||
-      newMem.pantryThreshold || newMem.maxTime || newMem.dietary.length > 0 ||
-      newMem.foodFocus ||                           // "use more fish"
-      delta.day !== null && delta.day !== undefined; // "replace Wednesday dinner"
-
-    if (!hasGoals && !delta.action && !delta.singleTarget) {
-      return _askClarification(msg);
-    }
-
-    // Merge global avoidedIngredients with any ingredient-level chat exclusions
-    const allExcluded = Object.values(newMem.exclusions || {}).flat();
-    const CUISINE_KEYS = new Set(['asian','mediterranean','italian','mexican','indian','soup','pasta','fish','meat','spicy']);
-    const chatIngAvoid = allExcluded.filter(k => !CUISINE_KEYS.has(k));
-    const mergedAvoid = [...(avoidedIngredients||[]), ...chatIngAvoid];
-    const ctx = { plan: currentPlan, ps: pantry, preferences: prefs, avoidedIngredients: mergedAvoid };
-    const result = executePlanEditsFromMemory(newMem, delta, ctx);
-    if (result.newPlan && Object.keys(result.newPlan).length > 0) setMealPlan(result.newPlan);
-    return buildAgentResponseV2(newMem, result, delta);
-  };  // end _planChatAgentInner
-
-  const handleChatSend = () => {
-    const msg = chatInput.trim();
-    if (!msg) return;
-    setChatInput('');
-    setChatMessages(prev => [...prev, { role: 'user', text: msg }]);
-    const reply = planChatAgent({ userMessage: msg, currentPlan: mealPlan });
-    setTimeout(() => setChatMessages(prev => [...prev, { role: 'bot', text: reply }]), 300);
-  };
-  // ── End Planner Chat Agent ─────────────────────────────────────────────────
-
-  // At a glance stats (kept for internal use)
-  const planned = mealPlan.flatMap(d=>d.meals).filter(Boolean);
-  const totalMeals = planned.length;
-  const totalTime = planned.reduce((a,m)=>{const r=allRecipes.find(x=>x.id===m.id);return a+(r?.time||30);},0);
-  const missingItems = shopping.filter(i=>!i.checked).length;
-  const active=["Breakfast","Lunch","Dinner"].filter(m=>slots[m]);
-
+/* ── RECIPE DETAIL ── */
+function RecipeDetail({ recipe, onClose, handleAddToPlan, toggleSave, saved, pantry, showToast }) {
+  if (!recipe) return null;
+  const pantrySet = new Set((pantry || []).map(p => (typeof p === 'string' ? p : p.name || '').toLowerCase().trim()));
   return (
-    <div>
-      {/* ── Planner sub-tabs ── */}
-      <div style={{display:'flex',gap:0,marginBottom:20,borderBottom:'1px solid var(--bor)'}}>
-        {[['week','📅 This Week'],['build','🗓 Build My Week'],['library','📚 Plan Library']].map(([v,label])=>(
-          <button key={v} onClick={()=>setPlannerView(v)} style={{padding:'10px 18px',fontSize:13,fontWeight:plannerView===v?700:500,color:plannerView===v?'var(--clay)':'var(--mu)',background:'none',border:'none',borderBottom:plannerView===v?'2px solid var(--clay)':'2px solid transparent',cursor:'pointer',transition:'all .15s'}}>
-            {label}
-          </button>
-        ))}
-      </div>
-      {/* ── Build My Week sub-view ── */}
-      {plannerView==='build' && (
-        <BuildMyWeekTab
-          mealPlan={mealPlan} setMealPlan={setMealPlan}
-          prefs={prefs} pantry={pantry}
-          allRecipes={allRecipes}
-          avoidedIngredients={avoidedIngredients}
-          showToast={showToast}
-          onViewRecipe={onViewRecipe}
-          collections={collections}
-          setCollections={setCollections}
-        />
-      )}
-      {/* ── Plan Library sub-view ── */}
-      {plannerView==='library' && (
-        <PlanLibraryErrorBoundary resetKey="planner-library">
-          <PlanLibraryTab
-            allRecipes={allRecipesProp||RECIPES} mealPlan={mealPlan} setMealPlan={setMealPlan}
-            pantry={pantry} showToast={showToast} onViewRecipe={onViewRecipe}
-            user={user} prefs={prefs}
-            libraryPreview={libraryPreview} setLibraryPreview={setLibraryPreview}
-            libraryDraft={libraryDraft} setLibraryDraft={setLibraryDraft}
-            libraryDraftTitle={libraryDraftTitle} setLibraryDraftTitle={setLibraryDraftTitle}
-            libraryShowCreate={libraryShowCreate} setLibraryShowCreate={setLibraryShowCreate}
-          />
-        </PlanLibraryErrorBoundary>
-      )}
-      {/* ── This Week view ── */}
-      {plannerView==='week' && <>
-      {/* ── Top header + action buttons ── */}
-      <div style={{display:"flex",alignItems:"flex-start",justifyContent:"space-between",marginBottom:12,flexWrap:"wrap",gap:12,animation:"fadeInUp .4s ease both"}}>
-        <div><h1 className="stitle">Weekly Planner</h1><p className="ssub">{(()=>{
-          const now = new Date();
-          const dow = now.getDay();
-          const diffToMon = (dow === 0) ? -6 : 1 - dow;
-          const mon = new Date(now); mon.setDate(now.getDate() + diffToMon);
-          const sun = new Date(mon); sun.setDate(mon.getDate() + 6);
-          const fmt = d => d.toLocaleDateString(undefined,{month:"short",day:"numeric"});
-          return `${fmt(mon)} – ${fmt(sun)}, ${sun.getFullYear()}`;
-        })()}</p></div>
-        <div style={{display:"flex",gap:8,flexWrap:"wrap",alignItems:"center"}}>
-          <button className="btn btn-p btn-sm" onClick={()=>{
-            if(isGuest){return;}
-            if(!isPremium && (subscription.autoplanUsed||0) >= FREE_AUTOPLAN_USES){onUpgrade("autoplan");return;}
-            autoplan();
-            if(!isPremium){setSubscription(p=>({...p,autoplanUsed:(p.autoplanUsed||0)+1}));}
-          }} disabled={planning||isGuest}>
-            {planning?"Planning…":<>✨ Auto-plan{!isPremium&&(subscription.autoplanUsed||0)<FREE_AUTOPLAN_USES&&<span style={{fontSize:10,marginLeft:5,background:"var(--sageBg)",color:"var(--sage)",padding:"1px 5px",borderRadius:3,fontWeight:700}}>1 FREE USE</span>}</>}
-          </button>
-          <button className="btn btn-g btn-sm" onClick={()=>{
-            if(isGuest) return;
-            if(!isPremium && (subscription.autoplanUsed||0) >= FREE_AUTOPLAN_USES){onUpgrade("autoplan");return;}
-            autoplan();
-            if(!isPremium) setSubscription(p=>({...p,autoplanUsed:(p.autoplanUsed||0)+1}));
-          }} disabled={planning||isGuest}>🔄 Regenerate</button>
-          {showClearConfirm
-            ? <span style={{display:"flex",gap:6,alignItems:"center"}}>
-                <span style={{fontSize:12,color:"var(--mu)"}}>Clear week?</span>
-                <button className="btn btn-sm" style={{background:"#e05c5c",color:"#fff",border:"none"}} onClick={()=>{
-                  setMealPlan(prev=>prev.map(day=>({...day,meals:[null,null,null]})));
-                  setShowClearConfirm(false);
-                  showToast?.("✅ Plan cleared");
-                }}>Yes</button>
-                <button className="btn btn-g btn-sm" onClick={()=>setShowClearConfirm(false)}>No</button>
-              </span>
-            : <button className="btn btn-g btn-sm" onClick={()=>setShowClearConfirm(true)} disabled={isGuest}>🗑️ Clear</button>
-          }
-          <button className="btn btn-g btn-sm" onClick={()=>setShowPlannerPrefs(p=>!p)}>⚙️ Preferences{showPlannerPrefs?" ▲":" ▼"}</button>
+    <div className="rd-overlay" onClick={onClose}>
+      <div className="rd-panel" onClick={e => e.stopPropagation()}>
+        <div className="rd-hero">
+          <img src={recipe.image || recipeImage(recipe.title)} alt={recipe.title} onError={e => { e.target.style.display = 'none'; }} />
+          <div className="rd-hero-overlay" />
+          <button className="rd-close" onClick={onClose}>✕</button>
         </div>
-      </div>
-      {showPlannerPrefs && (
-        <div style={{marginBottom:16,padding:"14px 16px",background:"var(--cream)",border:"1px solid var(--bor)",borderRadius:"var(--r)"}}>
-          <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:10}}>
-            <span style={{fontWeight:600,fontSize:13}}>Quick Filters</span>
-            <button style={{fontSize:11,color:"var(--clay)",background:"none",border:"none",cursor:"pointer",padding:0}} onClick={()=>setShowPrefsModal(true)}>More options →</button>
+        <div className="rd-body">
+          <h2 className="rd-title">{recipe.emoji} {recipe.title}</h2>
+          <div className="rd-meta">
+            <span>⏱ {recipe.time} min</span>
+            <span>📊 {recipe.diff}</span>
+            <span>🍽 {recipe.cuisine}</span>
           </div>
-          <div style={{display:"flex",flexWrap:"wrap",gap:8}}>
-            {[{id:"Healthy",icon:"💚",label:"Healthy"},{id:"Kosher",icon:"🕎",label:"Kosher"},{id:"Vegetarian",icon:"🥦",label:"Vegetarian"},{id:"Vegan",icon:"🌱",label:"Vegan"},{id:"Pescatarian",icon:"🐟",label:"Pescatarian"}].map(({id,icon,label})=>{
-              const isActive=(prefs.dietary||[]).includes(id);
+          {(recipe.dietary || []).length > 0 && (
+            <div style={{display:'flex',gap:6,flexWrap:'wrap',marginBottom:16}}>
+              {recipe.dietary.map(d => <span key={d} className="tag td">{d}</span>)}
+            </div>
+          )}
+          <div style={{display:'flex',gap:8,marginBottom:20}}>
+            <button className="btn btn-p btn-sm" onClick={() => handleAddToPlan(recipe)}>📅 Add to Plan</button>
+            <button className="btn btn-s btn-sm" onClick={() => toggleSave(recipe.id)}>
+              {saved.has(recipe.id) ? '❤️ Saved' : '🤍 Save'}
+            </button>
+          </div>
+          <h3 style={{fontFamily:'var(--fd)',fontSize:18,marginBottom:12}}>Ingredients ({(recipe.ingredients || []).length})</h3>
+          <div style={{marginBottom:24}}>
+            {(recipe.ingredients || []).map((ing, i) => {
+              const inPantry = pantrySet.has((ing.n || '').toLowerCase().trim());
               return (
-                <button key={id} onClick={()=>setPrefs&&setPrefs(p=>{
-                  const cur=p.dietary||[];
-                  if(cur.includes(id)) return {...p,dietary:cur.filter(x=>x!==id)};
-                  let next=[...cur,id];
-                  if(id==='Pescatarian') next=next.filter(x=>x!=='Vegetarian'&&x!=='Vegan');
-                  if(id==='Vegetarian')  next=next.filter(x=>x!=='Pescatarian'&&x!=='Vegan');
-                  if(id==='Vegan')       next=next.filter(x=>x!=='Pescatarian'&&x!=='Vegetarian');
-                  return {...p,dietary:next};
-                })} style={{padding:"6px 12px",borderRadius:20,border:`1.5px solid ${isActive?"var(--clay)":"var(--bor)"}`,background:isActive?"var(--clayBg)":"var(--white)",color:isActive?"var(--clay)":"var(--ch)",cursor:"pointer",fontSize:12,fontWeight:isActive?700:500,transition:"all .15s"}}>
-                  {icon} {label}
-                </button>
+                <div key={i} style={{display:'flex',alignItems:'center',gap:10,padding:'8px 0',borderBottom:'1px solid var(--bor)'}}>
+                  <span style={{color:inPantry ? 'var(--sage)' : 'var(--mu)',fontSize:16}}>{inPantry ? '✅' : '🛒'}</span>
+                  <span style={{fontWeight:500}}>{ing.n}</span>
+                  <span style={{color:'var(--mu)',fontSize:13,marginLeft:'auto'}}>{ing.a}</span>
+                </div>
               );
             })}
-            {(()=>{const isActive=(prefs.dietary||[]).includes('PantryOnly');return(
-              <button onClick={()=>setPrefs&&setPrefs(p=>({...p,dietary:(p.dietary||[]).includes('PantryOnly')?(p.dietary||[]).filter(x=>x!=='PantryOnly'):[...(p.dietary||[]),'PantryOnly']}))} style={{padding:"6px 12px",borderRadius:20,border:`1.5px solid ${isActive?"var(--clay)":"var(--bor)"}`,background:isActive?"var(--clayBg)":"var(--white)",color:isActive?"var(--clay)":"var(--ch)",cursor:"pointer",fontSize:12,fontWeight:isActive?700:500,transition:"all .15s"}}>🏠 Pantry Only</button>
-            );})()}
           </div>
-          {(prefs.dietary||[]).length>0&&<div style={{marginTop:8,display:"flex",alignItems:"center",gap:8}}><span style={{fontSize:11,color:"var(--mu)"}}>Active: {(prefs.dietary||[]).join(", ")}</span><button style={{fontSize:11,color:"var(--clay)",background:"none",border:"none",cursor:"pointer",padding:0}} onClick={()=>setPrefs&&setPrefs(p=>({...p,dietary:[]}))}>Reset</button></div>}
-        </div>
-      )}
-      {showPrefsModal&&setPrefs&&<PrefsModal prefs={prefs} setPrefs={setPrefs} onClose={()=>setShowPrefsModal(false)}/>}
-      {isGuest&&<div className="gnotice" style={{marginBottom:16}}><span>🔒</span><span>Create an account to save your meal plan and generate shopping lists.</span></div>}
-      {/* ── AVOID LIST TOO RESTRICTIVE WARNING ── */}
-      {tooRestrictive && (
-        <div style={{marginBottom:16,padding:'12px 16px',background:'rgba(224,92,92,.08)',border:'1px solid rgba(224,92,92,.3)',borderRadius:10,display:'flex',alignItems:'center',justifyContent:'space-between',gap:12,flexWrap:'wrap'}}>
+          <h3 style={{fontFamily:'var(--fd)',fontSize:18,marginBottom:12}}>Steps</h3>
           <div>
-            <div style={{fontWeight:700,fontSize:13,color:'#c04040',marginBottom:4}}>🚫 Avoid list is too restrictive to fill all 21 meals.</div>
-            <div style={{fontSize:12,color:'var(--mu)'}}>Reduce your avoided ingredients in the Pantry tab, or allow them as a last resort below.</div>
-          </div>
-          <label style={{display:'flex',alignItems:'center',gap:8,cursor:'pointer',fontSize:12,fontWeight:600,color:'var(--ch)',whiteSpace:'nowrap'}}>
-            <input type="checkbox" checked={allowAvoidedLastResort} onChange={e=>{setAllowAvoidedLastResort(e.target.checked);setTooRestrictive(false);}} style={{width:15,height:15,accentColor:'var(--clay)',cursor:'pointer'}}/>
-            Allow avoided as last resort
-          </label>
-        </div>
-      )}
-      {/* ── PLAN STATUS STRIP ── */}
-      {(()=>{
-        const planned = mealPlan.flatMap(d=>d.meals).filter(Boolean);
-        if(planned.length === 0) return null;
-        const ps = buildPantrySet(pantry);
-        let cookable = 0;
-        planned.forEach(m=>{
-          if(m.kind==="custom"){ cookable++; return; }
-          // Handle pantry-generated meals (IDs start with 'pantry-') separately
-          let r = null;
-          if(String(m.id).startsWith('pantry-')) {
-            r = getPantryRecipeObj(m.id);
-          } else {
-            r = allRecipes.find(x=>x.id===m.id);
-          }
-          // A meal is cookable if ALL non-optional ingredients are in pantry
-          if(!r||!r.ingredients?.length||r.ingredients.every(i=>i.optional||isOptionalIng(i.n)||ingInPantry(i.n,ps))) cookable++;
-        });
-        const missingData = computeMissingIngredients();
-        const totalMissingIng = missingData.length;
-        const allCookable = cookable === planned.length;
-        return (
-          <div style={{display:'flex',alignItems:'center',gap:16,padding:'10px 16px',background:allCookable?'rgba(106,158,114,.08)':'rgba(201,149,58,.07)',border:`1px solid ${allCookable?'rgba(106,158,114,.3)':'rgba(201,149,58,.25)'}`,borderRadius:10,marginBottom:16,flexWrap:'wrap'}}>
-            <span style={{fontSize:13,fontWeight:600,color:allCookable?'var(--sageH)':'var(--goldH)'}}>
-              {allCookable?'✅':'🍳'} {cookable} / {planned.length} meals cookable from pantry
-            </span>
-            {totalMissingIng > 0 && (
-              <span style={{fontSize:13,color:'var(--mu)'}}>
-                · {totalMissingIng} missing ingredient{totalMissingIng!==1?'s':''}{' '}
-                <button className="btn btn-xs btn-s" style={{marginLeft:4}} onClick={()=>setShowMissingPanel(true)}>View list</button>
-              </span>
-            )}
-          </div>
-        );
-      })()}
-      {!isPremium&&!isGuest&&(subscription.autoplanUsed||0)>=FREE_AUTOPLAN_USES&&<div style={{background:"linear-gradient(135deg,var(--clayBg) 0%,rgba(201,149,58,.06) 100%)",border:"1px solid rgba(192,106,62,.2)",borderRadius:10,padding:"12px 16px",marginBottom:16,display:"flex",alignItems:"center",justifyContent:"space-between",gap:12,flexWrap:"wrap"}}>
-        <div style={{display:"flex",alignItems:"center",gap:10}}><span style={{fontSize:20}}>📅</span><div><div style={{fontWeight:600,fontSize:14}}>Free auto-plan used</div><div style={{fontSize:12,color:"var(--mu)",marginTop:1}}>Upgrade to auto-generate unlimited weekly plans in one click.</div></div></div>
-        <button className="btn btn-p btn-sm" onClick={()=>onUpgrade("autoplan")}>⭐ Upgrade — $4.99/mo</button>
-      </div>}
-
-
-
-
-
-
-
-
-      {/* TODO [ROADMAP]: "Publish this week" button — social publish flow. Frozen. */}
-
-      {/* Weekly grid — only view. Prep Plan tab removed (TODO [ROADMAP]). */}
-      {true&&<>
-        {/* Grid — main focus, shown first */}
-        <div className="pwrap" style={{marginBottom:0}}>
-          <div style={{display:"grid",gridTemplateColumns:"70px repeat(7,1fr)",gap:8,minWidth:640}}>
-            <div/>
-            {mealPlan.map((d,i)=><div key={d.day} className="pdh" style={{animation:`fadeInUp .3s ease ${i*.05}s both`}}>{d.day}</div>)}
-            {active.map((mealType)=>{
-              // Use the FIXED position in the canonical [Breakfast,Lunch,Dinner] array
-              // so meals[mealIdx] always refers to the correct slot regardless of which
-              // slots are toggled on/off. Using the active-array index (mi) here was the
-              // root cause of wrong-recipe navigation when any slot was hidden.
-              const mealIdx=["Breakfast","Lunch","Dinner"].indexOf(mealType);
-              return [
-              <div key={`L${mealType}`} style={{display:"flex",alignItems:"center",justifyContent:"flex-end",paddingRight:8}}><div className="prl" style={{fontSize:11}}>{ME[mealType]}<span>{mealType}</span></div></div>,
-              ...mealPlan.map((day,dayIdx)=>{
-                const meal=day.meals[mealIdx];
-                const slotKey=`${dayIdx}-${mealIdx}`;
-                const recipeObj=meal&&meal.kind!=="custom"&&meal.id?(String(meal.id).startsWith('pantry-')?getPantryRecipeObj(meal.id):allRecipes.find(r=>r.id===meal.id)):null;
-                return(
-                <div
-                  key={`${day.day}-${mealType}-${meal?.id??'empty'}`}
-                  className={`mslot ${meal?"filled":""}${swapSource&&swapSource.mealType===mealType?" swap-target":""}`}
-                  style={{cursor:"pointer",outline:swapSource&&swapSource.dayIdx===dayIdx&&swapSource.mealIdx===mealIdx?"2px solid var(--clay)":"none",borderRadius:swapSource?"8px":"",position:"relative"}}
-                  draggable={!!meal}
-                  onClick={()=>handleSlotClick(dayIdx,mealIdx,mealType)}
-                  onDragStart={e=>{
-                    if(!meal) return;
-                    setDragSource({dayIdx,mealIdx,mealType});
-                    e.dataTransfer.effectAllowed="move";
-                  }}
-                  onDragOver={e=>{e.preventDefault();e.currentTarget.classList.add("drag-over");}}
-                  onDragLeave={e=>{e.currentTarget.classList.remove("drag-over");}}
-                  onDrop={e=>{
-                    e.currentTarget.classList.remove("drag-over");
-                    if(!dragSource) return;
-                    if(dragSource.mealType !== mealType) {
-                      if(showToast) showToast(`⚠️ ${dragSource.mealType} recipes must stay in ${dragSource.mealType} slots`);
-                      setDragSource(null); return;
-                    }
-                    swapSlots(dragSource, {dayIdx,mealIdx,mealType});
-                    setDragSource(null);
-                  }}
-                  onDragEnd={()=>setDragSource(null)}
-                >
-                  {meal
-                    ? <div className="msi">
-                        {meal.kind==="custom"
-                          ? <>
-                              <div className="msem">📝</div>
-                              <div className="msn">{meal.title}</div>
-                              <div className="custom-badge">Custom</div>
-                            </>
-                          : <PlannerThumb recipe={recipeObj} mealName={meal.name} emoji={meal.emoji} showShopping={recipeNeedsShopping(meal)}/>
-                        }
-                        {/* ⋯ slot options button */}
-                        <button
-                          className="slot-dot-btn"
-                          onClick={e=>{e.stopPropagation();setSlotPopover(v=>v?.key===slotKey?null:{dayIdx,mealIdx,mealType,key:slotKey,dayLabel:day.day});}}
-                        >⋯</button>
-                        {slotPopover?.key===slotKey&&(
-                          <div className="slot-popover" onClick={e=>e.stopPropagation()}>
-                            {recipeObj&&<button className="slot-pop-item" onClick={()=>{setSlotPopover(null);onViewRecipe(recipeObj);}}>📖 View recipe</button>}
-                            <button className="slot-pop-item" onClick={()=>{setSlotPopover(null);setReplacePicker({dayIdx,mealIdx,mealType});}}>🔄 Replace meal</button>
-                            <button className="slot-pop-item" onClick={()=>{setSlotPopover(null);setSwapSource({dayIdx,mealIdx,mealType});if(showToast)showToast("↔ Click another slot to swap (same meal type)");}}>↔ Swap meal</button>
-                            <button className="slot-pop-item" onClick={()=>{setSlotPopover(null);setCustomMealModal({dayIdx,mealIdx,dayLabel:day.day,mealType,existing:meal});}}>✏️ Custom meal</button>
-                            <div className="slot-pop-divider"/>
-                            <button className="slot-pop-item danger" onClick={()=>{setSlotPopover(null);setSlotMeal(dayIdx,mealIdx,null);}}>🗑 Remove</button>
-                          </div>
-                        )}
-                      </div>
-                    : <div className="msadd">+</div>
-                  }
-                </div>
-              );})
-            ];})}
-          </div>
-        </div>
-
-        {/* Meal slot toggles — BELOW the grid */}
-        <div style={{background:"var(--white)",border:"1px solid var(--bor)",borderRadius:"var(--r)",padding:"12px 18px",marginTop:12,marginBottom:12}}>
-          <div style={{fontSize:11,fontWeight:700,color:"var(--mu)",textTransform:"uppercase",letterSpacing:.5,marginBottom:8}}>Meal slots</div>
-          <div className="mtoggles">
-            {["Breakfast","Lunch","Dinner"].map(m=><label key={m} className="mtog"><input type="checkbox" checked={slots[m]} onChange={e=>setSlots(p=>({...p,[m]:e.target.checked}))}/><span className="mtog-l">{ME[m]} {m}</span></label>)}
-          </div>
-        </div>
-
-        {/* Missing ingredients inline panel — BELOW the grid */}
-        {showMissingPanel && (()=>{
-          const missingData = computeMissingIngredients().sort((a,b)=>b.count-a.count);
-          if(missingData.length === 0) return null;
-          return (
-            <div style={{background:"var(--white)",border:"1px solid rgba(201,149,58,.3)",borderRadius:"var(--r)",padding:"12px 16px",marginBottom:12}}>
-              <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:8}}>
-                <div style={{fontWeight:700,fontSize:13,color:"var(--goldH)"}}>🛒 Missing ingredients ({missingData.length})</div>
-                <div style={{display:"flex",gap:8,alignItems:"center"}}>
-                  <button className="btn btn-xs btn-p" onClick={()=>{
-                    missingData.forEach(ing=>{
-                      setShopping(prev=>{
-                        if(prev.some(s=>s.name.toLowerCase()===ing.name.toLowerCase())) return prev;
-                        return [...prev,{id:Date.now()+Math.random(),name:ing.name,qty:"as needed",checked:false}];
-                      });
-                    });
-                  }}>+ Add all to list</button>
-                  <button style={{background:"none",border:"none",cursor:"pointer",fontSize:16,color:"var(--mu)",padding:"1px 4px",lineHeight:1}} title="Dismiss" onClick={()=>setShowMissingPanel(false)}>✕</button>
+            {(recipe.steps || []).map((s, i) => (
+              <div key={i} style={{display:'flex',gap:12,marginBottom:14}}>
+                <div style={{width:28,height:28,borderRadius:'50%',background:'var(--clayBg)',color:'var(--clay)',display:'flex',alignItems:'center',justifyContent:'center',fontWeight:700,fontSize:13,flexShrink:0}}>{s.n || i+1}</div>
+                <div>
+                  <div style={{fontWeight:600,fontSize:14,marginBottom:2}}>{s.t}</div>
+                  <div style={{color:'var(--mu)',fontSize:14,lineHeight:1.5}}>{s.d}</div>
                 </div>
               </div>
-              <div style={{display:"flex",flexWrap:"wrap",gap:5}}>
-                {missingData.map(ing=>(
-                  <span key={ing.normalized} style={{fontSize:12,background:"var(--goldBg)",color:"var(--goldH)",padding:"3px 10px",borderRadius:99,fontWeight:600,display:"inline-flex",alignItems:"center",gap:4}}>
-                    {ing.name}
-                    <span style={{fontSize:10,fontWeight:400,color:"var(--mu)"}}>×{ing.count}</span>
-                  </span>
-                ))}
-              </div>
-            </div>
-          );
-        })()}
-
-        {/* Planner Chat panel */}
-        <div style={{marginBottom:8}}>
-          <button
-            style={{display:"flex",alignItems:"center",gap:8,width:"100%",padding:"10px 16px",background:chatOpen?"var(--cream)":"var(--white)",border:"1px solid var(--bor)",borderRadius:chatOpen?"var(--r) var(--r) 0 0":"var(--r)",cursor:"pointer",textAlign:"left"}}
-            onClick={()=>setChatOpen(p=>!p)}
-          >
-            <span style={{fontSize:16}}>💬</span>
-            <span style={{fontWeight:600,fontSize:13}}>💬 Plan Assistant</span>
-            <span style={{marginLeft:"auto",fontSize:11,color:"var(--mu)"}}>{chatOpen?"▲ Hide":"▼ Open"}</span>
-          </button>
-          {chatOpen&&(
-            <div style={{background:"var(--white)",border:"1px solid var(--bor)",borderTop:"none",borderRadius:"0 0 var(--r) var(--r)"}}>
-              <div style={{height:260,overflowY:"auto",padding:"12px 14px",display:"flex",flexDirection:"column",gap:7}}>
-                {chatMessages.map((m,i)=>(
-                  <div key={i} style={{display:"flex",justifyContent:m.role==="user"?"flex-end":"flex-start"}}>
-                    <div style={{maxWidth:"84%",padding:"8px 12px",borderRadius:10,fontSize:13,lineHeight:1.55,background:m.role==="user"?"var(--clay)":"var(--cream)",color:m.role==="user"?"#fff":"var(--ch)",borderBottomRightRadius:m.role==="user"?2:10,borderBottomLeftRadius:m.role==="bot"?2:10}}>
-                      {m.role==="bot" ? renderChatText(m.text) : m.text}
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <div style={{padding:"10px 12px",borderTop:"1px solid var(--bor)",display:"flex",gap:8}}>
-                <input
-                  value={chatInput}
-                  onChange={e=>setChatInput(e.target.value)}
-                  onKeyDown={e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();handleChatSend();}}}
-                  placeholder='Ask anything — "no pasta", "what can I cook tonight?", "suggest quick dinners"…'
-                  style={{flex:1,padding:"8px 12px",borderRadius:6,border:"1px solid var(--bor)",fontSize:13,background:"var(--cream)",outline:"none"}}
-                />
-                <button
-                  title={chatListening?"Listening…":"Voice input"}
-                  onClick={()=>{
-                    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-                    if (!SR) { alert("Speech recognition is not supported in your browser. Try Chrome or Edge."); return; }
-                    if (chatListening) return;
-                    const rec = new SR();
-                    rec.continuous = false;
-                    rec.interimResults = false;
-                    rec.lang = 'en-US';
-                    setChatListening(true);
-                    rec.onresult = (e) => { setChatInput(prev => prev ? prev + ' ' + e.results[0][0].transcript : e.results[0][0].transcript); setChatListening(false); };
-                    rec.onerror = () => setChatListening(false);
-                    rec.onend = () => setChatListening(false);
-                    rec.start();
-                  }}
-                  style={{padding:"8px 10px",borderRadius:6,border:"1px solid var(--bor)",background:chatListening?"#e05c5c":"var(--cream)",color:chatListening?"#fff":"var(--ch)",cursor:"pointer",fontSize:16,lineHeight:1,flexShrink:0,boxShadow:chatListening?"0 0 0 3px rgba(224,92,92,0.25)":"none",transition:"all .2s"}}
-                >{chatListening?"⏳":"🎤"}</button>
-                <button className="btn btn-p btn-sm" onClick={handleChatSend} disabled={!chatInput.trim()}>Send</button>
-              </div>
-            </div>
-          )}
-        </div>
-      </>}
-
-      {/* TODO [ROADMAP]: MealPrepPlanner — code retained as stub, not rendered */}
-
-      {/* SlotActionsModal removed — inline ⋯ popover used instead */}
-
-      {replacePicker && (
-        <RecipePickerModal
-          mealType={replacePicker.mealType}
-          pantry={pantry}
-          allRecipes={allRecipes}
-          prefs={prefs}
-          avoidedIngredients={avoidedIngredients}
-          onClose={()=>setReplacePicker(null)}
-          onSelect={r=>{
-            setSlotMeal(replacePicker.dayIdx, replacePicker.mealIdx, {kind:"recipe",emoji:r.emoji,name:r.title,id:r.id});
-            setReplacePicker(null);
-          }}
-        />
-      )}
-
-      {customMealModal && (
-        <CustomMealModal
-          existing={customMealModal.existing}
-          dayLabel={customMealModal.dayLabel}
-          mealType={customMealModal.mealType}
-          onClose={()=>setCustomMealModal(null)}
-          onSave={meal=>{
-            setSlotMeal(customMealModal.dayIdx, customMealModal.mealIdx, meal);
-            setCustomMealModal(null);
-          }}
-        />
-      )}
-
-      {/* AI Chat floating button */}
-      <button onClick={()=>setAiChatOpen(true)} style={{
-        position:"fixed",bottom:24,right:24,width:56,height:56,borderRadius:"50%",
-        background:"var(--sage)",color:"#fff",border:"none",cursor:"pointer",
-        boxShadow:"0 4px 16px rgba(0,0,0,.2)",display:"flex",alignItems:"center",justifyContent:"center",
-        fontSize:24,zIndex:100,transition:"transform .15s"
-      }} title="Chat with AI to edit your plan">
-        <Ic n="sparkle" s={24}/>
-      </button>
-
-      {aiChatOpen && <PlannerChatDrawer onClose={()=>setAiChatOpen(false)} mealPlan={mealPlan} setMealPlan={setMealPlan} allRecipes={allRecipes} prefs={prefs} />}
-      </>}
-    </div>
-  );
-}
-
-/* ── PLANNER CHAT DRAWER ── */
-function PlannerChatDrawer({ onClose, mealPlan, setMealPlan, allRecipes, prefs }) {
-  const [msgs,setMsgs]=useState([{role:"ai",text:"Hi! I can help you adjust your meal plan 🗓️\n\nTry:\n• \"Swap Tuesday dinner\"\n• \"Make Friday vegetarian\"\n• \"I'm busy Wednesday, give me something under 15 min\""}]);
-  const [input,setInput]=useState("");
-  const [loading,setLoading]=useState(false);
-  const [pending,setPending]=useState(null); // proposed change to confirm
-  const endRef=useRef(null);
-  useEffect(()=>{endRef.current?.scrollIntoView({behavior:"smooth"});},[msgs,loading]);
-
-  const QUICK=["Swap Tuesday dinner","Make Friday vegetarian","Busy Wednesday — 15 min meal","Add a healthy breakfast Monday","Remove Sunday lunch"];
-
-  const callAI=async userMsg=>{
-    setLoading(true);
-    setMsgs(p=>[...p,{role:"user",text:userMsg}]);setInput("");
-    const planSummary=mealPlan.map(d=>`${d.day}: ${d.meals.map((m,i)=>m?`${["Breakfast","Lunch","Dinner"][i]}=${m.name}`:"empty").join(", ")}`).join("\n");
-    try{
-      const res=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({
-        model:"claude-sonnet-4-20250514",max_tokens:600,
-        system:(()=>{
-          const pool = allRecipes || RECIPES;
-          const byMeal = {breakfast:[],lunch:[],dinner:[],snack:[],dessert:[]};
-          pool.slice(0,500).forEach(r => { const mt = getMealType(r); if(byMeal[mt]) byMeal[mt].push(`${r.emoji} ${r.title} (id:${r.id})`); });
-          const mealList = Object.entries(byMeal).map(([m,arr])=>`${m}: ${arr.slice(0,30).join(', ')}`).join('\n');
-          const dietInfo = (prefs?.dietary||[]).length ? `\nUser dietary preferences: ${prefs.dietary.join(', ')}.` : '';
-          const cuisInfo = (prefs?.cuisines||[]).length ? `\nUser cuisine preferences: ${prefs.cuisines.join(', ')}.` : '';
-          const prefInfo = dietInfo + cuisInfo;
-          return `You are a meal plan assistant.${prefInfo}\n\nThe user has this weekly plan:\n${planSummary}\n\nAvailable recipes by meal type:\n${mealList}\n\nRespect the user's dietary restrictions strictly. Prefer their cuisine preferences when possible.\n\nRespond with JSON: {"reply":"friendly confirmation message","change":{"day":"Mon","slot":0,"meal":{"emoji":"🥞","name":"Pancakes","id":6}} or null}. slot: 0=Breakfast,1=Lunch,2=Dinner. Days: Mon,Tue,Wed,Thu,Fri,Sat,Sun. If no change needed, change=null. For multiple changes, use "changes":[...] array instead of "change".`;
-        })(),
-        messages:[{role:"user",content:userMsg}]
-      })});
-      const data=await res.json();
-      const clean=data.content[0].text.replace(/```json|```/g,"").trim();
-      const parsed=JSON.parse(clean);
-      setMsgs(p=>[...p,{role:"ai",text:parsed.reply}]);
-      if(parsed.change){setPending(parsed.change);}
-    }catch{
-      setMsgs(p=>[...p,{role:"ai",text:"I've noted your preference! Try describing what day and meal you'd like to change, and I'll update it for you."}]);
-    }
-    setLoading(false);
-  };
-
-  const applyChange=()=>{
-    if(!pending)return;
-    setMealPlan(p=>p.map(d=>{
-      if(d.day!==pending.day)return d;
-      const meals=[...d.meals];
-      meals[pending.slot]=pending.meal;
-      return{...d,meals};
-    }));
-    setMsgs(p=>[...p,{role:"ai",text:"✅ Plan updated! Anything else you'd like to change?"}]);
-    setPending(null);
-  };
-
-  return (
-    <div className="dov" onClick={e=>e.target===e.currentTarget&&onClose()}>
-      <div className="pc-drawer">
-        <div className="dhdr">
-          <div><div className="dtitle">Adjust Plan</div><div style={{fontSize:12,color:"var(--mu)",marginTop:2}}>Chat to modify your week</div></div>
-          <button className="dclose" onClick={onClose}><Ic n="x" s={16}/></button>
-        </div>
-        {/* Quick suggestions */}
-        <div style={{padding:"12px 20px",borderBottom:"1px solid var(--bor)",display:"flex",flexWrap:"wrap",gap:6}}>
-          {QUICK.map(q=><button key={q} className="cchip" style={{fontSize:12,padding:"5px 10px"}} onClick={()=>callAI(q)}>{q}</button>)}
-        </div>
-        <div className="pc-msgs">
-          {msgs.map((m,i)=><div key={i} className={`mrow ${m.role==="user"?"u":""}`}>{m.role==="ai"&&<div className="mav">📅</div>}<div className="mbub" style={{whiteSpace:"pre-wrap"}}>{m.text}</div></div>)}
-          {loading&&<div className="mrow"><div className="mav">📅</div><div className="mbub"><div className="ldots"><div className="dot"/><div className="dot"/><div className="dot"/></div></div></div>}
-          {pending&&<div style={{background:"var(--sageBg)",border:"1px solid var(--sage)",borderRadius:"var(--rs)",padding:14,margin:"4px 0"}}>
-            <div style={{fontSize:13,fontWeight:600,marginBottom:8}}>Proposed: {pending.day} {["Breakfast","Lunch","Dinner"][pending.slot]} → {pending.meal?.emoji} {pending.meal?.name}</div>
-            <div style={{display:"flex",gap:8}}><button className="btn btn-sage btn-sm" onClick={applyChange}>Apply ✓</button><button className="btn btn-s btn-sm" onClick={()=>setPending(null)}>Dismiss</button></div>
-          </div>}
-          <div ref={endRef}/>
-        </div>
-        <div className="pc-bot">
-          <textarea className="pc-inp" rows={1} placeholder="e.g. Swap Tuesday dinner or make it vegetarian…" value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();if(input.trim())callAI(input.trim());}}}/>
-          <button className="csend" onClick={()=>{if(input.trim())callAI(input.trim());}}><Ic n="send" s={18}/></button>
+            ))}
+          </div>
         </div>
       </div>
     </div>
   );
 }
 
-/* ── MEAL PREP PLANNER ── */
-function MealPrepPlanner({ mealPlan, prefs }) {
-  const [setup,setSetup]=useState({days:5,meals:{Breakfast:true,Lunch:true,Dinner:true},sessions:1,maxTime:90,freezer:true});
-  const [result,setResult]=useState(null);
-  const [loading,setLoading]=useState(false);
+/* ── EXPLORE TAB ── */
+function ExploreTab({ setViewRecipe, handleAddToPlan, toggleSave, saved, showToast }) {
+  const [search, setSearch] = useState('');
+  const [cuisineFilter, setCuisineFilter] = useState('all');
+  const [mealFilter, setMealFilter] = useState('all');
+  const [dietFilter, setDietFilter] = useState('all');
 
-  const generate=async()=>{
-    setLoading(true);
-    await new Promise(r=>setTimeout(r,900));
-    const mealList=Object.entries(setup.meals).filter(([,v])=>v).map(([k])=>k).join("+");
-    setResult({
-      cookDay:"Sunday",
-      batches:[
-        { emoji:"🍗", title:"Herb Roast Chicken (batch)", portions:setup.days>4?6:4, fridge:"3–4 days", freeze:"Up to 3 months (portion in bags)", remixes:["Monday: chicken + rice bowl","Wednesday: chicken wrap","Friday: chicken salad"], time:70 },
-        { emoji:"🥣", title:"Big Grain Base (rice + quinoa)", portions:8, fridge:"5 days", freeze:"Up to 2 months", remixes:["Lunch bowl base","Side dish","Add to soups"], time:25 },
-        { emoji:"🥘", title:"Shakshuka sauce (batch)", portions:4, fridge:"4 days", freeze:"2 months (sauce only, eggs fresh)", remixes:["Breakfast eggs","Pasta sauce base","Shakshuka bowls"], time:20 },
-        ...(setup.meals.Breakfast?[{ emoji:"🥞", title:"Pancake batter (ready-to-cook)", portions:6, fridge:"2 days", freeze:"Not recommended — cook fresh", remixes:["Quick breakfast any morning"], time:10 }]:[]),
-      ],
-      shopping:["1 whole chicken","Rice + quinoa (1kg combined)","Canned tomatoes x4","Eggs x12","Lemons x3","Fresh herbs (parsley, thyme)","Olive oil","Cumin, paprika"],
-      checklist:[
-        {n:1,t:"Prep chicken (20 min)",d:"Season and prepare the whole chicken. Get it in the oven first — it takes longest."},
-        {n:2,t:"Start grain base (5 min active)",d:"Put rice and quinoa on to cook while chicken roasts."},
-        {n:3,t:"Make shakshuka sauce (20 min)",d:"Simmer the tomato sauce. Cool and portion into containers."},
-        {n:4,t:"Prep pancake batter (5 min)",d:"Mix dry and wet ingredients. Store in a sealed jar in the fridge."},
-        {n:5,t:"Portion + label everything (15 min)",d:"Use containers with date labels. Freeze portions you won't use in 3 days."},
-      ]
+  const cuisines = [...new Set(RECIPES.map(r => r.cuisine).filter(Boolean))].sort();
+
+  let filtered = RECIPES;
+  if (search) {
+    const s = search.toLowerCase();
+    filtered = filtered.filter(r => r.title.toLowerCase().includes(s) || (r.cuisine||'').toLowerCase().includes(s));
+  }
+  if (cuisineFilter !== 'all') filtered = filtered.filter(r => (r.cuisine||'').toLowerCase() === cuisineFilter.toLowerCase());
+  if (mealFilter !== 'all') {
+    filtered = filtered.filter(r => {
+      const m = (r.meal||'').toLowerCase();
+      if (mealFilter === 'breakfast') return m === 'breakfast';
+      if (mealFilter === 'lunch') return ['lunch','salad'].includes(m);
+      if (mealFilter === 'dinner') return !['breakfast','lunch','salad','snack','dessert'].includes(m);
+      if (mealFilter === 'snack') return ['snack','dessert'].includes(m);
+      return true;
     });
-    setLoading(false);
-  };
+  }
+  if (dietFilter !== 'all') filtered = filtered.filter(r => (r.dietary||[]).some(d => d.toLowerCase() === dietFilter.toLowerCase()));
+
+  // Shuffle for discovery
+  const [shuffled] = useState(() => [...Array(RECIPES.length).keys()].sort(() => Math.random() - 0.5));
+  const display = filtered.slice(0, 60);
 
   return (
     <div>
-      <h2 style={{fontFamily:"var(--fd)",fontSize:20,marginBottom:6}}>Meal Prep for the Week</h2>
-      <p style={{color:"var(--mu)",fontSize:14,marginBottom:20}}>Set your constraints and get a structured, cook-once plan for the whole week.</p>
-      {!result&&<div className="prep-setup">
-        <div className="prep-section">
-          <div className="prep-section-title">How many days to prep for?</div>
-          <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
-            {[3,5,7].map(d=><button key={d} className={`mopt ${setup.days===d?"sel":""}`} onClick={()=>setSetup(p=>({...p,days:d}))}>{d} days</button>)}
-          </div>
-        </div>
-        <div className="prep-section">
-          <div className="prep-section-title">Which meals to prep?</div>
-          <div style={{display:"flex",gap:12,flexWrap:"wrap"}}>
-            {["Breakfast","Lunch","Dinner"].map((m,mi)=>{const ico=["☀️","🌤️","🌙"][mi];return(<label key={m} className="mtog"><input type="checkbox" checked={setup.meals[m]} onChange={ev=>setSetup(p=>({...p,meals:{...p.meals,[m]:ev.target.checked}}))}/><span className="mtog-l">{ico} {m}</span></label>);})}
-          </div>
-        </div>
-        <div className="prep-section">
-          <div className="prep-section-title">Cooking sessions & time</div>
-          <div className="row" style={{flexWrap:"wrap",gap:16}}>
-            <div className="half">
-              <label className="fl">Cooking sessions</label>
-              <div style={{display:"flex",gap:8}}>{[{v:1,l:"1 day (Sunday)"},{v:2,l:"2 days (Sat+Sun)"}].map(o=><button key={o.v} className={`mopt ${setup.sessions===o.v?"sel":""}`} onClick={()=>setSetup(p=>({...p,sessions:o.v}))} style={{flex:1}}>{o.l}</button>)}</div>
-            </div>
-            <div className="half">
-              <label className="fl">Max time per session</label>
-              <div style={{display:"flex",gap:8}}>{[60,90,120].map(t=><button key={t} className={`mopt ${setup.maxTime===t?"sel":""}`} onClick={()=>setSetup(p=>({...p,maxTime:t}))} style={{flex:1}}>{t} min</button>)}</div>
-            </div>
-          </div>
-        </div>
-        <div className="prep-section">
-          <div className="prep-section-title">Include freezer meals?</div>
-          <div style={{display:"flex",gap:8}}>
-            <button className={`mopt ${setup.freezer?"sel":""}`} onClick={()=>setSetup(p=>({...p,freezer:true}))}>Yes, freeze extras</button>
-            <button className={`mopt ${!setup.freezer?"sel":""}`} onClick={()=>setSetup(p=>({...p,freezer:false}))}>No, fridge only</button>
-          </div>
-        </div>
-        <button className="btn btn-p btn-full btn-lg" onClick={generate} disabled={loading}>{loading?"Generating plan…":"📦 Generate meal prep plan"}</button>
-      </div>}
+      <div style={{display:'flex',gap:8,marginBottom:16,flexWrap:'wrap'}}>
+        <input className="fi" style={{flex:1,minWidth:200}} placeholder="Search recipes..." value={search} onChange={e => setSearch(e.target.value)} />
+        <select className="fi" style={{width:150}} value={cuisineFilter} onChange={e => setCuisineFilter(e.target.value)}>
+          <option value="all">All cuisines</option>
+          {cuisines.map(c => <option key={c} value={c}>{c}</option>)}
+        </select>
+        <select className="fi" style={{width:120}} value={mealFilter} onChange={e => setMealFilter(e.target.value)}>
+          <option value="all">All meals</option>
+          <option value="breakfast">Breakfast</option>
+          <option value="lunch">Lunch</option>
+          <option value="dinner">Dinner</option>
+          <option value="snack">Snacks</option>
+        </select>
+        <select className="fi" style={{width:130}} value={dietFilter} onChange={e => setDietFilter(e.target.value)}>
+          <option value="all">All diets</option>
+          <option value="vegetarian">Vegetarian</option>
+          <option value="vegan">Vegan</option>
+          <option value="gluten-free">Gluten-Free</option>
+          <option value="kosher">Kosher</option>
+          <option value="dairy-free">Dairy-Free</option>
+          <option value="halal">Halal</option>
+        </select>
+      </div>
 
-      {result&&<div className="prep-result">
-        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:16,flexWrap:"wrap",gap:10}}>
-          <h3 style={{fontFamily:"var(--fd)",fontSize:20}}>Cook on {result.cookDay} — {result.batches.length} batches</h3>
-          <div style={{display:"flex",gap:8}}><button className="btn btn-s btn-sm" onClick={()=>{setResult(null);}}>Edit constraints</button><button className="btn btn-cs btn-sm" onClick={generate}>Regenerate</button></div>
-        </div>
+      <div style={{fontSize:13,color:'var(--mu)',marginBottom:16}}>{filtered.length} recipes</div>
 
-        {/* Batches */}
-        {result.batches.map((b,i)=>(
-          <div key={i} className="prep-batch">
-            <div className="prep-batch-title"><span style={{fontSize:24}}>{b.emoji}</span>{b.title}</div>
-            <div className="prep-batch-row"><div className="prep-batch-lbl">Portions</div><div className="prep-batch-val">{b.portions} servings</div></div>
-            <div className="prep-batch-row"><div className="prep-batch-lbl">Fridge</div><div className="prep-batch-val">{b.fridge}</div></div>
-            {setup.freezer&&<div className="prep-batch-row"><div className="prep-batch-lbl">Freezer</div><div className="prep-batch-val">{b.freeze}</div></div>}
-            <div className="prep-batch-row"><div className="prep-batch-lbl">Remixes</div><div className="prep-batch-val">{b.remixes.map((r,ri)=><span key={ri} className="remix-tag">{r}</span>)}</div></div>
-            <div className="prep-batch-row"><div className="prep-batch-lbl">Cook time</div><div className="prep-batch-val">{b.time} min</div></div>
+      <div className="explore-grid">
+        {display.map(r => (
+          <div key={r.id} className="explore-card">
+            <div className="explore-card-img" onClick={() => setViewRecipe(r)}>
+              <img src={r.image || recipeImage(r.title)} alt={r.title} onError={e => { e.target.style.display = 'none'; }} loading="lazy" />
+            </div>
+            <div className="explore-card-body">
+              <div className="explore-card-title" onClick={() => setViewRecipe(r)} style={{cursor:'pointer'}}>{r.emoji} {r.title}</div>
+              <div className="explore-card-meta">
+                <span>{r.cuisine}</span>
+                <span>⏱ {r.time}min</span>
+                <span>📊 {r.diff}</span>
+              </div>
+              {(r.dietary||[]).length > 0 && (
+                <div style={{display:'flex',gap:4,flexWrap:'wrap',marginBottom:6}}>
+                  {r.dietary.slice(0,3).map(d => <span key={d} className="tag td" style={{fontSize:10}}>{d}</span>)}
+                </div>
+              )}
+              <div className="explore-card-actions">
+                <button className="btn btn-p btn-xs" onClick={() => handleAddToPlan(r)}>📅 Plan</button>
+                <button className="btn btn-s btn-xs" onClick={() => toggleSave(r.id)}>
+                  {saved.has(r.id) ? '❤️' : '🤍'}
+                </button>
+                <button className="btn btn-g btn-xs" onClick={() => setViewRecipe(r)}>View</button>
+              </div>
+            </div>
           </div>
         ))}
-
-        {/* Shopping list for prep */}
-        <div className="prep-section" style={{marginBottom:20}}>
-          <div className="prep-section-title">🛒 Shopping list for this prep</div>
-          <div style={{display:"flex",flexWrap:"wrap",gap:8,marginTop:8}}>
-            {result.shopping.map((s,i)=><span key={i} style={{background:"var(--cream)",border:"1px solid var(--bor)",borderRadius:6,padding:"4px 12px",fontSize:13}}>{s}</span>)}
-          </div>
-        </div>
-
-        {/* Prep checklist */}
-        <div className="prep-section">
-          <div className="prep-section-title">✅ Prep checklist ({result.cookDay})</div>
-          <div className="prep-checklist" style={{marginTop:12}}>
-            {result.checklist.map(s=>(
-              <div key={s.n} className="prep-check-item">
-                <div className="prep-step-num">{s.n}</div>
-                <div><div style={{fontWeight:600,marginBottom:2}}>{s.t}</div><div style={{color:"var(--mu)",fontSize:12,lineHeight:1.5}}>{s.d}</div></div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>}
-
+      </div>
     </div>
   );
 }
 
-/* ── SHOPPING LIST TAB ── */
-function ShoppingListTab({ shopping, setShopping, pantry, mealPlan, isGuest, allRecipes: allRecipesProp }) {
-  const [newItem,setNewItem]=useState("");
-  const [groupByCategory,setGroupByCategory]=useState(true);
-  const addItem=()=>{if(!newItem.trim())return;setShopping(p=>[...p,{id:Date.now(),name:newItem,qty:"",checked:false}]);setNewItem("");};
-  const toggle=id=>setShopping(p=>p.map(i=>i.id===id?{...i,checked:!i.checked}:i));
-  const remove=id=>setShopping(p=>p.filter(i=>i.id!==id));
-  const clearChecked=()=>setShopping(p=>p.filter(i=>!i.checked));
+/* ── SHOPPING TAB ── */
+function ShoppingTab({ shopping, setShopping, generateShopping, mealPlan, pantry }) {
+  const [editItem, setEditItem] = useState('');
 
-  // Ingredient category detection for grouping
-  const SHOP_CATS = {
-    'Oils & Condiments': /oil|vinegar|soy sauce|fish sauce|worcestershire|hot sauce|ketchup|mustard(?! seed)|mayo|sriracha|teriyaki|hoisin|oyster sauce|sesame oil|mirin|sake|wine.*cooking|cooking.*wine|dressing/i,
-    'Produce': /lettuce|tomato|onion|garlic|pepper|carrot|potato|spinach|kale|broccoli|cucumber|zucchini|celery|mushroom|avocado|lemon|lime|ginger|cilantro|parsley|basil|mint|thyme|rosemary|dill|chive|scallion|green onion|shallot|leek|corn|pea|bean sprout|cabbage|cauliflower|eggplant|squash|pumpkin|beet|radish|turnip|asparagus|artichoke|fennel|arugula|watercress|endive|bok choy|sprout|herb|apple|banana|orange|berry|strawberr|blueberr|raspberr|mango|pineapple|peach|pear|grape|melon|watermelon|coconut|fig|date|plum|cherry|kiwi|papaya/i,
-    'Dairy & Eggs': /milk|cheese|cream|butter|yogurt|egg|sour cream|crème|creme|ricotta|mozzarella|parmesan|cheddar|feta|gouda|brie|mascarpone|cottage|whipping|half.and.half|ghee|paneer|queso/i,
-    'Meat & Seafood': /chicken|beef|pork|lamb|turkey|fish|salmon|shrimp|prawn|tuna|cod|tilapia|sausage|bacon|ham|steak|ground meat|mince|veal|duck|crab|lobster|scallop|mussel|clam|oyster|squid|calamari|anchov/i,
-    'Grains & Pasta': /rice|pasta|noodle|bread|flour|tortilla|pita|couscous|quinoa|oat|cereal|granola|cracker|bagel|roll|bun|wrap|spaghetti|penne|fettuccine|macaroni|lasagna|orzo|barley|bulgur|millet|polenta|cornmeal|panko|breadcrumb/i,
-    'Canned & Jarred': /canned|can of|tomato paste|tomato sauce|diced tomato|crushed tomato|coconut milk|broth|stock|bean|chickpea|lentil|corn.*can|olive(?!\s*oil)|pickle|jam|jelly|preserve|salsa|peanut butter|almond butter|tahini|honey|maple syrup|molasses/i,
-    'Spices & Seasonings': /salt|pepper(?!corn)|cumin|paprika|cinnamon|turmeric|oregano|chili|cayenne|nutmeg|clove|cardamom|coriander|saffron|curry|garam masala|five.spice|bay lea|vanilla|sesame seed|poppy seed|mustard seed|fennel seed|star anise|chili flake/i,
-    'Frozen': /frozen|ice cream|popsicle|sorbet|frozen.*vegeta|frozen.*fruit/i,
-    'Baking': /sugar|baking powder|baking soda|yeast|cocoa|chocolate chip|vanilla extract|almond extract|cornstarch|gelatin|food color|sprinkle|powdered sugar|brown sugar|confectioner/i,
-    'Snacks & Other': /chip|nut|almond|walnut|pecan|cashew|pistachio|peanut|sunflower|pumpkin seed|dried|raisin|cranberr|tofu|tempeh|seitan|miso|nori|seaweed|wonton|dumpling|spring roll/i,
+  const filledCount = mealPlan.reduce((c, d) => c + d.meals.filter(Boolean).length, 0);
+
+  const toggleOwned = (idx) => {
+    setShopping(prev => {
+      const next = [...prev];
+      next[idx] = { ...next[idx], owned: !next[idx].owned };
+      return next;
+    });
   };
-  const categorizeItem = (name) => {
+
+  const addItem = () => {
+    if (!editItem.trim()) return;
+    setShopping(prev => [...prev, { name: editItem.trim(), amount: '', owned: false }]);
+    setEditItem('');
+  };
+
+  const removeItem = (idx) => {
+    setShopping(prev => prev.filter((_, i) => i !== idx));
+  };
+
+  // Categorize ingredients
+  const categorize = (name) => {
     const n = name.toLowerCase();
-    for (const [cat, re] of Object.entries(SHOP_CATS)) { if (re.test(n)) return cat; }
+    if (/chicken|beef|pork|lamb|turkey|fish|salmon|shrimp|prawn|duck|tuna|bacon|sausage/.test(n)) return 'Protein';
+    if (/milk|cheese|cream|yogurt|butter|egg/.test(n)) return 'Dairy & Eggs';
+    if (/lettuce|spinach|tomato|onion|garlic|pepper|carrot|potato|broccoli|mushroom|zucchini|cucumber|celery|avocado|lemon|lime|ginger|herb|basil|cilantro|parsley/.test(n)) return 'Produce';
+    if (/rice|pasta|flour|bread|tortilla|noodle|oat|cereal|quinoa/.test(n)) return 'Grains';
+    if (/oil|vinegar|sauce|soy|salt|pepper|cumin|paprika|cinnamon|sugar|honey|spice|seasoning/.test(n)) return 'Pantry Staples';
+    if (/bean|lentil|chickpea|tofu|tempeh/.test(n)) return 'Legumes';
     return 'Other';
   };
 
-  // Generate shopping list from meal plan
-  const generateFromPlan=()=>{
-    const pool = allRecipesProp || [];
-    const planIngredients=new Set();
-    mealPlan.forEach(day=>{
-      day.meals.forEach(meal=>{
-        if(meal){
-          const recipe=pool.find(r=>r.id===meal.id);
-          if(recipe){
-            recipe.missing?.forEach(ing=>planIngredients.add(ing));
-            recipe.ingredients?.forEach(ing=>planIngredients.add(ing.n));
-          }
-        }
-      });
-    });
-    const slPs = buildPantrySet(pantry);
-    const missing=Array.from(planIngredients).filter(ing=>!ingInPantry(ing, slPs));
-    if(missing.length===0){alert("You have all ingredients for this week's plan!");return;}
-    const newItems=missing.map((name,i)=>({id:Date.now()+i,name,qty:"as needed",checked:false}));
-    setShopping(p=>[...p,...newItems]);
-  };
+  const grouped = {};
+  shopping.forEach((item, idx) => {
+    const cat = categorize(item.name);
+    if (!grouped[cat]) grouped[cat] = [];
+    grouped[cat].push({ ...item, idx });
+  });
 
-  const unchecked=shopping.filter(i=>!i.checked);
-  const checked=shopping.filter(i=>i.checked);
-
-  // Group unchecked items by category
-  const groupedUnchecked = React.useMemo(()=>{
-    if(!groupByCategory) return null;
-    const groups={};
-    unchecked.forEach(item=>{
-      const cat = categorizeItem(item.name);
-      if(!groups[cat]) groups[cat]=[];
-      groups[cat].push(item);
-    });
-    // Sort categories, put 'Other' last
-    return Object.entries(groups).sort((a,b)=> a[0]==='Other'?1 : b[0]==='Other'?-1 : a[0].localeCompare(b[0]));
-  },[unchecked, groupByCategory]);
-  
-  return (
-    <div>
-      <div style={{display:"flex",alignItems:"flex-start",justifyContent:"space-between",marginBottom:24,gap:12,flexWrap:"wrap",animation:"fadeInUp .4s ease both"}}>
-        <div><h1 className="stitle">Shopping List</h1><p className="ssub">{unchecked.length} items to buy{checked.length>0&&` · ${checked.length} checked off`}</p></div>
-        <button className="btn btn-sage" onClick={generateFromPlan}><Ic n="cal" s={16}/>From this week's plan</button>
-      </div>
-      
-      {isGuest&&<div className="gnotice"><span>🔒</span><span>Create an account to save your shopping list.</span></div>}
-      
-      <div style={{display:"flex",gap:8,marginBottom:20}}>
-        <input className="fi" placeholder="Add item (e.g., milk, 2L)" value={newItem} onChange={e=>setNewItem(e.target.value)} onKeyDown={e=>{if(e.key==="Enter")addItem();}} style={{flex:1}}/>
-        <button className="btn btn-p" onClick={addItem}><Ic n="plus" s={16}/>Add</button>
-      </div>
-
-      {shopping.length===0&&<div className="empty" style={{animation:"scaleIn .5s ease .2s both"}}><div className="eic">🛒</div><div className="etitle">Your shopping list is empty</div><div className="esub">Add items manually or generate from your weekly meal plan.</div></div>}
-
-      {unchecked.length>0&&<div>
-        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:12,flexWrap:"wrap",gap:8}}>
-          <h3 style={{fontSize:15,fontWeight:700}}>To Buy ({unchecked.length})</h3>
-          <div style={{display:"flex",gap:8,alignItems:"center"}}>
-            <button className={`btn btn-sm ${groupByCategory?'btn-p':'btn-g'}`} onClick={()=>setGroupByCategory(!groupByCategory)} style={{fontSize:12}}>
-              {groupByCategory?'Grouped':'Group by aisle'}
-            </button>
-            {checked.length>0&&<button className="btn btn-g btn-sm" onClick={clearChecked}><Ic n="trash" s={14}/>Clear checked</button>}
-          </div>
-        </div>
-        {groupByCategory && groupedUnchecked ? (
-          groupedUnchecked.map(([cat, items])=>(
-            <div key={cat} style={{marginBottom:16}}>
-              <div style={{fontSize:13,fontWeight:700,color:"var(--sage)",textTransform:"uppercase",letterSpacing:".5px",marginBottom:6,paddingLeft:4}}>{cat} ({items.length})</div>
-              <div className="card" style={{padding:"4px 12px"}}>
-                {items.map((item,i)=><div key={item.id} style={{display:"flex",alignItems:"center",gap:12,padding:"11px 0",borderBottom:i<items.length-1?"1px solid var(--bor)":"none",transition:"all .25s ease"}}>
-                  <input type="checkbox" checked={false} onChange={()=>toggle(item.id)} style={{width:18,height:18,cursor:"pointer",accentColor:"var(--sage)"}}/>
-                  <div style={{flex:1}}><span style={{fontSize:14,fontWeight:500}}>{item.name}</span>{item.qty&&<span style={{fontSize:13,color:"var(--mu)",marginLeft:8}}>· {item.qty}</span>}</div>
-                  <button className="btn-ic" style={{width:28,height:28}} onClick={()=>remove(item.id)}><Ic n="x" s={14}/></button>
-                </div>)}
-              </div>
-            </div>
-          ))
-        ) : (
-          <div className="card" style={{padding:"4px 12px"}}>
-            {unchecked.map((item,i)=><div key={item.id} style={{display:"flex",alignItems:"center",gap:12,padding:"11px 0",borderBottom:i<unchecked.length-1?"1px solid var(--bor)":"none",animation:`slideInLeft .3s ease ${Math.min(i*.03,.3)}s both`,transition:"all .25s ease"}}>
-              <input type="checkbox" checked={false} onChange={()=>toggle(item.id)} style={{width:18,height:18,cursor:"pointer",accentColor:"var(--sage)",transition:"transform .2s ease"}}/>
-              <div style={{flex:1}}><span style={{fontSize:14,fontWeight:500}}>{item.name}</span>{item.qty&&<span style={{fontSize:13,color:"var(--mu)",marginLeft:8}}>· {item.qty}</span>}</div>
-              <button className="btn-ic" style={{width:28,height:28}} onClick={()=>remove(item.id)}><Ic n="x" s={14}/></button>
-            </div>)}
-          </div>
-        )}
-      </div>}
-      
-      {checked.length>0&&<div style={{marginTop:20}}>
-        <h3 style={{fontSize:15,fontWeight:700,marginBottom:12}}>Checked Off ({checked.length})</h3>
-        <div className="card" style={{padding:"4px 12px",opacity:0.6}}>
-          {checked.map((item,i)=><div key={item.id} style={{display:"flex",alignItems:"center",gap:12,padding:"11px 0",borderBottom:i<checked.length-1?"1px solid var(--bor)":"none",animation:`fadeIn .3s ease ${Math.min(i*.03,.3)}s both`,transition:"all .25s ease"}}>
-            <input type="checkbox" checked={true} onChange={()=>toggle(item.id)} style={{width:18,height:18,cursor:"pointer",accentColor:"var(--sage)"}}/>
-            <div style={{flex:1,textDecoration:"line-through"}}><span style={{fontSize:14,fontWeight:500}}>{item.name}</span>{item.qty&&<span style={{fontSize:13,color:"var(--mu)",marginLeft:8}}>· {item.qty}</span>}</div>
-            <button className="btn-ic" style={{width:28,height:28}} onClick={()=>remove(item.id)}><Ic n="trash" s={14}/></button>
-          </div>)}
-        </div>
-      </div>}
-    </div>
-  );
-}
-
-/* ── FAVORITES TAB ── */
-function FavoritesTab({ favFolders, favItems, userRecipes, allRecipes, onViewRecipe, onSaveFav,
-  removeFavItem, removeFromAllFolders, addUserRecipe, deleteUserRecipe,
-  createFavFolder, deleteFavFolder, saveToFolder, isRecipeSaved, showToast, pantry }) {
-  const [activeFolder,        setActiveFolder]        = useState(null);
-  const [search,              setSearch]              = useState("");
-  const [sort,                setSort]                = useState("recent");
-  const [showNewFolderInline, setShowNewFolderInline] = useState(false);
-  const [newFolderName,       setNewFolderName]       = useState("");
-  const [showAddRecipe,       setShowAddRecipe]       = useState(false);
-  const [openMenuId,          setOpenMenuId]          = useState(null);
-  const [moveTarget,          setMoveTarget]          = useState(null); // {recipe, item}
-  const [confirmDelete,       setConfirmDelete]       = useState(null); // recipe id pending confirm
-
-  // Close 3-dot menu on outside click
-  useEffect(() => {
-    if (!openMenuId) return;
-    const handler = () => setOpenMenuId(null);
-    document.addEventListener("click", handler);
-    return () => document.removeEventListener("click", handler);
-  }, [openMenuId]);
-
-  const getRecipe = (item) => {
-    if (item.userRecipeId) return allRecipes.find(r => r.id === item.userRecipeId);
-    return allRecipes.find(r => r.id === item.recipeId);
-  };
-
-  const getFolderCount = (folderId) => {
-    if (folderId === "fold_myrecipes") return userRecipes.length;
-    return favItems.filter(it => it.folderId === folderId).length;
-  };
-
-  const handleCreateFolder = () => {
-    if (!newFolderName.trim()) return;
-    createFavFolder(newFolderName.trim());
-    setNewFolderName(""); setShowNewFolderInline(false);
-  };
-
-  const isMyRecipesFolder = activeFolder?.id === "fold_myrecipes";
-
-  // Items for a regular (non-My-Recipes) open folder
-  const folderItems = activeFolder && !isMyRecipesFolder
-    ? favItems.filter(it => it.folderId === activeFolder.id) : [];
-
-  // Recipes shown inside an open folder
-  const folderRecipes = isMyRecipesFolder
-    ? userRecipes
-        .filter(r => !search || r.title.toLowerCase().includes(search.toLowerCase()))
-        .sort((a,b) => sort==="alpha" ? a.title.localeCompare(b.title) : b.createdAt - a.createdAt)
-    : folderItems
-        .map(item => ({ item, recipe: getRecipe(item) }))
-        .filter(({recipe}) => recipe && (!search || recipe.title.toLowerCase().includes(search.toLowerCase())))
-        .sort((a,b) => sort==="alpha"
-          ? a.recipe.title.localeCompare(b.recipe.title)
-          : b.item.createdAt - a.item.createdAt);
-
-  const isEmpty = favFolders.every(f => getFolderCount(f.id) === 0);
+  const missingCount = shopping.filter(i => !i.owned).length;
+  const ownedCount = shopping.filter(i => i.owned).length;
 
   return (
     <div>
-      {/* Header */}
-      <div style={{display:"flex",alignItems:"flex-start",justifyContent:"space-between",marginBottom:24,gap:16,flexWrap:"wrap"}}>
-        <div>
-          {activeFolder ? (
-            <div style={{display:"flex",alignItems:"center",gap:10}}>
-              <button className="btn btn-g btn-sm" onClick={()=>{setActiveFolder(null);setSearch("");setOpenMenuId(null);}}><Ic n="back" s={16}/>All folders</button>
-              <div>
-                <h1 className="stitle">{activeFolder.emoji} {activeFolder.name}</h1>
-                <p className="ssub">{getFolderCount(activeFolder.id)} recipe{getFolderCount(activeFolder.id)!==1?"s":""}</p>
-              </div>
-            </div>
-          ) : (
-            <div><h1 className="stitle">Favorites</h1><p className="ssub">Your saved recipes and personal collections</p></div>
-          )}
-        </div>
-        <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
-          {!activeFolder && <button className="btn btn-s btn-sm" onClick={()=>setShowNewFolderInline(true)}><Ic n="plus" s={15}/>New Folder</button>}
-          <button className="btn btn-p btn-sm" onClick={()=>setShowAddRecipe(true)}><Ic n="plus" s={15}/>Add Recipe</button>
-        </div>
+      <div style={{display:'flex',gap:12,marginBottom:20,alignItems:'center',flexWrap:'wrap'}}>
+        <button className="btn btn-p btn-sm" onClick={generateShopping}>🔄 Regenerate from plan</button>
+        <span style={{fontSize:13,color:'var(--mu)'}}>{shopping.length} items · {missingCount} to buy · {ownedCount} owned</span>
       </div>
 
-      {/* Search */}
-      <div className="sw" style={{marginBottom:20}}>
-        <div className="si"><Ic n="list" s={16}/></div>
-        <input className="sin" placeholder={activeFolder ? `Search in ${activeFolder.name}…` : "Search favorites…"} value={search} onChange={e=>setSearch(e.target.value)}/>
-      </div>
-
-      {!activeFolder ? (
-        /* ── FOLDER GRID VIEW ── */
-        <div>
-          {showNewFolderInline && (
-            <div style={{background:"var(--white)",border:"1.5px solid var(--bor)",borderRadius:"var(--r)",padding:18,marginBottom:20}}>
-              <div style={{fontWeight:600,fontSize:14,marginBottom:10}}>Name your folder</div>
-              <div style={{display:"flex",gap:8}}>
-                <input className="fi" style={{flex:1}} placeholder="e.g. Weekend meals, Keto…" value={newFolderName}
-                  onChange={e=>setNewFolderName(e.target.value)}
-                  onKeyDown={e=>{if(e.key==="Enter")handleCreateFolder();if(e.key==="Escape"){setShowNewFolderInline(false);setNewFolderName("");}}}
-                  autoFocus/>
-                <button className="btn btn-p btn-sm" onClick={handleCreateFolder}>Create</button>
-                <button className="btn btn-s btn-sm" onClick={()=>{setShowNewFolderInline(false);setNewFolderName("");}}>Cancel</button>
-              </div>
-            </div>
-          )}
-
-          <div className="fav-folders-grid">
-            {favFolders.map(folder => (
-              <div key={folder.id} className="fav-folder-card" onClick={()=>{setActiveFolder(folder);setSearch("");}}>
-                <div className="fav-folder-ic">{folder.emoji}</div>
-                <div className="fav-folder-name">{folder.name}</div>
-                <div className="fav-folder-count">{getFolderCount(folder.id)} recipe{getFolderCount(folder.id)!==1?"s":""}</div>
-                {/* 3-dot context menu */}
-                <div className="folder-ctx-wrap" onClick={e=>e.stopPropagation()}>
-                  <button className="folder-ctx-btn"
-                    onClick={e=>{e.stopPropagation();setOpenMenuId(openMenuId===folder.id?null:folder.id);}}
-                    title="Options">⋯</button>
-                  {openMenuId===folder.id && (
-                    <div className="folder-ctx-dd" onClick={e=>e.stopPropagation()}>
-                      <button className="folder-ctx-item danger"
-                        onClick={()=>{setOpenMenuId(null);deleteFavFolder(folder.id);}}>
-                        🗑 Delete folder
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {isEmpty && !search && (
-            <div style={{background:"var(--white)",border:"1px solid var(--bor)",borderRadius:"var(--r)",padding:"20px 24px",display:"flex",alignItems:"center",gap:14,marginBottom:20}}>
-              <div style={{fontSize:28}}>🔖</div>
-              <div>
-                <div style={{fontWeight:600,fontSize:14,marginBottom:3}}>No saved recipes yet</div>
-                <div style={{fontSize:13,color:"var(--mu)",lineHeight:1.5}}>Open any recipe and click <strong>Save recipe</strong>, or use the bookmark button on a recipe card to save it here.</div>
-              </div>
-            </div>
-          )}
+      {shopping.length === 0 ? (
+        <div style={{textAlign:'center',padding:'60px 20px'}}>
+          <div style={{fontSize:48,marginBottom:12}}>🛒</div>
+          <h3 style={{fontFamily:'var(--fd)',fontSize:22,marginBottom:8}}>No items yet</h3>
+          <p style={{color:'var(--mu)',marginBottom:20}}>
+            {filledCount > 0
+              ? 'Click "Regenerate from plan" to create your shopping list from your weekly meals.'
+              : 'Add meals to your weekly plan first, then generate a shopping list.'}
+          </p>
         </div>
       ) : (
-        /* ── FOLDER CONTENTS VIEW ── */
-        <div>
-          <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:16,flexWrap:"wrap",gap:8}}>
-            <div className="fav-sort">
-              <button className={`fav-sort-btn ${sort==="recent"?"ac":""}`} onClick={()=>setSort("recent")}>Recently added</button>
-              <button className={`fav-sort-btn ${sort==="alpha"?"ac":""}`} onClick={()=>setSort("alpha")}>A–Z</button>
-            </div>
-          </div>
-
-          {isMyRecipesFolder ? (
-            /* MY RECIPES folder — user-created recipes */
-            folderRecipes.length === 0 ? (
-              <div className="empty">
-                <div className="eic">📝</div>
-                <div className="etitle">{search ? "No matches" : "No recipes yet"}</div>
-                <div className="esub">{search ? "Try a different search." : "Click \"Add Recipe\" to create your first recipe."}</div>
+        <>
+          {Object.entries(grouped).sort(([a],[b]) => a.localeCompare(b)).map(([cat, items]) => (
+            <div key={cat} className="shop-section">
+              <div className="shop-section-title">
+                <span>{cat}</span>
+                <span style={{fontWeight:400,fontSize:11}}>({items.filter(i => !i.owned).length} to buy)</span>
               </div>
-            ) : (
-              <div className="rgrid">
-                {folderRecipes.map(recipe => (
-                  <div key={recipe.id}>
-                    <RecipeCard r={recipe}
-                      saved={isRecipeSaved ? isRecipeSaved(recipe) : false}
-                      inFav={true}
-                      onSave={()=>onSaveFav && onSaveFav(recipe)}
-                      onView={()=>onViewRecipe(recipe)}
-                      addToList={()=>{}}
-                      pantry={pantry}/>
-                    <div className="fav-card-footer">
-                      <button className="fav-foot-btn" onClick={()=>onViewRecipe(recipe)}>View</button>
-                      {confirmDelete === recipe.id ? (
-                        <button className="fav-foot-btn danger conf"
-                          onClick={()=>{ deleteUserRecipe(recipe.id); setConfirmDelete(null); }}>
-                          Tap again to confirm
-                        </button>
-                      ) : (
-                        <button className="fav-foot-btn danger"
-                          onClick={()=>setConfirmDelete(recipe.id)}>
-                          🗑 Delete recipe
-                        </button>
-                      )}
-                    </div>
+              {items.map(item => (
+                <div key={item.idx} className={`shop-item${item.owned ? ' owned' : ''}`}>
+                  <div className={`shop-check${item.owned ? ' checked' : ''}`} onClick={() => toggleOwned(item.idx)}>
+                    {item.owned && '✓'}
                   </div>
-                ))}
-              </div>
-            )
-          ) : (
-            /* REGULAR saved-recipes folder */
-            folderRecipes.length === 0 ? (
-              <div className="empty">
-                <div className="eic">{activeFolder.emoji}</div>
-                <div className="etitle">{search ? "No matches" : "Nothing here yet"}</div>
-                <div className="esub">{search ? "Try a different search." : `Save recipes to "${activeFolder.name}" to see them here.`}</div>
-              </div>
-            ) : (
-              <div className="rgrid">
-                {folderRecipes.map(({item, recipe}) => (
-                  <div key={item.id}>
-                    <RecipeCard r={recipe}
-                      saved={true}
-                      inFav={true}
-                      onSave={()=>removeFavItem(recipe, item.folderId)}
-                      onView={()=>onViewRecipe(recipe)}
-                      addToList={()=>{}}
-                      pantry={pantry}/>
-                    <div className="fav-card-footer">
-                      <button className="fav-foot-btn" onClick={()=>setMoveTarget({recipe, item})}>Move to…</button>
-                      <button className="fav-foot-btn danger" onClick={()=>removeFavItem(recipe, item.folderId)}>Remove</button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )
-          )}
-        </div>
-      )}
-
-      {showAddRecipe && <AddRecipeModal onClose={()=>setShowAddRecipe(false)} onAdd={addUserRecipe}/>}
-      {moveTarget && (
-        <MoveToModal
-          recipe={moveTarget.recipe}
-          item={moveTarget.item}
-          favFolders={favFolders}
-          favItems={favItems}
-          saveToFolder={saveToFolder}
-          removeFavItem={removeFavItem}
-          onClose={()=>setMoveTarget(null)}
-        />
-      )}
-    </div>
-  );
-}
-
-/* ── SAVE TO FAVORITES MODAL ── */
-function SaveFavModal({ recipe, favFolders, favItems, onSave, onClose, onCreateFolder }) {
-  const [selectedFolder, setSelectedFolder] = useState("fold_all");
-  const [showNewFolder,  setShowNewFolder]  = useState(false);
-  const [newFolderName,  setNewFolderName]  = useState("");
-
-  const isInFolder = (folderId) => favItems.some(it =>
-    it.folderId === folderId &&
-    (recipe.isUserCreated ? it.userRecipeId === recipe.id : it.recipeId === recipe.id));
-
-  const handleCreate = () => {
-    if (!newFolderName.trim()) return;
-    const newF = onCreateFolder(newFolderName.trim());
-    setSelectedFolder(newF.id);
-    setNewFolderName(""); setShowNewFolder(false);
-  };
-
-  return (
-    <div className="mov" onClick={e=>e.target===e.currentTarget&&onClose()}>
-      <div className="modal" style={{maxWidth:400}}>
-        <div className="mhd">
-          <div className="mtitle">Save to Favorites</div>
-          <button className="mclose" onClick={onClose}><Ic n="x" s={16}/></button>
-        </div>
-        <div className="mbody">
-          <div style={{fontSize:13,color:"var(--mu)",marginBottom:14,lineHeight:1.5}}>
-            Choose a folder for <strong>"{recipe.title}"</strong>
-          </div>
-          <div style={{maxHeight:280,overflowY:"auto"}}>
-            {favFolders.filter(f => f.id !== "fold_myrecipes").map(folder => {
-              const already = isInFolder(folder.id);
-              const selected = selectedFolder === folder.id;
-              return (
-                <div key={folder.id}
-                  className={`sfm-folder ${selected&&!already?"sel":""}`}
-                  style={{opacity: already ? 0.65 : 1, cursor: already ? "default" : "pointer"}}
-                  onClick={()=>!already && setSelectedFolder(folder.id)}>
-                  <div className="sfm-folder-ic">{folder.emoji}</div>
-                  <div className="sfm-folder-name">{folder.name}</div>
-                  {already
-                    ? <span style={{fontSize:11,color:"var(--sage)",fontWeight:700,background:"var(--sageBg)",padding:"2px 8px",borderRadius:4}}>✓ Saved</span>
-                    : <div className="sfm-folder-count">{favItems.filter(it=>it.folderId===folder.id).length} saved</div>
-                  }
-                </div>
-              );
-            })}
-          </div>
-
-          {showNewFolder ? (
-            <div style={{display:"flex",gap:8,marginTop:12}}>
-              <input className="fi" style={{flex:1,padding:"8px 12px",fontSize:13}} placeholder="Folder name…"
-                value={newFolderName} onChange={e=>setNewFolderName(e.target.value)}
-                onKeyDown={e=>{if(e.key==="Enter")handleCreate();if(e.key==="Escape"){setShowNewFolder(false);setNewFolderName("");}}}
-                autoFocus/>
-              <button className="btn btn-p btn-sm" onClick={handleCreate}>Create</button>
-              <button className="btn btn-s btn-sm" onClick={()=>{setShowNewFolder(false);setNewFolderName("");}}>✕</button>
-            </div>
-          ) : (
-            <button className="flink" style={{display:"flex",alignItems:"center",gap:6,marginTop:14,padding:"4px 0"}} onClick={()=>setShowNewFolder(true)}>
-              <Ic n="plus" s={14}/>Create new folder
-            </button>
-          )}
-
-          <div style={{display:"flex",gap:8,marginTop:20}}>
-            <button className="btn btn-p btn-full"
-              onClick={()=>onSave(recipe, selectedFolder, null)}
-              disabled={isInFolder(selectedFolder)}>
-              {isInFolder(selectedFolder) ? "Already saved here" : "Save"}
-            </button>
-            <button className="btn btn-s" style={{flexShrink:0}} onClick={onClose}>Cancel</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/* ── MOVE TO FOLDER MODAL ── */
-function MoveToModal({ recipe, item, favFolders, favItems, saveToFolder, removeFavItem, onClose }) {
-  // Show all folders except current folder and My Recipes
-  const targetFolders = favFolders.filter(f => f.id !== item.folderId && f.id !== "fold_myrecipes");
-  const currentFolderName = favFolders.find(f => f.id === item.folderId)?.name || "this folder";
-
-  const handleMove = (targetFolderId) => {
-    removeFavItem(recipe, item.folderId);
-    saveToFolder(recipe, targetFolderId);
-    onClose();
-  };
-
-  return (
-    <div className="mov" onClick={e=>e.target===e.currentTarget&&onClose()}>
-      <div className="modal" style={{maxWidth:400}}>
-        <div className="mhd">
-          <div className="mtitle">Move to folder</div>
-          <button className="mclose" onClick={onClose}><Ic n="x" s={16}/></button>
-        </div>
-        <div className="mbody">
-          <div style={{fontSize:13,color:"var(--mu)",marginBottom:14,lineHeight:1.5}}>
-            Moving <strong>"{recipe.title}"</strong> from <strong>{currentFolderName}</strong>
-          </div>
-          {targetFolders.length === 0 ? (
-            <div style={{textAlign:"center",padding:"24px 0",color:"var(--mu)",fontSize:14}}>
-              No other folders available. Create a folder first.
-            </div>
-          ) : (
-            <div style={{maxHeight:280,overflowY:"auto"}}>
-              {targetFolders.map(folder => (
-                <div key={folder.id} className="sfm-folder" onClick={()=>handleMove(folder.id)}>
-                  <div className="sfm-folder-ic">{folder.emoji}</div>
-                  <div className="sfm-folder-name">{folder.name}</div>
-                  <div className="sfm-folder-count">{favItems.filter(it=>it.folderId===folder.id).length} saved</div>
+                  <span style={{flex:1,fontWeight:500,fontSize:14}}>{item.name}</span>
+                  <span style={{fontSize:12,color:'var(--mu)'}}>{item.amount}</span>
+                  <button className="btn btn-g btn-xs" onClick={() => removeItem(item.idx)} style={{padding:'2px 6px',fontSize:11}}>✕</button>
                 </div>
               ))}
             </div>
-          )}
-          <div style={{marginTop:16}}>
-            <button className="btn btn-s btn-full" onClick={onClose}>Cancel</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
+          ))}
+        </>
+      )}
 
-/* ── ADD RECIPE MODAL ── */
-function AddRecipeModal({ onClose, onAdd }) {
-  const [form, setForm] = useState({
-    title:"", emoji:"🍽️", cuisine:"", time:"", diff:"Easy",
-    dietary:[], ingredients:[{n:"",a:""}], steps:[{t:"",d:""}]
-  });
-  const [errors, setErrors] = useState({});
-
-  const DIETARY_OPTIONS = ["Vegetarian","Vegan","Gluten-free","Dairy-free","Kosher","Halal","High protein","Low carb"];
-
-  const toggleDietary = (tag) =>
-    setForm(p=>({...p, dietary: p.dietary.includes(tag) ? p.dietary.filter(x=>x!==tag) : [...p.dietary, tag]}));
-
-  const addIng  = () => setForm(p=>({...p, ingredients:[...p.ingredients,{n:"",a:""}]}));
-  const delIng  = (i) => setForm(p=>({...p, ingredients:p.ingredients.filter((_,j)=>j!==i)}));
-  const setIng  = (i,k,v) => setForm(p=>{const ings=[...p.ingredients];ings[i]={...ings[i],[k]:v};return{...p,ingredients:ings};});
-
-  const addStep  = () => setForm(p=>({...p, steps:[...p.steps,{t:"",d:""}]}));
-  const delStep  = (i) => setForm(p=>({...p, steps:p.steps.filter((_,j)=>j!==i)}));
-  const setStep  = (i,k,v) => setForm(p=>{const steps=[...p.steps];steps[i]={...steps[i],[k]:v};return{...p,steps};});
-
-  const validate = () => {
-    const e = {};
-    if (!form.title.trim()) e.title = "Title is required";
-    if (form.ingredients.some(ing=>!ing.n.trim())) e.ingredients = "All ingredient names are required";
-    if (form.steps.some(s=>!s.d.trim())) e.steps = "All step descriptions are required";
-    setErrors(e);
-    return Object.keys(e).length === 0;
-  };
-
-  const handleSubmit = () => {
-    if (!validate()) return;
-    onAdd({
-      title: form.title.trim(),
-      emoji: form.emoji || "🍽️",
-      cuisine: form.cuisine || "Other",
-      time: parseInt(form.time) || 30,
-      diff: form.diff,
-      dietary: form.dietary,
-      ingredients: form.ingredients.filter(ing=>ing.n.trim()).map((ing,i)=>({n:ing.n.trim(),a:ing.a.trim(),have:false})),
-      steps: form.steps.filter(s=>s.d.trim()).map((s,i)=>({n:i+1,t:s.t.trim()||`Step ${i+1}`,d:s.d.trim()})),
-    });
-    onClose();
-  };
-
-  return (
-    <div className="mov" onClick={e=>e.target===e.currentTarget&&onClose()}>
-      <div className="modal" style={{maxWidth:600}}>
-        <div className="mhd">
-          <div className="mtitle">Add Your Recipe</div>
-          <button className="mclose" onClick={onClose}><Ic n="x" s={16}/></button>
-        </div>
-        <div className="mbody" style={{display:"flex",flexDirection:"column",gap:16}}>
-
-          {/* Basics row */}
-          <div style={{display:"grid",gridTemplateColumns:"56px 1fr",gap:12}}>
-            <div>
-              <label className="fl">Emoji</label>
-              <input className="fi" style={{textAlign:"center",fontSize:22,padding:"8px 6px"}} value={form.emoji}
-                onChange={e=>setForm(p=>({...p,emoji:e.target.value}))} maxLength={2}/>
-            </div>
-            <div>
-              <label className="fl">Recipe Title *</label>
-              <input className="fi" placeholder="e.g. Grandma's Tomato Soup" value={form.title}
-                onChange={e=>setForm(p=>({...p,title:e.target.value}))}/>
-              {errors.title && <div className="ferr">{errors.title}</div>}
-            </div>
-          </div>
-
-          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:12}}>
-            <div>
-              <label className="fl">Cuisine</label>
-              <input className="fi" placeholder="e.g. Italian" value={form.cuisine}
-                onChange={e=>setForm(p=>({...p,cuisine:e.target.value}))}/>
-            </div>
-            <div>
-              <label className="fl">Cook Time (min)</label>
-              <input className="fi" type="number" placeholder="30" value={form.time}
-                onChange={e=>setForm(p=>({...p,time:e.target.value}))}/>
-            </div>
-            <div>
-              <label className="fl">Difficulty</label>
-              <select className="sel" value={form.diff} onChange={e=>setForm(p=>({...p,diff:e.target.value}))}>
-                <option>Easy</option><option>Intermediate</option><option>Advanced</option>
-              </select>
-            </div>
-          </div>
-
-          {/* Dietary tags */}
-          <div>
-            <label className="fl">Dietary Tags</label>
-            <div className="mopts">
-              {DIETARY_OPTIONS.map(tag=>(
-                <button key={tag} className={`mopt ${form.dietary.includes(tag)?"sel":""}`} onClick={()=>toggleDietary(tag)}>{tag}</button>
-              ))}
-            </div>
-          </div>
-
-          {/* Ingredients */}
-          <div>
-            <label className="fl">Ingredients *</label>
-            {errors.ingredients && <div className="ferr" style={{marginBottom:8}}>{errors.ingredients}</div>}
-            {form.ingredients.map((ing,i)=>(
-              <div key={i} className="ar-ing-row">
-                <input className="fi" style={{padding:"8px 12px"}} placeholder={`Ingredient ${i+1}`}
-                  value={ing.n} onChange={e=>setIng(i,"n",e.target.value)}/>
-                <input className="fi" style={{padding:"8px 12px"}} placeholder="Amount"
-                  value={ing.a} onChange={e=>setIng(i,"a",e.target.value)}/>
-                <button className="ar-del-btn" onClick={()=>delIng(i)} disabled={form.ingredients.length===1}><Ic n="trash" s={14}/></button>
-              </div>
-            ))}
-            <button className="add-row-btn" onClick={addIng}><Ic n="plus" s={15}/>Add ingredient</button>
-          </div>
-
-          {/* Steps */}
-          <div>
-            <label className="fl">Instructions *</label>
-            {errors.steps && <div className="ferr" style={{marginBottom:8}}>{errors.steps}</div>}
-            {form.steps.map((step,i)=>(
-              <div key={i} className="ar-step-row">
-                <div className="ar-step-num">{i+1}</div>
-                <div style={{display:"flex",flexDirection:"column",gap:6}}>
-                  <input className="fi" style={{padding:"8px 12px"}} placeholder={`Step title (optional)`}
-                    value={step.t} onChange={e=>setStep(i,"t",e.target.value)}/>
-                  <textarea className="fi" style={{padding:"8px 12px",resize:"vertical",minHeight:72}} placeholder="Describe this step…"
-                    value={step.d} onChange={e=>setStep(i,"d",e.target.value)}/>
-                </div>
-                <button className="ar-del-btn" style={{alignSelf:"flex-start",marginTop:8}} onClick={()=>delStep(i)} disabled={form.steps.length===1}><Ic n="trash" s={14}/></button>
-              </div>
-            ))}
-            <button className="add-row-btn" onClick={addStep}><Ic n="plus" s={15}/>Add step</button>
-          </div>
-
-          <div style={{display:"flex",gap:8,paddingTop:8,borderTop:"1px solid var(--bor)"}}>
-            <button className="btn btn-p btn-full btn-lg" onClick={handleSubmit}>Save Recipe</button>
-            <button className="btn btn-s btn-lg" style={{flexShrink:0}} onClick={onClose}>Cancel</button>
-          </div>
-        </div>
+      <div style={{display:'flex',gap:8,marginTop:16}}>
+        <input className="fi" placeholder="Add custom item..." value={editItem} onChange={e => setEditItem(e.target.value)} onKeyDown={e => e.key === 'Enter' && addItem()} style={{flex:1}} />
+        <button className="btn btn-s btn-sm" onClick={addItem}>Add</button>
       </div>
     </div>
   );
 }
 
 /* ── PROFILE TAB ── */
-function ProfileTab({ user, isGuest, prefs, setPrefs, onLogout, shopping, setShopping, isPremium, subscription, setSubscription, onUpgrade, saved, publishedMenus = [], collections = [] }) {
-  const [showPrefs,setShowPrefs]=useState(false);
-  const [view,setView]=useState("main");
-  const [profTab,setProfTab]=useState("account"); // account | menus | collections
-  if(view==="shopping") return <ShoppingView shopping={shopping} setShopping={setShopping} onBack={()=>setView("main")}/>;
-  if(view==="folders")  return <FoldersView onBack={()=>setView("main")} isGuest={isGuest}/>;
-  const dl=prefs.dietary.length===0||prefs.dietary.includes("None")?"No restrictions":prefs.dietary.join(", ");
+function ProfileTab({ user, saved, userRecipes, mealPlan, prefs, setPrefs, publishedMenus, setViewRecipe, showToast }) {
+  const [activeTab, setActiveTab] = useState('saved');
+
+  const savedRecipes = RECIPES.filter(r => saved.has(r.id));
+  const DIETS = ["Vegetarian","Vegan","Gluten-Free","Dairy-Free","Kosher","Halal","Low-Carb","Nut-Free"];
+  const CUISINES = ["Italian","Mexican","Japanese","Indian","Mediterranean","French","Chinese","Thai","American","Korean","Middle Eastern","Greek"];
+
+  const togglePref = (field, val) => {
+    setPrefs(p => {
+      const arr = p[field] || [];
+      return { ...p, [field]: arr.includes(val) ? arr.filter(v => v !== val) : [...arr, val] };
+    });
+  };
+
   return (
     <div>
-      <div style={{marginBottom:16,animation:"fadeInUp .4s ease both"}}><h1 className="stitle">Profile</h1><p className="ssub">Manage your account and preferences</p></div>
-      {!isGuest&&<div style={{display:"flex",gap:6,marginBottom:20,flexWrap:"wrap"}}>
-        <button className={`prof-tab ${profTab==="account"?"ac":""}`} onClick={()=>setProfTab("account")}>👤 Account</button>
-        <button className={`prof-tab ${profTab==="menus"?"ac":""}`} onClick={()=>setProfTab("menus")}>📅 My Published Menus ({publishedMenus.length})</button>
-        <button className={`prof-tab ${profTab==="collections"?"ac":""}`} onClick={()=>setProfTab("collections")}>🔖 Collections ({collections.reduce((a,c)=>a+c.items.length,0)})</button>
-      </div>}
-      {profTab==="menus"&&!isGuest&&(
-        <div>
-          {publishedMenus.length===0
-            ? <div style={{textAlign:"center",padding:"40px 0",color:"var(--mu)"}}>
-                <div style={{fontSize:36,marginBottom:8}}>📅</div>
-                <div style={{fontWeight:600,marginBottom:4}}>No published menus yet</div>
-                <div style={{fontSize:13}}>Published menus feature coming soon.</div>
-              </div>
-            : <div className="feed-grid">
-                {publishedMenus.map(m=>(
-                  <div key={m.id} className="feed-card">
-                    <div style={{fontWeight:700,fontSize:15,marginBottom:4}}>{m.title}</div>
-                    <div style={{fontSize:12,color:"var(--mu)",marginBottom:8}}>{m.mealCount} meals · {new Date(m.createdAt).toLocaleDateString()} · {m.visibility==="public"?"🌐 Public":"🔒 Private"}</div>
-                  </div>
-                ))}
-              </div>
-          }
-        </div>
-      )}
-      {profTab==="collections"&&!isGuest&&(
-        <div>
-          {collections.map(col=>(
-            <div key={col.id} style={{marginBottom:20}}>
-              <div style={{fontWeight:700,fontSize:15,marginBottom:8}}>{col.emoji} {col.name} <span style={{fontSize:12,color:"var(--mu)",fontWeight:400}}>({col.items.length})</span></div>
-              {col.items.length===0
-                ? <div style={{fontSize:13,color:"var(--mu)",padding:"8px 0"}}>Nothing saved here yet.</div>
-                : <div style={{display:"flex",flexWrap:"wrap",gap:8}}>
-                    {col.items.map((item,i)=>(
-                      <div key={i} style={{background:"var(--white)",border:"1px solid var(--bor)",borderRadius:8,padding:"6px 12px",fontSize:13}}>
-                        {item.type==="recipe"?"🍽":"📅"} {item.menuData?.title||`Recipe #${item.id}`}
-                      </div>
-                    ))}
-                  </div>
-              }
-            </div>
-          ))}
-        </div>
-      )}
-      {(profTab==="account"||isGuest)&&<div className="pgr">
-        <div>
-          <div className="card pcard" style={{marginBottom:16}}>
-            <div className="pav">{isGuest?"👤":user?.name?.[0]?.toUpperCase()||"?"}</div>
-            <div className="pname">{isGuest?"Guest User":user?.name}</div>
-            <div className="pemail">{isGuest?"Guest session":user?.email}</div>
-            {isGuest&&<div style={{marginTop:10}}><span style={{background:"var(--clayBg)",color:"var(--clayH)",padding:"3px 10px",borderRadius:6,fontSize:12,fontWeight:700}}>GUEST MODE</span></div>}
-            {!isGuest&&<div style={{marginTop:10}}>{isPremium?<span className="pro-badge">⭐ PREMIUM</span>:<span className="free-badge">FREE PLAN</span>}</div>}
+      <div className="prof-header">
+        <div className="prof-avatar">{(user?.name || 'U')[0].toUpperCase()}</div>
+        <div className="prof-name">{user?.name || 'Chef'}</div>
+        <div className="prof-email">{user?.email}</div>
+        <div className="prof-stats">
+          <div className="prof-stat">
+            <div className="prof-stat-num">{savedRecipes.length}</div>
+            <div className="prof-stat-label">Saved</div>
           </div>
-          {/* Subscription Card */}
-          {!isGuest&&(
-            <div className={`card ${isPremium?"sub-pro-card":"sub-status-card"}`} style={{marginBottom:16,padding:"18px 20px"}}>
-              {isPremium ? <>
-                <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:12}}>
-                  <div style={{width:40,height:40,borderRadius:11,background:"linear-gradient(135deg,#C9953A 0%,#E8B84B 100%)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>⭐</div>
-                  <div><div style={{fontWeight:700,fontSize:15}}>SmartChef Premium</div><div style={{fontSize:12,color:"var(--mu)",marginTop:1}}>All features unlocked · Cancel anytime</div></div>
+          <div className="prof-stat">
+            <div className="prof-stat-num">{userRecipes.length}</div>
+            <div className="prof-stat-label">Created</div>
+          </div>
+          <div className="prof-stat">
+            <div className="prof-stat-num">{publishedMenus.length}</div>
+            <div className="prof-stat-label">Plans</div>
+          </div>
+        </div>
+      </div>
+
+      <div style={{display:'flex',gap:8,marginBottom:20}}>
+        {['saved','preferences'].map(t => (
+          <button key={t} className={`btn ${activeTab === t ? 'btn-p' : 'btn-s'} btn-sm`} onClick={() => setActiveTab(t)}>
+            {t === 'saved' ? '❤️ Saved Recipes' : '⚙️ Preferences'}
+          </button>
+        ))}
+      </div>
+
+      {activeTab === 'saved' && (
+        <div>
+          {savedRecipes.length === 0 ? (
+            <div style={{textAlign:'center',padding:40,color:'var(--mu)'}}>
+              <div style={{fontSize:40,marginBottom:8}}>🤍</div>
+              <p>No saved recipes yet. Browse Explore and tap the heart to save.</p>
+            </div>
+          ) : (
+            <div className="explore-grid">
+              {savedRecipes.map(r => (
+                <div key={r.id} className="explore-card" onClick={() => setViewRecipe(r)}>
+                  <div className="explore-card-img">
+                    <img src={r.image || recipeImage(r.title)} alt={r.title} onError={e => { e.target.style.display = 'none'; }} loading="lazy" />
+                  </div>
+                  <div className="explore-card-body">
+                    <div className="explore-card-title">{r.emoji} {r.title}</div>
+                    <div className="explore-card-meta"><span>{r.cuisine}</span><span>⏱ {r.time}min</span></div>
+                  </div>
                 </div>
-                <div style={{display:"flex",flexDirection:"column",gap:6,marginBottom:14}}>
-                  {["🤖 Chef AI chat","🍽️ All 131 recipes","📅 Unlimited auto-planning","❤️ Unlimited saved recipes"].map(f=>(
-                    <div key={f} style={{display:"flex",alignItems:"center",gap:8,fontSize:13}}><span style={{color:"var(--sage)",fontWeight:700}}>✓</span>{f}</div>
-                  ))}
-                </div>
-                <a href="https://billing.stripe.com/p/login/REPLACE_CUSTOMER_PORTAL" target="_blank" rel="noreferrer" style={{fontSize:13,color:"var(--clay)",fontWeight:600,textDecoration:"none"}}>Manage billing →</a>
-              </> : <>
-                <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:10}}>
-                  <div style={{width:40,height:40,borderRadius:11,background:"var(--cream)",border:"1px solid var(--bor)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>🔓</div>
-                  <div><div style={{fontWeight:700,fontSize:15}}>Free Plan</div><div style={{fontSize:12,color:"var(--mu)",marginTop:1}}>Limited to {FREE_RECIPE_LIMIT} recipes · {FREE_SAVE_LIMIT} saves</div></div>
-                </div>
-                <div style={{display:"flex",flexDirection:"column",gap:5,marginBottom:14}}>
-                  {[{f:`${FREE_RECIPE_LIMIT} of ${RECIPES.length} recipes`,locked:false},{f:"1 free auto-plan use",locked:false},{f:`${Math.min(saved?.size||0,FREE_SAVE_LIMIT)} of ${FREE_SAVE_LIMIT} recipe saves used`,locked:false},{f:"Chef AI chat",locked:true},{f:"Unlimited auto-planning",locked:true},{f:"All 131 recipes",locked:true}].map(({f,locked})=>(
-                    <div key={f} style={{display:"flex",alignItems:"center",gap:8,fontSize:13,color:locked?"var(--mu)":"var(--ch)"}}><span style={{color:locked?"var(--bor)":"var(--sage)",fontWeight:700}}>{locked?"✗":"✓"}</span>{f}</div>
-                  ))}
-                </div>
-                <button className="upgrade-btn" style={{marginTop:0}} onClick={()=>onUpgrade("generic")}>⭐ Upgrade to Premium — $4.99/mo</button>
-              </>}
+              ))}
             </div>
           )}
-          <div className="ssec">
-            <div className="srow" onClick={()=>setView("shopping")}><div><div className="srl">🛒 Shopping List</div><div style={{fontSize:12,color:"var(--mu)"}}>{shopping.filter(i=>!i.checked).length} items left</div></div><Ic n="right" s={16}/></div>
-            <div className="srow" onClick={()=>setView("folders")}><div><div className="srl">📁 Saved Folders</div></div><Ic n="right" s={16}/></div>
-          </div>
-          <div className="ssec"><div className="srow" onClick={onLogout}><div className="srl" style={{color:"var(--err)"}}>{isGuest?"← Exit Guest Mode":"Sign Out"}</div></div></div>
         </div>
-        <div>
-          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:16}}>
-            <h2 style={{fontFamily:"var(--fd)",fontSize:20}}>Preferences</h2>
-            <button className="btn btn-p btn-sm" onClick={()=>setShowPrefs(true)}>Edit preferences</button>
+      )}
+
+      {activeTab === 'preferences' && (
+        <div className="card" style={{padding:24}}>
+          <h3 style={{fontFamily:'var(--fd)',fontSize:20,marginBottom:16}}>Dietary Preferences</h3>
+          <div style={{display:'flex',gap:8,flexWrap:'wrap',marginBottom:24}}>
+            {DIETS.map(d => (
+              <button key={d} className={`onb-chip${(prefs.dietary||[]).includes(d) ? ' sel' : ''}`} onClick={() => togglePref('dietary', d)}>{d}</button>
+            ))}
           </div>
-          <div className="ssec">
-            {[{l:"🥗 Dietary mode",v:dl},{l:"🌍 Favorite cuisines",v:prefs.cuisines.join(", ")||"None"},{l:"🎯 Health goal",v:prefs.health},{l:"👨‍🍳 Cooking skill",v:prefs.skill},{l:"⏱ Max cook time",v:`${prefs.maxTime} min`},{l:"👥 Household size",v:`${prefs.household} people`}].map(r=><div key={r.l} className="srow" style={{cursor:"default"}}><div className="srl">{r.l}</div><div className="srv">{r.v}</div></div>)}
+          <h3 style={{fontFamily:'var(--fd)',fontSize:20,marginBottom:16}}>Favorite Cuisines</h3>
+          <div style={{display:'flex',gap:8,flexWrap:'wrap',marginBottom:24}}>
+            {CUISINES.map(c => (
+              <button key={c} className={`onb-chip${(prefs.cuisines||[]).includes(c) ? ' sel' : ''}`} onClick={() => togglePref('cuisines', c)}>{c}</button>
+            ))}
           </div>
-        </div>
-      </div>}
-      {showPrefs&&<PrefsModal prefs={prefs} setPrefs={setPrefs} onClose={()=>setShowPrefs(false)}/>}
-    </div>
-  );
-}
-
-function ShoppingView({ shopping, setShopping, onBack }) {
-  const [newItem,setNewItem]=useState("");
-  const toggle=id=>setShopping(p=>p.map(i=>i.id===id?{...i,checked:!i.checked}:i));
-  const remove=id=>setShopping(p=>p.filter(i=>i.id!==id));
-  const add=()=>{if(!newItem.trim())return;setShopping(p=>[...p,{id:Date.now(),name:newItem.trim(),qty:"",checked:false}]);setNewItem("");};
-  const unc=shopping.filter(i=>!i.checked);const chk=shopping.filter(i=>i.checked);
-  return (
-    <div>
-      <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:24}}><button className="btn btn-s btn-sm" onClick={onBack}><Ic n="back" s={15}/></button><div><h1 className="stitle">Shopping List</h1><p className="ssub">{unc.length} items remaining</p></div></div>
-      <div style={{maxWidth:540}}>
-        <div style={{display:"flex",gap:10,marginBottom:20}}><input className="fi" style={{flex:1}} placeholder="Add item…" value={newItem} onChange={e=>setNewItem(e.target.value)} onKeyDown={e=>e.key==="Enter"&&add()}/><button className="btn btn-p" onClick={add}><Ic n="plus" s={16}/></button></div>
-        {unc.map(item=><div key={item.id} style={{display:"flex",alignItems:"center",gap:12,padding:"12px 14px",background:"var(--white)",border:"1px solid var(--bor)",borderRadius:10,marginBottom:7}}><div style={{width:22,height:22,borderRadius:6,border:"2px solid var(--bor)",display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",flexShrink:0}} onClick={()=>toggle(item.id)}/><div style={{flex:1,fontWeight:500,fontSize:14}}>{item.name}</div>{item.qty&&<div style={{fontSize:12,color:"var(--mu)"}}>{item.qty}</div>}<button style={{background:"none",border:"none",cursor:"pointer",color:"var(--mu)"}} onClick={()=>remove(item.id)}><Ic n="trash" s={15}/></button></div>)}
-        {chk.length>0&&<><div style={{fontSize:11,fontWeight:700,color:"var(--mu)",textTransform:"uppercase",letterSpacing:.5,padding:"14px 0 6px"}}>✓ Checked off</div>{chk.map(item=><div key={item.id} style={{display:"flex",alignItems:"center",gap:12,padding:"12px 14px",background:"var(--white)",border:"1px solid var(--bor)",borderRadius:10,marginBottom:7,opacity:.5}}><div style={{width:22,height:22,borderRadius:6,background:"var(--sage)",border:"2px solid var(--sage)",display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",flexShrink:0}} onClick={()=>toggle(item.id)}><Ic n="check" s={13}/></div><div style={{flex:1,fontSize:14,textDecoration:"line-through",color:"var(--mu)"}}>{item.name}</div></div>)}</>}
-      </div>
-    </div>
-  );
-}
-
-function FoldersView({ onBack, isGuest }) {
-  const F=[{name:"Weeknight",emoji:"🌙",count:8},{name:"Shabbat",emoji:"🕯️",count:5},{name:"Dairy",emoji:"🧀",count:12},{name:"Meat",emoji:"🥩",count:7},{name:"Freezer-friendly",emoji:"🧊",count:4},{name:"Kid-friendly",emoji:"👶",count:9}];
-  return (
-    <div>
-      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:24}}>
-        <div style={{display:"flex",alignItems:"center",gap:12}}><button className="btn btn-s btn-sm" onClick={onBack}><Ic n="back" s={15}/></button><h1 className="stitle" style={{margin:0}}>Saved Folders</h1></div>
-        {!isGuest&&<button className="btn btn-p btn-sm"><Ic n="plus" s={15}/>New folder</button>}
-      </div>
-      {isGuest&&<div className="gnotice" style={{marginBottom:20}}>Create an account to permanently save and organize folders.</div>}
-      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(180px,1fr))",gap:14,opacity:isGuest?.6:1}}>
-        {F.map(f=><div key={f.name} className="card" style={{padding:20,cursor:"pointer"}}><div style={{fontSize:36,marginBottom:10}}>{f.emoji}</div><div style={{fontWeight:700,fontSize:15}}>{f.name}</div><div style={{fontSize:12,color:"var(--mu)",marginTop:3}}>{f.count} recipes</div></div>)}
-      </div>
-    </div>
-  );
-}
-
-/* ── PREFS MODAL ── */
-function PrefsModal({ prefs, setPrefs, onClose }) {
-  const [local,setLocal]=useState({...prefs});
-  const toggle=(k,v)=>setLocal(p=>({...p,[k]:p[k].includes(v)?p[k].filter(x=>x!==v):[...p[k],v]}));
-  // Dietary mode — MULTI-SELECT with conflict resolution
-  const DIETARY_MODES = [
-    {id:"Omnivore",    icon:"🍖", desc:"No restrictions"},
-    {id:"Pescatarian", icon:"🐟", desc:"Fish ok, no land meat"},
-    {id:"Vegetarian",  icon:"🥦", desc:"No meat or fish"},
-    {id:"Vegan",       icon:"🌱", desc:"No animal products"},
-    {id:"Kosher",      icon:"🕎", desc:"Stackable with any diet"},
-    {id:"Healthy",     icon:"💚", desc:"Prefer whole foods, less sugar/fried"},
-  ];
-  const activeDietary = local.dietary || [];
-  const isOmnivore = activeDietary.length === 0;
-  const toggleDietary = (id) => setLocal(p => {
-    const cur = p.dietary || [];
-    if (id === 'Omnivore') return {...p, dietary: []};
-    const isOn = cur.includes(id);
-    if (isOn) return {...p, dietary: cur.filter(x => x !== id)};
-    // Select — apply conflict rules (Pescatarian/Vegetarian/Vegan are mutually exclusive)
-    let next = [...cur, id];
-    if (id === 'Pescatarian') next = next.filter(x => x !== 'Vegetarian' && x !== 'Vegan');
-    if (id === 'Vegetarian')  next = next.filter(x => x !== 'Pescatarian' && x !== 'Vegan');
-    if (id === 'Vegan')       next = next.filter(x => x !== 'Pescatarian' && x !== 'Vegetarian');
-    return {...p, dietary: next};
-  });
-  const C=["Italian","Japanese","Mediterranean","Mexican","Indian","French","Middle Eastern","Thai","Chinese","American"];
-  const G=["Balanced","High protein","Low carb","Low calorie"];
-  const SK=["Beginner","Intermediate","Advanced"];
-  return (
-    <div className="mov" onClick={e=>e.target===e.currentTarget&&onClose()}>
-      <div className="modal" style={{maxWidth:580}}>
-        <div className="mhd"><div className="mtitle">Dietary Preferences</div><button className="mclose" onClick={onClose}><Ic n="x" s={16}/></button></div>
-        <div className="mbody" style={{display:"flex",flexDirection:"column",gap:20}}>
-          <div>
-            <label className="fl">Dietary Mode <span style={{fontSize:11,color:"var(--mu)",fontWeight:400}}>(mix &amp; match — Kosher stacks with any)</span></label>
-            <div style={{display:"flex",flexWrap:"wrap",gap:8,marginTop:6}}>
-              {DIETARY_MODES.map(m=>{
-                const isActive = m.id==='Omnivore' ? isOmnivore : activeDietary.includes(m.id);
-                return (
-                  <button key={m.id}
-                    onClick={()=>toggleDietary(m.id)}
-                    style={{padding:"8px 14px",borderRadius:8,border:`1.5px solid ${isActive?"var(--clay)":"var(--bor)"}`,background:isActive?"var(--clayBg)":"var(--white)",cursor:"pointer",textAlign:"left",transition:"all .15s"}}>
-                    <div style={{fontSize:13,fontWeight:600,color:isActive?"var(--clay)":"var(--ch)"}}>{m.icon} {m.id}</div>
-                    <div style={{fontSize:11,color:"var(--mu)",marginTop:2}}>{m.desc}</div>
-                  </button>
-                );
-              })}
+          <h3 style={{fontFamily:'var(--fd)',fontSize:20,marginBottom:16}}>Cooking Preferences</h3>
+          <div style={{display:'flex',gap:16,flexWrap:'wrap'}}>
+            <div>
+              <label className="fl">Max cook time (min)</label>
+              <input className="fi" type="number" value={prefs.maxTime || 60} onChange={e => setPrefs(p => ({...p, maxTime: +e.target.value}))} style={{width:100}} />
             </div>
-            {activeDietary.includes("Kosher")&&<div style={{marginTop:10,background:"var(--clayBg)",border:"1px solid rgba(192,106,62,.2)",borderRadius:"var(--rs)",padding:12}}>
-              <div className="togrow"><span style={{fontSize:13,fontWeight:500}}>🕎 Strict separation mode</span><button className={`tog ${local.strictKosher?"on":""}`} onClick={()=>setLocal(p=>({...p,strictKosher:!p.strictKosher}))}/></div>
-              <div style={{fontSize:11,color:"var(--mu)",marginTop:4}}>Full meat/dairy separation. Excludes any unlabelled recipes.</div>
-            </div>}
-            {activeDietary.includes("Pescatarian")&&<div style={{marginTop:8,padding:"8px 12px",background:"rgba(100,140,200,.06)",border:"1px solid rgba(100,140,200,.2)",borderRadius:8,fontSize:12,color:"var(--mu)"}}>
-              🐟 Fish and shellfish included. Land meat (chicken, beef, pork) excluded.
-            </div>}
-            {activeDietary.includes("Vegan")&&<div style={{marginTop:8,padding:"8px 12px",background:"rgba(80,160,80,.06)",border:"1px solid rgba(80,160,80,.2)",borderRadius:8,fontSize:12,color:"var(--mu)"}}>
-              🌱 Fully plant-based — no meat, fish, or dairy.
-            </div>}
+            <div>
+              <label className="fl">Household size</label>
+              <input className="fi" type="number" value={prefs.household || 2} onChange={e => setPrefs(p => ({...p, household: +e.target.value}))} style={{width:100}} />
+            </div>
           </div>
-          <div><label className="fl">Favorite Cuisines</label><div className="mopts">{C.map(c=><button key={c} className={`mopt ${local.cuisines.includes(c)?"sel":""}`} onClick={()=>toggle("cuisines",c)}>{c}</button>)}</div></div>
-          <div><label className="fl">Health Goal</label><div className="mopts">{G.map(g=><button key={g} className={`mopt ${local.health===g?"sel":""}`} onClick={()=>setLocal(p=>({...p,health:g}))}>{g}</button>)}</div></div>
-          <div><label className="fl">Cooking Skill</label><div className="mopts">{SK.map(s=><button key={s} className={`mopt ${local.skill===s?"sel":""}`} onClick={()=>setLocal(p=>({...p,skill:s}))}>{s}</button>)}</div></div>
-          <div className="row">
-            <div className="half"><label className="fl">Max cook time (min)</label><input className="fi" type="number" value={local.maxTime} onChange={e=>setLocal(p=>({...p,maxTime:+e.target.value}))}/></div>
-            <div className="half"><label className="fl">Household size</label><input className="fi" type="number" value={local.household} onChange={e=>setLocal(p=>({...p,household:+e.target.value}))}/></div>
-          </div>
-          <button className="btn btn-p btn-full btn-lg" onClick={()=>{setPrefs(local);onClose();}}>Save preferences</button>
         </div>
-      </div>
+      )}
     </div>
   );
 }
