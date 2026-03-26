@@ -21540,111 +21540,212 @@ class RecipeErrorBoundary extends React.Component {
 }
 
 // ── Dynamic recipe image ──────────────────────────────────────────────────────
-// Uses foodish-api.com — 574 guaranteed food photos across 10 categories.
-// Title-keyword matching ensures each recipe shows the CORRECT type of food.
-// Hash-based selection within categories maximizes uniqueness.
-const FOODISH_CATS = {
-  biryani:81, burger:87, 'butter-chicken':22, dessert:36, dosa:83,
-  idly:79, pasta:34, pizza:95, rice:35, samosa:22
+// PRIMARY: TheMealDB dish-specific photos (real photos of the actual dish type)
+// SECONDARY: foodish-api.com for categories where it's genuinely accurate
+// FALLBACK: emoji (better than a wrong image)
+//
+// TheMealDB pools: each array contains URLs of REAL photos of that dish type.
+const MEALDB = 'https://www.themealdb.com/images/media/meals';
+const IMG_POOLS = {
+  salad: [
+    `${MEALDB}/zry07j1763779321.jpg`,`${MEALDB}/fqpqml1764359125.jpg`,`${MEALDB}/z458v91763817681.jpg`,
+    `${MEALDB}/1549542994.jpg`,`${MEALDB}/g7jomp1763763994.jpg`,`${MEALDB}/4xcfai1763765676.jpg`,
+    `${MEALDB}/93iok31766436070.jpg`,`${MEALDB}/6cskio1763338156.jpg`,`${MEALDB}/6g3rso1763486069.jpg`,
+    `${MEALDB}/ei21r61764365935.jpg`,`${MEALDB}/pk8wtn1763758591.jpg`,`${MEALDB}/02s6gc1763799560.jpg`,
+    `${MEALDB}/wvqpwt1468339226.jpg`,`${MEALDB}/k29viq1585565980.jpg`,`${MEALDB}/ktsws11761998344.jpg`,
+    `${MEALDB}/ebvuir1699013665.jpg`,`${MEALDB}/wsu0rc1761848482.jpg`,`${MEALDB}/v8eaed1763257313.jpg`,
+    `${MEALDB}/st9shl1763755808.jpg`,`${MEALDB}/urtwux1486983078.jpg`,`${MEALDB}/dbazbg1763779999.jpg`,
+    `${MEALDB}/tbj1bs1764118062.jpg`,`${MEALDB}/0iryz91763778419.jpg`,
+  ],
+  soup: [
+    `${MEALDB}/x2fw9e1560460636.jpg`,`${MEALDB}/sqpqtp1515365614.jpg`,`${MEALDB}/1529446137.jpg`,
+    `${MEALDB}/xxtsvx1511814083.jpg`,`${MEALDB}/7n8su21699013057.jpg`,`${MEALDB}/xvrrux1511783685.jpg`,
+    `${MEALDB}/1529445893.jpg`,`${MEALDB}/1brbso1763585098.jpg`,`${MEALDB}/stpuws1511191310.jpg`,
+    `${MEALDB}/t8mn9g1560460231.jpg`,`${MEALDB}/ikizdm1763760862.jpg`,`${MEALDB}/jcr46d1614763831.jpg`,
+    `${MEALDB}/60oc3k1699009846.jpg`,`${MEALDB}/zadvgb1699012544.jpg`,`${MEALDB}/kggfo91763288633.jpg`,
+    `${MEALDB}/7kb44y1763589084.jpg`,`${MEALDB}/l50vz41763422681.jpg`,`${MEALDB}/lx1kkj1593349302.jpg`,
+    `${MEALDB}/9ptx0a1565090843.jpg`,`${MEALDB}/1ngcbf1628770793.jpg`,`${MEALDB}/9c5nlx1763424766.jpg`,
+    `${MEALDB}/raqjbj1762773035.jpg`,`${MEALDB}/p9tebp1764118792.jpg`,`${MEALDB}/tvvxpv1511191952.jpg`,
+    `${MEALDB}/118oj61763423896.jpg`,
+  ],
+  chicken: [
+    `${MEALDB}/wyxwsp1486979827.jpg`,`${MEALDB}/er4d081765186828.jpg`,`${MEALDB}/cj56fs1762340001.jpg`,
+    `${MEALDB}/1529446352.jpg`,`${MEALDB}/tyywsw1505930373.jpg`,`${MEALDB}/qpxvuq1511798906.jpg`,
+    `${MEALDB}/pqulvm1763282839.jpg`,`${MEALDB}/qptpvt1487339892.jpg`,`${MEALDB}/qxytrx1511304021.jpg`,
+    `${MEALDB}/1525872624.jpg`,`${MEALDB}/wruvqv1511880994.jpg`,`${MEALDB}/wuyd2h1765655837.jpg`,
+    `${MEALDB}/uwvxpv1511557015.jpg`,`${MEALDB}/sypxpx1515365095.jpg`,`${MEALDB}/8ovxf41763253962.jpg`,
+    `${MEALDB}/vwrpps1503068729.jpg`,`${MEALDB}/yxsurp1511304301.jpg`,`${MEALDB}/kzxflc1763194887.jpg`,
+    `${MEALDB}/1529444113.jpg`,`${MEALDB}/3um6il1763794322.jpg`,`${MEALDB}/arzs741766434335.jpg`,
+    `${MEALDB}/40r49m1763197022.jpg`,`${MEALDB}/s73ytv1765567838.jpg`,`${MEALDB}/prjve31763486864.jpg`,
+    `${MEALDB}/o5fuq51764789643.jpg`,
+  ],
+  fish: [
+    `${MEALDB}/ysxwuq1487323065.jpg`,`${MEALDB}/a15wsa1614349126.jpg`,`${MEALDB}/spswqs1511558697.jpg`,
+    `${MEALDB}/1520084413.jpg`,`${MEALDB}/7n8su21699013057.jpg`,`${MEALDB}/vytypy1511883765.jpg`,
+    `${MEALDB}/uwxusv1487344500.jpg`,`${MEALDB}/73o3vq1765317873.jpg`,`${MEALDB}/vptqpw1511798500.jpg`,
+    `${MEALDB}/uvuyxu1503067369.jpg`,`${MEALDB}/yx8j1i1763484612.jpg`,`${MEALDB}/a2ec961763587756.jpg`,
+    `${MEALDB}/do7zps1614349775.jpg`,`${MEALDB}/1549542994.jpg`,
+  ],
+  beef: [
+    `${MEALDB}/pbzcrx1763765096.jpg`,`${MEALDB}/1nalo51765188375.jpg`,`${MEALDB}/qxutws1486978099.jpg`,
+    `${MEALDB}/1529444830.jpg`,`${MEALDB}/bc8v651619789840.jpg`,`${MEALDB}/cgl60b1683206581.jpg`,
+    `${MEALDB}/1529443236.jpg`,`${MEALDB}/41cxjh1683207682.jpg`,`${MEALDB}/vvpprx1487325699.jpg`,
+    `${MEALDB}/svprys1511176755.jpg`,`${MEALDB}/xwutvy1511555540.jpg`,`${MEALDB}/vtqxtu1511784197.jpg`,
+    `${MEALDB}/vz94r81760534692.jpg`,`${MEALDB}/ssrrrs1503664277.jpg`,`${MEALDB}/lqampv1762325397.jpg`,
+    `${MEALDB}/uyqrrv1511553350.jpg`,`${MEALDB}/kyuxew1763479470.jpg`,`${MEALDB}/uuqvwu1504629254.jpg`,
+    `${MEALDB}/tvttqv1504640475.jpg`,`${MEALDB}/wrssvt1511556563.jpg`,`${MEALDB}/sytuqu1511553755.jpg`,
+    `${MEALDB}/wsqqsw1515364068.jpg`,`${MEALDB}/6sarfo1762340107.jpg`,`${MEALDB}/ursuup1487348423.jpg`,
+    `${MEALDB}/vussxq1511882648.jpg`,
+  ],
+  curry: [
+    `${MEALDB}/sstssx1487349585.jpg`,`${MEALDB}/qqlwv91763501559.jpg`,`${MEALDB}/sywrsu1511463066.jpg`,
+    `${MEALDB}/lqampv1762325397.jpg`,`${MEALDB}/vwrpps1503068729.jpg`,`${MEALDB}/tvttqv1504640475.jpg`,
+    `${MEALDB}/yxsurp1511304301.jpg`,`${MEALDB}/uc9qp11764796575.jpg`,`${MEALDB}/118oj61763423896.jpg`,
+    `${MEALDB}/snmtd61763426568.jpg`,`${MEALDB}/prjve31763486864.jpg`,`${MEALDB}/n7h5zs1765318909.jpg`,
+    `${MEALDB}/0dhtwr1763371444.jpg`,
+  ],
+  rice: [
+    `${MEALDB}/5r5rvx1763287943.jpg`,`${MEALDB}/wuyd2h1765655837.jpg`,`${MEALDB}/kw92t41604181871.jpg`,
+    `${MEALDB}/c6ghxm1763335584.jpg`,`${MEALDB}/zg2b9l1760524940.jpg`,`${MEALDB}/pkyvrn1764878267.jpg`,
+    `${MEALDB}/fk80jp1763280767.jpg`,`${MEALDB}/qt4i0n1763256454.jpg`,`${MEALDB}/sl6vqv1763335988.jpg`,
+    `${MEALDB}/tytyxu1515363282.jpg`,`${MEALDB}/xw1ruy1763786501.jpg`,`${MEALDB}/hblwvg1763478203.jpg`,
+    `${MEALDB}/11bvtm1764795135.jpg`,
+  ],
+  cake: [
+    `${MEALDB}/c0gmo31766594751.jpg`,`${MEALDB}/vrspxv1511722107.jpg`,`${MEALDB}/wtqrqw1511639627.jpg`,
+    `${MEALDB}/urtqut1511723591.jpg`,`${MEALDB}/ldnrm91576791881.jpg`,`${MEALDB}/xvgpng1764121726.jpg`,
+    `${MEALDB}/ywwrsp1511720277.jpg`,`${MEALDB}/tzt3it1764363293.jpg`,`${MEALDB}/swttys1511385853.jpg`,
+    `${MEALDB}/qxutws1486978099.jpg`,`${MEALDB}/y4jpgq1560459207.jpg`,`${MEALDB}/y2irzl1585563479.jpg`,
+    `${MEALDB}/xqrwyr1511133646.jpg`,`${MEALDB}/qtuuys1511387068.jpg`,`${MEALDB}/towo9c1763814590.jpg`,
+    `${MEALDB}/e8ihjp1764123021.jpg`,
+  ],
+  pancake: [
+    `${MEALDB}/rwuyqx1511383174.jpg`,`${MEALDB}/0206h11699013358.jpg`,`${MEALDB}/sywswr1511383814.jpg`,
+    `${MEALDB}/c400ok1764439058.jpg`,`${MEALDB}/xlqqhw1764369924.jpg`,
+  ],
+  egg: [
+    `${MEALDB}/1529446137.jpg`,`${MEALDB}/47y6ii1765658818.jpg`,`${MEALDB}/1550440197.jpg`,
+    `${MEALDB}/rwvw8q1765660071.jpg`,`${MEALDB}/qwtrtp1511799242.jpg`,`${MEALDB}/v8eaed1763257313.jpg`,
+  ],
+  roast: [
+    `${MEALDB}/ssrrrs1503664277.jpg`,`${MEALDB}/ursuup1487348423.jpg`,`${MEALDB}/swo87v1763595282.jpg`,
+    `${MEALDB}/ro8mzj1763800655.jpg`,`${MEALDB}/gr4lo51763791826.jpg`,`${MEALDB}/nlxald1764112200.jpg`,
+    `${MEALDB}/b5ft861583188991.jpg`,`${MEALDB}/h3ijwo1581013377.jpg`,
+  ],
+  taco: [
+    `${MEALDB}/uvuyxu1503067369.jpg`,`${MEALDB}/ypxvwv1505333929.jpg`,
+  ],
+  sandwich: [
+    `${MEALDB}/j80gmw1764372176.jpg`,`${MEALDB}/xr0n4r1576788363.jpg`,`${MEALDB}/sbx7n71587673021.jpg`,
+    `${MEALDB}/xutquv1505330523.jpg`,`${MEALDB}/ae6clc1760524712.jpg`,
+  ],
+  stew: [
+    `${MEALDB}/vptqpw1511798500.jpg`,`${MEALDB}/vtqxtu1511784197.jpg`,`${MEALDB}/uyqrrv1511553350.jpg`,
+    `${MEALDB}/uuqvwu1504629254.jpg`,`${MEALDB}/sypxpx1515365095.jpg`,
+  ],
 };
 
-// Title keywords → best foodish category (checked FIRST, before cuisine)
-// This ensures "Pasta Carbonara" shows pasta, "Margherita Pizza" shows pizza, etc.
-// ORDER MATTERS: more specific patterns first, general patterns last.
-const TITLE_KW_TO_CAT = [
-  // Pasta & noodles (most specific)
-  [/pasta|spaghetti|penne|linguine|fettuccine|tagliatelle|rigatoni|fusilli|macaroni|lasagna|ravioli|gnocchi|carbonara|bolognese|alfredo|aglio|cacio|puttanesca|arrabbiata|primavera|marinara|lo mein|chow mein|pad thai|udon|soba|ramen|noodle|yakisoba|japchae|laksa|pho|mac.and.cheese|orzo|tortellini|cannelloni/i, 'pasta'],
-  // Pizza & flatbread
-  [/pizza|flatbread|focaccia|calzone|margherita|pepperoni|neapolitan/i, 'pizza'],
-  // Burger & sandwich (only actual burgers/sandwiches with buns/bread)
-  [/burger|sandwich|wrap(?!.*spring)|slider|sub\b|hoagie|panini|blt\b|club\b|po.boy|philly|sloppy joe|pulled pork|hot dog/i, 'burger'],
-  // Curry & saucy dishes
-  [/curry|masala|tikka|vindaloo|korma|madras|rogan josh|dal\b|dhal|daal|rendang|paneer|palak|saag|aloo|chana|rajma|jalfrezi|bhuna|dopiaza|balti|stew|goulash|tagine|bourguignon|cacciatore|coq au vin|pot roast|braised|slow.cook|tandoori|butter chicken|chicken marsala|mole\b|enchilada/i, 'butter-chicken'],
-  // Rice dishes + Mexican/Mediterranean wraps (served with rice, not bread-bun items)
-  [/\brice\b|risotto|paella|pilaf|pilau|biryani|jambalaya|congee|fried rice|bibimbap|onigiri|sushi|poke bowl|burrito bowl|chirashi|kedgeree|arancini|taco|burrito(?!.*bowl)|quesadilla|torta\b|gyro|shawarma|bao\b|banh mi/i, 'rice'],
-  // Fried & crispy snacks (before dessert to catch savory items)
-  [/samosa|dumpling|spring roll|egg roll|wonton|gyoza|empanada|croquette|fritter|pakora|bhaji|falafel|tempura|popcorn chicken|nugget|finger\b|wing\b|wings\b|nacho|chips\b|pretzel|cracker|pastry|puff\b|phyllo|filo\b|mozzarella stick|fish.and.chip|onion ring|jalapeño popper|corn dog|hush pupp/i, 'samosa'],
-  // Pancake/crepe/egg dishes (before dessert to catch breakfast items)
-  [/pancake|waffle|crepe|dosa|galette|blini|frittata|omelette|omelet|quiche|shakshuka|egg\b|eggs\b|scramble|benedict|tortilla española|hash brown|french toast/i, 'dosa'],
-  // Bread & baked goods
-  [/bread|naan|roti|pita|biscuit|toast(?!.*french)|brioche|sourdough|ciabatta|baguette|croissant|roll\b|scone|cornbread|chapati|paratha|idli|idly|vada|dhokla|uttapam|appam|muffin|bagel|granola|muesli|oatmeal|cereal|porridge|yogurt/i, 'idly'],
-  // Dessert & sweet (after pancake/bread so savory pancakes/muffins don't match)
-  [/cake|cookie|brownie|pie\b|tart\b|ice cream|gelato|mousse|pudding|custard|crumble|cobbler|truffle|fudge|candy|sweet\b|chocolate|tiramisu|panna cotta|creme brulee|baklava|churro|donut|doughnut|macaron|eclair|profiterole|cheesecake|cupcake|sundae|sorbet|parfait|compote|meringue|souffl|beignet|halwa|gulab|kheer|tres leches|flan\b|jelly\b|jam\b|honey\b.*drizzle/i, 'dessert'],
-  // Plated meals / bowls (catch-all for composed dishes)
-  [/\bbowl\b|plate\b|platter|feast|combo|thali|mezze|antipasti|charcuterie|grain bowl|buddha bowl|power bowl|smoothie/i, 'biryani'],
-  // Grilled / roasted proteins (maps to biryani - plated food)
-  [/grilled|roasted|baked|seared|pan.fried|stir.fry|kebab|skewer|cutlet|schnitzel|milanese|piccata|scallopini|teriyaki|glazed|marinated|herb.crusted|blackened|cajun|jerk/i, 'biryani'],
-  // Soup (maps to butter-chicken - saucy/bowl food)
-  [/soup|broth|chowder|bisque|gazpacho|minestrone|chili\b|gumbo|pottage|consomm/i, 'butter-chicken'],
-  // Salad (maps to rice - fresh bowl food)
-  [/salad|slaw|ceviche|carpaccio|tartare|panzanella/i, 'rice'],
+// Foodish categories — ONLY used where the category genuinely matches the dish
+const FOODISH_CATS = {
+  pasta:34, pizza:95, burger:87, dessert:36, samosa:22, dosa:83
+};
+
+// Title keywords → image pool (ORDER MATTERS: specific first)
+const TITLE_TO_POOL = [
+  // Recipes with NO good image match → emoji fallback (honest, not misleading)
+  [/smoothie|protein shake|milkshake|lemonade|juice\b|iced tea|horchata|lassi|agua fresca/i, null],
+  [/yogurt|granola|muesli|overnight oats|acai/i, null],
+  [/charcuterie|cheese board|mezze|antipasti|platter/i, null],
+  // TheMealDB-backed pools (dish-specific, visually accurate)
+  [/toast\b|avocado toast|bruschetta|crostini/i, 'sandwich'],
+  [/salad|slaw|ceviche|carpaccio|panzanella/i, 'salad'],
+  [/soup|broth|chowder|bisque|gazpacho|minestrone|chili\b|gumbo|pottage|consomm|harira/i, 'soup'],
+  [/\bfish\b|salmon|tuna|cod\b|trout|tilapia|halibut|mahi|swordfish|anchov|sardine|mackerel|sea bass|snapper|ceviche|masgouf|seafood|shrimp|prawn|crab|lobster|clam|mussel|oyster|calamari|squid|scallop/i, 'fish'],
+  [/\bbeef\b|steak|filet mignon|sirloin|ribeye|tenderloin|brisket|short rib|flank|strip steak|prime rib|wagyu|veal|lamb\b|mutton|venison|goat\b/i, 'beef'],
+  [/chicken|poultry|turkey|duck\b|hen\b|cornish/i, 'chicken'],
+  [/curry|masala|tikka|vindaloo|korma|madras|rogan josh|dal\b|dhal|daal|rendang|paneer|palak|saag|aloo|chana|rajma|jalfrezi|bhuna|dopiaza|balti|tandoori|butter chicken/i, 'curry'],
+  [/taco|burrito|quesadilla|enchilada|fajita|nachos|chimichanga|tostada|tamale|elote/i, 'taco'],
+  [/\brice\b|risotto|paella|pilaf|pilau|biryani|jambalaya|congee|fried rice|bibimbap|onigiri|kedgeree|arancini/i, 'rice'],
+  [/roast|roasted|pot roast/i, 'roast'],
+  [/stew|goulash|tagine|bourguignon|cacciatore|coq au vin|braised|slow.cook|fesenjan/i, 'stew'],
+  [/\bcake\b|cheesecake|brownie|tiramisu|cupcake|gateau/i, 'cake'],
+  [/pancake|waffle|crepe|blini|galette/i, 'pancake'],
+  [/omelette|omelet|frittata|quiche|shakshuka|scramble|benedict|egg\b|eggs\b/i, 'egg'],
+  // Foodish-backed pools (genuinely accurate for these)
+  [/pasta|spaghetti|penne|linguine|fettuccine|tagliatelle|rigatoni|fusilli|macaroni|lasagna|ravioli|gnocchi|carbonara|bolognese|alfredo|aglio|cacio|puttanesca|arrabbiata|primavera|marinara|lo mein|chow mein|pad thai|udon|soba|ramen|noodle|yakisoba|japchae|laksa|pho|mac.and.cheese|orzo|tortellini|cannelloni/i, 'f_pasta'],
+  [/pizza|calzone|pepperoni|neapolitan/i, 'f_pizza'],
+  [/burger|slider|hot dog|sloppy joe/i, 'f_burger'],
+  [/sandwich|panini|blt\b|club\b|po.boy|philly|hoagie|sub\b|wrap(?!.*spring)|gyro|shawarma|bao\b|banh mi/i, 'sandwich'],
+  [/samosa|dumpling|spring roll|egg roll|wonton|gyoza|empanada|croquette|fritter|pakora|bhaji|falafel|tempura|nugget|wing\b|wings\b|chips\b|fish.and.chip|onion ring|corn dog/i, 'f_samosa'],
+  [/dosa|uttapam|appam|idli|idly|vada/i, 'f_dosa'],
+  [/cookie|pie\b|tart\b|ice cream|gelato|mousse|pudding|custard|crumble|cobbler|fudge|candy|chocolate|panna cotta|creme brulee|baklava|churro|donut|doughnut|macaron|eclair|profiterole|sundae|sorbet|parfait|meringue|beignet|halwa|gulab|kheer|tres leches|flan\b/i, 'f_dessert'],
 ];
 
-// Cuisine → fallback categories (used when title keywords don't match)
-const CUISINE_FALLBACK = {
-  'Italian':'pasta', 'Mediterranean':'rice', 'French':'pasta', 'Spanish':'rice',
-  'Greek':'rice', 'Turkish':'rice', 'Mexican':'rice', 'Brazilian':'rice',
-  'American':'burger', 'Southern US':'burger', 'Cajun':'rice', 'British':'butter-chicken',
-  'Japanese':'rice', 'Chinese':'rice', 'Korean':'rice', 'Thai':'butter-chicken',
-  'Vietnamese':'rice', 'Indian':'biryani', 'Middle Eastern':'rice', 'Moroccan':'biryani',
-  'Ethiopian':'biryani', 'Lebanese':'rice', 'Caribbean':'rice', 'Filipino':'rice',
-  'African':'biryani', 'Malaysian':'rice', 'Indonesian':'rice', 'Modern':'pasta',
-  'Pakistani':'biryani', 'Persian':'rice', 'Israeli':'rice', 'Egyptian':'rice',
-  'Syrian':'rice', 'North African':'biryani', 'Asian':'rice', 'Russian':'butter-chicken',
-  'Australian':'burger', 'Peruvian':'rice', 'Singaporean':'rice', 'Hawaiian':'rice',
-  'Jamaican':'rice', 'Iraqi':'rice', 'Jordanian':'rice', 'Palestinian':'rice',
-  'Cuban':'rice', 'Afghan':'biryani', 'Eastern European':'butter-chicken',
-  'Scandinavian':'rice', 'Hungarian':'butter-chicken', 'Scottish':'butter-chicken',
-  'Belgian':'pasta', 'German':'burger', 'Swedish':'rice', 'Nordic':'rice',
-  'Portuguese':'rice', 'Swiss':'pasta', 'Austrian':'pasta', 'Polish':'butter-chicken',
-  'Georgian':'rice', 'Serbian':'butter-chicken', 'Balkan':'rice', 'Cypriot':'rice',
-  'Danish':'idly', 'Uzbek':'biryani', 'Bangladeshi':'biryani', 'Tropical':'rice',
-  'West African':'rice', 'Libyan':'rice', 'Saudi':'biryani', 'Penang':'rice',
+// Cuisine fallback to TheMealDB pool
+const CUISINE_TO_POOL = {
+  'Italian':'f_pasta','French':'stew','Spanish':'rice','Greek':'salad',
+  'Mexican':'taco','American':'f_burger','Southern US':'chicken',
+  'Japanese':'fish','Chinese':'chicken','Korean':'rice','Thai':'curry',
+  'Vietnamese':'soup','Indian':'curry','Middle Eastern':'rice','Moroccan':'stew',
+  'Ethiopian':'stew','Lebanese':'salad','Caribbean':'rice','Filipino':'rice',
+  'Mediterranean':'salad','Turkish':'beef','Brazilian':'beef','British':'stew',
+  'Pakistani':'curry','Persian':'stew','African':'stew','Malaysian':'curry',
+  'Indonesian':'rice','Russian':'stew','German':'beef','Cajun':'soup',
+  'Hawaiian':'fish','Jamaican':'chicken','Cuban':'rice','Scandinavian':'fish',
+  'Australian':'beef','Peruvian':'fish',
 };
 
-// Meal type → fallback category
-const MEAL_FALLBACK = {
-  'breakfast':'dosa', 'lunch':'burger', 'dinner':'biryani',
-  'salad':'rice', 'soup':'butter-chicken', 'snack':'samosa', 'dessert':'dessert',
+// Meal type fallback
+const MEAL_TO_POOL = {
+  'breakfast':'pancake','lunch':'salad','dinner':'chicken',
+  'salad':'salad','soup':'soup','snack':'f_samosa','dessert':'cake',
 };
 
 function recipeImage(recipe) {
-  if (!recipe) return 'https://foodish-api.com/images/rice/rice1.jpg';
+  if (!recipe) return null;
   const r = typeof recipe === 'object' ? recipe : { id: recipe };
   const id = r.id || 0;
   const title = (r.title || '').toLowerCase();
 
-  // 1. Try title keyword matching FIRST (most accurate)
-  let cat = null;
-  for (const [regex, c] of TITLE_KW_TO_CAT) {
-    if (regex.test(title)) { cat = c; break; }
+  // 1. Try title keyword → pool
+  let pool = null;
+  let matched = false;
+  for (const [regex, p] of TITLE_TO_POOL) {
+    if (regex && regex.test(title)) { pool = p; matched = true; break; }
   }
-
-  // 2. Fall back to cuisine
-  if (!cat) {
+  if (matched && pool === null) return null; // Explicit emoji fallback (no good image for this dish type)
+  // 2. Cuisine fallback
+  if (!pool) {
     const cuisine = (r.cuisine || '').trim();
-    cat = CUISINE_FALLBACK[cuisine];
-    if (!cat && cuisine) {
-      for (const [key, val] of Object.entries(CUISINE_FALLBACK)) {
-        if (cuisine.toLowerCase().includes(key.toLowerCase())) { cat = val; break; }
+    pool = CUISINE_TO_POOL[cuisine];
+    if (!pool && cuisine) {
+      for (const [key, val] of Object.entries(CUISINE_TO_POOL)) {
+        if (cuisine.toLowerCase().includes(key.toLowerCase())) { pool = val; break; }
       }
     }
   }
-
-  // 3. Fall back to meal type
-  if (!cat) {
+  // 3. Meal type fallback
+  if (!pool) {
     const meal = (r.meal || '').toLowerCase();
-    cat = MEAL_FALLBACK[meal];
+    pool = MEAL_TO_POOL[meal];
   }
+  // 4. No match → return null (will use emoji fallback)
+  if (!pool) return null;
 
-  // 4. Ultimate fallback
-  if (!cat) cat = 'biryani';
-
-  const maxN = FOODISH_CATS[cat] || 34;
-  // Knuth multiplicative hash for good distribution within the category
-  const hash = ((id * 2654435761) >>> 0) % maxN;
-  const imgN = hash + 1; // 1-indexed
-  return `https://foodish-api.com/images/${cat}/${cat}${imgN}.jpg`;
+  // Resolve pool to URL
+  if (pool.startsWith('f_')) {
+    // Foodish pool
+    const cat = pool.substring(2);
+    const maxN = FOODISH_CATS[cat] || 34;
+    const hash = ((id * 2654435761) >>> 0) % maxN;
+    return `https://foodish-api.com/images/${cat}/${cat}${hash + 1}.jpg`;
+  } else {
+    // TheMealDB pool
+    const urls = IMG_POOLS[pool];
+    if (!urls || urls.length === 0) return null;
+    const hash = ((id * 2654435761) >>> 0) % urls.length;
+    return urls[hash];
+  }
 }
 
 // RecipeImg component — shows image with emoji fallback on error
@@ -21662,7 +21763,7 @@ function RecipeImg({ src, alt, emoji, style, className, onClick }) {
   return <img src={src} alt={alt||''} style={{...baseImgStyle,...(style||{})}} className={className} onClick={onClick} onError={()=>setFailed(true)} loading="lazy" />;
 }
 
-// Overflow pool: 126 verified Unsplash food photos for collision avoidance
+// Apply images with collision detection
 const UNSPLASH_FOOD = [
 "1504674900247-0877df9cc836","1567620905732-2d1ec7ab7445","1565299624946-b28f40a0ae38",
 "1565958011703-44f9829ba187","1482049016688-2d3e1b311543","1498837167922-ddd27525d352",
@@ -21712,47 +21813,52 @@ const UNSPLASH_FOOD = [
 "1563636619-e9143da7973b","1605478371310-a9f1e96b4ff4","1512003867696-6d5ce6835040",
 ];
 
-// Apply images: guaranteed food-correct photos for every recipe.
-// Uses foodish (574) + Unsplash (126) = 700 unique images.
-// Overflow cycles within same foodish category (correct food type, may share photo).
+// Apply images: TheMealDB (dish-specific) > foodish (category) > emoji fallback
+// Prioritizes visual correctness over uniqueness.
 (function assignImages() {
   const used = new Set();
+  let withImg = 0, withEmoji = 0;
   const sorted = [...RECIPES].sort((a,b) => (a.id||0) - (b.id||0));
 
   sorted.forEach(r => {
-    let img = recipeImage(r); // Primary: foodish category image
-    if (!used.has(img)) { used.add(img); r.image = img; return; }
-
-    // Extract the matched category from the foodish URL
-    const catMatch = img.match(/images\/([^/]+)\//);
-    const cat = catMatch ? catMatch[1] : 'biryani';
-    const maxN = FOODISH_CATS[cat] || 34;
-
-    // Tier 1: Try ALL remaining slots in same foodish category
-    let found = false;
-    for (let n = 1; n <= maxN; n++) {
-      const tryImg = `https://foodish-api.com/images/${cat}/${cat}${n}.jpg`;
-      if (!used.has(tryImg)) { img = tryImg; found = true; break; }
-    }
-
-    // Tier 2: Unsplash overflow pool (126 verified food photos)
-    if (!found) {
-      for (let i = 0; i < UNSPLASH_FOOD.length; i++) {
-        const tryImg = `https://images.unsplash.com/photo-${UNSPLASH_FOOD[i]}?w=400&h=300&fit=crop&auto=format`;
-        if (!used.has(tryImg)) { img = tryImg; found = true; break; }
+    let img = recipeImage(r);
+    if (!img) { r.image = null; withEmoji++; return; } // No good match → emoji fallback
+    // Collision detection: try alternate within same pool
+    if (used.has(img)) {
+      // Find which pool this recipe maps to
+      let found = false;
+      const title = (r.title || '').toLowerCase();
+      let poolKey = null;
+      for (const [regex, p] of TITLE_TO_POOL) {
+        if (regex.test(title)) { poolKey = p; break; }
       }
-    }
+      if (!poolKey) {
+        const cuisine = (r.cuisine || '').trim();
+        poolKey = CUISINE_TO_POOL[cuisine];
+      }
+      if (!poolKey) poolKey = MEAL_TO_POOL[(r.meal || '').toLowerCase()];
 
-    // Tier 3: Cycle within same category (correct food type, shared photo)
-    if (!found) {
-      const cycleN = ((r.id * 2654435761) >>> 0) % maxN + 1;
-      img = `https://foodish-api.com/images/${cat}/${cat}${cycleN}.jpg`;
+      if (poolKey && !poolKey.startsWith('f_') && IMG_POOLS[poolKey]) {
+        // TheMealDB pool: try all URLs
+        for (let i = 0; i < IMG_POOLS[poolKey].length; i++) {
+          if (!used.has(IMG_POOLS[poolKey][i])) { img = IMG_POOLS[poolKey][i]; found = true; break; }
+        }
+      } else if (poolKey && poolKey.startsWith('f_')) {
+        // Foodish pool: try all numbers
+        const cat = poolKey.substring(2);
+        const maxN = FOODISH_CATS[cat] || 34;
+        for (let n = 1; n <= maxN; n++) {
+          const tryImg = `https://foodish-api.com/images/${cat}/${cat}${n}.jpg`;
+          if (!used.has(tryImg)) { img = tryImg; found = true; break; }
+        }
+      }
+      // If still colliding, allow duplicate (same dish type, shared photo is OK)
     }
-
     used.add(img);
     r.image = img;
+    withImg++;
   });
-  console.log(`Image assignment: ${used.size} unique images for ${RECIPES.length} recipes`);
+  console.log(`Image assignment: ${withImg} with images, ${withEmoji} with emoji fallback, ${used.size} unique`);
 })();
 
 /* ── MAIN APP ── */
