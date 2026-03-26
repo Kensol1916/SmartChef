@@ -190,11 +190,15 @@ body{font-family:var(--fb);background:var(--cream);color:var(--ch);-webkit-font-
 .plan-cell.dragging{opacity:.4}
 .plan-cell-empty{display:flex;align-items:center;justify-content:center;height:100%;color:var(--bor);font-size:28px;font-weight:300}
 .plan-cell-empty:hover{color:var(--clay)}
-.meal-card{border-radius:8px;overflow:hidden;cursor:grab;transition:transform .15s,box-shadow .15s;height:100%}
+.meal-card{border-radius:8px;overflow:hidden;cursor:grab;transition:transform .15s,box-shadow .15s;height:100%;position:relative}
 .meal-card:hover{transform:scale(1.02);box-shadow:var(--sh1)}
 .meal-card:active{cursor:grabbing}
 .meal-card-img{width:100%;height:60px;object-fit:cover;display:block;background:linear-gradient(135deg,#F0E8DC,#E4D4BE)}
 .meal-card-name{padding:4px 6px;font-size:11px;font-weight:600;line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.meal-card-actions{display:none;position:absolute;top:2px;right:2px;gap:2px;z-index:2}
+.meal-card:hover .meal-card-actions{display:flex}
+.meal-card-actions button{width:20px;height:20px;border:none;border-radius:50%;background:rgba(255,255,255,0.9);cursor:pointer;font-size:10px;display:flex;align-items:center;justify-content:center;padding:0;box-shadow:0 1px 3px rgba(0,0,0,0.2)}
+.meal-card-actions button:hover{background:#fff;transform:scale(1.1)}
 
 /* quick action panel */
 .qap-overlay{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.3);backdrop-filter:blur(4px)}
@@ -21552,12 +21556,12 @@ const TITLE_KW_TO_CAT = [
   [/pasta|spaghetti|penne|linguine|fettuccine|tagliatelle|rigatoni|fusilli|macaroni|lasagna|ravioli|gnocchi|carbonara|bolognese|alfredo|aglio|cacio|puttanesca|arrabbiata|primavera|marinara|lo mein|chow mein|pad thai|udon|soba|ramen|noodle|yakisoba|japchae|laksa|pho|mac.and.cheese|orzo|tortellini|cannelloni/i, 'pasta'],
   // Pizza & flatbread
   [/pizza|flatbread|focaccia|calzone|margherita|pepperoni|neapolitan/i, 'pizza'],
-  // Burger & sandwich
-  [/burger|sandwich|wrap(?!.*spring)|slider|sub\b|hoagie|panini|blt\b|club\b|po.boy|philly|sloppy joe|pulled pork|bao\b|banh mi|gyro|shawarma|hot dog|taco|torta\b|quesadilla|burrito(?!.*bowl)/i, 'burger'],
+  // Burger & sandwich (only actual burgers/sandwiches with buns/bread)
+  [/burger|sandwich|wrap(?!.*spring)|slider|sub\b|hoagie|panini|blt\b|club\b|po.boy|philly|sloppy joe|pulled pork|hot dog/i, 'burger'],
   // Curry & saucy dishes
   [/curry|masala|tikka|vindaloo|korma|madras|rogan josh|dal\b|dhal|daal|rendang|paneer|palak|saag|aloo|chana|rajma|jalfrezi|bhuna|dopiaza|balti|stew|goulash|tagine|bourguignon|cacciatore|coq au vin|pot roast|braised|slow.cook|tandoori|butter chicken|chicken marsala|mole\b|enchilada/i, 'butter-chicken'],
-  // Rice dishes
-  [/\brice\b|risotto|paella|pilaf|pilau|biryani|jambalaya|congee|fried rice|bibimbap|onigiri|sushi|poke bowl|burrito bowl|chirashi|kedgeree|arancini/i, 'rice'],
+  // Rice dishes + Mexican/Mediterranean wraps (served with rice, not bread-bun items)
+  [/\brice\b|risotto|paella|pilaf|pilau|biryani|jambalaya|congee|fried rice|bibimbap|onigiri|sushi|poke bowl|burrito bowl|chirashi|kedgeree|arancini|taco|burrito(?!.*bowl)|quesadilla|torta\b|gyro|shawarma|bao\b|banh mi/i, 'rice'],
   // Fried & crispy snacks (before dessert to catch savory items)
   [/samosa|dumpling|spring roll|egg roll|wonton|gyoza|empanada|croquette|fritter|pakora|bhaji|falafel|tempura|popcorn chicken|nugget|finger\b|wing\b|wings\b|nacho|chips\b|pretzel|cracker|pastry|puff\b|phyllo|filo\b|mozzarella stick|fish.and.chip|onion ring|jalapeño popper|corn dog|hush pupp/i, 'samosa'],
   // Pancake/crepe/egg dishes (before dessert to catch breakfast items)
@@ -21845,6 +21849,10 @@ export default function App() {
         if (!prefs.dietary.every(d => rd.includes(d.toLowerCase()))) return false;
       }
       if (prefs.maxTime && r.time > prefs.maxTime) return false;
+      if ((prefs.excludeCuisines || []).length > 0) {
+        const rc = (r.cuisine || '').toLowerCase();
+        if (prefs.excludeCuisines.some(c => rc.includes(c.toLowerCase()))) return false;
+      }
       return true;
     });
     // Fallback: if filters are too strict, use all recipes
@@ -21896,6 +21904,11 @@ export default function App() {
       if (prefs.dietary.length > 0) {
         const rd = (r.dietary || []).map(d => d.toLowerCase());
         if (!prefs.dietary.every(d => rd.includes(d.toLowerCase()))) return false;
+      }
+      if (prefs.maxTime && r.time > prefs.maxTime) return false;
+      if ((prefs.excludeCuisines || []).length > 0) {
+        const rc = (r.cuisine || '').toLowerCase();
+        if (prefs.excludeCuisines.some(c => rc.includes(c.toLowerCase()))) return false;
       }
       return true;
     });
@@ -22337,7 +22350,7 @@ function PlannerHome({ mealPlan, setMealPlan, generateWeek, generateDay, regener
                         onDragStart={() => handleDragStart(di, mi)}
                         onClick={e => {
                           e.stopPropagation();
-                          setQap({ dayIdx: di, mealIdx: mi, rect: e.currentTarget.getBoundingClientRect() });
+                          if (recipe) setViewRecipe(recipe);
                         }}
                       >
                         <RecipeImg
@@ -22348,6 +22361,11 @@ function PlannerHome({ mealPlan, setMealPlan, generateWeek, generateDay, regener
                           style={{fontSize:24}}
                         />
                         <div className="meal-card-name">{slot.title}</div>
+                        <div className="meal-card-actions" onClick={e => e.stopPropagation()}>
+                          <button title="Regenerate" onClick={() => regenerateSlot(di, mi)}>🔄</button>
+                          <button title="Replace" onClick={() => setReplacePicker({dayIdx:di,mealIdx:mi})}>🔍</button>
+                          <button title="Remove" onClick={() => removeSlot(di, mi)}>✕</button>
+                        </div>
                       </div>
                     ) : (
                       <div className="plan-cell-empty">+</div>
@@ -22561,7 +22579,7 @@ function RecipeDetail({ recipe, onClose, handleAddToPlan, toggleSave, saved, pan
 }
 
 /* ── EXPLORE TAB ── */
-function ExploreTab({ setViewRecipe, handleAddToPlan, toggleSave, saved, showToast }) {
+function ExploreTab({ setViewRecipe, handleAddToPlan, toggleSave, saved, showToast, prefs }) {
   const [search, setSearch] = useState('');
   const [cuisineFilter, setCuisineFilter] = useState('all');
   const [mealFilter, setMealFilter] = useState('all');
@@ -22586,6 +22604,13 @@ function ExploreTab({ setViewRecipe, handleAddToPlan, toggleSave, saved, showToa
     });
   }
   if (dietFilter !== 'all') filtered = filtered.filter(r => (r.dietary||[]).some(d => d.toLowerCase() === dietFilter.toLowerCase()));
+  // Apply excluded cuisines from preferences
+  if ((prefs?.excludeCuisines || []).length > 0) {
+    filtered = filtered.filter(r => {
+      const rc = (r.cuisine || '').toLowerCase();
+      return !prefs.excludeCuisines.some(c => rc.includes(c.toLowerCase()));
+    });
+  }
 
   // Shuffle for discovery
   const [shuffled] = useState(() => [...Array(RECIPES.length).keys()].sort(() => Math.random() - 0.5));
@@ -22748,8 +22773,8 @@ function ShoppingTab({ shopping, setShopping, generateShopping, mealPlan, pantry
 
 /* ── PROFILE TAB ── */
 function PreferencesPanel({ prefs, setPrefs }) {
-  const DIETS = ["Vegetarian","Vegan","Gluten-Free","Dairy-Free","Kosher","Halal","Low-Carb","Nut-Free"];
-  const CUISINES = ["Italian","Mexican","Japanese","Indian","Mediterranean","French","Chinese","Thai","American","Korean","Middle Eastern","Greek"];
+  const DIETS = ["Vegetarian","Vegan","Pescatarian","Gluten-Free","Dairy-Free","Kosher","Halal","Low-Carb","Nut-Free"];
+  const CUISINES = ["Italian","Mexican","Japanese","Indian","Mediterranean","French","Chinese","Thai","American","Korean","Middle Eastern","Greek","Vietnamese","Turkish","Brazilian","African","Caribbean"];
   const togglePref = (field, val) => {
     setPrefs(p => {
       const arr = p[field] || [];
@@ -22765,9 +22790,16 @@ function PreferencesPanel({ prefs, setPrefs }) {
         ))}
       </div>
       <h3 style={{fontFamily:'var(--fd)',fontSize:20,marginBottom:16}}>Favorite Cuisines</h3>
-      <div style={{display:'flex',gap:8,flexWrap:'wrap',marginBottom:24}}>
+      <div style={{display:'flex',gap:8,flexWrap:'wrap',marginBottom:16}}>
         {CUISINES.map(c => (
           <button key={c} className={`onb-chip${(prefs.cuisines||[]).includes(c) ? ' sel' : ''}`} onClick={() => togglePref('cuisines', c)}>{c}</button>
+        ))}
+      </div>
+      <h3 style={{fontFamily:'var(--fd)',fontSize:20,marginBottom:16}}>Exclude Cuisines</h3>
+      <p style={{fontSize:13,color:'var(--mu)',marginBottom:12}}>Recipes from these cuisines will be hidden</p>
+      <div style={{display:'flex',gap:8,flexWrap:'wrap',marginBottom:24}}>
+        {CUISINES.map(c => (
+          <button key={c} className={`onb-chip${(prefs.excludeCuisines||[]).includes(c) ? ' sel' : ''}`} style={(prefs.excludeCuisines||[]).includes(c) ? {background:'#D32F2F',color:'#fff',borderColor:'#D32F2F'} : {}} onClick={() => togglePref('excludeCuisines', c)}>{c}</button>
         ))}
       </div>
       <h3 style={{fontFamily:'var(--fd)',fontSize:20,marginBottom:16}}>Cooking Preferences</h3>
