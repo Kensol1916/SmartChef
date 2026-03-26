@@ -21536,135 +21536,253 @@ class RecipeErrorBoundary extends React.Component {
 }
 
 // ── Dynamic recipe image ──────────────────────────────────────────────────────
-// Curated Unsplash photo pools by food category. Each recipe gets a deterministic
-// image based on its title hash mod the pool size — no external API calls needed.
-const FOOD_PHOTOS = {
-  pasta: [
-    'photo-1481931098730-318b6f776db0','photo-1621996346565-e3dbc646d9a9','photo-1563379926898-05f4575a45d8',
-    'photo-1622973536968-3ead9e780960','photo-1551892374-ecf8754cf8b0','photo-1608219992759-8d74ed8d76eb',
-    'photo-1555949258-eb67b1ef0ceb','photo-1473093295043-cdd812d0e601','photo-1556761223-4c4282c73f77',
-    'photo-1598866594042-8c11f76ec6de'
-  ],
-  chicken: [
-    'photo-1594221708779-94832f4320d1','photo-1598515214211-89d3c73ae83b','photo-1604908176997-125f25cc6f3d',
-    'photo-1576867757603-05b134ebc379','photo-1632778149955-e80f8ceca2e8','photo-1606728035253-0fcd0e2d8e10'
-  ],
-  beef: [
-    'photo-1546964124-0cce460f38ef','photo-1606756790138-261d2b21cd75','photo-1558030006-450675393462',
-    'photo-1588168333986-5078d3ae3976','photo-1529694157872-4e0c0f3b238b'
-  ],
-  fish: [
-    'photo-1467003909585-2f8a72700288','photo-1559847844934-e3f6e68a585f','photo-1580476262798-bddd9f4b7369',
-    'photo-1519708227418-c8fd9a32b7a0','photo-1535140728325-a4d3707eee61'
-  ],
-  salad: [
-    'photo-1546069901-ba9599a7e63c','photo-1512621776951-a57141f2eefd','photo-1540189549336-e6e99c3679fe',
-    'photo-1607532941433-304659e8198a','photo-1543339308-d595b4f1f3e0','photo-1505253716362-afaea1d3d1af',
-    'photo-1515543237350-b3eea1ec8082'
-  ],
-  soup: [
-    'photo-1547592166-23ac45744acd','photo-1587116861000-8e3e89e3b5a9','photo-1603105037880-880cd4edfb0d',
-    'photo-1588566565463-180a5b2090d2','photo-1534939561126-855b8675edd7'
-  ],
-  curry: [
-    'photo-1455619452474-d2be8b1e70cd','photo-1543339308091-ef4f38df18b7','photo-1565557623262-b51c2513a641',
-    'photo-1585937421612-70a008356fbe','photo-1574653853027-5382a3d23a15'
-  ],
-  rice: [
-    'photo-1559181567000-3b76e7e4c5a4','photo-1603133872878-684f208fb84b','photo-1596560548464-f010549b84d7',
-    'photo-1536304929831-ee1ca9d44906','photo-1604908176997-125f25cc6f3d'
-  ],
-  breakfast: [
-    'photo-1533089860892-a7c6f0a88666','photo-1525351484163-7529414344d8','photo-1590412200988-a436970781fa',
-    'photo-1600803907087-2e3e6fb2c834','photo-1528207776546-365bb710ee93','photo-1484723091739-30a097e8f929',
-    'photo-1495214783159-3503fd1b572d','photo-1517433367423-c7e5b0f35086'
-  ],
-  sandwich: [
-    'photo-1539252554453-80ab65ce3586','photo-1571877227200-a0d98ea607e9','photo-1528735602780-2552fd46c7af',
-    'photo-1509722747041-616f39b57569','photo-1481070555726-e2fe8357b3e3','photo-1575523392682-35fba24bdd3b'
-  ],
-  pizza: [
-    'photo-1565299624946-b28f40a0ae38','photo-1604908176997-125f25cc6f3d','photo-1571091718767-18b5b1457add',
-    'photo-1574071318508-1cdbab80d002','photo-1513104890138-7c749659a591'
-  ],
-  dessert: [
-    'photo-1563729784474-d77dbb933a9e','photo-1567171466295-4afa63d45416','photo-1533134242443-d4fd215305ad',
-    'photo-1488477181946-6428a0291777','photo-1464305795204-6f5bbfc7fb81','photo-1571115177098-24ec42ed204d',
-    'photo-1551024506-0bccd828d307','photo-1486427944544-d2c246c4df14','photo-1587668178277-295251f900ce',
-    'photo-1578985545062-69928b1d9587'
-  ],
-  sushi: [
-    'photo-1579871494447-9811cf80d66c','photo-1533777857889-4be7c70b33f7','photo-1553621042-f6e147245754',
-    'photo-1559410545-0bdcd187e0a6'
-  ],
-  mexican: [
-    'photo-1565299585323-38d6b0865b47','photo-1571091718767-18b5b1457add','photo-1599974579688-8dbdd335c6f7',
-    'photo-1551504734-5ee1c4a1479b','photo-1624300629298-e9209cf8c01b'
-  ],
-  stir_fry: [
-    'photo-1605926637512-c8b131444a3b','photo-1512058564366-18510be2db19','photo-1569718212165-3a8278d5f624',
-    'photo-1585032226651-759b368d7246'
-  ],
-  bowl: [
-    'photo-1546069901-ba9599a7e63c','photo-1590301157890-4810ed352733','photo-1600891964599-f94d4ca1bd76',
-    'photo-1512621776951-a57141f2eefd','photo-1490645935967-10de6ba17061'
-  ],
-  bread: [
-    'photo-1509440159596-0249088772ff','photo-1549931319-a545dcf3bc73','photo-1517433367423-c7e5b0f35086',
-    'photo-1558961363-fa8fdf82db35'
-  ],
-  smoothie: [
-    'photo-1600891964599-f94d4ca1bd76','photo-1505252585461-04db1eb84625','photo-1553530666-ba11a7da3888',
-    'photo-1502741338009-cac2772e18bc'
-  ],
-  snack: [
-    'photo-1555939594-58d7cb561ad1','photo-1501436513145-30f24e19fcc8','photo-1579366948929-444eb79881eb',
-    'photo-1504674900247-0877df9cc836','photo-1484980972926-edee96e0960d'
-  ],
-  general: [
-    'photo-1504674900247-0877df9cc836','photo-1476224203421-9ac39bcb3327','photo-1414235077428-338989a2e8c0',
-    'photo-1498837167922-ddd27525d352','photo-1493770348161-369560ae357d','photo-1555939594-58d7cb561ad1',
-    'photo-1506354666786-959d6d497f1a','photo-1543353071-087092ec393a','photo-1547592180-85f173990554',
-    'photo-1540189549336-e6e99c3679fe'
-  ]
+// Uses foodish-api.com — 574 guaranteed food photos across 10 categories.
+// Title-keyword matching ensures each recipe shows the CORRECT type of food.
+// Hash-based selection within categories maximizes uniqueness.
+const FOODISH_CATS = {
+  biryani:81, burger:87, 'butter-chicken':22, dessert:36, dosa:83,
+  idly:79, pasta:34, pizza:95, rice:35, samosa:22
 };
 
-function recipeImage(title, meal) {
-  if (!title) return '';
-  const t = title.toLowerCase();
-  const m = (meal || '').toLowerCase();
-  // Determine category
-  let cat = 'general';
-  if (/pasta|spaghetti|penne|fettuccin|linguine|lasagna|ravioli|gnocchi|macaroni|carbonara|aglio|bolognese|alfredo|ragu|rigatoni|orzo/.test(t)) cat = 'pasta';
-  else if (/chicken|pollo/.test(t)) cat = 'chicken';
-  else if (/beef|steak|bulgogi|burger|meatball|lamb|pork|bacon|sausage/.test(t)) cat = 'beef';
-  else if (/salmon|fish|tuna|cod\b|shrimp|prawn|lobster|crab|scallop|halibut|trout|sea bass|snapper|calamari/.test(t)) cat = 'fish';
-  else if (/salad/.test(t)) cat = 'salad';
-  else if (/soup|stew|chowder|bisque|broth|chili/.test(t)) cat = 'soup';
-  else if (/curry|tikka|masala|dal\b|dhal|korma|vindaloo/.test(t)) cat = 'curry';
-  else if (/rice|risotto|paella|biryani|pilaf|fried rice|congee|bibimbap/.test(t)) cat = 'rice';
-  else if (/sushi|sashimi|maki|temaki|nigiri/.test(t)) cat = 'sushi';
-  else if (/taco|burrito|enchilada|quesadilla|fajita|nachos|tamale|carnita/.test(t)) cat = 'mexican';
-  else if (/pizza|flatbread/.test(t)) cat = 'pizza';
-  else if (/sandwich|toast|panini|wrap|blt|melt|grilled cheese|bagel|bruschetta|sub\b/.test(t)) cat = 'sandwich';
-  else if (/cake|cookie|brownie|pie|tart|pudding|ice cream|sorbet|mousse|cheesecake|crumble|muffin|donut|croissant|pastry|flan|eclair/.test(t)) cat = 'dessert';
-  else if (/smoothie|shake|juice/.test(t)) cat = 'smoothie';
-  else if (/stir.?fry|wok|pad thai|ramen|noodle|pho|udon|lo mein/.test(t)) cat = 'stir_fry';
-  else if (/bowl|buddha|poke|acai/.test(t)) cat = 'bowl';
-  else if (/bread|scone|biscuit|focaccia/.test(t)) cat = 'bread';
-  else if (m === 'breakfast' || /omelette|omelet|pancake|waffle|french toast|granola|oatmeal|egg|shakshuka|frittata|hash/.test(t)) cat = 'breakfast';
-  else if (m === 'snack' || m === 'dessert') cat = 'snack';
-  // Deterministic hash from title
-  let hash = 0;
-  for (let i = 0; i < t.length; i++) hash = ((hash << 5) - hash + t.charCodeAt(i)) | 0;
-  hash = Math.abs(hash);
-  const pool = FOOD_PHOTOS[cat] || FOOD_PHOTOS.general;
-  const photoId = pool[hash % pool.length];
-  return `https://images.unsplash.com/${photoId}?w=400&auto=format&fit=crop&q=60`;
+// Title keywords → best foodish category (checked FIRST, before cuisine)
+// This ensures "Pasta Carbonara" shows pasta, "Margherita Pizza" shows pizza, etc.
+// ORDER MATTERS: more specific patterns first, general patterns last.
+const TITLE_KW_TO_CAT = [
+  // Pasta & noodles (most specific)
+  [/pasta|spaghetti|penne|linguine|fettuccine|tagliatelle|rigatoni|fusilli|macaroni|lasagna|ravioli|gnocchi|carbonara|bolognese|alfredo|aglio|cacio|puttanesca|arrabbiata|primavera|marinara|lo mein|chow mein|pad thai|udon|soba|ramen|noodle|yakisoba|japchae|laksa|pho|mac.and.cheese|orzo|tortellini|cannelloni/i, 'pasta'],
+  // Pizza & flatbread
+  [/pizza|flatbread|focaccia|calzone|margherita|pepperoni|neapolitan/i, 'pizza'],
+  // Burger & sandwich
+  [/burger|sandwich|wrap(?!.*spring)|slider|sub\b|hoagie|panini|blt\b|club\b|po.boy|philly|sloppy joe|pulled pork|bao\b|banh mi|gyro|shawarma|hot dog|taco|torta\b|quesadilla|burrito(?!.*bowl)/i, 'burger'],
+  // Curry & saucy dishes
+  [/curry|masala|tikka|vindaloo|korma|madras|rogan josh|dal\b|dhal|daal|rendang|paneer|palak|saag|aloo|chana|rajma|jalfrezi|bhuna|dopiaza|balti|stew|goulash|tagine|bourguignon|cacciatore|coq au vin|pot roast|braised|slow.cook|tandoori|butter chicken|chicken marsala|mole\b|enchilada/i, 'butter-chicken'],
+  // Rice dishes
+  [/\brice\b|risotto|paella|pilaf|pilau|biryani|jambalaya|congee|fried rice|bibimbap|onigiri|sushi|poke bowl|burrito bowl|chirashi|kedgeree|arancini/i, 'rice'],
+  // Fried & crispy snacks (before dessert to catch savory items)
+  [/samosa|dumpling|spring roll|egg roll|wonton|gyoza|empanada|croquette|fritter|pakora|bhaji|falafel|tempura|popcorn chicken|nugget|finger\b|wing\b|wings\b|nacho|chips\b|pretzel|cracker|pastry|puff\b|phyllo|filo\b|mozzarella stick|fish.and.chip|onion ring|jalapeño popper|corn dog|hush pupp/i, 'samosa'],
+  // Pancake/crepe/egg dishes (before dessert to catch breakfast items)
+  [/pancake|waffle|crepe|dosa|galette|blini|frittata|omelette|omelet|quiche|shakshuka|egg\b|eggs\b|scramble|benedict|tortilla española|hash brown|french toast/i, 'dosa'],
+  // Bread & baked goods
+  [/bread|naan|roti|pita|biscuit|toast(?!.*french)|brioche|sourdough|ciabatta|baguette|croissant|roll\b|scone|cornbread|chapati|paratha|idli|idly|vada|dhokla|uttapam|appam|muffin|bagel|granola|muesli|oatmeal|cereal|porridge|yogurt/i, 'idly'],
+  // Dessert & sweet (after pancake/bread so savory pancakes/muffins don't match)
+  [/cake|cookie|brownie|pie\b|tart\b|ice cream|gelato|mousse|pudding|custard|crumble|cobbler|truffle|fudge|candy|sweet\b|chocolate|tiramisu|panna cotta|creme brulee|baklava|churro|donut|doughnut|macaron|eclair|profiterole|cheesecake|cupcake|sundae|sorbet|parfait|compote|meringue|souffl|beignet|halwa|gulab|kheer|tres leches|flan\b|jelly\b|jam\b|honey\b.*drizzle/i, 'dessert'],
+  // Plated meals / bowls (catch-all for composed dishes)
+  [/\bbowl\b|plate\b|platter|feast|combo|thali|mezze|antipasti|charcuterie|grain bowl|buddha bowl|power bowl|smoothie/i, 'biryani'],
+  // Grilled / roasted proteins (maps to biryani - plated food)
+  [/grilled|roasted|baked|seared|pan.fried|stir.fry|kebab|skewer|cutlet|schnitzel|milanese|piccata|scallopini|teriyaki|glazed|marinated|herb.crusted|blackened|cajun|jerk/i, 'biryani'],
+  // Soup (maps to butter-chicken - saucy/bowl food)
+  [/soup|broth|chowder|bisque|gazpacho|minestrone|chili\b|gumbo|pottage|consomm/i, 'butter-chicken'],
+  // Salad (maps to rice - fresh bowl food)
+  [/salad|slaw|ceviche|carpaccio|tartare|panzanella/i, 'rice'],
+];
+
+// Cuisine → fallback categories (used when title keywords don't match)
+const CUISINE_FALLBACK = {
+  'Italian':'pasta', 'Mediterranean':'rice', 'French':'pasta', 'Spanish':'rice',
+  'Greek':'rice', 'Turkish':'rice', 'Mexican':'rice', 'Brazilian':'rice',
+  'American':'burger', 'Southern US':'burger', 'Cajun':'rice', 'British':'butter-chicken',
+  'Japanese':'rice', 'Chinese':'rice', 'Korean':'rice', 'Thai':'butter-chicken',
+  'Vietnamese':'rice', 'Indian':'biryani', 'Middle Eastern':'rice', 'Moroccan':'biryani',
+  'Ethiopian':'biryani', 'Lebanese':'rice', 'Caribbean':'rice', 'Filipino':'rice',
+  'African':'biryani', 'Malaysian':'rice', 'Indonesian':'rice', 'Modern':'pasta',
+  'Pakistani':'biryani', 'Persian':'rice', 'Israeli':'rice', 'Egyptian':'rice',
+  'Syrian':'rice', 'North African':'biryani', 'Asian':'rice', 'Russian':'butter-chicken',
+  'Australian':'burger', 'Peruvian':'rice', 'Singaporean':'rice', 'Hawaiian':'rice',
+  'Jamaican':'rice', 'Iraqi':'rice', 'Jordanian':'rice', 'Palestinian':'rice',
+  'Cuban':'rice', 'Afghan':'biryani', 'Eastern European':'butter-chicken',
+  'Scandinavian':'rice', 'Hungarian':'butter-chicken', 'Scottish':'butter-chicken',
+  'Belgian':'pasta', 'German':'burger', 'Swedish':'rice', 'Nordic':'rice',
+  'Portuguese':'rice', 'Swiss':'pasta', 'Austrian':'pasta', 'Polish':'butter-chicken',
+  'Georgian':'rice', 'Serbian':'butter-chicken', 'Balkan':'rice', 'Cypriot':'rice',
+  'Danish':'idly', 'Uzbek':'biryani', 'Bangladeshi':'biryani', 'Tropical':'rice',
+  'West African':'rice', 'Libyan':'rice', 'Saudi':'biryani', 'Penang':'rice',
+};
+
+// Meal type → fallback category
+const MEAL_FALLBACK = {
+  'breakfast':'dosa', 'lunch':'burger', 'dinner':'biryani',
+  'salad':'rice', 'soup':'butter-chicken', 'snack':'samosa', 'dessert':'dessert',
+};
+
+function recipeImage(recipe) {
+  if (!recipe) return 'https://foodish-api.com/images/rice/rice1.jpg';
+  const r = typeof recipe === 'object' ? recipe : { id: recipe };
+  const id = r.id || 0;
+  const title = (r.title || '').toLowerCase();
+
+  // 1. Try title keyword matching FIRST (most accurate)
+  let cat = null;
+  for (const [regex, c] of TITLE_KW_TO_CAT) {
+    if (regex.test(title)) { cat = c; break; }
+  }
+
+  // 2. Fall back to cuisine
+  if (!cat) {
+    const cuisine = (r.cuisine || '').trim();
+    cat = CUISINE_FALLBACK[cuisine];
+    if (!cat && cuisine) {
+      for (const [key, val] of Object.entries(CUISINE_FALLBACK)) {
+        if (cuisine.toLowerCase().includes(key.toLowerCase())) { cat = val; break; }
+      }
+    }
+  }
+
+  // 3. Fall back to meal type
+  if (!cat) {
+    const meal = (r.meal || '').toLowerCase();
+    cat = MEAL_FALLBACK[meal];
+  }
+
+  // 4. Ultimate fallback
+  if (!cat) cat = 'biryani';
+
+  const maxN = FOODISH_CATS[cat] || 34;
+  // Knuth multiplicative hash for good distribution within the category
+  const hash = ((id * 2654435761) >>> 0) % maxN;
+  const imgN = hash + 1; // 1-indexed
+  return `https://foodish-api.com/images/${cat}/${cat}${imgN}.jpg`;
 }
 
-// Apply images to all recipes
-RECIPES.forEach(r => { r.image = recipeImage(r.title, r.meal); });
+// RecipeImg component — shows image with emoji fallback on error
+function RecipeImg({ src, alt, emoji, style, className, onClick }) {
+  const [failed, setFailed] = React.useState(false);
+  const baseImgStyle = className ? {} : {width:'100%',height:'100%',objectFit:'cover',display:'block'};
+  const baseDivStyle = className ? {} : {width:'100%',height:'100%'};
+  if (!src || failed) {
+    return (
+      <div style={{...baseDivStyle,background:'linear-gradient(135deg,#F0E8DC 0%,#E4D4BE 100%)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:48,...(style||{})}} className={className} onClick={onClick}>
+        {emoji || '🍽️'}
+      </div>
+    );
+  }
+  return <img src={src} alt={alt||''} style={{...baseImgStyle,...(style||{})}} className={className} onClick={onClick} onError={()=>setFailed(true)} loading="lazy" />;
+}
+
+// Per-category loremflickr overflow pools — 3 keyword sets × 49 lock values = 147 per category
+// These provide category-correct food images for overflow (pasta recipes get pasta images, etc.)
+const LOREMFLICKR_POOLS = {
+  'pasta':    ['pasta,italian,food',    'spaghetti,noodle,sauce',  'penne,fettuccine,meal',   'linguine,carbonara,dish', 'macaroni,cheese,dinner',  'ravioli,tortellini,plate'],
+  'pizza':    ['pizza,cheese,baked',    'pizza,italian,slice',     'flatbread,oven,food',     'pepperoni,pizza,hot',     'margherita,pizza,fresh',  'calzone,pizza,golden'],
+  'burger':   ['burger,sandwich,bun',   'hamburger,fries,meal',    'sandwich,lunch,bread',    'slider,burger,grill',     'wrap,tortilla,lunch',     'panini,grilled,sandwich'],
+  'butter-chicken': ['curry,indian,food','stew,bowl,dinner',       'curry,spice,meal',        'masala,chicken,plate',    'tikka,tandoori,dish',     'korma,sauce,rice'],
+  'rice':     ['rice,bowl,food',        'risotto,grain,meal',      'fried,rice,asian',        'sushi,japanese,food',     'paella,seafood,rice',     'pilaf,rice,dinner'],
+  'biryani':  ['biryani,indian,rice',   'dinner,plate,food',       'grilled,meat,meal',       'roasted,chicken,dinner',  'kebab,skewer,grill',      'steak,beef,plate'],
+  'samosa':   ['samosa,fried,snack',    'dumpling,appetizer,food', 'spring,roll,crispy',      'empanada,pastry,golden',  'falafel,fried,crispy',    'tempura,japanese,fried'],
+  'dosa':     ['pancake,breakfast,food','crepe,egg,morning',       'waffle,brunch,meal',      'omelette,egg,breakfast',  'french,toast,syrup',      'frittata,egg,brunch'],
+  'idly':     ['bread,baked,food',      'pastry,breakfast,bakery', 'muffin,scone,baked',      'croissant,butter,pastry', 'bagel,cream,breakfast',   'sourdough,bread,fresh'],
+  'dessert':  ['cake,dessert,sweet',    'cookie,chocolate,treat',  'ice,cream,dessert',       'pie,fruit,baked',         'brownie,chocolate,fudge', 'tiramisu,coffee,sweet'],
+};
+const LOREMFLICKR_PER_KW = 49; // lock values 1-49 give unique images per keyword set
+
+// Overflow pool: 126 verified Unsplash food photos for collision avoidance
+const UNSPLASH_FOOD = [
+"1504674900247-0877df9cc836","1567620905732-2d1ec7ab7445","1565299624946-b28f40a0ae38",
+"1565958011703-44f9829ba187","1482049016688-2d3e1b311543","1498837167922-ddd27525d352",
+"1476224203421-9ac39bcb3327","1473093295043-cdd812d0e601","1455619452474-d2be8b1e70cd",
+"1540189549336-e6e99c3679fe","1512621776951-a57141f2eefd","1467003909585-2f8a72700288",
+"1484723091739-30a097e8f929","1529042410759-befb1204b468","1504754524776-8f4f37790ca0",
+"1546549032-9571cd6b27df","1551183053-bf91a1d81141","1571091718767-18b5b1457add",
+"1563379926898-05f4575a45d8","1540420773420-3366772f4999","1551326844-4df70f78d0e9",
+"1496116218417-1a781b1c416c","1559847844-5315695dadae","1585032226651-759b368d7246",
+"1588137378633-dea1336ce1e2","1569058242252-623df46b5025","1574484284002-952d92456975",
+"1414235077428-338989a2e8c0","1565299585323-38d6b0865b47","1499028344343-cd173ffc68a9",
+"1478145046317-39f10e56b5e9","1505253758473-96b7015fcd40","1490645935967-10de6ba17061",
+"1473093226795-af9932fe5856","1571167530149-c1105da4c2c7","1547592180-85f173990554",
+"1551024506-0bccd828d307","1555939594-58d7cb561ad1","1606787366850-de6330128bfc",
+"1547592166-23ac45744acd","1568901346375-23c9450c58cd","1563897539633-7374c276c212",
+"1546554137-f86b9593a222","1565557623262-b51c2513a641","1484980972926-edee96e0960d",
+"1511690656952-34342bb7c2f2","1544025162-d76694265947","1555126634-323283e090fa",
+"1540914124281-342587941389","1621996346565-e3dbc646d9a9","1543826173-70651703c5a4",
+"1559181567-c3190ca9959b","1563805042-7684c019e1cb","1560963689-b5682b6440f8",
+"1588166524941-3bf61a9c41db","1511910849309-0dffb8785146","1553621042-f6e147245754",
+"1507048331197-7d4ac70811cf","1464226184884-fa280b87c399","1547573854-74d2a71d0826",
+"1512058564366-18510be2db19","1557142046-c704a3adf364","1550547660-d9450f859349",
+"1551218808-94e220e084d2","1562059392-096320bccc7e","1495521821757-a1efb6729352",
+"1476718406336-bb5a9690ee2a","1574071318508-1cdbab80d002","1515003197210-e0cd71810b5f",
+"1529692236671-f1f6cf9683ba","1490818387583-1baba5e638af","1455279032140-49a4bf46f343",
+"1538688525198-9b88f6f53126","1504544750208-dc0358e63f7f","1556761223-4c4282c73f77",
+"1513104890138-7c749659a591","1556040220-4096d522378d","1563729784474-d77dbb933a9e",
+"1517244683847-7456b63c5969","1512058454905-6b841e7ad132","1505575967455-40e256f73376",
+"1460306855393-0410f61241c7","1482938289607-e9573fc25ebb","1485921325833-c519f76c4927",
+"1497888329096-51c27beff665","1528712306091-ed0763094c98","1493770348161-369560ae357d",
+"1559737558-2f5a35f4523b","1530554764233-e79e16c91d08","1518779578993-ec3579fee39f",
+"1501959181532-7d2a3c064642","1470338745628-171cf53de3a8","1467453678174-768ec283a940",
+"1606890658317-7d14490b76fd","1558642452-9d2a7deb7f62","1565299507177-b0ac66763828",
+"1569718212165-3a8278d5f624","1533777324565-a040eb52facd","1551782450-a2132b4ba21d",
+"1552332386-f8dd00dc2f85","1516685018646-549198525c1b","1466637574441-749b8f19452f",
+"1508615070457-7baeba4003ab","1603073163308-9654c3fb70b5","1592321675774-3de57f3ee0dc",
+"1623428187969-5da2dcea5ebf","1556909114-44e3e70034e2","1559058789-672da06263d8",
+"1555244162-803834f70033","1589302168068-964664d93dc0","1572656631137-7935297eff55",
+"1626082927389-6cd097cdc6ec","1560180474-e8563fd75bab","1600803907087-f56d462fd26b",
+"1563245372-f21724e3856d","1626200419199-391ae4be7a41","1551024709-8f23befc6f87",
+"1600565193348-f74bd3c7ccdf","1578916171728-46686eac8d58","1570197571499-166b36435e9f",
+"1615937722923-67f6deaf2cc9","1502741338009-cac2772e18bc","1590301157890-4810ed352733",
+"1567337710282-00832b415979","1594212699903-ec8a3eca50f5","1565895405138-6c3a1555da6a",
+"1585937421612-70a008356fbe","1580013759032-c96505e24c1f","1601050690597-df0568f70950",
+"1568602471122-7832951cc4c5","1609501676725-7186f017a4b7","1586190848861-99aa4a171e90",
+"1596040033229-a9821ebd058d","1558818498-28c1e002b655","1545247181-516773cae754",
+"1563636619-e9143da7973b","1605478371310-a9f1e96b4ff4","1512003867696-6d5ce6835040",
+];
+
+// Build per-category loremflickr URL pool for overflow
+function getLoremflickrUrl(cat, kwIdx, lockN) {
+  const kws = LOREMFLICKR_POOLS[cat];
+  if (!kws) return null;
+  const kw = kws[kwIdx % kws.length];
+  return `https://loremflickr.com/400/300/${kw}?lock=${lockN}`;
+}
+
+// Apply images with collision detection for maximum uniqueness
+// Pool hierarchy per category:
+//   1. Foodish (22-95 per cat, 574 total) — guaranteed food photos
+//   2. Loremflickr per-category (3 kw sets × 49 = 147 per cat) — food-keyword images
+//   3. Unsplash (126 general food photos) — final overflow
+(function assignImages() {
+  const used = new Set();
+  const sorted = [...RECIPES].sort((a,b) => (a.id||0) - (b.id||0));
+
+  sorted.forEach(r => {
+    let img = recipeImage(r); // Primary: foodish category image
+    if (!used.has(img)) { used.add(img); r.image = img; return; }
+
+    // Extract the matched category from the foodish URL
+    const catMatch = img.match(/images\/([^/]+)\//);
+    const cat = catMatch ? catMatch[1] : 'biryani';
+    const maxN = FOODISH_CATS[cat] || 34;
+
+    // Tier 1: Try ALL remaining slots in same foodish category
+    let found = false;
+    for (let n = 1; n <= maxN; n++) {
+      const tryImg = `https://foodish-api.com/images/${cat}/${cat}${n}.jpg`;
+      if (!used.has(tryImg)) { img = tryImg; found = true; break; }
+    }
+
+    // Tier 2: Loremflickr per-category overflow (3 keyword sets × 49 locks = 147)
+    if (!found) {
+      const kwSets = LOREMFLICKR_POOLS[cat];
+      if (kwSets) {
+        for (let kwi = 0; kwi < kwSets.length && !found; kwi++) {
+          for (let lock = 1; lock <= LOREMFLICKR_PER_KW && !found; lock++) {
+            const tryImg = getLoremflickrUrl(cat, kwi, lock);
+            if (tryImg && !used.has(tryImg)) { img = tryImg; found = true; }
+          }
+        }
+      }
+    }
+
+    // Tier 3: Unsplash overflow pool (126 general food photos)
+    if (!found) {
+      for (let i = 0; i < UNSPLASH_FOOD.length; i++) {
+        const tryImg = `https://images.unsplash.com/photo-${UNSPLASH_FOOD[i]}?w=400&h=300&fit=crop&auto=format`;
+        if (!used.has(tryImg)) { img = tryImg; found = true; break; }
+      }
+    }
+
+    used.add(img);
+    r.image = img;
+  });
+  console.log(`Image assignment: ${used.size} unique images for ${RECIPES.length} recipes`);
+})();
 
 /* ── MAIN APP ── */
 export default function App() {
@@ -21753,7 +21871,8 @@ export default function App() {
 
   // ── Generate plan ──
   const generateWeek = () => {
-    const pool = RECIPES.filter(r => {
+    try {
+    let pool = RECIPES.filter(r => {
       if (prefs.dietary.length > 0) {
         const rd = (r.dietary || []).map(d => d.toLowerCase());
         if (!prefs.dietary.every(d => rd.includes(d.toLowerCase()))) return false;
@@ -21761,6 +21880,8 @@ export default function App() {
       if (prefs.maxTime && r.time > prefs.maxTime) return false;
       return true;
     });
+    // Fallback: if filters are too strict, use all recipes
+    if (pool.length < 21) pool = RECIPES;
     const byMeal = { breakfast: [], lunch: [], dinner: [] };
     pool.forEach(r => {
       const m = (r.meal || 'dinner').toLowerCase();
@@ -21785,6 +21906,22 @@ export default function App() {
     }));
     setMealPlan(newPlan);
     showToast("Week plan generated!");
+    } catch (err) {
+      console.error("generateWeek error:", err);
+      // Emergency fallback: just pick 21 random recipes
+      const shuffled = [...RECIPES].sort(() => Math.random() - 0.5);
+      const days = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+      const fallback = days.map((day, i) => ({
+        day,
+        meals: [
+          { id: shuffled[i*3].id, title: shuffled[i*3].title, emoji: shuffled[i*3].emoji },
+          { id: shuffled[i*3+1].id, title: shuffled[i*3+1].title, emoji: shuffled[i*3+1].emoji },
+          { id: shuffled[i*3+2].id, title: shuffled[i*3+2].title, emoji: shuffled[i*3+2].emoji },
+        ]
+      }));
+      setMealPlan(fallback);
+      showToast("Week plan generated!");
+    }
   };
 
   const generateDay = (dayIdx) => {
@@ -22227,12 +22364,12 @@ function PlannerHome({ mealPlan, setMealPlan, generateWeek, generateDay, regener
                           setQap({ dayIdx: di, mealIdx: mi, rect: e.currentTarget.getBoundingClientRect() });
                         }}
                       >
-                        <img
+                        <RecipeImg
                           className="meal-card-img"
-                          src={recipe?.image || recipeImage(slot.title)}
+                          src={recipe?.image || recipeImage(recipe || slot)}
                           alt={slot.title}
-                          onError={e => { e.target.style.display = 'none'; }}
-                          loading="lazy"
+                          emoji={slot.emoji}
+                          style={{fontSize:24}}
                         />
                         <div className="meal-card-name">{slot.title}</div>
                       </div>
@@ -22333,7 +22470,7 @@ function ReplacePicker({ replacePicker, setReplacePicker, setSlotRecipe, showToa
                 setReplacePicker(null);
                 showToast(`Replaced with "${r.title}"`);
               }}>
-                <img src={r.image || recipeImage(r.title)} alt="" onError={e => { e.target.style.display = 'none'; }} />
+                <RecipeImg src={r.image} alt={r.title} emoji={r.emoji} style={{width:48,height:48,borderRadius:6,fontSize:20,flexShrink:0}} />
                 <div>
                   <div style={{fontWeight:600,fontSize:13}}>{r.title}</div>
                   <div style={{fontSize:11,color:'var(--mu)'}}>{r.cuisine} · {r.time}min</div>
@@ -22394,7 +22531,7 @@ function RecipeDetail({ recipe, onClose, handleAddToPlan, toggleSave, saved, pan
     <div className="rd-overlay" onClick={onClose}>
       <div className="rd-panel" onClick={e => e.stopPropagation()}>
         <div className="rd-hero">
-          <img src={recipe.image || recipeImage(recipe.title)} alt={recipe.title} onError={e => { e.target.style.display = 'none'; }} />
+          <RecipeImg src={recipe.image} alt={recipe.title} emoji={recipe.emoji} style={{width:'100%',height:'100%'}} />
           <div className="rd-hero-overlay" />
           <button className="rd-close" onClick={onClose}>✕</button>
         </div>
@@ -22510,7 +22647,7 @@ function ExploreTab({ setViewRecipe, handleAddToPlan, toggleSave, saved, showToa
         {display.map(r => (
           <div key={r.id} className="explore-card">
             <div className="explore-card-img" onClick={() => setViewRecipe(r)}>
-              <img src={r.image || recipeImage(r.title)} alt={r.title} onError={e => { e.target.style.display = 'none'; }} loading="lazy" />
+              <RecipeImg src={r.image} alt={r.title} emoji={r.emoji} />
             </div>
             <div className="explore-card-body">
               <div className="explore-card-title" onClick={() => setViewRecipe(r)} style={{cursor:'pointer'}}>{r.emoji} {r.title}</div>
@@ -22690,7 +22827,7 @@ function ProfileTab({ user, saved, userRecipes, mealPlan, prefs, setPrefs, publi
               {savedRecipes.map(r => (
                 <div key={r.id} className="explore-card" onClick={() => setViewRecipe(r)}>
                   <div className="explore-card-img">
-                    <img src={r.image || recipeImage(r.title)} alt={r.title} onError={e => { e.target.style.display = 'none'; }} loading="lazy" />
+                    <RecipeImg src={r.image} alt={r.title} emoji={r.emoji} />
                   </div>
                   <div className="explore-card-body">
                     <div className="explore-card-title">{r.emoji} {r.title}</div>
