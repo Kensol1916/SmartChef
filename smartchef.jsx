@@ -21658,22 +21658,6 @@ function RecipeImg({ src, alt, emoji, style, className, onClick }) {
   return <img src={src} alt={alt||''} style={{...baseImgStyle,...(style||{})}} className={className} onClick={onClick} onError={()=>setFailed(true)} loading="lazy" />;
 }
 
-// Per-category loremflickr overflow pools — 3 keyword sets × 49 lock values = 147 per category
-// These provide category-correct food images for overflow (pasta recipes get pasta images, etc.)
-const LOREMFLICKR_POOLS = {
-  'pasta':    ['pasta,italian,food',    'spaghetti,noodle,sauce',  'penne,fettuccine,meal',   'linguine,carbonara,dish', 'macaroni,cheese,dinner',  'ravioli,tortellini,plate'],
-  'pizza':    ['pizza,cheese,baked',    'pizza,italian,slice',     'flatbread,oven,food',     'pepperoni,pizza,hot',     'margherita,pizza,fresh',  'calzone,pizza,golden'],
-  'burger':   ['burger,sandwich,bun',   'hamburger,fries,meal',    'sandwich,lunch,bread',    'slider,burger,grill',     'wrap,tortilla,lunch',     'panini,grilled,sandwich'],
-  'butter-chicken': ['curry,indian,food','stew,bowl,dinner',       'curry,spice,meal',        'masala,chicken,plate',    'tikka,tandoori,dish',     'korma,sauce,rice'],
-  'rice':     ['rice,bowl,food',        'risotto,grain,meal',      'fried,rice,asian',        'sushi,japanese,food',     'paella,seafood,rice',     'pilaf,rice,dinner'],
-  'biryani':  ['biryani,indian,rice',   'dinner,plate,food',       'grilled,meat,meal',       'roasted,chicken,dinner',  'kebab,skewer,grill',      'steak,beef,plate'],
-  'samosa':   ['samosa,fried,snack',    'dumpling,appetizer,food', 'spring,roll,crispy',      'empanada,pastry,golden',  'falafel,fried,crispy',    'tempura,japanese,fried'],
-  'dosa':     ['pancake,breakfast,food','crepe,egg,morning',       'waffle,brunch,meal',      'omelette,egg,breakfast',  'french,toast,syrup',      'frittata,egg,brunch'],
-  'idly':     ['bread,baked,food',      'pastry,breakfast,bakery', 'muffin,scone,baked',      'croissant,butter,pastry', 'bagel,cream,breakfast',   'sourdough,bread,fresh'],
-  'dessert':  ['cake,dessert,sweet',    'cookie,chocolate,treat',  'ice,cream,dessert',       'pie,fruit,baked',         'brownie,chocolate,fudge', 'tiramisu,coffee,sweet'],
-};
-const LOREMFLICKR_PER_KW = 49; // lock values 1-49 give unique images per keyword set
-
 // Overflow pool: 126 verified Unsplash food photos for collision avoidance
 const UNSPLASH_FOOD = [
 "1504674900247-0877df9cc836","1567620905732-2d1ec7ab7445","1565299624946-b28f40a0ae38",
@@ -21724,19 +21708,9 @@ const UNSPLASH_FOOD = [
 "1563636619-e9143da7973b","1605478371310-a9f1e96b4ff4","1512003867696-6d5ce6835040",
 ];
 
-// Build per-category loremflickr URL pool for overflow
-function getLoremflickrUrl(cat, kwIdx, lockN) {
-  const kws = LOREMFLICKR_POOLS[cat];
-  if (!kws) return null;
-  const kw = kws[kwIdx % kws.length];
-  return `https://loremflickr.com/400/300/${kw}?lock=${lockN}`;
-}
-
-// Apply images with collision detection for maximum uniqueness
-// Pool hierarchy per category:
-//   1. Foodish (22-95 per cat, 574 total) — guaranteed food photos
-//   2. Loremflickr per-category (3 kw sets × 49 = 147 per cat) — food-keyword images
-//   3. Unsplash (126 general food photos) — final overflow
+// Apply images: guaranteed food-correct photos for every recipe.
+// Uses foodish (574) + Unsplash (126) = 700 unique images.
+// Overflow cycles within same foodish category (correct food type, may share photo).
 (function assignImages() {
   const used = new Set();
   const sorted = [...RECIPES].sort((a,b) => (a.id||0) - (b.id||0));
@@ -21757,25 +21731,18 @@ function getLoremflickrUrl(cat, kwIdx, lockN) {
       if (!used.has(tryImg)) { img = tryImg; found = true; break; }
     }
 
-    // Tier 2: Loremflickr per-category overflow (3 keyword sets × 49 locks = 147)
-    if (!found) {
-      const kwSets = LOREMFLICKR_POOLS[cat];
-      if (kwSets) {
-        for (let kwi = 0; kwi < kwSets.length && !found; kwi++) {
-          for (let lock = 1; lock <= LOREMFLICKR_PER_KW && !found; lock++) {
-            const tryImg = getLoremflickrUrl(cat, kwi, lock);
-            if (tryImg && !used.has(tryImg)) { img = tryImg; found = true; }
-          }
-        }
-      }
-    }
-
-    // Tier 3: Unsplash overflow pool (126 general food photos)
+    // Tier 2: Unsplash overflow pool (126 verified food photos)
     if (!found) {
       for (let i = 0; i < UNSPLASH_FOOD.length; i++) {
         const tryImg = `https://images.unsplash.com/photo-${UNSPLASH_FOOD[i]}?w=400&h=300&fit=crop&auto=format`;
         if (!used.has(tryImg)) { img = tryImg; found = true; break; }
       }
+    }
+
+    // Tier 3: Cycle within same category (correct food type, shared photo)
+    if (!found) {
+      const cycleN = ((r.id * 2654435761) >>> 0) % maxN + 1;
+      img = `https://foodish-api.com/images/${cat}/${cat}${cycleN}.jpg`;
     }
 
     used.add(img);
@@ -22295,9 +22262,10 @@ function Onboarding({ prefs, setPrefs, pantry, setPantry, onDone }) {
 }
 
 /* ── PLANNER HOME (main screen) ── */
-function PlannerHome({ mealPlan, setMealPlan, generateWeek, generateDay, regenerateSlot, removeSlot, setSlotRecipe, dragSrc, handleDragStart, handleDrop, qap, setQap, setViewRecipe, setReplacePicker, showToast }) {
+function PlannerHome({ mealPlan, setMealPlan, generateWeek, generateDay, regenerateSlot, removeSlot, setSlotRecipe, dragSrc, handleDragStart, handleDrop, qap, setQap, setViewRecipe, setReplacePicker, showToast, prefs, setPrefs }) {
   const MEALS = ['Breakfast', 'Lunch', 'Dinner'];
   const [dragOverCell, setDragOverCell] = useState(null);
+  const [showPrefs, setShowPrefs] = useState(false);
 
   const filledCount = mealPlan.reduce((c, d) => c + d.meals.filter(Boolean).length, 0);
   const isEmpty = filledCount === 0;
@@ -22309,12 +22277,20 @@ function PlannerHome({ mealPlan, setMealPlan, generateWeek, generateDay, regener
         <div style={{fontSize:13,color:'var(--mu)'}}>
           {filledCount} / 21 meals planned
         </div>
-        {mealPlan.map((day, di) => (
-          <button key={di} className="btn btn-xs btn-g" onClick={() => generateDay(di)} title={`Regenerate ${day.day}`}>
-            🔄 {day.day}
-          </button>
-        ))}
+        {mealPlan.map((day, di) => {
+          const dayFilled = day.meals.filter(Boolean).length;
+          return (
+            <span key={di} style={{fontSize:13,color: dayFilled === 3 ? 'var(--pr)' : 'var(--mu)',fontWeight: dayFilled === 3 ? 600 : 400}}>
+              {dayFilled === 3 ? '✅' : '⬜'} {day.day}
+            </span>
+          );
+        })}
+        <button className="btn btn-xs btn-s" onClick={() => setShowPrefs(p => !p)} style={{marginLeft:'auto'}}>
+          ⚙️ {showPrefs ? 'Hide' : 'Preferences'}
+        </button>
       </div>
+
+      {showPrefs && <PreferencesPanel prefs={prefs} setPrefs={setPrefs} />}
 
       {isEmpty ? (
         <div style={{textAlign:'center',padding:'80px 20px'}}>
@@ -22771,19 +22747,46 @@ function ShoppingTab({ shopping, setShopping, generateShopping, mealPlan, pantry
 }
 
 /* ── PROFILE TAB ── */
-function ProfileTab({ user, saved, userRecipes, mealPlan, prefs, setPrefs, publishedMenus, setViewRecipe, showToast }) {
-  const [activeTab, setActiveTab] = useState('saved');
-
-  const savedRecipes = RECIPES.filter(r => saved.has(r.id));
+function PreferencesPanel({ prefs, setPrefs }) {
   const DIETS = ["Vegetarian","Vegan","Gluten-Free","Dairy-Free","Kosher","Halal","Low-Carb","Nut-Free"];
   const CUISINES = ["Italian","Mexican","Japanese","Indian","Mediterranean","French","Chinese","Thai","American","Korean","Middle Eastern","Greek"];
-
   const togglePref = (field, val) => {
     setPrefs(p => {
       const arr = p[field] || [];
       return { ...p, [field]: arr.includes(val) ? arr.filter(v => v !== val) : [...arr, val] };
     });
   };
+  return (
+    <div className="card" style={{padding:24}}>
+      <h3 style={{fontFamily:'var(--fd)',fontSize:20,marginBottom:16}}>Dietary Preferences</h3>
+      <div style={{display:'flex',gap:8,flexWrap:'wrap',marginBottom:24}}>
+        {DIETS.map(d => (
+          <button key={d} className={`onb-chip${(prefs.dietary||[]).includes(d) ? ' sel' : ''}`} onClick={() => togglePref('dietary', d)}>{d}</button>
+        ))}
+      </div>
+      <h3 style={{fontFamily:'var(--fd)',fontSize:20,marginBottom:16}}>Favorite Cuisines</h3>
+      <div style={{display:'flex',gap:8,flexWrap:'wrap',marginBottom:24}}>
+        {CUISINES.map(c => (
+          <button key={c} className={`onb-chip${(prefs.cuisines||[]).includes(c) ? ' sel' : ''}`} onClick={() => togglePref('cuisines', c)}>{c}</button>
+        ))}
+      </div>
+      <h3 style={{fontFamily:'var(--fd)',fontSize:20,marginBottom:16}}>Cooking Preferences</h3>
+      <div style={{display:'flex',gap:16,flexWrap:'wrap'}}>
+        <div>
+          <label className="fl">Max cook time (min)</label>
+          <input className="fi" type="number" value={prefs.maxTime || 60} onChange={e => setPrefs(p => ({...p, maxTime: +e.target.value}))} style={{width:100}} />
+        </div>
+        <div>
+          <label className="fl">Household size</label>
+          <input className="fi" type="number" value={prefs.household || 2} onChange={e => setPrefs(p => ({...p, household: +e.target.value}))} style={{width:100}} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ProfileTab({ user, saved, userRecipes, mealPlan, prefs, setPrefs, publishedMenus, setViewRecipe, showToast }) {
+  const savedRecipes = RECIPES.filter(r => saved.has(r.id));
 
   return (
     <div>
@@ -22807,64 +22810,27 @@ function ProfileTab({ user, saved, userRecipes, mealPlan, prefs, setPrefs, publi
         </div>
       </div>
 
-      <div style={{display:'flex',gap:8,marginBottom:20}}>
-        {['saved','preferences'].map(t => (
-          <button key={t} className={`btn ${activeTab === t ? 'btn-p' : 'btn-s'} btn-sm`} onClick={() => setActiveTab(t)}>
-            {t === 'saved' ? '❤️ Saved Recipes' : '⚙️ Preferences'}
-          </button>
-        ))}
-      </div>
+      <PreferencesPanel prefs={prefs} setPrefs={setPrefs} />
 
-      {activeTab === 'saved' && (
-        <div>
-          {savedRecipes.length === 0 ? (
-            <div style={{textAlign:'center',padding:40,color:'var(--mu)'}}>
-              <div style={{fontSize:40,marginBottom:8}}>🤍</div>
-              <p>No saved recipes yet. Browse Explore and tap the heart to save.</p>
-            </div>
-          ) : (
-            <div className="explore-grid">
-              {savedRecipes.map(r => (
-                <div key={r.id} className="explore-card" onClick={() => setViewRecipe(r)}>
-                  <div className="explore-card-img">
-                    <RecipeImg src={r.image} alt={r.title} emoji={r.emoji} />
-                  </div>
-                  <div className="explore-card-body">
-                    <div className="explore-card-title">{r.emoji} {r.title}</div>
-                    <div className="explore-card-meta"><span>{r.cuisine}</span><span>⏱ {r.time}min</span></div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
+      <h3 style={{fontFamily:'var(--fd)',fontSize:20,margin:'24px 0 16px'}}>❤️ Saved Recipes</h3>
+      {savedRecipes.length === 0 ? (
+        <div style={{textAlign:'center',padding:40,color:'var(--mu)'}}>
+          <div style={{fontSize:40,marginBottom:8}}>🤍</div>
+          <p>No saved recipes yet. Browse Explore and tap the heart to save.</p>
         </div>
-      )}
-
-      {activeTab === 'preferences' && (
-        <div className="card" style={{padding:24}}>
-          <h3 style={{fontFamily:'var(--fd)',fontSize:20,marginBottom:16}}>Dietary Preferences</h3>
-          <div style={{display:'flex',gap:8,flexWrap:'wrap',marginBottom:24}}>
-            {DIETS.map(d => (
-              <button key={d} className={`onb-chip${(prefs.dietary||[]).includes(d) ? ' sel' : ''}`} onClick={() => togglePref('dietary', d)}>{d}</button>
-            ))}
-          </div>
-          <h3 style={{fontFamily:'var(--fd)',fontSize:20,marginBottom:16}}>Favorite Cuisines</h3>
-          <div style={{display:'flex',gap:8,flexWrap:'wrap',marginBottom:24}}>
-            {CUISINES.map(c => (
-              <button key={c} className={`onb-chip${(prefs.cuisines||[]).includes(c) ? ' sel' : ''}`} onClick={() => togglePref('cuisines', c)}>{c}</button>
-            ))}
-          </div>
-          <h3 style={{fontFamily:'var(--fd)',fontSize:20,marginBottom:16}}>Cooking Preferences</h3>
-          <div style={{display:'flex',gap:16,flexWrap:'wrap'}}>
-            <div>
-              <label className="fl">Max cook time (min)</label>
-              <input className="fi" type="number" value={prefs.maxTime || 60} onChange={e => setPrefs(p => ({...p, maxTime: +e.target.value}))} style={{width:100}} />
+      ) : (
+        <div className="explore-grid">
+          {savedRecipes.map(r => (
+            <div key={r.id} className="explore-card" onClick={() => setViewRecipe(r)}>
+              <div className="explore-card-img">
+                <RecipeImg src={r.image} alt={r.title} emoji={r.emoji} />
+              </div>
+              <div className="explore-card-body">
+                <div className="explore-card-title">{r.emoji} {r.title}</div>
+                <div className="explore-card-meta"><span>{r.cuisine}</span><span>⏱ {r.time}min</span></div>
+              </div>
             </div>
-            <div>
-              <label className="fl">Household size</label>
-              <input className="fi" type="number" value={prefs.household || 2} onChange={e => setPrefs(p => ({...p, household: +e.target.value}))} style={{width:100}} />
-            </div>
-          </div>
+          ))}
         </div>
       )}
     </div>
