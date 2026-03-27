@@ -220,6 +220,27 @@ body{font-family:var(--fb);background:var(--cream);color:var(--ch);-webkit-font-
 .explore-card-meta{font-size:12px;color:var(--mu);display:flex;gap:12px;margin-bottom:8px}
 .explore-card-actions{display:flex;gap:8px;margin-top:10px}
 
+/* pantry */
+.pantry-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px}
+.pantry-item{display:flex;align-items:center;gap:8px;padding:10px 14px;background:var(--white);border:1px solid var(--bor);border-radius:var(--rs);transition:all .2s;position:relative}
+.pantry-item:hover{border-color:var(--borH);box-shadow:var(--sh1)}
+.pantry-item .pi-name{flex:1;font-size:13px;font-weight:500}
+.pantry-item .pi-remove{width:18px;height:18px;border:none;border-radius:50%;background:transparent;cursor:pointer;font-size:11px;color:var(--mu);display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0}
+.pantry-item:hover .pi-remove{background:rgba(192,57,43,.1);color:var(--err)}
+.pantry-section{margin-bottom:20px}
+.pantry-section-title{font-size:13px;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.pantry-template{display:flex;align-items:center;gap:14px;padding:16px;background:var(--white);border:1.5px solid var(--bor);border-radius:var(--r);cursor:pointer;transition:all .2s}
+.pantry-template:hover{border-color:var(--clay);background:var(--clayBg);box-shadow:var(--sh1)}
+.pantry-template .pt-emoji{font-size:28px;flex-shrink:0}
+.pantry-template .pt-info{flex:1}
+.pantry-template .pt-name{font-weight:600;font-size:15px;margin-bottom:2px}
+.pantry-template .pt-desc{font-size:12px;color:var(--mu)}
+.pantry-template .pt-count{font-size:11px;color:var(--sage);font-weight:600}
+.pantry-match{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--white);border:1px solid var(--bor);border-radius:var(--rs);margin-bottom:6px;transition:all .2s}
+.pantry-match:hover{border-color:var(--borH)}
+.pantry-match-bar{height:6px;border-radius:3px;background:var(--bor);flex:1;overflow:hidden}
+.pantry-match-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--sage),var(--clay));transition:width .3s}
+
 /* shopping list */
 .shop-section{margin-bottom:20px}
 .shop-section-title{font-size:13px;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;display:flex;align-items:center;gap:8px}
@@ -21654,37 +21675,38 @@ const FOODISH_CATS = {
 const TITLE_TO_POOL = [
   // Recipes with NO good image match → emoji fallback (honest, not misleading)
   [/smoothie|protein shake|milkshake|lemonade|juice\b|iced tea|horchata|lassi|agua fresca/i, null],
-  [/yogurt|granola|muesli|overnight oats|acai/i, null],
-  [/charcuterie|cheese board|mezze|antipasti|platter/i, null],
-  // TheMealDB-backed pools (dish-specific, visually accurate)
+  [/yogurt|granola|muesli|overnight oats|oatmeal|oats\b|porridge|acai|chia\b|cottage cheese|berry bowl|smoothie bowl|cereal/i, null],
+  [/charcuterie|cheese board|mezze|antipasti|platter|hummus\b|trail mix|energy (bar|ball|bite)/i, null],
+  // ── DISH TYPE patterns (match BEFORE protein words so "Fish Tacos" → taco, not fish) ──
+  [/french toast/i, 'pancake'],
   [/toast\b|avocado toast|bruschetta|crostini/i, 'sandwich'],
-  [/salad|slaw|ceviche|carpaccio|panzanella/i, 'salad'],
+  [/salad|slaw|carpaccio|panzanella/i, 'salad'],
   [/soup|broth|chowder|bisque|gazpacho|minestrone|chili\b|gumbo|pottage|consomm|harira/i, 'soup'],
-  [/\bfish\b|salmon|tuna|cod\b|trout|tilapia|halibut|mahi|swordfish|anchov|sardine|mackerel|sea bass|snapper|ceviche|masgouf|seafood|shrimp|prawn|crab|lobster|clam|mussel|oyster|calamari|squid|scallop/i, 'fish'],
-  [/\bbeef\b|steak|filet mignon|sirloin|ribeye|tenderloin|brisket|short rib|flank|strip steak|prime rib|wagyu|veal|lamb\b|mutton|venison|goat\b/i, 'beef'],
-  [/chicken|poultry|turkey|duck\b|hen\b|cornish/i, 'chicken'],
   [/curry|masala|tikka|vindaloo|korma|madras|rogan josh|dal\b|dhal|daal|rendang|paneer|palak|saag|aloo|chana|rajma|jalfrezi|bhuna|dopiaza|balti|tandoori|butter chicken/i, 'curry'],
   [/taco|burrito|quesadilla|enchilada|fajita|nachos|chimichanga|tostada|tamale|elote/i, 'taco'],
-  [/\brice\b|risotto|paella|pilaf|pilau|biryani|jambalaya|congee|fried rice|bibimbap|onigiri|kedgeree|arancini/i, 'rice'],
-  [/roast|roasted|pot roast/i, 'roast'],
-  [/stew|goulash|tagine|bourguignon|cacciatore|coq au vin|braised|slow.cook|fesenjan/i, 'stew'],
-  [/\bcake\b|cheesecake|brownie|tiramisu|cupcake|gateau/i, 'cake'],
-  [/pancake|waffle|crepe|blini|galette/i, 'pancake'],
-  [/omelette|omelet|frittata|quiche|shakshuka|scramble|benedict|egg\b|eggs\b/i, 'egg'],
-  // Foodish-backed pools (genuinely accurate for these)
   [/pasta|spaghetti|penne|linguine|fettuccine|tagliatelle|rigatoni|fusilli|macaroni|lasagna|ravioli|gnocchi|carbonara|bolognese|alfredo|aglio|cacio|puttanesca|arrabbiata|primavera|marinara|lo mein|chow mein|pad thai|udon|soba|ramen|noodle|yakisoba|japchae|laksa|pho|mac.and.cheese|orzo|tortellini|cannelloni/i, 'f_pasta'],
   [/pizza|calzone|pepperoni|neapolitan/i, 'f_pizza'],
   [/burger|slider|hot dog|sloppy joe/i, 'f_burger'],
   [/sandwich|panini|blt\b|club\b|po.boy|philly|hoagie|sub\b|wrap(?!.*spring)|gyro|shawarma|bao\b|banh mi/i, 'sandwich'],
   [/samosa|dumpling|spring roll|egg roll|wonton|gyoza|empanada|croquette|fritter|pakora|bhaji|falafel|tempura|nugget|wing\b|wings\b|chips\b|fish.and.chip|onion ring|corn dog/i, 'f_samosa'],
-  [/dosa|uttapam|appam|idli|idly|vada/i, 'f_dosa'],
+  [/stew|goulash|tagine|bourguignon|cacciatore|coq au vin|braised|slow.cook|fesenjan|casserole|gratin|hotpot|pot pie/i, 'stew'],
+  [/\bcake\b|cheesecake|brownie|tiramisu|cupcake|gateau|muffin|scone/i, 'cake'],
+  [/pancake|waffle|crepe|blini|galette/i, 'pancake'],
+  [/omelette|omelet|frittata|quiche|shakshuka|scramble|benedict|egg\b|eggs\b/i, 'egg'],
   [/cookie|pie\b|tart\b|ice cream|gelato|mousse|pudding|custard|crumble|cobbler|fudge|candy|chocolate|panna cotta|creme brulee|baklava|churro|donut|doughnut|macaron|eclair|profiterole|sundae|sorbet|parfait|meringue|beignet|halwa|gulab|kheer|tres leches|flan\b/i, 'f_dessert'],
+  [/dosa|uttapam|appam|idli|idly|vada/i, 'f_dosa'],
+  [/\brice\b|risotto|paella|pilaf|pilau|biryani|jambalaya|fried rice|bibimbap|onigiri|kedgeree|arancini/i, 'rice'],
+  [/roast|roasted|pot roast/i, 'roast'],
+  // ── PROTEIN patterns (only match if no dish type matched above) ──
+  [/\bfish\b|salmon|tuna|cod\b|trout|tilapia|halibut|mahi|swordfish|anchov|sardine|mackerel|sea bass|snapper|ceviche|masgouf|seafood|shrimp|prawn|crab|lobster|clam|mussel|oyster|calamari|squid|scallop|sushi|sashimi|poke/i, 'fish'],
+  [/\bbeef\b|steak|filet mignon|sirloin|ribeye|tenderloin|brisket|short rib|flank|strip steak|prime rib|wagyu|veal|lamb\b|mutton|venison|goat\b|pork\b|pulled pork|carnitas|bacon(?!.*pancake)/i, 'beef'],
+  [/chicken|poultry|turkey|duck\b|hen\b|cornish|stir.fry/i, 'chicken'],
 ];
 
 // Cuisine fallback to TheMealDB pool
 const CUISINE_TO_POOL = {
   'Italian':'f_pasta','French':'stew','Spanish':'rice','Greek':'salad',
-  'Mexican':'taco','American':'f_burger','Southern US':'chicken',
+  'Mexican':'taco','American':'chicken','Southern US':'chicken',
   'Japanese':'fish','Chinese':'chicken','Korean':'rice','Thai':'curry',
   'Vietnamese':'soup','Indian':'curry','Middle Eastern':'rice','Moroccan':'stew',
   'Ethiopian':'stew','Lebanese':'salad','Caribbean':'rice','Filipino':'rice',
@@ -22005,6 +22027,65 @@ export default function App() {
     }
   };
 
+  // ── Generate week plan from pantry ingredients ──
+  const generateFromPantry = () => {
+    const pantrySet = new Set(pantry.map(p => (typeof p === 'string' ? p : p.name || '').toLowerCase().trim()).filter(Boolean));
+    if (pantrySet.size === 0) {
+      showToast("Add items to your pantry first!");
+      return;
+    }
+    // Score each recipe by how many ingredients match pantry
+    let pool = RECIPES.map(r => {
+      const ings = (r.ingredients || []).map(i => (i.n || '').toLowerCase().trim());
+      const matched = ings.filter(i => pantrySet.has(i) || [...pantrySet].some(p => i.includes(p) || p.includes(i)));
+      const score = ings.length > 0 ? matched.length / ings.length : 0;
+      return { ...r, pantryScore: score, pantryMatched: matched.length, pantryTotal: ings.length };
+    });
+    // Apply dietary/cuisine filters
+    pool = pool.filter(r => {
+      if (prefs.dietary.length > 0) {
+        const rd = (r.dietary || []).map(d => d.toLowerCase());
+        if (!prefs.dietary.every(d => rd.includes(d.toLowerCase()))) return false;
+      }
+      if (prefs.maxTime && r.time > prefs.maxTime) return false;
+      if ((prefs.excludeCuisines || []).length > 0) {
+        const rc = (r.cuisine || '').toLowerCase();
+        if (prefs.excludeCuisines.some(c => rc.includes(c.toLowerCase()))) return false;
+      }
+      return true;
+    });
+    // Only include recipes that match at least 30% of ingredients
+    const goodMatches = pool.filter(r => r.pantryScore >= 0.3);
+    const usePool = goodMatches.length >= 21 ? goodMatches : pool;
+    // Sort by pantry score descending with some randomness
+    usePool.sort((a, b) => (b.pantryScore - a.pantryScore) + (Math.random() - 0.5) * 0.2);
+    const byMeal = { breakfast: [], lunch: [], dinner: [] };
+    usePool.forEach(r => {
+      const m = (r.meal || 'dinner').toLowerCase();
+      if (m === 'breakfast') byMeal.breakfast.push(r);
+      else if (m === 'lunch' || m === 'salad' || m === 'snack' || m === 'dessert') byMeal.lunch.push(r);
+      else byMeal.dinner.push(r);
+    });
+    // Pick top-scoring for each meal, with variety
+    const pickTop = (arr, n) => arr.slice(0, Math.max(n, 7)).slice(0, n);
+    const breakfasts = pickTop(byMeal.breakfast.length > 0 ? byMeal.breakfast : usePool, 7);
+    const lunches = pickTop(byMeal.lunch.length > 0 ? byMeal.lunch : usePool, 7);
+    const dinners = pickTop(byMeal.dinner.length > 0 ? byMeal.dinner : usePool, 7);
+    const days = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+    const newPlan = days.map((day, i) => ({
+      day,
+      meals: [
+        breakfasts[i] ? { id: breakfasts[i].id, title: breakfasts[i].title, emoji: breakfasts[i].emoji } : null,
+        lunches[i] ? { id: lunches[i].id, title: lunches[i].title, emoji: lunches[i].emoji } : null,
+        dinners[i] ? { id: dinners[i].id, title: dinners[i].title, emoji: dinners[i].emoji } : null,
+      ]
+    }));
+    setMealPlan(newPlan);
+    const avgScore = usePool.length > 0 ? Math.round(usePool.slice(0, 21).reduce((s, r) => s + r.pantryScore, 0) / Math.min(21, usePool.length) * 100) : 0;
+    showToast(`Plan generated from pantry! ~${avgScore}% ingredient match`);
+    setTab("planner");
+  };
+
   const generateDay = (dayIdx) => {
     const pool = RECIPES.filter(r => {
       if (prefs.dietary.length > 0) {
@@ -22175,10 +22256,10 @@ export default function App() {
   const tp = {
     user, pantry, setPantry, shopping, setShopping, saved, setSaved, toggleSave,
     mealPlan, setMealPlan, prefs, setPrefs, viewRecipe, setViewRecipe,
-    showToast, generateWeek, generateDay, regenerateSlot, removeSlot, setSlotRecipe,
+    showToast, generateWeek, generateFromPantry, generateDay, regenerateSlot, removeSlot, setSlotRecipe,
     dragSrc, handleDragStart, handleDrop, qap, setQap, replacePicker, setReplacePicker,
     handleAddToPlan, generateShopping, userRecipes, setUserRecipes,
-    publishedMenus, setPublishedMenus,
+    publishedMenus, setPublishedMenus, setTab,
   };
 
   // ── Render ──
@@ -22195,6 +22276,7 @@ export default function App() {
         <header className="mhdr">
           <div className="mhdr-title">
             {tab === 'planner' && '📅 Weekly Plan'}
+            {tab === 'pantry' && '🥫 My Pantry'}
             {tab === 'explore' && '🧭 Explore'}
             {tab === 'shopping' && '🛒 Shopping List'}
             {tab === 'profile' && '👤 Profile'}
@@ -22202,12 +22284,19 @@ export default function App() {
           {tab === 'planner' && (
             <div style={{display:'flex',gap:8}}>
               <button className="btn btn-p btn-sm" onClick={generateWeek}>✨ Generate Week</button>
+              <button className="btn btn-s btn-sm" onClick={generateFromPantry}>🥫 From Pantry</button>
               <button className="btn btn-s btn-sm" onClick={generateShopping}>🛒 Shopping List</button>
+            </div>
+          )}
+          {tab === 'pantry' && (
+            <div style={{display:'flex',gap:8}}>
+              <button className="btn btn-p btn-sm" onClick={generateFromPantry}>✨ Plan from Pantry</button>
             </div>
           )}
         </header>
         <div className="mcontent">
           {tab === 'planner' && <PlannerHome {...tp} />}
+          {tab === 'pantry' && <PantryTab {...tp} />}
           {tab === 'explore' && <ExploreTab {...tp} />}
           {tab === 'shopping' && <ShoppingTab {...tp} />}
           {tab === 'profile' && <ProfileTab {...tp} />}
@@ -22225,9 +22314,10 @@ export default function App() {
 /* ── SIDEBAR ── */
 function Sidebar({ tab, setTab, user, onLogout }) {
   const NAV = [
-    { id: 'planner', label: 'My Week', icon: 'calendar' },
+    { id: 'planner', label: 'My Week', icon: 'cal' },
+    { id: 'pantry', label: 'Pantry', icon: 'pantry' },
     { id: 'explore', label: 'Explore', icon: 'compass' },
-    { id: 'shopping', label: 'Shopping', icon: 'shopping-cart' },
+    { id: 'shopping', label: 'Shopping', icon: 'cart' },
     { id: 'profile', label: 'Profile', icon: 'user' },
   ];
   return (
@@ -22784,6 +22874,197 @@ function ExploreTab({ setViewRecipe, handleAddToPlan, toggleSave, saved, showToa
 }
 
 /* ── SHOPPING TAB ── */
+/* ── PANTRY TAB ── */
+function PantryTab({ pantry, setPantry, generateFromPantry, setViewRecipe, prefs, showToast }) {
+  const [newItem, setNewItem] = useState('');
+  const [showTemplates, setShowTemplates] = useState(false);
+  const [showMatches, setShowMatches] = useState(false);
+
+  const addItem = (name) => {
+    const trimmed = (typeof name === 'string' ? name : '').trim();
+    if (!trimmed) return;
+    const exists = pantry.some(p => {
+      const pName = (typeof p === 'string' ? p : p.name || '').toLowerCase();
+      return pName === trimmed.toLowerCase();
+    });
+    if (exists) { showToast(`"${trimmed}" already in pantry`); return; }
+    setPantry(prev => [...prev, { name: trimmed, addedAt: Date.now() }]);
+  };
+
+  const removeItem = (idx) => {
+    setPantry(prev => prev.filter((_, i) => i !== idx));
+  };
+
+  const addTemplate = (template) => {
+    let added = 0;
+    template.ingredients.forEach(name => {
+      const exists = pantry.some(p => {
+        const pName = (typeof p === 'string' ? p : p.name || '').toLowerCase();
+        return pName === name.toLowerCase();
+      });
+      if (!exists) { setPantry(prev => [...prev, { name, addedAt: Date.now() }]); added++; }
+    });
+    showToast(`Added ${added} new items from ${template.name}`);
+    setShowTemplates(false);
+  };
+
+  const clearPantry = () => {
+    if (pantry.length === 0) return;
+    setPantry([]);
+    showToast("Pantry cleared");
+  };
+
+  // Categorize pantry items
+  const categorize = (name) => {
+    const n = name.toLowerCase();
+    if (/chicken|beef|pork|lamb|turkey|fish|salmon|shrimp|prawn|duck|tuna|bacon|sausage|ground/.test(n)) return '🥩 Protein';
+    if (/milk|cheese|cream|yogurt|butter|egg/.test(n)) return '🥚 Dairy & Eggs';
+    if (/lettuce|spinach|tomato|onion|garlic|pepper|carrot|potato|broccoli|mushroom|zucchini|cucumber|celery|avocado|lemon|lime|ginger|basil|cilantro|parsley|eggplant|kale|cabbage/.test(n)) return '🥬 Produce';
+    if (/rice|pasta|flour|bread|tortilla|noodle|oat|cereal|quinoa|couscous/.test(n)) return '🌾 Grains';
+    if (/oil|vinegar|sauce|soy|salt|pepper|cumin|paprika|cinnamon|sugar|honey|spice|seasoning|oregano|thyme|chili|curry/.test(n)) return '🧂 Spices & Condiments';
+    if (/bean|lentil|chickpea|tofu|tempeh|edamame/.test(n)) return '🫘 Legumes';
+    if (/can|canned|broth|stock|coconut milk|tomato paste/.test(n)) return '🥫 Canned Goods';
+    return '📦 Other';
+  };
+
+  const grouped = {};
+  pantry.forEach((item, idx) => {
+    const name = typeof item === 'string' ? item : item.name || '';
+    const cat = categorize(name);
+    if (!grouped[cat]) grouped[cat] = [];
+    grouped[cat].push({ name, idx });
+  });
+
+  // Recipe matches from pantry
+  const getMatches = () => {
+    const pantrySet = new Set(pantry.map(p => (typeof p === 'string' ? p : p.name || '').toLowerCase().trim()).filter(Boolean));
+    if (pantrySet.size === 0) return [];
+    return RECIPES.map(r => {
+      const ings = (r.ingredients || []).map(i => (i.n || '').toLowerCase().trim());
+      const matched = ings.filter(i => pantrySet.has(i) || [...pantrySet].some(p => i.includes(p) || p.includes(i)));
+      return { ...r, matched: matched.length, total: ings.length, pct: ings.length > 0 ? Math.round(matched.length / ings.length * 100) : 0 };
+    }).filter(r => r.pct >= 30).sort((a, b) => b.pct - a.pct).slice(0, 20);
+  };
+
+  const matches = showMatches ? getMatches() : [];
+
+  return (
+    <div>
+      {/* Stats bar */}
+      <div style={{display:'flex',gap:12,marginBottom:20,alignItems:'center',flexWrap:'wrap'}}>
+        <span style={{fontSize:14,fontWeight:600}}>{pantry.length} items</span>
+        <span style={{fontSize:13,color:'var(--mu)'}}>·</span>
+        <span style={{fontSize:13,color:'var(--mu)'}}>{Object.keys(grouped).length} categories</span>
+        <div style={{flex:1}}/>
+        <button className="btn btn-s btn-sm" onClick={() => setShowMatches(!showMatches)}>
+          {showMatches ? '📋 Hide Matches' : '🔍 What can I cook?'}
+        </button>
+        <button className="btn btn-s btn-sm" onClick={() => setShowTemplates(!showTemplates)}>
+          {showTemplates ? '✕ Close' : '📦 Quick Stock'}
+        </button>
+        {pantry.length > 0 && (
+          <button className="btn btn-g btn-sm" onClick={clearPantry} style={{fontSize:12}}>Clear all</button>
+        )}
+      </div>
+
+      {/* Quick stock templates */}
+      {showTemplates && (
+        <div style={{marginBottom:24}}>
+          <h3 style={{fontFamily:'var(--fd)',fontSize:18,marginBottom:12}}>Quick Stock Templates</h3>
+          <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(260px,1fr))',gap:10}}>
+            {PANTRY_TEMPLATES.map(t => (
+              <div key={t.id} className="pantry-template" onClick={() => addTemplate(t)}>
+                <div className="pt-emoji">{t.emoji}</div>
+                <div className="pt-info">
+                  <div className="pt-name">{t.name}</div>
+                  <div className="pt-desc">{t.desc}</div>
+                  <div className="pt-count">{t.ingredients.length} items</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Recipe matches from pantry */}
+      {showMatches && (
+        <div style={{marginBottom:24}}>
+          <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:12}}>
+            <h3 style={{fontFamily:'var(--fd)',fontSize:18}}>Recipes You Can Make</h3>
+            <button className="btn btn-p btn-sm" onClick={generateFromPantry}>✨ Plan Full Week</button>
+          </div>
+          {matches.length === 0 ? (
+            <div style={{textAlign:'center',padding:'30px 20px',color:'var(--mu)'}}>
+              <div style={{fontSize:32,marginBottom:8}}>🤔</div>
+              <p>Add more items to your pantry to see matching recipes.</p>
+            </div>
+          ) : (
+            <div>
+              {matches.map(r => (
+                <div key={r.id} className="pantry-match" style={{cursor:'pointer'}} onClick={() => setViewRecipe(r)}>
+                  <span style={{fontSize:22}}>{r.emoji}</span>
+                  <div style={{flex:1}}>
+                    <div style={{fontWeight:600,fontSize:14,marginBottom:4}}>{r.title}</div>
+                    <div className="pantry-match-bar">
+                      <div className="pantry-match-fill" style={{width:`${r.pct}%`}}/>
+                    </div>
+                  </div>
+                  <div style={{textAlign:'right',flexShrink:0}}>
+                    <div style={{fontSize:16,fontWeight:700,color: r.pct >= 80 ? 'var(--sage)' : r.pct >= 50 ? 'var(--gold)' : 'var(--mu)'}}>{r.pct}%</div>
+                    <div style={{fontSize:11,color:'var(--mu)'}}>{r.matched}/{r.total} items</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Add item input */}
+      <div style={{display:'flex',gap:8,marginBottom:20}}>
+        <input className="fi" placeholder="Add ingredient to pantry..." value={newItem} onChange={e => setNewItem(e.target.value)} onKeyDown={e => { if (e.key === 'Enter') { addItem(newItem); setNewItem(''); } }} style={{flex:1}} />
+        <button className="btn btn-p btn-sm" onClick={() => { addItem(newItem); setNewItem(''); }}>Add</button>
+      </div>
+
+      {/* Pantry items by category */}
+      {pantry.length === 0 ? (
+        <div style={{textAlign:'center',padding:'60px 20px'}}>
+          <div style={{fontSize:48,marginBottom:12}}>🥫</div>
+          <h3 style={{fontFamily:'var(--fd)',fontSize:22,marginBottom:8}}>Your pantry is empty</h3>
+          <p style={{color:'var(--mu)',marginBottom:20}}>Add ingredients you have at home, or use a Quick Stock template to get started.</p>
+          <button className="btn btn-p btn-sm" onClick={() => setShowTemplates(true)}>📦 Quick Stock</button>
+        </div>
+      ) : (
+        Object.entries(grouped).sort(([a],[b]) => a.localeCompare(b)).map(([cat, items]) => (
+          <div key={cat} className="pantry-section">
+            <div className="pantry-section-title">
+              <span>{cat}</span>
+              <span style={{fontWeight:400,fontSize:11}}>({items.length})</span>
+            </div>
+            <div className="pantry-grid">
+              {items.map(item => (
+                <div key={item.idx} className="pantry-item">
+                  <span className="pi-name">{item.name}</span>
+                  <button className="pi-remove" onClick={() => removeItem(item.idx)}>✕</button>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))
+      )}
+
+      {/* Plan from pantry CTA */}
+      {pantry.length >= 3 && (
+        <div style={{marginTop:24,padding:20,background:'var(--sageBg)',borderRadius:'var(--r)',textAlign:'center'}}>
+          <div style={{fontSize:18,fontWeight:600,marginBottom:6}}>Ready to plan your week?</div>
+          <p style={{fontSize:13,color:'var(--mu)',marginBottom:12}}>Generate a meal plan that prioritizes recipes matching your pantry items.</p>
+          <button className="btn btn-p btn-sm" onClick={generateFromPantry}>✨ Plan from Pantry</button>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function ShoppingTab({ shopping, setShopping, generateShopping, mealPlan, pantry }) {
   const [editItem, setEditItem] = useState('');
 
