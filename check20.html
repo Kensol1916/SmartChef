@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html><head><title>First 20 Recipe Images</title>
+<style>
+body { font-family: sans-serif; background: #1a1a1a; color: #fff; padding: 20px; }
+.grid { display: flex; flex-wrap: wrap; gap: 12px; }
+.card { width: 200px; background: #2a2a2a; border-radius: 8px; overflow: hidden; }
+.card img { width: 200px; height: 150px; object-fit: cover; display: block; }
+.card .emoji { width: 200px; height: 150px; display: flex; align-items: center; justify-content: center; font-size: 48px; background: linear-gradient(135deg,#F0E8DC,#E4D4BE); }
+.card .info { padding: 8px; font-size: 11px; }
+.card .title { font-weight: bold; font-size: 13px; margin-bottom: 4px; }
+.card .url { word-break: break-all; color: #88f; font-size: 9px; }
+.bad { border: 3px solid red; }
+.ok { border: 3px solid green; }
+.none { border: 3px solid yellow; }
+</style>
+</head>
+<body>
+<h2>First 20 Recipe Images - Diagnostic</h2>
+<div class="grid" id="grid"></div>
+<script type="module">
+import SmartChef from './smartchef.bundle.js';
+</script>
+<script>
+// Wait for bundle to load and RECIPES to be available
+setTimeout(() => {
+  // Access RECIPES from the global SmartChef namespace
+  const RECIPES = window.SmartChef?.RECIPES || window.RECIPES;
+  if (!RECIPES) {
+    document.getElementById('grid').innerHTML = '<p style="color:red">Could not find RECIPES array</p>';
+    return;
+  }
+  
+  const grid = document.getElementById('grid');
+  const first20 = RECIPES.slice(0, 20);
+  
+  first20.forEach((r, i) => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    
+    const imgUrl = r.image;
+    let imgHtml;
+    if (imgUrl) {
+      imgHtml = `<img src="${imgUrl}" onerror="this.parentElement.innerHTML='<div class=emoji>❌ 404</div>';this.parentElement.parentElement.className='card bad'">`;
+      card.className = 'card ok';
+    } else {
+      imgHtml = `<div class="emoji">${r.emoji || '🍽️'}</div>`;
+      card.className = 'card none';
+    }
+    
+    card.innerHTML = imgHtml + `
+      <div class="info">
+        <div class="title">#${r.id}: ${r.title}</div>
+        <div>Meal: ${r.meal} | Cuisine: ${r.cuisine}</div>
+        <div class="url">${imgUrl || 'NO IMAGE'}</div>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}, 1000);
+</script>
+</body>
+</html>

@@ -21655,6 +21655,9 @@ const IMG_POOLS = {
   ],
   taco: [
     `${MEALDB}/uvuyxu1503067369.jpg`,`${MEALDB}/ypxvwv1505333929.jpg`,
+    `${MEALDB}/1529444830.jpg`,`${MEALDB}/qtuwxu1468233098.jpg`,
+    `${MEALDB}/wrssvt1511556563.jpg`,`${MEALDB}/kos9av1699014767.jpg`,
+    `${MEALDB}/st1ifa1583267248.jpg`,`${MEALDB}/1529444113.jpg`,
   ],
   sandwich: [
     `${MEALDB}/j80gmw1764372176.jpg`,`${MEALDB}/xr0n4r1576788363.jpg`,`${MEALDB}/sbx7n71587673021.jpg`,
@@ -21684,11 +21687,17 @@ const TITLE_TO_POOL = [
   [/soup|broth|chowder|bisque|gazpacho|minestrone|chili\b|gumbo|pottage|consomm|harira/i, 'soup'],
   [/curry|masala|tikka|vindaloo|korma|madras|rogan josh|dal\b|dhal|daal|rendang|paneer|palak|saag|aloo|chana|rajma|jalfrezi|bhuna|dopiaza|balti|tandoori|butter chicken/i, 'curry'],
   [/taco|burrito|quesadilla|enchilada|fajita|nachos|chimichanga|tostada|tamale|elote/i, 'taco'],
-  [/pasta|spaghetti|penne|linguine|fettuccine|tagliatelle|rigatoni|fusilli|macaroni|lasagna|ravioli|gnocchi|carbonara|bolognese|alfredo|aglio|cacio|puttanesca|arrabbiata|primavera|marinara|lo mein|chow mein|pad thai|udon|soba|ramen|noodle|yakisoba|japchae|laksa|pho|mac.and.cheese|orzo|tortellini|cannelloni/i, 'f_pasta'],
+  // Asian brothy noodles → soup pool (look like soup, NOT Italian pasta)
+  [/ramen|pho|udon|soba|laksa|miso(?!.*paste)/i, 'soup'],
+  // Asian stir-fried/dry noodles → chicken pool (stir-fry dishes)
+  [/lo mein|chow mein|pad thai|yakisoba|japchae|noodle/i, 'chicken'],
+  [/pasta|spaghetti|penne|linguine|fettuccine|tagliatelle|rigatoni|fusilli|macaroni|lasagna|ravioli|gnocchi|carbonara|bolognese|alfredo|aglio|cacio|puttanesca|arrabbiata|primavera|marinara|mac.and.cheese|orzo|tortellini|cannelloni/i, 'f_pasta'],
   [/pizza|calzone|pepperoni|neapolitan/i, 'f_pizza'],
   [/burger|slider|hot dog|sloppy joe/i, 'f_burger'],
   [/sandwich|panini|blt\b|club\b|po.boy|philly|hoagie|sub\b|wrap(?!.*spring)|gyro|shawarma|bao\b|banh mi/i, 'sandwich'],
   [/samosa|dumpling|spring roll|egg roll|wonton|gyoza|empanada|croquette|fritter|pakora|bhaji|falafel|tempura|nugget|wing\b|wings\b|chips\b|fish.and.chip|onion ring|corn dog/i, 'f_samosa'],
+  // Ratatouille is a vegetable dish → salad pool (not meat stew)
+  [/ratatouille/i, 'salad'],
   [/stew|goulash|tagine|bourguignon|cacciatore|coq au vin|braised|slow.cook|fesenjan|casserole|gratin|hotpot|pot pie/i, 'stew'],
   [/\bcake\b|cheesecake|brownie|tiramisu|cupcake|gateau|muffin|scone/i, 'cake'],
   [/pancake|waffle|crepe|blini|galette/i, 'pancake'],
