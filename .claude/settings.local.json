@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(esbuild smartchef.jsx --bundle --platform=browser --global-name=SmartChef --outfile=smartchef.bundle.js --minify --external:react --external:react-dom)",
+      "Bash(npx esbuild:*)",
+      "Bash(grep -E \"\\\\.\\(env|config|json|js|ts|py\\)$\")"
+    ]
+  }
+}

@@ -21732,6 +21732,17 @@ const MEAL_TO_POOL = {
   'salad':'salad','soup':'soup','snack':'f_samosa','dessert':'cake',
 };
 
+// Direct image overrides for recipes where pool-based assignment gives visually wrong images
+const IMAGE_OVERRIDES = {
+  'pad thai': `${MEALDB}/rg9ze01763479093.jpg`,                    // Actual pad thai noodles (not chicken tikka masala)
+  'one-pan shakshuka': `${MEALDB}/g373701551450225.jpg`,            // Classic shakshuka: eggs in tomato sauce
+  'chicken shawarma wrap': `${MEALDB}/hcg6l91763596970.jpg`,        // Real chicken shawarma wrap (not deli sub)
+  'veggie frittata': `${MEALDB}/qwtrtp1511799242.jpg`,              // Provençal omelette cake (veggie egg dish)
+  'margherita pizza': `${MEALDB}/x0lk931587671540.jpg`,             // Pizza Express Margherita (not pepperoni)
+  'beef stir-fry': `${MEALDB}/kyuxew1763479470.jpg`,                // Thai beef stir-fry (not beef bourguignon)
+  'lentil soup': `${MEALDB}/uwxqwy1483389553.jpg`,                  // Smoky lentil chili (lentil-based, not mushroom broth)
+};
+
 function recipeImage(recipe) {
   if (!recipe) return null;
   const r = typeof recipe === 'object' ? recipe : { id: recipe };
@@ -21852,6 +21863,15 @@ const UNSPLASH_FOOD = [
   const sorted = [...RECIPES].sort((a,b) => (a.id||0) - (b.id||0));
 
   sorted.forEach(r => {
+    const titleLower = (r.title || '').toLowerCase();
+    // Check direct overrides first — bypasses pool system entirely
+    if (IMAGE_OVERRIDES[titleLower]) {
+      const overrideImg = IMAGE_OVERRIDES[titleLower];
+      used.add(overrideImg);
+      r.image = overrideImg;
+      withImg++;
+      return;
+    }
     let img = recipeImage(r);
     if (!img) { r.image = null; withEmoji++; return; } // No good match → emoji fallback
     // Collision detection: try alternate within same pool
