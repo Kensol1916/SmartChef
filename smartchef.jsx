@@ -22563,9 +22563,15 @@ function AISousChef({ pantry, prefs, mealPlan, setMealPlan, setSlotRecipe, shopp
     const ingPatterns = ['chicken','beef','pork','fish','salmon','tuna','shrimp','tofu','rice','pasta','noodle','egg','eggs','potato','tomato','cheese','bread','mushroom','onion','garlic','bean','lentil','avocado','broccoli','spinach'];
     ingPatterns.forEach(ing => { if (low.includes(ing)) mentionedIngs.push(ing); });
     if (mentionedIngs.length > 0) c.mustInclude = mentionedIngs;
-    // Exclusions
-    const excludeMatch = low.match(/(?:no|without|don't want|replace|remove|exclude|skip)\s+(?:the\s+)?(\w+)/);
-    if (excludeMatch) c.exclude = [excludeMatch[1].toLowerCase()];
+    // Exclusions — handles "no X", "without X", "replace X", "too many X", "tired of X", "sick of X", "instead of X"
+    const excludeMatch = low.match(/(?:no|without|don't want|replace|remove|exclude|skip|instead of|too many|tired of|sick of|not|less)\s+(?:the\s+)?(\w+)/);
+    if (excludeMatch) {
+      const excl = excludeMatch[1].toLowerCase();
+      // Avoid excluding common non-food words
+      if (!['it','that','this','them','me','the','a','an','my','more','time'].includes(excl)) {
+        c.exclude = [...(c.exclude || []), excl];
+      }
+    }
     // Pantry-only mode
     if (/only\s+(?:with\s+)?what\s+i\s+have|pantry\s+only|no\s+missing|nothing\s+missing/.test(low)) c.pantryOnly = true;
     if (/pantry|what\s+i\s+(?:already\s+)?have|my\s+ingredients/.test(low)) c.preferPantry = true;
@@ -22575,7 +22581,7 @@ function AISousChef({ pantry, prefs, mealPlan, setMealPlan, setSlotRecipe, shopp
   // ── Follow-up detection ──
   function isFollowUp(text) {
     const low = text.toLowerCase();
-    return /\breplace\b|\bswap\b|\bchange\b|\bmodify\b|\bmake it\b|\beasier\b|\bsimpler\b|\bfaster\b|\bcheaper\b|\banother\b|\bdifferent\b|\binstead\b|\bdon't want\b|\bno\s+\w+\b|\bremove\b|\bwithout\b|\bless\b|\bmore\b/.test(low);
+    return /\breplace\b|\bswap\b|\bchange\b|\bmodify\b|\bmake it\b|\beasier\b|\bsimpler\b|\bfaster\b|\bcheaper\b|\bhealthier\b|\blighter\b|\bmore healthy\b|\bnutritious\b|\banother\b|\bdifferent\b|\binstead\b|\bdon't want\b|\bno\s+\w+\b|\bremove\b|\bwithout\b|\bless\b|\bmore\b|\btoo many\b|\btired of\b|\bsick of\b/.test(low);
   }
 
   // ── Recipe search engine ──
@@ -22590,11 +22596,12 @@ function AISousChef({ pantry, prefs, mealPlan, setMealPlan, setSlotRecipe, shopp
     if (c.diff) pool = pool.filter(r => r.diff === c.diff);
     if (c.dietary) pool = pool.filter(r => (r.dietary || []).some(d => d.toLowerCase().includes(c.dietary.toLowerCase())));
 
-    // Exclusion filter
+    // Exclusion filter — checks BOTH ingredient names AND recipe title
     if (c.exclude) {
       pool = pool.filter(r => {
         const ingNames = (r.ingredients || []).map(i => (i.n || '').toLowerCase());
-        return !c.exclude.some(ex => ingNames.some(n => n.includes(ex)));
+        const titleLow = (r.title || '').toLowerCase();
+        return !c.exclude.some(ex => ingNames.some(n => n.includes(ex)) || titleLow.includes(ex));
       });
     }
 
@@ -22640,6 +22647,20 @@ function AISousChef({ pantry, prefs, mealPlan, setMealPlan, setSlotRecipe, shopp
         score += (10 - Math.min(miss.length, 10)) * 8; // Fewer missing = cheaper
         if (r.pp && r.pp < 50) score += 30;
       }
+      // Bonus for healthy
+      if (c.goal === 'healthy') {
+        const healthyIngredients = ['spinach','kale','broccoli','avocado','quinoa','salmon','lentil','chickpea','oats','sweet potato','tomato','berry','blueberry','almond','walnut','chia','flax','greek yogurt','olive oil','garlic','ginger','turmeric','egg','tofu','bean','cucumber','bell pepper'];
+        const ingStr = (r.ingredients || []).map(i => (i.n || '').toLowerCase()).join(' ');
+        const titleLow = (r.title || '').toLowerCase();
+        const healthyCount = healthyIngredients.filter(h => ingStr.includes(h) || titleLow.includes(h)).length;
+        score += healthyCount * 25;
+        // Penalize typically unheavy items
+        const unhealthyKeywords = ['pancake','waffle','fried','cream','butter','sugar','syrup','bacon','sausage','cheese','chocolate','cake','cookie','brownie','donut'];
+        const unhealthyCount = unhealthyKeywords.filter(u => ingStr.includes(u) || titleLow.includes(u)).length;
+        score -= unhealthyCount * 40;
+        // Bonus for salad, bowl, soup
+        if (/salad|bowl|soup|stew|grain|roast|grilled|steamed|baked/.test(titleLow)) score += 30;
+      }
       // Bonus for kid-friendly
       if (c.goal === 'kid-friendly') {
         const kidFriendly = ['pasta','mac','cheese','pizza','chicken','pancake','toast','egg','rice','noodle','burger','sandwich'];
@@ -22658,7 +22679,7 @@ function AISousChef({ pantry, prefs, mealPlan, setMealPlan, setSlotRecipe, shopp
 
     pool.sort((a, b) => b._score - a._score);
 
-    const count = c.count || 1;
+    const count = c.count || 3;
     return pool.slice(0, Math.min(count, 30));
   }
 
@@ -22845,13 +22866,16 @@ function AISousChef({ pantry, prefs, mealPlan, setMealPlan, setSlotRecipe, shopp
       if (/easier|simpler|simple/.test(low)) {
         constraints.diff = 'Easy';
         if (!constraints.maxTime) constraints.maxTime = 30;
-        constraints.count = 1;
+        constraints.count = 3;
         if (prevRecipe.meal) constraints.meal = prevRecipe.meal;
-        const similar = findRecipes(constraints, [prevRecipe.id]);
+        const similar = findRecipes(constraints, lastRecipes.map(r => r.id));
         if (similar.length > 0) {
-          const card = buildRecipeCard(similar[0]);
-          card.reason = `A simpler version — ${card.difficulty} difficulty, ready in ${card.totalTime} min`;
-          return { text: "Here's a simpler alternative:", recipes: [card] };
+          const cards = similar.map(r => {
+            const card = buildRecipeCard(r);
+            card.reason = `A simpler version — ${card.difficulty} difficulty, ready in ${card.totalTime} min`;
+            return card;
+          });
+          return { text: `Here ${cards.length === 1 ? 'is a' : 'are ' + cards.length} simpler alternative${cards.length > 1 ? 's' : ''}:`, recipes: cards };
         }
         return { text: `I couldn't find a simpler alternative to "${prevRecipe.title}" with your pantry. Try adding a few more basic ingredients to your pantry for more options.` };
       }
@@ -22859,40 +22883,69 @@ function AISousChef({ pantry, prefs, mealPlan, setMealPlan, setSlotRecipe, shopp
       // "Make it faster"
       if (/faster|quicker|less time/.test(low)) {
         constraints.maxTime = Math.max(10, (prevRecipe.time || 30) - 10);
-        constraints.count = 1;
+        constraints.count = 3;
         if (prevRecipe.meal) constraints.meal = prevRecipe.meal;
-        const similar = findRecipes(constraints, [prevRecipe.id]);
+        const similar = findRecipes(constraints, lastRecipes.map(r => r.id));
         if (similar.length > 0) {
-          const card = buildRecipeCard(similar[0]);
-          card.reason = `Faster option — only ${card.totalTime} min vs ${prevRecipe.time} min`;
-          return { text: "Here's a faster option:", recipes: [card] };
+          const cards = similar.map(r => {
+            const card = buildRecipeCard(r);
+            card.reason = `Faster option — only ${card.totalTime} min`;
+            return card;
+          });
+          return { text: `Here ${cards.length === 1 ? 'is a' : 'are ' + cards.length} faster option${cards.length > 1 ? 's' : ''}:`, recipes: cards };
         }
         return { text: `Already pretty quick! I couldn't find something faster than ${prevRecipe.time} min with similar ingredients.` };
+      }
+
+      // "Make it healthier"
+      if (/healthier|more healthy|lighter|low.?cal|nutritious/.test(low)) {
+        constraints.goal = 'healthy';
+        constraints.count = 3;
+        if (prevRecipe.meal) constraints.meal = prevRecipe.meal;
+        // Also exclude the previous recipe's title keywords to avoid giving same dish type
+        const prevTitleWords = (prevRecipe.title || '').toLowerCase().split(/\s+/).filter(w => w.length > 3);
+        constraints.exclude = [...(constraints.exclude || []), ...prevTitleWords];
+        const similar = findRecipes(constraints, lastRecipes.map(r => r.id));
+        if (similar.length > 0) {
+          const cards = similar.map(r => {
+            const card = buildRecipeCard(r);
+            card.reason = `Healthier option — ${card.haveIngredients.length} pantry items, lighter and more nutritious`;
+            return card;
+          });
+          return { text: `Here ${cards.length === 1 ? 'is a' : 'are ' + cards.length} healthier alternative${cards.length > 1 ? 's' : ''}:`, recipes: cards };
+        }
+        return { text: `I couldn't find a healthier alternative for ${prevRecipe.meal || 'that meal'} with your current pantry. Try adding more fresh vegetables, lean proteins, or whole grains to your pantry!` };
       }
 
       // "Make it cheaper"
       if (/cheaper|less expensive|budget|affordable/.test(low)) {
         constraints.goal = 'cheap';
-        constraints.count = 1;
+        constraints.count = 3;
         if (prevRecipe.meal) constraints.meal = prevRecipe.meal;
-        const similar = findRecipes(constraints, [prevRecipe.id]);
+        const similar = findRecipes(constraints, lastRecipes.map(r => r.id));
         if (similar.length > 0) {
-          const card = buildRecipeCard(similar[0]);
-          card.reason = `More budget-friendly — uses ${card.haveIngredients.length} pantry items, only ${card.missingIngredients.length} to buy`;
-          return { text: "Here's a more budget-friendly option:", recipes: [card] };
+          const cards = similar.map(r => {
+            const card = buildRecipeCard(r);
+            card.reason = `More budget-friendly — uses ${card.haveIngredients.length} pantry items, only ${card.missingIngredients.length} to buy`;
+            return card;
+          });
+          return { text: `Here ${cards.length === 1 ? 'is a' : 'are ' + cards.length} budget-friendly option${cards.length > 1 ? 's' : ''}:`, recipes: cards };
         }
       }
 
-      // "Replace X" / "No X"
+      // "Replace X" / "No X" / "Too many X"
       if (constraints.exclude && constraints.exclude.length > 0) {
-        const excluded = constraints.exclude[0];
+        const excluded = constraints.exclude.join(', ');
         if (prevRecipe.meal) constraints.meal = prevRecipe.meal;
-        constraints.count = 1;
-        const similar = findRecipes(constraints, [prevRecipe.id]);
+        constraints.count = 3;
+        const similar = findRecipes(constraints, lastRecipes.map(r => r.id));
         if (similar.length > 0) {
-          const card = buildRecipeCard(similar[0]);
-          card.reason = `No ${excluded} — this one uses different ingredients`;
-          return { text: `Here's an option without ${excluded}:`, recipes: [card] };
+          const cards = similar.map(r => {
+            const card = buildRecipeCard(r);
+            card.reason = `No ${excluded} — this one uses different ingredients`;
+            return card;
+          });
+          return { text: `Here ${cards.length === 1 ? 'is an' : 'are ' + cards.length} option${cards.length > 1 ? 's' : ''} without ${excluded}:`, recipes: cards };
         }
         return { text: `I couldn't find a close alternative without ${excluded}. Would you like me to search more broadly?` };
       }
@@ -22901,12 +22954,15 @@ function AISousChef({ pantry, prefs, mealPlan, setMealPlan, setSlotRecipe, shopp
       if (/another|different|else|alternative|instead|one more/.test(low)) {
         const c = parseConstraints(text);
         if (prevRecipe.meal) c.meal = prevRecipe.meal;
-        c.count = 1;
+        c.count = 3;
         const similar = findRecipes(c, lastRecipes.map(r => r.id));
         if (similar.length > 0) {
-          const card = buildRecipeCard(similar[0]);
-          card.reason = generateReason(card, c);
-          return { text: "How about this instead?", recipes: [card] };
+          const cards = similar.map(r => {
+            const card = buildRecipeCard(r);
+            card.reason = generateReason(card, c);
+            return card;
+          });
+          return { text: `How about ${cards.length === 1 ? 'this' : 'these'} instead?`, recipes: cards };
         }
         return { text: "I'm running low on alternatives with your current pantry. Try adding more ingredients or broadening your criteria!" };
       }
