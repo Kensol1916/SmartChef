@@ -331,6 +331,79 @@ body{font-family:var(--fb);background:var(--cream);color:var(--ch);-webkit-font-
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
 @keyframes softBounce{0%{transform:scale(1)}50%{transform:scale(1.15)}100%{transform:scale(1)}}
 @keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── AI SOUS CHEF CHAT ── */
+.chat-wrap{display:flex;flex-direction:column;height:calc(100vh - var(--sh));background:var(--cream);position:relative}
+.chat-msgs{flex:1;overflow-y:auto;padding:24px 24px 120px;scroll-behavior:smooth}
+.chat-msgs::-webkit-scrollbar{width:6px}
+.chat-msgs::-webkit-scrollbar-thumb{background:var(--bor);border-radius:3px}
+.chat-welcome{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;text-align:center;padding:40px 20px}
+.chat-welcome-ic{font-size:56px;margin-bottom:16px;animation:float 3s ease-in-out infinite}
+.chat-welcome h2{font-family:var(--fd);font-size:24px;color:var(--ch);margin-bottom:8px}
+.chat-welcome p{color:var(--mu);font-size:14px;max-width:420px;line-height:1.5;margin-bottom:28px}
+.chat-starters{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:560px}
+.chat-starter{background:var(--white);border:1px solid var(--bor);border-radius:20px;padding:8px 16px;font-size:13px;color:var(--ch);cursor:pointer;transition:var(--t);font-family:var(--fb)}
+.chat-starter:hover{border-color:var(--clay);color:var(--clay);background:var(--clayBg)}
+.chat-msg{display:flex;gap:12px;margin-bottom:20px;max-width:800px;animation:fadeUp .3s ease}
+.chat-msg.user{flex-direction:row-reverse;margin-left:auto}
+.chat-msg.assistant{margin-right:auto}
+.chat-avatar{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.chat-msg.user .chat-avatar{background:var(--clayBg);color:var(--clay)}
+.chat-msg.assistant .chat-avatar{background:var(--sageBg);color:var(--sage)}
+.chat-bubble{padding:14px 18px;border-radius:16px;font-size:14px;line-height:1.6;font-family:var(--fb);max-width:680px;word-wrap:break-word}
+.chat-msg.user .chat-bubble{background:var(--clay);color:#fff;border-bottom-right-radius:4px}
+.chat-msg.assistant .chat-bubble{background:var(--white);color:var(--ch);border:1px solid var(--bor);border-bottom-left-radius:4px}
+.chat-bubble p{margin-bottom:8px}
+.chat-bubble p:last-child{margin-bottom:0}
+.chat-bubble strong{font-weight:600;color:var(--clay)}
+.chat-typing{display:flex;gap:4px;padding:8px 0}
+.chat-typing span{width:7px;height:7px;background:var(--mu);border-radius:50%;animation:typeBounce 1.2s ease-in-out infinite}
+.chat-typing span:nth-child(2){animation-delay:.2s}
+.chat-typing span:nth-child(3){animation-delay:.4s}
+@keyframes typeBounce{0%,80%,100%{transform:translateY(0);opacity:.4}40%{transform:translateY(-6px);opacity:1}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.chat-input-bar{position:absolute;bottom:0;left:0;right:0;padding:16px 24px;background:linear-gradient(transparent,var(--cream) 20%);z-index:10}
+.chat-input-row{display:flex;gap:8px;max-width:800px;margin:0 auto;background:var(--white);border:1.5px solid var(--bor);border-radius:16px;padding:6px 6px 6px 16px;align-items:flex-end;transition:var(--t);box-shadow:var(--sh1)}
+.chat-input-row:focus-within{border-color:var(--clay);box-shadow:0 0 0 3px rgba(192,106,62,.12)}
+.chat-input-row textarea{flex:1;border:none;outline:none;font-size:14px;font-family:var(--fb);resize:none;background:transparent;color:var(--ch);max-height:120px;line-height:1.5;padding:8px 0}
+.chat-input-row textarea::placeholder{color:var(--mu)}
+.chat-send-btn{width:38px;height:38px;border-radius:12px;background:var(--clay);color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:var(--t);flex-shrink:0}
+.chat-send-btn:hover{background:var(--clayH)}
+.chat-send-btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* Recipe cards inside chat */
+.chat-recipe-card{background:var(--white);border:1px solid var(--bor);border-radius:16px;padding:0;margin:12px 0;overflow:hidden;transition:var(--t)}
+.chat-recipe-card:hover{box-shadow:var(--sh2)}
+.chat-rc-header{padding:16px 18px 12px;border-bottom:1px solid var(--bor)}
+.chat-rc-title{font-family:var(--fd);font-size:17px;font-weight:600;color:var(--ch);margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.chat-rc-desc{font-size:13px;color:var(--mu);line-height:1.4;margin-bottom:10px}
+.chat-rc-meta{display:flex;flex-wrap:wrap;gap:10px}
+.chat-rc-tag{font-size:12px;padding:3px 10px;border-radius:12px;display:flex;align-items:center;gap:4px}
+.chat-rc-tag.time{background:rgba(192,106,62,.08);color:var(--clay)}
+.chat-rc-tag.diff{background:rgba(106,158,114,.08);color:var(--sage)}
+.chat-rc-tag.serves{background:rgba(201,149,58,.08);color:var(--gold)}
+.chat-rc-tag.match{background:rgba(106,158,114,.15);color:#3e7b4a;font-weight:500}
+.chat-rc-body{padding:14px 18px}
+.chat-rc-section{margin-bottom:14px}
+.chat-rc-section:last-child{margin-bottom:0}
+.chat-rc-section-title{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--mu);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.chat-rc-ing-grid{display:flex;flex-wrap:wrap;gap:6px}
+.chat-rc-ing{font-size:12px;padding:4px 10px;border-radius:10px;border:1px solid var(--bor);background:var(--cream)}
+.chat-rc-ing.have{background:rgba(106,158,114,.1);border-color:var(--sageL);color:#3e7b4a}
+.chat-rc-ing.miss{background:rgba(192,106,62,.06);border-color:var(--clayL);color:var(--clayH)}
+.chat-rc-ing.opt{background:rgba(201,149,58,.06);border-color:#e0c88a;color:#8a6e20}
+.chat-rc-steps{list-style:none}
+.chat-rc-steps li{font-size:13px;color:var(--ch);padding:6px 0;line-height:1.5;display:flex;gap:10px}
+.chat-rc-steps li::before{content:attr(data-n);font-size:11px;font-weight:600;color:var(--clay);background:var(--clayBg);width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.chat-rc-reason{font-size:12px;color:var(--sage);background:var(--sageBg);padding:8px 12px;border-radius:8px;line-height:1.4;font-style:italic}
+.chat-rc-actions{display:flex;flex-wrap:wrap;gap:6px;padding:12px 18px;border-top:1px solid var(--bor);background:rgba(248,244,239,.5)}
+.chat-rc-btn{font-size:12px;padding:6px 12px;border-radius:10px;border:1px solid var(--bor);background:var(--white);color:var(--ch);cursor:pointer;transition:var(--t);font-family:var(--fb);display:flex;align-items:center;gap:4px}
+.chat-rc-btn:hover{border-color:var(--clay);color:var(--clay);background:var(--clayBg)}
+.chat-rc-btn.primary{background:var(--clay);color:#fff;border-color:var(--clay)}
+.chat-rc-btn.primary:hover{background:var(--clayH)}
+.chat-context-bar{display:flex;gap:8px;padding:8px 24px;border-bottom:1px solid var(--bor);background:var(--white);flex-wrap:wrap;align-items:center}
+.chat-ctx-chip{font-size:11px;padding:3px 10px;border-radius:12px;background:var(--sageBg);color:var(--sage);display:flex;align-items:center;gap:4px}
+.chat-ctx-chip.warn{background:rgba(192,106,62,.08);color:var(--clay)}
 `;
 
 /* ── ICONS ── */
@@ -366,6 +439,10 @@ const Ic = ({ n, s = 18 }) => {
     pencil:<><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></>,
     compass:<><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></>,
     expand:<><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></>,
+    chef:<><path d="M12 2C9.5 2 7.5 4 7.5 6.5c0 .5.1 1 .3 1.5C6.1 8.6 5 10.1 5 12c0 2.2 1.8 4 4 4h6c2.2 0 4-1.8 4-4 0-1.9-1.1-3.4-2.8-4C16.4 7.5 16.5 7 16.5 6.5 16.5 4 14.5 2 12 2z"/><path d="M8 16v4c0 1.1.9 2 2 2h4c1.1 0 2-.9 2-2v-4"/></>,
+    clock:<><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></>,
+    dollar:<><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></>,
+    refresh:<><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></>,
   };
   return <svg {...p}>{d[n]}</svg>;
 };
@@ -22305,6 +22382,7 @@ export default function App() {
         <header className="mhdr">
           <div className="mhdr-title">
             {tab === 'planner' && '📅 Weekly Plan'}
+            {tab === 'chef' && '👨‍🍳 AI Sous Chef'}
             {tab === 'pantry' && '🥫 My Pantry'}
             {tab === 'explore' && '🧭 Explore'}
             {tab === 'shopping' && '🛒 Shopping List'}
@@ -22323,8 +22401,9 @@ export default function App() {
             </div>
           )}
         </header>
-        <div className="mcontent">
+        <div className="mcontent" style={tab === 'chef' ? {padding:0,maxWidth:'100%'} : undefined}>
           {tab === 'planner' && <PlannerHome {...tp} />}
+          {tab === 'chef' && <AISousChef {...tp} />}
           {tab === 'pantry' && <PantryTab {...tp} />}
           {tab === 'explore' && <ExploreTab {...tp} />}
           {tab === 'shopping' && <ShoppingTab {...tp} />}
@@ -22340,10 +22419,712 @@ export default function App() {
   );
 }
 
+/* ── AI SOUS CHEF ── */
+function AISousChef({ pantry, prefs, mealPlan, shopping, setShopping, saved, setSaved, toggleSave, handleAddToPlan, showToast, setViewRecipe, setTab }) {
+  const [messages, setMessages] = React.useState([]);
+  const [input, setInput] = React.useState('');
+  const [loading, setLoading] = React.useState(false);
+  const [lastRecipes, setLastRecipes] = React.useState([]);
+  const msgsEnd = React.useRef(null);
+  const taRef = React.useRef(null);
+
+  React.useEffect(() => { msgsEnd.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages, loading]);
+
+  // ── Pantry helpers ──
+  const pantryNames = React.useMemo(() =>
+    pantry.map(p => (typeof p === 'string' ? p : p.name || '').toLowerCase().trim()).filter(Boolean),
+    [pantry]
+  );
+  const pantrySet = React.useMemo(() => new Set(pantryNames), [pantryNames]);
+
+  function ingredientInPantry(ingName) {
+    const low = ingName.toLowerCase().trim();
+    for (const p of pantrySet) {
+      if (p === low) return true;
+      if (p.includes(low) || low.includes(p)) return true;
+      // Handle plurals
+      if (p + 's' === low || p === low + 's') return true;
+      if (p + 'es' === low || p === low + 'es') return true;
+    }
+    // Common staples that most kitchens have
+    const staples = ['salt','pepper','water','oil','cooking oil','olive oil','vegetable oil'];
+    if (staples.includes(low)) return true;
+    return false;
+  }
+
+  function classifyIngredients(recipe) {
+    const have = [], miss = [], opt = [];
+    (recipe.ingredients || []).forEach(ing => {
+      const name = ing.n || ing.name || '';
+      const amount = (ing.a || ing.amount || '').toLowerCase();
+      const isOptional = amount.includes('optional') || amount.includes('to taste') || amount.includes('garnish') || amount.includes('for serving');
+      if (isOptional) opt.push({ name, amount: ing.a || ing.amount || '' });
+      else if (ingredientInPantry(name)) have.push({ name, amount: ing.a || ing.amount || '' });
+      else miss.push({ name, amount: ing.a || ing.amount || '' });
+    });
+    return { have, miss, opt };
+  }
+
+  function pantryMatchScore(recipe) {
+    const { have, miss } = classifyIngredients(recipe);
+    const total = have.length + miss.length;
+    return total > 0 ? Math.round((have.length / total) * 100) : 0;
+  }
+
+  // ── Constraint parsing ──
+  function parseConstraints(text) {
+    const low = text.toLowerCase();
+    const c = {};
+    // Meal type
+    if (/\bbreakfast\b/.test(low)) c.meal = 'breakfast';
+    else if (/\blunch\b/.test(low)) c.meal = 'lunch';
+    else if (/\bdinner\b/.test(low)) c.meal = 'dinner';
+    else if (/\bsnack\b/.test(low)) c.meal = 'snack';
+    else if (/\bdessert\b/.test(low)) c.meal = 'dessert';
+    // Time
+    const timeMatch = low.match(/(?:under|less than|max|within)\s*(\d+)\s*min/);
+    if (timeMatch) c.maxTime = parseInt(timeMatch[1]);
+    else if (/\bquick\b|\bfast\b|\bspeedy\b|\brapid\b/.test(low)) c.maxTime = 20;
+    // Dietary
+    if (/\bvegetarian\b|\bveggie\b/.test(low)) c.dietary = 'Vegetarian';
+    else if (/\bvegan\b/.test(low)) c.dietary = 'Vegan';
+    else if (/\bgluten.?free\b/.test(low)) c.dietary = 'Gluten-free';
+    // Goals
+    if (/\bhigh.?protein\b|\bprotein.?rich\b/.test(low)) c.goal = 'high-protein';
+    if (/\bcheap\b|\bbudget\b|\binexpensive\b|\baffordable\b/.test(low)) c.goal = 'cheap';
+    if (/\bhealthy\b|\blow.?cal\b|\blight\b/.test(low)) c.goal = 'healthy';
+    if (/\bkid\b|\bchild\b|\bfamily\b/.test(low)) c.goal = 'kid-friendly';
+    // Difficulty
+    if (/\beasy\b|\bsimple\b|\bsimpler\b|\beasier\b/.test(low)) c.diff = 'Easy';
+    // Count
+    const countMatch = low.match(/(\d+)\s*(?:option|recipe|idea|suggestion)/);
+    if (countMatch) c.count = Math.min(parseInt(countMatch[1]), 5);
+    else if (/\b3\b/.test(low) && /option|idea|recipe|suggestion/.test(low)) c.count = 3;
+    // Specific ingredients mentioned
+    const mentionedIngs = [];
+    const ingPatterns = ['chicken','beef','pork','fish','salmon','tuna','shrimp','tofu','rice','pasta','noodle','egg','eggs','potato','tomato','cheese','bread','mushroom','onion','garlic','bean','lentil','avocado','broccoli','spinach'];
+    ingPatterns.forEach(ing => { if (low.includes(ing)) mentionedIngs.push(ing); });
+    if (mentionedIngs.length > 0) c.mustInclude = mentionedIngs;
+    // Exclusions
+    const excludeMatch = low.match(/(?:no|without|don't want|replace|remove|exclude|skip)\s+(?:the\s+)?(\w+)/);
+    if (excludeMatch) c.exclude = [excludeMatch[1].toLowerCase()];
+    // Pantry-only mode
+    if (/only\s+(?:with\s+)?what\s+i\s+have|pantry\s+only|no\s+missing|nothing\s+missing/.test(low)) c.pantryOnly = true;
+    if (/pantry|what\s+i\s+(?:already\s+)?have|my\s+ingredients/.test(low)) c.preferPantry = true;
+    return c;
+  }
+
+  // ── Follow-up detection ──
+  function isFollowUp(text) {
+    const low = text.toLowerCase();
+    return /\breplace\b|\bswap\b|\bchange\b|\bmodify\b|\bmake it\b|\beasier\b|\bsimpler\b|\bfaster\b|\bcheaper\b|\banother\b|\bdifferent\b|\binstead\b|\bdon't want\b|\bno\s+\w+\b|\bremove\b|\bwithout\b|\bless\b|\bmore\b/.test(low);
+  }
+
+  // ── Recipe search engine ──
+  function findRecipes(constraints, excludeIds = []) {
+    const c = constraints;
+    const excludeSet = new Set(excludeIds);
+    let pool = RECIPES.filter(r => !excludeSet.has(r.id));
+
+    // Apply hard filters
+    if (c.meal) pool = pool.filter(r => r.meal === c.meal);
+    if (c.maxTime) pool = pool.filter(r => r.time <= c.maxTime);
+    if (c.diff) pool = pool.filter(r => r.diff === c.diff);
+    if (c.dietary) pool = pool.filter(r => (r.dietary || []).some(d => d.toLowerCase().includes(c.dietary.toLowerCase())));
+
+    // Exclusion filter
+    if (c.exclude) {
+      pool = pool.filter(r => {
+        const ingNames = (r.ingredients || []).map(i => (i.n || '').toLowerCase());
+        return !c.exclude.some(ex => ingNames.some(n => n.includes(ex)));
+      });
+    }
+
+    // Must-include filter
+    if (c.mustInclude && c.mustInclude.length > 0) {
+      pool = pool.filter(r => {
+        const ingNames = (r.ingredients || []).map(i => (i.n || '').toLowerCase()).join(' ') + ' ' + (r.title || '').toLowerCase();
+        return c.mustInclude.some(inc => ingNames.includes(inc));
+      });
+    }
+
+    // User prefs dietary filter
+    if (prefs.dietary && prefs.dietary.length > 0 && !c.dietary) {
+      const prefFiltered = pool.filter(r => {
+        return prefs.dietary.every(pref => {
+          const low = pref.toLowerCase();
+          if (low === 'vegetarian') return !r.contains_meat && !r.contains_fish;
+          if (low === 'vegan') return !r.contains_meat && !r.contains_fish && !r.contains_dairy;
+          if (low === 'pescatarian') return !r.contains_meat;
+          if (low === 'kosher') return r.kosher_safe;
+          return true;
+        });
+      });
+      if (prefFiltered.length >= 3) pool = prefFiltered;
+    }
+
+    // Score and sort
+    pool = pool.map(r => {
+      let score = 0;
+      const match = pantryMatchScore(r);
+      score += match * 3; // Pantry match is the primary score
+
+      // Bonus for high protein goal
+      if (c.goal === 'high-protein') {
+        const proteinIngredients = ['chicken','beef','pork','fish','salmon','tuna','shrimp','egg','eggs','tofu','lentil','bean','greek yogurt','cottage cheese','turkey'];
+        const ingStr = (r.ingredients || []).map(i => (i.n || '').toLowerCase()).join(' ');
+        const hasProtein = proteinIngredients.some(p => ingStr.includes(p));
+        if (hasProtein) score += 80;
+      }
+      // Bonus for cheap
+      if (c.goal === 'cheap') {
+        const { miss } = classifyIngredients(r);
+        score += (10 - Math.min(miss.length, 10)) * 8; // Fewer missing = cheaper
+        if (r.pp && r.pp < 50) score += 30;
+      }
+      // Bonus for kid-friendly
+      if (c.goal === 'kid-friendly') {
+        const kidFriendly = ['pasta','mac','cheese','pizza','chicken','pancake','toast','egg','rice','noodle','burger','sandwich'];
+        const titleLow = (r.title || '').toLowerCase();
+        if (kidFriendly.some(k => titleLow.includes(k))) score += 50;
+      }
+      // Pantry-only / prefer pantry
+      if (c.pantryOnly) {
+        const { miss } = classifyIngredients(r);
+        if (miss.length > 0) score -= 999;
+      }
+      if (c.preferPantry) score += match * 2; // Extra weight on pantry match
+
+      return { ...r, _score: score, _match: match };
+    });
+
+    pool.sort((a, b) => b._score - a._score);
+
+    const count = c.count || 1;
+    return pool.slice(0, Math.min(count, 5));
+  }
+
+  // ── Build recipe card data ──
+  function buildRecipeCard(recipe) {
+    const { have, miss, opt } = classifyIngredients(recipe);
+    return {
+      type: 'recipe_card',
+      recipe: recipe,
+      id: recipe.id,
+      title: recipe.title,
+      emoji: recipe.emoji || '🍽️',
+      description: `${recipe.cuisine || 'International'} ${recipe.meal || 'dish'} — ${recipe.diff || 'Easy'} difficulty`,
+      prepTime: Math.max(5, Math.round(recipe.time * 0.3)),
+      cookTime: Math.max(5, Math.round(recipe.time * 0.7)),
+      totalTime: recipe.time,
+      difficulty: recipe.diff || 'Easy',
+      servings: prefs.household || 2,
+      pantryMatch: recipe._match || pantryMatchScore(recipe),
+      haveIngredients: have,
+      missingIngredients: miss,
+      optionalIngredients: opt,
+      steps: recipe.steps || [],
+      cuisine: recipe.cuisine || '',
+      meal: recipe.meal || '',
+      dietary: recipe.dietary || [],
+    };
+  }
+
+  // ── Generate response reason ──
+  function generateReason(card, constraints) {
+    const parts = [];
+    if (card.pantryMatch >= 80) parts.push(`Uses ${card.pantryMatch}% of your pantry ingredients`);
+    else if (card.pantryMatch >= 50) parts.push(`Matches ${card.pantryMatch}% of your pantry`);
+    if (card.missingIngredients.length === 0) parts.push('Nothing extra needed!');
+    else if (card.missingIngredients.length <= 2) parts.push(`Only ${card.missingIngredients.length} ingredient${card.missingIngredients.length === 1 ? '' : 's'} to pick up`);
+    if (constraints.maxTime) parts.push(`Ready in ${card.totalTime} min`);
+    if (constraints.goal === 'high-protein') parts.push('Great protein source');
+    if (constraints.goal === 'cheap') parts.push('Budget-friendly choice');
+    if (constraints.goal === 'kid-friendly') parts.push('Kid-approved');
+    if (parts.length === 0) parts.push(`A tasty ${card.cuisine || ''} ${card.meal || 'recipe'} that fits your preferences`);
+    return parts.join(' · ');
+  }
+
+  // ── Process user message ──
+  function processMessage(text) {
+    setLoading(true);
+    const userMsg = { role: 'user', text, ts: Date.now() };
+    setMessages(prev => [...prev, userMsg]);
+    setInput('');
+
+    setTimeout(() => {
+      try {
+        const response = generateResponse(text);
+        setMessages(prev => [...prev, { role: 'assistant', ...response, ts: Date.now() }]);
+        if (response.recipes && response.recipes.length > 0) {
+          setLastRecipes(response.recipes.map(c => c.recipe || c));
+        }
+      } catch (e) {
+        setMessages(prev => [...prev, { role: 'assistant', text: "I had trouble processing that. Could you rephrase? I can help you find recipes based on your pantry, preferences, and cooking goals.", ts: Date.now() }]);
+      }
+      setLoading(false);
+    }, 600 + Math.random() * 800);
+  }
+
+  // ── Main response generator ──
+  function generateResponse(text) {
+    const low = text.toLowerCase().trim();
+
+    // ── Action: Add missing ingredients to shopping list ──
+    if (/add\s+(?:the\s+)?missing\s+(?:ingredients?\s+)?to\s+(?:my\s+)?shopping/i.test(low) || /shopping\s+list/i.test(low) && /add|missing/i.test(low)) {
+      if (lastRecipes.length > 0) {
+        const allMissing = [];
+        lastRecipes.forEach(r => {
+          const { miss } = classifyIngredients(r);
+          miss.forEach(m => {
+            if (!allMissing.some(a => a.name.toLowerCase() === m.name.toLowerCase())) {
+              allMissing.push(m);
+            }
+          });
+        });
+        if (allMissing.length > 0) {
+          setShopping(prev => {
+            const existing = new Set(prev.map(s => s.name.toLowerCase()));
+            const newItems = allMissing.filter(m => !existing.has(m.name.toLowerCase()));
+            return [...prev, ...newItems.map(m => ({ name: m.name, amount: m.amount, owned: false }))];
+          });
+          return { text: `Done! I added ${allMissing.length} missing ingredient${allMissing.length === 1 ? '' : 's'} to your shopping list: ${allMissing.map(m => '**' + m.name + '**').join(', ')}. You can review them in the Shopping tab.` };
+        }
+        return { text: "Great news — the last recipes I suggested don't have any missing ingredients! Everything is already in your pantry." };
+      }
+      return { text: "I don't have any recent recipe suggestions to work from. Ask me for a recipe first, and I can add any missing ingredients to your shopping list." };
+    }
+
+    // ── Action: Add to meal plan ──
+    if (/add\s+(?:this|it|the recipe)?\s*to\s+(?:my\s+)?(?:meal\s*)?plan|plan\s+(?:this|it)/i.test(low)) {
+      if (lastRecipes.length > 0) {
+        handleAddToPlan(lastRecipes[0]);
+        return { text: `I've opened the meal plan picker for **"${lastRecipes[0].title}"**. Choose a day and meal slot to add it!` };
+      }
+      return { text: "Ask me for a recipe first, then I can help you add it to your meal plan." };
+    }
+
+    // ── Action: Save recipe ──
+    if (/save\s+(?:this|it|the\s+recipe)/i.test(low)) {
+      if (lastRecipes.length > 0) {
+        const r = lastRecipes[0];
+        if (!saved.has(r.id)) {
+          setSaved(prev => { const n = new Set(prev); n.add(r.id); return n; });
+          return { text: `**"${r.title}"** has been saved to your favorites! ❤️` };
+        }
+        return { text: `**"${r.title}"** is already in your favorites!` };
+      }
+      return { text: "Ask me for a recipe first, then I can save it for you." };
+    }
+
+    // ── Follow-up: modify previous recipe ──
+    if (isFollowUp(low) && lastRecipes.length > 0) {
+      const prevRecipe = lastRecipes[0];
+      const constraints = parseConstraints(text);
+
+      // "Make it easier/simpler"
+      if (/easier|simpler|simple/.test(low)) {
+        constraints.diff = 'Easy';
+        if (!constraints.maxTime) constraints.maxTime = 30;
+        constraints.count = 1;
+        if (prevRecipe.meal) constraints.meal = prevRecipe.meal;
+        const similar = findRecipes(constraints, [prevRecipe.id]);
+        if (similar.length > 0) {
+          const card = buildRecipeCard(similar[0]);
+          card.reason = `A simpler version — ${card.difficulty} difficulty, ready in ${card.totalTime} min`;
+          return { text: "Here's a simpler alternative:", recipes: [card] };
+        }
+        return { text: `I couldn't find a simpler alternative to "${prevRecipe.title}" with your pantry. Try adding a few more basic ingredients to your pantry for more options.` };
+      }
+
+      // "Make it faster"
+      if (/faster|quicker|less time/.test(low)) {
+        constraints.maxTime = Math.max(10, (prevRecipe.time || 30) - 10);
+        constraints.count = 1;
+        if (prevRecipe.meal) constraints.meal = prevRecipe.meal;
+        const similar = findRecipes(constraints, [prevRecipe.id]);
+        if (similar.length > 0) {
+          const card = buildRecipeCard(similar[0]);
+          card.reason = `Faster option — only ${card.totalTime} min vs ${prevRecipe.time} min`;
+          return { text: "Here's a faster option:", recipes: [card] };
+        }
+        return { text: `Already pretty quick! I couldn't find something faster than ${prevRecipe.time} min with similar ingredients.` };
+      }
+
+      // "Make it cheaper"
+      if (/cheaper|less expensive|budget|affordable/.test(low)) {
+        constraints.goal = 'cheap';
+        constraints.count = 1;
+        if (prevRecipe.meal) constraints.meal = prevRecipe.meal;
+        const similar = findRecipes(constraints, [prevRecipe.id]);
+        if (similar.length > 0) {
+          const card = buildRecipeCard(similar[0]);
+          card.reason = `More budget-friendly — uses ${card.haveIngredients.length} pantry items, only ${card.missingIngredients.length} to buy`;
+          return { text: "Here's a more budget-friendly option:", recipes: [card] };
+        }
+      }
+
+      // "Replace X" / "No X"
+      if (constraints.exclude && constraints.exclude.length > 0) {
+        const excluded = constraints.exclude[0];
+        if (prevRecipe.meal) constraints.meal = prevRecipe.meal;
+        constraints.count = 1;
+        const similar = findRecipes(constraints, [prevRecipe.id]);
+        if (similar.length > 0) {
+          const card = buildRecipeCard(similar[0]);
+          card.reason = `No ${excluded} — this one uses different ingredients`;
+          return { text: `Here's an option without ${excluded}:`, recipes: [card] };
+        }
+        return { text: `I couldn't find a close alternative without ${excluded}. Would you like me to search more broadly?` };
+      }
+
+      // "Another option / different"
+      if (/another|different|else|alternative|instead|one more/.test(low)) {
+        const c = parseConstraints(text);
+        if (prevRecipe.meal) c.meal = prevRecipe.meal;
+        c.count = 1;
+        const similar = findRecipes(c, lastRecipes.map(r => r.id));
+        if (similar.length > 0) {
+          const card = buildRecipeCard(similar[0]);
+          card.reason = generateReason(card, c);
+          return { text: "How about this instead?", recipes: [card] };
+        }
+        return { text: "I'm running low on alternatives with your current pantry. Try adding more ingredients or broadening your criteria!" };
+      }
+    }
+
+    // ── User mentions specific ingredients they have ──
+    if (/i\s+have\s+(.+?)(?:\.\s*what|,?\s*what)/i.test(low)) {
+      const match = low.match(/i\s+have\s+(.+?)(?:\.\s*what|,?\s*what)/i);
+      if (match) {
+        const mentioned = match[1].split(/,|\band\b/).map(s => s.trim()).filter(Boolean);
+        const c = parseConstraints(text);
+        c.mustInclude = mentioned;
+        c.preferPantry = true;
+        c.count = c.count || 2;
+        const results = findRecipes(c);
+        if (results.length > 0) {
+          const cards = results.map(r => {
+            const card = buildRecipeCard(r);
+            card.reason = generateReason(card, c);
+            return card;
+          });
+          const intro = results.length === 1
+            ? `With ${mentioned.join(', ')}, here's what I'd suggest:`
+            : `With ${mentioned.join(', ')}, here are ${results.length} options:`;
+          return { text: intro, recipes: cards };
+        }
+        return { text: `I couldn't find great matches using ${mentioned.join(', ')}. Try adding them to your pantry and asking again — I'll factor them into all future suggestions!` };
+      }
+    }
+
+    // ── General recipe request ──
+    const constraints = parseConstraints(text);
+    if (!constraints.count && /\d+/.test(low)) {
+      const numMatch = low.match(/(\d+)/);
+      if (numMatch && parseInt(numMatch[1]) <= 5) constraints.count = parseInt(numMatch[1]);
+    }
+    if (!constraints.count) constraints.count = (/options|ideas|suggestions|recipes|things/.test(low)) ? 3 : 1;
+
+    // Default: prefer pantry unless they're clearly just browsing
+    if (!constraints.preferPantry && pantryNames.length > 0) constraints.preferPantry = true;
+
+    const results = findRecipes(constraints);
+
+    if (results.length === 0) {
+      // No results — helpful fallback
+      if (pantryNames.length === 0) {
+        return { text: "Your pantry is empty right now, so I don't have ingredients to work with. Head over to the **Pantry** tab to add what you have at home — even basics like eggs, rice, oil, and salt make a big difference. Once you do, I can give you personalized recipe suggestions!" };
+      }
+      let suggestion = "I couldn't find recipes matching all your criteria. ";
+      if (constraints.pantryOnly) suggestion += "Try relaxing the 'pantry only' constraint — I might find great recipes that need just 1–2 extra ingredients. ";
+      if (constraints.maxTime && constraints.maxTime <= 15) suggestion += "With more time, I'd have more options. ";
+      if (constraints.dietary) suggestion += `${constraints.dietary} options with your pantry are limited — try adding more ${constraints.dietary.toLowerCase()} staples. `;
+      suggestion += "Want me to search with fewer restrictions?";
+      return { text: suggestion };
+    }
+
+    const cards = results.map(r => {
+      const card = buildRecipeCard(r);
+      card.reason = generateReason(card, constraints);
+      return card;
+    });
+
+    // Generate intro text
+    let intro = '';
+    if (constraints.meal) intro = `Here's what I found for ${constraints.meal}`;
+    else if (constraints.goal === 'high-protein') intro = "Here's a high-protein option";
+    else if (constraints.goal === 'cheap') intro = "Here's a budget-friendly pick";
+    else intro = "Based on your pantry and preferences, here's what I'd suggest";
+    if (cards.length > 1) intro = intro.replace("Here's", `Here are ${cards.length}`).replace("option", "options").replace("pick", "picks").replace("I'd suggest", `I found ${cards.length} great options`);
+    intro += ':';
+
+    // Add pantry context note
+    if (pantryNames.length > 0 && pantryNames.length <= 3) {
+      intro += ` *(I see you have ${pantryNames.length} items in your pantry — adding more will unlock better suggestions)*`;
+    }
+
+    return { text: intro, recipes: cards };
+  }
+
+  // ── Render text with basic markdown ──
+  function renderText(text) {
+    if (!text) return null;
+    return text.split('\n').map((line, i) => {
+      const parts = line.split(/(\*\*[^*]+\*\*)/).map((seg, j) => {
+        if (seg.startsWith('**') && seg.endsWith('**')) {
+          return <strong key={j}>{seg.slice(2, -2)}</strong>;
+        }
+        // Italic
+        if (seg.startsWith('*') && seg.endsWith('*')) {
+          return <em key={j} style={{color:'var(--mu)',fontSize:12}}>{seg.slice(1, -1)}</em>;
+        }
+        return seg;
+      });
+      return <p key={i}>{parts}</p>;
+    });
+  }
+
+  // ── Recipe card action handlers ──
+  function handleCardAddToPlan(recipe) {
+    handleAddToPlan(recipe);
+    showToast('Choose a day and meal slot');
+  }
+
+  function handleCardAddMissing(card) {
+    const miss = card.missingIngredients || [];
+    if (miss.length === 0) { showToast('No missing ingredients!'); return; }
+    setShopping(prev => {
+      const existing = new Set(prev.map(s => s.name.toLowerCase()));
+      const newItems = miss.filter(m => !existing.has(m.name.toLowerCase()));
+      return [...prev, ...newItems.map(m => ({ name: m.name, amount: m.amount, owned: false }))];
+    });
+    showToast(`${miss.length} item${miss.length === 1 ? '' : 's'} added to shopping list`);
+  }
+
+  function handleCardReplace(card) {
+    const c = parseConstraints('');
+    if (card.meal) c.meal = card.meal;
+    c.count = 1;
+    c.preferPantry = true;
+    const results = findRecipes(c, [card.id, ...lastRecipes.map(r => r.id)]);
+    if (results.length > 0) {
+      const newCard = buildRecipeCard(results[0]);
+      newCard.reason = 'Alternative suggestion with your pantry ingredients';
+      setMessages(prev => [...prev, { role: 'assistant', text: "Here's a different option:", recipes: [newCard], ts: Date.now() }]);
+      setLastRecipes(prev => [results[0], ...prev.slice(0, 4)]);
+    } else {
+      showToast("Can't find more alternatives");
+    }
+  }
+
+  function handleCardSimpler(card) {
+    processMessage(`Give me something simpler than ${card.title}`);
+  }
+
+  function handleCardFaster(card) {
+    processMessage(`Give me something faster than ${card.title}`);
+  }
+
+  function handleCardCheaper(card) {
+    processMessage(`Give me something cheaper than ${card.title}`);
+  }
+
+  function handleCardSave(card) {
+    toggleSave(card.id);
+    showToast(saved.has(card.id) ? 'Removed from favorites' : 'Saved to favorites!');
+  }
+
+  // ── Render recipe card ──
+  function RecipeCard({ card }) {
+    const [showSteps, setShowSteps] = React.useState(false);
+    return (
+      <div className="chat-recipe-card">
+        <div className="chat-rc-header">
+          <div className="chat-rc-title">
+            <span>{card.emoji}</span>
+            <span>{card.title}</span>
+          </div>
+          <div className="chat-rc-desc">{card.description}</div>
+          <div className="chat-rc-meta">
+            <span className="chat-rc-tag time">⏱️ {card.totalTime} min</span>
+            <span className="chat-rc-tag diff">📊 {card.difficulty}</span>
+            <span className="chat-rc-tag serves">👥 {card.servings} servings</span>
+            {card.pantryMatch > 0 && <span className="chat-rc-tag match">🥫 {card.pantryMatch}% pantry match</span>}
+          </div>
+        </div>
+        <div className="chat-rc-body">
+          {card.haveIngredients.length > 0 && (
+            <div className="chat-rc-section">
+              <div className="chat-rc-section-title">✅ From Your Pantry ({card.haveIngredients.length})</div>
+              <div className="chat-rc-ing-grid">
+                {card.haveIngredients.map((ing, i) => (
+                  <span key={i} className="chat-rc-ing have">{ing.name} {ing.amount && <span style={{opacity:.6}}>· {ing.amount}</span>}</span>
+                ))}
+              </div>
+            </div>
+          )}
+          {card.missingIngredients.length > 0 && (
+            <div className="chat-rc-section">
+              <div className="chat-rc-section-title">🛒 Need to Get ({card.missingIngredients.length})</div>
+              <div className="chat-rc-ing-grid">
+                {card.missingIngredients.map((ing, i) => (
+                  <span key={i} className="chat-rc-ing miss">{ing.name} {ing.amount && <span style={{opacity:.6}}>· {ing.amount}</span>}</span>
+                ))}
+              </div>
+            </div>
+          )}
+          {card.optionalIngredients.length > 0 && (
+            <div className="chat-rc-section">
+              <div className="chat-rc-section-title">✨ Optional Extras</div>
+              <div className="chat-rc-ing-grid">
+                {card.optionalIngredients.map((ing, i) => (
+                  <span key={i} className="chat-rc-ing opt">{ing.name}</span>
+                ))}
+              </div>
+            </div>
+          )}
+          {card.steps.length > 0 && (
+            <div className="chat-rc-section">
+              <div className="chat-rc-section-title" onClick={() => setShowSteps(!showSteps)} style={{cursor:'pointer',userSelect:'none'}}>
+                📝 Steps ({card.steps.length}) <span style={{fontSize:10,marginLeft:4}}>{showSteps ? '▲ Hide' : '▼ Show'}</span>
+              </div>
+              {showSteps && (
+                <ol className="chat-rc-steps">
+                  {card.steps.map((s, i) => (
+                    <li key={i} data-n={s.n || i + 1}>
+                      <div><strong>{s.t}</strong> — {s.d}</div>
+                    </li>
+                  ))}
+                </ol>
+              )}
+            </div>
+          )}
+          {card.reason && (
+            <div className="chat-rc-reason">💡 {card.reason}</div>
+          )}
+        </div>
+        <div className="chat-rc-actions">
+          <button className="chat-rc-btn primary" onClick={() => handleCardAddToPlan(card.recipe)}>📅 Add to Plan</button>
+          {card.missingIngredients.length > 0 && (
+            <button className="chat-rc-btn" onClick={() => handleCardAddMissing(card)}>🛒 Add Missing to List</button>
+          )}
+          <button className="chat-rc-btn" onClick={() => handleCardSave(card)}>{saved.has(card.id) ? '❤️ Saved' : '🤍 Save'}</button>
+          <button className="chat-rc-btn" onClick={() => handleCardReplace(card)}>🔄 Replace</button>
+          <button className="chat-rc-btn" onClick={() => handleCardSimpler(card)}>✨ Simpler</button>
+          <button className="chat-rc-btn" onClick={() => handleCardFaster(card)}>⚡ Faster</button>
+          <button className="chat-rc-btn" onClick={() => handleCardCheaper(card)}>💰 Cheaper</button>
+        </div>
+      </div>
+    );
+  }
+
+  // ── Starters ──
+  const starters = [
+    "What can I cook with my pantry?",
+    "Quick dinner under 20 min",
+    "High-protein meal with what I have",
+    "Cheap lunch ideas",
+    "Give me 3 breakfast ideas",
+    "Easy snack with few ingredients",
+  ];
+
+  const handleSubmit = (e) => {
+    e?.preventDefault();
+    const trimmed = input.trim();
+    if (!trimmed || loading) return;
+    processMessage(trimmed);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSubmit(); }
+  };
+
+  // Auto-resize textarea
+  React.useEffect(() => {
+    if (taRef.current) {
+      taRef.current.style.height = 'auto';
+      taRef.current.style.height = Math.min(taRef.current.scrollHeight, 120) + 'px';
+    }
+  }, [input]);
+
+  return (
+    <div className="chat-wrap">
+      {/* Context bar */}
+      <div className="chat-context-bar">
+        <span className="chat-ctx-chip">🥫 {pantryNames.length} pantry item{pantryNames.length !== 1 ? 's' : ''}</span>
+        {prefs.dietary && prefs.dietary.length > 0 && <span className="chat-ctx-chip">{prefs.dietary.join(', ')}</span>}
+        {prefs.maxTime && <span className="chat-ctx-chip">⏱️ Max {prefs.maxTime} min</span>}
+        <span className="chat-ctx-chip">👥 Household of {prefs.household || 2}</span>
+        {pantryNames.length === 0 && <span className="chat-ctx-chip warn">⚠️ Pantry empty</span>}
+      </div>
+
+      {/* Messages area */}
+      <div className="chat-msgs">
+        {messages.length === 0 && !loading && (
+          <div className="chat-welcome">
+            <div className="chat-welcome-ic">👨‍🍳</div>
+            <h2>Hi! I'm your AI Sous Chef</h2>
+            <p>
+              I know what's in your pantry and your cooking preferences. Ask me anything —
+              what to cook tonight, quick lunch ideas, how to use up ingredients, or help planning meals.
+            </p>
+            <div className="chat-starters">
+              {starters.map((s, i) => (
+                <button key={i} className="chat-starter" onClick={() => processMessage(s)}>{s}</button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {messages.map((msg, i) => (
+          <div key={i} className={`chat-msg ${msg.role}`}>
+            <div className="chat-avatar">{msg.role === 'user' ? '👤' : '👨‍🍳'}</div>
+            <div style={{flex:1,maxWidth:680}}>
+              {msg.text && <div className="chat-bubble" style={msg.role === 'user' ? {} : {}}>{renderText(msg.text)}</div>}
+              {msg.recipes && msg.recipes.map((card, j) => (
+                <RecipeCard key={j} card={card} />
+              ))}
+            </div>
+          </div>
+        ))}
+
+        {loading && (
+          <div className="chat-msg assistant">
+            <div className="chat-avatar">👨‍🍳</div>
+            <div className="chat-bubble">
+              <div className="chat-typing"><span/><span/><span/></div>
+            </div>
+          </div>
+        )}
+        <div ref={msgsEnd} />
+      </div>
+
+      {/* Input bar */}
+      <div className="chat-input-bar">
+        <form className="chat-input-row" onSubmit={handleSubmit}>
+          <textarea
+            ref={taRef}
+            value={input}
+            onChange={e => setInput(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder="Ask me what to cook..."
+            rows={1}
+          />
+          <button type="submit" className="chat-send-btn" disabled={!input.trim() || loading}>
+            <Ic n="send" s={16} />
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+}
+
 /* ── SIDEBAR ── */
 function Sidebar({ tab, setTab, user, onLogout }) {
   const NAV = [
     { id: 'planner', label: 'My Week', icon: 'cal' },
+    { id: 'chef', label: 'AI Sous Chef', icon: 'chef' },
     { id: 'pantry', label: 'Pantry', icon: 'pantry' },
     { id: 'explore', label: 'Explore', icon: 'compass' },
     { id: 'shopping', label: 'Shopping', icon: 'cart' },
