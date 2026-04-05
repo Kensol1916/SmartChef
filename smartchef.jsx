@@ -22683,11 +22683,19 @@ function AISousChef({ pantry, prefs, mealPlan, setMealPlan, setSlotRecipe, shopp
     setInput('');
 
     try {
-      // Build the conversation history for the LLM
-      const chatHistory = [...messages, userMsg].map(m => ({
-        role: m.role === 'user' ? 'user' : 'assistant',
-        content: m.role === 'user' ? m.text : (m.text || 'Here are some recipe suggestions.'),
-      }));
+      // Build the conversation history for the LLM — include recipe/action context
+      const chatHistory = [...messages, userMsg].map(m => {
+        if (m.role === 'user') return { role: 'user', content: m.text };
+        // For assistant messages, include a summary of what was shown (recipes, plan changes)
+        let content = m.text || '';
+        if (m.recipes && m.recipes.length > 0) {
+          content += '\n[I showed ' + m.recipes.length + ' recipe card(s): ' + m.recipes.map(r => r.title).join(', ') + ']';
+        }
+        if (m.weekPlan) {
+          content += '\n[I displayed an updated week plan with ' + (m.weekPlan.totalRecipes || 21) + ' meals]';
+        }
+        return { role: 'assistant', content: content || 'Sure, here you go.' };
+      });
 
       const response = await fetch('/api/chef', {
         method: 'POST',
@@ -22799,19 +22807,19 @@ function AISousChef({ pantry, prefs, mealPlan, setMealPlan, setSlotRecipe, shopp
   }
 
   function handleCardReplace(card) {
-    processMessage(`Replace "${card.title}" with something different but similar. Give me a single alternative.`);
+    processMessage(`I don't love the ${card.title} suggestion. Can you swap it for something different?`);
   }
 
   function handleCardSimpler(card) {
-    processMessage(`Give me something simpler than ${card.title}`);
+    processMessage(`${card.title} looks too complex. Got anything simpler?`);
   }
 
   function handleCardFaster(card) {
-    processMessage(`Give me something faster than ${card.title}`);
+    processMessage(`I don't have much time — what's a quicker alternative to ${card.title}?`);
   }
 
   function handleCardCheaper(card) {
-    processMessage(`Give me something cheaper than ${card.title}`);
+    processMessage(`${card.title} seems pricey. What's a more budget-friendly option?`);
   }
 
   function handleCardSave(card) {
@@ -22872,7 +22880,7 @@ function AISousChef({ pantry, prefs, mealPlan, setMealPlan, setSlotRecipe, shopp
         <div className="chat-wp-actions">
           <button className="chat-rc-btn primary" onClick={() => { setTab('planner'); showToast('Viewing your updated plan!'); }}>📅 View Plan</button>
           <button className="chat-rc-btn" onClick={handleAddAllMissing}>🛒 Add All Missing to Shopping List</button>
-          <button className="chat-rc-btn" onClick={() => processMessage('Regenerate the week plan')}>🔄 Regenerate</button>
+          <button className="chat-rc-btn" onClick={() => processMessage("I'd like a fresh week plan — surprise me with something new!")}>🔄 Regenerate</button>
         </div>
       </div>
     );
@@ -22963,12 +22971,12 @@ function AISousChef({ pantry, prefs, mealPlan, setMealPlan, setSlotRecipe, shopp
 
   // ── Starters ──
   const starters = [
-    "Plan my week from my pantry",
-    "What can I cook with my pantry?",
-    "Quick dinner under 20 min",
-    "High-protein meal with what I have",
-    "Cheap lunch ideas",
-    "Give me 3 breakfast ideas",
+    "Plan my week — keep it healthy and simple",
+    "What should I make for dinner tonight?",
+    "I'm in a rush, what's something quick?",
+    "Help me use up what's in my pantry",
+    "I want to eat healthier this week",
+    "Something fun and different for lunch",
   ];
 
   const handleSubmit = (e) => {
@@ -23006,10 +23014,10 @@ function AISousChef({ pantry, prefs, mealPlan, setMealPlan, setSlotRecipe, shopp
         {messages.length === 0 && !loading && (
           <div className="chat-welcome">
             <div className="chat-welcome-ic">👨‍🍳</div>
-            <h2>Hi! I'm your AI Sous Chef</h2>
+            <h2>Hey! I'm your AI Sous Chef</h2>
             <p>
-              I know what's in your pantry and your cooking preferences. Ask me anything —
-              what to cook tonight, quick lunch ideas, how to use up ingredients, or help planning meals.
+              I know your pantry, your preferences, and your meal plan. Ask me anything — I can plan your week,
+              suggest what to cook, swap meals around, or just chat about food. Talk to me like you'd talk to a friend.
             </p>
             <div className="chat-starters">
               {starters.map((s, i) => (
