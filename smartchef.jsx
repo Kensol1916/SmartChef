@@ -404,6 +404,44 @@ body{font-family:var(--fb);background:var(--cream);color:var(--ch);-webkit-font-
 .chat-context-bar{display:flex;gap:8px;padding:8px 24px;border-bottom:1px solid var(--bor);background:var(--white);flex-wrap:wrap;align-items:center}
 .chat-ctx-chip{font-size:11px;padding:3px 10px;border-radius:12px;background:var(--sageBg);color:var(--sage);display:flex;align-items:center;gap:4px}
 .chat-ctx-chip.warn{background:rgba(192,106,62,.08);color:var(--clay)}
+
+/* Floating AI button + slide-out panel */
+.ai-fab{position:fixed;bottom:24px;right:24px;z-index:900;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--clay),var(--clayH));color:#fff;border:none;cursor:pointer;box-shadow:0 4px 20px rgba(192,106,62,.35);display:flex;align-items:center;justify-content:center;font-size:24px;transition:all .25s ease}
+.ai-fab:hover{transform:scale(1.08);box-shadow:0 6px 28px rgba(192,106,62,.45)}
+.ai-fab.open{transform:rotate(90deg) scale(1.08)}
+.ai-panel-overlay{position:fixed;inset:0;background:rgba(26,26,26,.25);z-index:950;opacity:0;animation:fadeIn .2s ease forwards}
+.ai-panel{position:fixed;top:0;right:0;bottom:0;width:min(520px,100vw);z-index:960;background:var(--cream);box-shadow:-8px 0 40px rgba(26,26,26,.15);display:flex;flex-direction:column;animation:slideInRight .25s ease forwards}
+@keyframes slideInRight{from{transform:translateX(100%)}to{transform:translateX(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.ai-panel-head{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--bor);background:var(--white)}
+.ai-panel-head h3{font-family:var(--fd);font-size:17px;color:var(--ch);display:flex;align-items:center;gap:8px}
+.ai-panel-close{width:32px;height:32px;border-radius:8px;border:none;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--mu);transition:var(--t)}
+.ai-panel-close:hover{background:var(--cream);color:var(--ch)}
+.ai-panel .chat-wrap{height:100%;flex:1}
+.ai-panel .chat-msgs{padding:16px 16px 100px}
+.ai-panel .chat-input-bar{padding:12px 16px}
+.ai-panel .chat-bubble{max-width:100%}
+.ai-panel .chat-recipe-card{font-size:13px}
+.ai-panel .chat-context-bar{padding:6px 16px}
+.ai-panel .chat-welcome{min-height:40vh;padding:24px 16px}
+.ai-panel .chat-welcome h2{font-size:20px}
+
+/* Week plan card */
+.chat-week-plan{background:var(--white);border:1px solid var(--bor);border-radius:16px;margin:12px 0;overflow:hidden}
+.chat-wp-header{padding:14px 18px;border-bottom:1px solid var(--bor);display:flex;align-items:center;justify-content:space-between}
+.chat-wp-header h4{font-family:var(--fd);font-size:16px;color:var(--ch)}
+.chat-wp-day{padding:10px 18px;border-bottom:1px solid rgba(230,224,216,.5)}
+.chat-wp-day:last-child{border-bottom:none}
+.chat-wp-day-name{font-size:12px;font-weight:600;color:var(--clay);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.chat-wp-meals{display:flex;flex-direction:column;gap:4px}
+.chat-wp-meal{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ch);padding:4px 0}
+.chat-wp-meal-type{font-size:11px;color:var(--mu);width:60px;flex-shrink:0}
+.chat-wp-meal-name{flex:1}
+.chat-wp-meal-match{font-size:11px;color:var(--sage);background:var(--sageBg);padding:2px 8px;border-radius:8px;flex-shrink:0}
+.chat-wp-actions{padding:12px 18px;border-top:1px solid var(--bor);display:flex;gap:8px;flex-wrap:wrap}
+.chat-wp-stats{display:flex;gap:12px;padding:8px 18px;background:rgba(106,158,114,.04);border-bottom:1px solid var(--bor)}
+.chat-wp-stat{font-size:12px;color:var(--mu);display:flex;align-items:center;gap:4px}
+.chat-wp-stat strong{color:var(--ch)}
 `;
 
 /* ── ICONS ── */
@@ -22012,6 +22050,7 @@ export default function App() {
   const [replacePicker, setReplacePicker] = useState(null); // {dayIdx, mealIdx}
   // Add-to-plan modal
   const [addToPlanRecipe, setAddToPlanRecipe] = useState(null);
+  const [chatOpen, setChatOpen] = useState(false);
 
   // ── Inject CSS ──
   React.useEffect(() => {
@@ -22415,12 +22454,31 @@ export default function App() {
       {qap && <QuickActionPanel {...tp} />}
       {replacePicker && <ReplacePicker {...tp} />}
       {toastMsg && <div className={`toast${toastMsg.leaving ? ' leaving' : ''}`}>{toastMsg.msg}</div>}
+      {/* Floating AI Sous Chef button - visible on all tabs except chef */}
+      {tab !== 'chef' && (
+        <button className={`ai-fab${chatOpen ? ' open' : ''}`} onClick={() => setChatOpen(!chatOpen)} title="AI Sous Chef">
+          {chatOpen ? '✕' : '👨‍🍳'}
+        </button>
+      )}
+      {/* Slide-out chat panel */}
+      {chatOpen && tab !== 'chef' && (
+        <>
+          <div className="ai-panel-overlay" onClick={() => setChatOpen(false)} />
+          <div className="ai-panel">
+            <div className="ai-panel-head">
+              <h3>👨‍🍳 AI Sous Chef</h3>
+              <button className="ai-panel-close" onClick={() => setChatOpen(false)}><Ic n="x" s={18} /></button>
+            </div>
+            <AISousChef {...tp} isPanel={true} />
+          </div>
+        </>
+      )}
     </div>
   );
 }
 
 /* ── AI SOUS CHEF ── */
-function AISousChef({ pantry, prefs, mealPlan, shopping, setShopping, saved, setSaved, toggleSave, handleAddToPlan, showToast, setViewRecipe, setTab }) {
+function AISousChef({ pantry, prefs, mealPlan, setMealPlan, setSlotRecipe, shopping, setShopping, saved, setSaved, toggleSave, handleAddToPlan, showToast, setViewRecipe, setTab, isPanel }) {
   const [messages, setMessages] = React.useState([]);
   const [input, setInput] = React.useState('');
   const [loading, setLoading] = React.useState(false);
@@ -22601,7 +22659,7 @@ function AISousChef({ pantry, prefs, mealPlan, shopping, setShopping, saved, set
     pool.sort((a, b) => b._score - a._score);
 
     const count = c.count || 1;
-    return pool.slice(0, Math.min(count, 5));
+    return pool.slice(0, Math.min(count, 30));
   }
 
   // ── Build recipe card data ──
@@ -22667,8 +22725,69 @@ function AISousChef({ pantry, prefs, mealPlan, shopping, setShopping, saved, set
   }
 
   // ── Main response generator ──
+  // ── Week plan builder ──
+  function buildWeekPlan() {
+    const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+    const mealTypes = ['breakfast','lunch','dinner'];
+    const usedIds = new Set();
+    const plan = [];
+    let totalMatch = 0;
+    let totalMissing = 0;
+
+    days.forEach((day, di) => {
+      const dayMeals = [];
+      mealTypes.forEach((mt, mi) => {
+        const c = { meal: mt, count: 5, preferPantry: true };
+        const candidates = findRecipes(c, [...usedIds]);
+        const pick = candidates[0];
+        if (pick) {
+          usedIds.add(pick.id);
+          const match = pantryMatchScore(pick);
+          const { miss } = classifyIngredients(pick);
+          totalMatch += match;
+          totalMissing += miss.length;
+          dayMeals.push({ recipe: pick, mealType: mt, match, missing: miss.length });
+        }
+      });
+      plan.push({ day, dayIdx: di, meals: dayMeals });
+    });
+
+    const avgMatch = Math.round(totalMatch / 21);
+    return { plan, avgMatch, totalMissing, usedIds };
+  }
+
   function generateResponse(text) {
     const low = text.toLowerCase().trim();
+
+    // ── Week plan request ──
+    if (/plan\s+(?:my|the|a)?\s*(?:full\s+)?week|week(?:ly)?\s+(?:meal\s*)?plan|plan\s+(?:all\s+)?(?:7|seven)\s+days|fill\s+(?:my|the)\s+(?:meal\s*)?plan|(?:create|generate|make|build)\s+(?:a\s+)?(?:full\s+)?(?:weekly|week)\s+(?:meal\s*)?plan|meal\s*plan\s+(?:from|using|with)\s+(?:my\s+)?pantry|plan\s+(?:my\s+)?(?:meals|week)\s+(?:from|using|with)/i.test(low)) {
+      if (pantryNames.length === 0) {
+        return { text: "I'd love to plan your week, but your pantry is empty! Head to the **Pantry** tab and add your ingredients first. Even 10-15 items will let me create a solid week plan." };
+      }
+      const { plan, avgMatch, totalMissing } = buildWeekPlan();
+
+      // Apply to actual meal plan state
+      if (setMealPlan && setSlotRecipe) {
+        setMealPlan(prev => {
+          const next = prev.map(d => ({ ...d, meals: [...d.meals] }));
+          plan.forEach(({ dayIdx, meals }) => {
+            meals.forEach((m, mi) => {
+              next[dayIdx].meals[mi] = { id: m.recipe.id, title: m.recipe.title, emoji: m.recipe.emoji };
+            });
+          });
+          return next;
+        });
+      }
+
+      // Store all recipes for follow-up actions
+      const allRecipes = plan.flatMap(d => d.meals.map(m => m.recipe));
+      setLastRecipes(allRecipes);
+
+      return {
+        text: `Done! I've planned your entire week using your pantry ingredients. Here's the plan:`,
+        weekPlan: { plan, avgMatch, totalMissing, totalRecipes: allRecipes.length }
+      };
+    }
 
     // ── Action: Add missing ingredients to shopping list ──
     if (/add\s+(?:the\s+)?missing\s+(?:ingredients?\s+)?to\s+(?:my\s+)?shopping/i.test(low) || /shopping\s+list/i.test(low) && /add|missing/i.test(low)) {
@@ -22824,7 +22943,7 @@ function AISousChef({ pantry, prefs, mealPlan, shopping, setShopping, saved, set
       const numMatch = low.match(/(\d+)/);
       if (numMatch && parseInt(numMatch[1]) <= 5) constraints.count = parseInt(numMatch[1]);
     }
-    if (!constraints.count) constraints.count = (/options|ideas|suggestions|recipes|things/.test(low)) ? 3 : 1;
+    if (!constraints.count) constraints.count = (/options|ideas|suggestions|recipes|things/.test(low)) ? 3 : 3;
 
     // Default: prefer pantry unless they're clearly just browsing
     if (!constraints.preferPantry && pantryNames.length > 0) constraints.preferPantry = true;
@@ -22936,6 +23055,58 @@ function AISousChef({ pantry, prefs, mealPlan, shopping, setShopping, saved, set
   }
 
   // ── Render recipe card ──
+  // ── Week plan card ──
+  function WeekPlanCard({ wp }) {
+    const mealLabels = ['Breakfast', 'Lunch', 'Dinner'];
+    const handleAddAllMissing = () => {
+      const allMissing = [];
+      wp.plan.forEach(day => day.meals.forEach(m => {
+        const { miss } = classifyIngredients(m.recipe);
+        miss.forEach(mi => {
+          if (!allMissing.some(a => a.name.toLowerCase() === mi.name.toLowerCase())) allMissing.push(mi);
+        });
+      }));
+      if (allMissing.length === 0) { showToast('No missing ingredients!'); return; }
+      setShopping(prev => {
+        const existing = new Set(prev.map(s => s.name.toLowerCase()));
+        const newItems = allMissing.filter(m => !existing.has(m.name.toLowerCase()));
+        return [...prev, ...newItems.map(m => ({ name: m.name, amount: m.amount || '', owned: false }))];
+      });
+      showToast(`${allMissing.length} items added to shopping list`);
+    };
+    return (
+      <div className="chat-week-plan">
+        <div className="chat-wp-header">
+          <h4>📅 Your Week Plan</h4>
+          <span style={{fontSize:12,color:'var(--sage)',fontWeight:500}}>{wp.totalRecipes} meals planned</span>
+        </div>
+        <div className="chat-wp-stats">
+          <span className="chat-wp-stat">🥫 Avg pantry match: <strong>{wp.avgMatch}%</strong></span>
+          <span className="chat-wp-stat">🛒 Total missing ingredients: <strong>{wp.totalMissing}</strong></span>
+        </div>
+        {wp.plan.map((day, di) => (
+          <div key={di} className="chat-wp-day">
+            <div className="chat-wp-day-name">{day.day}</div>
+            <div className="chat-wp-meals">
+              {day.meals.map((m, mi) => (
+                <div key={mi} className="chat-wp-meal">
+                  <span className="chat-wp-meal-type">{mealLabels[mi]}</span>
+                  <span className="chat-wp-meal-name">{m.recipe.emoji} {m.recipe.title}</span>
+                  <span className="chat-wp-meal-match">{m.match}%</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+        <div className="chat-wp-actions">
+          <button className="chat-rc-btn primary" onClick={() => { setTab('planner'); showToast('Viewing your updated plan!'); }}>📅 View Plan</button>
+          <button className="chat-rc-btn" onClick={handleAddAllMissing}>🛒 Add All Missing to Shopping List</button>
+          <button className="chat-rc-btn" onClick={() => processMessage('Regenerate the week plan')}>🔄 Regenerate</button>
+        </div>
+      </div>
+    );
+  }
+
   function RecipeCard({ card }) {
     const [showSteps, setShowSteps] = React.useState(false);
     return (
@@ -23021,12 +23192,12 @@ function AISousChef({ pantry, prefs, mealPlan, shopping, setShopping, saved, set
 
   // ── Starters ──
   const starters = [
+    "Plan my week from my pantry",
     "What can I cook with my pantry?",
     "Quick dinner under 20 min",
     "High-protein meal with what I have",
     "Cheap lunch ideas",
     "Give me 3 breakfast ideas",
-    "Easy snack with few ingredients",
   ];
 
   const handleSubmit = (e) => {
@@ -23082,6 +23253,7 @@ function AISousChef({ pantry, prefs, mealPlan, shopping, setShopping, saved, set
             <div className="chat-avatar">{msg.role === 'user' ? '👤' : '👨‍🍳'}</div>
             <div style={{flex:1,maxWidth:680}}>
               {msg.text && <div className="chat-bubble" style={msg.role === 'user' ? {} : {}}>{renderText(msg.text)}</div>}
+              {msg.weekPlan && <WeekPlanCard wp={msg.weekPlan} />}
               {msg.recipes && msg.recipes.map((card, j) => (
                 <RecipeCard key={j} card={card} />
               ))}
