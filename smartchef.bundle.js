@@ -31036,7 +31036,8 @@ body{font-family:var(--fb);background:var(--cream);color:var(--ch);-webkit-font-
         setLoading(false);
       }, 600 + Math.random() * 800);
     }
-    function buildWeekPlan() {
+    function buildWeekPlan(userEntities) {
+      const ue = userEntities || {};
       const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
       const mealTypes = ["breakfast", "lunch", "dinner"];
       const usedIds = /* @__PURE__ */ new Set();
@@ -31045,8 +31046,21 @@ body{font-family:var(--fb);background:var(--cream);color:var(--ch);-webkit-font-
       let totalMissing = 0;
       days.forEach((day, di) => {
         const dayMeals = [];
-        mealTypes.forEach((mt, mi) => {
-          const c = { meal: mt, count: 5, preferPantry: true };
+        mealTypes.forEach((mt) => {
+          const c = {
+            meal: mt,
+            count: 5,
+            preferPantry: true,
+            // Pass through ALL user constraints
+            goals: ue.goals && ue.goals.length > 0 ? [...ue.goals] : [],
+            exclude: ue.exclude && ue.exclude.length > 0 ? [...ue.exclude] : [],
+            include: ue.include && ue.include.length > 0 ? [...ue.include] : [],
+            cuisines: ue.cuisines && ue.cuisines.length > 0 ? [...ue.cuisines] : []
+          };
+          if (ue.dietary) c.dietary = ue.dietary;
+          if (ue.maxTime) c.maxTime = ue.maxTime;
+          if (ue.diff) c.diff = ue.diff;
+          if (ue.pantryOnly) c.pantryOnly = true;
           const candidates = findRecipes(c, [...usedIds]);
           const pick = candidates[0];
           if (pick) {
@@ -31068,8 +31082,7 @@ body{font-family:var(--fb);background:var(--cream);color:var(--ch);-webkit-font-
       const hasContext = lastRecipes.length > 0;
       const entities = extractEntities(text);
       const intents = classifyIntent(text, hasContext);
-      const topIntent = Object.entries(intents).sort((a, b) => b[1] - a[1])[0];
-      if (topIntent[0] === "greeting" && topIntent[1] >= 80) {
+      if (intents.greeting >= 80 && intents.search <= 30 && intents.weekPlan === 0) {
         const greetings = [
           `Hey! I'm your AI sous chef. I know your pantry (${pantryNames.length} items) and your preferences. What are you in the mood for?`,
           `Hi there! Ready to cook something great. I can see your pantry and suggest recipes that match what you have. What sounds good?`,
@@ -31077,32 +31090,27 @@ body{font-family:var(--fb);background:var(--cream);color:var(--ch);-webkit-font-
         ];
         return { text: greetings[Math.floor(Math.random() * greetings.length)] };
       }
-      if (topIntent[0] === "thanks" && topIntent[1] >= 80) {
-        const thanks = [
-          "Happy to help! Let me know if you want more ideas or need to change anything.",
-          "Glad you like it! I'm here whenever you want to cook something else.",
-          "Anytime! Just say the word if you need more recipe ideas."
-        ];
-        return { text: thanks[Math.floor(Math.random() * thanks.length)] };
+      if (intents.thanks >= 80 && intents.search <= 30) {
+        return { text: ["Happy to help! Let me know if you want more ideas or need to change anything.", "Glad you like it! I'm here whenever you want to cook something else.", "Anytime! Just say the word if you need more recipe ideas."][Math.floor(Math.random() * 3)] };
       }
-      if (topIntent[0] === "help" && topIntent[1] >= 80) {
+      if (intents.help >= 80) {
         return { text: `I can help you with all sorts of things:
 
 **Find recipes** \u2014 Just tell me what you're in the mood for. "Quick healthy dinner", "something with chicken", "comfort food for tonight"
 
-**Plan your week** \u2014 Say "plan my week" and I'll fill all 21 meal slots using your pantry
+**Plan your week** \u2014 Say "plan my week" and I'll fill all 21 meal slots. Add constraints like "plan my week with healthy food" or "vegetarian week plan"
 
-**Modify suggestions** \u2014 Don't like what I suggested? Just tell me naturally: "too many pancakes", "make it healthier", "something without gluten"
+**Modify suggestions** \u2014 Just tell me naturally: "too many pancakes", "make it healthier", "something without gluten"
 
 **Take action** \u2014 I can add recipes to your meal plan, save favorites, and put missing ingredients on your shopping list
 
-I always prioritize what's already in your pantry to minimize shopping trips.` };
+I always prioritize what's already in your pantry.` };
       }
-      if (topIntent[0] === "weekPlan" && topIntent[1] >= 80) {
+      if (intents.weekPlan >= 80) {
         if (pantryNames.length === 0) {
           return { text: "I'd love to plan your week, but your pantry is empty! Head to the **Pantry** tab and add your ingredients first. Even 10-15 items will let me create a solid plan." };
         }
-        const { plan, avgMatch, totalMissing } = buildWeekPlan();
+        const { plan, avgMatch, totalMissing } = buildWeekPlan(entities);
         if (setMealPlan && setSlotRecipe) {
           setMealPlan((prev) => {
             const next = prev.map((d) => ({ ...d, meals: [...d.meals] }));
@@ -31116,9 +31124,17 @@ I always prioritize what's already in your pantry to minimize shopping trips.` }
         }
         const allRecipes = plan.flatMap((d) => d.meals.map((m) => m.recipe));
         setLastRecipes(allRecipes);
-        return { text: "Done! I've planned your entire week using your pantry ingredients:", weekPlan: { plan, avgMatch, totalMissing, totalRecipes: allRecipes.length } };
+        const goals = entities.goals || [];
+        const desc = [];
+        if (goals.length > 0) desc.push(goals.map((g) => g === "high-protein" ? "high-protein" : g === "cheap" ? "budget-friendly" : g === "kid-friendly" ? "kid-friendly" : g).join(", "));
+        if (entities.dietary) desc.push(entities.dietary.toLowerCase());
+        if (entities.exclude && entities.exclude.length > 0) desc.push(`no ${entities.exclude.join("/")}`);
+        if (entities.cuisines && entities.cuisines.length > 0) desc.push(entities.cuisines.join(" & "));
+        if (entities.maxTime) desc.push(`under ${entities.maxTime} min`);
+        const descStr = desc.length > 0 ? ` \u2014 focused on **${desc.join(", ")}**` : "";
+        return { text: `Done! I've built a new week plan from your pantry${descStr}:`, weekPlan: { plan, avgMatch, totalMissing, totalRecipes: allRecipes.length } };
       }
-      if (topIntent[0] === "addToShopping" && topIntent[1] >= 80 && hasContext) {
+      if (intents.addToShopping >= 80 && hasContext) {
         const allMissing = [];
         lastRecipes.forEach((r) => {
           const { miss } = classifyIngredients(r);
@@ -31136,11 +31152,11 @@ I always prioritize what's already in your pantry to minimize shopping trips.` }
         }
         return { text: "Everything you need is already in your pantry \u2014 no shopping required!" };
       }
-      if (topIntent[0] === "addToPlan" && topIntent[1] >= 80 && hasContext) {
+      if (intents.addToPlan >= 80 && hasContext) {
         handleAddToPlan(lastRecipes[0]);
         return { text: `I've opened the meal plan picker for **"${lastRecipes[0].title}"**. Choose a day and slot!` };
       }
-      if (topIntent[0] === "save" && topIntent[1] >= 80 && hasContext) {
+      if (intents.save >= 80 && hasContext) {
         const r = lastRecipes[0];
         if (!saved.has(r.id)) {
           setSaved((prev) => {
@@ -31154,7 +31170,8 @@ I always prioritize what's already in your pantry to minimize shopping trips.` }
       }
       const ctx = hasContext ? resolveContext(entities, lastRecipes) : entities;
       if (!ctx.preferPantry && pantryNames.length > 0) ctx.preferPantry = true;
-      const excludeIds = hasContext && (intents.modify || 0) > 30 ? ctx._excludeIds || [] : [];
+      const isModifying = hasContext && (entities.exclude.length > 0 || entities.goals.length > 0 || entities.diff || entities.maxTime || /\banother\b|\bdifferent\b|\belse\b|\binstead\b|\breplace\b|\bchange\b|\bnew\b|\bbetter\b|\bmore\b/.test(low));
+      const excludeIds = isModifying ? ctx._excludeIds || [] : [];
       if (!ctx.count) ctx.count = 3;
       const results = findRecipes(ctx, excludeIds);
       if (results.length === 0) {
@@ -31162,9 +31179,7 @@ I always prioritize what's already in your pantry to minimize shopping trips.` }
           return { text: "Your pantry is empty right now. Head over to the **Pantry** tab and add what you have at home \u2014 even basics like eggs, rice, oil, and salt make a big difference. Then I can give you personalized suggestions!" };
         }
         const relaxed = { ...ctx, maxTime: void 0, diff: void 0, count: 3 };
-        if (relaxed.exclude) {
-          relaxed.exclude = relaxed.exclude.slice(0, 1);
-        }
+        if (relaxed.exclude && relaxed.exclude.length > 1) relaxed.exclude = relaxed.exclude.slice(0, 1);
         const fallback = findRecipes(relaxed, excludeIds);
         if (fallback.length > 0) {
           const cards2 = fallback.map((r) => {
@@ -31172,12 +31187,12 @@ I always prioritize what's already in your pantry to minimize shopping trips.` }
             card.reason = generateReason(card, relaxed);
             return card;
           });
-          return { text: "I couldn't find an exact match, but here are some close alternatives:", recipes: cards2 };
+          return { text: "I couldn't find an exact match for everything you asked, but here are some close alternatives:", recipes: cards2 };
         }
         let msg = "I couldn't find recipes matching all your criteria. ";
         if (ctx.exclude && ctx.exclude.length > 0) msg += `Excluding "${ctx.exclude.join(", ")}" narrows things down a lot. `;
         if (ctx.maxTime && ctx.maxTime <= 15) msg += "A bit more time would give me more options. ";
-        msg += "Want me to search with fewer restrictions?";
+        msg += "Want me to try with fewer restrictions?";
         return { text: msg };
       }
       const cards = results.map((r) => {
@@ -31185,8 +31200,7 @@ I always prioritize what's already in your pantry to minimize shopping trips.` }
         card.reason = generateReason(card, ctx);
         return card;
       });
-      const intro = generateIntro(ctx, cards, hasContext && (intents.modify || 0) > 30);
-      return { text: intro, recipes: cards };
+      return { text: generateIntro(ctx, cards, isModifying), recipes: cards };
     }
     function generateIntro(ctx, cards, isModification) {
       const n = cards.length;

@@ -22835,7 +22835,9 @@ function AISousChef({ pantry, prefs, mealPlan, setMealPlan, setSlotRecipe, shopp
 
   // ── Main response generator ──
   // ── Week plan builder ──
-  function buildWeekPlan() {
+  function buildWeekPlan(userEntities) {
+    // Merge user's constraints into every meal search
+    const ue = userEntities || {};
     const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
     const mealTypes = ['breakfast','lunch','dinner'];
     const usedIds = new Set();
@@ -22845,8 +22847,23 @@ function AISousChef({ pantry, prefs, mealPlan, setMealPlan, setSlotRecipe, shopp
 
     days.forEach((day, di) => {
       const dayMeals = [];
-      mealTypes.forEach((mt, mi) => {
-        const c = { meal: mt, count: 5, preferPantry: true };
+      mealTypes.forEach((mt) => {
+        // Start with the user's extracted entities, then layer on meal-specific stuff
+        const c = {
+          meal: mt,
+          count: 5,
+          preferPantry: true,
+          // Pass through ALL user constraints
+          goals: ue.goals && ue.goals.length > 0 ? [...ue.goals] : [],
+          exclude: ue.exclude && ue.exclude.length > 0 ? [...ue.exclude] : [],
+          include: ue.include && ue.include.length > 0 ? [...ue.include] : [],
+          cuisines: ue.cuisines && ue.cuisines.length > 0 ? [...ue.cuisines] : [],
+        };
+        if (ue.dietary) c.dietary = ue.dietary;
+        if (ue.maxTime) c.maxTime = ue.maxTime;
+        if (ue.diff) c.diff = ue.diff;
+        if (ue.pantryOnly) c.pantryOnly = true;
+
         const candidates = findRecipes(c, [...usedIds]);
         const pick = candidates[0];
         if (pick) {
@@ -22869,13 +22886,12 @@ function AISousChef({ pantry, prefs, mealPlan, setMealPlan, setSlotRecipe, shopp
     const low = text.toLowerCase().trim();
     const hasContext = lastRecipes.length > 0;
 
-    // ── Step 1: Extract all entities and classify intent ──
+    // ── Extract all entities from the message — this ALWAYS happens ──
     const entities = extractEntities(text);
     const intents = classifyIntent(text, hasContext);
-    const topIntent = Object.entries(intents).sort((a, b) => b[1] - a[1])[0];
 
-    // ── Step 2: Handle non-recipe intents first ──
-    if (topIntent[0] === 'greeting' && topIntent[1] >= 80) {
+    // ── Conversational responses (only if nothing recipe-related detected) ──
+    if (intents.greeting >= 80 && intents.search <= 30 && intents.weekPlan === 0) {
       const greetings = [
         `Hey! I'm your AI sous chef. I know your pantry (${pantryNames.length} items) and your preferences. What are you in the mood for?`,
         `Hi there! Ready to cook something great. I can see your pantry and suggest recipes that match what you have. What sounds good?`,
@@ -22884,25 +22900,22 @@ function AISousChef({ pantry, prefs, mealPlan, setMealPlan, setSlotRecipe, shopp
       return { text: greetings[Math.floor(Math.random() * greetings.length)] };
     }
 
-    if (topIntent[0] === 'thanks' && topIntent[1] >= 80) {
-      const thanks = [
-        "Happy to help! Let me know if you want more ideas or need to change anything.",
-        "Glad you like it! I'm here whenever you want to cook something else.",
-        "Anytime! Just say the word if you need more recipe ideas."
-      ];
-      return { text: thanks[Math.floor(Math.random() * thanks.length)] };
+    if (intents.thanks >= 80 && intents.search <= 30) {
+      return { text: ["Happy to help! Let me know if you want more ideas or need to change anything.", "Glad you like it! I'm here whenever you want to cook something else.", "Anytime! Just say the word if you need more recipe ideas."][Math.floor(Math.random() * 3)] };
     }
 
-    if (topIntent[0] === 'help' && topIntent[1] >= 80) {
-      return { text: "I can help you with all sorts of things:\n\n**Find recipes** — Just tell me what you're in the mood for. \"Quick healthy dinner\", \"something with chicken\", \"comfort food for tonight\"\n\n**Plan your week** — Say \"plan my week\" and I'll fill all 21 meal slots using your pantry\n\n**Modify suggestions** — Don't like what I suggested? Just tell me naturally: \"too many pancakes\", \"make it healthier\", \"something without gluten\"\n\n**Take action** — I can add recipes to your meal plan, save favorites, and put missing ingredients on your shopping list\n\nI always prioritize what's already in your pantry to minimize shopping trips." };
+    if (intents.help >= 80) {
+      return { text: "I can help you with all sorts of things:\n\n**Find recipes** — Just tell me what you're in the mood for. \"Quick healthy dinner\", \"something with chicken\", \"comfort food for tonight\"\n\n**Plan your week** — Say \"plan my week\" and I'll fill all 21 meal slots. Add constraints like \"plan my week with healthy food\" or \"vegetarian week plan\"\n\n**Modify suggestions** — Just tell me naturally: \"too many pancakes\", \"make it healthier\", \"something without gluten\"\n\n**Take action** — I can add recipes to your meal plan, save favorites, and put missing ingredients on your shopping list\n\nI always prioritize what's already in your pantry." };
     }
 
-    // ── Step 3: Handle action intents ──
-    if (topIntent[0] === 'weekPlan' && topIntent[1] >= 80) {
+    // ── Week plan — check this FIRST, independent of other intents ──
+    // If user mentions week/plan in ANY context, this takes priority
+    if (intents.weekPlan >= 80) {
       if (pantryNames.length === 0) {
         return { text: "I'd love to plan your week, but your pantry is empty! Head to the **Pantry** tab and add your ingredients first. Even 10-15 items will let me create a solid plan." };
       }
-      const { plan, avgMatch, totalMissing } = buildWeekPlan();
+      // Pass ALL extracted entities into the week planner
+      const { plan, avgMatch, totalMissing } = buildWeekPlan(entities);
       if (setMealPlan && setSlotRecipe) {
         setMealPlan(prev => {
           const next = prev.map(d => ({ ...d, meals: [...d.meals] }));
@@ -22916,10 +22929,22 @@ function AISousChef({ pantry, prefs, mealPlan, setMealPlan, setSlotRecipe, shopp
       }
       const allRecipes = plan.flatMap(d => d.meals.map(m => m.recipe));
       setLastRecipes(allRecipes);
-      return { text: "Done! I've planned your entire week using your pantry ingredients:", weekPlan: { plan, avgMatch, totalMissing, totalRecipes: allRecipes.length } };
+
+      // Build a descriptive response based on what they asked for
+      const goals = entities.goals || [];
+      const desc = [];
+      if (goals.length > 0) desc.push(goals.map(g => g === 'high-protein' ? 'high-protein' : g === 'cheap' ? 'budget-friendly' : g === 'kid-friendly' ? 'kid-friendly' : g).join(', '));
+      if (entities.dietary) desc.push(entities.dietary.toLowerCase());
+      if (entities.exclude && entities.exclude.length > 0) desc.push(`no ${entities.exclude.join('/')}`);
+      if (entities.cuisines && entities.cuisines.length > 0) desc.push(entities.cuisines.join(' & '));
+      if (entities.maxTime) desc.push(`under ${entities.maxTime} min`);
+      const descStr = desc.length > 0 ? ` — focused on **${desc.join(', ')}**` : '';
+
+      return { text: `Done! I've built a new week plan from your pantry${descStr}:`, weekPlan: { plan, avgMatch, totalMissing, totalRecipes: allRecipes.length } };
     }
 
-    if (topIntent[0] === 'addToShopping' && topIntent[1] >= 80 && hasContext) {
+    // ── Quick actions — only if clear and unambiguous ──
+    if (intents.addToShopping >= 80 && hasContext) {
       const allMissing = [];
       lastRecipes.forEach(r => {
         const { miss } = classifyIngredients(r);
@@ -22936,12 +22961,12 @@ function AISousChef({ pantry, prefs, mealPlan, setMealPlan, setSlotRecipe, shopp
       return { text: "Everything you need is already in your pantry — no shopping required!" };
     }
 
-    if (topIntent[0] === 'addToPlan' && topIntent[1] >= 80 && hasContext) {
+    if (intents.addToPlan >= 80 && hasContext) {
       handleAddToPlan(lastRecipes[0]);
       return { text: `I've opened the meal plan picker for **"${lastRecipes[0].title}"**. Choose a day and slot!` };
     }
 
-    if (topIntent[0] === 'save' && topIntent[1] >= 80 && hasContext) {
+    if (intents.save >= 80 && hasContext) {
       const r = lastRecipes[0];
       if (!saved.has(r.id)) {
         setSaved(prev => { const n = new Set(prev); n.add(r.id); return n; });
@@ -22950,17 +22975,22 @@ function AISousChef({ pantry, prefs, mealPlan, setMealPlan, setSlotRecipe, shopp
       return { text: `**"${r.title}"** is already in your favorites!` };
     }
 
-    // ── Step 4: Unified recipe search (handles BOTH new searches and modifications) ──
-    // If there's conversation context, use it to fill gaps
+    // ── Recipe search — unified for both new and modification requests ──
+    // Use conversation context to fill gaps, but entities from THIS message always take priority
     const ctx = hasContext ? resolveContext(entities, lastRecipes) : entities;
 
-    // Default: prefer pantry if they have items
     if (!ctx.preferPantry && pantryNames.length > 0) ctx.preferPantry = true;
 
-    // Determine which recipe IDs to exclude (previous suggestions if modifying)
-    const excludeIds = hasContext && (intents.modify || 0) > 30 ? ctx._excludeIds || [] : [];
+    // Exclude previous recipes if this looks like a modification/follow-up
+    const isModifying = hasContext && (
+      entities.exclude.length > 0 ||
+      entities.goals.length > 0 ||
+      entities.diff ||
+      entities.maxTime ||
+      /\banother\b|\bdifferent\b|\belse\b|\binstead\b|\breplace\b|\bchange\b|\bnew\b|\bbetter\b|\bmore\b/.test(low)
+    );
+    const excludeIds = isModifying ? (ctx._excludeIds || []) : [];
 
-    // Build the query
     if (!ctx.count) ctx.count = 3;
 
     const results = findRecipes(ctx, excludeIds);
@@ -22969,18 +22999,18 @@ function AISousChef({ pantry, prefs, mealPlan, setMealPlan, setSlotRecipe, shopp
       if (pantryNames.length === 0) {
         return { text: "Your pantry is empty right now. Head over to the **Pantry** tab and add what you have at home — even basics like eggs, rice, oil, and salt make a big difference. Then I can give you personalized suggestions!" };
       }
-      // Smart fallback — relax constraints and try again
+      // Smart fallback — progressively relax constraints
       const relaxed = { ...ctx, maxTime: undefined, diff: undefined, count: 3 };
-      if (relaxed.exclude) { relaxed.exclude = relaxed.exclude.slice(0, 1); }
+      if (relaxed.exclude && relaxed.exclude.length > 1) relaxed.exclude = relaxed.exclude.slice(0, 1);
       const fallback = findRecipes(relaxed, excludeIds);
       if (fallback.length > 0) {
         const cards = fallback.map(r => { const card = buildRecipeCard(r); card.reason = generateReason(card, relaxed); return card; });
-        return { text: "I couldn't find an exact match, but here are some close alternatives:", recipes: cards };
+        return { text: "I couldn't find an exact match for everything you asked, but here are some close alternatives:", recipes: cards };
       }
       let msg = "I couldn't find recipes matching all your criteria. ";
       if (ctx.exclude && ctx.exclude.length > 0) msg += `Excluding "${ctx.exclude.join(', ')}" narrows things down a lot. `;
       if (ctx.maxTime && ctx.maxTime <= 15) msg += "A bit more time would give me more options. ";
-      msg += "Want me to search with fewer restrictions?";
+      msg += "Want me to try with fewer restrictions?";
       return { text: msg };
     }
 
@@ -22990,10 +23020,7 @@ function AISousChef({ pantry, prefs, mealPlan, setMealPlan, setSlotRecipe, shopp
       return card;
     });
 
-    // ── Step 5: Generate natural response text ──
-    const intro = generateIntro(ctx, cards, hasContext && (intents.modify || 0) > 30);
-
-    return { text: intro, recipes: cards };
+    return { text: generateIntro(ctx, cards, isModifying), recipes: cards };
   }
 
   // ── Natural response text generator ──
