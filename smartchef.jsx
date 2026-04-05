@@ -22529,156 +22529,244 @@ function AISousChef({ pantry, prefs, mealPlan, setMealPlan, setSlotRecipe, shopp
     return total > 0 ? Math.round((have.length / total) * 100) : 0;
   }
 
-  // ── Constraint parsing ──
-  function parseConstraints(text) {
+  // ══════════════════════════════════════════════════════════════
+  // NLU ENGINE — Natural Language Understanding for recipe chat
+  // ══════════════════════════════════════════════════════════════
+
+  // ── Entity extraction — pulls ALL signals from natural language ──
+  function extractEntities(text) {
     const low = text.toLowerCase();
-    const c = {};
+    const e = { goals: [], exclude: [], include: [], cuisines: [] };
+
     // Meal type
-    if (/\bbreakfast\b/.test(low)) c.meal = 'breakfast';
-    else if (/\blunch\b/.test(low)) c.meal = 'lunch';
-    else if (/\bdinner\b/.test(low)) c.meal = 'dinner';
-    else if (/\bsnack\b/.test(low)) c.meal = 'snack';
-    else if (/\bdessert\b/.test(low)) c.meal = 'dessert';
+    if (/\bbreakfast\b|morning\s+meal|\bbrunch\b/.test(low)) e.meal = 'breakfast';
+    else if (/\blunch\b|midday/.test(low)) e.meal = 'lunch';
+    else if (/\bdinner\b|supper|evening\s+meal/.test(low)) e.meal = 'dinner';
+    else if (/\bsnack\b/.test(low)) e.meal = 'snack';
+    else if (/\bdessert\b|sweet\s+treat/.test(low)) e.meal = 'dessert';
+
     // Time
-    const timeMatch = low.match(/(?:under|less than|max|within)\s*(\d+)\s*min/);
-    if (timeMatch) c.maxTime = parseInt(timeMatch[1]);
-    else if (/\bquick\b|\bfast\b|\bspeedy\b|\brapid\b/.test(low)) c.maxTime = 20;
+    const timeMatch = low.match(/(?:under|less than|max|within|in)\s*(\d+)\s*min/);
+    if (timeMatch) e.maxTime = parseInt(timeMatch[1]);
+    else if (/\bquick\b|\bfast\b|\bspeedy\b|\brapid\b|\bno time\b|\bhurry\b|\brushed\b/.test(low)) e.maxTime = 20;
+    else if (/not too (?:long|slow)/.test(low)) e.maxTime = 30;
+
     // Dietary
-    if (/\bvegetarian\b|\bveggie\b/.test(low)) c.dietary = 'Vegetarian';
-    else if (/\bvegan\b/.test(low)) c.dietary = 'Vegan';
-    else if (/\bgluten.?free\b/.test(low)) c.dietary = 'Gluten-free';
-    // Goals
-    if (/\bhigh.?protein\b|\bprotein.?rich\b/.test(low)) c.goal = 'high-protein';
-    if (/\bcheap\b|\bbudget\b|\binexpensive\b|\baffordable\b/.test(low)) c.goal = 'cheap';
-    if (/\bhealthy\b|\blow.?cal\b|\blight\b/.test(low)) c.goal = 'healthy';
-    if (/\bkid\b|\bchild\b|\bfamily\b/.test(low)) c.goal = 'kid-friendly';
+    if (/\bvegetarian\b|\bveggie\b|\bno\s+meat\b|\bmeatless\b/.test(low)) e.dietary = 'Vegetarian';
+    else if (/\bvegan\b|\bplant.?based\b/.test(low)) e.dietary = 'Vegan';
+    else if (/\bgluten.?free\b|\bno\s+gluten\b/.test(low)) e.dietary = 'Gluten-free';
+    else if (/\bdairy.?free\b|\bno\s+dairy\b|\blactose/.test(low)) e.dietary = 'Dairy-free';
+    else if (/\bketo\b|\blow.?carb\b/.test(low)) e.dietary = 'Keto';
+
+    // Goals — multiple allowed
+    if (/\bhigh.?protein\b|\bprotein.?rich\b|\bmore protein\b|\bprotein.?packed\b/.test(low)) e.goals.push('high-protein');
+    if (/\bcheap\b|\bbudget\b|\binexpensive\b|\baffordable\b|\bsave money\b/.test(low)) e.goals.push('cheap');
+    if (/\bhealthy\b|\bhealthier\b|\blow.?cal\b|\blight\b|\blighter\b|\bnutritious\b|\bclean\b|\bwholesome\b|\bnourishing\b|\bgood for (?:me|you|health)\b/.test(low)) e.goals.push('healthy');
+    if (/\bkid\b|\bchild\b|\bfamily\b|\bpicky eater\b/.test(low)) e.goals.push('kid-friendly');
+    if (/\bcomfort\b|\bcozy\b|\bwarm(?:ing)?\b|\bhearty\b|\bfilling\b/.test(low)) e.goals.push('comfort');
+    if (/\bfancy\b|\bimpressive\b|\bdate night\b|\bspecial\b|\bgourmet\b/.test(low)) e.goals.push('fancy');
+
     // Difficulty
-    if (/\beasy\b|\bsimple\b|\bsimpler\b|\beasier\b/.test(low)) c.diff = 'Easy';
+    if (/\beasy\b|\bsimple\b|\bsimpler\b|\beasier\b|\bbeginner\b|\bno.?fuss\b/.test(low)) e.diff = 'Easy';
+
     // Count
-    const countMatch = low.match(/(\d+)\s*(?:option|recipe|idea|suggestion)/);
-    if (countMatch) c.count = Math.min(parseInt(countMatch[1]), 5);
-    else if (/\b3\b/.test(low) && /option|idea|recipe|suggestion/.test(low)) c.count = 3;
-    // Specific ingredients mentioned
-    const mentionedIngs = [];
-    const ingPatterns = ['chicken','beef','pork','fish','salmon','tuna','shrimp','tofu','rice','pasta','noodle','egg','eggs','potato','tomato','cheese','bread','mushroom','onion','garlic','bean','lentil','avocado','broccoli','spinach'];
-    ingPatterns.forEach(ing => { if (low.includes(ing)) mentionedIngs.push(ing); });
-    if (mentionedIngs.length > 0) c.mustInclude = mentionedIngs;
-    // Exclusions — handles "no X", "without X", "replace X", "too many X", "tired of X", "sick of X", "instead of X"
-    const excludeMatch = low.match(/(?:no|without|don't want|replace|remove|exclude|skip|instead of|too many|tired of|sick of|not|less)\s+(?:the\s+)?(\w+)/);
-    if (excludeMatch) {
-      const excl = excludeMatch[1].toLowerCase();
-      // Avoid excluding common non-food words
-      if (!['it','that','this','them','me','the','a','an','my','more','time'].includes(excl)) {
-        c.exclude = [...(c.exclude || []), excl];
+    const countMatch = low.match(/(\d+)\s*(?:option|recipe|idea|suggestion|thing|meal|dish)/);
+    if (countMatch) e.count = Math.min(parseInt(countMatch[1]), 10);
+    else {
+      const standaloneNum = low.match(/\bgive\s+(?:me\s+)?(\d+)\b|\bshow\s+(?:me\s+)?(\d+)\b|\b(\d+)\s+(?:different|more)\b|\bfind\s+(\d+)\b/);
+      if (standaloneNum) {
+        const n = parseInt(standaloneNum[1] || standaloneNum[2] || standaloneNum[3] || standaloneNum[4]);
+        if (n >= 1 && n <= 10) e.count = n;
       }
     }
-    // Pantry-only mode
-    if (/only\s+(?:with\s+)?what\s+i\s+have|pantry\s+only|no\s+missing|nothing\s+missing/.test(low)) c.pantryOnly = true;
-    if (/pantry|what\s+i\s+(?:already\s+)?have|my\s+ingredients/.test(low)) c.preferPantry = true;
-    return c;
+    if (/\ba couple\b/.test(low)) e.count = 2;
+    if (/\ba few\b|\bsome\b|\bseveral\b/.test(low) && !e.count) e.count = 3;
+
+    // Ingredients to include
+    const knownIngs = ['chicken','beef','pork','fish','salmon','tuna','shrimp','tofu','tempeh','rice','pasta','noodle','egg','eggs','potato','sweet potato','tomato','cheese','bread','mushroom','onion','garlic','bean','lentil','chickpea','avocado','broccoli','spinach','kale','quinoa','oats','corn','zucchini','eggplant','bell pepper','carrot','ginger','lemon','lime','coconut','banana','apple','turkey','lamb','sausage','bacon','ham','yogurt','cream','butter','flour','honey','tortilla','pita','couscous'];
+    knownIngs.forEach(ing => {
+      const re = new RegExp('\\b' + ing.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '(?:s|es)?\\b');
+      if (re.test(low)) e.include.push(ing);
+    });
+
+    // Cuisines
+    const knownCuisines = { 'italian': 'Italian', 'mexican': 'Mexican', 'thai': 'Thai', 'chinese': 'Chinese', 'indian': 'Indian', 'japanese': 'Japanese', 'korean': 'Korean', 'mediterranean': 'Mediterranean', 'greek': 'Greek', 'french': 'French', 'american': 'American', 'middle eastern': 'Middle Eastern', 'vietnamese': 'Vietnamese', 'moroccan': 'Moroccan', 'spanish': 'Spanish', 'turkish': 'Turkish', 'lebanese': 'Lebanese' };
+    Object.entries(knownCuisines).forEach(([key, val]) => { if (low.includes(key)) e.cuisines.push(val); });
+
+    // Exclusions — ALL negation forms
+    const exPat = /(?:no|without|don'?t want|don'?t like|replace|remove|exclude|skip|instead of|too many|tired of|sick of|bored of|had enough of|not\s+(?:any\s+)?|avoid|cut out|drop|ditch|hold the|less)\s+(?:the\s+|any\s+|more\s+)?(\w+(?:\s+\w+)?)/gi;
+    let m;
+    while ((m = exPat.exec(low)) !== null) {
+      const excl = m[1].trim();
+      const stopWords = ['it','that','this','them','me','the','a','an','my','more','time','much','many','lot','some','anything','something','thing','things','one','ones','recipe','recipes','please','just','really','good','great','sure','ok','so','very','too','enough'];
+      if (!stopWords.includes(excl) && excl.length > 1) e.exclude.push(excl);
+    }
+
+    // Pantry mode
+    if (/only\s+(?:with\s+)?what\s+i\s+have|pantry\s+only|no\s+missing|nothing\s+(?:extra|missing)|(?:just|only)\s+(?:use\s+)?(?:my\s+)?pantry/.test(low)) e.pantryOnly = true;
+    if (/pantry|what\s+i\s+(?:already\s+)?have|my\s+ingredients|what(?:'s| is)\s+in\s+my\s+(?:kitchen|fridge)/.test(low)) e.preferPantry = true;
+
+    return e;
   }
 
-  // ── Follow-up detection ──
-  function isFollowUp(text) {
+  // ── Intent classification — scored, not binary ──
+  function classifyIntent(text, hasContext) {
     const low = text.toLowerCase();
-    return /\breplace\b|\bswap\b|\bchange\b|\bmodify\b|\bmake it\b|\beasier\b|\bsimpler\b|\bfaster\b|\bcheaper\b|\bhealthier\b|\blighter\b|\bmore healthy\b|\bnutritious\b|\banother\b|\bdifferent\b|\binstead\b|\bdon't want\b|\bno\s+\w+\b|\bremove\b|\bwithout\b|\bless\b|\bmore\b|\btoo many\b|\btired of\b|\bsick of\b/.test(low);
+    const intents = {};
+
+    // Week planning
+    intents.weekPlan = 0;
+    if (/plan\s+(?:my|the|a)?\s*(?:full\s+)?week|week(?:ly)?\s+(?:meal\s*)?plan|plan\s+(?:all\s+)?(?:7|seven)\s+days|fill\s+(?:my|the)\s+(?:meal\s*)?plan|(?:create|generate|make|build)\s+(?:a\s+)?(?:full\s+)?(?:weekly|week)\s+(?:meal\s*)?plan|meal\s*plan\s+(?:from|using|with)\s+(?:my\s+)?pantry|plan\s+(?:my\s+)?(?:meals|week)\s+(?:from|using|with)/i.test(low)) intents.weekPlan = 100;
+
+    // Shopping list action
+    intents.addToShopping = 0;
+    if (/add\s+(?:the\s+)?missing|shopping\s+list|(?:put|add)\s+(?:those|these|them|ingredients?)\s+(?:on|to|in)\s+(?:my\s+)?(?:shopping|list|cart)/i.test(low)) intents.addToShopping = 90;
+
+    // Add to plan action
+    intents.addToPlan = 0;
+    if (/add\s+(?:this|it|that|the recipe)?\s*to\s+(?:my\s+)?(?:meal\s*)?plan|plan\s+(?:this|it|that)/i.test(low)) intents.addToPlan = 90;
+
+    // Save action
+    intents.save = 0;
+    if (/save\s+(?:this|it|that|the\s+recipe)|bookmark|favorite|keep\s+(?:this|it|that)/i.test(low)) intents.save = 90;
+
+    // Greeting
+    intents.greeting = 0;
+    if (/^(?:hi|hello|hey|howdy|what'?s up|yo|good (?:morning|afternoon|evening))[!?.]*$/i.test(low.trim())) intents.greeting = 100;
+
+    // Help
+    intents.help = 0;
+    if (/what (?:can|do) you (?:do|help)|how (?:do|does) (?:this|it) work|help me|capabilities/i.test(low)) intents.help = 100;
+
+    // Thanks
+    intents.thanks = 0;
+    if (/^(?:thanks?|thank you|thx|ty|great|awesome|perfect|nice|cool|love it|wonderful)[!.]*$/i.test(low.trim())) intents.thanks = 100;
+
+    // Recipe search — always has base score
+    intents.search = 30;
+    if (/\brecipe\b|\bcook\b|\bmake\b|\bprepare\b|\bwhat (?:can|should|could)\b|\bsuggest\b|\brecommend\b|\bidea\b|\boption\b|\bfind\b|\bshow\b|\bgive\b/.test(low)) intents.search += 40;
+    if (/\bbreakfast\b|\blunch\b|\bdinner\b|\bsnack\b|\bdessert\b/.test(low)) intents.search += 20;
+
+    return intents;
+  }
+
+  // ── Context resolver — fills gaps using conversation history ──
+  function resolveContext(entities, lastRecs) {
+    const ctx = { ...entities };
+    if (!ctx.meal && lastRecs.length > 0) {
+      const prevMeals = lastRecs.map(r => r.meal).filter(Boolean);
+      if (prevMeals.length > 0) {
+        const mc = {};
+        prevMeals.forEach(m => { mc[m] = (mc[m] || 0) + 1; });
+        ctx.meal = Object.entries(mc).sort((a, b) => b[1] - a[1])[0][0];
+      }
+    }
+    ctx._excludeIds = lastRecs.map(r => r.id);
+    return ctx;
   }
 
   // ── Recipe search engine ──
-  function findRecipes(constraints, excludeIds = []) {
-    const c = constraints;
+  function findRecipes(entities, excludeIds = []) {
+    const c = entities;
     const excludeSet = new Set(excludeIds);
     let pool = RECIPES.filter(r => !excludeSet.has(r.id));
 
-    // Apply hard filters
+    // Hard filters
     if (c.meal) pool = pool.filter(r => r.meal === c.meal);
     if (c.maxTime) pool = pool.filter(r => r.time <= c.maxTime);
     if (c.diff) pool = pool.filter(r => r.diff === c.diff);
     if (c.dietary) pool = pool.filter(r => (r.dietary || []).some(d => d.toLowerCase().includes(c.dietary.toLowerCase())));
 
-    // Exclusion filter — checks BOTH ingredient names AND recipe title
-    if (c.exclude) {
+    // Cuisine filter
+    if (c.cuisines && c.cuisines.length > 0) {
+      const cf = pool.filter(r => c.cuisines.some(cu => (r.cuisine || '').toLowerCase().includes(cu.toLowerCase())));
+      if (cf.length >= 3) pool = cf;
+    }
+
+    // Exclusion — checks titles, ingredients, AND cuisine
+    if (c.exclude && c.exclude.length > 0) {
       pool = pool.filter(r => {
-        const ingNames = (r.ingredients || []).map(i => (i.n || '').toLowerCase());
+        const ingStr = (r.ingredients || []).map(i => (i.n || '').toLowerCase()).join(' ');
         const titleLow = (r.title || '').toLowerCase();
-        return !c.exclude.some(ex => ingNames.some(n => n.includes(ex)) || titleLow.includes(ex));
+        return !c.exclude.some(ex => ingStr.includes(ex) || titleLow.includes(ex));
       });
     }
 
-    // Must-include filter
+    // Inclusion — specific ingredients
+    if (c.include && c.include.length > 0) {
+      const incl = pool.filter(r => {
+        const searchable = (r.ingredients || []).map(i => (i.n || '').toLowerCase()).join(' ') + ' ' + (r.title || '').toLowerCase();
+        return c.include.some(inc => searchable.includes(inc));
+      });
+      if (incl.length >= 1) pool = incl;
+    }
     if (c.mustInclude && c.mustInclude.length > 0) {
       pool = pool.filter(r => {
-        const ingNames = (r.ingredients || []).map(i => (i.n || '').toLowerCase()).join(' ') + ' ' + (r.title || '').toLowerCase();
-        return c.mustInclude.some(inc => ingNames.includes(inc));
+        const searchable = (r.ingredients || []).map(i => (i.n || '').toLowerCase()).join(' ') + ' ' + (r.title || '').toLowerCase();
+        return c.mustInclude.some(inc => searchable.includes(inc));
       });
     }
 
-    // User prefs dietary filter
+    // User prefs dietary
     if (prefs.dietary && prefs.dietary.length > 0 && !c.dietary) {
-      const prefFiltered = pool.filter(r => {
-        return prefs.dietary.every(pref => {
-          const low = pref.toLowerCase();
-          if (low === 'vegetarian') return !r.contains_meat && !r.contains_fish;
-          if (low === 'vegan') return !r.contains_meat && !r.contains_fish && !r.contains_dairy;
-          if (low === 'pescatarian') return !r.contains_meat;
-          if (low === 'kosher') return r.kosher_safe;
-          return true;
-        });
-      });
-      if (prefFiltered.length >= 3) pool = prefFiltered;
+      const pf = pool.filter(r => prefs.dietary.every(pref => {
+        const low = pref.toLowerCase();
+        if (low === 'vegetarian') return !r.contains_meat && !r.contains_fish;
+        if (low === 'vegan') return !r.contains_meat && !r.contains_fish && !r.contains_dairy;
+        if (low === 'pescatarian') return !r.contains_meat;
+        if (low === 'kosher') return r.kosher_safe;
+        return true;
+      }));
+      if (pf.length >= 3) pool = pf;
     }
 
-    // Score and sort
+    // Unified scoring — all goals contribute simultaneously
+    const goals = c.goals || (c.goal ? [c.goal] : []);
     pool = pool.map(r => {
       let score = 0;
       const match = pantryMatchScore(r);
-      score += match * 3; // Pantry match is the primary score
+      const ingStr = (r.ingredients || []).map(i => (i.n || '').toLowerCase()).join(' ');
+      const titleLow = (r.title || '').toLowerCase();
+      const { miss } = classifyIngredients(r);
 
-      // Bonus for high protein goal
-      if (c.goal === 'high-protein') {
-        const proteinIngredients = ['chicken','beef','pork','fish','salmon','tuna','shrimp','egg','eggs','tofu','lentil','bean','greek yogurt','cottage cheese','turkey'];
-        const ingStr = (r.ingredients || []).map(i => (i.n || '').toLowerCase()).join(' ');
-        const hasProtein = proteinIngredients.some(p => ingStr.includes(p));
-        if (hasProtein) score += 80;
-      }
-      // Bonus for cheap
-      if (c.goal === 'cheap') {
-        const { miss } = classifyIngredients(r);
-        score += (10 - Math.min(miss.length, 10)) * 8; // Fewer missing = cheaper
-        if (r.pp && r.pp < 50) score += 30;
-      }
-      // Bonus for healthy
-      if (c.goal === 'healthy') {
-        const healthyIngredients = ['spinach','kale','broccoli','avocado','quinoa','salmon','lentil','chickpea','oats','sweet potato','tomato','berry','blueberry','almond','walnut','chia','flax','greek yogurt','olive oil','garlic','ginger','turmeric','egg','tofu','bean','cucumber','bell pepper'];
-        const ingStr = (r.ingredients || []).map(i => (i.n || '').toLowerCase()).join(' ');
-        const titleLow = (r.title || '').toLowerCase();
-        const healthyCount = healthyIngredients.filter(h => ingStr.includes(h) || titleLow.includes(h)).length;
-        score += healthyCount * 25;
-        // Penalize typically unheavy items
-        const unhealthyKeywords = ['pancake','waffle','fried','cream','butter','sugar','syrup','bacon','sausage','cheese','chocolate','cake','cookie','brownie','donut'];
-        const unhealthyCount = unhealthyKeywords.filter(u => ingStr.includes(u) || titleLow.includes(u)).length;
-        score -= unhealthyCount * 40;
-        // Bonus for salad, bowl, soup
-        if (/salad|bowl|soup|stew|grain|roast|grilled|steamed|baked/.test(titleLow)) score += 30;
-      }
-      // Bonus for kid-friendly
-      if (c.goal === 'kid-friendly') {
-        const kidFriendly = ['pasta','mac','cheese','pizza','chicken','pancake','toast','egg','rice','noodle','burger','sandwich'];
-        const titleLow = (r.title || '').toLowerCase();
-        if (kidFriendly.some(k => titleLow.includes(k))) score += 50;
-      }
-      // Pantry-only / prefer pantry
-      if (c.pantryOnly) {
-        const { miss } = classifyIngredients(r);
-        if (miss.length > 0) score -= 999;
-      }
-      if (c.preferPantry) score += match * 2; // Extra weight on pantry match
+      score += match * 3;
+      if (c.preferPantry) score += match * 2;
+      if (c.pantryOnly && miss.length > 0) score -= 999;
+
+      goals.forEach(goal => {
+        if (goal === 'high-protein') {
+          const pi = ['chicken','beef','pork','fish','salmon','tuna','shrimp','egg','eggs','tofu','lentil','bean','greek yogurt','cottage cheese','turkey','lamb','tempeh','quinoa'];
+          score += pi.filter(p => ingStr.includes(p) || titleLow.includes(p)).length * 40;
+        }
+        if (goal === 'healthy') {
+          const hi = ['spinach','kale','broccoli','avocado','quinoa','salmon','lentil','chickpea','oats','sweet potato','tomato','berry','blueberry','almond','walnut','chia','flax','greek yogurt','olive oil','garlic','ginger','turmeric','egg','tofu','bean','cucumber','bell pepper','zucchini','cauliflower','carrot'];
+          score += hi.filter(h => ingStr.includes(h) || titleLow.includes(h)).length * 25;
+          const ui = ['pancake','waffle','fried','deep fried','cream','butter','sugar','syrup','bacon','sausage','chocolate','cake','cookie','brownie','donut','candy','fries'];
+          score -= ui.filter(u => ingStr.includes(u) || titleLow.includes(u)).length * 50;
+          if (/salad|bowl|soup|stew|grain|roast|grilled|steamed|baked|poached/.test(titleLow)) score += 35;
+        }
+        if (goal === 'cheap') {
+          score += (10 - Math.min(miss.length, 10)) * 8;
+          if (r.pp && r.pp < 50) score += 30;
+        }
+        if (goal === 'kid-friendly') {
+          const ki = ['pasta','mac','cheese','pizza','chicken','pancake','toast','egg','rice','noodle','burger','sandwich','nugget','meatball','quesadilla'];
+          if (ki.some(k => titleLow.includes(k))) score += 50;
+        }
+        if (goal === 'comfort') {
+          const ci = ['soup','stew','chili','pasta','casserole','pot pie','mac','gratin','curry','risotto','lasagna','meatloaf','chowder'];
+          if (ci.some(k => titleLow.includes(k))) score += 50;
+        }
+        if (goal === 'fancy') {
+          if (r.diff === 'Hard' || r.diff === 'Intermediate') score += 30;
+          if (/seared|braised|reduction|confit|risotto|glazed|filet/.test(titleLow)) score += 40;
+        }
+      });
 
       return { ...r, _score: score, _match: match };
     });
 
     pool.sort((a, b) => b._score - a._score);
-
     const count = c.count || 3;
     return pool.slice(0, Math.min(count, 30));
   }
@@ -22779,15 +22867,42 @@ function AISousChef({ pantry, prefs, mealPlan, setMealPlan, setSlotRecipe, shopp
 
   function generateResponse(text) {
     const low = text.toLowerCase().trim();
+    const hasContext = lastRecipes.length > 0;
 
-    // ── Week plan request ──
-    if (/plan\s+(?:my|the|a)?\s*(?:full\s+)?week|week(?:ly)?\s+(?:meal\s*)?plan|plan\s+(?:all\s+)?(?:7|seven)\s+days|fill\s+(?:my|the)\s+(?:meal\s*)?plan|(?:create|generate|make|build)\s+(?:a\s+)?(?:full\s+)?(?:weekly|week)\s+(?:meal\s*)?plan|meal\s*plan\s+(?:from|using|with)\s+(?:my\s+)?pantry|plan\s+(?:my\s+)?(?:meals|week)\s+(?:from|using|with)/i.test(low)) {
+    // ── Step 1: Extract all entities and classify intent ──
+    const entities = extractEntities(text);
+    const intents = classifyIntent(text, hasContext);
+    const topIntent = Object.entries(intents).sort((a, b) => b[1] - a[1])[0];
+
+    // ── Step 2: Handle non-recipe intents first ──
+    if (topIntent[0] === 'greeting' && topIntent[1] >= 80) {
+      const greetings = [
+        `Hey! I'm your AI sous chef. I know your pantry (${pantryNames.length} items) and your preferences. What are you in the mood for?`,
+        `Hi there! Ready to cook something great. I can see your pantry and suggest recipes that match what you have. What sounds good?`,
+        `Hello! I can help you plan meals, find recipes from your pantry, or suggest something new. What would you like?`
+      ];
+      return { text: greetings[Math.floor(Math.random() * greetings.length)] };
+    }
+
+    if (topIntent[0] === 'thanks' && topIntent[1] >= 80) {
+      const thanks = [
+        "Happy to help! Let me know if you want more ideas or need to change anything.",
+        "Glad you like it! I'm here whenever you want to cook something else.",
+        "Anytime! Just say the word if you need more recipe ideas."
+      ];
+      return { text: thanks[Math.floor(Math.random() * thanks.length)] };
+    }
+
+    if (topIntent[0] === 'help' && topIntent[1] >= 80) {
+      return { text: "I can help you with all sorts of things:\n\n**Find recipes** — Just tell me what you're in the mood for. \"Quick healthy dinner\", \"something with chicken\", \"comfort food for tonight\"\n\n**Plan your week** — Say \"plan my week\" and I'll fill all 21 meal slots using your pantry\n\n**Modify suggestions** — Don't like what I suggested? Just tell me naturally: \"too many pancakes\", \"make it healthier\", \"something without gluten\"\n\n**Take action** — I can add recipes to your meal plan, save favorites, and put missing ingredients on your shopping list\n\nI always prioritize what's already in your pantry to minimize shopping trips." };
+    }
+
+    // ── Step 3: Handle action intents ──
+    if (topIntent[0] === 'weekPlan' && topIntent[1] >= 80) {
       if (pantryNames.length === 0) {
-        return { text: "I'd love to plan your week, but your pantry is empty! Head to the **Pantry** tab and add your ingredients first. Even 10-15 items will let me create a solid week plan." };
+        return { text: "I'd love to plan your week, but your pantry is empty! Head to the **Pantry** tab and add your ingredients first. Even 10-15 items will let me create a solid plan." };
       }
       const { plan, avgMatch, totalMissing } = buildWeekPlan();
-
-      // Apply to actual meal plan state
       if (setMealPlan && setSlotRecipe) {
         setMealPlan(prev => {
           const next = prev.map(d => ({ ...d, meals: [...d.meals] }));
@@ -22799,247 +22914,142 @@ function AISousChef({ pantry, prefs, mealPlan, setMealPlan, setSlotRecipe, shopp
           return next;
         });
       }
-
-      // Store all recipes for follow-up actions
       const allRecipes = plan.flatMap(d => d.meals.map(m => m.recipe));
       setLastRecipes(allRecipes);
-
-      return {
-        text: `Done! I've planned your entire week using your pantry ingredients. Here's the plan:`,
-        weekPlan: { plan, avgMatch, totalMissing, totalRecipes: allRecipes.length }
-      };
+      return { text: "Done! I've planned your entire week using your pantry ingredients:", weekPlan: { plan, avgMatch, totalMissing, totalRecipes: allRecipes.length } };
     }
 
-    // ── Action: Add missing ingredients to shopping list ──
-    if (/add\s+(?:the\s+)?missing\s+(?:ingredients?\s+)?to\s+(?:my\s+)?shopping/i.test(low) || /shopping\s+list/i.test(low) && /add|missing/i.test(low)) {
-      if (lastRecipes.length > 0) {
-        const allMissing = [];
-        lastRecipes.forEach(r => {
-          const { miss } = classifyIngredients(r);
-          miss.forEach(m => {
-            if (!allMissing.some(a => a.name.toLowerCase() === m.name.toLowerCase())) {
-              allMissing.push(m);
-            }
-          });
+    if (topIntent[0] === 'addToShopping' && topIntent[1] >= 80 && hasContext) {
+      const allMissing = [];
+      lastRecipes.forEach(r => {
+        const { miss } = classifyIngredients(r);
+        miss.forEach(m => { if (!allMissing.some(a => a.name.toLowerCase() === m.name.toLowerCase())) allMissing.push(m); });
+      });
+      if (allMissing.length > 0) {
+        setShopping(prev => {
+          const existing = new Set(prev.map(s => s.name.toLowerCase()));
+          const newItems = allMissing.filter(m => !existing.has(m.name.toLowerCase()));
+          return [...prev, ...newItems.map(m => ({ name: m.name, amount: m.amount, owned: false }))];
         });
-        if (allMissing.length > 0) {
-          setShopping(prev => {
-            const existing = new Set(prev.map(s => s.name.toLowerCase()));
-            const newItems = allMissing.filter(m => !existing.has(m.name.toLowerCase()));
-            return [...prev, ...newItems.map(m => ({ name: m.name, amount: m.amount, owned: false }))];
-          });
-          return { text: `Done! I added ${allMissing.length} missing ingredient${allMissing.length === 1 ? '' : 's'} to your shopping list: ${allMissing.map(m => '**' + m.name + '**').join(', ')}. You can review them in the Shopping tab.` };
-        }
-        return { text: "Great news — the last recipes I suggested don't have any missing ingredients! Everything is already in your pantry." };
+        return { text: `Done! Added ${allMissing.length} missing ingredient${allMissing.length === 1 ? '' : 's'} to your shopping list: ${allMissing.map(m => '**' + m.name + '**').join(', ')}.` };
       }
-      return { text: "I don't have any recent recipe suggestions to work from. Ask me for a recipe first, and I can add any missing ingredients to your shopping list." };
+      return { text: "Everything you need is already in your pantry — no shopping required!" };
     }
 
-    // ── Action: Add to meal plan ──
-    if (/add\s+(?:this|it|the recipe)?\s*to\s+(?:my\s+)?(?:meal\s*)?plan|plan\s+(?:this|it)/i.test(low)) {
-      if (lastRecipes.length > 0) {
-        handleAddToPlan(lastRecipes[0]);
-        return { text: `I've opened the meal plan picker for **"${lastRecipes[0].title}"**. Choose a day and meal slot to add it!` };
-      }
-      return { text: "Ask me for a recipe first, then I can help you add it to your meal plan." };
+    if (topIntent[0] === 'addToPlan' && topIntent[1] >= 80 && hasContext) {
+      handleAddToPlan(lastRecipes[0]);
+      return { text: `I've opened the meal plan picker for **"${lastRecipes[0].title}"**. Choose a day and slot!` };
     }
 
-    // ── Action: Save recipe ──
-    if (/save\s+(?:this|it|the\s+recipe)/i.test(low)) {
-      if (lastRecipes.length > 0) {
-        const r = lastRecipes[0];
-        if (!saved.has(r.id)) {
-          setSaved(prev => { const n = new Set(prev); n.add(r.id); return n; });
-          return { text: `**"${r.title}"** has been saved to your favorites! ❤️` };
-        }
-        return { text: `**"${r.title}"** is already in your favorites!` };
+    if (topIntent[0] === 'save' && topIntent[1] >= 80 && hasContext) {
+      const r = lastRecipes[0];
+      if (!saved.has(r.id)) {
+        setSaved(prev => { const n = new Set(prev); n.add(r.id); return n; });
+        return { text: `**"${r.title}"** saved to your favorites!` };
       }
-      return { text: "Ask me for a recipe first, then I can save it for you." };
+      return { text: `**"${r.title}"** is already in your favorites!` };
     }
 
-    // ── Follow-up: modify previous recipe ──
-    if (isFollowUp(low) && lastRecipes.length > 0) {
-      const prevRecipe = lastRecipes[0];
-      const constraints = parseConstraints(text);
+    // ── Step 4: Unified recipe search (handles BOTH new searches and modifications) ──
+    // If there's conversation context, use it to fill gaps
+    const ctx = hasContext ? resolveContext(entities, lastRecipes) : entities;
 
-      // "Make it easier/simpler"
-      if (/easier|simpler|simple/.test(low)) {
-        constraints.diff = 'Easy';
-        if (!constraints.maxTime) constraints.maxTime = 30;
-        constraints.count = 3;
-        if (prevRecipe.meal) constraints.meal = prevRecipe.meal;
-        const similar = findRecipes(constraints, lastRecipes.map(r => r.id));
-        if (similar.length > 0) {
-          const cards = similar.map(r => {
-            const card = buildRecipeCard(r);
-            card.reason = `A simpler version — ${card.difficulty} difficulty, ready in ${card.totalTime} min`;
-            return card;
-          });
-          return { text: `Here ${cards.length === 1 ? 'is a' : 'are ' + cards.length} simpler alternative${cards.length > 1 ? 's' : ''}:`, recipes: cards };
-        }
-        return { text: `I couldn't find a simpler alternative to "${prevRecipe.title}" with your pantry. Try adding a few more basic ingredients to your pantry for more options.` };
-      }
+    // Default: prefer pantry if they have items
+    if (!ctx.preferPantry && pantryNames.length > 0) ctx.preferPantry = true;
 
-      // "Make it faster"
-      if (/faster|quicker|less time/.test(low)) {
-        constraints.maxTime = Math.max(10, (prevRecipe.time || 30) - 10);
-        constraints.count = 3;
-        if (prevRecipe.meal) constraints.meal = prevRecipe.meal;
-        const similar = findRecipes(constraints, lastRecipes.map(r => r.id));
-        if (similar.length > 0) {
-          const cards = similar.map(r => {
-            const card = buildRecipeCard(r);
-            card.reason = `Faster option — only ${card.totalTime} min`;
-            return card;
-          });
-          return { text: `Here ${cards.length === 1 ? 'is a' : 'are ' + cards.length} faster option${cards.length > 1 ? 's' : ''}:`, recipes: cards };
-        }
-        return { text: `Already pretty quick! I couldn't find something faster than ${prevRecipe.time} min with similar ingredients.` };
-      }
+    // Determine which recipe IDs to exclude (previous suggestions if modifying)
+    const excludeIds = hasContext && (intents.modify || 0) > 30 ? ctx._excludeIds || [] : [];
 
-      // "Make it healthier"
-      if (/healthier|more healthy|lighter|low.?cal|nutritious/.test(low)) {
-        constraints.goal = 'healthy';
-        constraints.count = 3;
-        if (prevRecipe.meal) constraints.meal = prevRecipe.meal;
-        // Also exclude the previous recipe's title keywords to avoid giving same dish type
-        const prevTitleWords = (prevRecipe.title || '').toLowerCase().split(/\s+/).filter(w => w.length > 3);
-        constraints.exclude = [...(constraints.exclude || []), ...prevTitleWords];
-        const similar = findRecipes(constraints, lastRecipes.map(r => r.id));
-        if (similar.length > 0) {
-          const cards = similar.map(r => {
-            const card = buildRecipeCard(r);
-            card.reason = `Healthier option — ${card.haveIngredients.length} pantry items, lighter and more nutritious`;
-            return card;
-          });
-          return { text: `Here ${cards.length === 1 ? 'is a' : 'are ' + cards.length} healthier alternative${cards.length > 1 ? 's' : ''}:`, recipes: cards };
-        }
-        return { text: `I couldn't find a healthier alternative for ${prevRecipe.meal || 'that meal'} with your current pantry. Try adding more fresh vegetables, lean proteins, or whole grains to your pantry!` };
-      }
+    // Build the query
+    if (!ctx.count) ctx.count = 3;
 
-      // "Make it cheaper"
-      if (/cheaper|less expensive|budget|affordable/.test(low)) {
-        constraints.goal = 'cheap';
-        constraints.count = 3;
-        if (prevRecipe.meal) constraints.meal = prevRecipe.meal;
-        const similar = findRecipes(constraints, lastRecipes.map(r => r.id));
-        if (similar.length > 0) {
-          const cards = similar.map(r => {
-            const card = buildRecipeCard(r);
-            card.reason = `More budget-friendly — uses ${card.haveIngredients.length} pantry items, only ${card.missingIngredients.length} to buy`;
-            return card;
-          });
-          return { text: `Here ${cards.length === 1 ? 'is a' : 'are ' + cards.length} budget-friendly option${cards.length > 1 ? 's' : ''}:`, recipes: cards };
-        }
-      }
-
-      // "Replace X" / "No X" / "Too many X"
-      if (constraints.exclude && constraints.exclude.length > 0) {
-        const excluded = constraints.exclude.join(', ');
-        if (prevRecipe.meal) constraints.meal = prevRecipe.meal;
-        constraints.count = 3;
-        const similar = findRecipes(constraints, lastRecipes.map(r => r.id));
-        if (similar.length > 0) {
-          const cards = similar.map(r => {
-            const card = buildRecipeCard(r);
-            card.reason = `No ${excluded} — this one uses different ingredients`;
-            return card;
-          });
-          return { text: `Here ${cards.length === 1 ? 'is an' : 'are ' + cards.length} option${cards.length > 1 ? 's' : ''} without ${excluded}:`, recipes: cards };
-        }
-        return { text: `I couldn't find a close alternative without ${excluded}. Would you like me to search more broadly?` };
-      }
-
-      // "Another option / different"
-      if (/another|different|else|alternative|instead|one more/.test(low)) {
-        const c = parseConstraints(text);
-        if (prevRecipe.meal) c.meal = prevRecipe.meal;
-        c.count = 3;
-        const similar = findRecipes(c, lastRecipes.map(r => r.id));
-        if (similar.length > 0) {
-          const cards = similar.map(r => {
-            const card = buildRecipeCard(r);
-            card.reason = generateReason(card, c);
-            return card;
-          });
-          return { text: `How about ${cards.length === 1 ? 'this' : 'these'} instead?`, recipes: cards };
-        }
-        return { text: "I'm running low on alternatives with your current pantry. Try adding more ingredients or broadening your criteria!" };
-      }
-    }
-
-    // ── User mentions specific ingredients they have ──
-    if (/i\s+have\s+(.+?)(?:\.\s*what|,?\s*what)/i.test(low)) {
-      const match = low.match(/i\s+have\s+(.+?)(?:\.\s*what|,?\s*what)/i);
-      if (match) {
-        const mentioned = match[1].split(/,|\band\b/).map(s => s.trim()).filter(Boolean);
-        const c = parseConstraints(text);
-        c.mustInclude = mentioned;
-        c.preferPantry = true;
-        c.count = c.count || 2;
-        const results = findRecipes(c);
-        if (results.length > 0) {
-          const cards = results.map(r => {
-            const card = buildRecipeCard(r);
-            card.reason = generateReason(card, c);
-            return card;
-          });
-          const intro = results.length === 1
-            ? `With ${mentioned.join(', ')}, here's what I'd suggest:`
-            : `With ${mentioned.join(', ')}, here are ${results.length} options:`;
-          return { text: intro, recipes: cards };
-        }
-        return { text: `I couldn't find great matches using ${mentioned.join(', ')}. Try adding them to your pantry and asking again — I'll factor them into all future suggestions!` };
-      }
-    }
-
-    // ── General recipe request ──
-    const constraints = parseConstraints(text);
-    if (!constraints.count && /\d+/.test(low)) {
-      const numMatch = low.match(/(\d+)/);
-      if (numMatch && parseInt(numMatch[1]) <= 5) constraints.count = parseInt(numMatch[1]);
-    }
-    if (!constraints.count) constraints.count = (/options|ideas|suggestions|recipes|things/.test(low)) ? 3 : 3;
-
-    // Default: prefer pantry unless they're clearly just browsing
-    if (!constraints.preferPantry && pantryNames.length > 0) constraints.preferPantry = true;
-
-    const results = findRecipes(constraints);
+    const results = findRecipes(ctx, excludeIds);
 
     if (results.length === 0) {
-      // No results — helpful fallback
       if (pantryNames.length === 0) {
-        return { text: "Your pantry is empty right now, so I don't have ingredients to work with. Head over to the **Pantry** tab to add what you have at home — even basics like eggs, rice, oil, and salt make a big difference. Once you do, I can give you personalized recipe suggestions!" };
+        return { text: "Your pantry is empty right now. Head over to the **Pantry** tab and add what you have at home — even basics like eggs, rice, oil, and salt make a big difference. Then I can give you personalized suggestions!" };
       }
-      let suggestion = "I couldn't find recipes matching all your criteria. ";
-      if (constraints.pantryOnly) suggestion += "Try relaxing the 'pantry only' constraint — I might find great recipes that need just 1–2 extra ingredients. ";
-      if (constraints.maxTime && constraints.maxTime <= 15) suggestion += "With more time, I'd have more options. ";
-      if (constraints.dietary) suggestion += `${constraints.dietary} options with your pantry are limited — try adding more ${constraints.dietary.toLowerCase()} staples. `;
-      suggestion += "Want me to search with fewer restrictions?";
-      return { text: suggestion };
+      // Smart fallback — relax constraints and try again
+      const relaxed = { ...ctx, maxTime: undefined, diff: undefined, count: 3 };
+      if (relaxed.exclude) { relaxed.exclude = relaxed.exclude.slice(0, 1); }
+      const fallback = findRecipes(relaxed, excludeIds);
+      if (fallback.length > 0) {
+        const cards = fallback.map(r => { const card = buildRecipeCard(r); card.reason = generateReason(card, relaxed); return card; });
+        return { text: "I couldn't find an exact match, but here are some close alternatives:", recipes: cards };
+      }
+      let msg = "I couldn't find recipes matching all your criteria. ";
+      if (ctx.exclude && ctx.exclude.length > 0) msg += `Excluding "${ctx.exclude.join(', ')}" narrows things down a lot. `;
+      if (ctx.maxTime && ctx.maxTime <= 15) msg += "A bit more time would give me more options. ";
+      msg += "Want me to search with fewer restrictions?";
+      return { text: msg };
     }
 
     const cards = results.map(r => {
       const card = buildRecipeCard(r);
-      card.reason = generateReason(card, constraints);
+      card.reason = generateReason(card, ctx);
       return card;
     });
 
-    // Generate intro text
-    let intro = '';
-    if (constraints.meal) intro = `Here's what I found for ${constraints.meal}`;
-    else if (constraints.goal === 'high-protein') intro = "Here's a high-protein option";
-    else if (constraints.goal === 'cheap') intro = "Here's a budget-friendly pick";
-    else intro = "Based on your pantry and preferences, here's what I'd suggest";
-    if (cards.length > 1) intro = intro.replace("Here's", `Here are ${cards.length}`).replace("option", "options").replace("pick", "picks").replace("I'd suggest", `I found ${cards.length} great options`);
-    intro += ':';
-
-    // Add pantry context note
-    if (pantryNames.length > 0 && pantryNames.length <= 3) {
-      intro += ` *(I see you have ${pantryNames.length} items in your pantry — adding more will unlock better suggestions)*`;
-    }
+    // ── Step 5: Generate natural response text ──
+    const intro = generateIntro(ctx, cards, hasContext && (intents.modify || 0) > 30);
 
     return { text: intro, recipes: cards };
+  }
+
+  // ── Natural response text generator ──
+  function generateIntro(ctx, cards, isModification) {
+    const n = cards.length;
+    const goals = ctx.goals || (ctx.goal ? [ctx.goal] : []);
+    const goalStr = goals.map(g => {
+      if (g === 'high-protein') return 'high-protein';
+      if (g === 'healthy') return 'healthy';
+      if (g === 'cheap') return 'budget-friendly';
+      if (g === 'kid-friendly') return 'kid-friendly';
+      if (g === 'comfort') return 'comforting';
+      if (g === 'fancy') return 'impressive';
+      return g;
+    }).join(', ');
+
+    if (isModification) {
+      const modPhrases = [
+        `Got it! Here ${n === 1 ? 'is something' : 'are ' + n + ' options'} that should work better:`,
+        `Sure thing — how about ${n === 1 ? 'this' : 'these ' + n} instead:`,
+        `No problem, ${n === 1 ? "here's a" : "here are " + n} different ${n === 1 ? 'option' : 'options'}:`,
+        `Understood! ${n === 1 ? "Here's" : "Here are " + n} ${goalStr ? goalStr + ' ' : ''}alternative${n > 1 ? 's' : ''}:`
+      ];
+      if (ctx.exclude && ctx.exclude.length > 0) {
+        return `Got it — no ${ctx.exclude.join(' or ')}. Here ${n === 1 ? 'is' : 'are ' + n} ${goalStr ? goalStr + ' ' : ''}option${n > 1 ? 's' : ''} for you:`;
+      }
+      return modPhrases[Math.floor(Math.random() * modPhrases.length)];
+    }
+
+    // New search
+    const parts = [];
+    if (ctx.meal) parts.push(`for ${ctx.meal}`);
+    if (goalStr) parts.push(goalStr);
+    if (ctx.cuisines && ctx.cuisines.length > 0) parts.push(ctx.cuisines.join(' & '));
+    if (ctx.include && ctx.include.length > 0) parts.push(`with ${ctx.include.slice(0, 3).join(', ')}`);
+
+    if (parts.length > 0) {
+      const desc = parts.join(', ');
+      const phrases = [
+        `Here ${n === 1 ? 'is' : 'are ' + n} ${desc} ${n === 1 ? 'option' : 'options'} from your pantry:`,
+        `I found ${n} great ${desc} ${n === 1 ? 'match' : 'matches'} using your ingredients:`,
+        `Based on your pantry, here ${n === 1 ? 'is' : 'are ' + n} ${desc} ${n === 1 ? 'pick' : 'picks'}:`
+      ];
+      return phrases[Math.floor(Math.random() * phrases.length)];
+    }
+
+    const defaultPhrases = [
+      `Here ${n === 1 ? 'is' : 'are ' + n} ${n === 1 ? 'recipe' : 'recipes'} that match your pantry and preferences:`,
+      `Based on what you have, I'd suggest ${n === 1 ? 'this' : 'these ' + n}:`,
+      `I found ${n} great ${n === 1 ? 'option' : 'options'} using your pantry ingredients:`
+    ];
+    let intro = defaultPhrases[Math.floor(Math.random() * defaultPhrases.length)];
+    if (pantryNames.length > 0 && pantryNames.length <= 3) {
+      intro += ` *(Adding more items to your pantry will unlock better suggestions)*`;
+    }
+    return intro;
   }
 
   // ── Render text with basic markdown ──
@@ -23078,7 +23088,7 @@ function AISousChef({ pantry, prefs, mealPlan, setMealPlan, setSlotRecipe, shopp
   }
 
   function handleCardReplace(card) {
-    const c = parseConstraints('');
+    const c = { goals: [], exclude: [], include: [], cuisines: [] };
     if (card.meal) c.meal = card.meal;
     c.count = 1;
     c.preferPantry = true;
