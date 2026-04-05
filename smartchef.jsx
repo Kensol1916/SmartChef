@@ -22488,23 +22488,25 @@ function AISousChef({ pantry, prefs, mealPlan, setMealPlan, setSlotRecipe, shopp
 
   React.useEffect(() => { msgsEnd.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages, loading]);
 
-  // ── Pantry helpers ──
+  // ── Pantry helpers (only used for UI display, not for AI logic) ──
   const pantryNames = React.useMemo(() =>
     pantry.map(p => (typeof p === 'string' ? p : p.name || '').toLowerCase().trim()).filter(Boolean),
     [pantry]
   );
   const pantrySet = React.useMemo(() => new Set(pantryNames), [pantryNames]);
 
+  // ══════════════════════════════════════════════════════════════
+  // LLM-POWERED AI ENGINE — All intelligence comes from the LLM
+  // No rule-based logic, no keyword matching, no hardcoded flows
+  // ══════════════════════════════════════════════════════════════
+
   function ingredientInPantry(ingName) {
     const low = ingName.toLowerCase().trim();
     for (const p of pantrySet) {
-      if (p === low) return true;
-      if (p.includes(low) || low.includes(p)) return true;
-      // Handle plurals
+      if (p === low || p.includes(low) || low.includes(p)) return true;
       if (p + 's' === low || p === low + 's') return true;
       if (p + 'es' === low || p === low + 'es') return true;
     }
-    // Common staples that most kitchens have
     const staples = ['salt','pepper','water','oil','cooking oil','olive oil','vegetable oil'];
     if (staples.includes(low)) return true;
     return false;
@@ -22529,249 +22531,214 @@ function AISousChef({ pantry, prefs, mealPlan, setMealPlan, setSlotRecipe, shopp
     return total > 0 ? Math.round((have.length / total) * 100) : 0;
   }
 
-  // ══════════════════════════════════════════════════════════════
-  // NLU ENGINE — Natural Language Understanding for recipe chat
-  // ══════════════════════════════════════════════════════════════
+  // ── Build context object to send with every LLM call ──
+  function buildContext() {
+    return {
+      pantry: pantry.map(p => typeof p === 'string' ? p : p.name || '').filter(Boolean),
+      prefs,
+      mealPlan: mealPlan.map(d => ({
+        day: d.day,
+        meals: d.meals.map(m => m ? { title: m.title, emoji: m.emoji } : null)
+      })),
+      shopping: shopping.map(s => ({ name: s.name, owned: s.owned })),
+      savedTitles: [...saved].map(id => {
+        const r = RECIPES.find(rc => rc.id === id);
+        return r ? r.title : '';
+      }).filter(Boolean),
+      recipeCount: RECIPES.length,
+    };
+  }
 
-  // ── Entity extraction — pulls ALL signals from natural language ──
-  function extractEntities(text) {
-    const low = text.toLowerCase();
-    const e = { goals: [], exclude: [], include: [], cuisines: [] };
-
-    // Meal type
-    if (/\bbreakfast\b|morning\s+meal|\bbrunch\b/.test(low)) e.meal = 'breakfast';
-    else if (/\blunch\b|midday/.test(low)) e.meal = 'lunch';
-    else if (/\bdinner\b|supper|evening\s+meal/.test(low)) e.meal = 'dinner';
-    else if (/\bsnack\b/.test(low)) e.meal = 'snack';
-    else if (/\bdessert\b|sweet\s+treat/.test(low)) e.meal = 'dessert';
-
-    // Time
-    const timeMatch = low.match(/(?:under|less than|max|within|in)\s*(\d+)\s*min/);
-    if (timeMatch) e.maxTime = parseInt(timeMatch[1]);
-    else if (/\bquick\b|\bfast\b|\bspeedy\b|\brapid\b|\bno time\b|\bhurry\b|\brushed\b/.test(low)) e.maxTime = 20;
-    else if (/not too (?:long|slow)/.test(low)) e.maxTime = 30;
-
-    // Dietary
-    if (/\bvegetarian\b|\bveggie\b|\bno\s+meat\b|\bmeatless\b/.test(low)) e.dietary = 'Vegetarian';
-    else if (/\bvegan\b|\bplant.?based\b/.test(low)) e.dietary = 'Vegan';
-    else if (/\bgluten.?free\b|\bno\s+gluten\b/.test(low)) e.dietary = 'Gluten-free';
-    else if (/\bdairy.?free\b|\bno\s+dairy\b|\blactose/.test(low)) e.dietary = 'Dairy-free';
-    else if (/\bketo\b|\blow.?carb\b/.test(low)) e.dietary = 'Keto';
-
-    // Goals — multiple allowed
-    if (/\bhigh.?protein\b|\bprotein.?rich\b|\bmore protein\b|\bprotein.?packed\b/.test(low)) e.goals.push('high-protein');
-    if (/\bcheap\b|\bbudget\b|\binexpensive\b|\baffordable\b|\bsave money\b/.test(low)) e.goals.push('cheap');
-    if (/\bhealthy\b|\bhealthier\b|\blow.?cal\b|\blight\b|\blighter\b|\bnutritious\b|\bclean\b|\bwholesome\b|\bnourishing\b|\bgood for (?:me|you|health)\b/.test(low)) e.goals.push('healthy');
-    if (/\bkid\b|\bchild\b|\bfamily\b|\bpicky eater\b/.test(low)) e.goals.push('kid-friendly');
-    if (/\bcomfort\b|\bcozy\b|\bwarm(?:ing)?\b|\bhearty\b|\bfilling\b/.test(low)) e.goals.push('comfort');
-    if (/\bfancy\b|\bimpressive\b|\bdate night\b|\bspecial\b|\bgourmet\b/.test(low)) e.goals.push('fancy');
-
-    // Difficulty
-    if (/\beasy\b|\bsimple\b|\bsimpler\b|\beasier\b|\bbeginner\b|\bno.?fuss\b/.test(low)) e.diff = 'Easy';
-
-    // Count
-    const countMatch = low.match(/(\d+)\s*(?:option|recipe|idea|suggestion|thing|meal|dish)/);
-    if (countMatch) e.count = Math.min(parseInt(countMatch[1]), 10);
-    else {
-      const standaloneNum = low.match(/\bgive\s+(?:me\s+)?(\d+)\b|\bshow\s+(?:me\s+)?(\d+)\b|\b(\d+)\s+(?:different|more)\b|\bfind\s+(\d+)\b/);
-      if (standaloneNum) {
-        const n = parseInt(standaloneNum[1] || standaloneNum[2] || standaloneNum[3] || standaloneNum[4]);
-        if (n >= 1 && n <= 10) e.count = n;
-      }
-    }
-    if (/\ba couple\b/.test(low)) e.count = 2;
-    if (/\ba few\b|\bsome\b|\bseveral\b/.test(low) && !e.count) e.count = 3;
-
-    // Ingredients to include
-    const knownIngs = ['chicken','beef','pork','fish','salmon','tuna','shrimp','tofu','tempeh','rice','pasta','noodle','egg','eggs','potato','sweet potato','tomato','cheese','bread','mushroom','onion','garlic','bean','lentil','chickpea','avocado','broccoli','spinach','kale','quinoa','oats','corn','zucchini','eggplant','bell pepper','carrot','ginger','lemon','lime','coconut','banana','apple','turkey','lamb','sausage','bacon','ham','yogurt','cream','butter','flour','honey','tortilla','pita','couscous'];
-    knownIngs.forEach(ing => {
-      const re = new RegExp('\\b' + ing.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '(?:s|es)?\\b');
-      if (re.test(low)) e.include.push(ing);
+  // ── Convert LLM recipe format to our card format ──
+  function llmRecipeToCard(recipe) {
+    // Handle ingredients — the LLM returns {name, amount, inPantry}
+    const have = [], miss = [], opt = [];
+    (recipe.ingredients || []).forEach(ing => {
+      const entry = { name: ing.name || '', amount: ing.amount || '' };
+      if (ing.inPantry) have.push(entry);
+      else miss.push(entry);
     });
 
-    // Cuisines
-    const knownCuisines = { 'italian': 'Italian', 'mexican': 'Mexican', 'thai': 'Thai', 'chinese': 'Chinese', 'indian': 'Indian', 'japanese': 'Japanese', 'korean': 'Korean', 'mediterranean': 'Mediterranean', 'greek': 'Greek', 'french': 'French', 'american': 'American', 'middle eastern': 'Middle Eastern', 'vietnamese': 'Vietnamese', 'moroccan': 'Moroccan', 'spanish': 'Spanish', 'turkish': 'Turkish', 'lebanese': 'Lebanese' };
-    Object.entries(knownCuisines).forEach(([key, val]) => { if (low.includes(key)) e.cuisines.push(val); });
-
-    // Exclusions — ALL negation forms
-    const exPat = /(?:no|without|don'?t want|don'?t like|replace|remove|exclude|skip|instead of|too many|tired of|sick of|bored of|had enough of|not\s+(?:any\s+)?|avoid|cut out|drop|ditch|hold the|less)\s+(?:the\s+|any\s+|more\s+)?(\w+(?:\s+\w+)?)/gi;
-    let m;
-    while ((m = exPat.exec(low)) !== null) {
-      const excl = m[1].trim();
-      const stopWords = ['it','that','this','them','me','the','a','an','my','more','time','much','many','lot','some','anything','something','thing','things','one','ones','recipe','recipes','please','just','really','good','great','sure','ok','so','very','too','enough'];
-      if (!stopWords.includes(excl) && excl.length > 1) e.exclude.push(excl);
-    }
-
-    // Pantry mode
-    if (/only\s+(?:with\s+)?what\s+i\s+have|pantry\s+only|no\s+missing|nothing\s+(?:extra|missing)|(?:just|only)\s+(?:use\s+)?(?:my\s+)?pantry/.test(low)) e.pantryOnly = true;
-    if (/pantry|what\s+i\s+(?:already\s+)?have|my\s+ingredients|what(?:'s| is)\s+in\s+my\s+(?:kitchen|fridge)/.test(low)) e.preferPantry = true;
-
-    return e;
+    return {
+      type: 'recipe_card',
+      id: recipe.title, // Use title as ID for LLM-generated recipes
+      title: recipe.title || 'Untitled Recipe',
+      emoji: recipe.emoji || '🍽️',
+      description: `${recipe.cuisine || ''} ${recipe.meal || 'dish'} — ${recipe.difficulty || 'Easy'}`,
+      totalTime: recipe.time || 30,
+      difficulty: recipe.difficulty || 'Easy',
+      servings: recipe.servings || prefs.household || 2,
+      pantryMatch: have.length > 0 ? Math.round((have.length / (have.length + miss.length)) * 100) : 0,
+      haveIngredients: have,
+      missingIngredients: miss,
+      optionalIngredients: opt,
+      steps: (recipe.steps || []).map((s, i) => typeof s === 'string' ? { n: i + 1, t: `Step ${i + 1}`, d: s } : s),
+      cuisine: recipe.cuisine || '',
+      meal: recipe.meal || '',
+      reason: recipe.reason || '',
+      recipe: recipe, // Keep the original for actions
+    };
   }
 
-  // ── Intent classification — scored, not binary ──
-  function classifyIntent(text, hasContext) {
-    const low = text.toLowerCase();
-    const intents = {};
+  // ── Execute actions returned by the LLM ──
+  function executeActions(actions) {
+    if (!actions || !Array.isArray(actions)) return;
 
-    // Week planning
-    intents.weekPlan = 0;
-    if (/plan\s+(?:my|the|a)?\s*(?:full\s+)?week|week(?:ly)?\s+(?:meal\s*)?plan|plan\s+(?:all\s+)?(?:7|seven)\s+days|fill\s+(?:my|the)\s+(?:meal\s*)?plan|(?:create|generate|make|build)\s+(?:a\s+)?(?:full\s+)?(?:weekly|week)\s+(?:meal\s*)?plan|meal\s*plan\s+(?:from|using|with)\s+(?:my\s+)?pantry|plan\s+(?:my\s+)?(?:meals|week)\s+(?:from|using|with)/i.test(low)) intents.weekPlan = 100;
-
-    // Shopping list action
-    intents.addToShopping = 0;
-    if (/add\s+(?:the\s+)?missing|shopping\s+list|(?:put|add)\s+(?:those|these|them|ingredients?)\s+(?:on|to|in)\s+(?:my\s+)?(?:shopping|list|cart)/i.test(low)) intents.addToShopping = 90;
-
-    // Add to plan action
-    intents.addToPlan = 0;
-    if (/add\s+(?:this|it|that|the recipe)?\s*to\s+(?:my\s+)?(?:meal\s*)?plan|plan\s+(?:this|it|that)/i.test(low)) intents.addToPlan = 90;
-
-    // Save action
-    intents.save = 0;
-    if (/save\s+(?:this|it|that|the\s+recipe)|bookmark|favorite|keep\s+(?:this|it|that)/i.test(low)) intents.save = 90;
-
-    // Greeting
-    intents.greeting = 0;
-    if (/^(?:hi|hello|hey|howdy|what'?s up|yo|good (?:morning|afternoon|evening))[!?.]*$/i.test(low.trim())) intents.greeting = 100;
-
-    // Help
-    intents.help = 0;
-    if (/what (?:can|do) you (?:do|help)|how (?:do|does) (?:this|it) work|help me|capabilities/i.test(low)) intents.help = 100;
-
-    // Thanks
-    intents.thanks = 0;
-    if (/^(?:thanks?|thank you|thx|ty|great|awesome|perfect|nice|cool|love it|wonderful)[!.]*$/i.test(low.trim())) intents.thanks = 100;
-
-    // Recipe search — always has base score
-    intents.search = 30;
-    if (/\brecipe\b|\bcook\b|\bmake\b|\bprepare\b|\bwhat (?:can|should|could)\b|\bsuggest\b|\brecommend\b|\bidea\b|\boption\b|\bfind\b|\bshow\b|\bgive\b/.test(low)) intents.search += 40;
-    if (/\bbreakfast\b|\blunch\b|\bdinner\b|\bsnack\b|\bdessert\b/.test(low)) intents.search += 20;
-
-    return intents;
-  }
-
-  // ── Context resolver — fills gaps using conversation history ──
-  function resolveContext(entities, lastRecs) {
-    const ctx = { ...entities };
-    if (!ctx.meal && lastRecs.length > 0) {
-      const prevMeals = lastRecs.map(r => r.meal).filter(Boolean);
-      if (prevMeals.length > 0) {
-        const mc = {};
-        prevMeals.forEach(m => { mc[m] = (mc[m] || 0) + 1; });
-        ctx.meal = Object.entries(mc).sort((a, b) => b[1] - a[1])[0][0];
+    actions.forEach(action => {
+      switch (action.type) {
+        case 'set_meal': {
+          const day = action.day;
+          const slot = action.slot;
+          const recipe = action.recipe;
+          if (day >= 0 && day <= 6 && slot >= 0 && slot <= 2 && recipe) {
+            setMealPlan(prev => {
+              const next = prev.map(d => ({ ...d, meals: [...d.meals] }));
+              next[day].meals[slot] = { id: recipe.title, title: recipe.title, emoji: recipe.emoji || '🍽️' };
+              return next;
+            });
+          }
+          break;
+        }
+        case 'plan_week': {
+          if (action.plan && Array.isArray(action.plan) && action.plan.length === 7) {
+            setMealPlan(prev => {
+              const next = prev.map(d => ({ ...d, meals: [...d.meals] }));
+              action.plan.forEach((day, di) => {
+                if (day.meals && Array.isArray(day.meals)) {
+                  day.meals.forEach((m, mi) => {
+                    if (m && mi < 3) {
+                      next[di].meals[mi] = { id: m.title || '', title: m.title || '', emoji: m.emoji || '🍽️' };
+                    }
+                  });
+                }
+              });
+              return next;
+            });
+            showToast('Week plan updated!');
+          }
+          break;
+        }
+        case 'add_shopping': {
+          if (action.items && Array.isArray(action.items)) {
+            setShopping(prev => {
+              const existing = new Set(prev.map(s => s.name.toLowerCase()));
+              const newItems = action.items.filter(item => !existing.has((item.name || '').toLowerCase()));
+              return [...prev, ...newItems.map(item => ({ name: item.name, amount: item.amount || '', owned: false }))];
+            });
+            showToast(`${action.items.length} items added to shopping list`);
+          }
+          break;
+        }
+        case 'save_recipe': {
+          if (action.recipe) {
+            // Find a matching recipe in the DB, or just show toast
+            const match = RECIPES.find(r => r.title.toLowerCase() === (action.recipe.title || '').toLowerCase());
+            if (match) {
+              setSaved(prev => { const n = new Set(prev); n.add(match.id); return n; });
+            }
+            showToast(`Saved "${action.recipe.title}" to favorites!`);
+          }
+          break;
+        }
       }
-    }
-    ctx._excludeIds = lastRecs.map(r => r.id);
-    return ctx;
+    });
   }
 
-  // ── Recipe search engine ──
-  function findRecipes(entities, excludeIds = []) {
-    const c = entities;
-    const excludeSet = new Set(excludeIds);
-    let pool = RECIPES.filter(r => !excludeSet.has(r.id));
+  // ── Build a week plan card from LLM plan_week action ──
+  function buildWeekPlanFromAction(planAction) {
+    if (!planAction || !planAction.plan) return null;
+    const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+    let totalMatch = 0;
+    let totalMissing = 0;
+    let totalRecipes = 0;
 
-    // Hard filters
-    if (c.meal) pool = pool.filter(r => r.meal === c.meal);
-    if (c.maxTime) pool = pool.filter(r => r.time <= c.maxTime);
-    if (c.diff) pool = pool.filter(r => r.diff === c.diff);
-    if (c.dietary) pool = pool.filter(r => (r.dietary || []).some(d => d.toLowerCase().includes(c.dietary.toLowerCase())));
+    const plan = planAction.plan.map((day, di) => {
+      const meals = (day.meals || []).map((m, mi) => {
+        if (!m) return null;
+        totalRecipes++;
+        // Try to match against our recipe DB for pantry scoring
+        const dbMatch = RECIPES.find(r => r.title.toLowerCase() === (m.title || '').toLowerCase());
+        let match = 0, missing = 0;
+        if (dbMatch) {
+          match = pantryMatchScore(dbMatch);
+          const { miss } = classifyIngredients(dbMatch);
+          missing = miss.length;
+        }
+        totalMatch += match;
+        totalMissing += missing;
+        return { recipe: { title: m.title, emoji: m.emoji || '🍽️', ...m }, mealType: ['breakfast','lunch','dinner'][mi], match, missing };
+      }).filter(Boolean);
+      return { day: days[di], dayIdx: di, meals };
+    });
 
-    // Cuisine filter
-    if (c.cuisines && c.cuisines.length > 0) {
-      const cf = pool.filter(r => c.cuisines.some(cu => (r.cuisine || '').toLowerCase().includes(cu.toLowerCase())));
-      if (cf.length >= 3) pool = cf;
-    }
+    const avgMatch = totalRecipes > 0 ? Math.round(totalMatch / totalRecipes) : 0;
+    return { plan, avgMatch, totalMissing, totalRecipes };
+  }
 
-    // Exclusion — checks titles, ingredients, AND cuisine
-    if (c.exclude && c.exclude.length > 0) {
-      pool = pool.filter(r => {
-        const ingStr = (r.ingredients || []).map(i => (i.n || '').toLowerCase()).join(' ');
-        const titleLow = (r.title || '').toLowerCase();
-        return !c.exclude.some(ex => ingStr.includes(ex) || titleLow.includes(ex));
-      });
-    }
+  // ── Main message handler — calls the real LLM ──
+  async function processMessage(text) {
+    setLoading(true);
+    const userMsg = { role: 'user', text, ts: Date.now() };
+    setMessages(prev => [...prev, userMsg]);
+    setInput('');
 
-    // Inclusion — specific ingredients
-    if (c.include && c.include.length > 0) {
-      const incl = pool.filter(r => {
-        const searchable = (r.ingredients || []).map(i => (i.n || '').toLowerCase()).join(' ') + ' ' + (r.title || '').toLowerCase();
-        return c.include.some(inc => searchable.includes(inc));
-      });
-      if (incl.length >= 1) pool = incl;
-    }
-    if (c.mustInclude && c.mustInclude.length > 0) {
-      pool = pool.filter(r => {
-        const searchable = (r.ingredients || []).map(i => (i.n || '').toLowerCase()).join(' ') + ' ' + (r.title || '').toLowerCase();
-        return c.mustInclude.some(inc => searchable.includes(inc));
-      });
-    }
-
-    // User prefs dietary
-    if (prefs.dietary && prefs.dietary.length > 0 && !c.dietary) {
-      const pf = pool.filter(r => prefs.dietary.every(pref => {
-        const low = pref.toLowerCase();
-        if (low === 'vegetarian') return !r.contains_meat && !r.contains_fish;
-        if (low === 'vegan') return !r.contains_meat && !r.contains_fish && !r.contains_dairy;
-        if (low === 'pescatarian') return !r.contains_meat;
-        if (low === 'kosher') return r.kosher_safe;
-        return true;
+    try {
+      // Build the conversation history for the LLM
+      const chatHistory = [...messages, userMsg].map(m => ({
+        role: m.role === 'user' ? 'user' : 'assistant',
+        content: m.role === 'user' ? m.text : (m.text || 'Here are some recipe suggestions.'),
       }));
-      if (pf.length >= 3) pool = pf;
-    }
 
-    // Unified scoring — all goals contribute simultaneously
-    const goals = c.goals || (c.goal ? [c.goal] : []);
-    pool = pool.map(r => {
-      let score = 0;
-      const match = pantryMatchScore(r);
-      const ingStr = (r.ingredients || []).map(i => (i.n || '').toLowerCase()).join(' ');
-      const titleLow = (r.title || '').toLowerCase();
-      const { miss } = classifyIngredients(r);
-
-      score += match * 3;
-      if (c.preferPantry) score += match * 2;
-      if (c.pantryOnly && miss.length > 0) score -= 999;
-
-      goals.forEach(goal => {
-        if (goal === 'high-protein') {
-          const pi = ['chicken','beef','pork','fish','salmon','tuna','shrimp','egg','eggs','tofu','lentil','bean','greek yogurt','cottage cheese','turkey','lamb','tempeh','quinoa'];
-          score += pi.filter(p => ingStr.includes(p) || titleLow.includes(p)).length * 40;
-        }
-        if (goal === 'healthy') {
-          const hi = ['spinach','kale','broccoli','avocado','quinoa','salmon','lentil','chickpea','oats','sweet potato','tomato','berry','blueberry','almond','walnut','chia','flax','greek yogurt','olive oil','garlic','ginger','turmeric','egg','tofu','bean','cucumber','bell pepper','zucchini','cauliflower','carrot'];
-          score += hi.filter(h => ingStr.includes(h) || titleLow.includes(h)).length * 25;
-          const ui = ['pancake','waffle','fried','deep fried','cream','butter','sugar','syrup','bacon','sausage','chocolate','cake','cookie','brownie','donut','candy','fries'];
-          score -= ui.filter(u => ingStr.includes(u) || titleLow.includes(u)).length * 50;
-          if (/salad|bowl|soup|stew|grain|roast|grilled|steamed|baked|poached/.test(titleLow)) score += 35;
-        }
-        if (goal === 'cheap') {
-          score += (10 - Math.min(miss.length, 10)) * 8;
-          if (r.pp && r.pp < 50) score += 30;
-        }
-        if (goal === 'kid-friendly') {
-          const ki = ['pasta','mac','cheese','pizza','chicken','pancake','toast','egg','rice','noodle','burger','sandwich','nugget','meatball','quesadilla'];
-          if (ki.some(k => titleLow.includes(k))) score += 50;
-        }
-        if (goal === 'comfort') {
-          const ci = ['soup','stew','chili','pasta','casserole','pot pie','mac','gratin','curry','risotto','lasagna','meatloaf','chowder'];
-          if (ci.some(k => titleLow.includes(k))) score += 50;
-        }
-        if (goal === 'fancy') {
-          if (r.diff === 'Hard' || r.diff === 'Intermediate') score += 30;
-          if (/seared|braised|reduction|confit|risotto|glazed|filet/.test(titleLow)) score += 40;
-        }
+      const response = await fetch('/api/chef', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: chatHistory,
+          context: buildContext(),
+        }),
       });
 
-      return { ...r, _score: score, _match: match };
-    });
+      if (!response.ok) {
+        const err = await response.json().catch(() => ({}));
+        throw new Error(err.error || `API returned ${response.status}`);
+      }
 
-    pool.sort((a, b) => b._score - a._score);
-    const count = c.count || 3;
-    return pool.slice(0, Math.min(count, 30));
+      const data = await response.json();
+
+      // ── Parse the LLM response ──
+      const assistantMsg = { role: 'assistant', text: data.message || '', ts: Date.now() };
+
+      // Convert recipes to our card format
+      if (data.recipes && data.recipes.length > 0) {
+        assistantMsg.recipes = data.recipes.map(llmRecipeToCard);
+        setLastRecipes(data.recipes);
+      }
+
+      // Check for a plan_week action and render as WeekPlanCard
+      if (data.actions && data.actions.length > 0) {
+        const weekAction = data.actions.find(a => a.type === 'plan_week');
+        if (weekAction) {
+          const wp = buildWeekPlanFromAction(weekAction);
+          if (wp) assistantMsg.weekPlan = wp;
+        }
+        // Execute ALL actions (update state)
+        executeActions(data.actions);
+      }
+
+      setMessages(prev => [...prev, assistantMsg]);
+    } catch (err) {
+      console.error('AI Chef error:', err);
+      setMessages(prev => [...prev, {
+        role: 'assistant',
+        text: `I'm having trouble connecting right now. ${err.message.includes('API') || err.message.includes('key') ? 'The AI service may not be configured yet — the app owner needs to add an OPENAI_API_KEY in Vercel environment variables.' : 'Please try again in a moment.'}`,
+        ts: Date.now(),
+      }]);
+    } finally {
+      setLoading(false);
+    }
   }
 
-  // ── Build recipe card data ──
+  // ── Build recipe card data from DB recipe (used by action buttons) ──
   function buildRecipeCard(recipe) {
     const { have, miss, opt } = classifyIngredients(recipe);
     return {
@@ -22797,289 +22764,6 @@ function AISousChef({ pantry, prefs, mealPlan, setMealPlan, setSlotRecipe, shopp
     };
   }
 
-  // ── Generate response reason ──
-  function generateReason(card, constraints) {
-    const parts = [];
-    if (card.pantryMatch >= 80) parts.push(`Uses ${card.pantryMatch}% of your pantry ingredients`);
-    else if (card.pantryMatch >= 50) parts.push(`Matches ${card.pantryMatch}% of your pantry`);
-    if (card.missingIngredients.length === 0) parts.push('Nothing extra needed!');
-    else if (card.missingIngredients.length <= 2) parts.push(`Only ${card.missingIngredients.length} ingredient${card.missingIngredients.length === 1 ? '' : 's'} to pick up`);
-    if (constraints.maxTime) parts.push(`Ready in ${card.totalTime} min`);
-    if (constraints.goal === 'high-protein') parts.push('Great protein source');
-    if (constraints.goal === 'cheap') parts.push('Budget-friendly choice');
-    if (constraints.goal === 'kid-friendly') parts.push('Kid-approved');
-    if (parts.length === 0) parts.push(`A tasty ${card.cuisine || ''} ${card.meal || 'recipe'} that fits your preferences`);
-    return parts.join(' · ');
-  }
-
-  // ── Process user message ──
-  function processMessage(text) {
-    setLoading(true);
-    const userMsg = { role: 'user', text, ts: Date.now() };
-    setMessages(prev => [...prev, userMsg]);
-    setInput('');
-
-    setTimeout(() => {
-      try {
-        const response = generateResponse(text);
-        setMessages(prev => [...prev, { role: 'assistant', ...response, ts: Date.now() }]);
-        if (response.recipes && response.recipes.length > 0) {
-          setLastRecipes(response.recipes.map(c => c.recipe || c));
-        }
-      } catch (e) {
-        setMessages(prev => [...prev, { role: 'assistant', text: "I had trouble processing that. Could you rephrase? I can help you find recipes based on your pantry, preferences, and cooking goals.", ts: Date.now() }]);
-      }
-      setLoading(false);
-    }, 600 + Math.random() * 800);
-  }
-
-  // ── Main response generator ──
-  // ── Week plan builder ──
-  function buildWeekPlan(userEntities) {
-    // Merge user's constraints into every meal search
-    const ue = userEntities || {};
-    const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-    const mealTypes = ['breakfast','lunch','dinner'];
-    const usedIds = new Set();
-    const plan = [];
-    let totalMatch = 0;
-    let totalMissing = 0;
-
-    days.forEach((day, di) => {
-      const dayMeals = [];
-      mealTypes.forEach((mt) => {
-        // Start with the user's extracted entities, then layer on meal-specific stuff
-        const c = {
-          meal: mt,
-          count: 5,
-          preferPantry: true,
-          // Pass through ALL user constraints
-          goals: ue.goals && ue.goals.length > 0 ? [...ue.goals] : [],
-          exclude: ue.exclude && ue.exclude.length > 0 ? [...ue.exclude] : [],
-          include: ue.include && ue.include.length > 0 ? [...ue.include] : [],
-          cuisines: ue.cuisines && ue.cuisines.length > 0 ? [...ue.cuisines] : [],
-        };
-        if (ue.dietary) c.dietary = ue.dietary;
-        if (ue.maxTime) c.maxTime = ue.maxTime;
-        if (ue.diff) c.diff = ue.diff;
-        if (ue.pantryOnly) c.pantryOnly = true;
-
-        const candidates = findRecipes(c, [...usedIds]);
-        const pick = candidates[0];
-        if (pick) {
-          usedIds.add(pick.id);
-          const match = pantryMatchScore(pick);
-          const { miss } = classifyIngredients(pick);
-          totalMatch += match;
-          totalMissing += miss.length;
-          dayMeals.push({ recipe: pick, mealType: mt, match, missing: miss.length });
-        }
-      });
-      plan.push({ day, dayIdx: di, meals: dayMeals });
-    });
-
-    const avgMatch = Math.round(totalMatch / 21);
-    return { plan, avgMatch, totalMissing, usedIds };
-  }
-
-  function generateResponse(text) {
-    const low = text.toLowerCase().trim();
-    const hasContext = lastRecipes.length > 0;
-
-    // ── Extract all entities from the message — this ALWAYS happens ──
-    const entities = extractEntities(text);
-    const intents = classifyIntent(text, hasContext);
-
-    // ── Conversational responses (only if nothing recipe-related detected) ──
-    if (intents.greeting >= 80 && intents.search <= 30 && intents.weekPlan === 0) {
-      const greetings = [
-        `Hey! I'm your AI sous chef. I know your pantry (${pantryNames.length} items) and your preferences. What are you in the mood for?`,
-        `Hi there! Ready to cook something great. I can see your pantry and suggest recipes that match what you have. What sounds good?`,
-        `Hello! I can help you plan meals, find recipes from your pantry, or suggest something new. What would you like?`
-      ];
-      return { text: greetings[Math.floor(Math.random() * greetings.length)] };
-    }
-
-    if (intents.thanks >= 80 && intents.search <= 30) {
-      return { text: ["Happy to help! Let me know if you want more ideas or need to change anything.", "Glad you like it! I'm here whenever you want to cook something else.", "Anytime! Just say the word if you need more recipe ideas."][Math.floor(Math.random() * 3)] };
-    }
-
-    if (intents.help >= 80) {
-      return { text: "I can help you with all sorts of things:\n\n**Find recipes** — Just tell me what you're in the mood for. \"Quick healthy dinner\", \"something with chicken\", \"comfort food for tonight\"\n\n**Plan your week** — Say \"plan my week\" and I'll fill all 21 meal slots. Add constraints like \"plan my week with healthy food\" or \"vegetarian week plan\"\n\n**Modify suggestions** — Just tell me naturally: \"too many pancakes\", \"make it healthier\", \"something without gluten\"\n\n**Take action** — I can add recipes to your meal plan, save favorites, and put missing ingredients on your shopping list\n\nI always prioritize what's already in your pantry." };
-    }
-
-    // ── Week plan — check this FIRST, independent of other intents ──
-    // If user mentions week/plan in ANY context, this takes priority
-    if (intents.weekPlan >= 80) {
-      if (pantryNames.length === 0) {
-        return { text: "I'd love to plan your week, but your pantry is empty! Head to the **Pantry** tab and add your ingredients first. Even 10-15 items will let me create a solid plan." };
-      }
-      // Pass ALL extracted entities into the week planner
-      const { plan, avgMatch, totalMissing } = buildWeekPlan(entities);
-      if (setMealPlan && setSlotRecipe) {
-        setMealPlan(prev => {
-          const next = prev.map(d => ({ ...d, meals: [...d.meals] }));
-          plan.forEach(({ dayIdx, meals }) => {
-            meals.forEach((m, mi) => {
-              next[dayIdx].meals[mi] = { id: m.recipe.id, title: m.recipe.title, emoji: m.recipe.emoji };
-            });
-          });
-          return next;
-        });
-      }
-      const allRecipes = plan.flatMap(d => d.meals.map(m => m.recipe));
-      setLastRecipes(allRecipes);
-
-      // Build a descriptive response based on what they asked for
-      const goals = entities.goals || [];
-      const desc = [];
-      if (goals.length > 0) desc.push(goals.map(g => g === 'high-protein' ? 'high-protein' : g === 'cheap' ? 'budget-friendly' : g === 'kid-friendly' ? 'kid-friendly' : g).join(', '));
-      if (entities.dietary) desc.push(entities.dietary.toLowerCase());
-      if (entities.exclude && entities.exclude.length > 0) desc.push(`no ${entities.exclude.join('/')}`);
-      if (entities.cuisines && entities.cuisines.length > 0) desc.push(entities.cuisines.join(' & '));
-      if (entities.maxTime) desc.push(`under ${entities.maxTime} min`);
-      const descStr = desc.length > 0 ? ` — focused on **${desc.join(', ')}**` : '';
-
-      return { text: `Done! I've built a new week plan from your pantry${descStr}:`, weekPlan: { plan, avgMatch, totalMissing, totalRecipes: allRecipes.length } };
-    }
-
-    // ── Quick actions — only if clear and unambiguous ──
-    if (intents.addToShopping >= 80 && hasContext) {
-      const allMissing = [];
-      lastRecipes.forEach(r => {
-        const { miss } = classifyIngredients(r);
-        miss.forEach(m => { if (!allMissing.some(a => a.name.toLowerCase() === m.name.toLowerCase())) allMissing.push(m); });
-      });
-      if (allMissing.length > 0) {
-        setShopping(prev => {
-          const existing = new Set(prev.map(s => s.name.toLowerCase()));
-          const newItems = allMissing.filter(m => !existing.has(m.name.toLowerCase()));
-          return [...prev, ...newItems.map(m => ({ name: m.name, amount: m.amount, owned: false }))];
-        });
-        return { text: `Done! Added ${allMissing.length} missing ingredient${allMissing.length === 1 ? '' : 's'} to your shopping list: ${allMissing.map(m => '**' + m.name + '**').join(', ')}.` };
-      }
-      return { text: "Everything you need is already in your pantry — no shopping required!" };
-    }
-
-    if (intents.addToPlan >= 80 && hasContext) {
-      handleAddToPlan(lastRecipes[0]);
-      return { text: `I've opened the meal plan picker for **"${lastRecipes[0].title}"**. Choose a day and slot!` };
-    }
-
-    if (intents.save >= 80 && hasContext) {
-      const r = lastRecipes[0];
-      if (!saved.has(r.id)) {
-        setSaved(prev => { const n = new Set(prev); n.add(r.id); return n; });
-        return { text: `**"${r.title}"** saved to your favorites!` };
-      }
-      return { text: `**"${r.title}"** is already in your favorites!` };
-    }
-
-    // ── Recipe search — unified for both new and modification requests ──
-    // Use conversation context to fill gaps, but entities from THIS message always take priority
-    const ctx = hasContext ? resolveContext(entities, lastRecipes) : entities;
-
-    if (!ctx.preferPantry && pantryNames.length > 0) ctx.preferPantry = true;
-
-    // Exclude previous recipes if this looks like a modification/follow-up
-    const isModifying = hasContext && (
-      entities.exclude.length > 0 ||
-      entities.goals.length > 0 ||
-      entities.diff ||
-      entities.maxTime ||
-      /\banother\b|\bdifferent\b|\belse\b|\binstead\b|\breplace\b|\bchange\b|\bnew\b|\bbetter\b|\bmore\b/.test(low)
-    );
-    const excludeIds = isModifying ? (ctx._excludeIds || []) : [];
-
-    if (!ctx.count) ctx.count = 3;
-
-    const results = findRecipes(ctx, excludeIds);
-
-    if (results.length === 0) {
-      if (pantryNames.length === 0) {
-        return { text: "Your pantry is empty right now. Head over to the **Pantry** tab and add what you have at home — even basics like eggs, rice, oil, and salt make a big difference. Then I can give you personalized suggestions!" };
-      }
-      // Smart fallback — progressively relax constraints
-      const relaxed = { ...ctx, maxTime: undefined, diff: undefined, count: 3 };
-      if (relaxed.exclude && relaxed.exclude.length > 1) relaxed.exclude = relaxed.exclude.slice(0, 1);
-      const fallback = findRecipes(relaxed, excludeIds);
-      if (fallback.length > 0) {
-        const cards = fallback.map(r => { const card = buildRecipeCard(r); card.reason = generateReason(card, relaxed); return card; });
-        return { text: "I couldn't find an exact match for everything you asked, but here are some close alternatives:", recipes: cards };
-      }
-      let msg = "I couldn't find recipes matching all your criteria. ";
-      if (ctx.exclude && ctx.exclude.length > 0) msg += `Excluding "${ctx.exclude.join(', ')}" narrows things down a lot. `;
-      if (ctx.maxTime && ctx.maxTime <= 15) msg += "A bit more time would give me more options. ";
-      msg += "Want me to try with fewer restrictions?";
-      return { text: msg };
-    }
-
-    const cards = results.map(r => {
-      const card = buildRecipeCard(r);
-      card.reason = generateReason(card, ctx);
-      return card;
-    });
-
-    return { text: generateIntro(ctx, cards, isModifying), recipes: cards };
-  }
-
-  // ── Natural response text generator ──
-  function generateIntro(ctx, cards, isModification) {
-    const n = cards.length;
-    const goals = ctx.goals || (ctx.goal ? [ctx.goal] : []);
-    const goalStr = goals.map(g => {
-      if (g === 'high-protein') return 'high-protein';
-      if (g === 'healthy') return 'healthy';
-      if (g === 'cheap') return 'budget-friendly';
-      if (g === 'kid-friendly') return 'kid-friendly';
-      if (g === 'comfort') return 'comforting';
-      if (g === 'fancy') return 'impressive';
-      return g;
-    }).join(', ');
-
-    if (isModification) {
-      const modPhrases = [
-        `Got it! Here ${n === 1 ? 'is something' : 'are ' + n + ' options'} that should work better:`,
-        `Sure thing — how about ${n === 1 ? 'this' : 'these ' + n} instead:`,
-        `No problem, ${n === 1 ? "here's a" : "here are " + n} different ${n === 1 ? 'option' : 'options'}:`,
-        `Understood! ${n === 1 ? "Here's" : "Here are " + n} ${goalStr ? goalStr + ' ' : ''}alternative${n > 1 ? 's' : ''}:`
-      ];
-      if (ctx.exclude && ctx.exclude.length > 0) {
-        return `Got it — no ${ctx.exclude.join(' or ')}. Here ${n === 1 ? 'is' : 'are ' + n} ${goalStr ? goalStr + ' ' : ''}option${n > 1 ? 's' : ''} for you:`;
-      }
-      return modPhrases[Math.floor(Math.random() * modPhrases.length)];
-    }
-
-    // New search
-    const parts = [];
-    if (ctx.meal) parts.push(`for ${ctx.meal}`);
-    if (goalStr) parts.push(goalStr);
-    if (ctx.cuisines && ctx.cuisines.length > 0) parts.push(ctx.cuisines.join(' & '));
-    if (ctx.include && ctx.include.length > 0) parts.push(`with ${ctx.include.slice(0, 3).join(', ')}`);
-
-    if (parts.length > 0) {
-      const desc = parts.join(', ');
-      const phrases = [
-        `Here ${n === 1 ? 'is' : 'are ' + n} ${desc} ${n === 1 ? 'option' : 'options'} from your pantry:`,
-        `I found ${n} great ${desc} ${n === 1 ? 'match' : 'matches'} using your ingredients:`,
-        `Based on your pantry, here ${n === 1 ? 'is' : 'are ' + n} ${desc} ${n === 1 ? 'pick' : 'picks'}:`
-      ];
-      return phrases[Math.floor(Math.random() * phrases.length)];
-    }
-
-    const defaultPhrases = [
-      `Here ${n === 1 ? 'is' : 'are ' + n} ${n === 1 ? 'recipe' : 'recipes'} that match your pantry and preferences:`,
-      `Based on what you have, I'd suggest ${n === 1 ? 'this' : 'these ' + n}:`,
-      `I found ${n} great ${n === 1 ? 'option' : 'options'} using your pantry ingredients:`
-    ];
-    let intro = defaultPhrases[Math.floor(Math.random() * defaultPhrases.length)];
-    if (pantryNames.length > 0 && pantryNames.length <= 3) {
-      intro += ` *(Adding more items to your pantry will unlock better suggestions)*`;
-    }
-    return intro;
-  }
-
-  // ── Render text with basic markdown ──
   function renderText(text) {
     if (!text) return null;
     return text.split('\n').map((line, i) => {
@@ -23115,19 +22799,7 @@ function AISousChef({ pantry, prefs, mealPlan, setMealPlan, setSlotRecipe, shopp
   }
 
   function handleCardReplace(card) {
-    const c = { goals: [], exclude: [], include: [], cuisines: [] };
-    if (card.meal) c.meal = card.meal;
-    c.count = 1;
-    c.preferPantry = true;
-    const results = findRecipes(c, [card.id, ...lastRecipes.map(r => r.id)]);
-    if (results.length > 0) {
-      const newCard = buildRecipeCard(results[0]);
-      newCard.reason = 'Alternative suggestion with your pantry ingredients';
-      setMessages(prev => [...prev, { role: 'assistant', text: "Here's a different option:", recipes: [newCard], ts: Date.now() }]);
-      setLastRecipes(prev => [results[0], ...prev.slice(0, 4)]);
-    } else {
-      showToast("Can't find more alternatives");
-    }
+    processMessage(`Replace "${card.title}" with something different but similar. Give me a single alternative.`);
   }
 
   function handleCardSimpler(card) {
@@ -23154,9 +22826,15 @@ function AISousChef({ pantry, prefs, mealPlan, setMealPlan, setSlotRecipe, shopp
     const handleAddAllMissing = () => {
       const allMissing = [];
       wp.plan.forEach(day => day.meals.forEach(m => {
-        const { miss } = classifyIngredients(m.recipe);
-        miss.forEach(mi => {
-          if (!allMissing.some(a => a.name.toLowerCase() === mi.name.toLowerCase())) allMissing.push(mi);
+        // Handle both LLM-generated and DB recipes
+        const ings = m.recipe.ingredients || [];
+        ings.forEach(ing => {
+          const name = ing.n || ing.name || '';
+          const amount = ing.a || ing.amount || '';
+          const inPantry = ing.inPantry !== undefined ? ing.inPantry : ingredientInPantry(name);
+          if (!inPantry && name && !allMissing.some(a => a.name.toLowerCase() === name.toLowerCase())) {
+            allMissing.push({ name, amount });
+          }
         });
       }));
       if (allMissing.length === 0) { showToast('No missing ingredients!'); return; }

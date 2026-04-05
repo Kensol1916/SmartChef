@@ -1,6 +1,14 @@
 {
   "version": 2,
   "name": "smartchef",
-  "builds": [{ "src": "**/*", "use": "@vercel/static" }],
-  "routes": [{ "src": "/(.*)", "dest": "/$1" }]
+  "builds": [
+    { "src": "api/**/*.js", "use": "@vercel/node" },
+    { "src": "index.html", "use": "@vercel/static" },
+    { "src": "smartchef.bundle.js", "use": "@vercel/static" }
+  ],
+  "routes": [
+    { "src": "/api/(.*)", "dest": "/api/$1" },
+    { "src": "/smartchef.bundle.js", "dest": "/smartchef.bundle.js" },
+    { "src": "/(.*)", "dest": "/index.html" }
+  ]
 }
