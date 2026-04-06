@@ -21861,7 +21861,14 @@ const IMAGE_OVERRIDES = {
 function recipeImage(recipe) {
   if (!recipe) return null;
   const r = typeof recipe === 'object' ? recipe : { id: recipe };
-  const id = r.id || 0;
+  // Generate a numeric hash from the ID — handles both numeric DB IDs and string LLM IDs
+  let id = r.id || 0;
+  if (typeof id === 'string') {
+    // Hash the string into a stable number
+    let h = 0;
+    for (let i = 0; i < id.length; i++) { h = ((h << 5) - h + id.charCodeAt(i)) | 0; }
+    id = Math.abs(h);
+  }
   const title = (r.title || '').toLowerCase();
 
   // 1. Try title keyword → pool
@@ -22591,9 +22598,15 @@ function AISousChef({ pantry, prefs, mealPlan, setMealPlan, setSlotRecipe, shopp
           const slot = action.slot;
           const recipe = action.recipe;
           if (day >= 0 && day <= 6 && slot >= 0 && slot <= 2 && recipe) {
+            // Try to find a matching DB recipe, otherwise store the LLM recipe as-is
+            const dbMatch = RECIPES.find(r => r.title.toLowerCase() === (recipe.title || '').toLowerCase());
             setMealPlan(prev => {
               const next = prev.map(d => ({ ...d, meals: [...d.meals] }));
-              next[day].meals[slot] = { id: recipe.title, title: recipe.title, emoji: recipe.emoji || '🍽️' };
+              if (dbMatch) {
+                next[day].meals[slot] = { id: dbMatch.id, title: dbMatch.title, emoji: dbMatch.emoji || recipe.emoji || '🍽️' };
+              } else {
+                next[day].meals[slot] = { id: recipe.title, title: recipe.title, emoji: recipe.emoji || '🍽️', llmRecipe: recipe, isLLM: true };
+              }
               return next;
             });
           }
@@ -22607,7 +22620,12 @@ function AISousChef({ pantry, prefs, mealPlan, setMealPlan, setSlotRecipe, shopp
                 if (day.meals && Array.isArray(day.meals)) {
                   day.meals.forEach((m, mi) => {
                     if (m && mi < 3) {
-                      next[di].meals[mi] = { id: m.title || '', title: m.title || '', emoji: m.emoji || '🍽️' };
+                      const dbMatch = RECIPES.find(r => r.title.toLowerCase() === (m.title || '').toLowerCase());
+                      if (dbMatch) {
+                        next[di].meals[mi] = { id: dbMatch.id, title: dbMatch.title, emoji: dbMatch.emoji || m.emoji || '🍽️' };
+                      } else {
+                        next[di].meals[mi] = { id: m.title || '', title: m.title || '', emoji: m.emoji || '🍽️', llmRecipe: m, isLLM: true };
+                      }
                     }
                   });
                 }
@@ -23285,6 +23303,16 @@ function PlannerHome({ mealPlan, setMealPlan, generateWeek, generateDay, regener
               {mealPlan.map((day, di) => {
                 const slot = day.meals[mi];
                 const recipe = slot ? RECIPES.find(r => r.id === slot.id) : null;
+                // For LLM-generated recipes, build a viewable recipe object from stored data
+                const viewable = recipe || (slot?.isLLM && slot.llmRecipe ? {
+                  id: slot.id, title: slot.title, emoji: slot.emoji,
+                  cuisine: slot.llmRecipe.cuisine || '', meal: slot.llmRecipe.meal || '',
+                  time: slot.llmRecipe.time || 30, difficulty: slot.llmRecipe.difficulty || 'Easy',
+                  servings: slot.llmRecipe.servings || 2,
+                  ingredients: (slot.llmRecipe.ingredients || []).map(ing => ({ n: ing.name, a: ing.amount })),
+                  steps: (slot.llmRecipe.steps || []).map((s, si) => typeof s === 'string' ? { n: si + 1, t: `Step ${si + 1}`, d: s } : s),
+                  reason: slot.llmRecipe.reason || '', isLLM: true,
+                } : null);
                 const isDragOver = dragOverCell?.dayIdx === di && dragOverCell?.mealIdx === mi;
                 return (
                   <div
@@ -23307,12 +23335,12 @@ function PlannerHome({ mealPlan, setMealPlan, generateWeek, generateDay, regener
                         onDragStart={() => handleDragStart(di, mi)}
                         onClick={e => {
                           e.stopPropagation();
-                          if (recipe) setViewRecipe(recipe);
+                          if (viewable) setViewRecipe(viewable);
                         }}
                       >
                         <RecipeImg
                           className="meal-card-img"
-                          src={recipe?.image || recipeImage(recipe || slot)}
+                          src={recipe?.image || recipeImage(viewable || slot)}
                           alt={slot.title}
                           emoji={slot.emoji}
                           style={{fontSize:24}}

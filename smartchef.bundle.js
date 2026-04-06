@@ -30261,7 +30261,14 @@ body{font-family:var(--fb);background:var(--cream);color:var(--ch);-webkit-font-
   function recipeImage(recipe) {
     if (!recipe) return null;
     const r = typeof recipe === "object" ? recipe : { id: recipe };
-    const id = r.id || 0;
+    let id = r.id || 0;
+    if (typeof id === "string") {
+      let h = 0;
+      for (let i = 0; i < id.length; i++) {
+        h = (h << 5) - h + id.charCodeAt(i) | 0;
+      }
+      id = Math.abs(h);
+    }
     const title = (r.title || "").toLowerCase();
     let pool = null;
     let matched = false;
@@ -30854,9 +30861,14 @@ body{font-family:var(--fb);background:var(--cream);color:var(--ch);-webkit-font-
             const slot = action.slot;
             const recipe = action.recipe;
             if (day >= 0 && day <= 6 && slot >= 0 && slot <= 2 && recipe) {
+              const dbMatch = RECIPES.find((r) => r.title.toLowerCase() === (recipe.title || "").toLowerCase());
               setMealPlan((prev) => {
                 const next = prev.map((d) => ({ ...d, meals: [...d.meals] }));
-                next[day].meals[slot] = { id: recipe.title, title: recipe.title, emoji: recipe.emoji || "\u{1F37D}\uFE0F" };
+                if (dbMatch) {
+                  next[day].meals[slot] = { id: dbMatch.id, title: dbMatch.title, emoji: dbMatch.emoji || recipe.emoji || "\u{1F37D}\uFE0F" };
+                } else {
+                  next[day].meals[slot] = { id: recipe.title, title: recipe.title, emoji: recipe.emoji || "\u{1F37D}\uFE0F", llmRecipe: recipe, isLLM: true };
+                }
                 return next;
               });
             }
@@ -30870,7 +30882,12 @@ body{font-family:var(--fb);background:var(--cream);color:var(--ch);-webkit-font-
                   if (day.meals && Array.isArray(day.meals)) {
                     day.meals.forEach((m, mi) => {
                       if (m && mi < 3) {
-                        next[di].meals[mi] = { id: m.title || "", title: m.title || "", emoji: m.emoji || "\u{1F37D}\uFE0F" };
+                        const dbMatch = RECIPES.find((r) => r.title.toLowerCase() === (m.title || "").toLowerCase());
+                        if (dbMatch) {
+                          next[di].meals[mi] = { id: dbMatch.id, title: dbMatch.title, emoji: dbMatch.emoji || m.emoji || "\u{1F37D}\uFE0F" };
+                        } else {
+                          next[di].meals[mi] = { id: m.title || "", title: m.title || "", emoji: m.emoji || "\u{1F37D}\uFE0F", llmRecipe: m, isLLM: true };
+                        }
                       }
                     });
                   }
@@ -31198,6 +31215,20 @@ body{font-family:var(--fb);background:var(--cream);color:var(--ch);-webkit-font-
     }), MEALS.map((meal, mi) => /* @__PURE__ */ React.createElement(React.Fragment, { key: meal }, /* @__PURE__ */ React.createElement("div", { className: "plan-label" }, meal === "Breakfast" ? "\u{1F305}" : meal === "Lunch" ? "\u2600\uFE0F" : "\u{1F319}", /* @__PURE__ */ React.createElement("br", null), meal), mealPlan.map((day, di) => {
       const slot = day.meals[mi];
       const recipe = slot ? RECIPES.find((r) => r.id === slot.id) : null;
+      const viewable = recipe || (slot?.isLLM && slot.llmRecipe ? {
+        id: slot.id,
+        title: slot.title,
+        emoji: slot.emoji,
+        cuisine: slot.llmRecipe.cuisine || "",
+        meal: slot.llmRecipe.meal || "",
+        time: slot.llmRecipe.time || 30,
+        difficulty: slot.llmRecipe.difficulty || "Easy",
+        servings: slot.llmRecipe.servings || 2,
+        ingredients: (slot.llmRecipe.ingredients || []).map((ing) => ({ n: ing.name, a: ing.amount })),
+        steps: (slot.llmRecipe.steps || []).map((s, si) => typeof s === "string" ? { n: si + 1, t: `Step ${si + 1}`, d: s } : s),
+        reason: slot.llmRecipe.reason || "",
+        isLLM: true
+      } : null);
       const isDragOver = dragOverCell?.dayIdx === di && dragOverCell?.mealIdx === mi;
       return /* @__PURE__ */ React.createElement(
         "div",
@@ -31228,14 +31259,14 @@ body{font-family:var(--fb);background:var(--cream);color:var(--ch);-webkit-font-
             onDragStart: () => handleDragStart(di, mi),
             onClick: (e) => {
               e.stopPropagation();
-              if (recipe) setViewRecipe(recipe);
+              if (viewable) setViewRecipe(viewable);
             }
           },
           /* @__PURE__ */ React.createElement(
             RecipeImg,
             {
               className: "meal-card-img",
-              src: recipe?.image || recipeImage(recipe || slot),
+              src: recipe?.image || recipeImage(viewable || slot),
               alt: slot.title,
               emoji: slot.emoji,
               style: { fontSize: 24 }
