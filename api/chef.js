@@ -35,7 +35,7 @@ module.exports = async function handler(req, res) {
           ...messages.slice(-30), // Keep last 30 messages for richer context
         ],
         temperature: 0.8,
-        max_tokens: 4000,
+        max_tokens: 16000,
         response_format: { type: 'json_object' },
       }),
     });
@@ -148,13 +148,15 @@ Set "inPantry" to true for ingredients the user has, false otherwise.
 
 ### When performing app actions, each action in the "actions" array:
 
+IMPORTANT: Every recipe in an action MUST include full details (title, emoji, meal, time, difficulty, cuisine, servings, ingredients with inPantry, steps). The app stores this data and users can click any meal to see the full recipe. Sending only a title will result in empty recipe cards.
+
 Set a specific meal:
-{ "type": "set_meal", "day": 0, "slot": 0, "recipe": { "title": "...", "emoji": "..." } }
+{ "type": "set_meal", "day": 0, "slot": 0, "recipe": { "title": "...", "emoji": "...", "meal": "breakfast", "time": 25, "difficulty": "Easy", "cuisine": "Mediterranean", "servings": 2, "ingredients": [{"name": "Eggs", "amount": "3", "inPantry": true}], "steps": ["Step 1...", "Step 2..."] } }
 (day: 0=Mon..6=Sun, slot: 0=breakfast, 1=lunch, 2=dinner)
 
 Replace the entire week plan:
-{ "type": "plan_week", "plan": [ { "meals": [breakfast, lunch, dinner] }, ... ] }
-(Array of exactly 7 day objects. Each meal: { "title": "...", "emoji": "..." })
+{ "type": "plan_week", "plan": [ { "meals": [full_breakfast_recipe, full_lunch_recipe, full_dinner_recipe] }, ... ] }
+(Array of exactly 7 day objects. Each meal MUST be a full recipe object with title, emoji, meal, time, difficulty, cuisine, servings, ingredients, and steps — NOT just a title.)
 
 Add to shopping list:
 { "type": "add_shopping", "items": [{"name": "...", "amount": "..."}] }

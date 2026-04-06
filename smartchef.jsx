@@ -22747,6 +22747,9 @@ function AISousChef({ pantry, prefs, mealPlan, setMealPlan, setSlotRecipe, shopp
           const wp = buildWeekPlanFromAction(weekAction);
           if (wp) assistantMsg.weekPlan = wp;
         }
+        // Flag if any meal was changed (so we can show "View Plan" in chat)
+        const hasMealChange = data.actions.some(a => a.type === 'set_meal' || a.type === 'plan_week');
+        if (hasMealChange) assistantMsg.planChanged = true;
         // Execute ALL actions (update state)
         executeActions(data.actions);
       }
@@ -23050,6 +23053,11 @@ function AISousChef({ pantry, prefs, mealPlan, setMealPlan, setSlotRecipe, shopp
             <div className="chat-avatar">{msg.role === 'user' ? '👤' : '👨‍🍳'}</div>
             <div style={{flex:1,maxWidth:680}}>
               {msg.text && <div className="chat-bubble" style={msg.role === 'user' ? {} : {}}>{renderText(msg.text)}</div>}
+              {msg.planChanged && !msg.weekPlan && (
+                <div style={{margin:'8px 0'}}>
+                  <button className="chat-rc-btn primary" onClick={() => { setTab('planner'); showToast('Viewing your updated plan!'); }} style={{display:'inline-flex',alignItems:'center',gap:6}}>📅 View Updated Plan</button>
+                </div>
+              )}
               {msg.weekPlan && <WeekPlanCard wp={msg.weekPlan} />}
               {msg.recipes && msg.recipes.map((card, j) => (
                 <RecipeCard key={j} card={card} />
@@ -23250,6 +23258,34 @@ function Onboarding({ prefs, setPrefs, pantry, setPantry, onDone }) {
 }
 
 /* ── PLANNER HOME (main screen) ── */
+// Build a full viewable recipe object from an LLM-generated meal slot
+// This maps LLM data format → the format RecipeDetail expects
+function buildViewableFromLLM(slot) {
+  if (!slot || !slot.llmRecipe) return null;
+  const r = slot.llmRecipe;
+  return {
+    id: slot.id,
+    title: slot.title || r.title || 'Untitled',
+    emoji: slot.emoji || r.emoji || '🍽️',
+    image: recipeImage({ id: slot.id, title: r.title || slot.title || '', cuisine: r.cuisine || '', meal: r.meal || '' }),
+    cuisine: r.cuisine || '',
+    meal: r.meal || '',
+    time: r.time || 30,
+    diff: r.difficulty || 'Easy',
+    servings: r.servings || 2,
+    ingredients: (r.ingredients || []).map(ing => ({
+      n: ing.name || ing.n || '',
+      a: ing.amount || ing.a || '',
+    })),
+    steps: (r.steps || []).map((s, i) => {
+      if (typeof s === 'string') return { n: i + 1, t: `Step ${i + 1}`, d: s };
+      return { n: s.n || i + 1, t: s.t || `Step ${i + 1}`, d: s.d || s };
+    }),
+    reason: r.reason || '',
+    isLLM: true,
+  };
+}
+
 function PlannerHome({ mealPlan, setMealPlan, generateWeek, generateDay, regenerateSlot, removeSlot, setSlotRecipe, dragSrc, handleDragStart, handleDrop, qap, setQap, setViewRecipe, setReplacePicker, showToast, prefs, setPrefs }) {
   const MEALS = ['Breakfast', 'Lunch', 'Dinner'];
   const [dragOverCell, setDragOverCell] = useState(null);
@@ -23304,15 +23340,7 @@ function PlannerHome({ mealPlan, setMealPlan, generateWeek, generateDay, regener
                 const slot = day.meals[mi];
                 const recipe = slot ? RECIPES.find(r => r.id === slot.id) : null;
                 // For LLM-generated recipes, build a viewable recipe object from stored data
-                const viewable = recipe || (slot?.isLLM && slot.llmRecipe ? {
-                  id: slot.id, title: slot.title, emoji: slot.emoji,
-                  cuisine: slot.llmRecipe.cuisine || '', meal: slot.llmRecipe.meal || '',
-                  time: slot.llmRecipe.time || 30, difficulty: slot.llmRecipe.difficulty || 'Easy',
-                  servings: slot.llmRecipe.servings || 2,
-                  ingredients: (slot.llmRecipe.ingredients || []).map(ing => ({ n: ing.name, a: ing.amount })),
-                  steps: (slot.llmRecipe.steps || []).map((s, si) => typeof s === 'string' ? { n: si + 1, t: `Step ${si + 1}`, d: s } : s),
-                  reason: slot.llmRecipe.reason || '', isLLM: true,
-                } : null);
+                const viewable = recipe || (slot?.isLLM && slot.llmRecipe ? buildViewableFromLLM(slot) : null);
                 const isDragOver = dragOverCell?.dayIdx === di && dragOverCell?.mealIdx === mi;
                 return (
                   <div
@@ -23510,7 +23538,7 @@ function RecipeDetail({ recipe, onClose, handleAddToPlan, toggleSave, saved, pan
     <div className="rd-overlay" onClick={onClose}>
       <div className="rd-panel" onClick={e => e.stopPropagation()}>
         <div className="rd-hero">
-          <RecipeImg src={recipe.image} alt={recipe.title} emoji={recipe.emoji} style={{width:'100%',height:'100%'}} />
+          <RecipeImg src={recipe.image || recipeImage(recipe)} alt={recipe.title} emoji={recipe.emoji} style={{width:'100%',height:'100%'}} />
           <div className="rd-hero-overlay" />
           <button className="rd-close" onClick={onClose}>✕</button>
         </div>
@@ -23518,7 +23546,7 @@ function RecipeDetail({ recipe, onClose, handleAddToPlan, toggleSave, saved, pan
           <h2 className="rd-title">{recipe.emoji} {recipe.title}</h2>
           <div className="rd-meta">
             <span>⏱ {recipe.time} min</span>
-            <span>📊 {recipe.diff}</span>
+            <span>📊 {recipe.diff || recipe.difficulty}</span>
             <span>🍽 {recipe.cuisine}</span>
           </div>
           {(recipe.dietary || []).length > 0 && (
