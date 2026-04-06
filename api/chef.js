@@ -1,7 +1,7 @@
 // Vercel Serverless Function — SmartChef AI Sous Chef
 // Proxies user messages to OpenAI with full pantry/plan context
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   // CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
