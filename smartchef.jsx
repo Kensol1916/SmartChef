@@ -21676,136 +21676,84 @@ class RecipeErrorBoundary extends React.Component {
 }
 
 // ── Recipe Image System ─────────────────────────────────────────────────────
-// Persistent per-recipe image model. Each recipe has a stable `recipe.image` field.
-// Images are resolved via /api/image (TheMealDB search) and cached in localStorage.
-// The UI only ever reads recipe.image — no runtime guessing.
+// Simple, stable approach:
+// - recipe.image is the source of truth
+// - Images cached in localStorage, resolved lazily per-card via /api/image
+// - No batch loading, no mount-time fetching
+// - Planner renders instantly; images appear as they load
 
-// Simple RecipeImg component — shows image with emoji fallback on error
+const IMAGE_CACHE_KEY = 'smartchef_recipe_images';
+const _imgCache = (() => {
+  try { return JSON.parse(localStorage.getItem(IMAGE_CACHE_KEY) || '{}'); } catch { return {}; }
+})();
+
+// Apply cached images to RECIPES at startup (instant, no network)
+RECIPES.forEach(r => { if (!r.image && _imgCache[r.id]) r.image = _imgCache[r.id]; });
+
+function saveToImgCache(id, url) {
+  if (!url) return;
+  _imgCache[id] = url;
+  try { localStorage.setItem(IMAGE_CACHE_KEY, JSON.stringify(_imgCache)); } catch {}
+}
+
+// RecipeImg — shows image with polished emoji placeholder on error/missing
 function RecipeImg({ src, alt, emoji, style, className, onClick }) {
   const [failed, setFailed] = React.useState(false);
   const [loaded, setLoaded] = React.useState(false);
-
   React.useEffect(() => { setFailed(false); setLoaded(false); }, [src]);
 
-  if (!src || failed) {
-    return (
-      <div
-        className={className}
-        onClick={onClick}
-        style={{
-          ...style,
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          background: 'linear-gradient(135deg, #f5ebe0 0%, #e8d5c4 100%)',
-          fontSize: style?.fontSize || 32, borderRadius: style?.borderRadius || 8,
-          minHeight: style?.height || style?.minHeight || 60,
-        }}
-      >
-        {emoji || '🍽️'}
-      </div>
-    );
-  }
+  const placeholder = (
+    <div className={className} onClick={onClick} style={{
+      ...style, display: 'flex', alignItems: 'center', justifyContent: 'center',
+      background: 'linear-gradient(135deg, #f5ebe0 0%, #e8d5c4 100%)',
+      fontSize: style?.fontSize || 32, borderRadius: style?.borderRadius || 8,
+      minHeight: style?.height || style?.minHeight || 60,
+    }}>
+      {emoji || '🍽️'}
+    </div>
+  );
+
+  if (!src || failed) return placeholder;
 
   return (
-    <img
-      className={className}
-      src={src}
-      alt={alt || ''}
-      onClick={onClick}
-      onError={() => setFailed(true)}
-      onLoad={() => setLoaded(true)}
-      style={{ ...style, objectFit: 'cover', opacity: loaded ? 1 : 0, transition: 'opacity 0.3s' }}
-      loading="lazy"
-    />
+    <>
+      {!loaded && placeholder}
+      <img className={className} src={src} alt={alt || ''} onClick={onClick}
+        onError={() => setFailed(true)} onLoad={() => setLoaded(true)}
+        style={{ ...style, objectFit: 'cover', display: loaded ? 'block' : 'none' }}
+        loading="lazy" />
+    </>
   );
 }
 
-// ── Batch image resolver ──
-// Calls /api/image to resolve images for recipes that don't have one yet.
-// Saves results to localStorage so images persist across sessions.
-const IMAGE_CACHE_KEY = 'smartchef_recipe_images';
+// LazyRecipeImg — resolves image on first render if missing, then caches it
+function LazyRecipeImg({ recipe, style, className, onClick }) {
+  const [imgSrc, setImgSrc] = React.useState(recipe?.image || null);
+  const id = recipe?.id;
+  const title = recipe?.title || '';
+  const emoji = recipe?.emoji || '🍽️';
 
-function loadImageCache() {
-  try {
-    return JSON.parse(localStorage.getItem(IMAGE_CACHE_KEY) || '{}');
-  } catch { return {}; }
-}
-
-function saveImageCache(cache) {
-  try {
-    localStorage.setItem(IMAGE_CACHE_KEY, JSON.stringify(cache));
-  } catch { /* storage full — ok */ }
-}
-
-// Apply cached images to RECIPES at startup
-(function applyCachedImages() {
-  const cache = loadImageCache();
-  let applied = 0;
-  RECIPES.forEach(r => {
-    if (cache[r.id]) {
-      r.image = cache[r.id];
-      applied++;
-    }
-  });
-  if (applied > 0) console.log(`Applied ${applied} cached recipe images`);
-})();
-
-// Async batch resolver — runs after app mounts
-async function resolveRecipeImages(recipes, batchSize = 20) {
-  const cache = loadImageCache();
-  const needImages = recipes.filter(r => !r.image && !cache[r.id]);
-
-  if (needImages.length === 0) return;
-  console.log(`Resolving images for ${needImages.length} recipes...`);
-
-  // Process in batches to avoid overwhelming the API
-  for (let i = 0; i < needImages.length; i += batchSize) {
-    const batch = needImages.slice(i, i + batchSize).map(r => ({
-      id: r.id, title: r.title, cuisine: r.cuisine || '', meal: r.meal || '',
-    }));
-
-    try {
-      const resp = await fetch('/api/image', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ recipes: batch }),
-      });
-
-      if (resp.ok) {
-        const data = await resp.json();
-        if (data.images) {
-          data.images.forEach(({ id, image }) => {
-            if (image) {
-              cache[id] = image;
-              const recipe = RECIPES.find(r => r.id === id);
-              if (recipe) recipe.image = image;
-            }
-          });
-          saveImageCache(cache);
-        }
-      }
-    } catch (err) {
-      console.warn('Image batch failed:', err);
-    }
-  }
-  console.log(`Image resolution complete. Cache size: ${Object.keys(cache).length}`);
-}
-
-// Resolve image for a single LLM-generated recipe (used by buildViewableFromLLM)
-async function resolveSingleImage(title, cuisine, meal) {
-  try {
-    const resp = await fetch('/api/image', {
+  React.useEffect(() => {
+    if (imgSrc || !title) return;
+    // Check cache first
+    if (_imgCache[id || title]) { setImgSrc(_imgCache[id || title]); return; }
+    // Fetch from API
+    let cancelled = false;
+    fetch('/api/image', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ recipes: [{ id: title, title, cuisine: cuisine || '', meal: meal || '' }] }),
-    });
-    if (resp.ok) {
-      const data = await resp.json();
-      if (data.images && data.images[0] && data.images[0].image) {
-        return data.images[0].image;
-      }
-    }
-  } catch { /* ok */ }
-  return null;
+      body: JSON.stringify({ recipes: [{ id: id || title, title, cuisine: recipe?.cuisine || '', meal: recipe?.meal || '' }] }),
+    }).then(r => r.ok ? r.json() : null).then(data => {
+      if (cancelled || !data?.images?.[0]?.image) return;
+      const url = data.images[0].image;
+      setImgSrc(url);
+      if (recipe) recipe.image = url;
+      saveToImgCache(id || title, url);
+    }).catch(() => {});
+    return () => { cancelled = true; };
+  }, [id, title]);
+
+  return <RecipeImg src={imgSrc} alt={title} emoji={emoji} style={style} className={className} onClick={onClick} />;
 }
 
 /* ── MAIN APP ── */
@@ -21841,14 +21789,6 @@ export default function App() {
     style.textContent = S;
     document.head.appendChild(style);
     return () => { const el = document.getElementById('smartchef-styles'); if (el) el.remove(); };
-  }, []);
-
-  // ── Batch-resolve recipe images on mount ──
-  const [, forceUpdate] = useState(0);
-  React.useEffect(() => {
-    resolveRecipeImages(RECIPES).then(() => {
-      forceUpdate(n => n + 1); // Re-render after images are loaded
-    });
   }, []);
 
   // ── Session restore ──
@@ -22335,6 +22275,8 @@ function AISousChef({ pantry, prefs, mealPlan, setMealPlan, setSlotRecipe, shopp
         return r ? r.title : '';
       }).filter(Boolean),
       recipeCount: RECIPES.length,
+      // Send available recipe titles so LLM can pick from existing DB (faster planning)
+      availableRecipes: RECIPES.map(r => `${r.emoji || ''} ${r.title} [${r.meal || 'any'}]`).join(', '),
     };
   }
 
@@ -23049,7 +22991,7 @@ function buildViewableFromLLM(slot) {
     id: slot.id,
     title: slot.title || r.title || 'Untitled',
     emoji: slot.emoji || r.emoji || '🍽️',
-    image: null, // Will be resolved asynchronously via resolveSingleImage
+    image: null, // LazyRecipeImg will resolve this when visible
     cuisine: r.cuisine || '',
     meal: r.meal || '',
     time: r.time || 30,
@@ -23148,11 +23090,9 @@ function PlannerHome({ mealPlan, setMealPlan, generateWeek, generateDay, regener
                           if (viewable) setViewRecipe(viewable);
                         }}
                       >
-                        <RecipeImg
+                        <LazyRecipeImg
+                          recipe={recipe || viewable || slot}
                           className="meal-card-img"
-                          src={recipe?.image || viewable?.image || null}
-                          alt={slot.title}
-                          emoji={slot.emoji}
                           style={{fontSize:24}}
                         />
                         <div className="meal-card-name">{slot.title}</div>
@@ -23259,7 +23199,7 @@ function ReplacePicker({ replacePicker, setReplacePicker, setSlotRecipe, showToa
                 setReplacePicker(null);
                 showToast(`Replaced with "${r.title}"`);
               }}>
-                <RecipeImg src={r.image} alt={r.title} emoji={r.emoji} style={{width:48,height:48,borderRadius:6,fontSize:20,flexShrink:0}} />
+                <LazyRecipeImg recipe={r} style={{width:48,height:48,borderRadius:6,fontSize:20,flexShrink:0}} />
                 <div>
                   <div style={{fontWeight:600,fontSize:13}}>{r.title}</div>
                   <div style={{fontSize:11,color:'var(--mu)'}}>{r.cuisine} · {r.time}min</div>
@@ -23320,7 +23260,7 @@ function RecipeDetail({ recipe, onClose, handleAddToPlan, toggleSave, saved, pan
     <div className="rd-overlay" onClick={onClose}>
       <div className="rd-panel" onClick={e => e.stopPropagation()}>
         <div className="rd-hero">
-          <RecipeImg src={recipe.image || null} alt={recipe.title} emoji={recipe.emoji} style={{width:'100%',height:'100%'}} />
+          <LazyRecipeImg recipe={recipe} style={{width:'100%',height:'100%'}} />
           <div className="rd-hero-overlay" />
           <button className="rd-close" onClick={onClose}>✕</button>
         </div>
@@ -23443,7 +23383,7 @@ function ExploreTab({ setViewRecipe, handleAddToPlan, toggleSave, saved, showToa
         {display.map(r => (
           <div key={r.id} className="explore-card">
             <div className="explore-card-img" onClick={() => setViewRecipe(r)}>
-              <RecipeImg src={r.image} alt={r.title} emoji={r.emoji} />
+              <LazyRecipeImg recipe={r} />
             </div>
             <div className="explore-card-body">
               <div className="explore-card-title" onClick={() => setViewRecipe(r)} style={{cursor:'pointer'}}>{r.emoji} {r.title}</div>
@@ -23841,7 +23781,7 @@ function ProfileTab({ user, saved, userRecipes, mealPlan, prefs, setPrefs, publi
           {savedRecipes.map(r => (
             <div key={r.id} className="explore-card" onClick={() => setViewRecipe(r)}>
               <div className="explore-card-img">
-                <RecipeImg src={r.image} alt={r.title} emoji={r.emoji} />
+                <LazyRecipeImg recipe={r} />
               </div>
               <div className="explore-card-body">
                 <div className="explore-card-title">{r.emoji} {r.title}</div>

@@ -29928,6 +29928,25 @@ body{font-family:var(--fb);background:var(--cream);color:var(--ch);-webkit-font-
       return this.props.children;
     }
   };
+  var IMAGE_CACHE_KEY = "smartchef_recipe_images";
+  var _imgCache = (() => {
+    try {
+      return JSON.parse(localStorage.getItem(IMAGE_CACHE_KEY) || "{}");
+    } catch {
+      return {};
+    }
+  })();
+  RECIPES.forEach((r) => {
+    if (!r.image && _imgCache[r.id]) r.image = _imgCache[r.id];
+  });
+  function saveToImgCache(id, url) {
+    if (!url) return;
+    _imgCache[id] = url;
+    try {
+      localStorage.setItem(IMAGE_CACHE_KEY, JSON.stringify(_imgCache));
+    } catch {
+    }
+  }
   function RecipeImg({ src, alt, emoji, style, className, onClick }) {
     const [failed, setFailed] = React.useState(false);
     const [loaded, setLoaded] = React.useState(false);
@@ -29935,27 +29954,18 @@ body{font-family:var(--fb);background:var(--cream);color:var(--ch);-webkit-font-
       setFailed(false);
       setLoaded(false);
     }, [src]);
-    if (!src || failed) {
-      return /* @__PURE__ */ React.createElement(
-        "div",
-        {
-          className,
-          onClick,
-          style: {
-            ...style,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            background: "linear-gradient(135deg, #f5ebe0 0%, #e8d5c4 100%)",
-            fontSize: style?.fontSize || 32,
-            borderRadius: style?.borderRadius || 8,
-            minHeight: style?.height || style?.minHeight || 60
-          }
-        },
-        emoji || "\u{1F37D}\uFE0F"
-      );
-    }
-    return /* @__PURE__ */ React.createElement(
+    const placeholder = /* @__PURE__ */ React.createElement("div", { className, onClick, style: {
+      ...style,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      background: "linear-gradient(135deg, #f5ebe0 0%, #e8d5c4 100%)",
+      fontSize: style?.fontSize || 32,
+      borderRadius: style?.borderRadius || 8,
+      minHeight: style?.height || style?.minHeight || 60
+    } }, emoji || "\u{1F37D}\uFE0F");
+    if (!src || failed) return placeholder;
+    return /* @__PURE__ */ React.createElement(React.Fragment, null, !loaded && placeholder, /* @__PURE__ */ React.createElement(
       "img",
       {
         className,
@@ -29964,72 +29974,40 @@ body{font-family:var(--fb);background:var(--cream);color:var(--ch);-webkit-font-
         onClick,
         onError: () => setFailed(true),
         onLoad: () => setLoaded(true),
-        style: { ...style, objectFit: "cover", opacity: loaded ? 1 : 0, transition: "opacity 0.3s" },
+        style: { ...style, objectFit: "cover", display: loaded ? "block" : "none" },
         loading: "lazy"
       }
-    );
+    ));
   }
-  var IMAGE_CACHE_KEY = "smartchef_recipe_images";
-  function loadImageCache() {
-    try {
-      return JSON.parse(localStorage.getItem(IMAGE_CACHE_KEY) || "{}");
-    } catch {
-      return {};
-    }
-  }
-  function saveImageCache(cache) {
-    try {
-      localStorage.setItem(IMAGE_CACHE_KEY, JSON.stringify(cache));
-    } catch {
-    }
-  }
-  (function applyCachedImages() {
-    const cache = loadImageCache();
-    let applied = 0;
-    RECIPES.forEach((r) => {
-      if (cache[r.id]) {
-        r.image = cache[r.id];
-        applied++;
+  function LazyRecipeImg({ recipe, style, className, onClick }) {
+    const [imgSrc, setImgSrc] = React.useState(recipe?.image || null);
+    const id = recipe?.id;
+    const title = recipe?.title || "";
+    const emoji = recipe?.emoji || "\u{1F37D}\uFE0F";
+    React.useEffect(() => {
+      if (imgSrc || !title) return;
+      if (_imgCache[id || title]) {
+        setImgSrc(_imgCache[id || title]);
+        return;
       }
-    });
-    if (applied > 0) console.log(`Applied ${applied} cached recipe images`);
-  })();
-  async function resolveRecipeImages(recipes, batchSize = 20) {
-    const cache = loadImageCache();
-    const needImages = recipes.filter((r) => !r.image && !cache[r.id]);
-    if (needImages.length === 0) return;
-    console.log(`Resolving images for ${needImages.length} recipes...`);
-    for (let i = 0; i < needImages.length; i += batchSize) {
-      const batch = needImages.slice(i, i + batchSize).map((r) => ({
-        id: r.id,
-        title: r.title,
-        cuisine: r.cuisine || "",
-        meal: r.meal || ""
-      }));
-      try {
-        const resp = await fetch("/api/image", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ recipes: batch })
-        });
-        if (resp.ok) {
-          const data = await resp.json();
-          if (data.images) {
-            data.images.forEach(({ id, image }) => {
-              if (image) {
-                cache[id] = image;
-                const recipe = RECIPES.find((r) => r.id === id);
-                if (recipe) recipe.image = image;
-              }
-            });
-            saveImageCache(cache);
-          }
-        }
-      } catch (err) {
-        console.warn("Image batch failed:", err);
-      }
-    }
-    console.log(`Image resolution complete. Cache size: ${Object.keys(cache).length}`);
+      let cancelled = false;
+      fetch("/api/image", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ recipes: [{ id: id || title, title, cuisine: recipe?.cuisine || "", meal: recipe?.meal || "" }] })
+      }).then((r) => r.ok ? r.json() : null).then((data) => {
+        if (cancelled || !data?.images?.[0]?.image) return;
+        const url = data.images[0].image;
+        setImgSrc(url);
+        if (recipe) recipe.image = url;
+        saveToImgCache(id || title, url);
+      }).catch(() => {
+      });
+      return () => {
+        cancelled = true;
+      };
+    }, [id, title]);
+    return /* @__PURE__ */ React.createElement(RecipeImg, { src: imgSrc, alt: title, emoji, style, className, onClick });
   }
   function App() {
     const [screen, setScreen] = (0, import_react.useState)("loading");
@@ -30066,12 +30044,6 @@ body{font-family:var(--fb);background:var(--cream);color:var(--ch);-webkit-font-
         const el = document.getElementById("smartchef-styles");
         if (el) el.remove();
       };
-    }, []);
-    const [, forceUpdate] = (0, import_react.useState)(0);
-    React.useEffect(() => {
-      resolveRecipeImages(RECIPES).then(() => {
-        forceUpdate((n) => n + 1);
-      });
     }, []);
     (0, import_react.useEffect)(() => {
       const session = localStorage.getItem("sc_session");
@@ -30478,7 +30450,9 @@ body{font-family:var(--fb);background:var(--cream);color:var(--ch);-webkit-font-
           const r = RECIPES.find((rc) => rc.id === id);
           return r ? r.title : "";
         }).filter(Boolean),
-        recipeCount: RECIPES.length
+        recipeCount: RECIPES.length,
+        // Send available recipe titles so LLM can pick from existing DB (faster planning)
+        availableRecipes: RECIPES.map((r) => `${r.emoji || ""} ${r.title} [${r.meal || "any"}]`).join(", ")
       };
     }
     function llmRecipeToCard(recipe) {
@@ -30871,7 +30845,7 @@ body{font-family:var(--fb);background:var(--cream);color:var(--ch);-webkit-font-
       title: slot.title || r.title || "Untitled",
       emoji: slot.emoji || r.emoji || "\u{1F37D}\uFE0F",
       image: null,
-      // Will be resolved asynchronously via resolveSingleImage
+      // LazyRecipeImg will resolve this when visible
       cuisine: r.cuisine || "",
       meal: r.meal || "",
       time: r.time || 30,
@@ -30939,12 +30913,10 @@ body{font-family:var(--fb);background:var(--cream);color:var(--ch);-webkit-font-
             }
           },
           /* @__PURE__ */ React.createElement(
-            RecipeImg,
+            LazyRecipeImg,
             {
+              recipe: recipe || viewable || slot,
               className: "meal-card-img",
-              src: recipe?.image || viewable?.image || null,
-              alt: slot.title,
-              emoji: slot.emoji,
               style: { fontSize: 24 }
             }
           ),
@@ -30998,7 +30970,7 @@ body{font-family:var(--fb);background:var(--cream);color:var(--ch);-webkit-font-
       setSlotRecipe(replacePicker.dayIdx, replacePicker.mealIdx, r);
       setReplacePicker(null);
       showToast(`Replaced with "${r.title}"`);
-    } }, /* @__PURE__ */ React.createElement(RecipeImg, { src: r.image, alt: r.title, emoji: r.emoji, style: { width: 48, height: 48, borderRadius: 6, fontSize: 20, flexShrink: 0 } }), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { style: { fontWeight: 600, fontSize: 13 } }, r.title), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 11, color: "var(--mu)" } }, r.cuisine, " \xB7 ", r.time, "min"))))))));
+    } }, /* @__PURE__ */ React.createElement(LazyRecipeImg, { recipe: r, style: { width: 48, height: 48, borderRadius: 6, fontSize: 20, flexShrink: 0 } }), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { style: { fontWeight: 600, fontSize: 13 } }, r.title), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 11, color: "var(--mu)" } }, r.cuisine, " \xB7 ", r.time, "min"))))))));
   }
   function AddToPlanModal({ recipe, mealPlan, onConfirm, onClose }) {
     const [sel, setSel] = (0, import_react.useState)(null);
@@ -31016,7 +30988,7 @@ body{font-family:var(--fb);background:var(--cream);color:var(--ch);-webkit-font-
   function RecipeDetail({ recipe, onClose, handleAddToPlan, toggleSave, saved, pantry, showToast }) {
     if (!recipe) return null;
     const pantrySet = new Set((pantry || []).map((p) => (typeof p === "string" ? p : p.name || "").toLowerCase().trim()));
-    return /* @__PURE__ */ React.createElement("div", { className: "rd-overlay", onClick: onClose }, /* @__PURE__ */ React.createElement("div", { className: "rd-panel", onClick: (e) => e.stopPropagation() }, /* @__PURE__ */ React.createElement("div", { className: "rd-hero" }, /* @__PURE__ */ React.createElement(RecipeImg, { src: recipe.image || null, alt: recipe.title, emoji: recipe.emoji, style: { width: "100%", height: "100%" } }), /* @__PURE__ */ React.createElement("div", { className: "rd-hero-overlay" }), /* @__PURE__ */ React.createElement("button", { className: "rd-close", onClick: onClose }, "\u2715")), /* @__PURE__ */ React.createElement("div", { className: "rd-body" }, /* @__PURE__ */ React.createElement("h2", { className: "rd-title" }, recipe.emoji, " ", recipe.title), /* @__PURE__ */ React.createElement("div", { className: "rd-meta" }, /* @__PURE__ */ React.createElement("span", null, "\u23F1 ", recipe.time, " min"), /* @__PURE__ */ React.createElement("span", null, "\u{1F4CA} ", recipe.diff || recipe.difficulty), /* @__PURE__ */ React.createElement("span", null, "\u{1F37D} ", recipe.cuisine)), (recipe.dietary || []).length > 0 && /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 16 } }, recipe.dietary.map((d) => /* @__PURE__ */ React.createElement("span", { key: d, className: "tag td" }, d))), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 8, marginBottom: 20 } }, /* @__PURE__ */ React.createElement("button", { className: "btn btn-p btn-sm", onClick: () => handleAddToPlan(recipe) }, "\u{1F4C5} Add to Plan"), /* @__PURE__ */ React.createElement("button", { className: "btn btn-s btn-sm", onClick: () => toggleSave(recipe.id) }, saved.has(recipe.id) ? "\u2764\uFE0F Saved" : "\u{1F90D} Save")), /* @__PURE__ */ React.createElement("h3", { style: { fontFamily: "var(--fd)", fontSize: 18, marginBottom: 12 } }, "Ingredients (", (recipe.ingredients || []).length, ")"), /* @__PURE__ */ React.createElement("div", { style: { marginBottom: 24 } }, (recipe.ingredients || []).map((ing, i) => {
+    return /* @__PURE__ */ React.createElement("div", { className: "rd-overlay", onClick: onClose }, /* @__PURE__ */ React.createElement("div", { className: "rd-panel", onClick: (e) => e.stopPropagation() }, /* @__PURE__ */ React.createElement("div", { className: "rd-hero" }, /* @__PURE__ */ React.createElement(LazyRecipeImg, { recipe, style: { width: "100%", height: "100%" } }), /* @__PURE__ */ React.createElement("div", { className: "rd-hero-overlay" }), /* @__PURE__ */ React.createElement("button", { className: "rd-close", onClick: onClose }, "\u2715")), /* @__PURE__ */ React.createElement("div", { className: "rd-body" }, /* @__PURE__ */ React.createElement("h2", { className: "rd-title" }, recipe.emoji, " ", recipe.title), /* @__PURE__ */ React.createElement("div", { className: "rd-meta" }, /* @__PURE__ */ React.createElement("span", null, "\u23F1 ", recipe.time, " min"), /* @__PURE__ */ React.createElement("span", null, "\u{1F4CA} ", recipe.diff || recipe.difficulty), /* @__PURE__ */ React.createElement("span", null, "\u{1F37D} ", recipe.cuisine)), (recipe.dietary || []).length > 0 && /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 16 } }, recipe.dietary.map((d) => /* @__PURE__ */ React.createElement("span", { key: d, className: "tag td" }, d))), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 8, marginBottom: 20 } }, /* @__PURE__ */ React.createElement("button", { className: "btn btn-p btn-sm", onClick: () => handleAddToPlan(recipe) }, "\u{1F4C5} Add to Plan"), /* @__PURE__ */ React.createElement("button", { className: "btn btn-s btn-sm", onClick: () => toggleSave(recipe.id) }, saved.has(recipe.id) ? "\u2764\uFE0F Saved" : "\u{1F90D} Save")), /* @__PURE__ */ React.createElement("h3", { style: { fontFamily: "var(--fd)", fontSize: 18, marginBottom: 12 } }, "Ingredients (", (recipe.ingredients || []).length, ")"), /* @__PURE__ */ React.createElement("div", { style: { marginBottom: 24 } }, (recipe.ingredients || []).map((ing, i) => {
       const inPantry = pantrySet.has((ing.n || "").toLowerCase().trim());
       return /* @__PURE__ */ React.createElement("div", { key: i, style: { display: "flex", alignItems: "center", gap: 10, padding: "8px 0", borderBottom: "1px solid var(--bor)" } }, /* @__PURE__ */ React.createElement("span", { style: { color: inPantry ? "var(--sage)" : "var(--mu)", fontSize: 16 } }, inPantry ? "\u2705" : "\u{1F6D2}"), /* @__PURE__ */ React.createElement("span", { style: { fontWeight: 500 } }, ing.n), /* @__PURE__ */ React.createElement("span", { style: { color: "var(--mu)", fontSize: 13, marginLeft: "auto" } }, ing.a));
     })), /* @__PURE__ */ React.createElement("h3", { style: { fontFamily: "var(--fd)", fontSize: 18, marginBottom: 12 } }, "Steps"), /* @__PURE__ */ React.createElement("div", null, (recipe.steps || []).map((s, i) => /* @__PURE__ */ React.createElement("div", { key: i, style: { display: "flex", gap: 12, marginBottom: 14 } }, /* @__PURE__ */ React.createElement("div", { style: { width: 28, height: 28, borderRadius: "50%", background: "var(--clayBg)", color: "var(--clay)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700, fontSize: 13, flexShrink: 0 } }, s.n || i + 1), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { style: { fontWeight: 600, fontSize: 14, marginBottom: 2 } }, s.t), /* @__PURE__ */ React.createElement("div", { style: { color: "var(--mu)", fontSize: 14, lineHeight: 1.5 } }, s.d))))))));
@@ -31052,7 +31024,7 @@ body{font-family:var(--fb);background:var(--cream);color:var(--ch);-webkit-font-
     }
     const [shuffled] = (0, import_react.useState)(() => [...Array(RECIPES.length).keys()].sort(() => Math.random() - 0.5));
     const display = filtered.slice(0, 60);
-    return /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 8, marginBottom: 16, flexWrap: "wrap" } }, /* @__PURE__ */ React.createElement("input", { className: "fi", style: { flex: 1, minWidth: 200 }, placeholder: "Search recipes...", value: search, onChange: (e) => setSearch(e.target.value) }), /* @__PURE__ */ React.createElement("select", { className: "fi", style: { width: 150 }, value: cuisineFilter, onChange: (e) => setCuisineFilter(e.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "all" }, "All cuisines"), cuisines.map((c) => /* @__PURE__ */ React.createElement("option", { key: c, value: c }, c))), /* @__PURE__ */ React.createElement("select", { className: "fi", style: { width: 120 }, value: mealFilter, onChange: (e) => setMealFilter(e.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "all" }, "All meals"), /* @__PURE__ */ React.createElement("option", { value: "breakfast" }, "Breakfast"), /* @__PURE__ */ React.createElement("option", { value: "lunch" }, "Lunch"), /* @__PURE__ */ React.createElement("option", { value: "dinner" }, "Dinner"), /* @__PURE__ */ React.createElement("option", { value: "snack" }, "Snacks")), /* @__PURE__ */ React.createElement("select", { className: "fi", style: { width: 130 }, value: dietFilter, onChange: (e) => setDietFilter(e.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "all" }, "All diets"), /* @__PURE__ */ React.createElement("option", { value: "vegetarian" }, "Vegetarian"), /* @__PURE__ */ React.createElement("option", { value: "vegan" }, "Vegan"), /* @__PURE__ */ React.createElement("option", { value: "gluten-free" }, "Gluten-Free"), /* @__PURE__ */ React.createElement("option", { value: "kosher" }, "Kosher"), /* @__PURE__ */ React.createElement("option", { value: "dairy-free" }, "Dairy-Free"), /* @__PURE__ */ React.createElement("option", { value: "halal" }, "Halal"))), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 13, color: "var(--mu)", marginBottom: 16 } }, filtered.length, " recipes"), /* @__PURE__ */ React.createElement("div", { className: "explore-grid" }, display.map((r) => /* @__PURE__ */ React.createElement("div", { key: r.id, className: "explore-card" }, /* @__PURE__ */ React.createElement("div", { className: "explore-card-img", onClick: () => setViewRecipe(r) }, /* @__PURE__ */ React.createElement(RecipeImg, { src: r.image, alt: r.title, emoji: r.emoji })), /* @__PURE__ */ React.createElement("div", { className: "explore-card-body" }, /* @__PURE__ */ React.createElement("div", { className: "explore-card-title", onClick: () => setViewRecipe(r), style: { cursor: "pointer" } }, r.emoji, " ", r.title), /* @__PURE__ */ React.createElement("div", { className: "explore-card-meta" }, /* @__PURE__ */ React.createElement("span", null, r.cuisine), /* @__PURE__ */ React.createElement("span", null, "\u23F1 ", r.time, "min"), /* @__PURE__ */ React.createElement("span", null, "\u{1F4CA} ", r.diff)), (r.dietary || []).length > 0 && /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 4, flexWrap: "wrap", marginBottom: 6 } }, r.dietary.slice(0, 3).map((d) => /* @__PURE__ */ React.createElement("span", { key: d, className: "tag td", style: { fontSize: 10 } }, d))), /* @__PURE__ */ React.createElement("div", { className: "explore-card-actions" }, /* @__PURE__ */ React.createElement("button", { className: "btn btn-p btn-xs", onClick: () => handleAddToPlan(r) }, "\u{1F4C5} Plan"), /* @__PURE__ */ React.createElement("button", { className: "btn btn-s btn-xs", onClick: () => toggleSave(r.id) }, saved.has(r.id) ? "\u2764\uFE0F" : "\u{1F90D}"), /* @__PURE__ */ React.createElement("button", { className: "btn btn-g btn-xs", onClick: () => setViewRecipe(r) }, "View")))))));
+    return /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 8, marginBottom: 16, flexWrap: "wrap" } }, /* @__PURE__ */ React.createElement("input", { className: "fi", style: { flex: 1, minWidth: 200 }, placeholder: "Search recipes...", value: search, onChange: (e) => setSearch(e.target.value) }), /* @__PURE__ */ React.createElement("select", { className: "fi", style: { width: 150 }, value: cuisineFilter, onChange: (e) => setCuisineFilter(e.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "all" }, "All cuisines"), cuisines.map((c) => /* @__PURE__ */ React.createElement("option", { key: c, value: c }, c))), /* @__PURE__ */ React.createElement("select", { className: "fi", style: { width: 120 }, value: mealFilter, onChange: (e) => setMealFilter(e.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "all" }, "All meals"), /* @__PURE__ */ React.createElement("option", { value: "breakfast" }, "Breakfast"), /* @__PURE__ */ React.createElement("option", { value: "lunch" }, "Lunch"), /* @__PURE__ */ React.createElement("option", { value: "dinner" }, "Dinner"), /* @__PURE__ */ React.createElement("option", { value: "snack" }, "Snacks")), /* @__PURE__ */ React.createElement("select", { className: "fi", style: { width: 130 }, value: dietFilter, onChange: (e) => setDietFilter(e.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "all" }, "All diets"), /* @__PURE__ */ React.createElement("option", { value: "vegetarian" }, "Vegetarian"), /* @__PURE__ */ React.createElement("option", { value: "vegan" }, "Vegan"), /* @__PURE__ */ React.createElement("option", { value: "gluten-free" }, "Gluten-Free"), /* @__PURE__ */ React.createElement("option", { value: "kosher" }, "Kosher"), /* @__PURE__ */ React.createElement("option", { value: "dairy-free" }, "Dairy-Free"), /* @__PURE__ */ React.createElement("option", { value: "halal" }, "Halal"))), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 13, color: "var(--mu)", marginBottom: 16 } }, filtered.length, " recipes"), /* @__PURE__ */ React.createElement("div", { className: "explore-grid" }, display.map((r) => /* @__PURE__ */ React.createElement("div", { key: r.id, className: "explore-card" }, /* @__PURE__ */ React.createElement("div", { className: "explore-card-img", onClick: () => setViewRecipe(r) }, /* @__PURE__ */ React.createElement(LazyRecipeImg, { recipe: r })), /* @__PURE__ */ React.createElement("div", { className: "explore-card-body" }, /* @__PURE__ */ React.createElement("div", { className: "explore-card-title", onClick: () => setViewRecipe(r), style: { cursor: "pointer" } }, r.emoji, " ", r.title), /* @__PURE__ */ React.createElement("div", { className: "explore-card-meta" }, /* @__PURE__ */ React.createElement("span", null, r.cuisine), /* @__PURE__ */ React.createElement("span", null, "\u23F1 ", r.time, "min"), /* @__PURE__ */ React.createElement("span", null, "\u{1F4CA} ", r.diff)), (r.dietary || []).length > 0 && /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 4, flexWrap: "wrap", marginBottom: 6 } }, r.dietary.slice(0, 3).map((d) => /* @__PURE__ */ React.createElement("span", { key: d, className: "tag td", style: { fontSize: 10 } }, d))), /* @__PURE__ */ React.createElement("div", { className: "explore-card-actions" }, /* @__PURE__ */ React.createElement("button", { className: "btn btn-p btn-xs", onClick: () => handleAddToPlan(r) }, "\u{1F4C5} Plan"), /* @__PURE__ */ React.createElement("button", { className: "btn btn-s btn-xs", onClick: () => toggleSave(r.id) }, saved.has(r.id) ? "\u2764\uFE0F" : "\u{1F90D}"), /* @__PURE__ */ React.createElement("button", { className: "btn btn-g btn-xs", onClick: () => setViewRecipe(r) }, "View")))))));
   }
   function PantryTab({ pantry, setPantry, generateFromPantry, setViewRecipe, prefs, showToast }) {
     const [newItem, setNewItem] = (0, import_react.useState)("");
@@ -31183,7 +31155,7 @@ body{font-family:var(--fb);background:var(--cream);color:var(--ch);-webkit-font-
   }
   function ProfileTab({ user, saved, userRecipes, mealPlan, prefs, setPrefs, publishedMenus, setViewRecipe, showToast }) {
     const savedRecipes = RECIPES.filter((r) => saved.has(r.id));
-    return /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "prof-header" }, /* @__PURE__ */ React.createElement("div", { className: "prof-avatar" }, (user?.name || "U")[0].toUpperCase()), /* @__PURE__ */ React.createElement("div", { className: "prof-name" }, user?.name || "Chef"), /* @__PURE__ */ React.createElement("div", { className: "prof-email" }, user?.email), /* @__PURE__ */ React.createElement("div", { className: "prof-stats" }, /* @__PURE__ */ React.createElement("div", { className: "prof-stat" }, /* @__PURE__ */ React.createElement("div", { className: "prof-stat-num" }, savedRecipes.length), /* @__PURE__ */ React.createElement("div", { className: "prof-stat-label" }, "Saved")), /* @__PURE__ */ React.createElement("div", { className: "prof-stat" }, /* @__PURE__ */ React.createElement("div", { className: "prof-stat-num" }, userRecipes.length), /* @__PURE__ */ React.createElement("div", { className: "prof-stat-label" }, "Created")), /* @__PURE__ */ React.createElement("div", { className: "prof-stat" }, /* @__PURE__ */ React.createElement("div", { className: "prof-stat-num" }, publishedMenus.length), /* @__PURE__ */ React.createElement("div", { className: "prof-stat-label" }, "Plans")))), /* @__PURE__ */ React.createElement(PreferencesPanel, { prefs, setPrefs }), /* @__PURE__ */ React.createElement("h3", { style: { fontFamily: "var(--fd)", fontSize: 20, margin: "24px 0 16px" } }, "\u2764\uFE0F Saved Recipes"), savedRecipes.length === 0 ? /* @__PURE__ */ React.createElement("div", { style: { textAlign: "center", padding: 40, color: "var(--mu)" } }, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 40, marginBottom: 8 } }, "\u{1F90D}"), /* @__PURE__ */ React.createElement("p", null, "No saved recipes yet. Browse Explore and tap the heart to save.")) : /* @__PURE__ */ React.createElement("div", { className: "explore-grid" }, savedRecipes.map((r) => /* @__PURE__ */ React.createElement("div", { key: r.id, className: "explore-card", onClick: () => setViewRecipe(r) }, /* @__PURE__ */ React.createElement("div", { className: "explore-card-img" }, /* @__PURE__ */ React.createElement(RecipeImg, { src: r.image, alt: r.title, emoji: r.emoji })), /* @__PURE__ */ React.createElement("div", { className: "explore-card-body" }, /* @__PURE__ */ React.createElement("div", { className: "explore-card-title" }, r.emoji, " ", r.title), /* @__PURE__ */ React.createElement("div", { className: "explore-card-meta" }, /* @__PURE__ */ React.createElement("span", null, r.cuisine), /* @__PURE__ */ React.createElement("span", null, "\u23F1 ", r.time, "min")))))));
+    return /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "prof-header" }, /* @__PURE__ */ React.createElement("div", { className: "prof-avatar" }, (user?.name || "U")[0].toUpperCase()), /* @__PURE__ */ React.createElement("div", { className: "prof-name" }, user?.name || "Chef"), /* @__PURE__ */ React.createElement("div", { className: "prof-email" }, user?.email), /* @__PURE__ */ React.createElement("div", { className: "prof-stats" }, /* @__PURE__ */ React.createElement("div", { className: "prof-stat" }, /* @__PURE__ */ React.createElement("div", { className: "prof-stat-num" }, savedRecipes.length), /* @__PURE__ */ React.createElement("div", { className: "prof-stat-label" }, "Saved")), /* @__PURE__ */ React.createElement("div", { className: "prof-stat" }, /* @__PURE__ */ React.createElement("div", { className: "prof-stat-num" }, userRecipes.length), /* @__PURE__ */ React.createElement("div", { className: "prof-stat-label" }, "Created")), /* @__PURE__ */ React.createElement("div", { className: "prof-stat" }, /* @__PURE__ */ React.createElement("div", { className: "prof-stat-num" }, publishedMenus.length), /* @__PURE__ */ React.createElement("div", { className: "prof-stat-label" }, "Plans")))), /* @__PURE__ */ React.createElement(PreferencesPanel, { prefs, setPrefs }), /* @__PURE__ */ React.createElement("h3", { style: { fontFamily: "var(--fd)", fontSize: 20, margin: "24px 0 16px" } }, "\u2764\uFE0F Saved Recipes"), savedRecipes.length === 0 ? /* @__PURE__ */ React.createElement("div", { style: { textAlign: "center", padding: 40, color: "var(--mu)" } }, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 40, marginBottom: 8 } }, "\u{1F90D}"), /* @__PURE__ */ React.createElement("p", null, "No saved recipes yet. Browse Explore and tap the heart to save.")) : /* @__PURE__ */ React.createElement("div", { className: "explore-grid" }, savedRecipes.map((r) => /* @__PURE__ */ React.createElement("div", { key: r.id, className: "explore-card", onClick: () => setViewRecipe(r) }, /* @__PURE__ */ React.createElement("div", { className: "explore-card-img" }, /* @__PURE__ */ React.createElement(LazyRecipeImg, { recipe: r })), /* @__PURE__ */ React.createElement("div", { className: "explore-card-body" }, /* @__PURE__ */ React.createElement("div", { className: "explore-card-title" }, r.emoji, " ", r.title), /* @__PURE__ */ React.createElement("div", { className: "explore-card-meta" }, /* @__PURE__ */ React.createElement("span", null, r.cuisine), /* @__PURE__ */ React.createElement("span", null, "\u23F1 ", r.time, "min")))))));
   }
   return __toCommonJS(smartchef_exports);
 })();
