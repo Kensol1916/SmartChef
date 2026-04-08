@@ -29928,457 +29928,109 @@ body{font-family:var(--fb);background:var(--cream);color:var(--ch);-webkit-font-
       return this.props.children;
     }
   };
-  var MEALDB = "https://www.themealdb.com/images/media/meals";
-  var IMG_POOLS = {
-    salad: [
-      `${MEALDB}/zry07j1763779321.jpg`,
-      `${MEALDB}/fqpqml1764359125.jpg`,
-      `${MEALDB}/z458v91763817681.jpg`,
-      `${MEALDB}/1549542994.jpg`,
-      `${MEALDB}/g7jomp1763763994.jpg`,
-      `${MEALDB}/4xcfai1763765676.jpg`,
-      `${MEALDB}/93iok31766436070.jpg`,
-      `${MEALDB}/6cskio1763338156.jpg`,
-      `${MEALDB}/6g3rso1763486069.jpg`,
-      `${MEALDB}/ei21r61764365935.jpg`,
-      `${MEALDB}/pk8wtn1763758591.jpg`,
-      `${MEALDB}/02s6gc1763799560.jpg`,
-      `${MEALDB}/wvqpwt1468339226.jpg`,
-      `${MEALDB}/k29viq1585565980.jpg`,
-      `${MEALDB}/ktsws11761998344.jpg`,
-      `${MEALDB}/ebvuir1699013665.jpg`,
-      `${MEALDB}/wsu0rc1761848482.jpg`,
-      `${MEALDB}/v8eaed1763257313.jpg`,
-      `${MEALDB}/st9shl1763755808.jpg`,
-      `${MEALDB}/urtwux1486983078.jpg`,
-      `${MEALDB}/dbazbg1763779999.jpg`,
-      `${MEALDB}/tbj1bs1764118062.jpg`,
-      `${MEALDB}/0iryz91763778419.jpg`
-    ],
-    soup: [
-      `${MEALDB}/x2fw9e1560460636.jpg`,
-      `${MEALDB}/sqpqtp1515365614.jpg`,
-      `${MEALDB}/1529446137.jpg`,
-      `${MEALDB}/xxtsvx1511814083.jpg`,
-      `${MEALDB}/7n8su21699013057.jpg`,
-      `${MEALDB}/xvrrux1511783685.jpg`,
-      `${MEALDB}/1529445893.jpg`,
-      `${MEALDB}/1brbso1763585098.jpg`,
-      `${MEALDB}/stpuws1511191310.jpg`,
-      `${MEALDB}/t8mn9g1560460231.jpg`,
-      `${MEALDB}/ikizdm1763760862.jpg`,
-      `${MEALDB}/jcr46d1614763831.jpg`,
-      `${MEALDB}/60oc3k1699009846.jpg`,
-      `${MEALDB}/zadvgb1699012544.jpg`,
-      `${MEALDB}/kggfo91763288633.jpg`,
-      `${MEALDB}/7kb44y1763589084.jpg`,
-      `${MEALDB}/l50vz41763422681.jpg`,
-      `${MEALDB}/lx1kkj1593349302.jpg`,
-      `${MEALDB}/9ptx0a1565090843.jpg`,
-      `${MEALDB}/1ngcbf1628770793.jpg`,
-      `${MEALDB}/9c5nlx1763424766.jpg`,
-      `${MEALDB}/raqjbj1762773035.jpg`,
-      `${MEALDB}/p9tebp1764118792.jpg`,
-      `${MEALDB}/tvvxpv1511191952.jpg`,
-      `${MEALDB}/118oj61763423896.jpg`
-    ],
-    chicken: [
-      `${MEALDB}/wyxwsp1486979827.jpg`,
-      `${MEALDB}/er4d081765186828.jpg`,
-      `${MEALDB}/cj56fs1762340001.jpg`,
-      `${MEALDB}/1529446352.jpg`,
-      `${MEALDB}/tyywsw1505930373.jpg`,
-      `${MEALDB}/qpxvuq1511798906.jpg`,
-      `${MEALDB}/pqulvm1763282839.jpg`,
-      `${MEALDB}/qptpvt1487339892.jpg`,
-      `${MEALDB}/qxytrx1511304021.jpg`,
-      `${MEALDB}/1525872624.jpg`,
-      `${MEALDB}/wruvqv1511880994.jpg`,
-      `${MEALDB}/wuyd2h1765655837.jpg`,
-      `${MEALDB}/uwvxpv1511557015.jpg`,
-      `${MEALDB}/sypxpx1515365095.jpg`,
-      `${MEALDB}/8ovxf41763253962.jpg`,
-      `${MEALDB}/vwrpps1503068729.jpg`,
-      `${MEALDB}/yxsurp1511304301.jpg`,
-      `${MEALDB}/kzxflc1763194887.jpg`,
-      `${MEALDB}/1529444113.jpg`,
-      `${MEALDB}/3um6il1763794322.jpg`,
-      `${MEALDB}/arzs741766434335.jpg`,
-      `${MEALDB}/40r49m1763197022.jpg`,
-      `${MEALDB}/s73ytv1765567838.jpg`,
-      `${MEALDB}/prjve31763486864.jpg`,
-      `${MEALDB}/o5fuq51764789643.jpg`
-    ],
-    fish: [
-      `${MEALDB}/ysxwuq1487323065.jpg`,
-      `${MEALDB}/a15wsa1614349126.jpg`,
-      `${MEALDB}/spswqs1511558697.jpg`,
-      `${MEALDB}/1520084413.jpg`,
-      `${MEALDB}/7n8su21699013057.jpg`,
-      `${MEALDB}/vytypy1511883765.jpg`,
-      `${MEALDB}/uwxusv1487344500.jpg`,
-      `${MEALDB}/73o3vq1765317873.jpg`,
-      `${MEALDB}/vptqpw1511798500.jpg`,
-      `${MEALDB}/uvuyxu1503067369.jpg`,
-      `${MEALDB}/yx8j1i1763484612.jpg`,
-      `${MEALDB}/a2ec961763587756.jpg`,
-      `${MEALDB}/do7zps1614349775.jpg`,
-      `${MEALDB}/1549542994.jpg`
-    ],
-    beef: [
-      `${MEALDB}/pbzcrx1763765096.jpg`,
-      `${MEALDB}/1nalo51765188375.jpg`,
-      `${MEALDB}/qxutws1486978099.jpg`,
-      `${MEALDB}/1529444830.jpg`,
-      `${MEALDB}/bc8v651619789840.jpg`,
-      `${MEALDB}/cgl60b1683206581.jpg`,
-      `${MEALDB}/1529443236.jpg`,
-      `${MEALDB}/41cxjh1683207682.jpg`,
-      `${MEALDB}/vvpprx1487325699.jpg`,
-      `${MEALDB}/svprys1511176755.jpg`,
-      `${MEALDB}/xwutvy1511555540.jpg`,
-      `${MEALDB}/vtqxtu1511784197.jpg`,
-      `${MEALDB}/vz94r81760534692.jpg`,
-      `${MEALDB}/ssrrrs1503664277.jpg`,
-      `${MEALDB}/lqampv1762325397.jpg`,
-      `${MEALDB}/uyqrrv1511553350.jpg`,
-      `${MEALDB}/kyuxew1763479470.jpg`,
-      `${MEALDB}/uuqvwu1504629254.jpg`,
-      `${MEALDB}/tvttqv1504640475.jpg`,
-      `${MEALDB}/wrssvt1511556563.jpg`,
-      `${MEALDB}/sytuqu1511553755.jpg`,
-      `${MEALDB}/wsqqsw1515364068.jpg`,
-      `${MEALDB}/6sarfo1762340107.jpg`,
-      `${MEALDB}/ursuup1487348423.jpg`,
-      `${MEALDB}/vussxq1511882648.jpg`
-    ],
-    curry: [
-      `${MEALDB}/sstssx1487349585.jpg`,
-      `${MEALDB}/qqlwv91763501559.jpg`,
-      `${MEALDB}/sywrsu1511463066.jpg`,
-      `${MEALDB}/lqampv1762325397.jpg`,
-      `${MEALDB}/vwrpps1503068729.jpg`,
-      `${MEALDB}/tvttqv1504640475.jpg`,
-      `${MEALDB}/yxsurp1511304301.jpg`,
-      `${MEALDB}/uc9qp11764796575.jpg`,
-      `${MEALDB}/118oj61763423896.jpg`,
-      `${MEALDB}/snmtd61763426568.jpg`,
-      `${MEALDB}/prjve31763486864.jpg`,
-      `${MEALDB}/n7h5zs1765318909.jpg`,
-      `${MEALDB}/0dhtwr1763371444.jpg`
-    ],
-    rice: [
-      `${MEALDB}/5r5rvx1763287943.jpg`,
-      `${MEALDB}/wuyd2h1765655837.jpg`,
-      `${MEALDB}/kw92t41604181871.jpg`,
-      `${MEALDB}/c6ghxm1763335584.jpg`,
-      `${MEALDB}/zg2b9l1760524940.jpg`,
-      `${MEALDB}/pkyvrn1764878267.jpg`,
-      `${MEALDB}/fk80jp1763280767.jpg`,
-      `${MEALDB}/qt4i0n1763256454.jpg`,
-      `${MEALDB}/sl6vqv1763335988.jpg`,
-      `${MEALDB}/tytyxu1515363282.jpg`,
-      `${MEALDB}/xw1ruy1763786501.jpg`,
-      `${MEALDB}/hblwvg1763478203.jpg`,
-      `${MEALDB}/11bvtm1764795135.jpg`
-    ],
-    cake: [
-      `${MEALDB}/c0gmo31766594751.jpg`,
-      `${MEALDB}/vrspxv1511722107.jpg`,
-      `${MEALDB}/wtqrqw1511639627.jpg`,
-      `${MEALDB}/urtqut1511723591.jpg`,
-      `${MEALDB}/ldnrm91576791881.jpg`,
-      `${MEALDB}/xvgpng1764121726.jpg`,
-      `${MEALDB}/ywwrsp1511720277.jpg`,
-      `${MEALDB}/tzt3it1764363293.jpg`,
-      `${MEALDB}/swttys1511385853.jpg`,
-      `${MEALDB}/qxutws1486978099.jpg`,
-      `${MEALDB}/y4jpgq1560459207.jpg`,
-      `${MEALDB}/y2irzl1585563479.jpg`,
-      `${MEALDB}/xqrwyr1511133646.jpg`,
-      `${MEALDB}/qtuuys1511387068.jpg`,
-      `${MEALDB}/towo9c1763814590.jpg`,
-      `${MEALDB}/e8ihjp1764123021.jpg`
-    ],
-    pancake: [
-      `${MEALDB}/rwuyqx1511383174.jpg`,
-      `${MEALDB}/0206h11699013358.jpg`,
-      `${MEALDB}/sywswr1511383814.jpg`,
-      `${MEALDB}/c400ok1764439058.jpg`,
-      `${MEALDB}/xlqqhw1764369924.jpg`
-    ],
-    egg: [
-      `${MEALDB}/1529446137.jpg`,
-      `${MEALDB}/47y6ii1765658818.jpg`,
-      `${MEALDB}/1550440197.jpg`,
-      `${MEALDB}/rwvw8q1765660071.jpg`,
-      `${MEALDB}/qwtrtp1511799242.jpg`,
-      `${MEALDB}/v8eaed1763257313.jpg`
-    ],
-    roast: [
-      `${MEALDB}/ssrrrs1503664277.jpg`,
-      `${MEALDB}/ursuup1487348423.jpg`,
-      `${MEALDB}/swo87v1763595282.jpg`,
-      `${MEALDB}/ro8mzj1763800655.jpg`,
-      `${MEALDB}/gr4lo51763791826.jpg`,
-      `${MEALDB}/nlxald1764112200.jpg`,
-      `${MEALDB}/b5ft861583188991.jpg`,
-      `${MEALDB}/h3ijwo1581013377.jpg`
-    ],
-    taco: [
-      `${MEALDB}/uvuyxu1503067369.jpg`,
-      `${MEALDB}/ypxvwv1505333929.jpg`,
-      `${MEALDB}/1529444830.jpg`,
-      `${MEALDB}/qtuwxu1468233098.jpg`,
-      `${MEALDB}/wrssvt1511556563.jpg`,
-      `${MEALDB}/kos9av1699014767.jpg`,
-      `${MEALDB}/st1ifa1583267248.jpg`,
-      `${MEALDB}/1529444113.jpg`
-    ],
-    sandwich: [
-      `${MEALDB}/j80gmw1764372176.jpg`,
-      `${MEALDB}/xr0n4r1576788363.jpg`,
-      `${MEALDB}/sbx7n71587673021.jpg`,
-      `${MEALDB}/xutquv1505330523.jpg`,
-      `${MEALDB}/ae6clc1760524712.jpg`
-    ],
-    stew: [
-      `${MEALDB}/vptqpw1511798500.jpg`,
-      `${MEALDB}/vtqxtu1511784197.jpg`,
-      `${MEALDB}/uyqrrv1511553350.jpg`,
-      `${MEALDB}/uuqvwu1504629254.jpg`,
-      `${MEALDB}/sypxpx1515365095.jpg`
-    ]
-  };
-  var FOODISH_CATS = {
-    pasta: 34,
-    pizza: 95,
-    burger: 87,
-    dessert: 36,
-    samosa: 22,
-    dosa: 83
-  };
-  var TITLE_TO_POOL = [
-    // Recipes with NO good image match → emoji fallback (honest, not misleading)
-    [/smoothie|protein shake|milkshake|lemonade|juice\b|iced tea|horchata|lassi|agua fresca/i, null],
-    [/yogurt|granola|muesli|overnight oats|oatmeal|oats\b|porridge|acai|chia\b|cottage cheese|berry bowl|smoothie bowl|cereal/i, null],
-    [/charcuterie|cheese board|mezze|antipasti|platter|hummus\b|trail mix|energy (bar|ball|bite)/i, null],
-    // ── DISH TYPE patterns (match BEFORE protein words so "Fish Tacos" → taco, not fish) ──
-    [/french toast/i, "pancake"],
-    [/toast\b|avocado toast|bruschetta|crostini/i, "sandwich"],
-    [/salad|slaw|carpaccio|panzanella/i, "salad"],
-    [/soup|broth|chowder|bisque|gazpacho|minestrone|chili\b|gumbo|pottage|consomm|harira/i, "soup"],
-    [/curry|masala|tikka|vindaloo|korma|madras|rogan josh|dal\b|dhal|daal|rendang|paneer|palak|saag|aloo|chana|rajma|jalfrezi|bhuna|dopiaza|balti|tandoori|butter chicken/i, "curry"],
-    [/taco|burrito|quesadilla|enchilada|fajita|nachos|chimichanga|tostada|tamale|elote/i, "taco"],
-    // Asian brothy noodles → soup pool (look like soup, NOT Italian pasta)
-    [/ramen|pho|udon|soba|laksa|miso(?!.*paste)/i, "soup"],
-    // Asian stir-fried/dry noodles → chicken pool (stir-fry dishes)
-    [/lo mein|chow mein|pad thai|yakisoba|japchae|noodle/i, "chicken"],
-    [/pasta|spaghetti|penne|linguine|fettuccine|tagliatelle|rigatoni|fusilli|macaroni|lasagna|ravioli|gnocchi|carbonara|bolognese|alfredo|aglio|cacio|puttanesca|arrabbiata|primavera|marinara|mac.and.cheese|orzo|tortellini|cannelloni/i, "f_pasta"],
-    [/pizza|calzone|pepperoni|neapolitan/i, "f_pizza"],
-    [/burger|slider|hot dog|sloppy joe/i, "f_burger"],
-    [/sandwich|panini|blt\b|club\b|po.boy|philly|hoagie|sub\b|wrap(?!.*spring)|gyro|shawarma|bao\b|banh mi/i, "sandwich"],
-    [/samosa|dumpling|spring roll|egg roll|wonton|gyoza|empanada|croquette|fritter|pakora|bhaji|falafel|tempura|nugget|wing\b|wings\b|chips\b|fish.and.chip|onion ring|corn dog/i, "f_samosa"],
-    // Ratatouille is a vegetable dish → salad pool (not meat stew)
-    [/ratatouille/i, "salad"],
-    [/stew|goulash|tagine|bourguignon|cacciatore|coq au vin|braised|slow.cook|fesenjan|casserole|gratin|hotpot|pot pie/i, "stew"],
-    [/\bcake\b|cheesecake|brownie|tiramisu|cupcake|gateau|muffin|scone/i, "cake"],
-    [/pancake|waffle|crepe|blini|galette/i, "pancake"],
-    [/omelette|omelet|frittata|quiche|shakshuka|scramble|benedict|egg\b|eggs\b/i, "egg"],
-    [/cookie|pie\b|tart\b|ice cream|gelato|mousse|pudding|custard|crumble|cobbler|fudge|candy|chocolate|panna cotta|creme brulee|baklava|churro|donut|doughnut|macaron|eclair|profiterole|sundae|sorbet|parfait|meringue|beignet|halwa|gulab|kheer|tres leches|flan\b/i, "f_dessert"],
-    [/dosa|uttapam|appam|idli|idly|vada/i, "f_dosa"],
-    [/\brice\b|risotto|paella|pilaf|pilau|biryani|jambalaya|fried rice|bibimbap|onigiri|kedgeree|arancini/i, "rice"],
-    [/roast|roasted|pot roast/i, "roast"],
-    // ── PROTEIN patterns (only match if no dish type matched above) ──
-    [/\bfish\b|salmon|tuna|cod\b|trout|tilapia|halibut|mahi|swordfish|anchov|sardine|mackerel|sea bass|snapper|ceviche|masgouf|seafood|shrimp|prawn|crab|lobster|clam|mussel|oyster|calamari|squid|scallop|sushi|sashimi|poke/i, "fish"],
-    [/\bbeef\b|steak|filet mignon|sirloin|ribeye|tenderloin|brisket|short rib|flank|strip steak|prime rib|wagyu|veal|lamb\b|mutton|venison|goat\b|pork\b|pulled pork|carnitas|bacon(?!.*pancake)/i, "beef"],
-    [/chicken|poultry|turkey|duck\b|hen\b|cornish|stir.fry/i, "chicken"]
-  ];
-  var CUISINE_TO_POOL = {
-    "Italian": "f_pasta",
-    "French": "stew",
-    "Spanish": "rice",
-    "Greek": "salad",
-    "Mexican": "taco",
-    "American": "chicken",
-    "Southern US": "chicken",
-    "Japanese": "fish",
-    "Chinese": "chicken",
-    "Korean": "rice",
-    "Thai": "curry",
-    "Vietnamese": "soup",
-    "Indian": "curry",
-    "Middle Eastern": "rice",
-    "Moroccan": "stew",
-    "Ethiopian": "stew",
-    "Lebanese": "salad",
-    "Caribbean": "rice",
-    "Filipino": "rice",
-    "Mediterranean": "salad",
-    "Turkish": "beef",
-    "Brazilian": "beef",
-    "British": "stew",
-    "Pakistani": "curry",
-    "Persian": "stew",
-    "African": "stew",
-    "Malaysian": "curry",
-    "Indonesian": "rice",
-    "Russian": "stew",
-    "German": "beef",
-    "Cajun": "soup",
-    "Hawaiian": "fish",
-    "Jamaican": "chicken",
-    "Cuban": "rice",
-    "Scandinavian": "fish",
-    "Australian": "beef",
-    "Peruvian": "fish"
-  };
-  var MEAL_TO_POOL = {
-    "breakfast": "pancake",
-    "lunch": "salad",
-    "dinner": "chicken",
-    "salad": "salad",
-    "soup": "soup",
-    "snack": "f_samosa",
-    "dessert": "cake"
-  };
-  var IMAGE_OVERRIDES = {
-    "pad thai": `${MEALDB}/rg9ze01763479093.jpg`,
-    // Actual pad thai noodles (not chicken tikka masala)
-    "one-pan shakshuka": `${MEALDB}/g373701551450225.jpg`,
-    // Classic shakshuka: eggs in tomato sauce
-    "chicken shawarma wrap": `${MEALDB}/hcg6l91763596970.jpg`,
-    // Real chicken shawarma wrap (not deli sub)
-    "veggie frittata": `${MEALDB}/qwtrtp1511799242.jpg`,
-    // Provençal omelette cake (veggie egg dish)
-    "margherita pizza": `${MEALDB}/x0lk931587671540.jpg`,
-    // Pizza Express Margherita (not pepperoni)
-    "beef stir-fry": `${MEALDB}/kyuxew1763479470.jpg`,
-    // Thai beef stir-fry (not beef bourguignon)
-    "lentil soup": `${MEALDB}/uwxqwy1483389553.jpg`
-    // Smoky lentil chili (lentil-based, not mushroom broth)
-  };
-  function recipeImage(recipe) {
-    if (!recipe) return null;
-    const r = typeof recipe === "object" ? recipe : { id: recipe };
-    let id = r.id || 0;
-    if (typeof id === "string") {
-      let h = 0;
-      for (let i = 0; i < id.length; i++) {
-        h = (h << 5) - h + id.charCodeAt(i) | 0;
-      }
-      id = Math.abs(h);
-    }
-    const title = (r.title || "").toLowerCase();
-    let pool = null;
-    let matched = false;
-    for (const [regex, p] of TITLE_TO_POOL) {
-      if (regex && regex.test(title)) {
-        pool = p;
-        matched = true;
-        break;
-      }
-    }
-    if (matched && pool === null) return null;
-    if (!pool) {
-      const cuisine = (r.cuisine || "").trim();
-      pool = CUISINE_TO_POOL[cuisine];
-      if (!pool && cuisine) {
-        for (const [key, val] of Object.entries(CUISINE_TO_POOL)) {
-          if (cuisine.toLowerCase().includes(key.toLowerCase())) {
-            pool = val;
-            break;
-          }
-        }
-      }
-    }
-    if (!pool) {
-      const meal = (r.meal || "").toLowerCase();
-      pool = MEAL_TO_POOL[meal];
-    }
-    if (!pool) return null;
-    if (pool.startsWith("f_")) {
-      const cat = pool.substring(2);
-      const maxN = FOODISH_CATS[cat] || 34;
-      const hash = (id * 2654435761 >>> 0) % maxN;
-      return `https://foodish-api.com/images/${cat}/${cat}${hash + 1}.jpg`;
-    } else {
-      const urls = IMG_POOLS[pool];
-      if (!urls || urls.length === 0) return null;
-      const hash = (id * 2654435761 >>> 0) % urls.length;
-      return urls[hash];
-    }
-  }
   function RecipeImg({ src, alt, emoji, style, className, onClick }) {
     const [failed, setFailed] = React.useState(false);
-    const baseImgStyle = className ? {} : { width: "100%", height: "100%", objectFit: "cover", display: "block" };
-    const baseDivStyle = className ? {} : { width: "100%", height: "100%" };
+    const [loaded, setLoaded] = React.useState(false);
+    React.useEffect(() => {
+      setFailed(false);
+      setLoaded(false);
+    }, [src]);
     if (!src || failed) {
-      return /* @__PURE__ */ React.createElement("div", { style: { ...baseDivStyle, background: "linear-gradient(135deg,#F0E8DC 0%,#E4D4BE 100%)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 48, ...style || {} }, className, onClick }, emoji || "\u{1F37D}\uFE0F");
+      return /* @__PURE__ */ React.createElement(
+        "div",
+        {
+          className,
+          onClick,
+          style: {
+            ...style,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            background: "linear-gradient(135deg, #f5ebe0 0%, #e8d5c4 100%)",
+            fontSize: style?.fontSize || 32,
+            borderRadius: style?.borderRadius || 8,
+            minHeight: style?.height || style?.minHeight || 60
+          }
+        },
+        emoji || "\u{1F37D}\uFE0F"
+      );
     }
-    return /* @__PURE__ */ React.createElement("img", { src, alt: alt || "", style: { ...baseImgStyle, ...style || {} }, className, onClick, onError: () => setFailed(true), loading: "lazy" });
+    return /* @__PURE__ */ React.createElement(
+      "img",
+      {
+        className,
+        src,
+        alt: alt || "",
+        onClick,
+        onError: () => setFailed(true),
+        onLoad: () => setLoaded(true),
+        style: { ...style, objectFit: "cover", opacity: loaded ? 1 : 0, transition: "opacity 0.3s" },
+        loading: "lazy"
+      }
+    );
   }
-  (function assignImages() {
-    const used = /* @__PURE__ */ new Set();
-    let withImg = 0, withEmoji = 0;
-    const sorted = [...RECIPES].sort((a, b) => (a.id || 0) - (b.id || 0));
-    sorted.forEach((r) => {
-      const titleLower = (r.title || "").toLowerCase();
-      if (IMAGE_OVERRIDES[titleLower]) {
-        const overrideImg = IMAGE_OVERRIDES[titleLower];
-        used.add(overrideImg);
-        r.image = overrideImg;
-        withImg++;
-        return;
+  var IMAGE_CACHE_KEY = "smartchef_recipe_images";
+  function loadImageCache() {
+    try {
+      return JSON.parse(localStorage.getItem(IMAGE_CACHE_KEY) || "{}");
+    } catch {
+      return {};
+    }
+  }
+  function saveImageCache(cache) {
+    try {
+      localStorage.setItem(IMAGE_CACHE_KEY, JSON.stringify(cache));
+    } catch {
+    }
+  }
+  (function applyCachedImages() {
+    const cache = loadImageCache();
+    let applied = 0;
+    RECIPES.forEach((r) => {
+      if (cache[r.id]) {
+        r.image = cache[r.id];
+        applied++;
       }
-      let img = recipeImage(r);
-      if (!img) {
-        r.image = null;
-        withEmoji++;
-        return;
-      }
-      if (used.has(img)) {
-        let found = false;
-        const title = (r.title || "").toLowerCase();
-        let poolKey = null;
-        for (const [regex, p] of TITLE_TO_POOL) {
-          if (regex.test(title)) {
-            poolKey = p;
-            break;
-          }
-        }
-        if (!poolKey) {
-          const cuisine = (r.cuisine || "").trim();
-          poolKey = CUISINE_TO_POOL[cuisine];
-        }
-        if (!poolKey) poolKey = MEAL_TO_POOL[(r.meal || "").toLowerCase()];
-        if (poolKey && !poolKey.startsWith("f_") && IMG_POOLS[poolKey]) {
-          for (let i = 0; i < IMG_POOLS[poolKey].length; i++) {
-            if (!used.has(IMG_POOLS[poolKey][i])) {
-              img = IMG_POOLS[poolKey][i];
-              found = true;
-              break;
-            }
-          }
-        } else if (poolKey && poolKey.startsWith("f_")) {
-          const cat = poolKey.substring(2);
-          const maxN = FOODISH_CATS[cat] || 34;
-          for (let n = 1; n <= maxN; n++) {
-            const tryImg = `https://foodish-api.com/images/${cat}/${cat}${n}.jpg`;
-            if (!used.has(tryImg)) {
-              img = tryImg;
-              found = true;
-              break;
-            }
-          }
-        }
-      }
-      used.add(img);
-      r.image = img;
-      withImg++;
     });
-    console.log(`Image assignment: ${withImg} with images, ${withEmoji} with emoji fallback, ${used.size} unique`);
+    if (applied > 0) console.log(`Applied ${applied} cached recipe images`);
   })();
+  async function resolveRecipeImages(recipes, batchSize = 20) {
+    const cache = loadImageCache();
+    const needImages = recipes.filter((r) => !r.image && !cache[r.id]);
+    if (needImages.length === 0) return;
+    console.log(`Resolving images for ${needImages.length} recipes...`);
+    for (let i = 0; i < needImages.length; i += batchSize) {
+      const batch = needImages.slice(i, i + batchSize).map((r) => ({
+        id: r.id,
+        title: r.title,
+        cuisine: r.cuisine || "",
+        meal: r.meal || ""
+      }));
+      try {
+        const resp = await fetch("/api/image", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ recipes: batch })
+        });
+        if (resp.ok) {
+          const data = await resp.json();
+          if (data.images) {
+            data.images.forEach(({ id, image }) => {
+              if (image) {
+                cache[id] = image;
+                const recipe = RECIPES.find((r) => r.id === id);
+                if (recipe) recipe.image = image;
+              }
+            });
+            saveImageCache(cache);
+          }
+        }
+      } catch (err) {
+        console.warn("Image batch failed:", err);
+      }
+    }
+    console.log(`Image resolution complete. Cache size: ${Object.keys(cache).length}`);
+  }
   function App() {
     const [screen, setScreen] = (0, import_react.useState)("loading");
     const [tab, setTab] = (0, import_react.useState)("planner");
@@ -30414,6 +30066,12 @@ body{font-family:var(--fb);background:var(--cream);color:var(--ch);-webkit-font-
         const el = document.getElementById("smartchef-styles");
         if (el) el.remove();
       };
+    }, []);
+    const [, forceUpdate] = (0, import_react.useState)(0);
+    React.useEffect(() => {
+      resolveRecipeImages(RECIPES).then(() => {
+        forceUpdate((n) => n + 1);
+      });
     }, []);
     (0, import_react.useEffect)(() => {
       const session = localStorage.getItem("sc_session");
@@ -31212,7 +30870,8 @@ body{font-family:var(--fb);background:var(--cream);color:var(--ch);-webkit-font-
       id: slot.id,
       title: slot.title || r.title || "Untitled",
       emoji: slot.emoji || r.emoji || "\u{1F37D}\uFE0F",
-      image: recipeImage({ id: slot.id, title: r.title || slot.title || "", cuisine: r.cuisine || "", meal: r.meal || "" }),
+      image: null,
+      // Will be resolved asynchronously via resolveSingleImage
       cuisine: r.cuisine || "",
       meal: r.meal || "",
       time: r.time || 30,
@@ -31283,7 +30942,7 @@ body{font-family:var(--fb);background:var(--cream);color:var(--ch);-webkit-font-
             RecipeImg,
             {
               className: "meal-card-img",
-              src: recipe?.image || recipeImage(viewable || slot),
+              src: recipe?.image || viewable?.image || null,
               alt: slot.title,
               emoji: slot.emoji,
               style: { fontSize: 24 }
@@ -31357,7 +31016,7 @@ body{font-family:var(--fb);background:var(--cream);color:var(--ch);-webkit-font-
   function RecipeDetail({ recipe, onClose, handleAddToPlan, toggleSave, saved, pantry, showToast }) {
     if (!recipe) return null;
     const pantrySet = new Set((pantry || []).map((p) => (typeof p === "string" ? p : p.name || "").toLowerCase().trim()));
-    return /* @__PURE__ */ React.createElement("div", { className: "rd-overlay", onClick: onClose }, /* @__PURE__ */ React.createElement("div", { className: "rd-panel", onClick: (e) => e.stopPropagation() }, /* @__PURE__ */ React.createElement("div", { className: "rd-hero" }, /* @__PURE__ */ React.createElement(RecipeImg, { src: recipe.image || recipeImage(recipe), alt: recipe.title, emoji: recipe.emoji, style: { width: "100%", height: "100%" } }), /* @__PURE__ */ React.createElement("div", { className: "rd-hero-overlay" }), /* @__PURE__ */ React.createElement("button", { className: "rd-close", onClick: onClose }, "\u2715")), /* @__PURE__ */ React.createElement("div", { className: "rd-body" }, /* @__PURE__ */ React.createElement("h2", { className: "rd-title" }, recipe.emoji, " ", recipe.title), /* @__PURE__ */ React.createElement("div", { className: "rd-meta" }, /* @__PURE__ */ React.createElement("span", null, "\u23F1 ", recipe.time, " min"), /* @__PURE__ */ React.createElement("span", null, "\u{1F4CA} ", recipe.diff || recipe.difficulty), /* @__PURE__ */ React.createElement("span", null, "\u{1F37D} ", recipe.cuisine)), (recipe.dietary || []).length > 0 && /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 16 } }, recipe.dietary.map((d) => /* @__PURE__ */ React.createElement("span", { key: d, className: "tag td" }, d))), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 8, marginBottom: 20 } }, /* @__PURE__ */ React.createElement("button", { className: "btn btn-p btn-sm", onClick: () => handleAddToPlan(recipe) }, "\u{1F4C5} Add to Plan"), /* @__PURE__ */ React.createElement("button", { className: "btn btn-s btn-sm", onClick: () => toggleSave(recipe.id) }, saved.has(recipe.id) ? "\u2764\uFE0F Saved" : "\u{1F90D} Save")), /* @__PURE__ */ React.createElement("h3", { style: { fontFamily: "var(--fd)", fontSize: 18, marginBottom: 12 } }, "Ingredients (", (recipe.ingredients || []).length, ")"), /* @__PURE__ */ React.createElement("div", { style: { marginBottom: 24 } }, (recipe.ingredients || []).map((ing, i) => {
+    return /* @__PURE__ */ React.createElement("div", { className: "rd-overlay", onClick: onClose }, /* @__PURE__ */ React.createElement("div", { className: "rd-panel", onClick: (e) => e.stopPropagation() }, /* @__PURE__ */ React.createElement("div", { className: "rd-hero" }, /* @__PURE__ */ React.createElement(RecipeImg, { src: recipe.image || null, alt: recipe.title, emoji: recipe.emoji, style: { width: "100%", height: "100%" } }), /* @__PURE__ */ React.createElement("div", { className: "rd-hero-overlay" }), /* @__PURE__ */ React.createElement("button", { className: "rd-close", onClick: onClose }, "\u2715")), /* @__PURE__ */ React.createElement("div", { className: "rd-body" }, /* @__PURE__ */ React.createElement("h2", { className: "rd-title" }, recipe.emoji, " ", recipe.title), /* @__PURE__ */ React.createElement("div", { className: "rd-meta" }, /* @__PURE__ */ React.createElement("span", null, "\u23F1 ", recipe.time, " min"), /* @__PURE__ */ React.createElement("span", null, "\u{1F4CA} ", recipe.diff || recipe.difficulty), /* @__PURE__ */ React.createElement("span", null, "\u{1F37D} ", recipe.cuisine)), (recipe.dietary || []).length > 0 && /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 16 } }, recipe.dietary.map((d) => /* @__PURE__ */ React.createElement("span", { key: d, className: "tag td" }, d))), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 8, marginBottom: 20 } }, /* @__PURE__ */ React.createElement("button", { className: "btn btn-p btn-sm", onClick: () => handleAddToPlan(recipe) }, "\u{1F4C5} Add to Plan"), /* @__PURE__ */ React.createElement("button", { className: "btn btn-s btn-sm", onClick: () => toggleSave(recipe.id) }, saved.has(recipe.id) ? "\u2764\uFE0F Saved" : "\u{1F90D} Save")), /* @__PURE__ */ React.createElement("h3", { style: { fontFamily: "var(--fd)", fontSize: 18, marginBottom: 12 } }, "Ingredients (", (recipe.ingredients || []).length, ")"), /* @__PURE__ */ React.createElement("div", { style: { marginBottom: 24 } }, (recipe.ingredients || []).map((ing, i) => {
       const inPantry = pantrySet.has((ing.n || "").toLowerCase().trim());
       return /* @__PURE__ */ React.createElement("div", { key: i, style: { display: "flex", alignItems: "center", gap: 10, padding: "8px 0", borderBottom: "1px solid var(--bor)" } }, /* @__PURE__ */ React.createElement("span", { style: { color: inPantry ? "var(--sage)" : "var(--mu)", fontSize: 16 } }, inPantry ? "\u2705" : "\u{1F6D2}"), /* @__PURE__ */ React.createElement("span", { style: { fontWeight: 500 } }, ing.n), /* @__PURE__ */ React.createElement("span", { style: { color: "var(--mu)", fontSize: 13, marginLeft: "auto" } }, ing.a));
     })), /* @__PURE__ */ React.createElement("h3", { style: { fontFamily: "var(--fd)", fontSize: 18, marginBottom: 12 } }, "Steps"), /* @__PURE__ */ React.createElement("div", null, (recipe.steps || []).map((s, i) => /* @__PURE__ */ React.createElement("div", { key: i, style: { display: "flex", gap: 12, marginBottom: 14 } }, /* @__PURE__ */ React.createElement("div", { style: { width: 28, height: 28, borderRadius: "50%", background: "var(--clayBg)", color: "var(--clay)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700, fontSize: 13, flexShrink: 0 } }, s.n || i + 1), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { style: { fontWeight: 600, fontSize: 14, marginBottom: 2 } }, s.t), /* @__PURE__ */ React.createElement("div", { style: { color: "var(--mu)", fontSize: 14, lineHeight: 1.5 } }, s.d))))))));

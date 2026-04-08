@@ -21675,364 +21675,138 @@ class RecipeErrorBoundary extends React.Component {
   }
 }
 
-// ── Dynamic recipe image ──────────────────────────────────────────────────────
-// PRIMARY: TheMealDB dish-specific photos (real photos of the actual dish type)
-// SECONDARY: foodish-api.com for categories where it's genuinely accurate
-// FALLBACK: emoji (better than a wrong image)
-//
-// TheMealDB pools: each array contains URLs of REAL photos of that dish type.
-const MEALDB = 'https://www.themealdb.com/images/media/meals';
-const IMG_POOLS = {
-  salad: [
-    `${MEALDB}/zry07j1763779321.jpg`,`${MEALDB}/fqpqml1764359125.jpg`,`${MEALDB}/z458v91763817681.jpg`,
-    `${MEALDB}/1549542994.jpg`,`${MEALDB}/g7jomp1763763994.jpg`,`${MEALDB}/4xcfai1763765676.jpg`,
-    `${MEALDB}/93iok31766436070.jpg`,`${MEALDB}/6cskio1763338156.jpg`,`${MEALDB}/6g3rso1763486069.jpg`,
-    `${MEALDB}/ei21r61764365935.jpg`,`${MEALDB}/pk8wtn1763758591.jpg`,`${MEALDB}/02s6gc1763799560.jpg`,
-    `${MEALDB}/wvqpwt1468339226.jpg`,`${MEALDB}/k29viq1585565980.jpg`,`${MEALDB}/ktsws11761998344.jpg`,
-    `${MEALDB}/ebvuir1699013665.jpg`,`${MEALDB}/wsu0rc1761848482.jpg`,`${MEALDB}/v8eaed1763257313.jpg`,
-    `${MEALDB}/st9shl1763755808.jpg`,`${MEALDB}/urtwux1486983078.jpg`,`${MEALDB}/dbazbg1763779999.jpg`,
-    `${MEALDB}/tbj1bs1764118062.jpg`,`${MEALDB}/0iryz91763778419.jpg`,
-  ],
-  soup: [
-    `${MEALDB}/x2fw9e1560460636.jpg`,`${MEALDB}/sqpqtp1515365614.jpg`,`${MEALDB}/1529446137.jpg`,
-    `${MEALDB}/xxtsvx1511814083.jpg`,`${MEALDB}/7n8su21699013057.jpg`,`${MEALDB}/xvrrux1511783685.jpg`,
-    `${MEALDB}/1529445893.jpg`,`${MEALDB}/1brbso1763585098.jpg`,`${MEALDB}/stpuws1511191310.jpg`,
-    `${MEALDB}/t8mn9g1560460231.jpg`,`${MEALDB}/ikizdm1763760862.jpg`,`${MEALDB}/jcr46d1614763831.jpg`,
-    `${MEALDB}/60oc3k1699009846.jpg`,`${MEALDB}/zadvgb1699012544.jpg`,`${MEALDB}/kggfo91763288633.jpg`,
-    `${MEALDB}/7kb44y1763589084.jpg`,`${MEALDB}/l50vz41763422681.jpg`,`${MEALDB}/lx1kkj1593349302.jpg`,
-    `${MEALDB}/9ptx0a1565090843.jpg`,`${MEALDB}/1ngcbf1628770793.jpg`,`${MEALDB}/9c5nlx1763424766.jpg`,
-    `${MEALDB}/raqjbj1762773035.jpg`,`${MEALDB}/p9tebp1764118792.jpg`,`${MEALDB}/tvvxpv1511191952.jpg`,
-    `${MEALDB}/118oj61763423896.jpg`,
-  ],
-  chicken: [
-    `${MEALDB}/wyxwsp1486979827.jpg`,`${MEALDB}/er4d081765186828.jpg`,`${MEALDB}/cj56fs1762340001.jpg`,
-    `${MEALDB}/1529446352.jpg`,`${MEALDB}/tyywsw1505930373.jpg`,`${MEALDB}/qpxvuq1511798906.jpg`,
-    `${MEALDB}/pqulvm1763282839.jpg`,`${MEALDB}/qptpvt1487339892.jpg`,`${MEALDB}/qxytrx1511304021.jpg`,
-    `${MEALDB}/1525872624.jpg`,`${MEALDB}/wruvqv1511880994.jpg`,`${MEALDB}/wuyd2h1765655837.jpg`,
-    `${MEALDB}/uwvxpv1511557015.jpg`,`${MEALDB}/sypxpx1515365095.jpg`,`${MEALDB}/8ovxf41763253962.jpg`,
-    `${MEALDB}/vwrpps1503068729.jpg`,`${MEALDB}/yxsurp1511304301.jpg`,`${MEALDB}/kzxflc1763194887.jpg`,
-    `${MEALDB}/1529444113.jpg`,`${MEALDB}/3um6il1763794322.jpg`,`${MEALDB}/arzs741766434335.jpg`,
-    `${MEALDB}/40r49m1763197022.jpg`,`${MEALDB}/s73ytv1765567838.jpg`,`${MEALDB}/prjve31763486864.jpg`,
-    `${MEALDB}/o5fuq51764789643.jpg`,
-  ],
-  fish: [
-    `${MEALDB}/ysxwuq1487323065.jpg`,`${MEALDB}/a15wsa1614349126.jpg`,`${MEALDB}/spswqs1511558697.jpg`,
-    `${MEALDB}/1520084413.jpg`,`${MEALDB}/7n8su21699013057.jpg`,`${MEALDB}/vytypy1511883765.jpg`,
-    `${MEALDB}/uwxusv1487344500.jpg`,`${MEALDB}/73o3vq1765317873.jpg`,`${MEALDB}/vptqpw1511798500.jpg`,
-    `${MEALDB}/uvuyxu1503067369.jpg`,`${MEALDB}/yx8j1i1763484612.jpg`,`${MEALDB}/a2ec961763587756.jpg`,
-    `${MEALDB}/do7zps1614349775.jpg`,`${MEALDB}/1549542994.jpg`,
-  ],
-  beef: [
-    `${MEALDB}/pbzcrx1763765096.jpg`,`${MEALDB}/1nalo51765188375.jpg`,`${MEALDB}/qxutws1486978099.jpg`,
-    `${MEALDB}/1529444830.jpg`,`${MEALDB}/bc8v651619789840.jpg`,`${MEALDB}/cgl60b1683206581.jpg`,
-    `${MEALDB}/1529443236.jpg`,`${MEALDB}/41cxjh1683207682.jpg`,`${MEALDB}/vvpprx1487325699.jpg`,
-    `${MEALDB}/svprys1511176755.jpg`,`${MEALDB}/xwutvy1511555540.jpg`,`${MEALDB}/vtqxtu1511784197.jpg`,
-    `${MEALDB}/vz94r81760534692.jpg`,`${MEALDB}/ssrrrs1503664277.jpg`,`${MEALDB}/lqampv1762325397.jpg`,
-    `${MEALDB}/uyqrrv1511553350.jpg`,`${MEALDB}/kyuxew1763479470.jpg`,`${MEALDB}/uuqvwu1504629254.jpg`,
-    `${MEALDB}/tvttqv1504640475.jpg`,`${MEALDB}/wrssvt1511556563.jpg`,`${MEALDB}/sytuqu1511553755.jpg`,
-    `${MEALDB}/wsqqsw1515364068.jpg`,`${MEALDB}/6sarfo1762340107.jpg`,`${MEALDB}/ursuup1487348423.jpg`,
-    `${MEALDB}/vussxq1511882648.jpg`,
-  ],
-  curry: [
-    `${MEALDB}/sstssx1487349585.jpg`,`${MEALDB}/qqlwv91763501559.jpg`,`${MEALDB}/sywrsu1511463066.jpg`,
-    `${MEALDB}/lqampv1762325397.jpg`,`${MEALDB}/vwrpps1503068729.jpg`,`${MEALDB}/tvttqv1504640475.jpg`,
-    `${MEALDB}/yxsurp1511304301.jpg`,`${MEALDB}/uc9qp11764796575.jpg`,`${MEALDB}/118oj61763423896.jpg`,
-    `${MEALDB}/snmtd61763426568.jpg`,`${MEALDB}/prjve31763486864.jpg`,`${MEALDB}/n7h5zs1765318909.jpg`,
-    `${MEALDB}/0dhtwr1763371444.jpg`,
-  ],
-  rice: [
-    `${MEALDB}/5r5rvx1763287943.jpg`,`${MEALDB}/wuyd2h1765655837.jpg`,`${MEALDB}/kw92t41604181871.jpg`,
-    `${MEALDB}/c6ghxm1763335584.jpg`,`${MEALDB}/zg2b9l1760524940.jpg`,`${MEALDB}/pkyvrn1764878267.jpg`,
-    `${MEALDB}/fk80jp1763280767.jpg`,`${MEALDB}/qt4i0n1763256454.jpg`,`${MEALDB}/sl6vqv1763335988.jpg`,
-    `${MEALDB}/tytyxu1515363282.jpg`,`${MEALDB}/xw1ruy1763786501.jpg`,`${MEALDB}/hblwvg1763478203.jpg`,
-    `${MEALDB}/11bvtm1764795135.jpg`,
-  ],
-  cake: [
-    `${MEALDB}/c0gmo31766594751.jpg`,`${MEALDB}/vrspxv1511722107.jpg`,`${MEALDB}/wtqrqw1511639627.jpg`,
-    `${MEALDB}/urtqut1511723591.jpg`,`${MEALDB}/ldnrm91576791881.jpg`,`${MEALDB}/xvgpng1764121726.jpg`,
-    `${MEALDB}/ywwrsp1511720277.jpg`,`${MEALDB}/tzt3it1764363293.jpg`,`${MEALDB}/swttys1511385853.jpg`,
-    `${MEALDB}/qxutws1486978099.jpg`,`${MEALDB}/y4jpgq1560459207.jpg`,`${MEALDB}/y2irzl1585563479.jpg`,
-    `${MEALDB}/xqrwyr1511133646.jpg`,`${MEALDB}/qtuuys1511387068.jpg`,`${MEALDB}/towo9c1763814590.jpg`,
-    `${MEALDB}/e8ihjp1764123021.jpg`,
-  ],
-  pancake: [
-    `${MEALDB}/rwuyqx1511383174.jpg`,`${MEALDB}/0206h11699013358.jpg`,`${MEALDB}/sywswr1511383814.jpg`,
-    `${MEALDB}/c400ok1764439058.jpg`,`${MEALDB}/xlqqhw1764369924.jpg`,
-  ],
-  egg: [
-    `${MEALDB}/1529446137.jpg`,`${MEALDB}/47y6ii1765658818.jpg`,`${MEALDB}/1550440197.jpg`,
-    `${MEALDB}/rwvw8q1765660071.jpg`,`${MEALDB}/qwtrtp1511799242.jpg`,`${MEALDB}/v8eaed1763257313.jpg`,
-  ],
-  roast: [
-    `${MEALDB}/ssrrrs1503664277.jpg`,`${MEALDB}/ursuup1487348423.jpg`,`${MEALDB}/swo87v1763595282.jpg`,
-    `${MEALDB}/ro8mzj1763800655.jpg`,`${MEALDB}/gr4lo51763791826.jpg`,`${MEALDB}/nlxald1764112200.jpg`,
-    `${MEALDB}/b5ft861583188991.jpg`,`${MEALDB}/h3ijwo1581013377.jpg`,
-  ],
-  taco: [
-    `${MEALDB}/uvuyxu1503067369.jpg`,`${MEALDB}/ypxvwv1505333929.jpg`,
-    `${MEALDB}/1529444830.jpg`,`${MEALDB}/qtuwxu1468233098.jpg`,
-    `${MEALDB}/wrssvt1511556563.jpg`,`${MEALDB}/kos9av1699014767.jpg`,
-    `${MEALDB}/st1ifa1583267248.jpg`,`${MEALDB}/1529444113.jpg`,
-  ],
-  sandwich: [
-    `${MEALDB}/j80gmw1764372176.jpg`,`${MEALDB}/xr0n4r1576788363.jpg`,`${MEALDB}/sbx7n71587673021.jpg`,
-    `${MEALDB}/xutquv1505330523.jpg`,`${MEALDB}/ae6clc1760524712.jpg`,
-  ],
-  stew: [
-    `${MEALDB}/vptqpw1511798500.jpg`,`${MEALDB}/vtqxtu1511784197.jpg`,`${MEALDB}/uyqrrv1511553350.jpg`,
-    `${MEALDB}/uuqvwu1504629254.jpg`,`${MEALDB}/sypxpx1515365095.jpg`,
-  ],
-};
+// ── Recipe Image System ─────────────────────────────────────────────────────
+// Persistent per-recipe image model. Each recipe has a stable `recipe.image` field.
+// Images are resolved via /api/image (TheMealDB search) and cached in localStorage.
+// The UI only ever reads recipe.image — no runtime guessing.
 
-// Foodish categories — ONLY used where the category genuinely matches the dish
-const FOODISH_CATS = {
-  pasta:34, pizza:95, burger:87, dessert:36, samosa:22, dosa:83
-};
-
-// Title keywords → image pool (ORDER MATTERS: specific first)
-const TITLE_TO_POOL = [
-  // Recipes with NO good image match → emoji fallback (honest, not misleading)
-  [/smoothie|protein shake|milkshake|lemonade|juice\b|iced tea|horchata|lassi|agua fresca/i, null],
-  [/yogurt|granola|muesli|overnight oats|oatmeal|oats\b|porridge|acai|chia\b|cottage cheese|berry bowl|smoothie bowl|cereal/i, null],
-  [/charcuterie|cheese board|mezze|antipasti|platter|hummus\b|trail mix|energy (bar|ball|bite)/i, null],
-  // ── DISH TYPE patterns (match BEFORE protein words so "Fish Tacos" → taco, not fish) ──
-  [/french toast/i, 'pancake'],
-  [/toast\b|avocado toast|bruschetta|crostini/i, 'sandwich'],
-  [/salad|slaw|carpaccio|panzanella/i, 'salad'],
-  [/soup|broth|chowder|bisque|gazpacho|minestrone|chili\b|gumbo|pottage|consomm|harira/i, 'soup'],
-  [/curry|masala|tikka|vindaloo|korma|madras|rogan josh|dal\b|dhal|daal|rendang|paneer|palak|saag|aloo|chana|rajma|jalfrezi|bhuna|dopiaza|balti|tandoori|butter chicken/i, 'curry'],
-  [/taco|burrito|quesadilla|enchilada|fajita|nachos|chimichanga|tostada|tamale|elote/i, 'taco'],
-  // Asian brothy noodles → soup pool (look like soup, NOT Italian pasta)
-  [/ramen|pho|udon|soba|laksa|miso(?!.*paste)/i, 'soup'],
-  // Asian stir-fried/dry noodles → chicken pool (stir-fry dishes)
-  [/lo mein|chow mein|pad thai|yakisoba|japchae|noodle/i, 'chicken'],
-  [/pasta|spaghetti|penne|linguine|fettuccine|tagliatelle|rigatoni|fusilli|macaroni|lasagna|ravioli|gnocchi|carbonara|bolognese|alfredo|aglio|cacio|puttanesca|arrabbiata|primavera|marinara|mac.and.cheese|orzo|tortellini|cannelloni/i, 'f_pasta'],
-  [/pizza|calzone|pepperoni|neapolitan/i, 'f_pizza'],
-  [/burger|slider|hot dog|sloppy joe/i, 'f_burger'],
-  [/sandwich|panini|blt\b|club\b|po.boy|philly|hoagie|sub\b|wrap(?!.*spring)|gyro|shawarma|bao\b|banh mi/i, 'sandwich'],
-  [/samosa|dumpling|spring roll|egg roll|wonton|gyoza|empanada|croquette|fritter|pakora|bhaji|falafel|tempura|nugget|wing\b|wings\b|chips\b|fish.and.chip|onion ring|corn dog/i, 'f_samosa'],
-  // Ratatouille is a vegetable dish → salad pool (not meat stew)
-  [/ratatouille/i, 'salad'],
-  [/stew|goulash|tagine|bourguignon|cacciatore|coq au vin|braised|slow.cook|fesenjan|casserole|gratin|hotpot|pot pie/i, 'stew'],
-  [/\bcake\b|cheesecake|brownie|tiramisu|cupcake|gateau|muffin|scone/i, 'cake'],
-  [/pancake|waffle|crepe|blini|galette/i, 'pancake'],
-  [/omelette|omelet|frittata|quiche|shakshuka|scramble|benedict|egg\b|eggs\b/i, 'egg'],
-  [/cookie|pie\b|tart\b|ice cream|gelato|mousse|pudding|custard|crumble|cobbler|fudge|candy|chocolate|panna cotta|creme brulee|baklava|churro|donut|doughnut|macaron|eclair|profiterole|sundae|sorbet|parfait|meringue|beignet|halwa|gulab|kheer|tres leches|flan\b/i, 'f_dessert'],
-  [/dosa|uttapam|appam|idli|idly|vada/i, 'f_dosa'],
-  [/\brice\b|risotto|paella|pilaf|pilau|biryani|jambalaya|fried rice|bibimbap|onigiri|kedgeree|arancini/i, 'rice'],
-  [/roast|roasted|pot roast/i, 'roast'],
-  // ── PROTEIN patterns (only match if no dish type matched above) ──
-  [/\bfish\b|salmon|tuna|cod\b|trout|tilapia|halibut|mahi|swordfish|anchov|sardine|mackerel|sea bass|snapper|ceviche|masgouf|seafood|shrimp|prawn|crab|lobster|clam|mussel|oyster|calamari|squid|scallop|sushi|sashimi|poke/i, 'fish'],
-  [/\bbeef\b|steak|filet mignon|sirloin|ribeye|tenderloin|brisket|short rib|flank|strip steak|prime rib|wagyu|veal|lamb\b|mutton|venison|goat\b|pork\b|pulled pork|carnitas|bacon(?!.*pancake)/i, 'beef'],
-  [/chicken|poultry|turkey|duck\b|hen\b|cornish|stir.fry/i, 'chicken'],
-];
-
-// Cuisine fallback to TheMealDB pool
-const CUISINE_TO_POOL = {
-  'Italian':'f_pasta','French':'stew','Spanish':'rice','Greek':'salad',
-  'Mexican':'taco','American':'chicken','Southern US':'chicken',
-  'Japanese':'fish','Chinese':'chicken','Korean':'rice','Thai':'curry',
-  'Vietnamese':'soup','Indian':'curry','Middle Eastern':'rice','Moroccan':'stew',
-  'Ethiopian':'stew','Lebanese':'salad','Caribbean':'rice','Filipino':'rice',
-  'Mediterranean':'salad','Turkish':'beef','Brazilian':'beef','British':'stew',
-  'Pakistani':'curry','Persian':'stew','African':'stew','Malaysian':'curry',
-  'Indonesian':'rice','Russian':'stew','German':'beef','Cajun':'soup',
-  'Hawaiian':'fish','Jamaican':'chicken','Cuban':'rice','Scandinavian':'fish',
-  'Australian':'beef','Peruvian':'fish',
-};
-
-// Meal type fallback
-const MEAL_TO_POOL = {
-  'breakfast':'pancake','lunch':'salad','dinner':'chicken',
-  'salad':'salad','soup':'soup','snack':'f_samosa','dessert':'cake',
-};
-
-// Direct image overrides for recipes where pool-based assignment gives visually wrong images
-const IMAGE_OVERRIDES = {
-  'pad thai': `${MEALDB}/rg9ze01763479093.jpg`,                    // Actual pad thai noodles (not chicken tikka masala)
-  'one-pan shakshuka': `${MEALDB}/g373701551450225.jpg`,            // Classic shakshuka: eggs in tomato sauce
-  'chicken shawarma wrap': `${MEALDB}/hcg6l91763596970.jpg`,        // Real chicken shawarma wrap (not deli sub)
-  'veggie frittata': `${MEALDB}/qwtrtp1511799242.jpg`,              // Provençal omelette cake (veggie egg dish)
-  'margherita pizza': `${MEALDB}/x0lk931587671540.jpg`,             // Pizza Express Margherita (not pepperoni)
-  'beef stir-fry': `${MEALDB}/kyuxew1763479470.jpg`,                // Thai beef stir-fry (not beef bourguignon)
-  'lentil soup': `${MEALDB}/uwxqwy1483389553.jpg`,                  // Smoky lentil chili (lentil-based, not mushroom broth)
-};
-
-function recipeImage(recipe) {
-  if (!recipe) return null;
-  const r = typeof recipe === 'object' ? recipe : { id: recipe };
-  // Generate a numeric hash from the ID — handles both numeric DB IDs and string LLM IDs
-  let id = r.id || 0;
-  if (typeof id === 'string') {
-    // Hash the string into a stable number
-    let h = 0;
-    for (let i = 0; i < id.length; i++) { h = ((h << 5) - h + id.charCodeAt(i)) | 0; }
-    id = Math.abs(h);
-  }
-  const title = (r.title || '').toLowerCase();
-
-  // 1. Try title keyword → pool
-  let pool = null;
-  let matched = false;
-  for (const [regex, p] of TITLE_TO_POOL) {
-    if (regex && regex.test(title)) { pool = p; matched = true; break; }
-  }
-  if (matched && pool === null) return null; // Explicit emoji fallback (no good image for this dish type)
-  // 2. Cuisine fallback
-  if (!pool) {
-    const cuisine = (r.cuisine || '').trim();
-    pool = CUISINE_TO_POOL[cuisine];
-    if (!pool && cuisine) {
-      for (const [key, val] of Object.entries(CUISINE_TO_POOL)) {
-        if (cuisine.toLowerCase().includes(key.toLowerCase())) { pool = val; break; }
-      }
-    }
-  }
-  // 3. Meal type fallback
-  if (!pool) {
-    const meal = (r.meal || '').toLowerCase();
-    pool = MEAL_TO_POOL[meal];
-  }
-  // 4. No match → return null (will use emoji fallback)
-  if (!pool) return null;
-
-  // Resolve pool to URL
-  if (pool.startsWith('f_')) {
-    // Foodish pool
-    const cat = pool.substring(2);
-    const maxN = FOODISH_CATS[cat] || 34;
-    const hash = ((id * 2654435761) >>> 0) % maxN;
-    return `https://foodish-api.com/images/${cat}/${cat}${hash + 1}.jpg`;
-  } else {
-    // TheMealDB pool
-    const urls = IMG_POOLS[pool];
-    if (!urls || urls.length === 0) return null;
-    const hash = ((id * 2654435761) >>> 0) % urls.length;
-    return urls[hash];
-  }
-}
-
-// RecipeImg component — shows image with emoji fallback on error
+// Simple RecipeImg component — shows image with emoji fallback on error
 function RecipeImg({ src, alt, emoji, style, className, onClick }) {
   const [failed, setFailed] = React.useState(false);
-  const baseImgStyle = className ? {} : {width:'100%',height:'100%',objectFit:'cover',display:'block'};
-  const baseDivStyle = className ? {} : {width:'100%',height:'100%'};
+  const [loaded, setLoaded] = React.useState(false);
+
+  React.useEffect(() => { setFailed(false); setLoaded(false); }, [src]);
+
   if (!src || failed) {
     return (
-      <div style={{...baseDivStyle,background:'linear-gradient(135deg,#F0E8DC 0%,#E4D4BE 100%)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:48,...(style||{})}} className={className} onClick={onClick}>
+      <div
+        className={className}
+        onClick={onClick}
+        style={{
+          ...style,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          background: 'linear-gradient(135deg, #f5ebe0 0%, #e8d5c4 100%)',
+          fontSize: style?.fontSize || 32, borderRadius: style?.borderRadius || 8,
+          minHeight: style?.height || style?.minHeight || 60,
+        }}
+      >
         {emoji || '🍽️'}
       </div>
     );
   }
-  return <img src={src} alt={alt||''} style={{...baseImgStyle,...(style||{})}} className={className} onClick={onClick} onError={()=>setFailed(true)} loading="lazy" />;
+
+  return (
+    <img
+      className={className}
+      src={src}
+      alt={alt || ''}
+      onClick={onClick}
+      onError={() => setFailed(true)}
+      onLoad={() => setLoaded(true)}
+      style={{ ...style, objectFit: 'cover', opacity: loaded ? 1 : 0, transition: 'opacity 0.3s' }}
+      loading="lazy"
+    />
+  );
 }
 
-// Apply images with collision detection
-const UNSPLASH_FOOD = [
-"1504674900247-0877df9cc836","1567620905732-2d1ec7ab7445","1565299624946-b28f40a0ae38",
-"1565958011703-44f9829ba187","1482049016688-2d3e1b311543","1498837167922-ddd27525d352",
-"1476224203421-9ac39bcb3327","1473093295043-cdd812d0e601","1455619452474-d2be8b1e70cd",
-"1540189549336-e6e99c3679fe","1512621776951-a57141f2eefd","1467003909585-2f8a72700288",
-"1484723091739-30a097e8f929","1529042410759-befb1204b468","1504754524776-8f4f37790ca0",
-"1546549032-9571cd6b27df","1551183053-bf91a1d81141","1571091718767-18b5b1457add",
-"1563379926898-05f4575a45d8","1540420773420-3366772f4999","1551326844-4df70f78d0e9",
-"1496116218417-1a781b1c416c","1559847844-5315695dadae","1585032226651-759b368d7246",
-"1588137378633-dea1336ce1e2","1569058242252-623df46b5025","1574484284002-952d92456975",
-"1414235077428-338989a2e8c0","1565299585323-38d6b0865b47","1499028344343-cd173ffc68a9",
-"1478145046317-39f10e56b5e9","1505253758473-96b7015fcd40","1490645935967-10de6ba17061",
-"1473093226795-af9932fe5856","1571167530149-c1105da4c2c7","1547592180-85f173990554",
-"1551024506-0bccd828d307","1555939594-58d7cb561ad1","1606787366850-de6330128bfc",
-"1547592166-23ac45744acd","1568901346375-23c9450c58cd","1563897539633-7374c276c212",
-"1546554137-f86b9593a222","1565557623262-b51c2513a641","1484980972926-edee96e0960d",
-"1511690656952-34342bb7c2f2","1544025162-d76694265947","1555126634-323283e090fa",
-"1540914124281-342587941389","1621996346565-e3dbc646d9a9","1543826173-70651703c5a4",
-"1559181567-c3190ca9959b","1563805042-7684c019e1cb","1560963689-b5682b6440f8",
-"1588166524941-3bf61a9c41db","1511910849309-0dffb8785146","1553621042-f6e147245754",
-"1507048331197-7d4ac70811cf","1464226184884-fa280b87c399","1547573854-74d2a71d0826",
-"1512058564366-18510be2db19","1557142046-c704a3adf364","1550547660-d9450f859349",
-"1551218808-94e220e084d2","1562059392-096320bccc7e","1495521821757-a1efb6729352",
-"1476718406336-bb5a9690ee2a","1574071318508-1cdbab80d002","1515003197210-e0cd71810b5f",
-"1529692236671-f1f6cf9683ba","1490818387583-1baba5e638af","1455279032140-49a4bf46f343",
-"1538688525198-9b88f6f53126","1504544750208-dc0358e63f7f","1556761223-4c4282c73f77",
-"1513104890138-7c749659a591","1556040220-4096d522378d","1563729784474-d77dbb933a9e",
-"1517244683847-7456b63c5969","1512058454905-6b841e7ad132","1505575967455-40e256f73376",
-"1460306855393-0410f61241c7","1482938289607-e9573fc25ebb","1485921325833-c519f76c4927",
-"1497888329096-51c27beff665","1528712306091-ed0763094c98","1493770348161-369560ae357d",
-"1559737558-2f5a35f4523b","1530554764233-e79e16c91d08","1518779578993-ec3579fee39f",
-"1501959181532-7d2a3c064642","1470338745628-171cf53de3a8","1467453678174-768ec283a940",
-"1606890658317-7d14490b76fd","1558642452-9d2a7deb7f62","1565299507177-b0ac66763828",
-"1569718212165-3a8278d5f624","1533777324565-a040eb52facd","1551782450-a2132b4ba21d",
-"1552332386-f8dd00dc2f85","1516685018646-549198525c1b","1466637574441-749b8f19452f",
-"1508615070457-7baeba4003ab","1603073163308-9654c3fb70b5","1592321675774-3de57f3ee0dc",
-"1623428187969-5da2dcea5ebf","1556909114-44e3e70034e2","1559058789-672da06263d8",
-"1555244162-803834f70033","1589302168068-964664d93dc0","1572656631137-7935297eff55",
-"1626082927389-6cd097cdc6ec","1560180474-e8563fd75bab","1600803907087-f56d462fd26b",
-"1563245372-f21724e3856d","1626200419199-391ae4be7a41","1551024709-8f23befc6f87",
-"1600565193348-f74bd3c7ccdf","1578916171728-46686eac8d58","1570197571499-166b36435e9f",
-"1615937722923-67f6deaf2cc9","1502741338009-cac2772e18bc","1590301157890-4810ed352733",
-"1567337710282-00832b415979","1594212699903-ec8a3eca50f5","1565895405138-6c3a1555da6a",
-"1585937421612-70a008356fbe","1580013759032-c96505e24c1f","1601050690597-df0568f70950",
-"1568602471122-7832951cc4c5","1609501676725-7186f017a4b7","1586190848861-99aa4a171e90",
-"1596040033229-a9821ebd058d","1558818498-28c1e002b655","1545247181-516773cae754",
-"1563636619-e9143da7973b","1605478371310-a9f1e96b4ff4","1512003867696-6d5ce6835040",
-];
+// ── Batch image resolver ──
+// Calls /api/image to resolve images for recipes that don't have one yet.
+// Saves results to localStorage so images persist across sessions.
+const IMAGE_CACHE_KEY = 'smartchef_recipe_images';
 
-// Apply images: TheMealDB (dish-specific) > foodish (category) > emoji fallback
-// Prioritizes visual correctness over uniqueness.
-(function assignImages() {
-  const used = new Set();
-  let withImg = 0, withEmoji = 0;
-  const sorted = [...RECIPES].sort((a,b) => (a.id||0) - (b.id||0));
+function loadImageCache() {
+  try {
+    return JSON.parse(localStorage.getItem(IMAGE_CACHE_KEY) || '{}');
+  } catch { return {}; }
+}
 
-  sorted.forEach(r => {
-    const titleLower = (r.title || '').toLowerCase();
-    // Check direct overrides first — bypasses pool system entirely
-    if (IMAGE_OVERRIDES[titleLower]) {
-      const overrideImg = IMAGE_OVERRIDES[titleLower];
-      used.add(overrideImg);
-      r.image = overrideImg;
-      withImg++;
-      return;
+function saveImageCache(cache) {
+  try {
+    localStorage.setItem(IMAGE_CACHE_KEY, JSON.stringify(cache));
+  } catch { /* storage full — ok */ }
+}
+
+// Apply cached images to RECIPES at startup
+(function applyCachedImages() {
+  const cache = loadImageCache();
+  let applied = 0;
+  RECIPES.forEach(r => {
+    if (cache[r.id]) {
+      r.image = cache[r.id];
+      applied++;
     }
-    let img = recipeImage(r);
-    if (!img) { r.image = null; withEmoji++; return; } // No good match → emoji fallback
-    // Collision detection: try alternate within same pool
-    if (used.has(img)) {
-      // Find which pool this recipe maps to
-      let found = false;
-      const title = (r.title || '').toLowerCase();
-      let poolKey = null;
-      for (const [regex, p] of TITLE_TO_POOL) {
-        if (regex.test(title)) { poolKey = p; break; }
-      }
-      if (!poolKey) {
-        const cuisine = (r.cuisine || '').trim();
-        poolKey = CUISINE_TO_POOL[cuisine];
-      }
-      if (!poolKey) poolKey = MEAL_TO_POOL[(r.meal || '').toLowerCase()];
-
-      if (poolKey && !poolKey.startsWith('f_') && IMG_POOLS[poolKey]) {
-        // TheMealDB pool: try all URLs
-        for (let i = 0; i < IMG_POOLS[poolKey].length; i++) {
-          if (!used.has(IMG_POOLS[poolKey][i])) { img = IMG_POOLS[poolKey][i]; found = true; break; }
-        }
-      } else if (poolKey && poolKey.startsWith('f_')) {
-        // Foodish pool: try all numbers
-        const cat = poolKey.substring(2);
-        const maxN = FOODISH_CATS[cat] || 34;
-        for (let n = 1; n <= maxN; n++) {
-          const tryImg = `https://foodish-api.com/images/${cat}/${cat}${n}.jpg`;
-          if (!used.has(tryImg)) { img = tryImg; found = true; break; }
-        }
-      }
-      // If still colliding, allow duplicate (same dish type, shared photo is OK)
-    }
-    used.add(img);
-    r.image = img;
-    withImg++;
   });
-  console.log(`Image assignment: ${withImg} with images, ${withEmoji} with emoji fallback, ${used.size} unique`);
+  if (applied > 0) console.log(`Applied ${applied} cached recipe images`);
 })();
+
+// Async batch resolver — runs after app mounts
+async function resolveRecipeImages(recipes, batchSize = 20) {
+  const cache = loadImageCache();
+  const needImages = recipes.filter(r => !r.image && !cache[r.id]);
+
+  if (needImages.length === 0) return;
+  console.log(`Resolving images for ${needImages.length} recipes...`);
+
+  // Process in batches to avoid overwhelming the API
+  for (let i = 0; i < needImages.length; i += batchSize) {
+    const batch = needImages.slice(i, i + batchSize).map(r => ({
+      id: r.id, title: r.title, cuisine: r.cuisine || '', meal: r.meal || '',
+    }));
+
+    try {
+      const resp = await fetch('/api/image', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ recipes: batch }),
+      });
+
+      if (resp.ok) {
+        const data = await resp.json();
+        if (data.images) {
+          data.images.forEach(({ id, image }) => {
+            if (image) {
+              cache[id] = image;
+              const recipe = RECIPES.find(r => r.id === id);
+              if (recipe) recipe.image = image;
+            }
+          });
+          saveImageCache(cache);
+        }
+      }
+    } catch (err) {
+      console.warn('Image batch failed:', err);
+    }
+  }
+  console.log(`Image resolution complete. Cache size: ${Object.keys(cache).length}`);
+}
+
+// Resolve image for a single LLM-generated recipe (used by buildViewableFromLLM)
+async function resolveSingleImage(title, cuisine, meal) {
+  try {
+    const resp = await fetch('/api/image', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ recipes: [{ id: title, title, cuisine: cuisine || '', meal: meal || '' }] }),
+    });
+    if (resp.ok) {
+      const data = await resp.json();
+      if (data.images && data.images[0] && data.images[0].image) {
+        return data.images[0].image;
+      }
+    }
+  } catch { /* ok */ }
+  return null;
+}
 
 /* ── MAIN APP ── */
 export default function App() {
@@ -22067,6 +21841,14 @@ export default function App() {
     style.textContent = S;
     document.head.appendChild(style);
     return () => { const el = document.getElementById('smartchef-styles'); if (el) el.remove(); };
+  }, []);
+
+  // ── Batch-resolve recipe images on mount ──
+  const [, forceUpdate] = useState(0);
+  React.useEffect(() => {
+    resolveRecipeImages(RECIPES).then(() => {
+      forceUpdate(n => n + 1); // Re-render after images are loaded
+    });
   }, []);
 
   // ── Session restore ──
@@ -23267,7 +23049,7 @@ function buildViewableFromLLM(slot) {
     id: slot.id,
     title: slot.title || r.title || 'Untitled',
     emoji: slot.emoji || r.emoji || '🍽️',
-    image: recipeImage({ id: slot.id, title: r.title || slot.title || '', cuisine: r.cuisine || '', meal: r.meal || '' }),
+    image: null, // Will be resolved asynchronously via resolveSingleImage
     cuisine: r.cuisine || '',
     meal: r.meal || '',
     time: r.time || 30,
@@ -23368,7 +23150,7 @@ function PlannerHome({ mealPlan, setMealPlan, generateWeek, generateDay, regener
                       >
                         <RecipeImg
                           className="meal-card-img"
-                          src={recipe?.image || recipeImage(viewable || slot)}
+                          src={recipe?.image || viewable?.image || null}
                           alt={slot.title}
                           emoji={slot.emoji}
                           style={{fontSize:24}}
@@ -23538,7 +23320,7 @@ function RecipeDetail({ recipe, onClose, handleAddToPlan, toggleSave, saved, pan
     <div className="rd-overlay" onClick={onClose}>
       <div className="rd-panel" onClick={e => e.stopPropagation()}>
         <div className="rd-hero">
-          <RecipeImg src={recipe.image || recipeImage(recipe)} alt={recipe.title} emoji={recipe.emoji} style={{width:'100%',height:'100%'}} />
+          <RecipeImg src={recipe.image || null} alt={recipe.title} emoji={recipe.emoji} style={{width:'100%',height:'100%'}} />
           <div className="rd-hero-overlay" />
           <button className="rd-close" onClick={onClose}>✕</button>
         </div>
