@@ -60,7 +60,7 @@ const KEY_FOOD_WORDS = new Set([
   'shakshuka', 'pancake', 'pancakes', 'lentil', 'chickpea', 'mushroom', 'burrito', 'toast', 'yogurt',
 ])
 
-async function resolveImage({ id, title, cuisine }) {
+async function resolveImage({ id, title, cuisine, meal }) {
   if (!title) return { id, image: null }
 
   const normalized = normalizeTitle(title)
@@ -82,7 +82,31 @@ async function resolveImage({ id, title, cuisine }) {
     return { id, image: best.meal.strMealThumb }
   }
 
-  // No confident match: fall back to emoji in UI.
+  if (best && isMediumConfidenceMatch(best)) {
+    return { id, image: best.meal.strMealThumb }
+  }
+
+  // Fallback A: cuisine area list (text-scored, not random).
+  const area = mapCuisineToArea(cuisine)
+  if (area) {
+    const list = await fetchMealDbFilter('a', area)
+    const candidate = pickBestFromFilterList(list?.meals || [], title)
+    if (candidate && isUsableFallback(candidate)) {
+      return { id, image: candidate.meal.strMealThumb }
+    }
+  }
+
+  // Fallback B: meal category list (text-scored, not random).
+  const category = mapMealToCategory(meal, title)
+  if (category) {
+    const list = await fetchMealDbFilter('c', category)
+    const candidate = pickBestFromFilterList(list?.meals || [], title)
+    if (candidate && isUsableFallback(candidate)) {
+      return { id, image: candidate.meal.strMealThumb }
+    }
+  }
+
+  // No decent match: fall back to emoji in UI.
   return { id, image: null }
 }
 
@@ -91,6 +115,22 @@ async function fetchMealDbSearch(term) {
   const timeout = setTimeout(() => controller.abort(), 3500)
   try {
     const url = `https://www.themealdb.com/api/json/v1/1/search.php?s=${encodeURIComponent(term)}`
+    const resp = await fetch(url, { signal: controller.signal })
+    if (!resp.ok) return null
+    return await resp.json()
+  } catch {
+    return null
+  } finally {
+    clearTimeout(timeout)
+  }
+}
+
+async function fetchMealDbFilter(param, value) {
+  if (!param || !value) return null
+  const controller = new AbortController()
+  const timeout = setTimeout(() => controller.abort(), 3500)
+  try {
+    const url = `https://www.themealdb.com/api/json/v1/1/filter.php?${param}=${encodeURIComponent(value)}`
     const resp = await fetch(url, { signal: controller.signal })
     if (!resp.ok) return null
     return await resp.json()
@@ -151,6 +191,35 @@ function pickBestMatch(meals, title, cuisine) {
   return best
 }
 
+function pickBestFromFilterList(meals, title) {
+  if (!Array.isArray(meals) || meals.length === 0) return null
+  const titleNorm = normalizeTitle(title)
+  const titleTokens = tokenize(titleNorm)
+  const titleTokenSet = new Set(titleTokens)
+  const titleKeywords = titleTokens.filter(t => KEY_FOOD_WORDS.has(t))
+
+  let best = null
+  for (const meal of meals) {
+    if (!meal?.strMealThumb) continue
+    const mealTokens = tokenize(meal.strMeal || '')
+    const mealTokenSet = new Set(mealTokens)
+
+    let overlap = 0
+    for (const t of titleTokenSet) if (mealTokenSet.has(t)) overlap++
+
+    let keywordOverlap = 0
+    for (const t of titleKeywords) if (mealTokenSet.has(t)) keywordOverlap++
+
+    const exact = normalizeTitle(meal.strMeal || '') === titleNorm
+    const score = (exact ? 8 : 0) + (overlap * 2) + (keywordOverlap * 3)
+
+    if (!best || score > best.score) {
+      best = { meal, score, overlap, keywordOverlap, exact, prefixMatch: false }
+    }
+  }
+  return best
+}
+
 function isHighConfidenceMatch(candidate) {
   if (!candidate?.meal?.strMealThumb) return false
   if (candidate.exact) return true
@@ -159,6 +228,62 @@ function isHighConfidenceMatch(candidate) {
   if (candidate.prefixMatch && candidate.overlap >= 1 && candidate.score >= 8) return true
   if (candidate.overlap >= 3 && candidate.score >= 8) return true
   return false
+}
+
+function isMediumConfidenceMatch(candidate) {
+  if (!candidate?.meal?.strMealThumb) return false
+  if (candidate.score >= 7 && candidate.overlap >= 1) return true
+  if (candidate.keywordOverlap >= 1 && candidate.score >= 6) return true
+  return false
+}
+
+function isUsableFallback(candidate) {
+  if (!candidate?.meal?.strMealThumb) return false
+  if (candidate.exact) return true
+  if (candidate.keywordOverlap >= 1 && candidate.score >= 5) return true
+  if (candidate.overlap >= 2 && candidate.score >= 4) return true
+  return false
+}
+
+function mapCuisineToArea(cuisine) {
+  const c = normalizeTitle(cuisine || '')
+  if (!c) return null
+  const map = {
+    italian: 'Italian',
+    mexican: 'Mexican',
+    chinese: 'Chinese',
+    japanese: 'Japanese',
+    indian: 'Indian',
+    thai: 'Thai',
+    french: 'French',
+    greek: 'Greek',
+    spanish: 'Spanish',
+    moroccan: 'Moroccan',
+    turkish: 'Turkish',
+    vietnamese: 'Vietnamese',
+    korean: 'Korean',
+    british: 'British',
+    american: 'American',
+    mediterranean: 'Italian',
+    'middle eastern': 'Egyptian',
+    lebanese: 'Egyptian',
+    syrian: 'Egyptian',
+  }
+  return map[c] || null
+}
+
+function mapMealToCategory(meal, title) {
+  const m = normalizeTitle(meal || '')
+  const t = normalizeTitle(title || '')
+  if (m === 'breakfast') return 'Breakfast'
+  if (m === 'dessert' || t.includes('cake') || t.includes('pudding') || t.includes('cookie')) return 'Dessert'
+  if (t.includes('pizza')) return 'Miscellaneous'
+  if (t.includes('pasta') || t.includes('spaghetti')) return 'Pasta'
+  if (t.includes('chicken')) return 'Chicken'
+  if (t.includes('beef') || t.includes('steak')) return 'Beef'
+  if (t.includes('fish') || t.includes('salmon') || t.includes('cod') || t.includes('shrimp')) return 'Seafood'
+  if (t.includes('lamb')) return 'Lamb'
+  return null
 }
 
 function normalizeTitle(input) {

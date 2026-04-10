@@ -32,10 +32,10 @@ module.exports = async function handler(req, res) {
         model: 'gpt-4o-mini',
         messages: [
           { role: 'system', content: systemPrompt },
-          ...messages.slice(-12), // Keep context compact for lower latency
+          ...messages.slice(-8), // Keep context compact for lower latency
         ],
-        temperature: 0.35,
-        max_tokens: 1600,
+        temperature: 0.2,
+        max_tokens: 1000,
         response_format: { type: 'json_object' },
       }),
     });
@@ -135,7 +135,7 @@ ${availableRecipesStr || 'None loaded'}`;
 function compactRecipeList(listStr) {
   const items = String(listStr || '').split(',').map(s => s.trim()).filter(Boolean);
   if (items.length === 0) return '';
-  const maxItems = 60;
+  const maxItems = 40;
   if (items.length <= maxItems) return items.join(', ');
   return `${items.slice(0, maxItems).join(', ')}, ...`;
 }

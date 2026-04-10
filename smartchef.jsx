@@ -21682,7 +21682,7 @@ class RecipeErrorBoundary extends React.Component {
 // - No batch loading, no mount-time fetching
 // - Planner renders instantly; images appear as they load
 
-const IMAGE_CACHE_KEY = 'smartchef_recipe_images_v2';
+const IMAGE_CACHE_KEY = 'smartchef_recipe_images_v3';
 const NO_IMAGE_MARKER = '__NO_IMAGE__';
 const _imgCache = (() => {
   try { return JSON.parse(localStorage.getItem(IMAGE_CACHE_KEY) || '{}'); } catch { return {}; }
@@ -22364,10 +22364,10 @@ function AISousChef({ pantry, prefs, mealPlan, setMealPlan, setSlotRecipe, shopp
     });
 
     const selected = [
-      ...byMeal.breakfast.slice(0, 18),
-      ...byMeal.lunch.slice(0, 22),
-      ...byMeal.dinner.slice(0, 24),
-      ...byMeal.other.slice(0, 8),
+      ...byMeal.breakfast.slice(0, 14),
+      ...byMeal.lunch.slice(0, 16),
+      ...byMeal.dinner.slice(0, 18),
+      ...byMeal.other.slice(0, 4),
     ];
 
     const seen = new Set();
@@ -22379,17 +22379,17 @@ function AISousChef({ pantry, prefs, mealPlan, setMealPlan, setSlotRecipe, shopp
       }
     });
 
-    if (unique.length < 50) {
+    if (unique.length < 35) {
       for (const r of RECIPES) {
         if (!seen.has(r.id)) {
           seen.add(r.id);
           unique.push(r);
         }
-        if (unique.length >= 60) break;
+        if (unique.length >= 40) break;
       }
     }
 
-    return unique.slice(0, 60).map(r => `${r.title} [${r.meal || 'any'}]`).join(', ');
+    return unique.slice(0, 40).map(r => `${r.title} [${r.meal || 'any'}]`).join(', ');
   }
 
   // ── Build context object to send with every LLM call ──
@@ -22558,7 +22558,7 @@ function AISousChef({ pantry, prefs, mealPlan, setMealPlan, setSlotRecipe, shopp
 
     try {
       // Build the conversation history for the LLM — include recipe/action context
-      const chatHistory = [...messages, userMsg].slice(-12).map(m => {
+      const chatHistory = [...messages, userMsg].slice(-8).map(m => {
         if (m.role === 'user') return { role: 'user', content: m.text };
         // For assistant messages, include a summary of what was shown (recipes, plan changes)
         let content = m.text || '';
