@@ -18,8 +18,18 @@ module.exports = async function handler(req, res) {
       return res.status(400).json({ error: 'messages array required' });
     }
 
+    const latestUserText = getLatestUserMessage(messages);
+    const ctx = context || {};
+
+    // Fast path: generate a full week plan from DB titles without an LLM call.
+    // This removes model latency for common "plan my week" requests.
+    if (shouldFastPlanWeek(latestUserText, ctx)) {
+      const fast = buildFastWeekPlanResponse(ctx, latestUserText);
+      if (fast) return res.status(200).json(fast);
+    }
+
     // ── Build the system prompt with full user context ──
-    const systemPrompt = buildSystemPrompt(context || {});
+    const systemPrompt = buildSystemPrompt(ctx);
 
     // ── Call OpenAI ──
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -138,6 +148,101 @@ function compactRecipeList(listStr) {
   const maxItems = 40;
   if (items.length <= maxItems) return items.join(', ');
   return `${items.slice(0, maxItems).join(', ')}, ...`;
+}
+
+function getLatestUserMessage(messages) {
+  for (let i = messages.length - 1; i >= 0; i--) {
+    const m = messages[i];
+    if (m && m.role === 'user' && typeof m.content === 'string') return m.content;
+  }
+  return '';
+}
+
+function shouldFastPlanWeek(userText, ctx) {
+  const txt = String(userText || '').toLowerCase();
+  if (!txt) return false;
+
+  const asksWeekPlan =
+    /(plan|build|create|make|generate).{0,25}(week|weekly)/i.test(txt) ||
+    /week plan|plan my week|meal plan|weekly meals/i.test(txt);
+  if (!asksWeekPlan) return false;
+
+  // Let LLM handle nuanced edit requests.
+  const editIntent = /(replace|swap|change|update|edit|remove|instead|regenerate|healthier|higher protein|lower carb)/i.test(txt);
+  if (editIntent) return false;
+
+  // Fast path is best when planning from scratch or mostly empty weeks.
+  const filledMeals = ((ctx.mealPlan || []).reduce((acc, d) => {
+    const meals = (d?.meals || []).filter(Boolean).length;
+    return acc + meals;
+  }, 0));
+  return filledMeals <= 4;
+}
+
+function buildFastWeekPlanResponse(ctx, userText) {
+  const pool = parseAvailableRecipes(ctx.availableRecipes || '');
+  if (pool.length < 18) return null;
+
+  const byMeal = { breakfast: [], lunch: [], dinner: [] };
+  for (const r of pool) {
+    if (r.meal === 'breakfast') byMeal.breakfast.push(r);
+    else if (r.meal === 'lunch' || r.meal === 'salad' || r.meal === 'snack') byMeal.lunch.push(r);
+    else byMeal.dinner.push(r);
+  }
+
+  const all = pool.map(r => ({ title: r.title, emoji: '🍽️' }));
+  const seed = simpleHash(`${userText}|${(ctx.pantry || []).length}|${(ctx.savedTitles || []).length}`);
+
+  const pick = (arr, idx) => {
+    if (!arr || arr.length === 0) return all[idx % all.length];
+    return arr[idx % arr.length];
+  };
+
+  const breakfasts = rotate(byMeal.breakfast.length ? byMeal.breakfast : all, seed % 17);
+  const lunches = rotate(byMeal.lunch.length ? byMeal.lunch : all, seed % 23);
+  const dinners = rotate(byMeal.dinner.length ? byMeal.dinner : all, seed % 29);
+
+  const plan = Array.from({ length: 7 }, (_, i) => ({
+    meals: [
+      { title: pick(breakfasts, i).title, emoji: pick(breakfasts, i).emoji || '🍽️' },
+      { title: pick(lunches, i).title, emoji: pick(lunches, i).emoji || '🍽️' },
+      { title: pick(dinners, i).title, emoji: pick(dinners, i).emoji || '🍽️' },
+    ],
+  }));
+
+  return {
+    message: 'Built a full week plan from your recipe library. You can ask me to swap any meal.',
+    actions: [{ type: 'plan_week', plan }],
+  };
+}
+
+function parseAvailableRecipes(listStr) {
+  return String(listStr || '')
+    .split(',')
+    .map(s => s.trim())
+    .filter(Boolean)
+    .map(entry => {
+      const m = entry.match(/^(.*)\[(.*?)\]\s*$/);
+      if (m) {
+        const title = m[1].trim();
+        const meal = m[2].trim().toLowerCase();
+        return title ? { title, meal, emoji: '🍽️' } : null;
+      }
+      return { title: entry, meal: 'any', emoji: '🍽️' };
+    })
+    .filter(Boolean);
+}
+
+function rotate(arr, offset) {
+  if (!arr || arr.length === 0) return [];
+  const o = Math.abs(offset || 0) % arr.length;
+  return [...arr.slice(o), ...arr.slice(0, o)];
+}
+
+function simpleHash(str) {
+  let h = 0;
+  for (let i = 0; i < str.length; i++) h = ((h << 5) - h + str.charCodeAt(i)) | 0;
+  return Math.abs(h);
 }
 
 function formatMealPlan(plan) {
