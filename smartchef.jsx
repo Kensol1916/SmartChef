@@ -21682,17 +21682,65 @@ class RecipeErrorBoundary extends React.Component {
 // - No batch loading, no mount-time fetching
 // - Planner renders instantly; images appear as they load
 
-const IMAGE_CACHE_KEY = 'smartchef_recipe_images';
+const IMAGE_CACHE_KEY = 'smartchef_recipe_images_v2';
+const NO_IMAGE_MARKER = '__NO_IMAGE__';
 const _imgCache = (() => {
   try { return JSON.parse(localStorage.getItem(IMAGE_CACHE_KEY) || '{}'); } catch { return {}; }
 })();
 
-// Apply cached images to RECIPES at startup (instant, no network)
-RECIPES.forEach(r => { if (!r.image && _imgCache[r.id]) r.image = _imgCache[r.id]; });
+function normalizeRecipeTitle(title) {
+  return String(title || '').toLowerCase().replace(/['’]/g, '').replace(/[^a-z0-9]+/g, ' ').trim();
+}
 
-function saveToImgCache(id, url) {
-  if (!url) return;
-  _imgCache[id] = url;
+// Curated, verified images for high-visibility recipes.
+const CURATED_IMAGE_MAP = {
+  [normalizeRecipeTitle('Spaghetti Aglio e Olio')]: 'https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=800&q=80',
+  [normalizeRecipeTitle('Mediterranean Chickpea Bowl')]: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80',
+  [normalizeRecipeTitle('Quick Miso Ramen')]: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=800&q=80',
+  [normalizeRecipeTitle('Lemon Herb Roast Chicken')]: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=800&q=80',
+  [normalizeRecipeTitle('One-Pan Shakshuka')]: 'https://images.unsplash.com/photo-1590412200988-a436970781fa?auto=format&fit=crop&w=800&q=80',
+  [normalizeRecipeTitle('Fluffy Buttermilk Pancakes')]: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=800&q=80',
+  [normalizeRecipeTitle('Chickpea Curry')]: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=800&q=80',
+  [normalizeRecipeTitle('Fish Tacos')]: 'https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=800&q=80',
+  [normalizeRecipeTitle('Lentil Soup')]: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=800&q=80',
+  [normalizeRecipeTitle('Margherita Pizza')]: 'https://images.unsplash.com/photo-1598103442097-8b74394b95c3?auto=format&fit=crop&w=800&q=80',
+  [normalizeRecipeTitle('Chicken Shawarma Wrap')]: 'https://images.unsplash.com/photo-1529006557810-274b9b2fc783?auto=format&fit=crop&w=800&q=80',
+  [normalizeRecipeTitle('Veggie Frittata')]: 'https://images.unsplash.com/photo-1510693206972-df098062cb71?auto=format&fit=crop&w=800&q=80',
+  [normalizeRecipeTitle('Pad Thai')]: 'https://images.unsplash.com/photo-1559314809-0d155014e29e?auto=format&fit=crop&w=800&q=80',
+  [normalizeRecipeTitle('Beef Stir-Fry')]: 'https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=800&q=80',
+  [normalizeRecipeTitle('Creamy Mushroom Pasta')]: 'https://images.unsplash.com/photo-1555949258-eb67b1ef0ceb?auto=format&fit=crop&w=800&q=80',
+  [normalizeRecipeTitle('Burrito Bowl')]: 'https://images.unsplash.com/photo-1543352634-a1c51d613f26?auto=format&fit=crop&w=800&q=80',
+  [normalizeRecipeTitle('Ratatouille')]: 'https://images.unsplash.com/photo-1572453800999-e8d2d1589b7c?auto=format&fit=crop&w=800&q=80',
+  [normalizeRecipeTitle('Tom Yum Soup')]: 'https://images.unsplash.com/photo-1548943487-a2e4e43b4853?auto=format&fit=crop&w=800&q=80',
+  [normalizeRecipeTitle('Greek Salad')]: 'https://images.unsplash.com/photo-1540189549519-8bf0c5e5d0e3?auto=format&fit=crop&w=800&q=80',
+  [normalizeRecipeTitle('Avocado Toast')]: 'https://images.unsplash.com/photo-1588566565463-180a5a8f1ac1?auto=format&fit=crop&w=800&q=80',
+  [normalizeRecipeTitle('Avocado Toast with Lemon')]: 'https://images.unsplash.com/photo-1588566565463-180a5a8f1ac1?auto=format&fit=crop&w=800&q=80',
+};
+
+function getCuratedRecipeImage(recipe) {
+  if (!recipe?.title) return null;
+  return CURATED_IMAGE_MAP[normalizeRecipeTitle(recipe.title)] || null;
+}
+
+// Apply curated/cached images to RECIPES at startup (instant, no network)
+let didHydrateCache = false;
+RECIPES.forEach(r => {
+  const curated = getCuratedRecipeImage(r);
+  const cached = _imgCache[r.id];
+  const hydrated = curated || (cached && cached !== NO_IMAGE_MARKER ? cached : null);
+  if (hydrated && !r.image) r.image = hydrated;
+  if (hydrated && _imgCache[r.id] !== hydrated) {
+    _imgCache[r.id] = hydrated;
+    didHydrateCache = true;
+  }
+});
+if (didHydrateCache) {
+  try { localStorage.setItem(IMAGE_CACHE_KEY, JSON.stringify(_imgCache)); } catch {}
+}
+
+function saveToImgCache(key, value) {
+  if ((key === null || key === undefined) || !value) return;
+  _imgCache[key] = value;
   try { localStorage.setItem(IMAGE_CACHE_KEY, JSON.stringify(_imgCache)); } catch {}
 }
 
@@ -21728,30 +21776,47 @@ function RecipeImg({ src, alt, emoji, style, className, onClick }) {
 
 // LazyRecipeImg — resolves image on first render if missing, then caches it
 function LazyRecipeImg({ recipe, style, className, onClick }) {
-  const [imgSrc, setImgSrc] = React.useState(recipe?.image || null);
   const id = recipe?.id;
   const title = recipe?.title || '';
+  const titleKey = normalizeRecipeTitle(title);
+  const cacheKey = id || titleKey;
   const emoji = recipe?.emoji || '🍽️';
+  const [imgSrc, setImgSrc] = React.useState(() => {
+    const curated = getCuratedRecipeImage(recipe);
+    const cached = cacheKey ? _imgCache[cacheKey] : null;
+    return recipe?.image || curated || (cached && cached !== NO_IMAGE_MARKER ? cached : null) || null;
+  });
 
   React.useEffect(() => {
-    if (imgSrc || !title) return;
-    // Check cache first
-    if (_imgCache[id || title]) { setImgSrc(_imgCache[id || title]); return; }
-    // Fetch from API
+    const curated = getCuratedRecipeImage(recipe);
+    const cached = cacheKey ? _imgCache[cacheKey] : null;
+    const hydrated = recipe?.image || curated || (cached && cached !== NO_IMAGE_MARKER ? cached : null) || null;
+    setImgSrc(hydrated);
+    if (hydrated && cacheKey && _imgCache[cacheKey] !== hydrated) saveToImgCache(cacheKey, hydrated);
+  }, [cacheKey, recipe?.image, title]);
+
+  React.useEffect(() => {
+    if (!title || !cacheKey || imgSrc) return;
+    if (_imgCache[cacheKey] === NO_IMAGE_MARKER) return;
+
     let cancelled = false;
     fetch('/api/image', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ recipes: [{ id: id || title, title, cuisine: recipe?.cuisine || '', meal: recipe?.meal || '' }] }),
+      body: JSON.stringify({ recipes: [{ id: cacheKey, title, cuisine: recipe?.cuisine || '', meal: recipe?.meal || '' }] }),
     }).then(r => r.ok ? r.json() : null).then(data => {
-      if (cancelled || !data?.images?.[0]?.image) return;
-      const url = data.images[0].image;
+      if (cancelled) return;
+      const url = data?.images?.[0]?.image || null;
+      if (!url) {
+        saveToImgCache(cacheKey, NO_IMAGE_MARKER);
+        return;
+      }
       setImgSrc(url);
       if (recipe) recipe.image = url;
-      saveToImgCache(id || title, url);
+      saveToImgCache(cacheKey, url);
     }).catch(() => {});
     return () => { cancelled = true; };
-  }, [id, title]);
+  }, [cacheKey, imgSrc, title, recipe?.cuisine, recipe?.meal]);
 
   return <RecipeImg src={imgSrc} alt={title} emoji={emoji} style={style} className={className} onClick={onClick} />;
 }
@@ -22260,6 +22325,73 @@ function AISousChef({ pantry, prefs, mealPlan, setMealPlan, setSlotRecipe, shopp
     return total > 0 ? Math.round((have.length / total) * 100) : 0;
   }
 
+  function buildAvailableRecipesForLLM() {
+    let pool = [...RECIPES];
+    const prefDiet = (prefs.dietary || []).map(d => String(d).toLowerCase());
+    const prefCuisines = (prefs.cuisines || []).map(c => String(c).toLowerCase());
+    const maxTime = Number(prefs.maxTime || prefs.time || 0);
+
+    if (prefDiet.length > 0) {
+      pool = pool.filter(r => {
+        const rd = (r.dietary || []).map(d => String(d).toLowerCase());
+        return prefDiet.every(d => rd.includes(d));
+      });
+    }
+    if (maxTime > 0) {
+      pool = pool.filter(r => !r.time || r.time <= maxTime + 15);
+    }
+
+    if (pool.length < 45 && prefDiet.length === 0) pool = [...RECIPES];
+
+    if (prefCuisines.length > 0) {
+      const preferred = [];
+      const rest = [];
+      pool.forEach(r => {
+        const rc = String(r.cuisine || '').toLowerCase();
+        if (prefCuisines.some(c => rc.includes(c))) preferred.push(r);
+        else rest.push(r);
+      });
+      pool = [...preferred, ...rest];
+    }
+
+    const byMeal = { breakfast: [], lunch: [], dinner: [], other: [] };
+    pool.forEach(r => {
+      const meal = String(r.meal || '').toLowerCase();
+      if (meal === 'breakfast') byMeal.breakfast.push(r);
+      else if (meal === 'lunch' || meal === 'salad' || meal === 'snack') byMeal.lunch.push(r);
+      else if (meal === 'dinner') byMeal.dinner.push(r);
+      else byMeal.other.push(r);
+    });
+
+    const selected = [
+      ...byMeal.breakfast.slice(0, 18),
+      ...byMeal.lunch.slice(0, 22),
+      ...byMeal.dinner.slice(0, 24),
+      ...byMeal.other.slice(0, 8),
+    ];
+
+    const seen = new Set();
+    const unique = [];
+    selected.forEach(r => {
+      if (!seen.has(r.id)) {
+        seen.add(r.id);
+        unique.push(r);
+      }
+    });
+
+    if (unique.length < 50) {
+      for (const r of RECIPES) {
+        if (!seen.has(r.id)) {
+          seen.add(r.id);
+          unique.push(r);
+        }
+        if (unique.length >= 60) break;
+      }
+    }
+
+    return unique.slice(0, 60).map(r => `${r.title} [${r.meal || 'any'}]`).join(', ');
+  }
+
   // ── Build context object to send with every LLM call ──
   function buildContext() {
     return {
@@ -22275,8 +22407,8 @@ function AISousChef({ pantry, prefs, mealPlan, setMealPlan, setSlotRecipe, shopp
         return r ? r.title : '';
       }).filter(Boolean),
       recipeCount: RECIPES.length,
-      // Send available recipe titles so LLM can pick from existing DB (faster planning)
-      availableRecipes: RECIPES.map(r => `${r.emoji || ''} ${r.title} [${r.meal || 'any'}]`).join(', '),
+      // Keep this compact to reduce prompt size and speed up week-plan generation.
+      availableRecipes: buildAvailableRecipesForLLM(),
     };
   }
 
@@ -22426,12 +22558,13 @@ function AISousChef({ pantry, prefs, mealPlan, setMealPlan, setSlotRecipe, shopp
 
     try {
       // Build the conversation history for the LLM — include recipe/action context
-      const chatHistory = [...messages, userMsg].map(m => {
+      const chatHistory = [...messages, userMsg].slice(-12).map(m => {
         if (m.role === 'user') return { role: 'user', content: m.text };
         // For assistant messages, include a summary of what was shown (recipes, plan changes)
         let content = m.text || '';
         if (m.recipes && m.recipes.length > 0) {
-          content += '\n[I showed ' + m.recipes.length + ' recipe card(s): ' + m.recipes.map(r => r.title).join(', ') + ']';
+          const names = m.recipes.slice(0, 4).map(r => r.title).join(', ');
+          content += '\n[I showed ' + m.recipes.length + ' recipe card(s): ' + names + (m.recipes.length > 4 ? ', ...' : '') + ']';
         }
         if (m.weekPlan) {
           content += '\n[I displayed an updated week plan with ' + (m.weekPlan.totalRecipes || 21) + ' meals]';

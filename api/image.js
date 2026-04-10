@@ -1,194 +1,175 @@
 // Vercel Serverless Function — SmartChef Recipe Image Resolver
-// Finds a real food photo for a recipe by searching TheMealDB API
-// Returns a persistent image URL that gets saved to recipe.image
+// Policy:
+// - Prefer correctness over coverage.
+// - Return null (emoji fallback in UI) instead of a likely wrong photo.
+// - Use curated overrides for high-visibility recipes.
 
 module.exports = async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  if (req.method === 'OPTIONS') return res.status(200).end();
-  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+  res.setHeader('Access-Control-Allow-Origin', '*')
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS')
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
+  if (req.method === 'OPTIONS') return res.status(200).end()
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' })
 
   try {
-    const { recipes } = req.body; // Array of { id, title, cuisine, meal }
+    const { recipes } = req.body
     if (!recipes || !Array.isArray(recipes)) {
-      return res.status(400).json({ error: 'recipes array required' });
+      return res.status(400).json({ error: 'recipes array required' })
     }
 
-    // Process in batches — resolve images for each recipe
-    const results = await Promise.all(
-      recipes.map(r => resolveImage(r))
-    );
-
-    return res.status(200).json({ images: results });
+    const results = await Promise.all(recipes.map(r => resolveImage(r)))
+    return res.status(200).json({ images: results })
   } catch (err) {
-    console.error('Image API error:', err);
-    return res.status(500).json({ error: 'Internal server error' });
+    console.error('Image API error:', err)
+    return res.status(500).json({ error: 'Internal server error' })
   }
-};
+}
 
-async function resolveImage({ id, title, cuisine, meal }) {
-  if (!title) return { id, image: null };
+const CURATED_IMAGE_OVERRIDES = {
+  [normalizeTitle('Spaghetti Aglio e Olio')]: 'https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=800&q=80',
+  [normalizeTitle('Mediterranean Chickpea Bowl')]: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80',
+  [normalizeTitle('Quick Miso Ramen')]: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=800&q=80',
+  [normalizeTitle('Lemon Herb Roast Chicken')]: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=800&q=80',
+  [normalizeTitle('One-Pan Shakshuka')]: 'https://images.unsplash.com/photo-1590412200988-a436970781fa?auto=format&fit=crop&w=800&q=80',
+  [normalizeTitle('Fluffy Buttermilk Pancakes')]: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=800&q=80',
+  [normalizeTitle('Chickpea Curry')]: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=800&q=80',
+  [normalizeTitle('Fish Tacos')]: 'https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=800&q=80',
+  [normalizeTitle('Lentil Soup')]: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=800&q=80',
+  [normalizeTitle('Margherita Pizza')]: 'https://images.unsplash.com/photo-1598103442097-8b74394b95c3?auto=format&fit=crop&w=800&q=80',
+  [normalizeTitle('Chicken Shawarma Wrap')]: 'https://images.unsplash.com/photo-1529006557810-274b9b2fc783?auto=format&fit=crop&w=800&q=80',
+  [normalizeTitle('Veggie Frittata')]: 'https://images.unsplash.com/photo-1510693206972-df098062cb71?auto=format&fit=crop&w=800&q=80',
+  [normalizeTitle('Pad Thai')]: 'https://images.unsplash.com/photo-1559314809-0d155014e29e?auto=format&fit=crop&w=800&q=80',
+  [normalizeTitle('Beef Stir-Fry')]: 'https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=800&q=80',
+  [normalizeTitle('Creamy Mushroom Pasta')]: 'https://images.unsplash.com/photo-1555949258-eb67b1ef0ceb?auto=format&fit=crop&w=800&q=80',
+  [normalizeTitle('Burrito Bowl')]: 'https://images.unsplash.com/photo-1543352634-a1c51d613f26?auto=format&fit=crop&w=800&q=80',
+  [normalizeTitle('Ratatouille')]: 'https://images.unsplash.com/photo-1572453800999-e8d2d1589b7c?auto=format&fit=crop&w=800&q=80',
+  [normalizeTitle('Tom Yum Soup')]: 'https://images.unsplash.com/photo-1548943487-a2e4e43b4853?auto=format&fit=crop&w=800&q=80',
+  [normalizeTitle('Greek Salad')]: 'https://images.unsplash.com/photo-1540189549519-8bf0c5e5d0e3?auto=format&fit=crop&w=800&q=80',
+  [normalizeTitle('Avocado Toast')]: 'https://images.unsplash.com/photo-1588566565463-180a5a8f1ac1?auto=format&fit=crop&w=800&q=80',
+  [normalizeTitle('Avocado Toast with Lemon')]: 'https://images.unsplash.com/photo-1588566565463-180a5a8f1ac1?auto=format&fit=crop&w=800&q=80',
+}
 
-  // Strategy 1: Search TheMealDB by the main keyword from the title
-  const keywords = extractSearchTerms(title);
-  for (const term of keywords) {
-    const url = `https://www.themealdb.com/api/json/v1/1/search.php?s=${encodeURIComponent(term)}`;
-    try {
-      const resp = await fetch(url);
-      if (resp.ok) {
-        const data = await resp.json();
-        if (data.meals && data.meals.length > 0) {
-          // Pick the best match based on title similarity
-          const best = pickBestMatch(data.meals, title, cuisine);
-          if (best && best.strMealThumb) {
-            return { id, image: best.strMealThumb };
-          }
-        }
-      }
-    } catch { /* continue to next term */ }
-  }
+const NOISE_WORDS = new Set([
+  'a', 'an', 'and', 'the', 'of', 'for', 'with', 'from', 'style', 'easy', 'quick', 'simple', 'best',
+  'fresh', 'warm', 'cold', 'hot', 'sweet', 'savory', 'light', 'hearty', 'one', 'pan',
+])
 
-  // Strategy 2: Search by cuisine category
-  if (cuisine) {
-    try {
-      const url = `https://www.themealdb.com/api/json/v1/1/filter.php?a=${encodeURIComponent(mapCuisineToArea(cuisine))}`;
-      const resp = await fetch(url);
-      if (resp.ok) {
-        const data = await resp.json();
-        if (data.meals && data.meals.length > 0) {
-          // Pick a random-ish one based on title hash for consistency
-          const hash = simpleHash(title);
-          const picked = data.meals[hash % data.meals.length];
-          if (picked.strMealThumb) {
-            return { id, image: picked.strMealThumb };
-          }
-        }
-      }
-    } catch { /* continue */ }
-  }
+const KEY_FOOD_WORDS = new Set([
+  'chicken', 'beef', 'fish', 'salmon', 'shrimp', 'taco', 'tacos', 'pizza', 'pasta', 'spaghetti',
+  'ramen', 'soup', 'curry', 'salad', 'wrap', 'sandwich', 'bowl', 'omelette', 'omelet', 'frittata',
+  'shakshuka', 'pancake', 'pancakes', 'lentil', 'chickpea', 'mushroom', 'burrito', 'toast', 'yogurt',
+])
 
-  // Strategy 3: Search by meal category (breakfast, dessert, etc.)
-  const category = mapMealToCategory(meal, title);
-  if (category) {
-    try {
-      const url = `https://www.themealdb.com/api/json/v1/1/filter.php?c=${encodeURIComponent(category)}`;
-      const resp = await fetch(url);
-      if (resp.ok) {
-        const data = await resp.json();
-        if (data.meals && data.meals.length > 0) {
-          const hash = simpleHash(title);
-          const picked = data.meals[hash % data.meals.length];
-          if (picked.strMealThumb) {
-            return { id, image: picked.strMealThumb };
-          }
-        }
-      }
-    } catch { /* continue */ }
+async function resolveImage({ id, title, cuisine }) {
+  if (!title) return { id, image: null }
+
+  const normalized = normalizeTitle(title)
+  const curated = CURATED_IMAGE_OVERRIDES[normalized]
+  if (curated) return { id, image: curated }
+
+  const terms = extractSearchTerms(title)
+  let best = null
+
+  for (const term of terms) {
+    const data = await fetchMealDbSearch(term)
+    if (!data?.meals?.length) continue
+    const candidate = pickBestMatch(data.meals, title, cuisine)
+    if (!candidate) continue
+    if (!best || candidate.score > best.score) best = candidate
   }
 
-  // No image found
-  return { id, image: null };
+  if (best && isHighConfidenceMatch(best)) {
+    return { id, image: best.meal.strMealThumb }
+  }
+
+  // No confident match: fall back to emoji in UI.
+  return { id, image: null }
+}
+
+async function fetchMealDbSearch(term) {
+  const controller = new AbortController()
+  const timeout = setTimeout(() => controller.abort(), 3500)
+  try {
+    const url = `https://www.themealdb.com/api/json/v1/1/search.php?s=${encodeURIComponent(term)}`
+    const resp = await fetch(url, { signal: controller.signal })
+    if (!resp.ok) return null
+    return await resp.json()
+  } catch {
+    return null
+  } finally {
+    clearTimeout(timeout)
+  }
 }
 
 function extractSearchTerms(title) {
-  // Extract meaningful food keywords from recipe titles
-  const lower = title.toLowerCase();
-  const words = lower.split(/[\s,&\-–—]+/).filter(w => w.length > 2);
+  const tokens = tokenize(title).filter(t => !NOISE_WORDS.has(t))
+  const terms = [title.trim()]
 
-  // Remove generic words
-  const skip = new Set(['with', 'and', 'the', 'for', 'from', 'style', 'homemade', 'easy', 'quick', 'simple', 'best', 'classic', 'fresh', 'warm', 'cold', 'hot', 'spicy', 'sweet', 'savory', 'crispy', 'creamy', 'light', 'hearty', 'bowl', 'plate', 'baked', 'grilled', 'roasted', 'fried', 'steamed', 'sauteed']);
-  const foodWords = words.filter(w => !skip.has(w));
+  // Phrase term often helps for multi-word dishes.
+  if (tokens.length >= 2) terms.push(tokens.slice(0, 2).join(' '))
 
-  // Build search terms: full title first, then key food words
-  const terms = [title];
-
-  // Add the main protein/ingredient (usually the first noun)
-  const proteins = ['chicken', 'salmon', 'beef', 'fish', 'shrimp', 'lamb', 'pork', 'turkey', 'tuna', 'cod', 'tofu', 'egg', 'eggs', 'lentil', 'lentils', 'chickpea', 'bean', 'beans'];
-  const dishes = ['pasta', 'pizza', 'soup', 'salad', 'stew', 'curry', 'rice', 'sandwich', 'wrap', 'taco', 'burrito', 'burger', 'pancake', 'omelette', 'frittata', 'risotto', 'couscous', 'quinoa', 'noodle', 'noodles', 'bread', 'cake', 'pie', 'pudding', 'smoothie', 'oatmeal', 'porridge', 'yogurt'];
-
-  for (const word of foodWords) {
-    if (proteins.includes(word) || dishes.includes(word)) {
-      terms.push(word);
-    }
+  // Add important single-word dish/protein hints.
+  for (const t of tokens) {
+    if (KEY_FOOD_WORDS.has(t)) terms.push(t)
   }
 
-  // Add 2-word combos
-  if (foodWords.length >= 2) {
-    terms.push(foodWords.slice(0, 2).join(' '));
-  }
-
-  return [...new Set(terms)].slice(0, 4); // Max 4 search attempts
+  return [...new Set(terms)].filter(Boolean).slice(0, 5)
 }
 
 function pickBestMatch(meals, title, cuisine) {
-  const titleLower = title.toLowerCase();
-  const titleWords = new Set(titleLower.split(/\s+/));
+  const titleNorm = normalizeTitle(title)
+  const titleTokens = tokenize(titleNorm)
+  const titleTokenSet = new Set(titleTokens)
+  const titleKeywords = titleTokens.filter(t => KEY_FOOD_WORDS.has(t))
+  const cuisineNorm = normalizeTitle(cuisine || '')
 
-  let best = null;
-  let bestScore = -1;
+  let best = null
 
   for (const meal of meals) {
-    const mealLower = (meal.strMeal || '').toLowerCase();
-    const mealWords = mealLower.split(/\s+/);
+    const mealName = meal?.strMeal || ''
+    const mealNorm = normalizeTitle(mealName)
+    const mealTokens = tokenize(mealNorm)
+    const mealTokenSet = new Set(mealTokens)
 
-    // Score: count how many words overlap
-    let score = 0;
-    for (const w of mealWords) {
-      if (titleWords.has(w)) score += 2;
-    }
+    let overlap = 0
+    for (const t of titleTokenSet) if (mealTokenSet.has(t)) overlap++
 
-    // Bonus for matching cuisine area
-    if (cuisine && meal.strArea && meal.strArea.toLowerCase().includes(cuisine.toLowerCase())) {
-      score += 3;
-    }
+    let keywordOverlap = 0
+    for (const t of titleKeywords) if (mealTokenSet.has(t)) keywordOverlap++
 
-    // Bonus for matching category
-    if (meal.strCategory) {
-      const cat = meal.strCategory.toLowerCase();
-      if (titleLower.includes(cat)) score += 2;
-    }
+    const exact = mealNorm === titleNorm
+    const prefixMatch = mealNorm.startsWith(titleNorm) || titleNorm.startsWith(mealNorm)
+    const cuisineBonus = cuisineNorm && normalizeTitle(meal.strArea || '').includes(cuisineNorm) ? 2 : 0
+    const score = (exact ? 12 : 0) + (prefixMatch ? 4 : 0) + (overlap * 2) + (keywordOverlap * 3) + cuisineBonus
 
-    if (score > bestScore) {
-      bestScore = score;
-      best = meal;
+    if (!meal.strMealThumb) continue
+    if (!best || score > best.score) {
+      best = { meal, score, overlap, keywordOverlap, exact, prefixMatch }
     }
   }
 
-  return best;
+  return best
 }
 
-function mapCuisineToArea(cuisine) {
-  const map = {
-    'italian': 'Italian', 'mexican': 'Mexican', 'chinese': 'Chinese',
-    'japanese': 'Japanese', 'indian': 'Indian', 'thai': 'Thai',
-    'french': 'French', 'greek': 'Greek', 'spanish': 'Spanish',
-    'moroccan': 'Moroccan', 'turkish': 'Turkish', 'vietnamese': 'Vietnamese',
-    'korean': 'Korean', 'british': 'British', 'american': 'American',
-    'mediterranean': 'Italian', 'middle eastern': 'Egyptian',
-    'lebanese': 'Egyptian', 'egyptian': 'Egyptian', 'syrian': 'Egyptian',
-  };
-  return map[(cuisine || '').toLowerCase()] || cuisine || 'American';
+function isHighConfidenceMatch(candidate) {
+  if (!candidate?.meal?.strMealThumb) return false
+  if (candidate.exact) return true
+  if (candidate.keywordOverlap >= 2 && candidate.overlap >= 2) return true
+  if (candidate.keywordOverlap >= 1 && candidate.overlap >= 1 && candidate.score >= 8) return true
+  if (candidate.prefixMatch && candidate.overlap >= 1 && candidate.score >= 8) return true
+  if (candidate.overlap >= 3 && candidate.score >= 8) return true
+  return false
 }
 
-function mapMealToCategory(meal, title) {
-  const lower = (meal || '').toLowerCase();
-  const titleLower = (title || '').toLowerCase();
-  if (lower === 'breakfast') return 'Breakfast';
-  if (lower === 'dessert' || titleLower.includes('cake') || titleLower.includes('pudding')) return 'Dessert';
-  if (titleLower.includes('pasta') || titleLower.includes('spaghetti')) return 'Pasta';
-  if (titleLower.includes('chicken')) return 'Chicken';
-  if (titleLower.includes('beef') || titleLower.includes('steak')) return 'Beef';
-  if (titleLower.includes('lamb')) return 'Lamb';
-  if (titleLower.includes('fish') || titleLower.includes('salmon') || titleLower.includes('cod')) return 'Seafood';
-  if (titleLower.includes('vegetable') || titleLower.includes('vegan')) return 'Vegetarian';
-  return lower === 'dinner' ? 'Miscellaneous' : null;
+function normalizeTitle(input) {
+  return String(input || '')
+    .toLowerCase()
+    .replace(/['’]/g, '')
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim()
 }
 
-function simpleHash(str) {
-  let h = 0;
-  for (let i = 0; i < str.length; i++) {
-    h = ((h << 5) - h + str.charCodeAt(i)) | 0;
-  }
-  return Math.abs(h);
+function tokenize(input) {
+  const norm = normalizeTitle(input)
+  return norm ? norm.split(/\s+/).filter(Boolean) : []
 }
